@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         int height = size.y;
         int count = 0;
         float density = getResources().getDisplayMetrics().density;
-        Widget1 circle = new Widget1(getApplicationContext(), density);
+        Widget1 circle = new Widget1(getApplicationContext(), density, width, height);
         setContentView(circle);
     }
 }
