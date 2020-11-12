@@ -20,40 +20,46 @@ public class Widget1 extends View {
     int ship_x;
     int ship_y;
     boolean destroy;
+    boolean milk;
     Random random;
-    public Widget1(Context context, float density) {
+    public Widget1(Context context, float density, int width, int height) {
         super(context);
         this.random = new Random();
 
         this.density = density;
         this.x = 0;
         this.y = 0;
-        this.block = 100;
+        this.block = 70;
         this.destroy = false;
+        this.milk = false;
+        this.cell_x = width / this.block - 1;
+        this.cell_y = height / this.block - 1;
+
+        this.ship_x = this.random.nextInt(this.cell_x);
+        this.ship_y = this.random.nextInt(this.cell_y);
+        if (ship_y > cell_y) {
+            this.ship_x = this.random.nextInt(this.cell_x);
+            this.ship_y = this.random.nextInt(this.cell_y);
+        }
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        this.cell_x = getWidth() / this.block;
-        this.cell_y = getHeight() / this.block;
-        this.ship_x = this.random.nextInt(this.cell_x);
-        this.ship_y = this.random.nextInt(this.cell_y);
-        Log.i("boom", "x: " + this.ship_x + ", y: " + this.ship_y);
-
         Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(2);
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(1);
         paint.setStyle(Paint.Style.STROKE);
-        for (int i = 0; i < getWidth(); i += this.block) {
-            canvas.drawLine(i, 0, i, getHeight(), paint);
-        }
-        for (int j = 0; j < getHeight(); j += this.block) {
-            canvas.drawLine(0, j, getWidth(), j, paint);
+        for (int i = 0; i <= getWidth(); i += this.block) {
+            for (int j = 0; j <= getHeight(); j += this.block) {
+                canvas.drawLine(0, j, (getWidth()  / this.block) * this.block, j, paint);
+                canvas.drawLine(i, 0, i, (getHeight() / this.block) * this.block, paint);
+            }
         }
 
-        boom(canvas);
+        shoot(canvas);
 
     }
     @Override
@@ -64,19 +70,48 @@ public class Widget1 extends View {
             Log.i("onTouch", "x: " + this.x + ", y: " + this.y);
             if (this.x == this.ship_x & this.y == this.ship_y) {
                 this.destroy = true;
+                this.ship_x = this.random.nextInt(this.cell_x);
+                this.ship_y = this.random.nextInt(this.cell_y);
+                if (ship_y > cell_y) {
+                    this.ship_x = this.random.nextInt(this.cell_x);
+                    this.ship_y = this.random.nextInt(this.cell_y);
+                }
+                Log.i("ship", "x: " + this.ship_x + ", y: " + this.ship_y);
+                Log.i("ship", "sgsghfhx: " + this.cell_x + ", y: " + this.cell_y);
+                invalidate();
+            } else {
+                this.milk = true;
+                this.destroy = false;
                 invalidate();
             }
         }
         return false;
     }
 
-
-
-    public void boom(Canvas canvas) {
+    public void shoot(Canvas canvas) {
+        if (this.milk) {
+            Paint d = new Paint();
+            d.setColor(Color.RED);
+            d.setStrokeWidth(6);
+            d.setStyle(Paint.Style.STROKE);
+            Paint paint = new Paint();
+            paint.setColor(Color.BLUE);
+            paint.setStrokeWidth(4);
+            paint.setStyle(Paint.Style.STROKE);
+            for (int xx = this.x - 2; xx < this.x + 3; xx++) {
+                for (int yy = this.y - 2; yy < this.y + 3; yy++) {
+                    if (xx == this.ship_x & yy == this.ship_y) {
+                        canvas.drawCircle(xx * this.block + this.block / 2,yy * this.block + this.block / 2, this.block / 2, d);
+                    } else {
+                        canvas.drawCircle(xx * this.block + this.block / 2,yy * this.block + this.block / 2, this.block / 4, paint);
+                    }
+                }
+            }
+        }
         if (this.destroy) {
             Paint d = new Paint();
             d.setColor(Color.RED);
-            d.setStrokeWidth(2);
+            d.setStrokeWidth(10);
             d.setStyle(Paint.Style.STROKE);
             canvas.drawLine(this.x * this.block, this.y * this.block, this.x * this.block + this.block, this.y * this.block + this.block, d);
             canvas.drawLine(this.x * this.block, this.y * this.block + this.block, this.x * this.block + this.block, this.y * this.block, d);

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.graphics.Point;
-import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,9 +17,8 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        int count = 0;
         float density = getResources().getDisplayMetrics().density;
-        Widget1 circle = new Widget1(getApplicationContext(), density);
+        Widget1 circle = new Widget1(getApplicationContext(), density, width, height);
         setContentView(circle);
     }
 }
