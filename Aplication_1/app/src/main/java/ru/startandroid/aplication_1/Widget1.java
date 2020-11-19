@@ -29,6 +29,7 @@ public class Widget1 extends View {
         this.density = density;
         this.x = 0;
         this.y = 0;
+<<<<<<< HEAD
         this.block = 70;
         this.destroy = false;
         this.milk = false;
@@ -42,20 +43,40 @@ public class Widget1 extends View {
             this.ship_y = this.random.nextInt(this.cell_y);
         }
 
+=======
+        this.block = 50;
+        this.destroy = false;
+        this.milk = false;
+        this.cell_x = width / this.block;
+        this.cell_y = height / this.block;
+        this.ship_x = this.random.nextInt(this.cell_x);
+        this.ship_y = this.random.nextInt(this.cell_y);
+>>>>>>> 009ee9127181ddbe1fda66aaf4010810de42218b
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+<<<<<<< HEAD
+=======
+        Log.i("boom", "x: " + this.ship_x + ", y: " + this.ship_y);
+>>>>>>> 009ee9127181ddbe1fda66aaf4010810de42218b
 
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(1);
         paint.setStyle(Paint.Style.STROKE);
+<<<<<<< HEAD
         for (int i = 0; i <= getWidth(); i += this.block) {
             for (int j = 0; j <= getHeight(); j += this.block) {
                 canvas.drawLine(0, j, (getWidth()  / this.block) * this.block, j, paint);
                 canvas.drawLine(i, 0, i, (getHeight() / this.block) * this.block, paint);
+=======
+        for (int i = 0; i < getWidth(); i += this.block) {
+            for (int j = 0; j < getHeight(); j += this.block) {
+                canvas.drawLine(0, j, getWidth(), j, paint);
+                canvas.drawLine(i, 0, i, getHeight(), paint);
+>>>>>>> 009ee9127181ddbe1fda66aaf4010810de42218b
             }
         }
 
@@ -83,7 +104,20 @@ public class Widget1 extends View {
                 this.milk = true;
                 this.destroy = false;
                 invalidate();
+                this.ship_x = this.random.nextInt(this.cell_x);
+                this.ship_y = this.random.nextInt(this.cell_y);
+            } else {
+                this.milk = true;
+                this.destroy = false;
+                invalidate();
             }
+//            else {
+//                if (this.x - 2 <= this.ship_x & this.ship_x <= this.x + 2 & this.y - 2 <= this.ship_y & this.ship_y <= this.y + 2) {
+//                    this.milk = true;
+//                    this.destroy = false;
+//                    invalidate();
+//                }
+//            }
         }
         return false;
     }

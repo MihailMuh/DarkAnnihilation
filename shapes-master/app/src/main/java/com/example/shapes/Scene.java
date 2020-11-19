@@ -24,17 +24,8 @@ public class Scene extends View {
     String typeShape = "rect";
     String color = "#000000";
 
-    // свойства прямоугольника
-    Rect[] rects = new Rect[3000];
-    int countRect = 0;
-    // свойства круга
-    Circle[] circles = new Circle[3000];
-    int countCircles = 0;
-
-    // свойства треугольника
-    Triangle[] triangles = new Triangle[3000];
-    int countTriangles = 0;
-
+    Figures[] figures = new Figures[3000];
+    int countFigures = 0;
 
     public Scene(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -43,18 +34,18 @@ public class Scene extends View {
     }
 
     private void createRect(String color, Point corner, int width, int height) {
-        rects[countRect] = new Rect(color, corner, width, height);
-        countRect++;
+        figures[countFigures] = new Rect(color, corner, width, height);
+        countFigures++;
     }
 
     private void createCircle(String color, Point center, float radius) {
-        circles[countCircles] = new Circle(color, center, radius);
-        countCircles++;
+        figures[countFigures] = new Circle(color, center, radius);
+        countFigures++;
     }
 
     private void createTriangle(String color, Point a, Point b, Point c) {
-        triangles[countTriangles] = new Triangle(color, a, b, c);
-        countTriangles++;
+        figures[countFigures] = new Triangle(color, a, b, c);
+        countFigures++;
     }
 
     @Override
@@ -66,26 +57,12 @@ public class Scene extends View {
         drawGrid(canvas);
         drawPoints(canvas);
 
-        drawRects(canvas);
-        drawCircle(canvas);
-        drawTriangle(canvas);
+        drawFigures(canvas);
     }
 
-    private void drawTriangle(Canvas canvas) {
-        for (int i = 0; i < countTriangles; i++) {
-            triangles[i].draw(canvas);
-        }
-    }
-
-    private void drawCircle(Canvas canvas) {
-        for (int i = 0; i < countCircles; i++) {
-            circles[i].draw(canvas);
-        }
-    }
-
-    private void drawRects(Canvas canvas) {
-        for (int i = 0; i < countRect; i++) {
-            rects[i].draw(canvas);
+    private void drawFigures(Canvas canvas) {
+        for (int i = 0; i < countFigures; i++) {
+            figures[i].draw(canvas);
         }
     }
 
