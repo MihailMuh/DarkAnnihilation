@@ -24,6 +24,8 @@ public class Scene extends View {
     String typeShape = "rect";
     String color = "#000000";
 
+
+
     Figures[] figures = new Figures[3000];
     int countFigures = 0;
 
@@ -58,6 +60,10 @@ public class Scene extends View {
         drawPoints(canvas);
 
         drawFigures(canvas);
+    }
+
+    void sendPost(Postman postman) {
+        postman.getPost(new Box());
     }
 
     private void drawFigures(Canvas canvas) {
@@ -156,5 +162,11 @@ public class Scene extends View {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void undo() {
+        countFigures--;
+        countFigures = Math.max(0, countFigures);
+        invalidate();
     }
 }

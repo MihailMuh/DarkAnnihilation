@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     RadioGroup shapes;
     Spinner colors;
     Scene scene;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
         scene = findViewById(R.id.scene);
         shapes = findViewById(R.id.shapeGroup);
         colors = findViewById(R.id.colors);
+        button = findViewById(R.id.button);
+
+        button.setOnClickListener(this);
 
         shapes.setOnCheckedChangeListener(new OnCheckedChangeListener(){
             @Override
@@ -47,5 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        scene.undo();
     }
 }
