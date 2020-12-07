@@ -19,13 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Draw" />
+            android:text="@string/draw" />
 
         <RadioButton
             android:id="@+id/move"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Move" />
+            android:text="@string/move" />
     </RadioGroup>
 
     <com.example.shapes.Scene
@@ -53,19 +53,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Rect" />
+            android:text="@string/rect" />
 
         <RadioButton
             android:id="@+id/circle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Circle" />
+            android:text="@string/circle" />
 
         <RadioButton
             android:id="@+id/triangle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Triangle" />
+            android:text="@string/triangle" />
     </RadioGroup>
 
     <Spinner
@@ -81,7 +81,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/colors"
         app:layout_constraintTop_toTopOf="parent" />

@@ -62,10 +62,6 @@ public class Scene extends View {
         drawFigures(canvas);
     }
 
-    void sendPost(Postman postman) {
-        postman.getPost(new Box());
-    }
-
     private void drawFigures(Canvas canvas) {
         for (int i = 0; i < countFigures; i++) {
             figures[i].draw(canvas);
