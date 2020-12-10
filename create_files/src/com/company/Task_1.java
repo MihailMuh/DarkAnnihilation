@@ -1,10 +1,12 @@
 package com.company;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Calendar;
 
 public class Task_1 {
 
@@ -22,6 +24,7 @@ public class Task_1 {
             FileInputStream fis = new FileInputStream(inputFile);
             FileChannel fileChannel = fis.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate(1024);
+            BufferedReader br = new BufferedReader(fis);
 
             while (fileChannel.read(buffer) > 0) {
                 buffer.flip();
@@ -36,5 +39,10 @@ public class Task_1 {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static long getCurrentTimeInMillisecs() {
+        Calendar cal = Calendar.getInstance();
+        return cal.getTimeInMillis();
     }
 }

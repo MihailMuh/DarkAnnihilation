@@ -1,5 +1,7 @@
 package com.company;
 import java.io.*;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Main {
 
@@ -22,6 +24,7 @@ public class Main {
 //
 //            System.out.println(ex.getMessage());
 //        }
+        long start = getCurrentTimeInMillisecs();
         try (FileReader reader = new FileReader(path)) {
             // читаем посимвольно
             int c;
@@ -33,6 +36,14 @@ public class Main {
 
             System.out.println(ex.getMessage());
         }
+        System.out.println();
+        long stop = getCurrentTimeInMillisecs();
+        System.out.println(stop - start);
+    }
+
+    public static long getCurrentTimeInMillisecs() {
+        Calendar cal = Calendar.getInstance();
+        return cal.getTimeInMillis();
     }
 }
 
