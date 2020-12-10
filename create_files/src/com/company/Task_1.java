@@ -9,7 +9,7 @@ import java.nio.channels.FileChannel;
 public class Task_1 {
 
     public static void main(String[] args) {
-        String path = "C:/Users/mobile/Desktop/My_projects/JAVA/Maraphone/src/com/company/NOTES.txt";
+        String path = "C:/Users/mobile/Desktop/My_projects/JAVA/Maraphone/src/com/company/note.txt";
 
         File inputFile = new File(path);
 

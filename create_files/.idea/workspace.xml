@@ -28,7 +28,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Task_1">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="Maraphone" />
@@ -74,8 +74,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Task_1" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Task_2 (1)" />
         <item itemvalue="Application.Task_2" />
       </list>
