@@ -5,20 +5,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 
-class Box {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-}
-class Human {
-
-}
-interface Postman {
-    void getPost(Box box);
-    void dropBox(Box box);
-    void sendTo(Human human);
-}
-
-
-public class Circle extends Figures implements Postman {
+public class Circle extends Figures {
     private static final double PI = 3.14;
     Point center;
     float radius;
@@ -36,22 +26,17 @@ public class Circle extends Figures implements Postman {
         paint.setColor(Color.parseColor(this.color));
         canvas.drawCircle(this.center.x, this.center.y, this.radius, paint);
     }
-    double getArea() {
-        return radius * radius * PI;
-    }
 
     @Override
-    public void getPost(Box box) {
-
+    String save_inf() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "circle");
+        jsonObject.put("x", this.center.x);
+        jsonObject.put("y", this.center.y);
+        jsonObject.put("radius", this.radius);
+        jsonObject.put("color", this.color);
+        return jsonObject.toString();
     }
 
-    @Override
-    public void dropBox(Box box) {
 
-    }
-
-    @Override
-    public void sendTo(Human human) {
-
-    }
 }

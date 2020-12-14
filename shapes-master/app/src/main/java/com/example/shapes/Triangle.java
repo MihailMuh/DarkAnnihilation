@@ -31,4 +31,6 @@ public class Triangle extends Figures {
 
         canvas.drawPath(path, paint);
     }
+
+
 }

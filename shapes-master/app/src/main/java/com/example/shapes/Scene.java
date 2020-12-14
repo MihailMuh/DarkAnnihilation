@@ -5,9 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -37,16 +37,20 @@ public class Scene extends View {
 
     private void createRect(String color, Point corner, int width, int height) {
         figures[countFigures] = new Rect(color, corner, width, height);
+        got_info();
         countFigures++;
     }
 
     private void createCircle(String color, Point center, float radius) {
         figures[countFigures] = new Circle(color, center, radius);
+        got_info();
         countFigures++;
+
     }
 
     private void createTriangle(String color, Point a, Point b, Point c) {
         figures[countFigures] = new Triangle(color, a, b, c);
+        got_info();
         countFigures++;
     }
 
@@ -164,5 +168,12 @@ public class Scene extends View {
         countFigures--;
         countFigures = Math.max(0, countFigures);
         invalidate();
+    }
+    void got_info() {
+        try{
+            Log.e("Инфо", figures[countFigures].save_inf());
+        } catch (Exception e) {
+            Log.e("Инфо", "");
+        }
     }
 }
