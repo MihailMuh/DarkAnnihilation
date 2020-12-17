@@ -13,6 +13,12 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import org.json.JSONArray;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Scene extends View {
     Point[] points = new Point[3];
     float density;
@@ -24,10 +30,24 @@ public class Scene extends View {
     String typeShape = "rect";
     String color = "#000000";
 
+    JSONArray jsonArray = new JSONArray();
+    String path = "/DATA.txt";
+
 
 
     Figures[] figures = new Figures[3000];
     int countFigures = 0;
+
+    public void SaveData() {
+        try (FileWriter writer = new FileWriter(path, false)) {
+            String text = jsonArray.toString();
+            writer.write(text);
+            writer.append('\n');
+            writer.flush();
+        } catch (IOException ex) {
+            Log.e("Инфо", ex.getMessage());
+        }
+    }
 
     public Scene(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -171,7 +191,8 @@ public class Scene extends View {
     }
     void got_info() {
         try{
-            Log.e("Инфо", figures[countFigures].save_inf());
+            figures[countFigures].save_inf(jsonArray);
+            Log.e("Инфо", jsonArray.toString());
         } catch (Exception e) {
             Log.e("Инфо", "");
         }

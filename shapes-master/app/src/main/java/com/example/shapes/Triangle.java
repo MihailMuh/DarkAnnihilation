@@ -6,6 +6,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Triangle extends Figures {
     String color;
     Point a;
@@ -31,6 +35,19 @@ public class Triangle extends Figures {
 
         canvas.drawPath(path, paint);
     }
-
+    @Override
+    String save_inf(JSONArray jsonArray) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "triangle");
+        jsonObject.put("xa", this.a.x);
+        jsonObject.put("ya", this.a.y);
+        jsonObject.put("xb", this.b.x);
+        jsonObject.put("yb", this.b.y);
+        jsonObject.put("xc", this.c.x);
+        jsonObject.put("yc", this.c.y);
+        jsonObject.put("color", this.color);
+        jsonArray.put(jsonObject);
+        return jsonArray.toString();
+    }
 
 }

@@ -3,11 +3,15 @@ package com.example.shapes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     RadioGroup shapes;
@@ -15,12 +19,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Scene scene;
     Button button;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            getApplicationContext().openFileInput("DATA.txt");
+        } catch (IOException e) {}
+
 
         scene = findViewById(R.id.scene);
         shapes = findViewById(R.id.shapeGroup);
@@ -61,5 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         scene.undo();
+    }
+    @Override
+    public void onStop() {
+        scene.SaveData();
+        super.onStop();
     }
 }

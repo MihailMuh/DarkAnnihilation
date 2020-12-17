@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,16 +27,17 @@ public class Circle extends Figures {
         paint.setColor(Color.parseColor(this.color));
         canvas.drawCircle(this.center.x, this.center.y, this.radius, paint);
     }
-
     @Override
-    String save_inf() throws JSONException {
+    String save_inf(JSONArray jsonArray) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "circle");
         jsonObject.put("x", this.center.x);
         jsonObject.put("y", this.center.y);
         jsonObject.put("radius", this.radius);
         jsonObject.put("color", this.color);
-        return jsonObject.toString();
+        jsonArray.put(jsonObject);
+
+        return jsonArray.toString();
     }
 
 
