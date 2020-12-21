@@ -14,6 +14,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -31,22 +32,12 @@ public class Scene extends View {
     String color = "#000000";
 
     JSONArray jsonArray = new JSONArray();
-    String path = "/DATA.txt";
-
-
 
     Figures[] figures = new Figures[3000];
     int countFigures = 0;
 
-    public void SaveData() {
-        try (FileWriter writer = new FileWriter(path, false)) {
-            String text = jsonArray.toString();
-            writer.write(text);
-            writer.append('\n');
-            writer.flush();
-        } catch (IOException ex) {
-            Log.e("Инфо", ex.getMessage());
-        }
+    public JSONArray GetData() {
+        return jsonArray;
     }
 
     public Scene(Context context, @Nullable AttributeSet attrs) {
@@ -195,6 +186,17 @@ public class Scene extends View {
             Log.e("Инфо", jsonArray.toString());
         } catch (Exception e) {
             Log.e("Инфо", "");
+        }
+    }
+    void recovery_info(JSONArray jsonArray) {
+        try{
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+            }
+//            for (int i = 0; i < countFigures; i++) {
+//                figures[i].recovery_inf(jsonArray);
+//            }
+        } catch (Exception e) {
         }
     }
 }

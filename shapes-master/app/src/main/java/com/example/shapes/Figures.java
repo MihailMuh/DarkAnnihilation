@@ -18,4 +18,6 @@ public class Figures {
     void draw(Canvas canvas) {
     }
     String save_inf(JSONArray jsonArray) throws JSONException {return "There is a DATA";}
+    void recovery_inf(JSONArray jsonArray) throws JSONException {}
+
 }

@@ -21,6 +21,14 @@ public class Circle extends Figures {
         this.radius = radius;
     }
 
+    public Circle(JSONObject jsonObject) throws JSONException {
+        this(
+                jsonObject.getString("color"),
+                new Point(jsonObject.getInt("x"), jsonObject.getInt("y")),
+                (float)jsonObject.getDouble("radius")
+        );
+    }
+
     void draw(Canvas canvas) {
         super.draw(canvas);
         Paint paint = new Paint();
@@ -39,6 +47,4 @@ public class Circle extends Figures {
 
         return jsonArray.toString();
     }
-
-
 }
