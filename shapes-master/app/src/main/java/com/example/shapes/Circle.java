@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Circle extends Figures {
-    private static final double PI = 3.14;
     Point center;
     float radius;
 
@@ -36,7 +35,7 @@ public class Circle extends Figures {
         canvas.drawCircle(this.center.x, this.center.y, this.radius, paint);
     }
     @Override
-    String save_inf(JSONArray jsonArray) throws JSONException {
+    void save_inf(JSONArray jsonArray) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "circle");
         jsonObject.put("x", this.center.x);
@@ -44,7 +43,5 @@ public class Circle extends Figures {
         jsonObject.put("radius", this.radius);
         jsonObject.put("color", this.color);
         jsonArray.put(jsonObject);
-
-        return jsonArray.toString();
     }
 }

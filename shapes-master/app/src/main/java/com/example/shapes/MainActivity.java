@@ -2,9 +2,9 @@ package com.example.shapes;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         shapes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
+            @SuppressLint("NonConstantResourceId")
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 jsonArray_end.put(jsonObj);
-                Log.e("Инфо", jsonObj.toString());
             }
 
             reader_cooler.close();
