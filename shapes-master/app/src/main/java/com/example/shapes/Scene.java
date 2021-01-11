@@ -1,5 +1,6 @@
 package com.example.shapes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -112,6 +113,7 @@ public class Scene extends View {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -161,9 +163,9 @@ public class Scene extends View {
         }
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
+//    public void setMode(String mode) {
+//        this.mode = mode;
+//    }
 
     public void setTypeShape(String type) {
         this.typeShape = type;
@@ -179,6 +181,7 @@ public class Scene extends View {
         countFigures--;
         countFigures = Math.max(0, countFigures);
         invalidate();
+        jsonArray.remove(jsonArray.length() - 1);
     }
     void got_info() {
         try{
@@ -191,12 +194,18 @@ public class Scene extends View {
     void recovery_info(JSONArray jsonArray) {
         try{
             for (int i = 0; i < jsonArray.length(); i++) {
-
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                String name = jsonObject.get("name") + "";
+                if (name.equals("circle")) {
+                    figures[countFigures] = new Circle(jsonObject);
+                } if (name.equals("triangle")) {
+                    figures[countFigures] = new Triangle(jsonObject);
+                } if (name.equals("rect")) {
+                    figures[countFigures] = new Rect(jsonObject);
+                }
+                got_info();
+                countFigures++;
             }
-//            for (int i = 0; i < countFigures; i++) {
-//                figures[i].recovery_inf(jsonArray);
-//            }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
     }
 }

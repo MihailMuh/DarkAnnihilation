@@ -22,6 +22,14 @@ public class Triangle extends Figures {
         this.b = b;
         this.c = c;
     }
+    public Triangle(JSONObject jsonObject) throws JSONException {
+        this(
+                jsonObject.getString("color"),
+                new Point(jsonObject.getInt("xa"), jsonObject.getInt("ya")),
+                new Point(jsonObject.getInt("xb"), jsonObject.getInt("yb")),
+                new Point(jsonObject.getInt("xc"), jsonObject.getInt("yc"))
+        );
+    }
     void draw(Canvas canvas) {
         super.draw(canvas);
         Paint paint = new Paint();
@@ -36,7 +44,7 @@ public class Triangle extends Figures {
         canvas.drawPath(path, paint);
     }
     @Override
-    String save_inf(JSONArray jsonArray) throws JSONException {
+    void save_inf(JSONArray jsonArray) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "triangle");
         jsonObject.put("xa", this.a.x);
@@ -47,7 +55,6 @@ public class Triangle extends Figures {
         jsonObject.put("yc", this.c.y);
         jsonObject.put("color", this.color);
         jsonArray.put(jsonObject);
-        return jsonArray.toString();
     }
 
 }
