@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecoveryData();
 
         shapes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 21c6aac0b1a3e151193055d30becadbdbbd34471
             @SuppressLint("NonConstantResourceId")
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

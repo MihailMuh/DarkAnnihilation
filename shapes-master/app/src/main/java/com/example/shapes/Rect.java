@@ -46,4 +46,17 @@ public class Rect extends Figures {
         jsonObject.put("color", this.color);
         jsonArray.put(jsonObject);
     }
+//    @Override
+//    void recovery_inf(JSONArray jsonArray) throws JSONException {
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+//            this.color = jsonObject.get("name") + "";
+//            if (this.color.equals("rect")) {
+//                this.corner.x = Integer.parseInt(jsonObject.get("x") + "");
+//                this.corner.y = Integer.parseInt(jsonObject.get("y") + "");
+//                this.widthRect = Integer.parseInt(jsonObject.get("width") + "");
+//                this.heightRect = Integer.parseInt(jsonObject.get("height") + "");
+//            }
+//        }
+//    }
 }
