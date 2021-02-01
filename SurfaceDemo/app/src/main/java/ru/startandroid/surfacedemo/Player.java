@@ -9,10 +9,12 @@ import android.util.Log;
 
 public class Player {
     private Bitmap player_image;
-    public int x;
-    public int y;
-    public int width;
-    public int height;
+    public float x;
+    public float y;
+    public float endX;
+    public float endY;
+    public float width;
+    public float height;
     private boolean isFilter = true;
     private final Paint color = new Paint();
 
@@ -28,14 +30,24 @@ public class Player {
         player_image = player_image.createScaledBitmap(player_image, 100, 120, isFilter);
         x = 500;
         y = 500;
+        endX = 500;
+        endY = 500;
         width = player_image.getWidth();
         height = player_image.getHeight();
     }
-    public void get_info(){
+    public void get_info() {
         Log.i("player", "X = " + x + " Y = " + y);
-        Log.i("player", "width = " + width + " height = " + height);
+//        Log.i("player", "width = " + width + " height = " + height);
     }
     public void update(Canvas canvas) {
+        float deltaX = endX - x;
+        float deltaY = endY - y;
+        float speedX;
+        float speedY;
+        speedX = deltaX / 10;
+        speedY = deltaY / 10;
+        x += speedX;
+        y += speedY;
         canvas.drawBitmap(player_image, x - width / 2, y - height / 2, color);
     }
 }

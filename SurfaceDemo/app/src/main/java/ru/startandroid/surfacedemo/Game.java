@@ -24,6 +24,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static final int MILLIS_IN_SECOND = 1000000000;
     long timeFrame;
     public Player player;
+    public Vader[] vaders = new Vader[40];
 
 
     public Game(Context context, AttributeSet attrs) {
@@ -34,6 +35,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(40);
         player = new Player(context);
+        for (int i = 0; i < vaders.length; i++) {
+            Vader vader = new Vader(context);
+            vaders[i] = vader;
+        }
 
     }
 
@@ -41,15 +46,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (holder.getSurface().isValid()) {
             Canvas canvas = holder.lockCanvas();
             timeFrame = System.nanoTime();
-            
+
             canvas.drawColor(Color.BLUE);
             canvas.drawText("FPS: " + fps, 50, 50, textPaint);
 
+            for (int i = 0; i < vaders.length; i++) {
+                vaders[i].update(canvas);
+            }
             player.update(canvas);
 
-            if (timeFrame > 0) {
-                fps = MILLIS_IN_SECOND / (System.nanoTime() - timeFrame);
-            }
+            fps = MILLIS_IN_SECOND / (System.nanoTime() - timeFrame);
+
             timeFrame = System.nanoTime();
             holder.unlockCanvasAndPost(canvas);
         }
@@ -80,8 +87,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        player.x = (int)event.getX();
-        player.y = (int)event.getY();
+        player.endX = event.getX();
+        player.endY = event.getY();
 
         player.get_info();
         return true;
