@@ -1,3 +1,7 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">StarWarsTheJoke</string>
+=======
+    <string name="app_name">Surface Demo</string>
+>>>>>>> 14019d6d9fa5d2b258fffb9b7a082e1e65e32ff6
 </resources>
