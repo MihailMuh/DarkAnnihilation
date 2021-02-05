@@ -15,7 +15,6 @@ public class Player {
     public float endY;
     public float width;
     public float height;
-<<<<<<< HEAD
     private final boolean isFilter = true;
     private final Paint color = new Paint();
     private int screenWidth;
@@ -24,10 +23,6 @@ public class Player {
     float deltaY;
     float speedX;
     float speedY;
-=======
-    private boolean isFilter = true;
-    private final Paint color = new Paint();
->>>>>>> 14019d6d9fa5d2b258fffb9b7a082e1e65e32ff6
 
 //    Rectangle imgRect = new Rectangle(263, 146, img.getWidth(), img.getHeight());
 //    Rectangle img7Rect = new Rectangle(x+ player.getmapX() + 500, y + player.getmapY() + 500, 40, 40);
@@ -38,7 +33,6 @@ public class Player {
 
     public Player(Context context) {
         player_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
-<<<<<<< HEAD
         player_image = Bitmap.createScaledBitmap(player_image, 100, 120, isFilter);
         width = player_image.getWidth();
         height = player_image.getHeight();
@@ -56,30 +50,10 @@ public class Player {
     public void update(Canvas canvas) {
         deltaX = endX - x;
         deltaY = endY - y;
-=======
-        player_image = player_image.createScaledBitmap(player_image, 100, 120, isFilter);
-        x = 500;
-        y = 500;
-        endX = 500;
-        endY = 500;
-        width = player_image.getWidth();
-        height = player_image.getHeight();
-    }
-    public void get_info() {
-        Log.i("player", "X = " + x + " Y = " + y);
-//        Log.i("player", "width = " + width + " height = " + height);
-    }
-    public void update(Canvas canvas) {
-        float deltaX = endX - x;
-        float deltaY = endY - y;
-        float speedX;
-        float speedY;
->>>>>>> 14019d6d9fa5d2b258fffb9b7a082e1e65e32ff6
         speedX = deltaX / 10;
         speedY = deltaY / 10;
         x += speedX;
         y += speedY;
-<<<<<<< HEAD
 //        if (x < 0 | x > screenWidth + width) {
 //            x -= speedX;
 //        } else {
@@ -87,8 +61,6 @@ public class Player {
 //                y -= speedY;
 //            }
 //        }
-=======
->>>>>>> 14019d6d9fa5d2b258fffb9b7a082e1e65e32ff6
         canvas.drawBitmap(player_image, x - width / 2, y - height / 2, color);
     }
 }
