@@ -15,8 +15,14 @@ public class Player {
     public float endY;
     public float width;
     public float height;
-    private boolean isFilter = true;
-    private final Paint color = new Paint();
+    private final boolean isFilter = true;
+    public final Paint paint = new Paint();
+    private int screenWidth;
+    private int screenHeight;
+    float deltaX;
+    float deltaY;
+    float speedX;
+    float speedY;
 
 //    Rectangle imgRect = new Rectangle(263, 146, img.getWidth(), img.getHeight());
 //    Rectangle img7Rect = new Rectangle(x+ player.getmapX() + 500, y + player.getmapY() + 500, 40, 40);
@@ -27,27 +33,28 @@ public class Player {
 
     public Player(Context context) {
         player_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
-        player_image = player_image.createScaledBitmap(player_image, 100, 120, isFilter);
-        x = 500;
-        y = 500;
-        endX = 500;
-        endY = 500;
+        player_image = Bitmap.createScaledBitmap(player_image, 100, 120, isFilter);
         width = player_image.getWidth();
         height = player_image.getHeight();
     }
-    public void get_info() {
-        Log.i("player", "X = " + x + " Y = " + y);
-//        Log.i("player", "width = " + width + " height = " + height);
+
+    public void setCoords(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
+        x = (float) screenWidth / 2;
+        y = (float) screenHeight / 2;
+        endX = x;
+        endY = y;
     }
+
     public void update(Canvas canvas) {
-        float deltaX = endX - x;
-        float deltaY = endY - y;
-        float speedX;
-        float speedY;
-        speedX = deltaX / 10;
-        speedY = deltaY / 10;
+        deltaX = endX - x;
+        deltaY = endY - y;
+        speedX = deltaX / 5;
+        speedY = deltaY / 5;
         x += speedX;
         y += speedY;
-        canvas.drawBitmap(player_image, x - width / 2, y - height / 2, color);
+        canvas.drawRect(x, y, x + width, y + height, paint);
+        canvas.drawBitmap(player_image, x, y, paint);
     }
 }

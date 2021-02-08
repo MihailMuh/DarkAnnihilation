@@ -1,5 +1,6 @@
 package ru.startandroid.surfacedemo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,13 +19,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     SurfaceHolder holder;
     Paint textPaint;
     Thread thread;
-    private volatile boolean playing = false;
 
-    private float fps;
+    private volatile boolean playing = false;
+    private int fps;
     private static final int MILLIS_IN_SECOND = 1000000000;
     long timeFrame;
     public Player player;
-    public Vader[] vaders = new Vader[40];
+    public Vader[] vaders = new Vader[12];
 
 
     public Game(Context context, AttributeSet attrs) {
@@ -32,30 +33,36 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         holder = getHolder();
         textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
+        textPaint.setColor(Color.RED);
         textPaint.setTextSize(40);
         player = new Player(context);
         for (int i = 0; i < vaders.length; i++) {
             Vader vader = new Vader(context);
             vaders[i] = vader;
         }
-
     }
 
     private void draw() {
         if (holder.getSurface().isValid()) {
             Canvas canvas = holder.lockCanvas();
             timeFrame = System.nanoTime();
-
             canvas.drawColor(Color.BLUE);
-            canvas.drawText("FPS: " + fps, 50, 50, textPaint);
+
+            for (int i = 0; i < vaders.length; i++) {
+//                if (player.x < vaders[i].x & vaders[i].x < player.x + player.width &
+//                        player.y < vaders[i].y & vaders[i].y < player.y + player.height) {
+//                    vaders[i].newStatus();
+//                }
+                vaders[i].check_intersection(player.x, player.y, player.width, player.height);
+            }
 
             for (int i = 0; i < vaders.length; i++) {
                 vaders[i].update(canvas);
             }
             player.update(canvas);
 
-            fps = MILLIS_IN_SECOND / (System.nanoTime() - timeFrame);
+            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+            canvas.drawText("FPS: " + fps, 50, 50, textPaint);
 
             timeFrame = System.nanoTime();
             holder.unlockCanvasAndPost(canvas);
@@ -85,12 +92,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        player.endX = event.getX();
-        player.endY = event.getY();
-
-        player.get_info();
+        player.endX = event.getX() - player.width / 2;
+        player.endY = event.getY()  - player.height / 2;
         return true;
     }
 
@@ -107,5 +113,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         pause();
+    }
+
+    public void setScreenSizes(int width, int height) {
+        player.setCoords(width, height);
+        for (int i = 0; i < vaders.length; i++) {
+            vaders[i].setCoords(width, height);
+        }
     }
 }

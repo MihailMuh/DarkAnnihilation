@@ -17,8 +17,10 @@ public class Vader {
     public float speedY;
     public float width;
     public float height;
+    private int screenWidth;
+    private int screenHeight;
     private boolean isFilter = true;
-    private final Paint color = new Paint();
+    private final Paint paint = new Paint();
 
 //    Rectangle imgRect = new Rectangle(263, 146, img.getWidth(), img.getHeight());
 //    Rectangle img7Rect = new Rectangle(x+ player.getmapX() + 500, y + player.getmapY() + 500, 40, 40);
@@ -37,24 +39,37 @@ public class Vader {
         width = vader_img.getWidth();
         height = vader_img.getHeight();
     }
-    public void get_info() {
-        Log.i("player", "width = " + width + " height = " + height);
+
+    public void setCoords(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
     }
+
     public float get_random(int min, int max){
         max -= min;
         return (int) (Math.random() * ++max) + min;
     }
+
     public void newStatus() {
         x = get_random(0, 1920);
         y = -50;
         speedX = get_random(-5, 5);
         speedY = get_random(3, 10);
     }
+
+    public void check_intersection(float playerX, float playerY, float playerWidth, float playerHeight) {
+        if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
+                playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+            newStatus();
+        }
+    }
+
     public void update(Canvas canvas) {
         x += speedX;
         y += speedY;
-        canvas.drawBitmap(vader_img, x - width / 2, y - height / 2, color);
-        if (x < -50 | x > 2000 | y > 1600) {
+        canvas.drawRect(x, y, x + width, y + height, paint);
+        canvas.drawBitmap(vader_img, x, y, paint);
+        if (x < -width | x > screenWidth + width | y > screenHeight + height * 2) {
             newStatus();
         }
     }
