@@ -16,7 +16,11 @@ public class Player {
     public float width;
     public float height;
     private final boolean isFilter = true;
+<<<<<<< HEAD
     public final Paint paint = new Paint();
+=======
+    private final Paint color = new Paint();
+>>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
     private int screenWidth;
     private int screenHeight;
     float deltaX;
@@ -50,11 +54,26 @@ public class Player {
     public void update(Canvas canvas) {
         deltaX = endX - x;
         deltaY = endY - y;
+<<<<<<< HEAD
         speedX = deltaX / 5;
         speedY = deltaY / 5;
         x += speedX;
         y += speedY;
         canvas.drawRect(x, y, x + width, y + height, paint);
         canvas.drawBitmap(player_image, x, y, paint);
+=======
+        speedX = deltaX / 10;
+        speedY = deltaY / 10;
+        x += speedX;
+        y += speedY;
+//        if (x < 0 | x > screenWidth + width) {
+//            x -= speedX;
+//        } else {
+//            if (y > screenHeight | y < 0) {
+//                y -= speedY;
+//            }
+//        }
+        canvas.drawBitmap(player_image, x - width / 2, y - height / 2, color);
+>>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
     }
 }

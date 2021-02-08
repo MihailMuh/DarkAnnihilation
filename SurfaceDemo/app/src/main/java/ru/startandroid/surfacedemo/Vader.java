@@ -57,6 +57,7 @@ public class Vader {
         speedY = get_random(3, 10);
     }
 
+<<<<<<< HEAD
     public void check_intersection(float playerX, float playerY, float playerWidth, float playerHeight) {
         if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
                 playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
@@ -70,6 +71,13 @@ public class Vader {
         canvas.drawRect(x, y, x + width, y + height, paint);
         canvas.drawBitmap(vader_img, x, y, paint);
         if (x < -width | x > screenWidth + width | y > screenHeight + height * 2) {
+=======
+    public void update(Canvas canvas) {
+        x += speedX;
+        y += speedY;
+        canvas.drawBitmap(vader_img, x - width / 2, y - height / 2, color);
+        if (x < -50 | x > screenWidth + 150 | y > screenHeight + 50) {
+>>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
             newStatus();
         }
     }

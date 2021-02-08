@@ -47,6 +47,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             Canvas canvas = holder.lockCanvas();
             timeFrame = System.nanoTime();
             canvas.drawColor(Color.BLUE);
+<<<<<<< HEAD
 
             for (int i = 0; i < vaders.length; i++) {
 //                if (player.x < vaders[i].x & vaders[i].x < player.x + player.width &
@@ -55,6 +56,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 //                }
                 vaders[i].check_intersection(player.x, player.y, player.width, player.height);
             }
+=======
+>>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
 
             for (int i = 0; i < vaders.length; i++) {
                 vaders[i].update(canvas);
@@ -95,8 +98,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+<<<<<<< HEAD
         player.endX = event.getX() - player.width / 2;
         player.endY = event.getY()  - player.height / 2;
+=======
+        player.endX = event.getX();
+        player.endY = event.getY();
+>>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
         return true;
     }
 
