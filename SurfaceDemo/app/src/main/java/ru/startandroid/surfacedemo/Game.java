@@ -17,40 +17,50 @@ import androidx.annotation.NonNull;
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
 
     SurfaceHolder holder;
-    Paint textPaint;
     Thread thread;
+    Canvas canvas;
 
+    public int screenWidth;
+    public int screenHeight;
+    private Paint textPaint = new Paint();
     private volatile boolean playing = false;
     private int fps;
     private static final int MILLIS_IN_SECOND = 1000000000;
-    long timeFrame;
+    private long timeFrame;
     public Player player;
-    public Vader[] vaders = new Vader[40];
-
+    public Vader[] vaders = new Vader[12];
+    public Screen screen;
+    private final int number_vaders = vaders.length;
 
     public Game(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         holder = getHolder();
-        textPaint = new Paint();
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(40);
         player = new Player(context);
-        for (int i = 0; i < vaders.length; i++) {
-            Vader vader = new Vader(context);
-            vaders[i] = vader;
+        for (int i = 0; i < number_vaders; i++) {
+            vaders[i] = new Vader(context);
         }
+        screen = new Screen(context);
     }
 
     private void draw() {
         if (holder.getSurface().isValid()) {
-            Canvas canvas = holder.lockCanvas();
+            canvas = holder.lockCanvas();
             timeFrame = System.nanoTime();
-            canvas.drawColor(Color.BLUE);
 
-            for (int i = 0; i < vaders.length; i++) {
+            screen.x += player.speedX / 3;
+
+
+            screen.update(canvas);
+
+            for (int i = 0; i < number_vaders; i++) {
+                vaders[i].check_intersection(player.x, player.y, player.width, player.height);
+                vaders[i].x -= player.speedX / 50;
                 vaders[i].update(canvas);
             }
+
             player.update(canvas);
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
@@ -87,8 +97,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        player.endX = event.getX();
-        player.endY = event.getY();
+        player.endX = event.getX() - player.width / 2;
+        player.endY = event.getY()  - player.height / 2;
+
         return true;
     }
 
@@ -108,9 +119,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void setScreenSizes(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
         player.setCoords(width, height);
         for (int i = 0; i < vaders.length; i++) {
             vaders[i].setCoords(width, height);
         }
+        screen.setCoords(width, height);
     }
 }

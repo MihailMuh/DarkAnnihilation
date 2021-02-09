@@ -16,20 +16,11 @@ public class Player {
     public float width;
     public float height;
     private final boolean isFilter = true;
-    private final Paint color = new Paint();
+    public final Paint color = new Paint();
     private int screenWidth;
     private int screenHeight;
-    float deltaX;
-    float deltaY;
     float speedX;
     float speedY;
-
-//    Rectangle imgRect = new Rectangle(263, 146, img.getWidth(), img.getHeight());
-//    Rectangle img7Rect = new Rectangle(x+ player.getmapX() + 500, y + player.getmapY() + 500, 40, 40);
-//
-//        ()
-//            if(imgRect.intersects(img7Rect)) {
-//    }
 
     public Player(Context context) {
         player_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
@@ -48,19 +39,11 @@ public class Player {
     }
 
     public void update(Canvas canvas) {
-        deltaX = endX - x;
-        deltaY = endY - y;
-        speedX = deltaX / 10;
-        speedY = deltaY / 10;
+        speedX = (endX - x) / 5;
+        speedY = (endY - y) / 5;
         x += speedX;
         y += speedY;
-//        if (x < 0 | x > screenWidth + width) {
-//            x -= speedX;
-//        } else {
-//            if (y > screenHeight | y < 0) {
-//                y -= speedY;
-//            }
-//        }
-        canvas.drawBitmap(player_image, x - width / 2, y - height / 2, color);
+//        canvas.drawRect(x, y, x + width, y + height, color);
+        canvas.drawBitmap(player_image, x, y, color);
     }
 }

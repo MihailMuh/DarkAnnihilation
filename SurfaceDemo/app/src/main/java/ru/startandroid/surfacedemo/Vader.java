@@ -20,20 +20,13 @@ public class Vader {
     private int screenWidth;
     private int screenHeight;
     private boolean isFilter = true;
-    private final Paint color = new Paint();
-
-//    Rectangle imgRect = new Rectangle(263, 146, img.getWidth(), img.getHeight());
-//    Rectangle img7Rect = new Rectangle(x+ player.getmapX() + 500, y + player.getmapY() + 500, 40, 40);
-//
-//        ()
-//            if(imgRect.intersects(img7Rect)) {
-//    }
+    private final Paint paint = new Paint();
 
     public Vader(Context context) {
         vader_img = BitmapFactory.decodeResource(context.getResources(), R.drawable.vader3);
         vader_img = Bitmap.createScaledBitmap(vader_img, 75, 75, isFilter);
         x = get_random(0, 1920);
-        y = -50;
+        y = -150;
         speedX = get_random(-5, 5);
         speedY = get_random(3, 10);
         width = vader_img.getWidth();
@@ -52,16 +45,24 @@ public class Vader {
 
     public void newStatus() {
         x = get_random(0, 1920);
-        y = -50;
+        y = -150;
         speedX = get_random(-5, 5);
         speedY = get_random(3, 10);
+    }
+
+    public void check_intersection(float playerX, float playerY, float playerWidth, float playerHeight) {
+        if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
+                playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+            newStatus();
+        }
     }
 
     public void update(Canvas canvas) {
         x += speedX;
         y += speedY;
-        canvas.drawBitmap(vader_img, x - width / 2, y - height / 2, color);
-        if (x < -50 | x > screenWidth + 150 | y > screenHeight + 50) {
+//        canvas.drawRect(x, y, x + width, y + height, paint);
+        canvas.drawBitmap(vader_img, x, y, paint);
+        if (x < -width | x > screenWidth + width | y > screenHeight + height) {
             newStatus();
         }
     }
