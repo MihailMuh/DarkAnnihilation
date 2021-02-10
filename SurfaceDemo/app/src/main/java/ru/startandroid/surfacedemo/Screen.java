@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Screen {
+public class Screen extends Sprite{
     private Bitmap[] screen_image = new Bitmap[34];
     private final boolean isFilter = true;
     public final Paint color = new Paint();
@@ -57,6 +57,7 @@ public class Screen {
         lastUpdate = System.nanoTime();
     }
 
+    @Override
     public void setCoords(int screenWidth, int screenHeight) {
         for (int i = 0; i < screenImageLength; i++) {
             screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) ((screenWidth + 110) * 1.4), screenHeight, isFilter);
@@ -65,6 +66,7 @@ public class Screen {
         y = 0;
     }
 
+    @Override
     public void update(Canvas canvas) {
         now = System.nanoTime();
         if (now - lastUpdate > frameRate) {
@@ -74,7 +76,6 @@ public class Screen {
             }
             canvas.drawBitmap(screen_image[frame], x, y, color);
             frame += 1;
-            Log.i("screen", "" + frame);
         }
     }
 }

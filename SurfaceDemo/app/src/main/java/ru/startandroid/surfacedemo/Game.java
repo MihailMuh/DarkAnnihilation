@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,6 +18,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     SurfaceHolder holder;
     Thread thread;
     Canvas canvas;
+    SpriteGroup spriteGroup = new SpriteGroup(canvas);
 
     public int screenWidth;
     public int screenHeight;
@@ -28,9 +28,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static final int MILLIS_IN_SECOND = 1000000000;
     private long timeFrame;
     public Player player;
-    public Vader[] vaders = new Vader[12];
+    public final Vader[] vaders = new Vader[12];
     public Screen screen;
-    private final int number_vaders = vaders.length;
+    private final int vaderNumbers = vaders.length;
 
     public Game(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,30 +38,37 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         holder = getHolder();
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(40);
-        player = new Player(context);
-        for (int i = 0; i < number_vaders; i++) {
-            vaders[i] = new Vader(context);
-        }
         screen = new Screen(context);
+        SpriteGroup.append(screen);
+        player = new Player(context);
+        SpriteGroup.append(player);
+        for (int i = 0; i < vaderNumbers; i++) {
+            vaders[i] = new Vader(context);
+            SpriteGroup.append(vaders[i]);
+        }
     }
 
     private void draw() {
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
             timeFrame = System.nanoTime();
-
-            screen.x += player.speedX / 3;
-
-
             screen.update(canvas);
 
-            for (int i = 0; i < number_vaders; i++) {
+            screen.x -= player.speedX / 3;
+
+            for (int i = 0; i < vaderNumbers; i++) {
+                player.bullet[i].update(canvas, player);
+                player.bullet[i].x -= player.speedX / 3;
                 vaders[i].check_intersection(player.x, player.y, player.width, player.height);
-                vaders[i].x -= player.speedX / 50;
+                for (int j = 0; j < vaderNumbers; j++) {
+                    vaders[i].check_intersection(player.bullet[j].x, player.bullet[j].y, player.bullet[j].width, player.bullet[j].height);
+                }
+                vaders[i].x -= player.speedX / 3;
                 vaders[i].update(canvas);
             }
-
             player.update(canvas);
+
+//            SpriteGroup.update();
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText("FPS: " + fps, 50, 50, textPaint);
@@ -88,9 +95,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     @Override
     public void run() {
+        player.start();
         while(playing) {
             draw();
-
         }
     }
 
@@ -124,6 +131,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.setCoords(width, height);
         for (int i = 0; i < vaders.length; i++) {
             vaders[i].setCoords(width, height);
+            player.bullet[i].setCoords(width, height);
         }
         screen.setCoords(width, height);
     }

@@ -7,8 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Player {
-    private Bitmap player_image;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Player extends Sprite{
+    private Bitmap playerImage;
     public float x;
     public float y;
     public float endX;
@@ -19,16 +22,27 @@ public class Player {
     public final Paint color = new Paint();
     private int screenWidth;
     private int screenHeight;
-    float speedX;
-    float speedY;
+    public float speedX;
+    public float speedY;
+    public final Bullet[] bullet = new Bullet[12];
+    public int ammo = 0;
+    private int start = 1;
+    private static Timer timer = new Timer();
+    private static TimerTask timerTask;
+
 
     public Player(Context context) {
-        player_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
-        player_image = Bitmap.createScaledBitmap(player_image, 100, 120, isFilter);
-        width = player_image.getWidth();
-        height = player_image.getHeight();
+        playerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
+        playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
+        width = playerImage.getWidth();
+        height = playerImage.getHeight();
+        for (int i = 0; i < 12; i++) {
+            bullet[i] = new Bullet(context, this);
+        }
+//        ammo = 0;
     }
 
+    @Override
     public void setCoords(int width, int height) {
         screenWidth = width;
         screenHeight = height;
@@ -38,12 +52,29 @@ public class Player {
         endY = y;
     }
 
+    public void start() {
+        timerTask = new TimerTask()
+        {
+            @Override
+            public void run() {
+                if (ammo != 12) {
+                    bullet[ammo].start = 1;
+                    ammo += 1;
+                } else {
+                    ammo = 0;
+                }
+            }
+        };
+        timer.schedule(timerTask, 50, 600);
+    }
+
+    @Override
     public void update(Canvas canvas) {
         speedX = (endX - x) / 5;
         speedY = (endY - y) / 5;
         x += speedX;
         y += speedY;
 //        canvas.drawRect(x, y, x + width, y + height, color);
-        canvas.drawBitmap(player_image, x, y, color);
+        canvas.drawBitmap(playerImage, x, y, color);
     }
 }

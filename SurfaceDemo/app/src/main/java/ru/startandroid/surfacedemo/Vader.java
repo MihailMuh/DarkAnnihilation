@@ -5,12 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
-import java.util.Random;
-
-public class Vader {
-    private Bitmap vader_img;
+public class Vader extends Sprite{
+    private Bitmap vaderImage;
     public float x;
     public float y;
     public float speedX;
@@ -23,16 +20,17 @@ public class Vader {
     private final Paint paint = new Paint();
 
     public Vader(Context context) {
-        vader_img = BitmapFactory.decodeResource(context.getResources(), R.drawable.vader3);
-        vader_img = Bitmap.createScaledBitmap(vader_img, 75, 75, isFilter);
+        vaderImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.vader3);
+        vaderImage = Bitmap.createScaledBitmap(vaderImage, 75, 75, isFilter);
         x = get_random(0, 1920);
         y = -150;
         speedX = get_random(-5, 5);
         speedY = get_random(3, 10);
-        width = vader_img.getWidth();
-        height = vader_img.getHeight();
+        width = vaderImage.getWidth();
+        height = vaderImage.getHeight();
     }
 
+    @Override
     public void setCoords(int width, int height) {
         screenWidth = width;
         screenHeight = height;
@@ -57,11 +55,12 @@ public class Vader {
         }
     }
 
+    @Override
     public void update(Canvas canvas) {
         x += speedX;
         y += speedY;
 //        canvas.drawRect(x, y, x + width, y + height, paint);
-        canvas.drawBitmap(vader_img, x, y, paint);
+        canvas.drawBitmap(vaderImage, x, y, paint);
         if (x < -width | x > screenWidth + width | y > screenHeight + height) {
             newStatus();
         }
