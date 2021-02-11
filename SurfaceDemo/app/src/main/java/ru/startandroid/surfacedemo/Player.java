@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Player {
-    private Bitmap player_image;
+public class Player extends Sprite{
+    private Bitmap playerImage;
     public float x;
     public float y;
     public float endX;
@@ -16,32 +16,35 @@ public class Player {
     public float width;
     public float height;
     private final boolean isFilter = true;
-<<<<<<< HEAD
-    public final Paint paint = new Paint();
-=======
-    private final Paint color = new Paint();
->>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
+    public final Paint color = new Paint();
     private int screenWidth;
     private int screenHeight;
-    float deltaX;
-    float deltaY;
-    float speedX;
-    float speedY;
-
-//    Rectangle imgRect = new Rectangle(263, 146, img.getWidth(), img.getHeight());
-//    Rectangle img7Rect = new Rectangle(x+ player.getmapX() + 500, y + player.getmapY() + 500, 40, 40);
-//
-//        ()
-//            if(imgRect.intersects(img7Rect)) {
-//    }
+    public float speedX;
+    public float speedY;
+    public final Bullet[] bullet = new Bullet[12];
+    public int ammo = 0;
+    private int start = 1;
+    public int distance;
+    private final int numberBullet = 12;
+    private int[] posBullets;
 
     public Player(Context context) {
-        player_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
-        player_image = Bitmap.createScaledBitmap(player_image, 100, 120, isFilter);
-        width = player_image.getWidth();
-        height = player_image.getHeight();
+        playerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
+        playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
+        width = playerImage.getWidth();
+        height = playerImage.getHeight();
+        for (int i = 0; i < numberBullet; i++) {
+            bullet[i] = new Bullet(context, this);
+        }
     }
 
+    public void completeDistance() {
+        for (int i = 0; i < x; i += distance) {
+            posBullets[i / distance] = i;
+        }
+    }
+
+    @Override
     public void setCoords(int width, int height) {
         screenWidth = width;
         screenHeight = height;
@@ -49,31 +52,30 @@ public class Player {
         y = (float) screenHeight / 2;
         endX = x;
         endY = y;
+        distance = (int) ((screenWidth - x) / numberBullet);
+        posBullets = new int[numberBullet];
+        completeDistance();
+        for (int k = 0; k < 12; k++) {
+            bullet[k].y = posBullets[k];
+            bullet[k].x = x;
+            bullet[k].start = 1;
+        }
     }
 
+    @Override
     public void update(Canvas canvas) {
-        deltaX = endX - x;
-        deltaY = endY - y;
-<<<<<<< HEAD
-        speedX = deltaX / 5;
-        speedY = deltaY / 5;
-        x += speedX;
-        y += speedY;
-        canvas.drawRect(x, y, x + width, y + height, paint);
-        canvas.drawBitmap(player_image, x, y, paint);
-=======
-        speedX = deltaX / 10;
-        speedY = deltaY / 10;
-        x += speedX;
-        y += speedY;
-//        if (x < 0 | x > screenWidth + width) {
-//            x -= speedX;
-//        } else {
-//            if (y > screenHeight | y < 0) {
-//                y -= speedY;
+//        for (int i = 0; i < numberBullet; i++) {
+//            if (bullet[i].y < -10) {
+//                bullet[i].y = posBullets[i];
+//                bullet[i].x = x;
 //            }
 //        }
-        canvas.drawBitmap(player_image, x - width / 2, y - height / 2, color);
->>>>>>> acdb79ad105e33de70e1626dd116379ba67bf263
+        
+        speedX = (endX - x) / 5;
+        speedY = (endY - y) / 5;
+        x += speedX;
+        y += speedY;
+//        canvas.drawRect(x, y, x + width, y + height, color);
+        canvas.drawBitmap(playerImage, x, y, color);
     }
 }
