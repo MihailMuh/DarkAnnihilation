@@ -17,15 +17,6 @@ public class Bullet {
     public final Paint color = new Paint();
     public float speed = 10;
 
-    public Bullet(Context context, Player player) {
-        bulletImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet);
-        bulletImage = Bitmap.createScaledBitmap(bulletImage, 7, 30, isFilter);
-        width = bulletImage.getWidth();
-        height = bulletImage.getHeight();
-        x = player.x + player.width / 2;
-        y = player.y;
-    }
-
     public Bullet(Context context, int X, int Y) {
         bulletImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet);
         bulletImage = Bitmap.createScaledBitmap(bulletImage, 7, 30, isFilter);

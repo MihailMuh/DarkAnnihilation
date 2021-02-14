@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+
 
 public class Player {
     private Context context;
@@ -47,12 +47,12 @@ public class Player {
         endY = y;
     }
 
-    public void update(Canvas canvas, BulletGroup bulletGroup) {
+    public void update(Canvas canvas, ArrayList<Bullet> bullets) {
         now =  System.nanoTime();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
-            Bullet bullet = new Bullet(context, (int) (x + width / 2), (int) y);
-            bulletGroup.append(bullet);
+            Bullet bullet = new Bullet(context, (int) (x + width / 2) + 2, (int) y);
+            bullets.add(bullet);
         }
 
         speedX = (endX - x) / 5;

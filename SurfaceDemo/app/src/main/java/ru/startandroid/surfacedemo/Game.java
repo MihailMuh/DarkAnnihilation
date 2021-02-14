@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -12,6 +13,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
 
@@ -28,8 +31,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private long timeFrame;
     public Player player;
     public final Vader[] vaders = new Vader[12];
-    public BulletGroup bulletGroup;
+    public ArrayList<Bullet> bullets = new ArrayList<>(0);
     public Screen screen;
+    public Button button;
     private final int vaderNumbers = vaders.length;
 
     public Game(Context context, AttributeSet attrs) {
@@ -43,7 +47,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         for (int i = 0; i < vaderNumbers; i++) {
             vaders[i] = new Vader(context);
         }
-        bulletGroup = new BulletGroup(player);
+        button = new Button(context, "Start", screenWidth / 2 + 150, screenHeight - 70);
     }
 
     public void pause() {
@@ -71,17 +75,29 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 timeFrame = System.nanoTime();
 
                 screen.update(canvas);
-                player.update(canvas, bulletGroup);
-                bulletGroup.update(canvas);
+                player.update(canvas, bullets);
 
                 screen.x -= player.speedX / 3;
 
+                for (int i = 0; i < bullets.size(); i++) {
+                    bullets.get(i).x -= player.speedX / 3;
+                    bullets.get(i).update(canvas);
+                    if (bullets.get(i).y < -10) {
+                        bullets.get(i).bulletImage.recycle();
+                        bullets.remove(i);
+                    }
+                }
+
                 for (int i = 0; i < vaderNumbers; i++) {
-                    bulletGroup.checkCollisions(vaders, i);
+                    for (int j = 0; j < bullets.size(); j++) {
+                        vaders[i].check_intersection(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height);
+                    }
                     vaders[i].check_intersection(player.x, player.y, player.width, player.height);
                     vaders[i].x -= player.speedX / 3;
                     vaders[i].update(canvas);
                 }
+
+//                button.update(canvas);
 
                 fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
                 canvas.drawText("FPS: " + fps, 50, 50, textPaint);
@@ -98,6 +114,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public boolean onTouchEvent(MotionEvent event) {
         player.endX = event.getX() - player.width / 2;
         player.endY = event.getY()  - player.height / 2;
+        button.mouseX = event.getX();
+        button.mouseY = event.getY();
         return true;
     }
 
@@ -120,8 +138,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screenWidth = width;
         screenHeight = height;
         player.setCoords(width, height);
-        for (int i = 0; i < vaders.length; i++) {
-            vaders[i].setCoords(width, height);
+        for (Vader vader : vaders) {
+            vader.setCoords(width, height);
         }
         screen.setCoords(width, height);
     }
