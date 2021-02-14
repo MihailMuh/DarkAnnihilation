@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public class Vader extends Sprite{
+public class Vader {
     private Bitmap vaderImage;
     public float x;
     public float y;
@@ -30,7 +30,6 @@ public class Vader extends Sprite{
         height = vaderImage.getHeight();
     }
 
-    @Override
     public void setCoords(int width, int height) {
         screenWidth = width;
         screenHeight = height;
@@ -55,7 +54,6 @@ public class Vader extends Sprite{
         }
     }
 
-    @Override
     public void update(Canvas canvas) {
         x += speedX;
         y += speedY;

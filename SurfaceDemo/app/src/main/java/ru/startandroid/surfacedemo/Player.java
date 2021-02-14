@@ -7,44 +7,37 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Player extends Sprite{
-    private Bitmap playerImage;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Player {
+    private Context context;
+    private static Bitmap playerImage;
     public float x;
     public float y;
     public float endX;
     public float endY;
     public float width;
     public float height;
-    private final boolean isFilter = true;
-    public final Paint color = new Paint();
-    private int screenWidth;
-    private int screenHeight;
+    private static final boolean isFilter = true;
+    public static final Paint color = new Paint();
+    private static int screenWidth;
+    private static int screenHeight;
     public float speedX;
     public float speedY;
-    public final Bullet[] bullet = new Bullet[12];
-    public int ammo = 0;
-    private int start = 1;
-    public int distance;
-    private final int numberBullet = 12;
-    private int[] posBullets;
+    private static final int shootTime = 200_000_000;
+    private long lastShoot;
+    private long now;
 
-    public Player(Context context) {
+    public Player(Context c) {
+        context = c;
         playerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
         playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
         width = playerImage.getWidth();
         height = playerImage.getHeight();
-        for (int i = 0; i < numberBullet; i++) {
-            bullet[i] = new Bullet(context, this);
-        }
+        lastShoot = System.nanoTime();
     }
 
-    public void completeDistance() {
-        for (int i = 0; i < x; i += distance) {
-            posBullets[i / distance] = i;
-        }
-    }
-
-    @Override
     public void setCoords(int width, int height) {
         screenWidth = width;
         screenHeight = height;
@@ -52,25 +45,16 @@ public class Player extends Sprite{
         y = (float) screenHeight / 2;
         endX = x;
         endY = y;
-        distance = (int) ((screenWidth - x) / numberBullet);
-        posBullets = new int[numberBullet];
-        completeDistance();
-        for (int k = 0; k < 12; k++) {
-            bullet[k].y = posBullets[k];
-            bullet[k].x = x;
-            bullet[k].start = 1;
-        }
     }
 
-    @Override
-    public void update(Canvas canvas) {
-//        for (int i = 0; i < numberBullet; i++) {
-//            if (bullet[i].y < -10) {
-//                bullet[i].y = posBullets[i];
-//                bullet[i].x = x;
-//            }
-//        }
-        
+    public void update(Canvas canvas, BulletGroup bulletGroup) {
+        now =  System.nanoTime();
+        if (now - lastShoot > shootTime) {
+            lastShoot = now;
+            Bullet bullet = new Bullet(context, (int) (x + width / 2), (int) y);
+            bulletGroup.append(bullet);
+        }
+
         speedX = (endX - x) / 5;
         speedY = (endY - y) / 5;
         x += speedX;

@@ -2,9 +2,11 @@ package ru.startandroid.surfacedemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         game = findViewById(R.id.gameView);
         game.setScreenSizes(displaymetrics.widthPixels, displaymetrics.heightPixels);
+
     }
 
     @Override

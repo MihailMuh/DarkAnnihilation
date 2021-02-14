@@ -7,18 +7,15 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Bullet extends Sprite{
-    private Bitmap bulletImage;
+public class Bullet {
+    public Bitmap bulletImage;
     public float x;
     public float y;
     public float width;
     public float height;
     private final boolean isFilter = true;
     public final Paint color = new Paint();
-    private int screenWidth;
-    private int screenHeight;
-    private final float speed = 10;
-    public int start = 0;
+    public float speed = 10;
 
     public Bullet(Context context, Player player) {
         bulletImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet);
@@ -29,22 +26,18 @@ public class Bullet extends Sprite{
         y = player.y;
     }
 
-    @Override
-    public void setCoords(int width, int height) {
-        screenWidth = width;
-        screenHeight = height;
+    public Bullet(Context context, int X, int Y) {
+        bulletImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet);
+        bulletImage = Bitmap.createScaledBitmap(bulletImage, 7, 30, isFilter);
+        width = bulletImage.getWidth();
+        height = bulletImage.getHeight();
+        x = X;
+        y = Y;
     }
 
-    @Override
-    public void update(Canvas canvas, Player player) {
-        if (start == 1) {
-            y -= speed;
-            if (y < -150) {
-                x = player.x + player.width / 2;
-                y = player.y;
-            }
+    public void update(Canvas canvas) {
+        y -= speed;
 //        canvas.drawRect(x, y, x + width, y + height, color);
-        }
         canvas.drawBitmap(bulletImage, x, y, color);
     }
 }
