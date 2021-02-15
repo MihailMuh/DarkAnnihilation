@@ -19,7 +19,7 @@ public class Screen {
     private int frame = 0;
     private int screenImageLength = screen_image.length;
 
-    public Screen(Context context) {
+    public Screen(Context context, int screenWidth, int screenHeight) {
         screen_image[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable._0);
         screen_image[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable._1);
         screen_image[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable._2);
@@ -54,15 +54,14 @@ public class Screen {
         screen_image[31] = BitmapFactory.decodeResource(context.getResources(), R.drawable._31);
         screen_image[32] = BitmapFactory.decodeResource(context.getResources(), R.drawable._32);
         screen_image[33] = BitmapFactory.decodeResource(context.getResources(), R.drawable._33);
-        lastUpdate = System.nanoTime();
-    }
 
-    public void setCoords(int screenWidth, int screenHeight) {
         for (int i = 0; i < screenImageLength; i++) {
             screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) ((screenWidth + 110) * 1.4), screenHeight + 100, isFilter);
         }
         x = (float) (screenWidth * -0.2);
         y = 0;
+
+        lastUpdate = System.nanoTime();
     }
 
     public void update(Canvas canvas) {

@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getSupportActionBar().hide();
         this.getWindow().getDecorView().setSystemUiVisibility(
                           View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics displaymetrics = getResources().getDisplayMetrics();
 
         game = findViewById(R.id.gameView);
-        game.setScreenSizes(displaymetrics.widthPixels, displaymetrics.heightPixels);
+        game.initGame(displaymetrics.widthPixels, displaymetrics.heightPixels);
 
     }
 

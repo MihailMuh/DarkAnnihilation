@@ -23,15 +23,17 @@ public class Button {
     public static final Paint paint = new Paint();
     private static int screenWidth;
     private static int screenHeight;
-    public int start = 0;
+    public Game game;
 
     private Rect bounds = new Rect();
     private String text;
     private int textWidth;
     private int textHeight;
 
-    public Button(Context c, String t, float X, float Y, int w, int h) {
+    public Button(Context c, String t, int screenW, int screenH, float X, float Y, int w, int h) {
         context = c;
+        screenWidth = screenW;
+        screenHeight = screenH;
         buttonImagePressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_press);
         buttonImagePressed = Bitmap.createScaledBitmap(buttonImagePressed, w, h, isFilter);
         buttonImageNotPressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_notpress);
@@ -39,6 +41,9 @@ public class Button {
         img = buttonImageNotPressed;
         width = buttonImagePressed.getWidth();
         height = buttonImagePressed.getHeight();
+
+        x = X;
+        y = Y;
 
         text = t;
         paint.setColor(Color.WHITE);
@@ -48,8 +53,12 @@ public class Button {
         textHeight = bounds.height();
     }
 
-    public Button(Context c, String t, float X, float Y) {
+    public Button(Context c, String t, int screenW, int screenH, float X, float Y, Game g) {
         context = c;
+        screenWidth = screenW;
+        screenHeight = screenH;
+        game = g;
+
         buttonImagePressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_press);
         buttonImagePressed = Bitmap.createScaledBitmap(buttonImagePressed, 300, 70, isFilter);
         buttonImageNotPressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.button_notpress);
@@ -57,6 +66,9 @@ public class Button {
         img = buttonImageNotPressed;
         width = buttonImagePressed.getWidth();
         height = buttonImagePressed.getHeight();
+
+        x = X;
+        y = Y;
 
         text = t;
         paint.setColor(Color.WHITE);
@@ -69,7 +81,7 @@ public class Button {
     public void update(Canvas canvas) {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
             img = buttonImagePressed;
-            start = 1;
+            game.preview = 0;
         } else {
             img = buttonImageNotPressed;
         }

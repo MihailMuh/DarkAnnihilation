@@ -19,20 +19,26 @@ public class Vader {
     private boolean isFilter = true;
     private final Paint paint = new Paint();
 
-    public Vader(Context context) {
+    public Vader(Context context, int screenW, int screenH) {
+        screenWidth = screenW;
+        screenHeight = screenH;
+
         vaderImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.vader3);
         vaderImage = Bitmap.createScaledBitmap(vaderImage, 75, 75, isFilter);
+        width = vaderImage.getWidth();
+        height = vaderImage.getHeight();
+
         x = get_random(0, 1920);
         y = -150;
         speedX = get_random(-5, 5);
         speedY = get_random(3, 10);
-        width = vaderImage.getWidth();
-        height = vaderImage.getHeight();
     }
 
-    public void setCoords(int width, int height) {
-        screenWidth = width;
-        screenHeight = height;
+    public void reboot() {
+        x = get_random(0, 1920);
+        y = -150;
+        speedX = get_random(-5, 5);
+        speedY = get_random(3, 10);
     }
 
     public float get_random(int min, int max){
