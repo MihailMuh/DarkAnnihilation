@@ -29,11 +29,13 @@ public class Player {
     private static final int shootTime = 100_000_000;
     private long lastShoot;
     private long now;
+    private Game game;
 
-    public Player(Context c, int screenW, int screenH) {
-        context = c;
-        screenWidth = screenW;
-        screenHeight = screenH;
+    public Player(Game g) {
+        game = g;
+        context = game.context;
+        screenWidth = game.screenWidth;
+        screenHeight = game.screenHeight;
 
         playerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
         playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
@@ -55,12 +57,12 @@ public class Player {
         endY = y;
     }
 
-    public void update(Canvas canvas, LinkedList<Bullet> bullets) {
+    public void update() {
         now =  System.nanoTime();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
-            Bullet bullet = new Bullet(context, (int) (x + width / 2) - 3, (int) y);
-            bullets.add(bullet);
+            Bullet bullet = new Bullet(game, (int) (x + width / 2) - 3, (int) y);
+            game.bullets.add(bullet);
         }
 
 
@@ -74,6 +76,69 @@ public class Player {
         x += speedX;
         y += speedY;
 //        canvas.drawRect(x, y, x + width, y + height, color);
-        canvas.drawBitmap(playerImage, x, y, color);
+        game.canvas.drawBitmap(playerImage, x, y, color);
+    }
+}
+
+
+class AI {
+    private Context context;
+    public static Bitmap playerImage;
+    public float x;
+    public float y;
+    public float width;
+    public float height;
+    private static final boolean isFilter = true;
+    public static final Paint color = new Paint();
+    private static int screenWidth;
+    private static int screenHeight;
+    public float speedX = 3;
+    public float speedY = 3;
+    private static final int shootTime = 250_000_000;
+    private long lastShoot;
+    private long now;
+    private Game game;
+
+    public AI(Game g) {
+        game = g;
+        context = game.context;
+        screenWidth = game.screenWidth;
+        screenHeight = game.screenHeight;
+
+        playerImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
+        playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
+        width = playerImage.getWidth();
+        height = playerImage.getHeight();
+
+        x = (float) screenWidth / 2;
+        y = (float) screenHeight / 2;
+
+        lastShoot = System.nanoTime();
+    }
+
+    public void reboot() {
+        x = (float) screenWidth / 2;
+        y = (float) screenHeight / 2;
+    }
+
+    public void update() {
+        now =  System.nanoTime();
+        if (now - lastShoot > shootTime) {
+            lastShoot = now;
+            Bullet bullet = new Bullet(game, (int) (x + width / 2) - 3, (int) y);
+            game.bullets.add(bullet);
+        }
+
+        if (x < 30 | x > screenWidth - 30) {
+            speedX = -speedX;
+        }
+        if (y < 30 | y > screenHeight- 30) {
+            speedY = -speedY;
+        }
+
+        x += speedX;
+        y += speedY;
+//        canvas.drawRect(x, y, x + width, y + height, color);
+        game.canvas.drawBitmap(playerImage, x, y, color);
     }
 }

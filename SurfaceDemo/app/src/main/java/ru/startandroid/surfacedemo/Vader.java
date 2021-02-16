@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public class Vader {
-    private Bitmap vaderImage;
+    public Bitmap vaderImage;
     public float x;
     public float y;
     public float speedX;
@@ -18,12 +18,14 @@ public class Vader {
     private int screenHeight;
     private boolean isFilter = true;
     private final Paint paint = new Paint();
+    private Game game;
 
-    public Vader(Context context, int screenW, int screenH) {
-        screenWidth = screenW;
-        screenHeight = screenH;
+    public Vader(Game g) {
+        game = g;
+        screenWidth = game.screenWidth;
+        screenHeight = game.screenHeight;
 
-        vaderImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.vader3);
+        vaderImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
         vaderImage = Bitmap.createScaledBitmap(vaderImage, 75, 75, isFilter);
         width = vaderImage.getWidth();
         height = vaderImage.getHeight();
@@ -60,11 +62,11 @@ public class Vader {
         }
     }
 
-    public void update(Canvas canvas) {
+    public void update() {
         x += speedX;
         y += speedY;
 //        canvas.drawRect(x, y, x + width, y + height, paint);
-        canvas.drawBitmap(vaderImage, x, y, paint);
+        game.canvas.drawBitmap(vaderImage, x, y, paint);
         if (x < -width | x > screenWidth + width | y > screenHeight + height) {
             newStatus();
         }
