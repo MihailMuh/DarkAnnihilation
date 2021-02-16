@@ -1,22 +1,19 @@
 package ru.startandroid.surfacedemo;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 public class Bullet {
     public Bitmap bulletImage;
-    public float x;
-    public float y;
-    public float width;
-    public float height;
-    private final boolean isFilter = true;
-    public final Paint color = new Paint();
-    public float speed = 10;
-    private Game game;
+    public int x;
+    public int y;
+    public int width;
+    public int height;
+    private static final boolean isFilter = true;
+    public static final Paint color = new Paint();
+    public static final int speed = 10;
+    private final Game game;
 
     public Bullet(Game g, int X, int Y) {
         game = g;

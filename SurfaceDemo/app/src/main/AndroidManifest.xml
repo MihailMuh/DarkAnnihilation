@@ -19,7 +19,8 @@
         android:theme="@style/Theme.SurfaceDemo"
         android:largeHeap = "true"
         android:hardwareAccelerated="false"
-        android:noHistory="true" >
+        android:noHistory="true"
+        android:configChanges="orientation|screenSize">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

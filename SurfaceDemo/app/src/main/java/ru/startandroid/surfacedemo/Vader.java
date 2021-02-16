@@ -1,24 +1,22 @@
 package ru.startandroid.surfacedemo;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public class Vader {
     public Bitmap vaderImage;
-    public float x;
-    public float y;
-    public float speedX;
-    public float speedY;
-    public float width;
-    public float height;
-    private int screenWidth;
-    private int screenHeight;
-    private boolean isFilter = true;
-    private final Paint paint = new Paint();
-    private Game game;
+    public int x;
+    public int y;
+    public int speedX;
+    public int speedY;
+    public int width;
+    public int height;
+    private static int screenWidth;
+    private static int screenHeight;
+    private static final boolean isFilter = true;
+    private static final Paint paint = new Paint();
+    private final Game game;
 
     public Vader(Game g) {
         game = g;
@@ -36,14 +34,7 @@ public class Vader {
         speedY = get_random(3, 10);
     }
 
-    public void reboot() {
-        x = get_random(0, 1920);
-        y = -150;
-        speedX = get_random(-5, 5);
-        speedY = get_random(3, 10);
-    }
-
-    public float get_random(int min, int max){
+    public static int get_random(int min, int max){
         max -= min;
         return (int) (Math.random() * ++max) + min;
     }

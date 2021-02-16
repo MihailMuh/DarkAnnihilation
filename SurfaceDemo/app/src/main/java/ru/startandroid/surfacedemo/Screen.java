@@ -8,17 +8,17 @@ import android.graphics.Paint;
 import android.util.Log;
 
 public class Screen {
-    private Bitmap[] screen_image = new Bitmap[34];
-    private final boolean isFilter = true;
-    public final Paint color = new Paint();
-    public float x;
-    public float y;
+    private static final Bitmap[] screen_image = new Bitmap[34];
+    private static final boolean isFilter = true;
+    public static final Paint color = new Paint();
+    public int x;
+    public int y;
     private long lastUpdate;
     private static final int frameRate = 25;
     private long now;
     private int frame = 0;
-    private int screenImageLength = screen_image.length;
-    private Game game;
+    private static final int screenImageLength = screen_image.length;
+    private final Game game;
 
     public Screen(Game g) {
         game = g;
@@ -61,7 +61,7 @@ public class Screen {
         for (int i = 0; i < screenImageLength; i++) {
             screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) ((game.screenWidth + 110) * 1.4), game.screenHeight + 100, isFilter);
         }
-        x = (float) (game.screenWidth * -0.2);
+        x = (int) (game.screenWidth * -0.2);
         y = 0;
 
         lastUpdate = System.nanoTime();
