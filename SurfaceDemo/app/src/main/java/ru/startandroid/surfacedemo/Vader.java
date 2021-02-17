@@ -17,6 +17,7 @@ public class Vader {
     private static final boolean isFilter = true;
     private static final Paint paint = new Paint();
     private final Game game;
+    public boolean lock = false;
 
     public Vader(Game g) {
         game = g;
@@ -54,12 +55,14 @@ public class Vader {
     }
 
     public void update() {
-        x += speedX;
-        y += speedY;
+        if (!lock) {
+            x += speedX;
+            y += speedY;
 //        canvas.drawRect(x, y, x + width, y + height, paint);
-        game.canvas.drawBitmap(vaderImage, x, y, paint);
-        if (x < -width | x > screenWidth + width | y > screenHeight + height) {
-            newStatus();
+            game.canvas.drawBitmap(vaderImage, x, y, paint);
+            if (x < -width | x > screenWidth + width | y > screenHeight + height) {
+                newStatus();
+            }
         }
     }
 }

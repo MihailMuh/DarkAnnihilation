@@ -27,6 +27,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int screenWidth;
     public int screenHeight;
     private static final Paint textPaint = new Paint();
+    private static final Paint startPaint = new Paint();
     public volatile boolean playing = false;
     public int fps;
     private static final int MILLIS_IN_SECOND = 1000000000;
@@ -41,6 +42,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int vaderNumbers = vaders.length;
     public int numberBullets = bullets.size();
     public int preview = 1;
+    public int count = 0;
+    public Rect bounds = new Rect();
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -55,6 +58,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(40);
+        startPaint.setColor(Color.WHITE);
+        startPaint.setTextSize(400);
 
         screen = new Screen(this);
         if (preview == 1) {
@@ -127,8 +132,36 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         timeFrame = System.nanoTime();
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
+
             screen.update();
             player.update();
+
+            if (preview == 2) {
+                count += 1;
+                if (0 <= count & count < 60) {
+                    canvas.drawText("1", screenWidth / 2 - startPaint.measureText("1") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+                } else {
+                    if (60 <= count & count < 120) {
+                        canvas.drawText("2", screenWidth / 2 - startPaint.measureText("2") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+                    } else {
+                        if (120 <= count & count < 180) {
+                            canvas.drawText("3", screenWidth / 2 - startPaint.measureText("3") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+                        } else {
+                            if (180 <= count & count < 240) {
+                                canvas.drawText("SHOOT!", screenWidth / 2 - startPaint.measureText("SHOOT!") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+                            } else {
+                                if (count >= 240) {
+                                    preview = 0;
+                                    for (int i = 0; i < vaderNumbers; i++) {
+                                        vaders[i].lock = false;
+                                    }
+                                    player.lock = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             screen.x -= player.speedX / 3;
 
@@ -152,7 +185,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + fps, 50, 50, textPaint);
+            canvas.drawText("FPS: " + String.valueOf(fps), 50, 50, textPaint);
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();

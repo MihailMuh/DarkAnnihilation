@@ -58,15 +58,17 @@ public class Button {
             if (function.equals("start")) {
                 game.ai = null;
                 game.player = new Player(game);
+                game.player.lock = true;
                 game.vaders = new Vader[12];
                 game.vaderNumbers = 12;
                 for (int i = 0; i < 12; i++) {
                     game.vaders[i] = new Vader(game);
+                    game.vaders[i].lock = true;
                 }
                 game.bullets = new ArrayList<>(0);
                 game.numberBullets = game.bullets.size();
                 game.buttonStart = null;
-                game.preview = 0;
+                game.preview = 2;
             } else {
                 if (function.equals("quit")) {
                     System.exit(0);

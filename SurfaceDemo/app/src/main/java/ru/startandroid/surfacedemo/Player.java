@@ -22,6 +22,7 @@ public class Player {
     private long lastShoot;
     private static long now;
     private final Game game;
+    public boolean lock = false;
 
     public Player(Game g) {
         game = g;
@@ -42,12 +43,14 @@ public class Player {
     }
 
     public void update() {
-        now =  System.nanoTime();
-        if (now - lastShoot > shootTime) {
-            lastShoot = now;
-            Bullet bullet = new Bullet(game, (int) (x + width / 2) - 3, (int) y);
-            game.bullets.add(bullet);
-            game.numberBullets += 1;
+        if (!lock) {
+            now = System.nanoTime();
+            if (now - lastShoot > shootTime) {
+                lastShoot = now;
+                Bullet bullet = new Bullet(game, (int) (x + width / 2) - 3, (int) y);
+                game.bullets.add(bullet);
+                game.numberBullets += 1;
+            }
         }
 
 
