@@ -6,11 +6,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -18,7 +21,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
-
+    MediaPlayer mediaPlayer;
+//    View view;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
     public static SurfaceHolder holder;
     public static Thread thread;
     public Canvas canvas;
@@ -44,6 +53,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int preview = 1;
     public int count = 0;
     public Rect bounds = new Rect();
+
+    public void startMusic() {
+        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.start_game);
+//        int longmedia = mediaPlayer.getDuration();
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+    }
+
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -77,6 +95,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 vaders[i] = new Vader(this);
             }
         }
+        startMusic();
     }
 
     public void pause() {
@@ -95,6 +114,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void preview() {
+
         timeFrame = System.nanoTime();
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
@@ -130,6 +150,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void gameplay() {
         timeFrame = System.nanoTime();
+
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
 
@@ -189,6 +210,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();
+
     }
 
     @Override

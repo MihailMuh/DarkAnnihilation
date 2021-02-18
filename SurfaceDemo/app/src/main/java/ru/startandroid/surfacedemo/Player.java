@@ -1,8 +1,9 @@
 package ru.startandroid.surfacedemo;
-
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 
 public class Player {
     private static Bitmap playerImage;
@@ -23,6 +24,16 @@ public class Player {
     private static long now;
     private final Game game;
     public boolean lock = false;
+    MediaPlayer shootSound;
+
+    public void ShootSound() {
+        shootSound = MediaPlayer.create(game.context, R.raw.shoot);
+//        int longmedia = mediaPlayer.getDuration();
+        shootSound.start();
+
+    }
+
+    
 
     public Player(Game g) {
         game = g;
@@ -46,10 +57,12 @@ public class Player {
         if (!lock) {
             now = System.nanoTime();
             if (now - lastShoot > shootTime) {
+
                 lastShoot = now;
                 Bullet bullet = new Bullet(game, (int) (x + width / 2) - 3, (int) y);
                 game.bullets.add(bullet);
                 game.numberBullets += 1;
+                ShootSound();
             }
         }
 
