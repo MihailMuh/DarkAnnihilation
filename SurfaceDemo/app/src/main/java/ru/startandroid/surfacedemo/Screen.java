@@ -7,19 +7,28 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Screen extends Sprite{
-    private Bitmap[] screen_image = new Bitmap[34];
-    private final boolean isFilter = true;
-    public final Paint color = new Paint();
-    public float x;
-    public float y;
+public class Screen {
+    private static final Bitmap[] screen_image = new Bitmap[34];
+    private static final boolean isFilter = true;
+    public static final Paint color = new Paint();
+    public int x;
+    public int y;
     private long lastUpdate;
     private static final int frameRate = 25;
     private long now;
     private int frame = 0;
-    private int screenImageLength = screen_image.length;
+    private static final int screenImageLength = screen_image.length;
+    private final Game game;
+    public boolean gameover = false;
+    public static Bitmap gameoverScreen;
 
-    public Screen(Context context) {
+    public Screen(Game g) {
+        game = g;
+        Context context = game.context;
+
+        gameoverScreen = BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover);
+        gameoverScreen = Bitmap.createScaledBitmap(gameoverScreen, game.screenWidth, game.screenHeight, true);
+
         screen_image[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable._0);
         screen_image[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable._1);
         screen_image[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable._2);
@@ -54,28 +63,29 @@ public class Screen extends Sprite{
         screen_image[31] = BitmapFactory.decodeResource(context.getResources(), R.drawable._31);
         screen_image[32] = BitmapFactory.decodeResource(context.getResources(), R.drawable._32);
         screen_image[33] = BitmapFactory.decodeResource(context.getResources(), R.drawable._33);
+
+        for (int i = 0; i < screenImageLength; i++) {
+            screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) ((game.screenWidth + 110) * 1.4), game.screenHeight + 100, isFilter);
+        }
+        x = (int) (game.screenWidth * -0.2);
+        y = 0;
+
         lastUpdate = System.nanoTime();
     }
 
-    @Override
-    public void setCoords(int screenWidth, int screenHeight) {
-        for (int i = 0; i < screenImageLength; i++) {
-            screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) ((screenWidth + 110) * 1.4), screenHeight, isFilter);
-        }
-        x = (float) (screenWidth * -0.2);
-        y = 0;
-    }
-
-    @Override
-    public void update(Canvas canvas) {
-        now = System.nanoTime();
-        if (now - lastUpdate > frameRate) {
-            lastUpdate = now;
-            if (frame == screenImageLength) {
-                frame = 0;
+    public void update() {
+        if (!gameover) {
+            now = System.nanoTime();
+            if (now - lastUpdate > frameRate) {
+                lastUpdate = now;
+                if (frame == screenImageLength) {
+                    frame = 0;
+                }
+                game.canvas.drawBitmap(screen_image[frame], x, y, color);
+                frame += 1;
             }
-            canvas.drawBitmap(screen_image[frame], x, y, color);
-            frame += 1;
+        } else {
+            game.canvas.drawBitmap(gameoverScreen, 0, 0, color);
         }
     }
 }

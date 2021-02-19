@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,100 +14,190 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
-public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
+import java.util.ArrayList;
 
-    SurfaceHolder holder;
-    Thread thread;
-    Canvas canvas;
-    SpriteGroup spriteGroup = new SpriteGroup(canvas);
+public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
+    public static SurfaceHolder holder;
+    public static Thread thread;
+    public Canvas canvas;
+    public Context context;
 
     public int screenWidth;
     public int screenHeight;
-    private Paint textPaint = new Paint();
-    private volatile boolean playing = false;
-    private int fps;
+    private static final Paint textPaint = new Paint();
+    private static final Paint startPaint = new Paint();
+    private static final Paint gameoverPaint = new Paint();
+    public volatile boolean playing = false;
+    public int fps;
     private static final int MILLIS_IN_SECOND = 1000000000;
     private long timeFrame;
     public Player player;
-    public final Vader[] vaders = new Vader[12];
+    public AI ai;
+    public Vader[] vaders = new Vader[12];
+    public ArrayList<Bullet> bullets = new ArrayList<>(0);
+    public ArrayList<Heart> hearts = new ArrayList<>(0);
     public Screen screen;
-    private final int vaderNumbers = vaders.length;
+    public Button buttonStart;
+    public Button buttonQuit;
+    public int vaderNumbers = vaders.length;
+    public int heartsNumbers = 0;
+    public int numberBullets = 0;
+    public int gameStatus = 1;
+    public int count = 0;
+    public MediaPlayer mediaPlayer;
+    public int pointerCount;
 
-    public Game(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
-        holder = getHolder();
-        textPaint.setColor(Color.RED);
-        textPaint.setTextSize(40);
-        screen = new Screen(context);
-        SpriteGroup.append(screen);
-        player = new Player(context);
-        SpriteGroup.append(player);
-        for (int i = 0; i < vaderNumbers; i++) {
-            vaders[i] = new Vader(context);
-            SpriteGroup.append(vaders[i]);
-        }
+    public Game(Context cont, AttributeSet attrs) {
+        super(cont, attrs);
+        context = cont;
     }
 
-    private void draw() {
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-            timeFrame = System.nanoTime();
-            screen.update(canvas);
+    public void initGame(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
 
-            screen.x -= player.speedX / 3;
+        holder = getHolder();
 
-            for (int i = 0; i < vaderNumbers; i++) {
-                player.bullet[i].update(canvas, player);
-                player.bullet[i].x -= player.speedX / 3;
-                vaders[i].check_intersection(player.x, player.y, player.width, player.height);
-                for (int j = 0; j < vaderNumbers; j++) {
-                    vaders[i].check_intersection(player.bullet[j].x, player.bullet[j].y, player.bullet[j].width, player.bullet[j].height);
-                }
-                vaders[i].x -= player.speedX / 3;
-                vaders[i].update(canvas);
-            }
-            player.update(canvas);
+        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.menu);
+        mediaPlayer.setLooping(true);
 
-//            SpriteGroup.update();
+        textPaint.setColor(Color.RED);
+        textPaint.setTextSize(40);
+        startPaint.setColor(Color.WHITE);
+        startPaint.setTextSize(300);
+        gameoverPaint.setColor(Color.WHITE);
+        gameoverPaint.setTextSize(50);
 
-            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + fps, 50, 50, textPaint);
-
-            timeFrame = System.nanoTime();
-            holder.unlockCanvasAndPost(canvas);
+        screen = new Screen(this);
+        ai = new AI(this);
+        vaderNumbers *= 2;
+        vaders = new Vader[vaderNumbers];
+        for (int i = 0; i < vaderNumbers; i++) {
+            vaders[i] = new Vader(this);
         }
+        buttonStart = new Button(this, "Start", screenWidth / 2, screenHeight - 70, "start");
+        buttonQuit = new Button(this, "Quit", screenWidth / 2 - 300, screenHeight - 70, "quit");
+
     }
 
     public void pause() {
         playing = false;
+        mediaPlayer.pause();
         try {
             thread.join();
         } catch(Exception e) {
-            Log.e("Error: ", "thread join");
+            Log.e("Error: ", "Thread join");
         }
     }
 
     public void resume() {
-        playing = true;
         thread = new Thread(this);
         thread.start();
+        playing = true;
+        mediaPlayer.start();
+    }
+
+    public void gameplay() {
+        timeFrame = System.nanoTime();
+
+        if (holder.getSurface().isValid()) {
+            canvas = holder.lockCanvas();
+
+            screen.update();
+            screen.x -= player.speedX / 3;
+
+            for (int i = 0; i < numberBullets; i++) {
+                bullets.get(i).x -= player.speedX / 3;
+                bullets.get(i).update();
+                if (bullets.get(i).y < -50) {
+                    bullets.get(i).bulletImage.recycle();
+                    bullets.remove(i);
+                    numberBullets -= 1;
+                }
+            }
+
+            for (int i = 0; i < vaderNumbers; i++) {
+                for (int j = 0; j < numberBullets; j++) {
+                    vaders[i].check_intersectionBullet(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height, bullets.get(j).damage);
+                }
+                vaders[i].check_intersectionPlayer(player.x, player.y, player.width, player.height);
+                vaders[i].x -= player.speedX / 3;
+                vaders[i].update();
+            }
+
+            player.update();
+            if (player.health <= 0) {
+                screen.gameover = true;
+                gameStatus = 3;
+            }
+            if (gameStatus == 2) {
+                timerStart();
+            }
+
+            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+            holder.unlockCanvasAndPost(canvas);
+        }
+        timeFrame = System.nanoTime();
     }
 
     @Override
     public void run() {
-        player.start();
         while(playing) {
-            draw();
+            switch (gameStatus)
+            {
+                case 1:
+                    preview();
+                    break;
+                case 2:
+                    gameplay();
+                    break;
+                case 0:
+                    gameplay();
+                    break;
+                case 3:
+                    gameover();
+                    break;
+            }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        player.endX = event.getX() - player.width / 2;
-        player.endY = event.getY()  - player.height / 2;
-
+        final int action = event.getAction();
+        pointerCount = event.getPointerCount();
+        switch (action & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN: {
+                if (buttonStart != null) {
+                    buttonStart.mouseX = (int) event.getX();
+                    buttonStart.mouseY = (int) event.getY();
+                    buttonQuit.mouseX = (int) event.getX();
+                    buttonQuit.mouseY = (int) event.getY();
+                }
+                if (player != null) {
+                    player.endX = (int) (event.getX() - player.width / 2);
+                    player.endY = (int) (event.getY() - player.height / 2);
+                }
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                if (player != null) {
+                    player.endX = (int) (event.getX() - player.width / 2);
+                    player.endY = (int) (event.getY() - player.height / 2);
+                }
+                break;
+            }
+//            case MotionEvent.ACTION_UP: {
+//                break;
+//            }
+//            case MotionEvent.ACTION_CANCEL: {
+//                break;
+//            }
+//            case MotionEvent.ACTION_POINTER_UP: {
+//                break;
+//            }
+        }
         return true;
     }
 
@@ -125,14 +216,120 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         pause();
     }
 
-    public void setScreenSizes(int width, int height) {
-        screenWidth = width;
-        screenHeight = height;
-        player.setCoords(width, height);
-        for (int i = 0; i < vaders.length; i++) {
-            vaders[i].setCoords(width, height);
-            player.bullet[i].setCoords(width, height);
+    public void generateNewGame() {
+        count = 0;
+        screen.gameover = false;
+        ai = null;
+        player = new Player(this);
+        player.lock = true;
+        vaders = new Vader[12];
+        vaderNumbers = 12;
+        for (int i = 0; i < 12; i++) {
+            vaders[i] = new Vader(this);
+            vaders[i].lock = true;
         }
-        screen.setCoords(width, height);
+        bullets = new ArrayList<>(0);
+        hearts = new ArrayList<>(0);
+        numberBullets = 0;
+        buttonStart = null;
+        int c = 10;
+        for (int i = 0; i < 5; i++) {
+            Heart heart = new Heart(this, c, 10, "full");
+            hearts.add(heart);
+            c += 90;
+        }
+        heartsNumbers = hearts.size();
+
+        mediaPlayer.stop();
+        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.pirate);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+        gameStatus = 2;
+
+    }
+
+    public void gameover() {
+        timeFrame = System.nanoTime();
+
+        if (holder.getSurface().isValid()) {
+            canvas = holder.lockCanvas();
+
+            screen.update();
+
+            if (pointerCount >= 4) {
+                generateNewGame();
+            }
+
+            canvas.drawText("Tap this screen with four or more fingers to restart",
+                    (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
+                    (float) (screenHeight * 0.7), gameoverPaint);
+
+            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+            holder.unlockCanvasAndPost(canvas);
+        }
+        timeFrame = System.nanoTime();
+    }
+
+    public void timerStart() {
+        count += 1;
+        if (0 <= count & count < 60) {
+            canvas.drawText("1", screenWidth / 2 - startPaint.measureText("1") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+        } else {
+            if (60 <= count & count < 120) {
+                canvas.drawText("2", screenWidth / 2 - startPaint.measureText("2") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+            } else {
+                if (120 <= count & count < 180) {
+                    canvas.drawText("3", screenWidth / 2 - startPaint.measureText("3") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+                } else {
+                    if (180 <= count & count < 240) {
+                        canvas.drawText("SHOOT!", screenWidth / 2 - startPaint.measureText("SHOOT!") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
+                    } else {
+                        if (count >= 240) {
+                            gameStatus = 0;
+                            for (int i = 0; i < vaderNumbers; i++) {
+                                vaders[i].lock = false;
+                            }
+                            player.lock = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void preview() {
+        timeFrame = System.nanoTime();
+        if (holder.getSurface().isValid()) {
+            canvas = holder.lockCanvas();
+            screen.update();
+            ai.update();
+
+            for (int i = 0; i < numberBullets; i++) {
+                bullets.get(i).update();
+                if (bullets.get(i).y < -50) {
+                    bullets.get(i).bulletImage.recycle();
+                    bullets.remove(i);
+                    numberBullets -= 1;
+                }
+            }
+
+            for (int i = 0; i < vaderNumbers; i++) {
+                for (int j = 0; j < numberBullets; j++) {
+                    vaders[i].check_intersectionBullet(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height, bullets.get(j).damage);
+                }
+                vaders[i].check_intersectionAI(ai.x, ai.y, ai.width, ai.height);
+                vaders[i].update();
+            }
+
+            buttonStart.update();
+            buttonQuit.update();
+
+            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+            holder.unlockCanvasAndPost(canvas);
+        }
+        timeFrame = System.nanoTime();
     }
 }
