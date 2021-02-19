@@ -25,8 +25,8 @@ public class Player {
     private static long now;
     private final Game game;
     public boolean lock = false;
-    public MediaPlayer shootSound;
     public int damage = 999;
+    public int health = 50;
 
     public Player(Game g) {
         game = g;
@@ -43,8 +43,6 @@ public class Player {
         endX = x;
         endY = y;
 
-        shootSound = MediaPlayer.create(game.context, R.raw.laser);
-
         lastShoot = System.nanoTime();
     }
 
@@ -56,7 +54,6 @@ public class Player {
                 Bullet bullet = new Bullet(game, x + width / 2 - 3, y);
                 game.bullets.add(bullet);
                 game.numberBullets += 1;
-                shootSound.start();
             }
         }
 
@@ -67,6 +64,13 @@ public class Player {
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
         }
+
+        if (health <= 0) {
+            for (int i = 0; i < game.heartsNumbers; i++) {
+                game.hearts.get(i).lock = true;
+            }
+        }
+
         x += speedX;
         y += speedY;
 //        game.canvas.drawRect(x, y, x + width, y + height, color);

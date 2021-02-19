@@ -75,10 +75,19 @@ public class Button {
                 game.bullets = new ArrayList<>(0);
                 game.numberBullets = game.bullets.size();
                 game.buttonStart = null;
+                int c = 10;
+                for (int i = 0; i < 5; i++) {
+                    Heart heart = new Heart(game, c, 10, "full");
+                    game.hearts.add(heart);
+                    c += 90;
+                }
+                game.heartsNumbers = game.hearts.size();
+
                 game.mediaPlayer.stop();
                 game.mediaPlayer = MediaPlayer.create(game.context.getApplicationContext(), R.raw.pirate);
                 game.mediaPlayer.setLooping(true);
                 game.mediaPlayer.start();
+
                 game.preview = 2;
             } else {
                 if (function.equals("quit")) {

@@ -55,13 +55,28 @@ public class Vader {
         }
     }
 
-    public void check_intersection(float playerX, float playerY, float playerWidth, float playerHeight, int damage) {
+    public void check_intersectionBullet(float playerX, float playerY, float playerWidth, float playerHeight, int damage) {
         if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
                 playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
             health -= damage;
             if (health <= 0) {
                 newStatus();
             }
+        }
+    }
+
+    public void check_intersectionPlayer(float playerX, float playerY, float playerWidth, float playerHeight) {
+        if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
+                playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+            newStatus();
+            game.player.health -= 5;
+        }
+    }
+
+    public void check_intersectionAI(float playerX, float playerY, float playerWidth, float playerHeight) {
+        if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
+                playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+            newStatus();
         }
     }
 
