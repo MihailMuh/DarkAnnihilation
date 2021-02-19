@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityManager;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -41,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         game.initGame(size.x, size.y);
 
     }
+
 
     @Override
     protected void onPause() {

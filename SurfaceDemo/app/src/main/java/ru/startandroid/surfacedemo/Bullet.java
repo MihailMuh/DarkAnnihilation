@@ -3,6 +3,7 @@ package ru.startandroid.surfacedemo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 
 public class Bullet {
     public Bitmap bulletImage;
@@ -14,6 +15,8 @@ public class Bullet {
     public static final Paint color = new Paint();
     public static final int speed = 10;
     private final Game game;
+    public int damage = 1;
+//    public MediaPlayer shootSound;
 
     public Bullet(Game g, int X, int Y) {
         game = g;
@@ -23,6 +26,8 @@ public class Bullet {
         height = bulletImage.getHeight();
         x = X;
         y = Y;
+//        shootSound = MediaPlayer.create(game.context, R.raw.laser);
+//        shootSound.start();
     }
 
     public void update() {

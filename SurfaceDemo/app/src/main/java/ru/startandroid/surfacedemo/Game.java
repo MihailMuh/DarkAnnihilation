@@ -6,11 +6,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -18,7 +21,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
-
     public static SurfaceHolder holder;
     public static Thread thread;
     public Canvas canvas;
@@ -43,6 +45,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int numberBullets = bullets.size();
     public int preview = 1;
     public int count = 0;
+    public MediaPlayer mediaPlayer;
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -50,11 +53,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void initGame(int width, int height) {
+        count += 1;
+        Log.i("count", "" + count);
         screenWidth = width;
         screenHeight = height;
-        Log.i("size", "2 " + screenWidth + " " + screenHeight);
 
         holder = getHolder();
+
+        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.menu);
+        mediaPlayer.setLooping(true);
 
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(40);
@@ -71,6 +78,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
             buttonStart = new Button(this, "Start", screenWidth / 2, screenHeight - 70, "start");
             buttonQuit = new Button(this, "Quit", screenWidth / 2 - 300, screenHeight - 70, "quit");
+
+//            mediaPlayer.start();
         } else {
             player = new Player(this);
             for (int i = 0; i < vaderNumbers; i++) {
@@ -112,9 +121,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             for (int i = 0; i < vaderNumbers; i++) {
                 for (int j = 0; j < numberBullets; j++) {
-                    vaders[i].check_intersection(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height);
+                    vaders[i].check_intersection(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height, bullets.get(j).damage);
                 }
-                vaders[i].check_intersection(ai.x, ai.y, ai.width, ai.height);
+                vaders[i].check_intersection(ai.x, ai.y, ai.width, ai.height, ai.damage);
                 vaders[i].update();
             }
 
@@ -130,6 +139,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void gameplay() {
         timeFrame = System.nanoTime();
+
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
 
@@ -177,9 +187,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             for (int i = 0; i < vaderNumbers; i++) {
                 for (int j = 0; j < numberBullets; j++) {
-                    vaders[i].check_intersection(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height);
+                    vaders[i].check_intersection(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height, bullets.get(j).damage);
                 }
-                vaders[i].check_intersection(player.x, player.y, player.width, player.height);
+                vaders[i].check_intersection(player.x, player.y, player.width, player.height, player.damage);
                 vaders[i].x -= player.speedX / 3;
                 vaders[i].update();
             }

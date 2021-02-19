@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,6 +30,9 @@ public class Button {
     private int textWidth;
     private int textHeight;
 
+    public MediaPlayer mediaPlayer;
+
+
     public Button(Game g, String t, int X, int Y, String func) {
         game = g;
 
@@ -50,10 +54,13 @@ public class Button {
         paint.getTextBounds(text, 0, text.length(), bounds);
         textWidth = bounds.width();
         textHeight = bounds.height();
+
+        mediaPlayer = MediaPlayer.create(game.context.getApplicationContext(), R.raw.spacebar);
     }
 
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
+            mediaPlayer.start();
             img = buttonImagePressed;
             if (function.equals("start")) {
                 game.ai = null;
@@ -68,6 +75,10 @@ public class Button {
                 game.bullets = new ArrayList<>(0);
                 game.numberBullets = game.bullets.size();
                 game.buttonStart = null;
+                game.mediaPlayer.stop();
+                game.mediaPlayer = MediaPlayer.create(game.context.getApplicationContext(), R.raw.pirate);
+                game.mediaPlayer.setLooping(true);
+                game.mediaPlayer.start();
                 game.preview = 2;
             } else {
                 if (function.equals("quit")) {

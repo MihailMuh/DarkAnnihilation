@@ -1,8 +1,10 @@
 package ru.startandroid.surfacedemo;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 
 public class Player {
     private static Bitmap playerImage;
@@ -23,6 +25,8 @@ public class Player {
     private static long now;
     private final Game game;
     public boolean lock = false;
+    public MediaPlayer shootSound;
+    public int damage = 999;
 
     public Player(Game g) {
         game = g;
@@ -39,6 +43,8 @@ public class Player {
         endX = x;
         endY = y;
 
+        shootSound = MediaPlayer.create(game.context, R.raw.laser);
+
         lastShoot = System.nanoTime();
     }
 
@@ -47,12 +53,12 @@ public class Player {
             now = System.nanoTime();
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
-                Bullet bullet = new Bullet(game, (int) (x + width / 2) - 3, (int) y);
+                Bullet bullet = new Bullet(game, x + width / 2 - 3, y);
                 game.bullets.add(bullet);
                 game.numberBullets += 1;
+                shootSound.start();
             }
         }
-
 
         if (Math.sqrt((endX - x) * (endX - x) + (endY - y) * (endY - y)) > screenWidth / 2){
             speedX = 0;
@@ -85,6 +91,7 @@ class AI {
     private long lastShoot;
     private static long now;
     private final Game game;
+    public int damage = 999;
 
     public AI(Game g) {
         game = g;
@@ -116,10 +123,10 @@ class AI {
             game.numberBullets += 1;
         }
 
-        if (x < 30 | x > screenWidth - width - 30) {
+        if (x < 30 | x > screenWidth - height - 30) {
             speedX = -speedX;
         }
-        if (y < 30 | y > screenHeight - height - 30) {
+        if (y < 30 | y > screenHeight - width - 30) {
             speedY = -speedY;
         }
 

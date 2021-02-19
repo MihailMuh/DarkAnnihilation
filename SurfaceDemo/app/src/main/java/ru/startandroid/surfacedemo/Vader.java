@@ -18,6 +18,7 @@ public class Vader {
     private static final Paint paint = new Paint();
     private final Game game;
     public boolean lock = false;
+    public int health = 2;
 
     public Vader(Game g) {
         game = g;
@@ -47,10 +48,20 @@ public class Vader {
         speedY = get_random(3, 10);
     }
 
-    public void check_intersection(float playerX, float playerY, float playerWidth, float playerHeight) {
+    public void damage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            newStatus();
+        }
+    }
+
+    public void check_intersection(float playerX, float playerY, float playerWidth, float playerHeight, int damage) {
         if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
                 playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
-            newStatus();
+            health -= damage;
+            if (health <= 0) {
+                newStatus();
+            }
         }
     }
 
