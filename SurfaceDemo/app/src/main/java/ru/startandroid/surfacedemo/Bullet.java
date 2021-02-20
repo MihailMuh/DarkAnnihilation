@@ -2,6 +2,7 @@ package ru.startandroid.surfacedemo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 
@@ -19,6 +20,8 @@ public class Bullet {
 
     public Bullet(Game g, int X, int Y) {
         game = g;
+//        color.setColor(Color.WHITE);
+
         bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet);
         bulletImage = Bitmap.createScaledBitmap(bulletImage, 7, 30, isFilter);
         width = bulletImage.getWidth();
@@ -30,7 +33,7 @@ public class Bullet {
 
     public void update() {
         y -= speed;
-//        canvas.drawRect(x, y, x + width, y + height, color);
         game.canvas.drawBitmap(bulletImage, x, y, color);
+//        game.canvas.drawRect(x, y, x + width, y + height, color);
     }
 }

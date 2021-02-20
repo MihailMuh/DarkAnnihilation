@@ -45,7 +45,7 @@ public class AudioPlayer {
 
         pirateMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.pirate);
         pirateMusic.setLooping(true);
-        pirateMusic.setVolume(0.85f, 0.85f);
+        pirateMusic.setVolume(0.8f, 0.8f);
         sounds.add(pirateMusic);
 
         buttonSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.spacebar);
@@ -75,11 +75,11 @@ public class AudioPlayer {
     }
 
     public void playBoom() {
-        soundPool.play(boomSnd, 0.1f, 0.1f, 1, 0, 1);
+        soundPool.play(boomSnd, 0.13f, 0.13f, 1, 0, 1);
     }
 
     public void playShoot() {
-        soundPool.play(shootSnd, 0.25f, 0.25f, 1, 0, 1);
+        soundPool.play(shootSnd, 0.2f, 0.2f, 1, 0, 1);
     }
     public void playMetal() {
         soundPool.play(metalSnd, 0.45f, 0.45f, 1, 0, 1);

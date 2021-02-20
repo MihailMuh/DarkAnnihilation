@@ -1,10 +1,10 @@
 package ru.startandroid.surfacedemo;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
+import android.telephony.IccOpenLogicalChannelResponse;
 
 public class Player {
     private static Bitmap playerImage;
@@ -15,7 +15,7 @@ public class Player {
     public int width;
     public int height;
     private static final boolean isFilter = true;
-    public static final Paint color = new Paint();
+    public static Paint paint = new Paint();
     private static int screenWidth;
     private static int screenHeight;
     public int speedX;
@@ -25,13 +25,13 @@ public class Player {
     private static long now;
     private final Game game;
     public boolean lock = false;
-    public int damage = 999;
     public int health = 50;
 
     public Player(Game g) {
         game = g;
         screenWidth = game.screenWidth;
         screenHeight = game.screenHeight;
+        paint.setColor(Color.WHITE);
 
         playerImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.ship);
         playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
@@ -78,8 +78,8 @@ public class Player {
             }
             game.hearts.get(k / 2).update();
         }
-//        game.canvas.drawRect(x, y, x + width, y + height, color);
-        game.canvas.drawBitmap(playerImage, x, y, color);
+        game.canvas.drawBitmap(playerImage, x, y, paint);
+//        game.canvas.drawRect(x + 20, y + 30, x + width - 20, y + height - 20, paint);
     }
 }
 
@@ -100,7 +100,7 @@ class AI {
     private long lastShoot;
     private static long now;
     private final Game game;
-    public int damage = 999;
+    public int health = 0;
 
     public AI(Game g) {
         game = g;

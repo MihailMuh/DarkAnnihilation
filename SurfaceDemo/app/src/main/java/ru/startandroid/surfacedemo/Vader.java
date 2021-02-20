@@ -2,6 +2,7 @@ package ru.startandroid.surfacedemo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Vader {
@@ -24,6 +25,7 @@ public class Vader {
         game = g;
         screenWidth = game.screenWidth;
         screenHeight = game.screenHeight;
+        paint.setColor(Color.WHITE);
 
         vaderImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
         vaderImage = Bitmap.createScaledBitmap(vaderImage, 75, 75, isFilter);
@@ -67,8 +69,8 @@ public class Vader {
     }
 
     public void check_intersectionPlayer(float playerX, float playerY, float playerWidth, float playerHeight) {
-        if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
-                playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+        if (x + 20 < playerX + 15 & playerX + 15 < x + width - 20 & y + 30 < playerY + 15 & playerY + 15 < y + height - 20 |
+                playerX + 15 < x & x < playerX + playerWidth - 15 & playerY + 15 < y & y < playerY + playerHeight - 15) {
             game.audioPlayer.playMetal();
             newStatus();
             game.player.health -= 5;
@@ -76,8 +78,9 @@ public class Vader {
     }
 
     public void check_intersectionAI(float playerX, float playerY, float playerWidth, float playerHeight) {
-        if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
-                playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+        if (x + 20 < playerX + 15 & playerX + 15 < x + width - 20 & y + 30 < playerY + 15 & playerY + 15 < y + height - 20 |
+                playerX + 15 < x & x < playerX + playerWidth - 15 & playerY + 15 < y & y < playerY + playerHeight - 15) {
+            game.audioPlayer.playMetal();
             newStatus();
         }
     }
@@ -86,11 +89,14 @@ public class Vader {
         if (!lock) {
             x += speedX;
             y += speedY;
-//        canvas.drawRect(x, y, x + width, y + height, paint);
-            game.canvas.drawBitmap(vaderImage, x, y, paint);
+
             if (x < -width | x > screenWidth + width | y > screenHeight + height) {
                 newStatus();
             }
+
+            game.canvas.drawBitmap(vaderImage, x, y, paint);
+//            game.canvas.drawRect(x + 15, y + 15, x + width - 15, y + height - 15, paint);
+
         }
     }
 }

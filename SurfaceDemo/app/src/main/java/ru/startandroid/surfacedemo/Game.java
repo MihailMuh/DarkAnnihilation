@@ -53,6 +53,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void initGame(int width, int height) {
+        audioPlayer = new AudioPlayer(this);
+
         screenWidth = width;
         screenHeight = height;
 
@@ -75,7 +77,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonStart = new Button(this, "Start", screenWidth / 2, screenHeight - 70, "start");
         buttonQuit = new Button(this, "Quit", screenWidth / 2 - 300, screenHeight - 70, "quit");
 
-        audioPlayer = new AudioPlayer(this);
         audioPlayer.menuMusic.start();
     }
 
@@ -185,19 +186,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        resume();
-    }
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {}
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-        pause();
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-        pause();
-    }
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder){}
 
     public void pause() {
         playing = false;
