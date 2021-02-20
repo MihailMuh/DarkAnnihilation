@@ -16,7 +16,6 @@ public class Bullet {
     public static final int speed = 10;
     private final Game game;
     public int damage = 1;
-//    public MediaPlayer shootSound;
 
     public Bullet(Game g, int X, int Y) {
         game = g;
@@ -26,8 +25,7 @@ public class Bullet {
         height = bulletImage.getHeight();
         x = X;
         y = Y;
-//        shootSound = MediaPlayer.create(game.context, R.raw.laser);
-//        shootSound.start();
+        game.audioPlayer.playShoot();
     }
 
     public void update() {

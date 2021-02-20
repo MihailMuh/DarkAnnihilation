@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActivityManager;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
         setContentView(R.layout.activity_main);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         game.pause();
+        game.audioPlayer.releaseAP();
     }
 
     @Override

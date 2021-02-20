@@ -44,7 +44,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int numberBullets = 0;
     public int gameStatus = 1;
     public int count = 0;
-    public MediaPlayer mediaPlayer;
+    public AudioPlayer audioPlayer;
     public int pointerCount;
 
     public Game(Context cont, AttributeSet attrs) {
@@ -57,9 +57,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screenHeight = height;
 
         holder = getHolder();
-
-        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.menu);
-        mediaPlayer.setLooping(true);
 
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(40);
@@ -78,23 +75,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonStart = new Button(this, "Start", screenWidth / 2, screenHeight - 70, "start");
         buttonQuit = new Button(this, "Quit", screenWidth / 2 - 300, screenHeight - 70, "quit");
 
-    }
-
-    public void pause() {
-        playing = false;
-        mediaPlayer.pause();
-        try {
-            thread.join();
-        } catch(Exception e) {
-            Log.e("Error: ", "Thread join");
-        }
-    }
-
-    public void resume() {
-        thread = new Thread(this);
-        thread.start();
-        playing = true;
-        mediaPlayer.start();
+        audioPlayer = new AudioPlayer(this);
+        audioPlayer.menuMusic.start();
     }
 
     public void gameplay() {
@@ -127,6 +109,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             player.update();
             if (player.health <= 0) {
+                audioPlayer.gameoverSnd.start();
                 screen.gameover = true;
                 gameStatus = 3;
             }
@@ -216,6 +199,34 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         pause();
     }
 
+    public void pause() {
+        playing = false;
+        if (gameStatus == 1) {
+            audioPlayer.menuMusic.pause();
+        } else {
+            audioPlayer.pirateMusic.pause();
+        }
+        try {
+            thread.join();
+        } catch(Exception e) {
+            Log.e("Error: ", "Thread join");
+        }
+    }
+
+    public void resume() {
+        thread = new Thread(this);
+        thread.start();
+        playing = true;
+        if (gameStatus == 1) {
+            audioPlayer.menuMusic.seekTo(0);
+            audioPlayer.menuMusic.start();
+        } else {
+            audioPlayer.pirateMusic.seekTo(0);
+            audioPlayer.pirateMusic.start();
+        }
+    }
+
+
     public void generateNewGame() {
         count = 0;
         screen.gameover = false;
@@ -240,10 +251,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         heartsNumbers = hearts.size();
 
-        mediaPlayer.stop();
-        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.pirate);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        if (gameStatus == 1) {
+            audioPlayer.menuMusic.pause();
+        } else {
+            audioPlayer.pirateMusic.pause();
+        }
+        audioPlayer.pirateMusic.seekTo(0);
+        audioPlayer.pirateMusic.start();
 
         gameStatus = 2;
 
@@ -274,19 +288,20 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void timerStart() {
         count += 1;
-        if (0 <= count & count < 60) {
+        audioPlayer.readySnd.start();
+        if (0 <= count & count < 70) {
             canvas.drawText("1", screenWidth / 2 - startPaint.measureText("1") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
         } else {
-            if (60 <= count & count < 120) {
+            if (70 <= count & count < 140) {
                 canvas.drawText("2", screenWidth / 2 - startPaint.measureText("2") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
             } else {
-                if (120 <= count & count < 180) {
+                if (140 <= count & count < 210) {
                     canvas.drawText("3", screenWidth / 2 - startPaint.measureText("3") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
                 } else {
-                    if (180 <= count & count < 240) {
+                    if (210 <= count & count < 280) {
                         canvas.drawText("SHOOT!", screenWidth / 2 - startPaint.measureText("SHOOT!") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
                     } else {
-                        if (count >= 240) {
+                        if (count >= 280) {
                             gameStatus = 0;
                             for (int i = 0; i < vaderNumbers; i++) {
                                 vaders[i].lock = false;

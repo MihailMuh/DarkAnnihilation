@@ -47,6 +47,9 @@ public class Player {
     }
 
     public void update() {
+        x += speedX;
+        y += speedY;
+
         if (!lock) {
             now = System.nanoTime();
             if (now - lastShoot > shootTime) {
@@ -75,15 +78,6 @@ public class Player {
             }
             game.hearts.get(k / 2).update();
         }
-//
-//        if (health <= 0) {
-//            for (int i = 0; i < game.heartsNumbers; i++) {
-//                game.hearts.get(i).lock = true;
-//            }
-//        }
-
-        x += speedX;
-        y += speedY;
 //        game.canvas.drawRect(x, y, x + width, y + height, color);
         game.canvas.drawBitmap(playerImage, x, y, color);
     }

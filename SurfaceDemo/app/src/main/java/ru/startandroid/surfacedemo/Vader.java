@@ -60,6 +60,7 @@ public class Vader {
                 playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
             health -= damage;
             if (health <= 0) {
+                game.audioPlayer.playBoom();
                 newStatus();
             }
         }
@@ -68,6 +69,7 @@ public class Vader {
     public void check_intersectionPlayer(float playerX, float playerY, float playerWidth, float playerHeight) {
         if (x < playerX & playerX < x + width & y < playerY & playerY < y + height |
                 playerX < x & x < playerX + playerWidth & playerY < y & y < playerY + playerHeight) {
+            game.audioPlayer.playMetal();
             newStatus();
             game.player.health -= 5;
         }

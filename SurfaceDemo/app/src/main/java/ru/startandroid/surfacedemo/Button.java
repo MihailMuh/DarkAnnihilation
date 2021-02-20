@@ -29,9 +29,6 @@ public class Button {
     private int textWidth;
     private int textHeight;
 
-    public MediaPlayer mediaPlayer;
-
-
     public Button(Game g, String t, int X, int Y, String func) {
         game = g;
 
@@ -54,12 +51,11 @@ public class Button {
         textWidth = bounds.width();
         textHeight = bounds.height();
 
-        mediaPlayer = MediaPlayer.create(game.context.getApplicationContext(), R.raw.spacebar);
     }
 
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
-            mediaPlayer.start();
+            game.audioPlayer.buttonSnd.start();
             img = buttonImagePressed;
             if (function.equals("start")) {
                 game.generateNewGame();
