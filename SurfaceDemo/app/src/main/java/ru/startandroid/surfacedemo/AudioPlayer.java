@@ -79,7 +79,7 @@ public class AudioPlayer {
     }
 
     public void playShoot() {
-        soundPool.play(shootSnd, 0.2f, 0.2f, 1, 0, 1);
+        soundPool.play(shootSnd, 0.17f, 0.17f, 1, 0, 1);
     }
     public void playMetal() {
         soundPool.play(metalSnd, 0.45f, 0.45f, 1, 0, 1);

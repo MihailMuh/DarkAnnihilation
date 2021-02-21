@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     public static SurfaceHolder holder;
@@ -29,23 +30,27 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static final Paint gameoverPaint = new Paint();
     public volatile boolean playing = false;
     public int fps;
-    private static final int MILLIS_IN_SECOND = 1000000000;
+    private static final int MILLIS_IN_SECOND = 1_000_000_000;
     private long timeFrame;
     public Player player;
     public AI ai;
-    public Vader[] vaders = new Vader[12];
+    public Vader[] vaders = new Vader[10];
     public ArrayList<Bullet> bullets = new ArrayList<>(0);
-    public ArrayList<Heart> hearts = new ArrayList<>(0);
+    public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
+    public ArrayList<BulletEnemy> bulletEnemies = new ArrayList<>(0);
+    public Heart[] hearts = new Heart[5];
     public Screen screen;
     public Button buttonStart;
     public Button buttonQuit;
     public int vaderNumbers = vaders.length;
-    public int heartsNumbers = 0;
     public int numberBullets = 0;
+    public int numberTripleFighters;
+    public int numberBulletsEnemy = 0;
     public int gameStatus = 1;
     public int count = 0;
     public AudioPlayer audioPlayer;
     public int pointerCount;
+    public static final Random random = new Random();
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -101,11 +106,32 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             for (int i = 0; i < vaderNumbers; i++) {
                 for (int j = 0; j < numberBullets; j++) {
-                    vaders[i].check_intersectionBullet(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height, bullets.get(j).damage);
+                    vaders[i].check_intersectionBullet(bullets.get(j));
                 }
-                vaders[i].check_intersectionPlayer(player.x, player.y, player.width, player.height);
+                vaders[i].check_intersectionPlayer();
                 vaders[i].x -= player.speedX / 3;
                 vaders[i].update();
+            }
+
+            for (int i = 0; i < numberTripleFighters; i++) {
+                for (int j = 0; j < numberBullets; j++) {
+                    tripleFighters.get(i).check_intersectionBullet(bullets.get(j));
+                }
+                tripleFighters.get(i).check_intersectionPlayer();
+                tripleFighters.get(i).x -= player.speedX / 3;
+                tripleFighters.get(i).update();
+            }
+
+            for (int i = 0; i < bulletEnemies.size(); i++) {
+                bulletEnemies.get(i).x -= player.speedX / 3;
+                bulletEnemies.get(i).update();
+                if (bulletEnemies.get(i).y > screenHeight | bulletEnemies.get(i).x < -100 | bulletEnemies.get(i).x > screenWidth) {
+                    bulletEnemies.get(i).bulletImage.recycle();
+                    bulletEnemies.remove(i);
+                    numberBulletsEnemy -= 1;
+                } else {
+                    player.check_intersectionBullet(bulletEnemies.get(i));
+                }
             }
 
             player.update();
@@ -120,6 +146,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();
@@ -134,8 +161,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     preview();
                     break;
                 case 2:
-                    gameplay();
-                    break;
                 case 0:
                     gameplay();
                     break;
@@ -229,22 +254,26 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player = new Player(this);
         player.lock = true;
         vaders = new Vader[12];
+        tripleFighters = new ArrayList<>(0);
         vaderNumbers = 12;
         for (int i = 0; i < 12; i++) {
+            if (random.nextFloat() <= 0.15) {
+                tripleFighters.add(new TripleFighter(this));
+            }
             vaders[i] = new Vader(this);
             vaders[i].lock = true;
         }
+        numberTripleFighters = tripleFighters.size();
         bullets = new ArrayList<>(0);
-        hearts = new ArrayList<>(0);
+        bulletEnemies = new ArrayList<>(0);
         numberBullets = 0;
         buttonStart = null;
-        int c = 10;
+        int c = 370;
         for (int i = 0; i < 5; i++) {
-            Heart heart = new Heart(this, c, 10, "full");
-            hearts.add(heart);
-            c += 90;
+            Heart heart = new Heart(this, c, 10);
+            hearts[i] = heart;
+            c -= 90;
         }
-        heartsNumbers = hearts.size();
 
         if (gameStatus == 1) {
             audioPlayer.menuMusic.pause();
@@ -255,7 +284,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         audioPlayer.pirateMusic.start();
 
         gameStatus = 2;
-
+        audioPlayer.readySnd.start();
     }
 
     public void gameover() {
@@ -283,7 +312,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void timerStart() {
         count += 1;
-        audioPlayer.readySnd.start();
         if (0 <= count & count < 70) {
             canvas.drawText("1", screenWidth / 2 - startPaint.measureText("1") / 2, screenHeight / 2 + startPaint.getTextSize() / 2, startPaint);
         } else {
@@ -300,6 +328,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                             gameStatus = 0;
                             for (int i = 0; i < vaderNumbers; i++) {
                                 vaders[i].lock = false;
+                            }
+                            for (int i = 0; i < numberTripleFighters; i++) {
+                                tripleFighters.get(i).lock = false;
                             }
                             player.lock = false;
                         }
@@ -327,9 +358,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             for (int i = 0; i < vaderNumbers; i++) {
                 for (int j = 0; j < numberBullets; j++) {
-                    vaders[i].check_intersectionBullet(bullets.get(j).x, bullets.get(j).y, bullets.get(j).width, bullets.get(j).height, bullets.get(j).damage);
+                    vaders[i].check_intersectionBullet(bullets.get(j));
                 }
-                vaders[i].check_intersectionAI(ai.x, ai.y, ai.width, ai.height);
+                vaders[i].check_intersectionAI();
                 vaders[i].update();
             }
 

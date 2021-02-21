@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.telephony.IccOpenLogicalChannelResponse;
 
 public class Player {
     private static Bitmap playerImage;
@@ -46,6 +45,18 @@ public class Player {
         lastShoot = System.nanoTime();
     }
 
+    public void check_intersectionBullet(BulletEnemy bulletEnemy) {
+        if (x + 20 < bulletEnemy.x + 5 & bulletEnemy.x + 5 < x + width - 20 &
+                y + 30 < bulletEnemy.y + 5 & bulletEnemy.y + 5 < y + height - 20 |
+                bulletEnemy.x + 5 < x & x < bulletEnemy.x + bulletEnemy.width - 5 &
+                        bulletEnemy.y + 5 < y & y < bulletEnemy.y + bulletEnemy.height - 5) {
+            health -= bulletEnemy.damage;
+            bulletEnemy.bulletImage.recycle();
+            game.bulletEnemies.remove(bulletEnemy);
+            game.numberBulletsEnemy -= 1;
+        }
+    }
+
     public void update() {
         x += speedX;
         y += speedY;
@@ -60,24 +71,90 @@ public class Player {
             }
         }
 
-        if (Math.sqrt((endX - x) * (endX - x) + (endY - y) * (endY - y)) > screenWidth / 2){
-            speedX = 0;
-            speedY = 0;
-        } else {
-            speedX = (endX - x) / 5;
-            speedY = (endY - y) / 5;
+        speedX = (endX - x) / 5;
+        speedY = (endY - y) / 5;
+
+
+        switch (health) {
+            case 50:
+                game.hearts[0].update("full");
+                game.hearts[1].update("full");
+                game.hearts[2].update("full");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 45:
+                game.hearts[0].update("half");
+                game.hearts[1].update("full");
+                game.hearts[2].update("full");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 40:
+                game.hearts[0].update("non");
+                game.hearts[1].update("full");
+                game.hearts[2].update("full");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 35:
+                game.hearts[0].update("non");
+                game.hearts[1].update("half");
+                game.hearts[2].update("full");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 30:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("full");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 25:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("half");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 20:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("non");
+                game.hearts[3].update("full");
+                game.hearts[4].update("full");
+                break;
+            case 15:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("non");
+                game.hearts[3].update("half");
+                game.hearts[4].update("full");
+                break;
+            case 10:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("non");
+                game.hearts[3].update("non");
+                game.hearts[4].update("full");
+                break;
+            case 5:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("non");
+                game.hearts[3].update("non");
+                game.hearts[4].update("half");
+                break;
+            case 0:
+                game.hearts[0].update("non");
+                game.hearts[1].update("non");
+                game.hearts[2].update("non");
+                game.hearts[3].update("non");
+                game.hearts[4].update("non");
+                break;
         }
 
-        for (int k = 9; k >= 0 ; k--) {
-            if (health == k * 5) {
-                if (health % 10 == 0) {
-                    game.hearts.get(k / 2).change("non");
-                } else {
-                    game.hearts.get(k / 2).change("half");
-                }
-            }
-            game.hearts.get(k / 2).update();
-        }
         game.canvas.drawBitmap(playerImage, x, y, paint);
 //        game.canvas.drawRect(x + 20, y + 30, x + width - 20, y + height - 20, paint);
     }
@@ -100,7 +177,6 @@ class AI {
     private long lastShoot;
     private static long now;
     private final Game game;
-    public int health = 0;
 
     public AI(Game g) {
         game = g;

@@ -5,37 +5,56 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class Vader {
-    public Bitmap vaderImage;
+public class TripleFighter{
+    public Bitmap tripleFighterImg;
     public int x;
     public int y;
     public int speedX;
     public int speedY;
     public int width;
     public int height;
-    private static int screenWidth;
-    private static int screenHeight;
     private static final boolean isFilter = true;
     private static final Paint paint = new Paint();
     private final Game game;
-    public boolean lock = false;
-    public int health = 2;
+    public boolean lock = true;
+    public int health = 16;
+    private static int screenWidth;
+    private static int screenHeight;
+    private double angle;
+    private static final int shootTime = 1_000_000_000;
+    private long lastShoot;
+    private static long now;
 
-    public Vader(Game g) {
+    public TripleFighter(Game g) {
         game = g;
         screenWidth = game.screenWidth;
         screenHeight = game.screenHeight;
         paint.setColor(Color.WHITE);
 
-        vaderImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
-        vaderImage = Bitmap.createScaledBitmap(vaderImage, 75, 75, isFilter);
-        width = vaderImage.getWidth();
-        height = vaderImage.getHeight();
+        tripleFighterImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.triple_fighter);
+        tripleFighterImg = Bitmap.createScaledBitmap(tripleFighterImg, 105, 105, isFilter);
+        width = tripleFighterImg.getWidth();
+        height = tripleFighterImg.getHeight();
 
         x = get_random(0, 1920);
         y = -150;
-        speedX = get_random(-5, 5);
-        speedY = get_random(3, 10);
+        speedX = get_random(-3, 3);
+        speedY = get_random(1, 10);
+        lastShoot = System.nanoTime();
+    }
+
+    public void shoot() {
+        now = System.nanoTime();
+        if (now - lastShoot > shootTime) {
+            int X = (game.player.x + game.player.width / 2) - (x + width / 2);
+            int Y = (game.player.y + game.player.height / 2) - (y + height / 2);
+            lastShoot = now;
+            angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2.0));
+
+            BulletEnemy bullet1 = new BulletEnemy(game, x + width / 2, y + height / 2, angle, X / 50, Y / 50);
+            game.bulletEnemies.add(bullet1);
+            game.numberBulletsEnemy += 1;
+        }
     }
 
     public static int get_random(int min, int max){
@@ -46,15 +65,9 @@ public class Vader {
     public void newStatus() {
         x = get_random(0, 1920);
         y = -150;
-        speedX = get_random(-5, 5);
-        speedY = get_random(3, 10);
-    }
-
-    public void damage(int damage) {
-        health -= damage;
-        if (health <= 0) {
-            newStatus();
-        }
+        speedX = get_random(-3, 3);
+        speedY = get_random(1, 10);
+        lastShoot = System.nanoTime();
     }
 
     public void check_intersectionBullet(Bullet bullet) {
@@ -78,7 +91,7 @@ public class Vader {
                         game.player.y + 15 < y & y < game.player.y + game.player.height - 15) {
             game.audioPlayer.playMetal();
             newStatus();
-            game.player.health -= 5;
+            game.player.health -= 10;
         }
     }
 
@@ -97,13 +110,16 @@ public class Vader {
             x += speedX;
             y += speedY;
 
+            shoot();
+
             if (x < -width | x > screenWidth | y > screenHeight) {
                 newStatus();
             }
+//            game.canvas.drawRect(x, y, x + width, y + height, paint);
 
-            game.canvas.drawBitmap(vaderImage, x, y, paint);
-//            game.canvas.drawRect(x + 15, y + 15, x + width - 15, y + height - 15, paint);
+            game.canvas.drawBitmap(tripleFighterImg, x, y, paint);
 
         }
     }
+
 }

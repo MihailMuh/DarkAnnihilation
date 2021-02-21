@@ -5,60 +5,43 @@ import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 
 public class Heart {
-    public Bitmap image;
+    public Bitmap imageFull;
+    public Bitmap imageHalf;
+    public Bitmap imageNon;
+
     public int x;
     public int y;
-    public int width;
-    public int height;
     private static final boolean isFilter = true;
     public static final Paint color = new Paint();
     private final Game game;
-    public boolean lock = false;
 
-    public Heart(Game g, int X, int Y, String type) {
+    public Heart(Game g, int X, int Y) {
         game = g;
-        if (type.equals("full")) {
-            image = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.full_heart);
-            image = Bitmap.createScaledBitmap(image, 70, 60, isFilter);
-        } else {
-            if (type.equals("half")) {
-                image = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.half_heart);
-                image = Bitmap.createScaledBitmap(image, 70, 60, isFilter);
-            } else {
-                if (type.equals("non")) {
-                    image = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.non_heart);
-                    image = Bitmap.createScaledBitmap(image, 70, 60, isFilter);
-                }
-            }
-        }
-        width = image.getWidth();
-        height = image.getHeight();
+        imageFull = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.full_heart);
+        imageFull = Bitmap.createScaledBitmap(imageFull, 70, 60, isFilter);
+
+        imageHalf = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.half_heart);
+        imageHalf = Bitmap.createScaledBitmap(imageHalf, 70, 60, isFilter);
+
+        imageNon = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.non_heart);
+        imageNon = Bitmap.createScaledBitmap(imageNon, 70, 60, isFilter);
+
         x = X;
         y = Y;
     }
 
-    public void change(String type) {
-        if (type.equals("full")) {
-            image = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.full_heart);
-            image = Bitmap.createScaledBitmap(image, 70, 60, isFilter);
-        } else {
-            if (type.equals("half")) {
-                image = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.half_heart);
-                image = Bitmap.createScaledBitmap(image, 70, 60, isFilter);
-            } else {
-                if (type.equals("non")) {
-                    image = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.non_heart);
-                    image = Bitmap.createScaledBitmap(image, 70, 60, isFilter);
-                } else {
-                    lock = true;
-                }
-            }
-        }
-    }
-
-    public void update() {
-        if (!lock) {
-            game.canvas.drawBitmap(image, x, y, color);
+    public void update(String type) {
+        switch (type)
+        {
+            case "full":
+                game.canvas.drawBitmap(imageFull, x, y, color);
+                break;
+            case "half":
+                game.canvas.drawBitmap(imageHalf, x, y, color);
+                break;
+            case "non":
+                game.canvas.drawBitmap(imageNon, x, y, color);
+                break;
         }
     }
 }
