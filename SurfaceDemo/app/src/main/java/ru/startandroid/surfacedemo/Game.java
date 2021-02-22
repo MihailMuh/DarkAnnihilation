@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +13,11 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,9 +29,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public int screenWidth;
     public int screenHeight;
-    private static final Paint textPaint = new Paint();
+    private static final Paint fpsPaint = new Paint();
     private static final Paint startPaint = new Paint();
     private static final Paint gameoverPaint = new Paint();
+    private static final Paint scorePaint = new Paint();
     public volatile boolean playing = false;
     public int fps;
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
@@ -48,9 +53,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int numberBulletsEnemy = 0;
     public int gameStatus = 1;
     public int count = 0;
+    public int score = 0;
+    public int lastMax = 0;
     public AudioPlayer audioPlayer;
     public int pointerCount;
     public static final Random random = new Random();
+    public StringBuilder scoreBuilder = new StringBuilder();
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -65,12 +73,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         holder = getHolder();
 
-        textPaint.setColor(Color.RED);
-        textPaint.setTextSize(40);
+        fpsPaint.setColor(Color.RED);
+        fpsPaint.setTextSize(40);
         startPaint.setColor(Color.WHITE);
         startPaint.setTextSize(300);
         gameoverPaint.setColor(Color.WHITE);
         gameoverPaint.setTextSize(50);
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextSize(40);
 
         screen = new Screen(this);
         ai = new AI(this);
@@ -136,6 +146,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             player.update();
             if (player.health <= 0) {
+                if (score > lastMax) {
+                    scoreBuilder.append(" ").append(score);
+                }
+
                 audioPlayer.gameoverSnd.start();
                 screen.gameover = true;
                 gameStatus = 3;
@@ -145,7 +159,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
+            canvas.drawText("Current score: " + String.valueOf(score), screenWidth / 2 - 200, 50, scorePaint);
+            canvas.drawText("Max score: " + String.valueOf(lastMax), screenWidth / 2 - 170, 150, scorePaint);
 
             holder.unlockCanvasAndPost(canvas);
         }
@@ -229,11 +245,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         try {
             thread.join();
         } catch(Exception e) {
-            Log.e("Error: ", "Thread join");
+            Log.e("Error ", "Thread join " + e);
         }
     }
 
     public void resume() {
+        checkMaxScore();
         thread = new Thread(this);
         thread.start();
         playing = true;
@@ -248,7 +265,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
 
     public void generateNewGame() {
+        saveScore();
+        checkMaxScore();
         count = 0;
+        score = 0;
         screen.gameover = false;
         ai = null;
         player = new Player(this);
@@ -304,7 +324,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     (float) (screenHeight * 0.7), gameoverPaint);
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
+            canvas.drawText("Current score: " + String.valueOf(score), screenWidth / 2 - 200, 50, scorePaint);
+            canvas.drawText("Max score: " + String.valueOf(lastMax), screenWidth / 2 - 170, 150, scorePaint);
+
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();
@@ -368,9 +391,52 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             buttonQuit.update();
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, textPaint);
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
+            canvas.drawText("Max score: " + String.valueOf(lastMax), screenWidth / 2 - 170, 50, scorePaint);
+
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();
+    }
+
+
+    public void saveScore() {
+//        Log.e("s", "s");
+        if (scoreBuilder.length() > 0) {
+            try {
+                FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
+                OutputStreamWriter writer_str = new OutputStreamWriter(writer);
+
+                writer_str.write(scoreBuilder.toString());
+                writer_str.close();
+            } catch (IOException e) {
+                Log.e("Error ", "Can't save SCORE " + e);
+            }
+        }
+    }
+
+    public void checkMaxScore() {
+        try {
+            InputStreamReader reader_cooler = new InputStreamReader(context.getApplicationContext().openFileInput("SCORE.txt"));
+            BufferedReader reader_buffer = new BufferedReader(reader_cooler);
+            String line;
+            StringBuilder builder = new StringBuilder();
+
+            while ((line = reader_buffer.readLine()) != null) {
+                builder.append(line);
+            }
+            String[] scoreList = builder.toString().split(" ");
+            for (int i = 1; i < scoreList.length; i++) {
+                int j = Integer.parseInt(scoreList[i]);
+                if (j > lastMax) {
+                    lastMax = j;
+                }
+            }
+//            Log.e("Recovery", builder.toString() + " max: " + lastMax);
+
+            reader_cooler.close();
+        } catch (IOException e) {
+            Log.e("Error ", "Can't recovery SCORE: " + e);
+        }
     }
 }

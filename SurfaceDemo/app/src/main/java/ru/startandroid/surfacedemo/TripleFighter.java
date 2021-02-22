@@ -17,7 +17,7 @@ public class TripleFighter{
     private static final Paint paint = new Paint();
     private final Game game;
     public boolean lock = true;
-    public int health = 16;
+    public int health = 7;
     private static int screenWidth;
     private static int screenHeight;
     private double angle;
@@ -63,6 +63,7 @@ public class TripleFighter{
     }
 
     public void newStatus() {
+        health = 7;
         x = get_random(0, 1920);
         y = -150;
         speedX = get_random(-3, 3);
@@ -79,6 +80,7 @@ public class TripleFighter{
             game.numberBullets -= 1;
             if (health <= 0) {
                 game.audioPlayer.playBoom();
+                game.score += 5;
                 newStatus();
             }
         }

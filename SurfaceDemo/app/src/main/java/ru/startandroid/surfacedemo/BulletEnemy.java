@@ -21,19 +21,23 @@ public class BulletEnemy {
 
     public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
         game = g;
+        game.audioPlayer.playShotgun();
+        color.setColor(Color.WHITE);
+
         speedx = spdx;
         speedy = spdy;
-        color.setColor(Color.WHITE);
+
         Matrix matrix = new Matrix();
         matrix.postRotate((float) angle);
+
         bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet_enemy);
         bulletImage = Bitmap.createScaledBitmap(bulletImage, 17, 50, isFilter);
         bulletImage = Bitmap.createBitmap(bulletImage, 0, 0, 17, 50, matrix, isFilter);
         width = bulletImage.getWidth();
         height = bulletImage.getHeight();
+
         x = X;
         y = Y;
-        game.audioPlayer.playShoot();
     }
 
     public void update() {

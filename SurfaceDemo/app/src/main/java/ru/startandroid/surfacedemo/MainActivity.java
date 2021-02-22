@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         game.pause();
+        game.saveScore();
         game.audioPlayer.releaseAP();
     }
 

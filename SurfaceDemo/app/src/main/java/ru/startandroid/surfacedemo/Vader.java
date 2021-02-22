@@ -44,6 +44,7 @@ public class Vader {
     }
 
     public void newStatus() {
+        health = 2;
         x = get_random(0, 1920);
         y = -150;
         speedX = get_random(-5, 5);
@@ -66,6 +67,7 @@ public class Vader {
             game.numberBullets -= 1;
             if (health <= 0) {
                 game.audioPlayer.playBoom();
+                game.score += 1;
                 newStatus();
             }
         }

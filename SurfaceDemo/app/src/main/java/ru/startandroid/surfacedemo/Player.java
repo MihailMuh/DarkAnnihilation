@@ -65,8 +65,11 @@ public class Player {
             now = System.nanoTime();
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
-                Bullet bullet = new Bullet(game, x + width / 2 - 3, y);
-                game.bullets.add(bullet);
+                Bullet bullet1 = new Bullet(game, x + width / 2 - 6, y);
+                game.bullets.add(bullet1);
+                game.numberBullets += 1;
+                Bullet bullet2 = new Bullet(game, x + width / 2, y);
+                game.bullets.add(bullet2);
                 game.numberBullets += 1;
             }
         }
