@@ -29,6 +29,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public int screenWidth;
     public int screenHeight;
+    public double resizeK;
     private static final Paint fpsPaint = new Paint();
     private static final Paint startPaint = new Paint();
     private static final Paint gameoverPaint = new Paint();
@@ -59,6 +60,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int pointerCount;
     public static final Random random = new Random();
     public StringBuilder scoreBuilder = new StringBuilder();
+    public String curScore;
+    public String maxScore;
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -70,6 +73,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         screenWidth = width;
         screenHeight = height;
+        resizeK = (double) screenWidth / 1920;
+        Log.i("sizes", "" + resizeK + " " + resizeK);
 
         holder = getHolder();
 
@@ -89,8 +94,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         for (int i = 0; i < vaderNumbers; i++) {
             vaders[i] = new Vader(this);
         }
-        buttonStart = new Button(this, "Start", screenWidth / 2, screenHeight - 70, "start");
-        buttonQuit = new Button(this, "Quit", screenWidth / 2 - 300, screenHeight - 70, "quit");
+        buttonStart = new Button(this, "Start", screenWidth / 2, (int) (screenHeight - 70 * resizeK), "start");
+        buttonQuit = new Button(this, "Quit", (int) (screenWidth / 2 - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
 
         audioPlayer.menuMusic.start();
     }
@@ -160,8 +165,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
-            canvas.drawText("Current score: " + String.valueOf(score), screenWidth / 2 - 200, 50, scorePaint);
-            canvas.drawText("Max score: " + String.valueOf(lastMax), screenWidth / 2 - 170, 150, scorePaint);
+
+            curScore = "Current score: " + String.valueOf(score);
+            maxScore = "Max score: " + String.valueOf(lastMax);
+            canvas.drawText(curScore, screenWidth / 2 - scorePaint.measureText(curScore) / 2, 50, scorePaint);
+            canvas.drawText(maxScore, screenWidth / 2 - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
 
             holder.unlockCanvasAndPost(canvas);
         }
@@ -325,8 +333,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
-            canvas.drawText("Current score: " + String.valueOf(score), screenWidth / 2 - 200, 50, scorePaint);
-            canvas.drawText("Max score: " + String.valueOf(lastMax), screenWidth / 2 - 170, 150, scorePaint);
+
+            curScore = "Current score: " + String.valueOf(score);
+            maxScore = "Max score: " + String.valueOf(lastMax);
+            canvas.drawText(curScore, screenWidth / 2 - scorePaint.measureText(curScore) / 2, 50, scorePaint);
+            canvas.drawText(maxScore, screenWidth / 2 - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
 
             holder.unlockCanvasAndPost(canvas);
         }
@@ -392,7 +403,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
-            canvas.drawText("Max score: " + String.valueOf(lastMax), screenWidth / 2 - 170, 50, scorePaint);
+
+            maxScore = "Max score: " + String.valueOf(lastMax);
+            canvas.drawText(maxScore, screenWidth / 2 - scorePaint.measureText(maxScore) / 2, 50, scorePaint);
 
             holder.unlockCanvasAndPost(canvas);
         }

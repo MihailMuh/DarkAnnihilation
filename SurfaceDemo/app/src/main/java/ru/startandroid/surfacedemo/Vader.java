@@ -28,7 +28,7 @@ public class Vader {
         paint.setColor(Color.WHITE);
 
         vaderImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
-        vaderImage = Bitmap.createScaledBitmap(vaderImage, 75, 75, isFilter);
+        vaderImage = Bitmap.createScaledBitmap(vaderImage, (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
         width = vaderImage.getWidth();
         height = vaderImage.getHeight();
 
@@ -74,10 +74,10 @@ public class Vader {
     }
 
     public void check_intersectionPlayer() {
-        if (x + 20 < game.player.x + 15 & game.player.x + 15 < x + width - 20 &
-                y + 30 < game.player.y + 15 & game.player.y + 15 < y + height - 20 |
-                game.player.x + 15 < x & x < game.player.x + game.player.width - 15 &
-                        game.player.y + 15 < y & y < game.player.y + game.player.height - 15) {
+        if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
+                y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
+                game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
+                        game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
             game.audioPlayer.playMetal();
             newStatus();
             game.player.health -= 5;
@@ -85,10 +85,10 @@ public class Vader {
     }
 
     public void check_intersectionAI() {
-        if (x + 20 < game.ai.x + 15 & game.ai.x + 15 < x + width - 20 &
-                y + 30 < game.ai.y + 15 & game.ai.y + 15 < y + height - 20 |
-                game.ai.x + 15 < x & x < game.ai.x + game.ai.width - 15 &
-                        game.ai.y + 15 < y & y < game.ai.y + game.ai.height - 15) {
+        if (x + 15 < game.ai.x + 20 & game.ai.x + 20 < x + width - 15 &
+                y + 15 < game.ai.y + 25 & game.ai.y + 25 < y + height - 15 |
+                game.ai.x + 20 < x & x < game.ai.x + game.ai.width - 20 &
+                        game.ai.y + 25 < y & y < game.ai.y + game.ai.height - 20) {
             game.audioPlayer.playMetal();
             newStatus();
         }

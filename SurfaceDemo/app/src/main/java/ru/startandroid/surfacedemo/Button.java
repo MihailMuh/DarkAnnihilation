@@ -5,9 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
-
-import java.util.ArrayList;
+import android.util.Log;
 
 public class Button {
     private static Bitmap buttonImagePressed;
@@ -24,7 +22,6 @@ public class Button {
     public final Game game;
     public String function;
 
-    private Rect bounds = new Rect();
     private String text;
     private int textWidth;
     private int textHeight;
@@ -33,9 +30,9 @@ public class Button {
         game = g;
 
         buttonImagePressed = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.button_press);
-        buttonImagePressed = Bitmap.createScaledBitmap(buttonImagePressed, 300, 70, isFilter);
+        buttonImagePressed = Bitmap.createScaledBitmap(buttonImagePressed, (int) (300 * game.resizeK), (int) (70 * game.resizeK), isFilter);
         buttonImageNotPressed = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.button_notpress);
-        buttonImageNotPressed = Bitmap.createScaledBitmap(buttonImageNotPressed, 300, 70, isFilter);
+        buttonImageNotPressed = Bitmap.createScaledBitmap(buttonImageNotPressed, (int) (300 * game.resizeK), (int) (70 * game.resizeK), isFilter);
         img = buttonImageNotPressed;
         width = buttonImagePressed.getWidth();
         height = buttonImagePressed.getHeight();
@@ -47,10 +44,8 @@ public class Button {
         text = t;
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
-        paint.getTextBounds(text, 0, text.length(), bounds);
-        textWidth = bounds.width();
-        textHeight = bounds.height();
-
+        textWidth = (int) paint.measureText(text);
+        textHeight = (int) (paint.getTextSize() / 4);
     }
 
     public void update() {
@@ -69,6 +64,6 @@ public class Button {
         }
 
         game.canvas.drawBitmap(img, x, y, paint);
-        game.canvas.drawText(text, x + ((width - textWidth) / 2),y + (height - textHeight), paint);
+        game.canvas.drawText(text, x + (width - textWidth) / 2,y + (height / 2 + textHeight), paint);
     }
 }

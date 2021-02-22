@@ -18,13 +18,13 @@ public class Heart {
     public Heart(Game g, int X, int Y) {
         game = g;
         imageFull = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.full_heart);
-        imageFull = Bitmap.createScaledBitmap(imageFull, 70, 60, isFilter);
+        imageFull = Bitmap.createScaledBitmap(imageFull, (int) (70 * game.resizeK), (int) (60 * game.resizeK), isFilter);
 
         imageHalf = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.half_heart);
-        imageHalf = Bitmap.createScaledBitmap(imageHalf, 70, 60, isFilter);
+        imageHalf = Bitmap.createScaledBitmap(imageHalf, (int) (70 * game.resizeK), (int) (60 * game.resizeK), isFilter);
 
         imageNon = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.non_heart);
-        imageNon = Bitmap.createScaledBitmap(imageNon, 70, 60, isFilter);
+        imageNon = Bitmap.createScaledBitmap(imageNon, (int) (70 * game.resizeK), (int) (60 * game.resizeK), isFilter);
 
         x = X;
         y = Y;

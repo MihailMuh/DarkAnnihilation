@@ -33,7 +33,7 @@ public class Player {
         paint.setColor(Color.WHITE);
 
         playerImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.ship);
-        playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
+        playerImage = Bitmap.createScaledBitmap(playerImage, (int) (100 * game.resizeK), (int) (120 * game.resizeK), isFilter);
         width = playerImage.getWidth();
         height = playerImage.getHeight();
 
@@ -187,7 +187,7 @@ class AI {
         screenHeight = game.screenHeight;
 
         playerImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.ship);
-        playerImage = Bitmap.createScaledBitmap(playerImage, 100, 120, isFilter);
+        playerImage = Bitmap.createScaledBitmap(playerImage, (int) (100 * game.resizeK), (int) (120 * game.resizeK), isFilter);
         width = playerImage.getWidth();
         height = playerImage.getHeight();
 

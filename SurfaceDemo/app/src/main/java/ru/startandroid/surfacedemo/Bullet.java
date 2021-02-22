@@ -2,9 +2,7 @@ package ru.startandroid.surfacedemo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 
 public class Bullet {
     public Bitmap bulletImage;
@@ -23,7 +21,7 @@ public class Bullet {
 //        color.setColor(Color.WHITE);
 
         bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet);
-        bulletImage = Bitmap.createScaledBitmap(bulletImage, 7, 30, isFilter);
+        bulletImage = Bitmap.createScaledBitmap(bulletImage, (int) (7 * game.resizeK), (int) (30 * game.resizeK), isFilter);
         width = bulletImage.getWidth();
         height = bulletImage.getHeight();
         x = X;

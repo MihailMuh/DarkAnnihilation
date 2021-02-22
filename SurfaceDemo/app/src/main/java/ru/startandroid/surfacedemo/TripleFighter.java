@@ -32,7 +32,7 @@ public class TripleFighter{
         paint.setColor(Color.WHITE);
 
         tripleFighterImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.triple_fighter);
-        tripleFighterImg = Bitmap.createScaledBitmap(tripleFighterImg, 105, 105, isFilter);
+        tripleFighterImg = Bitmap.createScaledBitmap(tripleFighterImg, (int) (105 * game.resizeK), (int) (105 * game.resizeK), isFilter);
         width = tripleFighterImg.getWidth();
         height = tripleFighterImg.getHeight();
 
@@ -87,23 +87,13 @@ public class TripleFighter{
     }
 
     public void check_intersectionPlayer() {
-        if (x + 20 < game.player.x + 15 & game.player.x + 15 < x + width - 20 &
-                y + 30 < game.player.y + 15 & game.player.y + 15 < y + height - 20 |
-                game.player.x + 15 < x & x < game.player.x + game.player.width - 15 &
-                        game.player.y + 15 < y & y < game.player.y + game.player.height - 15) {
+        if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
+                y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
+                game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
+                        game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
             game.audioPlayer.playMetal();
             newStatus();
             game.player.health -= 10;
-        }
-    }
-
-    public void check_intersectionAI() {
-        if (x + 20 < game.ai.x + 15 & game.ai.x + 15 < x + width - 20 &
-                y + 30 < game.ai.y + 15 & game.ai.y + 15 < y + height - 20 |
-                game.ai.x + 15 < x & x < game.ai.x + game.ai.width - 15 &
-                        game.ai.y + 15 < y & y < game.ai.y + game.ai.height - 15) {
-            game.audioPlayer.playMetal();
-            newStatus();
         }
     }
 

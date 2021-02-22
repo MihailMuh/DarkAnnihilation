@@ -31,8 +31,8 @@ public class BulletEnemy {
         matrix.postRotate((float) angle);
 
         bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet_enemy);
-        bulletImage = Bitmap.createScaledBitmap(bulletImage, 17, 50, isFilter);
-        bulletImage = Bitmap.createBitmap(bulletImage, 0, 0, 17, 50, matrix, isFilter);
+        bulletImage = Bitmap.createScaledBitmap(bulletImage, (int) (17 * game.resizeK), (int) (50 * game.resizeK), isFilter);
+        bulletImage = Bitmap.createBitmap(bulletImage, 0, 0, (int) (17 * game.resizeK), (int) (50 * game.resizeK), matrix, isFilter);
         width = bulletImage.getWidth();
         height = bulletImage.getHeight();
 
