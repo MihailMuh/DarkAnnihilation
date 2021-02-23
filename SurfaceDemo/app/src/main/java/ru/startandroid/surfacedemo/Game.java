@@ -45,12 +45,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
     public ArrayList<BulletEnemy> bulletEnemies = new ArrayList<>(0);
     public Heart[] hearts = new Heart[5];
+    public Explosion[] explosions = new Explosion[40];
     public Screen screen;
     public Button buttonStart;
     public Button buttonQuit;
     public int vaderNumbers = vaders.length;
+    public int numberExplosions = explosions.length;
     public int numberBullets = 0;
-    public int numberTripleFighters;
+    public int numberTripleFighters = 0;
     public int numberBulletsEnemy = 0;
     public int gameStatus = 1;
     public int count = 0;
@@ -62,6 +64,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public StringBuilder scoreBuilder = new StringBuilder();
     public String curScore;
     public String maxScore;
+    public ImageHub imageHub;
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -69,12 +72,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void initGame(int width, int height) {
-        audioPlayer = new AudioPlayer(this);
-
         screenWidth = width;
         screenHeight = height;
         resizeK = (double) screenWidth / 1920;
-        Log.i("sizes", "" + resizeK + " " + resizeK);
+
+        imageHub = new ImageHub(this);
+        audioPlayer = new AudioPlayer(this);
 
         holder = getHolder();
 
@@ -94,6 +97,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         for (int i = 0; i < vaderNumbers; i++) {
             vaders[i] = new Vader(this);
         }
+        for (int i = 0; i < numberExplosions; i++) {
+            if (i < 20) {
+                explosions[i] = new Explosion(this, "default");
+            } else {
+                explosions[i] = new Explosion(this, "small");
+            }
+        }
+//        for (int i = 0; i < numberExplosionsSmall; i++) {
+//            explosionsSmall[i] = new Explosion(this, "small");
+//        }
+//        for (int i = 0; i < 20; i++) {
+//            explosionslarge[i] = new Explosion(this, "large");
+//        }
         buttonStart = new Button(this, "Start", screenWidth / 2, (int) (screenHeight - 70 * resizeK), "start");
         buttonQuit = new Button(this, "Quit", (int) (screenWidth / 2 - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
 
@@ -159,6 +175,20 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 screen.gameover = true;
                 gameStatus = 3;
             }
+
+//            for (int i = 0; i < numberExplosionsSmall; i++) {
+//                if (!explosionsSmall[i].lock) {
+//                    explosionsSmall[i].update();
+//                    explosionsSmall[i].x -= player.speedX / 3;
+//                }
+//            }
+            for (int i = 0; i < numberExplosions; i++) {
+                if (!explosions[i].lock) {
+                    explosions[i].update();
+                    explosions[i].x -= player.speedX / 3;
+                }
+            }
+
             if (gameStatus == 2) {
                 timerStart();
             }
@@ -396,6 +426,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 vaders[i].check_intersectionAI();
                 vaders[i].update();
+            }
+
+//            for (int i = 0; i < numberExplosionsSmall; i++) {
+//                if (!explosionsSmall[i].lock) {
+//                    explosionsSmall[i].update();
+//                }
+//            }
+            for (int i = 0; i < numberExplosions; i++) {
+                if (!explosions[i].lock) {
+                    explosions[i].update();
+                }
             }
 
             buttonStart.update();

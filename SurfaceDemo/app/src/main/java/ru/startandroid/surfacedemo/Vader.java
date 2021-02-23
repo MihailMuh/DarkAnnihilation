@@ -66,6 +66,12 @@ public class Vader {
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
             if (health <= 0) {
+                for (int i = 0; i < 20; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + width / 2, y + height / 2);
+                        break;
+                    }
+                }
                 game.audioPlayer.playBoom();
                 game.score += 1;
                 newStatus();
@@ -79,6 +85,12 @@ public class Vader {
                 game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
                         game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
             game.audioPlayer.playMetal();
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(x + width / 2, y + height / 2);
+                    break;
+                }
+            }
             newStatus();
             game.player.health -= 5;
         }
@@ -90,6 +102,12 @@ public class Vader {
                 game.ai.x + 20 < x & x < game.ai.x + game.ai.width - 20 &
                         game.ai.y + 25 < y & y < game.ai.y + game.ai.height - 20) {
             game.audioPlayer.playMetal();
+//            for (int i = 20; i < 40; i++) {
+//                if (game.explosions[i].lock) {
+//                    game.explosions[i].start(x + width / 2, y + height / 2);
+//                    break;
+//                }
+//            }
             newStatus();
         }
     }

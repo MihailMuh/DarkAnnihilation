@@ -46,11 +46,17 @@ public class Player {
     }
 
     public void check_intersectionBullet(BulletEnemy bulletEnemy) {
-        if (x + 20 < bulletEnemy.x + 5 & bulletEnemy.x + 5 < x + width - 20 &
-                y + 30 < bulletEnemy.y + 5 & bulletEnemy.y + 5 < y + height - 20 |
-                bulletEnemy.x + 5 < x & x < bulletEnemy.x + bulletEnemy.width - 5 &
-                        bulletEnemy.y + 5 < y & y < bulletEnemy.y + bulletEnemy.height - 5) {
+        if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
+                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
+                bulletEnemy.x < x & x < bulletEnemy.x + bulletEnemy.width &
+                        bulletEnemy.y < y & y < bulletEnemy.y + bulletEnemy.height) {
             health -= bulletEnemy.damage;
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.width / 2, bulletEnemy.y + bulletEnemy.height / 2);
+                    break;
+                }
+            }
             bulletEnemy.bulletImage.recycle();
             game.bulletEnemies.remove(bulletEnemy);
             game.numberBulletsEnemy -= 1;

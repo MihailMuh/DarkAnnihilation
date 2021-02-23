@@ -65,7 +65,7 @@ public class Screen {
         screen_image[33] = BitmapFactory.decodeResource(context.getResources(), R.drawable._33);
 
         for (int i = 0; i < screenImageLength; i++) {
-            screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) ((game.screenWidth + 110) * 1.4), game.screenHeight + 100, isFilter);
+            screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) (game.screenWidth * 1.4), game.screenHeight, isFilter);
         }
         x = (int) (game.screenWidth * -0.2);
         y = 0;

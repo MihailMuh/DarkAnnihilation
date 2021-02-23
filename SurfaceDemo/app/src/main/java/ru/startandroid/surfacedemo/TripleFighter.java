@@ -75,10 +75,22 @@ public class TripleFighter{
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2);
+                    break;
+                }
+            }
             bullet.bulletImage.recycle();
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
             if (health <= 0) {
+                for (int i = 0; i < game.numberExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + width / 2, y + height / 2);
+                        break;
+                    }
+                }
                 game.audioPlayer.playBoom();
                 game.score += 5;
                 newStatus();
@@ -92,6 +104,12 @@ public class TripleFighter{
                 game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
                         game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
             game.audioPlayer.playMetal();
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(x + width / 2, y + height / 2);
+                    break;
+                }
+            }
             newStatus();
             game.player.health -= 10;
         }
