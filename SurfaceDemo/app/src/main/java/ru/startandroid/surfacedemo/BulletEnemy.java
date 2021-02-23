@@ -7,12 +7,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 
 public class BulletEnemy {
-    public Bitmap bulletImage;
+    private final Bitmap img;
     public int x;
     public int y;
     public int width;
     public int height;
-    private static final boolean isFilter = true;
     public static final Paint color = new Paint();
     public int speedy;
     public int speedx;
@@ -22,7 +21,7 @@ public class BulletEnemy {
     public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
         game = g;
         game.audioPlayer.playShotgun();
-        color.setColor(Color.WHITE);
+//        color.setColor(Color.WHITE);
 
         speedx = spdx;
         speedy = spdy;
@@ -30,11 +29,9 @@ public class BulletEnemy {
         Matrix matrix = new Matrix();
         matrix.postRotate((float) angle);
 
-        bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet_enemy);
-        bulletImage = Bitmap.createScaledBitmap(bulletImage, (int) (17 * game.resizeK), (int) (50 * game.resizeK), isFilter);
-        bulletImage = Bitmap.createBitmap(bulletImage, 0, 0, (int) (17 * game.resizeK), (int) (50 * game.resizeK), matrix, isFilter);
-        width = bulletImage.getWidth();
-        height = bulletImage.getHeight();
+        width = ImageHub.bulletEnemyImage.getWidth();
+        height = ImageHub.bulletEnemyImage.getHeight();
+        img = Bitmap.createBitmap(ImageHub.bulletEnemyImage, 0, 0, width, height, matrix, ImageHub.isFilter);
 
         x = X;
         y = Y;
@@ -45,6 +42,6 @@ public class BulletEnemy {
         x += speedx;
 //        game.canvas.drawRect(x, y, x + width, y + height, color);
 
-        game.canvas.drawBitmap(bulletImage, x, y, color);
+        game.canvas.drawBitmap(img, x, y, color);
     }
 }

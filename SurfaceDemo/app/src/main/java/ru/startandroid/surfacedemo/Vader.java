@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Vader {
-    public Bitmap vaderImage;
     public int x;
     public int y;
     public int speedX;
@@ -15,7 +14,6 @@ public class Vader {
     public int height;
     private static int screenWidth;
     private static int screenHeight;
-    private static final boolean isFilter = true;
     private static final Paint paint = new Paint();
     private final Game game;
     public boolean lock = false;
@@ -27,10 +25,8 @@ public class Vader {
         screenHeight = game.screenHeight;
         paint.setColor(Color.WHITE);
 
-        vaderImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
-        vaderImage = Bitmap.createScaledBitmap(vaderImage, (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
-        width = vaderImage.getWidth();
-        height = vaderImage.getHeight();
+        width = ImageHub.vaderImage.getWidth();
+        height = ImageHub.vaderImage.getHeight();
 
         x = get_random(0, 1920);
         y = -150;
@@ -62,7 +58,6 @@ public class Vader {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
-            bullet.bulletImage.recycle();
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
             if (health <= 0) {
@@ -96,22 +91,6 @@ public class Vader {
         }
     }
 
-    public void check_intersectionAI() {
-        if (x + 15 < game.ai.x + 20 & game.ai.x + 20 < x + width - 15 &
-                y + 15 < game.ai.y + 25 & game.ai.y + 25 < y + height - 15 |
-                game.ai.x + 20 < x & x < game.ai.x + game.ai.width - 20 &
-                        game.ai.y + 25 < y & y < game.ai.y + game.ai.height - 20) {
-            game.audioPlayer.playMetal();
-//            for (int i = 20; i < 40; i++) {
-//                if (game.explosions[i].lock) {
-//                    game.explosions[i].start(x + width / 2, y + height / 2);
-//                    break;
-//                }
-//            }
-            newStatus();
-        }
-    }
-
     public void update() {
         if (!lock) {
             x += speedX;
@@ -121,7 +100,7 @@ public class Vader {
                 newStatus();
             }
 
-            game.canvas.drawBitmap(vaderImage, x, y, paint);
+            game.canvas.drawBitmap(ImageHub.vaderImage, x, y, paint);
 //            game.canvas.drawRect(x + 15, y + 15, x + width - 15, y + height - 15, paint);
 
         }

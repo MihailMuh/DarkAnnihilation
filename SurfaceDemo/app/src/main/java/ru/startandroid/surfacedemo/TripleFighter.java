@@ -1,23 +1,19 @@
 package ru.startandroid.surfacedemo;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 
 public class TripleFighter{
-    public Bitmap tripleFighterImg;
     public int x;
     public int y;
     public int speedX;
     public int speedY;
     public int width;
     public int height;
-    private static final boolean isFilter = true;
     private static final Paint paint = new Paint();
     private final Game game;
     public boolean lock = true;
-    public int health = 7;
+    public int health = 6;
     private static int screenWidth;
     private static int screenHeight;
     private double angle;
@@ -31,10 +27,8 @@ public class TripleFighter{
         screenHeight = game.screenHeight;
         paint.setColor(Color.WHITE);
 
-        tripleFighterImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.triple_fighter);
-        tripleFighterImg = Bitmap.createScaledBitmap(tripleFighterImg, (int) (105 * game.resizeK), (int) (105 * game.resizeK), isFilter);
-        width = tripleFighterImg.getWidth();
-        height = tripleFighterImg.getHeight();
+        width = ImageHub.tripleFighterImg.getWidth();
+        height = ImageHub.tripleFighterImg.getHeight();
 
         x = get_random(0, 1920);
         y = -150;
@@ -49,10 +43,10 @@ public class TripleFighter{
             int X = (game.player.x + game.player.width / 2) - (x + width / 2);
             int Y = (game.player.y + game.player.height / 2) - (y + height / 2);
             lastShoot = now;
-            angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2.0));
+            angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
 
-            BulletEnemy bullet1 = new BulletEnemy(game, x + width / 2, y + height / 2, angle, X / 50, Y / 50);
-            game.bulletEnemies.add(bullet1);
+            BulletEnemy bullet = new BulletEnemy(game, x + width / 2, y + height / 2, angle, X / 50, Y / 50);
+            game.bulletEnemies.add(bullet);
             game.numberBulletsEnemy += 1;
         }
     }
@@ -81,7 +75,6 @@ public class TripleFighter{
                     break;
                 }
             }
-            bullet.bulletImage.recycle();
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
             if (health <= 0) {
@@ -127,7 +120,7 @@ public class TripleFighter{
             }
 //            game.canvas.drawRect(x, y, x + width, y + height, paint);
 
-            game.canvas.drawBitmap(tripleFighterImg, x, y, paint);
+            game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, paint);
 
         }
     }

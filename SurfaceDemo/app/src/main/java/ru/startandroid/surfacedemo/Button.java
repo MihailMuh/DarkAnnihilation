@@ -8,8 +8,6 @@ import android.graphics.Rect;
 import android.util.Log;
 
 public class Button {
-    private static Bitmap buttonImagePressed;
-    private static Bitmap buttonImageNotPressed;
     private Bitmap img;
     public int x;
     public int y;
@@ -17,7 +15,6 @@ public class Button {
     public int mouseY;
     public int width;
     public int height;
-    private static final boolean isFilter = true;
     public static final Paint paint = new Paint();
     public final Game game;
     public String function;
@@ -29,13 +26,9 @@ public class Button {
     public Button(Game g, String t, int X, int Y, String func) {
         game = g;
 
-        buttonImagePressed = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.button_press);
-        buttonImagePressed = Bitmap.createScaledBitmap(buttonImagePressed, (int) (300 * game.resizeK), (int) (70 * game.resizeK), isFilter);
-        buttonImageNotPressed = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.button_notpress);
-        buttonImageNotPressed = Bitmap.createScaledBitmap(buttonImageNotPressed, (int) (300 * game.resizeK), (int) (70 * game.resizeK), isFilter);
-        img = buttonImageNotPressed;
-        width = buttonImagePressed.getWidth();
-        height = buttonImagePressed.getHeight();
+        img = ImageHub.buttonImageNotPressed;
+        width = ImageHub.buttonImagePressed.getWidth();
+        height = ImageHub.buttonImagePressed.getHeight();
         function = func;
 
         x = X;
@@ -51,7 +44,7 @@ public class Button {
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
             game.audioPlayer.buttonSnd.start();
-            img = buttonImagePressed;
+            img = ImageHub.buttonImagePressed;
             if (function.equals("start")) {
                 game.generateNewGame();
             } else {
@@ -60,7 +53,7 @@ public class Button {
                 }
             }
         } else {
-            img = buttonImageNotPressed;
+            img = ImageHub.buttonImageNotPressed;
         }
 
         game.canvas.drawBitmap(img, x, y, paint);

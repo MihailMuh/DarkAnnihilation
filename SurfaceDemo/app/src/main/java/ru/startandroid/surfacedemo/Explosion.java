@@ -41,6 +41,11 @@ public class Explosion {
         lock = false;
     }
 
+    public void stop() {
+        lock = true;
+        frame = 0;
+    }
+
     public void update() {
         if (frame != 28) {
             game.canvas.drawBitmap(img[frame], x, y, color);

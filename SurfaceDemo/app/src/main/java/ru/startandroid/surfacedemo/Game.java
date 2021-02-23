@@ -39,7 +39,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
     private long timeFrame;
     public Player player;
-    public AI ai;
     public Vader[] vaders = new Vader[10];
     public ArrayList<Bullet> bullets = new ArrayList<>(0);
     public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
@@ -91,7 +90,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         scorePaint.setTextSize(40);
 
         screen = new Screen(this);
-        ai = new AI(this);
+        player = new Player(this);
+
         vaderNumbers *= 2;
         vaders = new Vader[vaderNumbers];
         for (int i = 0; i < vaderNumbers; i++) {
@@ -104,12 +104,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 explosions[i] = new Explosion(this, "small");
             }
         }
-//        for (int i = 0; i < numberExplosionsSmall; i++) {
-//            explosionsSmall[i] = new Explosion(this, "small");
-//        }
-//        for (int i = 0; i < 20; i++) {
-//            explosionslarge[i] = new Explosion(this, "large");
-//        }
         buttonStart = new Button(this, "Start", screenWidth / 2, (int) (screenHeight - 70 * resizeK), "start");
         buttonQuit = new Button(this, "Quit", (int) (screenWidth / 2 - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
 
@@ -129,7 +123,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bullets.get(i).x -= player.speedX / 3;
                 bullets.get(i).update();
                 if (bullets.get(i).y < -50) {
-                    bullets.get(i).bulletImage.recycle();
                     bullets.remove(i);
                     numberBullets -= 1;
                 }
@@ -157,7 +150,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bulletEnemies.get(i).x -= player.speedX / 3;
                 bulletEnemies.get(i).update();
                 if (bulletEnemies.get(i).y > screenHeight | bulletEnemies.get(i).x < -100 | bulletEnemies.get(i).x > screenWidth) {
-                    bulletEnemies.get(i).bulletImage.recycle();
                     bulletEnemies.remove(i);
                     numberBulletsEnemy -= 1;
                 } else {
@@ -176,12 +168,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 gameStatus = 3;
             }
 
-//            for (int i = 0; i < numberExplosionsSmall; i++) {
-//                if (!explosionsSmall[i].lock) {
-//                    explosionsSmall[i].update();
-//                    explosionsSmall[i].x -= player.speedX / 3;
-//                }
-//            }
             for (int i = 0; i < numberExplosions; i++) {
                 if (!explosions[i].lock) {
                     explosions[i].update();
@@ -238,17 +224,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     buttonQuit.mouseX = (int) event.getX();
                     buttonQuit.mouseY = (int) event.getY();
                 }
-                if (player != null) {
-                    player.endX = (int) (event.getX() - player.width / 2);
-                    player.endY = (int) (event.getY() - player.height / 2);
-                }
+                player.endX = (int) (event.getX() - player.width / 2);
+                player.endY = (int) (event.getY() - player.height / 2);
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                if (player != null) {
-                    player.endX = (int) (event.getX() - player.width / 2);
-                    player.endY = (int) (event.getY() - player.height / 2);
-                }
+                player.endX = (int) (event.getX() - player.width / 2);
+                player.endY = (int) (event.getY() - player.height / 2);
                 break;
             }
 //            case MotionEvent.ACTION_UP: {
@@ -308,9 +290,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         count = 0;
         score = 0;
         screen.gameover = false;
-        ai = null;
         player = new Player(this);
         player.lock = true;
+        player.ai = 0;
         vaders = new Vader[12];
         tripleFighters = new ArrayList<>(0);
         vaderNumbers = 12;
@@ -322,6 +304,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             vaders[i].lock = true;
         }
         numberTripleFighters = tripleFighters.size();
+
+        for (int i = 0; i < numberExplosions; i++) {
+            explosions[i].stop();
+        }
+
         bullets = new ArrayList<>(0);
         bulletEnemies = new ArrayList<>(0);
         numberBullets = 0;
@@ -409,12 +396,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
             screen.update();
-            ai.update();
+            player.update();
 
             for (int i = 0; i < numberBullets; i++) {
                 bullets.get(i).update();
                 if (bullets.get(i).y < -50) {
-                    bullets.get(i).bulletImage.recycle();
                     bullets.remove(i);
                     numberBullets -= 1;
                 }
@@ -424,15 +410,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 for (int j = 0; j < numberBullets; j++) {
                     vaders[i].check_intersectionBullet(bullets.get(j));
                 }
-                vaders[i].check_intersectionAI();
+                vaders[i].check_intersectionPlayer();
                 vaders[i].update();
             }
 
-//            for (int i = 0; i < numberExplosionsSmall; i++) {
-//                if (!explosionsSmall[i].lock) {
-//                    explosionsSmall[i].update();
-//                }
-//            }
             for (int i = 0; i < numberExplosions; i++) {
                 if (!explosions[i].lock) {
                     explosions[i].update();
