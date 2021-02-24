@@ -41,6 +41,19 @@ public class Button {
         textHeight = (int) (paint.getTextSize() / 4);
     }
 
+    public void newFunc(String t, int X, int Y, String func) {
+        function = func;
+
+        x = X;
+        y = Y;
+
+        text = t;
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(35);
+        textWidth = (int) paint.measureText(text);
+        textHeight = (int) (paint.getTextSize() / 4);
+    }
+
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
             game.audioPlayer.buttonSnd.start();
@@ -50,10 +63,18 @@ public class Button {
             } else {
                 if (function.equals("quit")) {
                     System.exit(0);
+                } else {
+                    if (function.equals("pause")) {
+                        if (game.pauseButton.oldStatus == 2) {
+                            game.audioPlayer.readySnd.start();
+                        }
+                        game.gameStatus = game.pauseButton.oldStatus;
+                    }
                 }
             }
         } else {
             img = ImageHub.buttonImageNotPressed;
+//            game.player.dontmove = true;
         }
 
         game.canvas.drawBitmap(img, x, y, paint);

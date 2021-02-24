@@ -24,6 +24,7 @@ public class Player {
     public boolean lock = false;
     public int health = 50;
     public int ai = 1;
+    public boolean dontmove = false;
 
     public Player(Game g) {
         game = g;
@@ -85,7 +86,6 @@ public class Player {
 
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
-
 
             switch (health) {
                 case 50:

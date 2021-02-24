@@ -22,6 +22,7 @@ public class ImageHub {
     public static Bitmap imageHeartHalf;
     public static Bitmap imageHeartNon;
     public static Bitmap gameoverScreen;
+    public static Bitmap pauseButtonImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -133,5 +134,8 @@ public class ImageHub {
 
         imageHeartNon = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.non_heart);
         imageHeartNon = Bitmap.createScaledBitmap(imageHeartNon, (int) (70 * game.resizeK), (int) (60 * game.resizeK), isFilter);
+
+        pauseButtonImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.pause_button);
+        pauseButtonImg = Bitmap.createScaledBitmap(pauseButtonImg, (int) (100 * game.resizeK), (int) (100 * game.resizeK), isFilter);
     }
 }

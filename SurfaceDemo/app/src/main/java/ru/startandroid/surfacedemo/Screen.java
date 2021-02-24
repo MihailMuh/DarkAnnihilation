@@ -16,7 +16,6 @@ public class Screen {
     private long now;
     private int frame = 0;
     private final Game game;
-    public boolean gameover = false;
     private static final int screenImageLength = ImageHub.screen_image.length;
 
     public Screen(Game g) {
@@ -29,18 +28,18 @@ public class Screen {
     }
 
     public void update() {
-        if (!gameover) {
-            now = System.nanoTime();
-            if (now - lastUpdate > frameRate) {
-                lastUpdate = now;
-                if (frame == screenImageLength) {
-                    frame = 0;
-                }
-                game.canvas.drawBitmap(ImageHub.screen_image[frame], x, y, color);
-                frame += 1;
+        now = System.nanoTime();
+        if (now - lastUpdate > frameRate) {
+            lastUpdate = now;
+            if (frame == screenImageLength) {
+                frame = 0;
             }
-        } else {
-            game.canvas.drawBitmap(ImageHub.gameoverScreen, 0, 0, color);
+            game.canvas.drawBitmap(ImageHub.screen_image[frame], x, y, color);
+            frame += 1;
         }
+    }
+
+    public void update(Bitmap img) {
+        game.canvas.drawBitmap(img, 0, 0, color);
     }
 }

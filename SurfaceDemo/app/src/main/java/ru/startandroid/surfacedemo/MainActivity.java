@@ -2,8 +2,8 @@ package ru.startandroid.surfacedemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActivityManager;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
     Game game;
+//    Bitmap screenshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,20 @@ public class MainActivity extends AppCompatActivity {
         Point size = new Point();
         display.getRealSize(size);
 
+//        DisplayMetrics displaymetrics = getResources().getDisplayMetrics();
+//
+//        int bar = 0;
+//
+//        if (size.x - displaymetrics.widthPixels > 0) {
+//            bar = size.x - displaymetrics.widthPixels;
+//            screenshot = Bitmap.createBitmap(size.x - 50, size.y, Bitmap.Config.ARGB_8888);
+//        } else {
+//            if (size.y - displaymetrics.heightPixels > 0) {
+//                bar = size.y - displaymetrics.heightPixels;
+//                screenshot = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+//            }
+//        }
+//        Log.e("screen", "" + (size.x - displaymetrics.widthPixels));
         game = findViewById(R.id.gameView);
         game.initGame(size.x, size.y);
 
@@ -46,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        game.pause();
+        game.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        game.pause();
+        game.onPause();
         game.saveScore();
         game.audioPlayer.releaseAP();
     }
@@ -70,6 +85,6 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
-        game.resume();
+        game.onResume();
     }
 }

@@ -2,14 +2,22 @@ package ru.startandroid.surfacedemo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.PixelCopy;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -48,6 +56,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Screen screen;
     public Button buttonStart;
     public Button buttonQuit;
+    public PauseButton pauseButton;
     public int vaderNumbers = vaders.length;
     public int numberExplosions = explosions.length;
     public int numberBullets = 0;
@@ -63,7 +72,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public StringBuilder scoreBuilder = new StringBuilder();
     public String curScore;
     public String maxScore;
+    public int action;
+    public int clickX;
+    public int clickY;
     public ImageHub imageHub;
+    public Bitmap screenshot;
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -74,6 +87,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screenWidth = width;
         screenHeight = height;
         resizeK = (double) screenWidth / 1920;
+
+        screenshot = Bitmap.createBitmap(screenWidth - 53, screenHeight, Bitmap.Config.ARGB_8888);
 
         imageHub = new ImageHub(this);
         audioPlayer = new AudioPlayer(this);
@@ -106,6 +121,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         buttonStart = new Button(this, "Start", screenWidth / 2, (int) (screenHeight - 70 * resizeK), "start");
         buttonQuit = new Button(this, "Quit", (int) (screenWidth / 2 - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
+        pauseButton = new PauseButton(this);
 
         audioPlayer.menuMusic.start();
     }
@@ -164,7 +180,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
 
                 audioPlayer.gameoverSnd.start();
-                screen.gameover = true;
                 gameStatus = 3;
             }
 
@@ -180,13 +195,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
-
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 140, fpsPaint);
             curScore = "Current score: " + String.valueOf(score);
-            maxScore = "Max score: " + String.valueOf(lastMax);
+//            maxScore = "Max score: " + String.valueOf(lastMax);
             canvas.drawText(curScore, screenWidth / 2 - scorePaint.measureText(curScore) / 2, 50, scorePaint);
-            canvas.drawText(maxScore, screenWidth / 2 - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
-
+//            canvas.drawText(maxScore, screenWidth / 2 - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
+            pauseButton.update();
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();
@@ -207,6 +221,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 case 3:
                     gameover();
                     break;
+                case 4:
+                    pause();
+                    break;
             }
         }
     }
@@ -214,23 +231,24 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        final int action = event.getAction();
+        action = event.getAction();
         pointerCount = event.getPointerCount();
+        clickX = (int) event.getX();
+        clickY = (int) event.getY();
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN: {
-                if (buttonStart != null) {
-                    buttonStart.mouseX = (int) event.getX();
-                    buttonStart.mouseY = (int) event.getY();
-                    buttonQuit.mouseX = (int) event.getX();
-                    buttonQuit.mouseY = (int) event.getY();
-                }
-                player.endX = (int) (event.getX() - player.width / 2);
-                player.endY = (int) (event.getY() - player.height / 2);
+                buttonStart.mouseX = clickX;
+                buttonStart.mouseY = clickY;
+                buttonQuit.mouseX = clickX;
+                buttonQuit.mouseY = clickY;
+                pauseButton.setCoords(clickX, clickY);
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                player.endX = (int) (event.getX() - player.width / 2);
-                player.endY = (int) (event.getY() - player.height / 2);
+                if (!player.dontmove) {
+                    player.endX = clickX - player.width / 2;
+                    player.endY = clickY - player.height / 2;
+                }
                 break;
             }
 //            case MotionEvent.ACTION_UP: {
@@ -255,7 +273,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder){}
 
-    public void pause() {
+    public void onPause() {
         playing = false;
         if (gameStatus == 1) {
             audioPlayer.menuMusic.pause();
@@ -269,7 +287,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    public void resume() {
+    public void onResume() {
         checkMaxScore();
         thread = new Thread(this);
         thread.start();
@@ -283,13 +301,23 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
+    public void makeScreenshot() {
+        final HandlerThread handlerThread = new HandlerThread("PixelCopier");
+        handlerThread.start();
+        PixelCopy.request(this, screenshot, (copyResult) -> {
+            if (copyResult != PixelCopy.SUCCESS) {
+                Log.e("Error ", "Can't create screenshot ");
+            }
+            handlerThread.quitSafely();
+        }, new Handler(handlerThread.getLooper()));
+    }
+
 
     public void generateNewGame() {
         saveScore();
         checkMaxScore();
         count = 0;
         score = 0;
-        screen.gameover = false;
         player = new Player(this);
         player.lock = true;
         player.ai = 0;
@@ -312,13 +340,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         bullets = new ArrayList<>(0);
         bulletEnemies = new ArrayList<>(0);
         numberBullets = 0;
-        buttonStart = null;
+        buttonStart.x = screenWidth * 2;
+        buttonQuit.x = screenWidth * 2;
         int c = 370;
         for (int i = 0; i < 5; i++) {
             Heart heart = new Heart(this, c, 10);
             hearts[i] = heart;
             c -= 90;
         }
+
+        pauseButton.lock = false;
 
         if (gameStatus == 1) {
             audioPlayer.menuMusic.pause();
@@ -329,6 +360,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         audioPlayer.pirateMusic.start();
 
         gameStatus = 2;
+        makeScreenshot();
         audioPlayer.readySnd.start();
     }
 
@@ -338,18 +370,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
 
-            screen.update();
+            screen.update(ImageHub.gameoverScreen);
 
             if (pointerCount >= 4) {
                 generateNewGame();
             }
+            pauseButton.update();
 
             canvas.drawText("Tap this screen with four or more fingers to restart",
                     (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
                     (float) (screenHeight * 0.7), gameoverPaint);
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 50, fpsPaint);
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, 140, fpsPaint);
 
             curScore = "Current score: " + String.valueOf(score);
             maxScore = "Max score: " + String.valueOf(lastMax);
@@ -360,6 +393,22 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         timeFrame = System.nanoTime();
     }
+
+    public void pause() {
+        if (holder.getSurface().isValid()) {
+            canvas = holder.lockCanvas();
+
+            screen.update(screenshot);
+            buttonQuit.update();
+            buttonStart.update();
+
+            maxScore = "Max score: " + String.valueOf(lastMax);
+            canvas.drawText(maxScore, screenWidth / 2 - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
+
+            holder.unlockCanvasAndPost(canvas);
+        }
+    }
+
 
     public void timerStart() {
         count += 1;
@@ -436,7 +485,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
 
     public void saveScore() {
-//        Log.e("s", "s");
         if (scoreBuilder.length() > 0) {
             try {
                 FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
