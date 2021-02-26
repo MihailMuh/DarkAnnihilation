@@ -22,7 +22,7 @@ public class Bullet {
         height = ImageHub.bulletImage.getHeight();
         x = X;
         y = Y;
-        game.audioPlayer.playShoot();
+        AudioPlayer.playShoot();
     }
 
     public void update() {

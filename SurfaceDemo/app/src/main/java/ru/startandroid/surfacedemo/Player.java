@@ -48,6 +48,22 @@ public class Player {
         return (int) (Math.random() * ++max) + min;
     }
 
+    public void AI() {
+        ai = 1;
+        x = screenWidth / 2;
+        y = screenHeight / 2;
+        speedX = get_random(3, 7);
+        speedY = get_random(3, 7);
+    }
+
+    public void PLAYER() {
+        ai = 0;
+        x = screenWidth / 2;
+        y = screenHeight / 2;
+        lock = true;
+        health = 50;
+    }
+
     public void check_intersectionBullet(BulletEnemy bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |

@@ -1,11 +1,8 @@
 package ru.startandroid.surfacedemo;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.Log;
 
 public class Button {
     private Bitmap img;
@@ -56,7 +53,7 @@ public class Button {
 
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
-            game.audioPlayer.buttonSnd.start();
+            AudioPlayer.buttonSnd.start();
             img = ImageHub.buttonImagePressed;
             if (function.equals("start")) {
                 game.generateNewGame();
@@ -65,10 +62,16 @@ public class Button {
                     System.exit(0);
                 } else {
                     if (function.equals("pause")) {
+                        AudioPlayer.pauseMusic.pause();
+                        AudioPlayer.pirateMusic.start();
                         if (game.pauseButton.oldStatus == 2) {
-                            game.audioPlayer.readySnd.start();
+                            AudioPlayer.readySnd.start();
                         }
                         game.gameStatus = game.pauseButton.oldStatus;
+                    } else {
+                        if (function.equals("menu")) {
+                            game.generateMenu();
+                        }
                     }
                 }
             }

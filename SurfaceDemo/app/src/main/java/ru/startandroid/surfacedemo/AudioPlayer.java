@@ -11,18 +11,19 @@ import java.util.ArrayList;
 public class AudioPlayer {
     private final Game game;
 
-    public ArrayList<MediaPlayer> sounds = new ArrayList(0);
-    public MediaPlayer menuMusic;
-    public MediaPlayer pirateMusic;
-    public MediaPlayer buttonSnd;
-    public MediaPlayer gameoverSnd;
-    public MediaPlayer readySnd;
-    public int boomSnd;
-    public int shootSnd;
-    public int metalSnd;
-    public int shotgunSnd;
+    public static ArrayList<MediaPlayer> sounds = new ArrayList(0);
+    public static MediaPlayer menuMusic;
+    public static MediaPlayer pauseMusic;
+    public static MediaPlayer pirateMusic;
+    public static MediaPlayer buttonSnd;
+    public static MediaPlayer gameoverSnd;
+    public static MediaPlayer readySnd;
+    public static int boomSnd;
+    public static int shootSnd;
+    public static int metalSnd;
+    public static int shotgunSnd;
 
-    public SoundPool soundPool;
+    public static SoundPool soundPool;
     public static final int MAX_STREAMS = 500000;
 
     public AudioPlayer(Game g) {
@@ -61,9 +62,13 @@ public class AudioPlayer {
         readySnd.setVolume(3f, 3f);
         sounds.add(readySnd);
 
+        pauseMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.pause);
+        readySnd.setVolume(1f, 1f);
+        pauseMusic.setLooping(true);
+        sounds.add(pauseMusic);
     }
 
-    public void releaseAP() {
+    public static void releaseAP() {
         try {
             for (int i = 0; i < sounds.size(); i++) {
                 sounds.get(i).release();
@@ -76,16 +81,16 @@ public class AudioPlayer {
         }
     }
 
-    public void playBoom() {
+    public static void playBoom() {
         soundPool.play(boomSnd, 0.13f, 0.13f, 1, 0, 1);
     }
-    public void playShoot() {
+    public static void playShoot() {
         soundPool.play(shootSnd, 0.17f, 0.17f, 1, 0, 1);
     }
-    public void playMetal() {
+    public static void playMetal() {
         soundPool.play(metalSnd, 0.45f, 0.45f, 1, 0, 1);
     }
-    public void playShotgun() {
+    public static void playShotgun() {
         soundPool.play(shotgunSnd, 0.3f, 0.3f, 1, 0, 1);
     }
 }

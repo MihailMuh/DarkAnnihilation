@@ -1,7 +1,5 @@
 package ru.startandroid.surfacedemo;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -47,13 +45,6 @@ public class Vader {
         speedY = get_random(3, 10);
     }
 
-    public void damage(int damage) {
-        health -= damage;
-        if (health <= 0) {
-            newStatus();
-        }
-    }
-
     public void check_intersectionBullet(Bullet bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
@@ -67,7 +58,7 @@ public class Vader {
                         break;
                     }
                 }
-                game.audioPlayer.playBoom();
+                AudioPlayer.playBoom();
                 game.score += 1;
                 newStatus();
             }
@@ -79,7 +70,7 @@ public class Vader {
                 y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
                 game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
                         game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
-            game.audioPlayer.playMetal();
+            AudioPlayer.playMetal();
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + width / 2, y + height / 2);
@@ -93,6 +84,8 @@ public class Vader {
 
     public void update() {
         if (!lock) {
+            check_intersectionPlayer();
+
             x += speedX;
             y += speedY;
 

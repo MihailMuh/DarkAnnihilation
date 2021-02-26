@@ -20,7 +20,7 @@ public class BulletEnemy {
 
     public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
         game = g;
-        game.audioPlayer.playShotgun();
+        AudioPlayer.playShotgun();
 //        color.setColor(Color.WHITE);
 
         speedx = spdx;

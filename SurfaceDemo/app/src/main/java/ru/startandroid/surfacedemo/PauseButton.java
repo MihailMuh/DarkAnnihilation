@@ -13,7 +13,6 @@ public class PauseButton {
     public int height;
     public static final Paint paint = new Paint();
     public final Game game;
-    public boolean lock = true;
     public int oldStatus;
 
     public PauseButton(Game g) {
@@ -30,20 +29,10 @@ public class PauseButton {
         mouseX = X;
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height & game.gameStatus != 4) {
-            game.player.dontmove = true;
-            game.audioPlayer.buttonSnd.start();
-            if (game.gameStatus == 2) {
-                game.audioPlayer.readySnd.pause();
-            }
             mouseX = 0;
             mouseY = 0;
-            game.buttonStart.newFunc("Resume", game.screenWidth / 2 - game.buttonQuit.width / 2,
-                    game.screenHeight / 3 - game.buttonStart.height / 2, "pause");
-            game.buttonQuit.newFunc("Quit", game.screenWidth / 2 - game.buttonQuit.width / 2,
-                    game.buttonStart.height + game.buttonStart.y + 10, "quit");
-            game.makeScreenshot();
             oldStatus = game.gameStatus;
-            game.gameStatus = 4;
+            game.generatePause();
         } else {
             if (game.gameStatus != 4) {
                 game.player.dontmove = false;
@@ -52,8 +41,6 @@ public class PauseButton {
     }
 
     public void update() {
-        if (!lock) {
-            game.canvas.drawBitmap(ImageHub.pauseButtonImg, x, y, paint);
-        }
+        game.canvas.drawBitmap(ImageHub.pauseButtonImg, x, y, paint);
     }
 }

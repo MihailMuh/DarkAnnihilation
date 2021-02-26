@@ -6,6 +6,8 @@ import android.graphics.Paint;
 public class TripleFighter{
     public int x;
     public int y;
+    public int X;
+    public int Y;
     public int speedX;
     public int speedY;
     public int width;
@@ -40,12 +42,13 @@ public class TripleFighter{
     public void shoot() {
         now = System.nanoTime();
         if (now - lastShoot > shootTime) {
-            int X = (game.player.x + game.player.width / 2) - (x + width / 2);
-            int Y = (game.player.y + game.player.height / 2) - (y + height / 2);
             lastShoot = now;
+
+            X = ((game.player.x + game.player.width / 2) - (x + width / 2)) / 50;
+            Y = ((game.player.y + game.player.height / 2) - (y + height / 2)) / 50;
             angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
 
-            BulletEnemy bullet = new BulletEnemy(game, x + width / 2, y + height / 2, angle, X / 50, Y / 50);
+            BulletEnemy bullet = new BulletEnemy(game, x + width / 2, y + height / 2, angle, X, Y);
             game.bulletEnemies.add(bullet);
             game.numberBulletsEnemy += 1;
         }
@@ -84,7 +87,7 @@ public class TripleFighter{
                         break;
                     }
                 }
-                game.audioPlayer.playBoom();
+                AudioPlayer.playBoom();
                 game.score += 5;
                 newStatus();
             }
@@ -96,7 +99,7 @@ public class TripleFighter{
                 y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
                 game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
                         game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
-            game.audioPlayer.playMetal();
+            AudioPlayer.playMetal();
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + width / 2, y + height / 2);
@@ -110,6 +113,8 @@ public class TripleFighter{
 
     public void update() {
         if (!lock) {
+            check_intersectionPlayer();
+
             x += speedX;
             y += speedY;
 
@@ -124,5 +129,4 @@ public class TripleFighter{
 
         }
     }
-
 }
