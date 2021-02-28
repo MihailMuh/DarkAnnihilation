@@ -49,8 +49,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ArrayList<Bullet> bullets = new ArrayList<>(0);
     public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
     public ArrayList<BulletEnemy> bulletEnemies = new ArrayList<>(0);
+    public ArrayList<Boss> bosses = new ArrayList<>(0);
     public Heart[] hearts = new Heart[5];
-    public Explosion[] explosions = new Explosion[40];
+    public Explosion[] explosions = new Explosion[45];
     public Screen screen;
     public Button buttonStart;
     public Button buttonQuit;
@@ -61,6 +62,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int numberBullets = 0;
     public int numberTripleFighters = 0;
     public int numberBulletsEnemy = 0;
+    public int numberBosses = 0;
     public int gameStatus = 1;
     public int count = 0;
     public int score = 0;
@@ -77,6 +79,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ImageHub imageHub;
     public Bitmap screenshot;
     public int moveAll;
+
+    private static final long bossTime = 20_000_000_000L;
+    private static long lastBoss;
+    private static long now;
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -115,7 +121,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             if (i < 20) {
                 explosions[i] = new Explosion(this, "default");
             } else {
-                explosions[i] = new Explosion(this, "small");
+                if (20 <= i & i < 40) {
+                    explosions[i] = new Explosion(this, "small");
+                } else {
+                    if (i >= 40) {
+                        explosions[i] = new Explosion(this, "large");
+                    }
+                }
             }
         }
         buttonStart = new Button(this, "Start", screenWidth / 2, (int) (screenHeight - 70 * resizeK), "start");
@@ -131,12 +143,20 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
+            now = System.nanoTime();
+
             moveAll = player.speedX / 3;
 
             screen.update();
             screen.x -= moveAll;
 
-            for (int i = 0; i < 120; i++) {
+            if (now - lastBoss > bossTime) {
+                lastBoss = now;
+                bosses.add(new Boss(this));
+                numberBosses += 1;
+            }
+
+            for (int i = 0; i < 150; i++) {
                 if (i < vaderNumbers) {
                     for (int j = 0; j < numberBullets; j++) {
                         vaders[i].check_intersectionBullet(bullets.get(j));
@@ -162,7 +182,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     }
                 }
 
-                if (i < numberBulletsEnemy & numberBulletsEnemy != 0) {
+                if (i < numberBulletsEnemy) {
                     bulletEnemies.get(i).x -= moveAll;
                     bulletEnemies.get(i).update();
                     if (bulletEnemies.get(i).y > screenHeight | bulletEnemies.get(i).x < -100 | bulletEnemies.get(i).x > screenWidth) {
@@ -177,6 +197,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (!explosions[i].lock) {
                         explosions[i].update();
                         explosions[i].x -= moveAll;
+                    }
+                }
+
+                if (i < numberBosses) {
+                    bosses.get(i).x -= moveAll;
+                    bosses.get(i).update();
+                    for (int j = 0; j < numberBullets; j++) {
+                        bosses.get(i).check_intersectionBullet(bullets.get(j));
+                    }
+                    if (bosses.get(i).health <= 0) {
+                        bosses.get(i).kill();
                     }
                 }
             }
@@ -204,7 +235,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         timeFrame = System.nanoTime();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void run() {
         while(playing) {
@@ -227,7 +257,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -280,7 +309,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (gameStatus == 1) {
             AudioPlayer.menuMusic.pause();
         } else {
-            AudioPlayer.pirateMusic.pause();
+            if (gameStatus == 0 | gameStatus == 2) {
+                AudioPlayer.pirateMusic.pause();
+            } else {
+                if (gameStatus == 4) {
+                    AudioPlayer.pauseMusic.pause();
+                }
+            }
         }
         try {
             thread.join();
@@ -295,27 +330,31 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         thread.start();
         playing = true;
         if (gameStatus == 1) {
-            AudioPlayer.menuMusic.seekTo(0);
             AudioPlayer.menuMusic.start();
         } else {
-            AudioPlayer.pirateMusic.seekTo(0);
-            AudioPlayer.pirateMusic.start();
+            if (gameStatus == 0 | gameStatus == 2) {
+                AudioPlayer.pirateMusic.start();
+            } else {
+                if (gameStatus == 4) {
+                    AudioPlayer.pauseMusic.start();
+                }
+            }
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void makeScreenshot() {
         final HandlerThread handlerThread = new HandlerThread("PixelCopier");
         handlerThread.start();
-        PixelCopy.request(this, screenshot, (copyResult) -> {
-            if (copyResult != PixelCopy.SUCCESS) {
-                Log.e("Error ", "Can't create screenshot");
-            }
-            handlerThread.quitSafely();
-        }, new Handler(handlerThread.getLooper()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            PixelCopy.request(this, screenshot, (copyResult) -> {
+                if (copyResult != PixelCopy.SUCCESS) {
+                    Log.e("Error ", "Can't create screenshot");
+                }
+                handlerThread.quitSafely();
+            }, new Handler(handlerThread.getLooper()));
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void generatePause() {
         AudioPlayer.pirateMusic.pause();
         AudioPlayer.pauseMusic.seekTo(0);
@@ -366,7 +405,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void generateNewGame() {
         saveScore();
         checkMaxScore();
@@ -411,11 +449,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.pirateMusic.start();
 
         gameStatus = 2;
+
         makeScreenshot();
         AudioPlayer.readySnd.start();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void gameover() {
         timeFrame = System.nanoTime();
 
@@ -486,6 +524,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                 tripleFighters.get(i).lock = false;
                             }
                             player.lock = false;
+                            lastBoss = System.nanoTime();
                         }
                     }
                 }

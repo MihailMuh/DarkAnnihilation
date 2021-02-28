@@ -55,6 +55,9 @@ public class TripleFighter{
     }
 
     public void newStatus() {
+        if (game.numberBosses != 0) {
+            lock = true;
+        }
         health = 6;
         x = get_random(0, 1920);
         y = -150;
@@ -122,6 +125,10 @@ public class TripleFighter{
 
             game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
 
+        } else {
+            if (game.numberBosses == 0 & game.gameStatus != 2) {
+                lock = false;
+            }
         }
     }
 }

@@ -25,7 +25,6 @@ public class PauseButton {
         x = game.screenWidth - width * 2;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setCoords(int X, int Y) {
         mouseX = X;
         mouseY = Y;

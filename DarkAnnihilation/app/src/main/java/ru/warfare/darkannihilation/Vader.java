@@ -33,6 +33,9 @@ public class Vader {
     }
 
     public void newStatus() {
+        if (game.numberBosses != 0) {
+            lock = true;
+        }
         health = 2;
         x = get_random(0, 1920);
         y = -150;
@@ -91,6 +94,10 @@ public class Vader {
             game.canvas.drawBitmap(ImageHub.vaderImage, x, y, null);
 //            game.canvas.drawRect(x + 15, y + 15, x + width - 15, y + height - 15, paint);
 
+        } else {
+            if (game.numberBosses == 0 & game.gameStatus != 2) {
+                lock = false;
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ public class AudioPlayer {
     public static int shootSnd;
     public static int metalSnd;
     public static int shotgunSnd;
+    public static int megaBoom;
 
     public static SoundPool soundPool;
     public static final int MAX_STREAMS = 500000;
@@ -40,6 +41,7 @@ public class AudioPlayer {
         shootSnd = soundPool.load(game.context.getApplicationContext(), R.raw.laser, 1);
         metalSnd = soundPool.load(game.context.getApplicationContext(), R.raw.metal, 1);
         shotgunSnd = soundPool.load(game.context.getApplicationContext(), R.raw.shotgun, 1);
+        megaBoom = soundPool.load(game.context.getApplicationContext(), R.raw.megaboom, 1);
 
         menuMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.menu);
         menuMusic.setLooping(true);
@@ -62,7 +64,7 @@ public class AudioPlayer {
         sounds.add(readySnd);
 
         pauseMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.pause);
-        readySnd.setVolume(1f, 1f);
+        pauseMusic.setVolume(1f, 1f);
         pauseMusic.setLooping(true);
         sounds.add(pauseMusic);
     }
@@ -91,5 +93,8 @@ public class AudioPlayer {
     }
     public static void playShotgun() {
         soundPool.play(shotgunSnd, 0.3f, 0.3f, 1, 0, 1);
+    }
+    public static void playMegaBoom() {
+        soundPool.play(megaBoom, 0.5f, 0.5f, 1, 0, 1);
     }
 }

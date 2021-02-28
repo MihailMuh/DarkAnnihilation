@@ -54,7 +54,6 @@ public class Button {
         textHeight = (int) (paint.getTextSize() / 4);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
             AudioPlayer.buttonSnd.start();
