@@ -43,8 +43,7 @@ public class TripleFighter{
             Y = ((game.player.y + game.player.height / 2) - (y + height / 2)) / 50;
             angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
 
-            BulletEnemy bullet = new BulletEnemy(game, x + width / 2, y + height / 2, angle, X, Y);
-            game.bulletEnemies.add(bullet);
+            game.bulletEnemies.add(new BulletEnemy(game, x + width / 2, y + height / 2, angle, X, Y));
             game.numberBulletsEnemy += 1;
         }
     }
@@ -72,7 +71,7 @@ public class TripleFighter{
             health -= bullet.damage;
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2);
+                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
                 }
             }

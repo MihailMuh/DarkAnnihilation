@@ -24,6 +24,7 @@ public class ImageHub {
     public static Bitmap gameoverScreen;
     public static Bitmap pauseButtonImg;
     public static Bitmap bossImage;
+    public static Bitmap laserImage;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -98,13 +99,13 @@ public class ImageHub {
         explosionImageSmall[26] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion_27);
         explosionImageSmall[27] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion_28);
         for (int i = 0; i < 28; i++) {
-            explosionImageSmall[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (50 * game.resizeK), (int) (50 * game.resizeK), isFilter);
-        }
-        for (int i = 0; i < 28; i++) {
             explosionImageDefault[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (145 * game.resizeK), (int) (145 * game.resizeK), isFilter);
         }
         for (int i = 0; i < 28; i++) {
             explosionImageLarge[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (300 * game.resizeK), (int) (300 * game.resizeK), isFilter);
+        }
+        for (int i = 0; i < 28; i++) {
+            explosionImageSmall[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (50 * game.resizeK), (int) (50 * game.resizeK), isFilter);
         }
 
         bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet);
@@ -141,6 +142,9 @@ public class ImageHub {
 
         bossImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.boss);
         bossImage = Bitmap.createScaledBitmap(bossImage, (int) (200 * game.resizeK), (int) (200 * game.resizeK), isFilter);
+
+        laserImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.laser);
+        laserImage = Bitmap.createScaledBitmap(laserImage, (int) (15 * game.resizeK), (int) (60 * game.resizeK), isFilter);
 
     }
 }

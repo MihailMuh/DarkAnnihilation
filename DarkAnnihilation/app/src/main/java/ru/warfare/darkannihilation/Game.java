@@ -49,6 +49,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ArrayList<Bullet> bullets = new ArrayList<>(0);
     public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
     public ArrayList<BulletEnemy> bulletEnemies = new ArrayList<>(0);
+    public ArrayList<BulletBoss> bulletBosses = new ArrayList<>(0);
     public ArrayList<Boss> bosses = new ArrayList<>(0);
     public Heart[] hearts = new Heart[5];
     public Explosion[] explosions = new Explosion[45];
@@ -62,6 +63,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int numberBullets = 0;
     public int numberTripleFighters = 0;
     public int numberBulletsEnemy = 0;
+    public int numberBulletsBoss = 0;
     public int numberBosses = 0;
     public int gameStatus = 1;
     public int count = 0;
@@ -80,7 +82,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Bitmap screenshot;
     public int moveAll;
 
-    private static final long bossTime = 20_000_000_000L;
+    private static final long bossTime = 8_000_000_000L;
     private static long lastBoss;
     private static long now;
 
@@ -190,6 +192,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         numberBulletsEnemy -= 1;
                     } else {
                         player.check_intersectionBullet(bulletEnemies.get(i));
+                    }
+                }
+
+                if (i < numberBulletsBoss) {
+                    bulletBosses.get(i).x -= moveAll;
+                    bulletBosses.get(i).update();
+                    if (bulletBosses.get(i).y > screenHeight | bulletBosses.get(i).x < -100 | bulletBosses.get(i).x > screenWidth) {
+                        bulletBosses.remove(i);
+                        numberBulletsBoss -= 1;
+                    } else {
+                        player.check_intersectionBullet(bulletBosses.get(i));
                     }
                 }
 
@@ -309,7 +322,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (gameStatus == 1) {
             AudioPlayer.menuMusic.pause();
         } else {
-            if (gameStatus == 0 | gameStatus == 2) {
+            if (gameStatus == 0 | gameStatus == 2 | gameStatus == 3) {
                 AudioPlayer.pirateMusic.pause();
             } else {
                 if (gameStatus == 4) {
@@ -332,7 +345,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (gameStatus == 1) {
             AudioPlayer.menuMusic.start();
         } else {
-            if (gameStatus == 0 | gameStatus == 2) {
+            if (gameStatus == 0 | gameStatus == 2 | gameStatus == 3) {
                 AudioPlayer.pirateMusic.start();
             } else {
                 if (gameStatus == 4) {
@@ -451,6 +464,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         gameStatus = 2;
 
         makeScreenshot();
+        lastBoss = System.nanoTime();
         AudioPlayer.readySnd.start();
     }
 
@@ -524,7 +538,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                 tripleFighters.get(i).lock = false;
                             }
                             player.lock = false;
-                            lastBoss = System.nanoTime();
                         }
                     }
                 }

@@ -9,6 +9,8 @@ public class BulletEnemy {
     public int y;
     public int width;
     public int height;
+    public int halfWidth;
+    public int halfHeight;
     public int speedy;
     public int speedx;
     private final Game game;
@@ -27,6 +29,9 @@ public class BulletEnemy {
 
         width = ImageHub.bulletEnemyImage.getWidth();
         height = ImageHub.bulletEnemyImage.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
+
         img = Bitmap.createBitmap(ImageHub.bulletEnemyImage, 0, 0, width, height, matrix, ImageHub.isFilter);
 
         x = X;

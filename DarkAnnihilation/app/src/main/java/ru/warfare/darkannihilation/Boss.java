@@ -16,8 +16,12 @@ public class Boss {
     private static int screenWidth;
     private final Game game;
     public float health = 100;
-    private Paint paintFill = new Paint();
-    private Paint paintOutLine = new Paint();
+    private static final Paint paintFill = new Paint();
+    private static final Paint paintOutLine = new Paint();
+
+    private static final int shootTime = 1_500_000_000;
+    private long lastShoot;
+    private static long now;
 
     public Boss(Game g) {
         paintFill.setColor(Color.RED);
@@ -33,6 +37,20 @@ public class Boss {
 
         x = (screenWidth / 2) - halfWidth;
         y = -600;
+
+        lastShoot = System.nanoTime();
+    }
+
+    public void shoot() {
+        now = System.nanoTime();
+        if (now - lastShoot > shootTime) {
+            lastShoot = now;
+            game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 1));
+            game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 2));
+            game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 3));
+            game.numberBulletsBoss += 3;
+            AudioPlayer.playShoot();
+        }
     }
 
     public void kill() {
@@ -56,7 +74,7 @@ public class Boss {
             game.numberBullets -= 1;
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2);
+                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
                 }
             }
@@ -65,7 +83,7 @@ public class Boss {
 
     public void drawHealthBar() {
         game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, paintOutLine);
-        game.canvas.drawRect(x + halfWidth - 68, y - 8, (float) (x + halfWidth - 70 + (health / 100.0) * 140), y + 3, paintFill);
+        game.canvas.drawRect(x + halfWidth - 68, y - 8, (float) (x + halfWidth - 72 + (health / 100.0) * 140), y + 3, paintFill);
     }
 
     public void update() {
@@ -75,8 +93,8 @@ public class Boss {
         if (y >= 50) {
             speedY = 0;
             speedX = -5;
+            shoot();
         }
-
         if (x < -width) {
             x = screenWidth;
         }

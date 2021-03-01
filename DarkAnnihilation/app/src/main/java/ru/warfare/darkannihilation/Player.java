@@ -70,12 +70,29 @@ public class Player {
             health -= bulletEnemy.damage;
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
-                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.width / 2, bulletEnemy.y + bulletEnemy.height / 2);
+                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
                     break;
                 }
             }
             game.bulletEnemies.remove(bulletEnemy);
             game.numberBulletsEnemy -= 1;
+        }
+    }
+
+    public void check_intersectionBullet(BulletBoss bulletEnemy) {
+        if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
+                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
+                bulletEnemy.x < x & x < bulletEnemy.x + bulletEnemy.width &
+                        bulletEnemy.y < y & y < bulletEnemy.y + bulletEnemy.height) {
+            health -= bulletEnemy.damage;
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
+                    break;
+                }
+            }
+            game.bulletBosses.remove(bulletEnemy);
+            game.numberBulletsBoss -= 1;
         }
     }
 
@@ -87,12 +104,9 @@ public class Player {
             now = System.nanoTime();
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
-                Bullet bullet1 = new Bullet(game, x + width / 2 - 6, y);
-                game.bullets.add(bullet1);
-                game.numberBullets += 1;
-                Bullet bullet2 = new Bullet(game, x + width / 2, y);
-                game.bullets.add(bullet2);
-                game.numberBullets += 1;
+                game.bullets.add(new Bullet(game, x + width / 2 - 6, y));
+                game.bullets.add(new Bullet(game, x + width / 2, y));
+                game.numberBullets += 2;
             }
         }
 

@@ -5,6 +5,8 @@ public class Bullet {
     public int y;
     public int width;
     public int height;
+    public int halfWidth;
+    public int halfHeight;
     public static final int speed = 10;
     private final Game game;
     public int damage = 1;
@@ -15,6 +17,9 @@ public class Bullet {
 
         width = ImageHub.bulletImage.getWidth();
         height = ImageHub.bulletImage.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
+
         x = X;
         y = Y;
         AudioPlayer.playShoot();
