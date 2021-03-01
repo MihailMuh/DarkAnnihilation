@@ -42,12 +42,20 @@ public class Explosion {
     }
 
     public void update() {
-        if (frame != 28) {
+        if (!lock) {
+            if (frame != 28) {
+                game.canvas.drawBitmap(img[frame], x, y, null);
+                frame += 1;
+            } else {
+                frame = 0;
+                lock = true;
+            }
+        }
+    }
+
+    public void render () {
+        if (!lock & frame != 28) {
             game.canvas.drawBitmap(img[frame], x, y, null);
-            frame += 1;
-        } else {
-            frame = 0;
-            lock = true;
         }
     }
 }

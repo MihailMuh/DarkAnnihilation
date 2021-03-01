@@ -13,7 +13,7 @@ public class Heart {
         y = Y;
     }
 
-    public void update(String type) {
+    public void render(String type) {
         switch (type)
         {
             case "full":

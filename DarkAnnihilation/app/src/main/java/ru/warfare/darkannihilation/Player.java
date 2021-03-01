@@ -1,8 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 public class Player {
     public int x;
     public int y;
@@ -115,85 +112,6 @@ public class Player {
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
 
-            switch (health) {
-                case 50:
-                    game.hearts[0].update("full");
-                    game.hearts[1].update("full");
-                    game.hearts[2].update("full");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 45:
-                    game.hearts[0].update("half");
-                    game.hearts[1].update("full");
-                    game.hearts[2].update("full");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 40:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("full");
-                    game.hearts[2].update("full");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 35:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("half");
-                    game.hearts[2].update("full");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 30:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("full");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 25:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("half");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 20:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("non");
-                    game.hearts[3].update("full");
-                    game.hearts[4].update("full");
-                    break;
-                case 15:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("non");
-                    game.hearts[3].update("half");
-                    game.hearts[4].update("full");
-                    break;
-                case 10:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("non");
-                    game.hearts[3].update("non");
-                    game.hearts[4].update("full");
-                    break;
-                case 5:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("non");
-                    game.hearts[3].update("non");
-                    game.hearts[4].update("half");
-                    break;
-                case 0:
-                    game.hearts[0].update("non");
-                    game.hearts[1].update("non");
-                    game.hearts[2].update("non");
-                    game.hearts[3].update("non");
-                    game.hearts[4].update("non");
-                    break;
-            }
         } else {
             if (x < 30 | x > game.screenWidth - height - 30) {
                 speedX = -speedX;
@@ -203,7 +121,92 @@ public class Player {
             }
         }
 
+    }
+
+    public void render () {
+        if (ai == 0) {
+            switch (health) {
+                case 50:
+                    game.hearts[0].render("full");
+                    game.hearts[1].render("full");
+                    game.hearts[2].render("full");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 45:
+                    game.hearts[0].render("half");
+                    game.hearts[1].render("full");
+                    game.hearts[2].render("full");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 40:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("full");
+                    game.hearts[2].render("full");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 35:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("half");
+                    game.hearts[2].render("full");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 30:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("full");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 25:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("half");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 20:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("non");
+                    game.hearts[3].render("full");
+                    game.hearts[4].render("full");
+                    break;
+                case 15:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("non");
+                    game.hearts[3].render("half");
+                    game.hearts[4].render("full");
+                    break;
+                case 10:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("non");
+                    game.hearts[3].render("non");
+                    game.hearts[4].render("full");
+                    break;
+                case 5:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("non");
+                    game.hearts[3].render("non");
+                    game.hearts[4].render("half");
+                    break;
+                case 0:
+                    game.hearts[0].render("non");
+                    game.hearts[1].render("non");
+                    game.hearts[2].render("non");
+                    game.hearts[3].render("non");
+                    game.hearts[4].render("non");
+                    break;
+            }
+        }
         game.canvas.drawBitmap(ImageHub.playerImage, x, y, null);
 //        game.canvas.drawRect(x + 20, y + 30, x + width - 20, y + height - 20, paint);
+
     }
 }

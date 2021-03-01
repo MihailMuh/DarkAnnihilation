@@ -50,7 +50,9 @@ public class BulletBoss {
     public void update() {
         y += speedy;
         x -= speedx;
+    }
+
+    public void render () {
         game.canvas.drawBitmap(img, x, y, null);
-//        game.canvas.drawRect(x, y, x + width, y + height, color);
     }
 }

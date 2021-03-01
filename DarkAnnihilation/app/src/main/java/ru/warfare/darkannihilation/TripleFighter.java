@@ -120,14 +120,14 @@ public class TripleFighter{
             if (x < -width | x > game.screenWidth | y > game.screenHeight) {
                 newStatus();
             }
-//            game.canvas.drawRect(x, y, x + width, y + height, paint);
-
-            game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
-
         } else {
-            if (game.numberBosses == 0 & game.gameStatus != 2) {
+            if (game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4) {
                 lock = false;
             }
         }
+    }
+
+    public void render() {
+        game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
     }
 }

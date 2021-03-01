@@ -27,7 +27,9 @@ public class Bullet {
 
     public void update() {
         y -= speed;
+    }
+
+    public void render () {
         game.canvas.drawBitmap(ImageHub.bulletImage, x, y, null);
-//        game.canvas.drawRect(x, y, x + width, y + height, color);
     }
 }

@@ -41,8 +41,9 @@ public class BulletEnemy {
     public void update() {
         y += speedy;
         x += speedx;
-//        game.canvas.drawRect(x, y, x + width, y + height, color);
+    }
 
+    public void render () {
         game.canvas.drawBitmap(img, x, y, null);
     }
 }

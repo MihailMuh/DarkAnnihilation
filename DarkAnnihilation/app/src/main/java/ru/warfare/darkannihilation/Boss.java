@@ -97,9 +97,10 @@ public class Boss {
         if (x < -width) {
             x = game.screenWidth;
         }
+    }
 
+    public void render() {
         game.canvas.drawBitmap(ImageHub.bossImage, x, y, null);
         drawHealthBar();
-//            game.canvas.drawRect(x + 15, y + 15, x + width - 15, y + height - 15, paint);
     }
 }

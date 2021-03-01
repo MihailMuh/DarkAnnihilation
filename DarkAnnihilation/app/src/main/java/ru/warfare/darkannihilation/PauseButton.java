@@ -33,7 +33,7 @@ public class PauseButton {
         }
     }
 
-    public void update() {
+    public void render() {
         game.canvas.drawBitmap(ImageHub.pauseButtonImg, x, y, null);
     }
 }

@@ -87,8 +87,10 @@ public class Button {
         } else {
             img = ImageHub.buttonImageNotPressed;
         }
+    }
 
+    public void render () {
         game.canvas.drawBitmap(img, x, y, null);
-        game.canvas.drawText(text, x + (width - textWidth) / 2,y + (halfHeight + textHeight), paint);
+        game.canvas.drawText(text, x + (float) ((width - textWidth) / 2),y + (halfHeight + textHeight), paint);
     }
 }
