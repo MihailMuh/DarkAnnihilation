@@ -95,6 +95,6 @@ public class AudioPlayer {
         soundPool.play(shotgunSnd, 0.3f, 0.3f, 1, 0, 1);
     }
     public static void playMegaBoom() {
-        soundPool.play(megaBoom, 0.7f, 0.7f, 1, 0, 1);
+        soundPool.play(megaBoom, 1f, 1f, 1, 0, 1);
     }
 }

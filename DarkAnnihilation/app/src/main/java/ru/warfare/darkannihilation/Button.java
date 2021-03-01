@@ -15,6 +15,9 @@ public class Button {
     public int mouseY;
     public int width;
     public int height;
+    public int halfWidth;
+    public int halfHeight;
+
     public static final Paint paint = new Paint();
     public final Game game;
     public String function;
@@ -29,6 +32,9 @@ public class Button {
         img = ImageHub.buttonImageNotPressed;
         width = ImageHub.buttonImagePressed.getWidth();
         height = ImageHub.buttonImagePressed.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
+
         function = func;
 
         x = X;
@@ -83,6 +89,6 @@ public class Button {
         }
 
         game.canvas.drawBitmap(img, x, y, null);
-        game.canvas.drawText(text, x + (width - textWidth) / 2,y + (height / 2 + textHeight), paint);
+        game.canvas.drawText(text, x + (width - textWidth) / 2,y + (halfHeight + textHeight), paint);
     }
 }

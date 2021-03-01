@@ -10,9 +10,9 @@ public class Player {
     public int endY;
     public int width;
     public int height;
-    public static Paint paint = new Paint();
-    private static int screenWidth;
-    private static int screenHeight;
+    public int halfWidth;
+    public int halfHeight;
+//    public static final Paint paint = new Paint();
     public int speedX = get_random(3, 7);
     public int speedY = get_random(3, 7);
     private static final int shootTime = 100_000_000;
@@ -26,15 +26,15 @@ public class Player {
 
     public Player(Game g) {
         game = g;
-        screenWidth = game.screenWidth;
-        screenHeight = game.screenHeight;
-        paint.setColor(Color.WHITE);
+//        paint.setColor(Color.WHITE);
 
         width = ImageHub.playerImage.getWidth();
         height = ImageHub.playerImage.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
 
-        x = screenWidth / 2;
-        y = screenHeight / 2;
+        x = game.halfScreenWidth;
+        y = game.halfScreenHeight;
         endX = x;
         endY = y;
 
@@ -48,16 +48,16 @@ public class Player {
 
     public void AI() {
         ai = 1;
-        x = screenWidth / 2;
-        y = screenHeight / 2;
+        x = game.halfScreenWidth;
+        y = game.halfScreenHeight;
         speedX = get_random(3, 7);
         speedY = get_random(3, 7);
     }
 
     public void PLAYER() {
         ai = 0;
-        x = screenWidth / 2;
-        y = screenHeight / 2;
+        x = game.halfScreenWidth;
+        y = game.halfScreenHeight;
         lock = true;
         health = 50;
     }
@@ -104,8 +104,8 @@ public class Player {
             now = System.nanoTime();
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
-                game.bullets.add(new Bullet(game, x + width / 2 - 6, y));
-                game.bullets.add(new Bullet(game, x + width / 2, y));
+                game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
+                game.bullets.add(new Bullet(game, x + halfWidth, y));
                 game.numberBullets += 2;
             }
         }
@@ -195,10 +195,10 @@ public class Player {
                     break;
             }
         } else {
-            if (x < 30 | x > screenWidth - height - 30) {
+            if (x < 30 | x > game.screenWidth - height - 30) {
                 speedX = -speedX;
             }
-            if (y < 30 | y > screenHeight - width - 30) {
+            if (y < 30 | y > game.screenHeight - width - 30) {
                 speedY = -speedY;
             }
         }

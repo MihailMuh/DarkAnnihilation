@@ -13,9 +13,9 @@ public class Boss {
     public int height;
     public int halfWidth;
     public int halfHeight;
-    private static int screenWidth;
     private final Game game;
-    public float health = 100;
+    public float health = 200;
+    public float maxHealth = health;
     private static final Paint paintFill = new Paint();
     private static final Paint paintOutLine = new Paint();
 
@@ -28,14 +28,13 @@ public class Boss {
         paintOutLine.setColor(Color.WHITE);
 
         game = g;
-        screenWidth = game.screenWidth;
 
         width = ImageHub.bossImage.getWidth();
         height = ImageHub.bossImage.getHeight();
         halfHeight = height / 2;
         halfWidth = width / 2;
 
-        x = (screenWidth / 2) - halfWidth;
+        x = game.halfScreenWidth - halfWidth;
         y = -600;
 
         lastShoot = System.nanoTime();
@@ -83,7 +82,7 @@ public class Boss {
 
     public void drawHealthBar() {
         game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, paintOutLine);
-        game.canvas.drawRect(x + halfWidth - 68, y - 8, (float) (x + halfWidth - 72 + (health / 100.0) * 140), y + 3, paintFill);
+        game.canvas.drawRect(x + halfWidth - 68, y - 8, (float) (x + halfWidth - 72 + (health / maxHealth) * 140), y + 3, paintFill);
     }
 
     public void update() {
@@ -96,7 +95,7 @@ public class Boss {
             shoot();
         }
         if (x < -width) {
-            x = screenWidth;
+            x = game.screenWidth;
         }
 
         game.canvas.drawBitmap(ImageHub.bossImage, x, y, null);

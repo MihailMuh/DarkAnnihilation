@@ -9,11 +9,11 @@ public class TripleFighter{
     public int speedY;
     public int width;
     public int height;
+    public int halfWidth;
+    public int halfHeight;
     private final Game game;
     public boolean lock = true;
     public int health = 6;
-    private static int screenWidth;
-    private static int screenHeight;
     private double angle;
     private static final int shootTime = 1_500_000_000;
     private long lastShoot;
@@ -21,11 +21,11 @@ public class TripleFighter{
 
     public TripleFighter(Game g) {
         game = g;
-        screenWidth = game.screenWidth;
-        screenHeight = game.screenHeight;
 
         width = ImageHub.tripleFighterImg.getWidth();
         height = ImageHub.tripleFighterImg.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
 
         x = get_random(0, 1920);
         y = -150;
@@ -39,11 +39,11 @@ public class TripleFighter{
         if (now - lastShoot > shootTime) {
             lastShoot = now;
 
-            X = ((game.player.x + game.player.width / 2) - (x + width / 2)) / 50;
-            Y = ((game.player.y + game.player.height / 2) - (y + height / 2)) / 50;
+            X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;
+            Y = ((game.player.y + game.player.halfHeight) - (y + halfHeight)) / 50;
             angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
 
-            game.bulletEnemies.add(new BulletEnemy(game, x + width / 2, y + height / 2, angle, X, Y));
+            game.bulletEnemies.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, angle, X, Y));
             game.numberBulletsEnemy += 1;
         }
     }
@@ -80,7 +80,7 @@ public class TripleFighter{
             if (health <= 0) {
                 for (int i = 0; i < game.numberExplosions; i++) {
                     if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + width / 2, y + height / 2);
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
                         break;
                     }
                 }
@@ -99,7 +99,7 @@ public class TripleFighter{
             AudioPlayer.playMetal();
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + width / 2, y + height / 2);
+                    game.explosions[i].start(x + halfWidth, y + halfHeight);
                     break;
                 }
             }
@@ -117,7 +117,7 @@ public class TripleFighter{
 
             shoot();
 
-            if (x < -width | x > screenWidth | y > screenHeight) {
+            if (x < -width | x > game.screenWidth | y > game.screenHeight) {
                 newStatus();
             }
 //            game.canvas.drawRect(x, y, x + width, y + height, paint);

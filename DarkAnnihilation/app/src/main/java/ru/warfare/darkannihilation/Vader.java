@@ -7,19 +7,19 @@ public class Vader {
     public int speedY;
     public int width;
     public int height;
-    private static int screenWidth;
-    private static int screenHeight;
+    public int halfWidth;
+    public int halfHeight;
     private final Game game;
     public boolean lock = false;
     public int health = 2;
 
     public Vader(Game g) {
         game = g;
-        screenWidth = game.screenWidth;
-        screenHeight = game.screenHeight;
 
         width = ImageHub.vaderImage.getWidth();
         height = ImageHub.vaderImage.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
 
         x = get_random(0, 1920);
         y = -150;
@@ -52,7 +52,7 @@ public class Vader {
             if (health <= 0) {
                 for (int i = 0; i < 20; i++) {
                     if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + width / 2, y + height / 2);
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
                         break;
                     }
                 }
@@ -71,7 +71,7 @@ public class Vader {
             AudioPlayer.playMetal();
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + width / 2, y + height / 2);
+                    game.explosions[i].start(x + halfWidth, y + halfHeight);
                     break;
                 }
             }
@@ -87,7 +87,7 @@ public class Vader {
             x += speedX;
             y += speedY;
 
-            if (x < -width | x > screenWidth | y > screenHeight) {
+            if (x < -width | x > game.screenWidth | y > game.screenHeight) {
                 newStatus();
             }
 
@@ -95,7 +95,7 @@ public class Vader {
 //            game.canvas.drawRect(x + 15, y + 15, x + width - 15, y + height - 15, paint);
 
         } else {
-            if (game.numberBosses == 0 & game.gameStatus != 2) {
+            if (game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4) {
                 lock = false;
             }
         }
