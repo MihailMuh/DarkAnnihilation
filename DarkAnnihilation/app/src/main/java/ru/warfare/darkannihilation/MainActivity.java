@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
         setContentView(R.layout.activity_main);
+
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         game = findViewById(R.id.gameView);
         game.initGame(size.x, size.y);
-
     }
 
     @Override

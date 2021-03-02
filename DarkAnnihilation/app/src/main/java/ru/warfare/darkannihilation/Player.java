@@ -43,8 +43,8 @@ public class Player extends Sprite {
     public void check_intersectionBullet(BulletEnemy bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
-                bulletEnemy.x < x & x < bulletEnemy.x + bulletEnemy.width &
-                        bulletEnemy.y < y & y < bulletEnemy.y + bulletEnemy.height) {
+                bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
+                        bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
             health -= bulletEnemy.damage;
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
@@ -59,10 +59,10 @@ public class Player extends Sprite {
 
     @Override
     public void check_intersectionBullet(BulletBoss bulletEnemy) {
-        if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
-                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
-                bulletEnemy.x < x & x < bulletEnemy.x + bulletEnemy.width &
-                        bulletEnemy.y < y & y < bulletEnemy.y + bulletEnemy.height) {
+        if (x + 15 < bulletEnemy.x & bulletEnemy.x < x + width - 15 &
+                y + 15 < bulletEnemy.y & bulletEnemy.y < y + height - 15 |
+                bulletEnemy.x < x + 15 & x + 15 < bulletEnemy.x + bulletEnemy.width &
+                        bulletEnemy.y < y + 15 & y + 15 < bulletEnemy.y + bulletEnemy.height) {
             health -= bulletEnemy.damage;
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {

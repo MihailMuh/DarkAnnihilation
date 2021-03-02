@@ -80,7 +80,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public String maxScore = "";
     public volatile boolean playing = false;
 
-    private static final long BOSS_TIME = 50_000_000_000L;
+    private static final long BOSS_TIME = 4_000_000_000L;
     private static long lastBoss;
     private static long now;
 
@@ -185,10 +185,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     bullet.render();
                     bullet.x -= moveAll;
                     bullet.update();
-//                    if (bullet.y < -50) {
-//                        bullets.remove(bullet);
-//                        numberBullets -= 1;
-//                    }
                 }
 
                 if (i < numberBulletsEnemy) {
@@ -196,10 +192,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     bulletEnemy.render();
                     bulletEnemy.x -= moveAll;
                     bulletEnemy.update();
-//                    if (bulletEnemy.y > screenHeight | bulletEnemy.x < -100 | bulletEnemy.x > screenWidth) {
-//                        bulletEnemies.remove(bulletEnemy);
-//                        numberBulletsEnemy -= 1;
-//                    }
                 }
 
                 if (i < numberBulletsBoss) {
@@ -207,10 +199,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     bulletBoss.render();
                     bulletBoss.x -= moveAll;
                     bulletBoss.update();
-//                    if (bulletBoss.y > screenHeight | bulletBoss.x < -100 | bulletBoss.x > screenWidth) {
-//                        bulletBosses.remove(bulletBoss);
-//                        numberBulletsBoss -= 1;
-//                    }
                 }
 
                 if (i < numberExplosions) {
@@ -227,9 +215,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     for (int j = 0; j < numberBullets; j++) {
                         boss.check_intersectionBullet(bullets.get(j));
                     }
-//                    if (boss.health <= 0) {
-//                        boss.kill();
-//                    }
                 }
             }
 
@@ -388,7 +373,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.pauseMusic.pause();
         AudioPlayer.menuMusic.start();
 
-        saveScore();
+        if (score > lastMax) {
+            scoreBuilder.append(" ").append(score);
+            saveScore();
+        }
         checkMaxScore();
         count = 0;
         score = 0;
@@ -421,6 +409,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         score = 0;
         bulletEnemies = new ArrayList<>(0);
         bulletBosses = new ArrayList<>(0);
+        bosses = new ArrayList<>(0);
         tripleFighters = new ArrayList<>(0);
         bullets = new ArrayList<>(0);
         bulletEnemies = new ArrayList<>(0);

@@ -19,6 +19,13 @@ allprojects {
     }
 }
 
+configurations.all {
+    exclude group : 'com.android.support', module :'transition'
+    exclude group : 'com.android.support', module :'customtabs'
+    exclude group : 'com.android.support', module :'support-media-compat'
+    exclude group : 'com.android.support', module :'support-fragment'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
