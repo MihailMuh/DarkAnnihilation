@@ -3,34 +3,19 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
-public class BulletEnemy {
+public class BulletEnemy extends Sprite {
     private final Bitmap img;
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-    public int speedy;
-    public int speedx;
-    private final Game game;
     public int damage = 5;
 
     public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
-        game = g;
+        super(g, ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
         AudioPlayer.playShotgun();
-//        color.setColor(Color.WHITE);
 
-        speedx = spdx;
-        speedy = spdy;
+        speedX = spdx;
+        speedY = spdy;
 
         Matrix matrix = new Matrix();
         matrix.postRotate((float) angle);
-
-        width = ImageHub.bulletEnemyImage.getWidth();
-        height = ImageHub.bulletEnemyImage.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
 
         img = Bitmap.createBitmap(ImageHub.bulletEnemyImage, 0, 0, width, height, matrix, ImageHub.isFilter);
 
@@ -38,11 +23,20 @@ public class BulletEnemy {
         y = Y;
     }
 
+    @Override
     public void update() {
-        y += speedy;
-        x += speedx;
+        y += speedY;
+        x += speedX;
+
+        game.player.check_intersectionBullet(this);
+
+        if (y > screenHeight | x < -100 | x > screenWidth) {
+            game.bulletEnemies.remove(this);
+            game.numberBulletsEnemy -= 1;
+        }
     }
 
+    @Override
     public void render () {
         game.canvas.drawBitmap(img, x, y, null);
     }

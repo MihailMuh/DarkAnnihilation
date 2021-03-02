@@ -2,17 +2,12 @@ package ru.warfare.darkannihilation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.PixelCopy;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -85,7 +80,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public String maxScore = "";
     public volatile boolean playing = false;
 
-    private static final long BOSS_TIME = 80_000_000_000L;
+    private static final long BOSS_TIME = 50_000_000_000L;
     private static long lastBoss;
     private static long now;
 
@@ -166,72 +161,75 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             for (int i = 0; i < 150; i++) {
                 if (i < numberVaders) {
+                    Vader vader = vaders[i];
                     for (int j = 0; j < numberBullets; j++) {
-                        vaders[i].check_intersectionBullet(bullets.get(j));
+                        vader.check_intersectionBullet(bullets.get(j));
                     }
-                    vaders[i].x -= moveAll;
-                    vaders[i].update();
-                    vaders[i].render();
+                    vader.x -= moveAll;
+                    vader.update();
+                    vader.render();
                 }
 
                 if (i < numberTripleFighters) {
+                    TripleFighter tripleFighter = tripleFighters.get(i);
                     for (int j = 0; j < numberBullets; j++) {
-                        tripleFighters.get(i).check_intersectionBullet(bullets.get(j));
+                        tripleFighter.check_intersectionBullet(bullets.get(j));
                     }
-                    tripleFighters.get(i).x -= moveAll;
-                    tripleFighters.get(i).update();
-                    tripleFighters.get(i).render();
+                    tripleFighter.x -= moveAll;
+                    tripleFighter.update();
+                    tripleFighter.render();
                 }
 
                 if (i < numberBullets) {
-                    bullets.get(i).x -= moveAll;
-                    bullets.get(i).update();
-                    bullets.get(i).render();
-                    if (bullets.get(i).y < -50) {
-                        bullets.remove(i);
-                        numberBullets -= 1;
-                    }
+                    Bullet bullet = bullets.get(i);
+                    bullet.render();
+                    bullet.x -= moveAll;
+                    bullet.update();
+//                    if (bullet.y < -50) {
+//                        bullets.remove(bullet);
+//                        numberBullets -= 1;
+//                    }
                 }
 
                 if (i < numberBulletsEnemy) {
-                    bulletEnemies.get(i).x -= moveAll;
-                    bulletEnemies.get(i).update();
-                    bulletEnemies.get(i).render();
-                    if (bulletEnemies.get(i).y > screenHeight | bulletEnemies.get(i).x < -100 | bulletEnemies.get(i).x > screenWidth) {
-                        bulletEnemies.remove(i);
-                        numberBulletsEnemy -= 1;
-                    } else {
-                        player.check_intersectionBullet(bulletEnemies.get(i));
-                    }
+                    BulletEnemy bulletEnemy = bulletEnemies.get(i);
+                    bulletEnemy.render();
+                    bulletEnemy.x -= moveAll;
+                    bulletEnemy.update();
+//                    if (bulletEnemy.y > screenHeight | bulletEnemy.x < -100 | bulletEnemy.x > screenWidth) {
+//                        bulletEnemies.remove(bulletEnemy);
+//                        numberBulletsEnemy -= 1;
+//                    }
                 }
 
                 if (i < numberBulletsBoss) {
-                    bulletBosses.get(i).x -= moveAll;
-                    bulletBosses.get(i).update();
-                    bulletBosses.get(i).render();
-                    if (bulletBosses.get(i).y > screenHeight | bulletBosses.get(i).x < -100 | bulletBosses.get(i).x > screenWidth) {
-                        bulletBosses.remove(i);
-                        numberBulletsBoss -= 1;
-                    } else {
-                        player.check_intersectionBullet(bulletBosses.get(i));
-                    }
+                    BulletBoss bulletBoss = bulletBosses.get(i);
+                    bulletBoss.render();
+                    bulletBoss.x -= moveAll;
+                    bulletBoss.update();
+//                    if (bulletBoss.y > screenHeight | bulletBoss.x < -100 | bulletBoss.x > screenWidth) {
+//                        bulletBosses.remove(bulletBoss);
+//                        numberBulletsBoss -= 1;
+//                    }
                 }
 
                 if (i < numberExplosions) {
                     explosions[i].x -= moveAll;
                     explosions[i].update();
+                    explosions[i].render();
                 }
 
                 if (i < numberBosses) {
-                    bosses.get(i).x -= moveAll;
-                    bosses.get(i).update();
-                    bosses.get(i).render();
+                    Boss boss = bosses.get(i);
+                    boss.render();
+                    boss.x -= moveAll;
+                    boss.update();
                     for (int j = 0; j < numberBullets; j++) {
-                        bosses.get(i).check_intersectionBullet(bullets.get(j));
+                        boss.check_intersectionBullet(bullets.get(j));
                     }
-                    if (bosses.get(i).health <= 0) {
-                        bosses.get(i).kill();
-                    }
+//                    if (boss.health <= 0) {
+//                        boss.kill();
+//                    }
                 }
             }
 
@@ -397,7 +395,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         numberBosses = 0;
 
         screen.x = (int) (screenWidth * -0.2);
-
         player.AI();
 
         gameStatus = 1;
@@ -422,8 +419,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         checkMaxScore();
         count = 0;
         score = 0;
-        screen.x = (int) (screenWidth * -0.2);
-        player.PLAYER();
         bulletEnemies = new ArrayList<>(0);
         bulletBosses = new ArrayList<>(0);
         tripleFighters = new ArrayList<>(0);
@@ -440,6 +435,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         numberBulletsBoss = 0;
         buttonStart.x = screenWidth * 2;
         buttonQuit.x = screenWidth * 2;
+
+        screen.x = (int) (screenWidth * -0.2);
+        player.PLAYER();
+
         int c = 370;
         for (int i = 0; i < 5; i++) {
             Heart heart = new Heart(this, c, 10);
@@ -636,16 +635,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
 
                 if (i < numberBullets) {
-                    bullets.get(i).update();
                     bullets.get(i).render();
-                    if (bullets.get(i).y < -50) {
-                        bullets.remove(i);
-                        numberBullets -= 1;
-                    }
+                    bullets.get(i).update();
                 }
 
                 if (i < numberExplosions) {
                     explosions[i].update();
+                    explosions[i].render();
                 }
             }
 

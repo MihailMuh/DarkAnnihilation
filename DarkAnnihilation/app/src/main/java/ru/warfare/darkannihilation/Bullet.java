@@ -1,34 +1,27 @@
 package ru.warfare.darkannihilation;
 
-public class Bullet {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-    public static final int speed = 10;
-    private final Game game;
+public class Bullet extends Sprite {
     public int damage = 1;
 
     public Bullet(Game g, int X, int Y) {
-        game = g;
-//        color.setColor(Color.WHITE);
-
-        width = ImageHub.bulletImage.getWidth();
-        height = ImageHub.bulletImage.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
+        super(g, ImageHub.bulletImage.getWidth(), ImageHub.bulletImage.getHeight());
+        speedY = 10;
 
         x = X;
         y = Y;
         AudioPlayer.playShoot();
     }
 
+    @Override
     public void update() {
-        y -= speed;
+        y -= speedY;
+        if (y < -50) {
+            game.bullets.remove(this);
+            game.numberBullets -= 1;
+        }
     }
 
+    @Override
     public void render () {
         game.canvas.drawBitmap(ImageHub.bulletImage, x, y, null);
     }

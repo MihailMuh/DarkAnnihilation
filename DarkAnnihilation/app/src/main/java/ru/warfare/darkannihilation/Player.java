@@ -1,34 +1,19 @@
 package ru.warfare.darkannihilation;
 
-public class Player {
-    public int x;
-    public int y;
+public class Player extends Sprite {
     public int endX;
     public int endY;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-//    public static final Paint paint = new Paint();
-    public int speedX = get_random(3, 7);
-    public int speedY = get_random(3, 7);
     private static final int shootTime = 100_000_000;
     private long lastShoot;
     private static long now;
-    private final Game game;
-    public boolean lock = false;
-    public int health = 50;
     public int ai = 1;
     public boolean dontmove = false;
 
     public Player(Game g) {
-        game = g;
-//        paint.setColor(Color.WHITE);
-
-        width = ImageHub.playerImage.getWidth();
-        height = ImageHub.playerImage.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
+        super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
+        health = 50;
+        speedX = get_random(3, 7);
+        speedY = get_random(3, 7);
 
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -36,11 +21,6 @@ public class Player {
         endY = y;
 
         lastShoot = System.nanoTime();
-    }
-
-    public static int get_random(int min, int max){
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
     }
 
     public void AI() {
@@ -59,6 +39,7 @@ public class Player {
         health = 50;
     }
 
+    @Override
     public void check_intersectionBullet(BulletEnemy bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
@@ -76,6 +57,7 @@ public class Player {
         }
     }
 
+    @Override
     public void check_intersectionBullet(BulletBoss bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
@@ -93,6 +75,7 @@ public class Player {
         }
     }
 
+    @Override
     public void update() {
         x += speedX;
         y += speedY;
@@ -123,6 +106,7 @@ public class Player {
 
     }
 
+    @Override
     public void render () {
         if (ai == 0) {
             switch (health) {

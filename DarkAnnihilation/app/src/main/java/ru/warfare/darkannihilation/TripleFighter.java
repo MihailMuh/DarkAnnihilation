@@ -1,31 +1,17 @@
 package ru.warfare.darkannihilation;
 
-public class TripleFighter{
-    public int x;
-    public int y;
+public class TripleFighter extends Sprite {
     public int X;
     public int Y;
-    public int speedX;
-    public int speedY;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-    private final Game game;
-    public boolean lock = true;
-    public int health = 6;
     private double angle;
     private static final int shootTime = 1_500_000_000;
     private long lastShoot;
     private static long now;
 
     public TripleFighter(Game g) {
-        game = g;
-
-        width = ImageHub.tripleFighterImg.getWidth();
-        height = ImageHub.tripleFighterImg.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
+        super(g, ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
+        lock = true;
+        health = 6;
 
         x = get_random(0, 1920);
         y = -150;
@@ -48,11 +34,6 @@ public class TripleFighter{
         }
     }
 
-    public static int get_random(int min, int max){
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
-    }
-
     public void newStatus() {
         if (game.numberBosses != 0) {
             lock = true;
@@ -65,6 +46,7 @@ public class TripleFighter{
         lastShoot = System.nanoTime();
     }
 
+    @Override
     public void check_intersectionBullet(Bullet bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
@@ -91,6 +73,7 @@ public class TripleFighter{
         }
     }
 
+    @Override
     public void check_intersectionPlayer() {
         if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
                 y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
@@ -108,6 +91,7 @@ public class TripleFighter{
         }
     }
 
+    @Override
     public void update() {
         if (!lock) {
             check_intersectionPlayer();
@@ -127,6 +111,7 @@ public class TripleFighter{
         }
     }
 
+    @Override
     public void render() {
         game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
     }

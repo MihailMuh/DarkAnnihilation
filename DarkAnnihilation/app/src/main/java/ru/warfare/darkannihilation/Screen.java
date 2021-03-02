@@ -2,18 +2,15 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
-public class Screen {
-    public int x;
-    public int y;
+public class Screen extends Sprite {
     private long lastUpdate;
     private static final int frameRate = 25;
     private long now;
     private int frame = -1;
-    private final Game game;
     private static final int screenImageLength = ImageHub.screen_image.length;
 
     public Screen(Game g) {
-        game = g;
+        super(g, 0, 0);
 
         x = (int) (game.screenWidth * -0.2);
         y = 0;
@@ -21,6 +18,7 @@ public class Screen {
         lastUpdate = System.nanoTime();
     }
 
+    @Override
     public void update() {
         now = System.nanoTime();
         if (now - lastUpdate > frameRate) {
@@ -32,6 +30,7 @@ public class Screen {
         }
     }
 
+    @Override
     public void render() {
         game.canvas.drawBitmap(ImageHub.screen_image[frame], x, y, null);
     }

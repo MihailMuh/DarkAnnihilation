@@ -7,33 +7,20 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-public class Button {
+public class Button extends Sprite {
     private Bitmap img;
-    public int x;
-    public int y;
     public int mouseX;
     public int mouseY;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-
     public static final Paint paint = new Paint();
-    public final Game game;
     public String function;
-
     private String text;
     private int textWidth;
     private int textHeight;
 
     public Button(Game g, String t, int X, int Y, String func) {
-        game = g;
+        super(g, ImageHub.buttonImagePressed.getWidth(), ImageHub.buttonImagePressed.getHeight());
 
         img = ImageHub.buttonImageNotPressed;
-        width = ImageHub.buttonImagePressed.getWidth();
-        height = ImageHub.buttonImagePressed.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
 
         function = func;
 
@@ -60,6 +47,7 @@ public class Button {
         textHeight = (int) (paint.getTextSize() / 4);
     }
 
+    @Override
     public void update() {
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
             AudioPlayer.buttonSnd.start();
@@ -89,6 +77,7 @@ public class Button {
         }
     }
 
+    @Override
     public void render () {
         game.canvas.drawBitmap(img, x, y, null);
         game.canvas.drawText(text, x + (float) ((width - textWidth) / 2),y + (halfHeight + textHeight), paint);

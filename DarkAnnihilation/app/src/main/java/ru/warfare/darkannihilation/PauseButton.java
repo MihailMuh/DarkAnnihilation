@@ -1,18 +1,12 @@
 package ru.warfare.darkannihilation;
 
-public class PauseButton {
-    public int x;
-    public int y;
+public class PauseButton extends Sprite {
     public int mouseX;
     public int mouseY;
-    public int width;
-    public final Game game;
     public int oldStatus;
 
     public PauseButton(Game g) {
-        game = g;
-
-        width = ImageHub.pauseButtonImg.getWidth();
+        super(g, ImageHub.pauseButtonImg.getWidth(), 0);
 
         y = 20;
         x = game.screenWidth - width * 2;
@@ -33,6 +27,7 @@ public class PauseButton {
         }
     }
 
+    @Override
     public void render() {
         game.canvas.drawBitmap(ImageHub.pauseButtonImg, x, y, null);
     }

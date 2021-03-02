@@ -1,35 +1,14 @@
 package ru.warfare.darkannihilation;
 
-public class Vader {
-    public int x;
-    public int y;
-    public int speedX;
-    public int speedY;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-    private final Game game;
-    public boolean lock = false;
-    public int health = 2;
-
+public class Vader extends Sprite {
     public Vader(Game g) {
-        game = g;
-
-        width = ImageHub.vaderImage.getWidth();
-        height = ImageHub.vaderImage.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
+        super(g, ImageHub.vaderImage.getWidth(), ImageHub.vaderImage.getHeight());
+        health = 2;
 
         x = get_random(0, 1920);
         y = -150;
         speedX = get_random(-5, 5);
         speedY = get_random(3, 10);
-    }
-
-    public static int get_random(int min, int max){
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
     }
 
     public void newStatus() {
@@ -43,6 +22,7 @@ public class Vader {
         speedY = get_random(3, 10);
     }
 
+    @Override
     public void check_intersectionBullet(Bullet bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
@@ -63,6 +43,7 @@ public class Vader {
         }
     }
 
+    @Override
     public void check_intersectionPlayer() {
         if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
                 y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
@@ -80,6 +61,7 @@ public class Vader {
         }
     }
 
+    @Override
     public void update() {
         if (!lock) {
             check_intersectionPlayer();
@@ -98,6 +80,7 @@ public class Vader {
         }
     }
 
+    @Override
     public void render() {
         game.canvas.drawBitmap(ImageHub.vaderImage, x, y, null);
     }

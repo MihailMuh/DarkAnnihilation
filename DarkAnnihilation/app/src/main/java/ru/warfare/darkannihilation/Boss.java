@@ -4,35 +4,24 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Boss {
-    public int x;
-    public int y;
-    public int speedX = 0;
-    public int speedY = 1;
-    public int width;
-    public int height;
-    public int halfWidth;
-    public int halfHeight;
-    private final Game game;
-    public float health = 200;
-    public float maxHealth = health;
+public class Boss extends Sprite {
+    public float maxHealth;
     private static final Paint paintFill = new Paint();
     private static final Paint paintOutLine = new Paint();
 
-    private static final int shootTime = 1_500_000_000;
+    private static final int shootTime = 500_000_000;
     private long lastShoot;
     private static long now;
 
     public Boss(Game g) {
+        super(g, ImageHub.bossImage.getWidth(), ImageHub.bossImage.getHeight());
+
         paintFill.setColor(Color.RED);
         paintOutLine.setColor(Color.WHITE);
 
-        game = g;
-
-        width = ImageHub.bossImage.getWidth();
-        height = ImageHub.bossImage.getHeight();
-        halfHeight = height / 2;
-        halfWidth = width / 2;
+        health = 200;
+        maxHealth = health;
+        speedY = 1;
 
         x = game.halfScreenWidth - halfWidth;
         y = -600;
@@ -65,6 +54,7 @@ public class Boss {
         game.numberBosses -= 1;
     }
 
+    @Override
     public void check_intersectionBullet(Bullet bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
@@ -80,11 +70,7 @@ public class Boss {
         }
     }
 
-    public void drawHealthBar() {
-        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, paintOutLine);
-        game.canvas.drawRect(x + halfWidth - 68, y - 8, (float) (x + halfWidth - 72 + (health / maxHealth) * 140), y + 3, paintFill);
-    }
-
+    @Override
     public void update() {
         x += speedX;
         y += speedY;
@@ -97,10 +83,17 @@ public class Boss {
         if (x < -width) {
             x = game.screenWidth;
         }
+
+        if (health <= 0) {
+            kill();
+        }
     }
 
+    @Override
     public void render() {
         game.canvas.drawBitmap(ImageHub.bossImage, x, y, null);
-        drawHealthBar();
+
+        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, paintOutLine);
+        game.canvas.drawRect(x + halfWidth - 68, y - 8, (float) (x + halfWidth - 72 + (health / maxHealth) * 140), y + 3, paintFill);
     }
 }
