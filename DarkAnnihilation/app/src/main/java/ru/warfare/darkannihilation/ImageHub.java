@@ -25,6 +25,7 @@ public class ImageHub {
     public static Bitmap pauseButtonImg;
     public static Bitmap bossImage;
     public static Bitmap laserImage;
+    public static Bitmap fightBgImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -145,6 +146,9 @@ public class ImageHub {
 
         laserImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.laser);
         laserImage = Bitmap.createScaledBitmap(laserImage, (int) (15 * game.resizeK), (int) (60 * game.resizeK), isFilter);
+
+        fightBgImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.player_vs_boss);
+        fightBgImg = Bitmap.createScaledBitmap(fightBgImg, (int) (game.screenHeight * game.resizeK), (int) ((game.screenHeight-150) * game.resizeK), isFilter);
 
     }
 }

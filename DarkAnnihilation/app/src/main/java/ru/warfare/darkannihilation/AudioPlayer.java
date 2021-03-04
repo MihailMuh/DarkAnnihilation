@@ -17,6 +17,7 @@ public class AudioPlayer {
     public static MediaPlayer buttonSnd;
     public static MediaPlayer gameoverSnd;
     public static MediaPlayer readySnd;
+    public static MediaPlayer bossMusic;
     public static int boomSnd;
     public static int shootSnd;
     public static int metalSnd;
@@ -67,6 +68,11 @@ public class AudioPlayer {
         pauseMusic.setVolume(1f, 1f);
         pauseMusic.setLooping(true);
         sounds.add(pauseMusic);
+
+        bossMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.shadow_boss);
+        bossMusic.setVolume(0.45f, 0.45f);
+        bossMusic.setLooping(true);
+        sounds.add(bossMusic);
     }
 
     public static void releaseAP() {

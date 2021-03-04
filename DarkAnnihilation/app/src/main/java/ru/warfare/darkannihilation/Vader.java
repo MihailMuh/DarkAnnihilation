@@ -50,6 +50,7 @@ public class Vader extends Sprite {
                 game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
                         game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
             AudioPlayer.playMetal();
+            game.player.damage(5);
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + halfWidth, y + halfHeight);
@@ -57,7 +58,6 @@ public class Vader extends Sprite {
                 }
             }
             newStatus();
-            game.player.health -= 5;
         }
     }
 

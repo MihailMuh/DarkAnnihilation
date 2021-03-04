@@ -23,6 +23,17 @@ public class Player extends Sprite {
         lastShoot = System.nanoTime();
     }
 
+    public void damage(int dmg) {
+        if (ai == 0) {
+            health -= dmg;
+            if (health <= 0) {
+                game.vibrator.vibrate(2000);
+            } else {
+                game.vibrator.vibrate(150);
+            }
+        }
+    }
+
     public void AI() {
         ai = 1;
         x = game.halfScreenWidth;
@@ -45,7 +56,7 @@ public class Player extends Sprite {
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
                 bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
                         bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
-            health -= bulletEnemy.damage;
+            game.player.damage(bulletEnemy.damage);
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
@@ -63,7 +74,7 @@ public class Player extends Sprite {
                 y + 15 < bulletEnemy.y & bulletEnemy.y < y + height - 15 |
                 bulletEnemy.x < x + 15 & x + 15 < bulletEnemy.x + bulletEnemy.width &
                         bulletEnemy.y < y + 15 & y + 15 < bulletEnemy.y + bulletEnemy.height) {
-            health -= bulletEnemy.damage;
+            game.player.damage(bulletEnemy.damage);
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
@@ -91,10 +102,8 @@ public class Player extends Sprite {
         }
 
         if (ai == 0) {
-
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
-
         } else {
             if (x < 30 | x > game.screenWidth - height - 30) {
                 speedX = -speedX;
