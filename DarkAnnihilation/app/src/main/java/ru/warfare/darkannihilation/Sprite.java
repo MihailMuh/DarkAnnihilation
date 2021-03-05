@@ -38,7 +38,7 @@ public class Sprite {
     public void update() {}
     public void render() {}
 
-    public static int get_random(int min, int max){
+    public static int randInt(int min, int max){
         max -= min;
         return (int) (Math.random() * ++max) + min;
     }

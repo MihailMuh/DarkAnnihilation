@@ -25,6 +25,8 @@ public class ImageHub {
     public static Bitmap pauseButtonImg;
     public static Bitmap bossImage;
     public static Bitmap laserImage;
+    public static Bitmap fightBgImg;
+    public static Bitmap healthKitImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -138,13 +140,19 @@ public class ImageHub {
         imageHeartNon = Bitmap.createScaledBitmap(imageHeartNon, (int) (70 * game.resizeK), (int) (60 * game.resizeK), isFilter);
 
         pauseButtonImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.pause_button);
-        pauseButtonImg = Bitmap.createScaledBitmap(pauseButtonImg, (int) (100 * game.resizeK), (int) (100 * game.resizeK), isFilter);
+        pauseButtonImg = Bitmap.createScaledBitmap(pauseButtonImg, (int) (150 * game.resizeK), (int) (150 * game.resizeK), isFilter);
 
         bossImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.boss);
         bossImage = Bitmap.createScaledBitmap(bossImage, (int) (200 * game.resizeK), (int) (200 * game.resizeK), isFilter);
 
         laserImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.laser);
         laserImage = Bitmap.createScaledBitmap(laserImage, (int) (15 * game.resizeK), (int) (60 * game.resizeK), isFilter);
+
+        fightBgImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.player_vs_boss);
+        fightBgImg = Bitmap.createScaledBitmap(fightBgImg, (int) (game.screenWidth * game.resizeK), (int) ((game.screenWidth-150) * game.resizeK), isFilter);
+
+        healthKitImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.health);
+        healthKitImg = Bitmap.createScaledBitmap(healthKitImg, (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
 
     }
 }

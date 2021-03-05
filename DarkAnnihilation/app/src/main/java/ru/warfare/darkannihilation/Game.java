@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -40,6 +41,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public static final Random random = new Random();
     public StringBuilder scoreBuilder = new StringBuilder();
+    Vibrator vibrator;
 
     public Vader[] vaders = new Vader[10];
     public Heart[] hearts = new Heart[5];
@@ -58,6 +60,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public PauseButton pauseButton;
     public AudioPlayer audioPlayer;
     public ImageHub imageHub;
+    public FightBg fightBg;
+    public HealthKit healthKit;
 
     public int numberVaders = vaders.length;
     public int numberExplosions = explosions.length;
@@ -80,7 +84,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public String maxScore = "";
     public volatile boolean playing = false;
 
-    private static final long BOSS_TIME = 4_000_000_000L;
+    private static final long BOSS_TIME = 10_000_000_000L;
     private static long lastBoss;
     private static long now;
 
@@ -92,6 +96,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         super(cont, attrs);
         context = cont;
         holder = getHolder();
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public void initGame(int width, int height) {
@@ -137,6 +142,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonMenu = new Button(this, "To Menu", screenWidth * 2, 0, "menu");
         pauseButton = new PauseButton(this);
 
+        fightBg = new FightBg(this);
+        healthKit = new HealthKit(this);
+
         AudioPlayer.menuMusic.start();
     }
 
@@ -157,6 +165,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 lastBoss = now;
                 bosses.add(new Boss(this));
                 numberBosses += 1;
+            }
+            if (random.nextFloat() >= 0.995 & healthKit.lock & gameStatus == 0) {
+                healthKit.lock = false;
             }
 
             for (int i = 0; i < 150; i++) {
@@ -215,10 +226,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     for (int j = 0; j < numberBullets; j++) {
                         boss.check_intersectionBullet(bullets.get(j));
                     }
+                    if (boss.y == -400) {
+                        AudioPlayer.bossMusic.seekTo(0);
+                        AudioPlayer.bossMusic.start();
+                        AudioPlayer.pirateMusic.pause();
+                        gameStatus = 5;
+                    }
                 }
             }
 
-            player.update();
+            healthKit.x -= moveAll;
+            healthKit.update();
+            healthKit.render();
+
             if (player.health <= 0) {
                 if (score > lastMax) {
                     scoreBuilder.append(" ").append(score);
@@ -226,6 +246,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 AudioPlayer.gameoverSnd.start();
                 gameStatus = 3;
             }
+            player.update();
             player.render();
 
             pauseButton.render();
@@ -246,9 +267,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     @Override
     public void run() {
-        while(playing) {
-            switch (gameStatus)
-            {
+        while (playing) {
+            switch (gameStatus) {
                 case 1:
                     preview();
                     break;
@@ -262,6 +282,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 case 4:
                     pause();
                     break;
+                case 5:
+                    readyToFight();
+                    break;
             }
         }
     }
@@ -269,28 +292,29 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        action = event.getAction();
         pointerCount = event.getPointerCount();
-        clickX = (int) event.getX();
-        clickY = (int) event.getY();
-        switch (action & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                buttonStart.mouseX = clickX;
-                buttonStart.mouseY = clickY;
-                buttonQuit.mouseX = clickX;
-                buttonQuit.mouseY = clickY;
-                buttonMenu.mouseX = clickX;
-                buttonMenu.mouseY = clickY;
-                pauseButton.setCoords(clickX, clickY);
-                break;
-            }
-            case MotionEvent.ACTION_MOVE: {
-                if (!player.dontmove) {
-                    player.endX = clickX - player.halfWidth;
-                    player.endY = clickY - player.halfHeight;
+        if (gameStatus != 5) {
+            action = event.getAction();
+            clickX = (int) event.getX();
+            clickY = (int) event.getY();
+            switch (action & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN: {
+                    buttonStart.mouseX = clickX;
+                    buttonStart.mouseY = clickY;
+                    buttonQuit.mouseX = clickX;
+                    buttonQuit.mouseY = clickY;
+                    buttonMenu.mouseX = clickX;
+                    buttonMenu.mouseY = clickY;
+                    pauseButton.setCoords(clickX, clickY);
+                    break;
                 }
-                break;
-            }
+                case MotionEvent.ACTION_MOVE: {
+                    if (!player.dontmove) {
+                        player.endX = clickX - player.halfWidth;
+                        player.endY = clickY - player.halfHeight;
+                    }
+                    break;
+                }
 //            case MotionEvent.ACTION_UP: {
 //                break;
 //            }
@@ -300,18 +324,22 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 //            case MotionEvent.ACTION_POINTER_UP: {
 //                break;
 //            }
+            }
         }
         return true;
     }
 
     @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {}
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
+    }
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
+    }
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder){}
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
+    }
 
     public void onPause() {
         playing = false;
@@ -328,7 +356,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         try {
             thread.join();
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e("Error ", "Thread join " + e);
         }
     }
@@ -352,10 +380,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generatePause() {
-        AudioPlayer.pirateMusic.pause();
-        AudioPlayer.pauseMusic.seekTo(0);
-        AudioPlayer.pauseMusic.start();
-        AudioPlayer.buttonSnd.start();
+        if (bosses.size() == 0) {
+            AudioPlayer.pirateMusic.pause();
+            AudioPlayer.pauseMusic.seekTo(0);
+            AudioPlayer.pauseMusic.start();
+            AudioPlayer.buttonSnd.start();
+        }
         if (gameStatus == 2) {
             AudioPlayer.readySnd.pause();
         }
@@ -363,10 +393,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         player.dontmove = true;
 
-        buttonStart.newFunc("Resume", halfScreenWidth - buttonQuit.halfWidth,screenHeight / 3 - buttonStart.halfHeight, "pause");
+        buttonStart.newFunc("Resume", halfScreenWidth - buttonQuit.halfWidth, screenHeight / 3 - buttonStart.halfHeight, "pause");
         buttonMenu.x = halfScreenWidth - buttonQuit.halfWidth;
         buttonMenu.y = buttonStart.height + buttonStart.y + 30;
-        buttonQuit.newFunc("Quit", halfScreenWidth - buttonQuit.halfWidth,buttonStart.height + buttonMenu.y + 30, "quit");
+        buttonQuit.newFunc("Quit", halfScreenWidth - buttonQuit.halfWidth, buttonStart.height + buttonMenu.y + 30, "quit");
     }
 
     public void generateMenu() {
@@ -403,6 +433,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateNewGame() {
+        AudioPlayer.bossMusic.pause();
         saveScore();
         checkMaxScore();
         count = 0;
@@ -427,6 +458,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         screen.x = (int) (screenWidth * -0.2);
         player.PLAYER();
+        healthKit.stop();
 
         int c = 370;
         for (int i = 0; i < 5; i++) {
@@ -492,8 +524,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
 
-//            if (pauseButton.oldStatus == 0) {
-
             if (player.health > 0) {
                 screen.render();
                 for (int i = 0; i < 150; i++) {
@@ -525,6 +555,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         bosses.get(i).render();
                     }
                 }
+                healthKit.render();
                 player.render();
                 if (pauseButton.oldStatus == 2) {
                     if (0 <= count & count < 70) {
@@ -557,6 +588,65 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             buttonMenu.update();
             buttonMenu.render();
 
+            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+            curScore = "Current score: " + String.valueOf(score);
+            maxScore = "Max score: " + String.valueOf(lastMax);
+
+
+            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
+            canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
+            canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
+
+            holder.unlockCanvasAndPost(canvas);
+        }
+        timeFrame = System.nanoTime();
+    }
+
+
+    public void readyToFight() {
+        timeFrame = System.nanoTime();
+        if (holder.getSurface().isValid()) {
+            canvas = holder.lockCanvas();
+
+            if (bosses.get(bosses.size()-1).y >= -200 | pointerCount >= 4) {
+                gameStatus = 0;
+                bosses.get(bosses.size()-1).y = -200;
+            }
+
+            screen.render();
+            for (int i = 0; i < 150; i++) {
+                if (i < numberVaders) {
+                    vaders[i].render();
+                }
+
+                if (i < numberTripleFighters) {
+                    tripleFighters.get(i).render();
+                }
+
+                if (i < numberBullets) {
+                    bullets.get(i).render();
+                }
+
+                if (i < numberBulletsEnemy) {
+                    bulletEnemies.get(i).render();
+                }
+
+                if (i < numberBulletsBoss) {
+                    bulletBosses.get(i).render();
+                }
+
+                if (i < numberExplosions) {
+                    explosions[i].render();
+                }
+
+                if (i < numberBosses) {
+                    bosses.get(i).render();
+                }
+            }
+            healthKit.render();
+            bosses.get(bosses.size()-1).update();
+            player.render();
+
             pauseButton.render();
 
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
@@ -568,6 +658,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
             canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
 
+            fightBg.render();
             holder.unlockCanvasAndPost(canvas);
         }
         timeFrame = System.nanoTime();

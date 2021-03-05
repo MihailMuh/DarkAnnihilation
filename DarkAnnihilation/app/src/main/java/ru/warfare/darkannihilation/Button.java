@@ -60,7 +60,9 @@ public class Button extends Sprite {
                 } else {
                     if (function.equals("pause")) {
                         AudioPlayer.pauseMusic.pause();
-                        AudioPlayer.pirateMusic.start();
+                        if (game.bosses.size() == 0) {
+                            AudioPlayer.pirateMusic.start();
+                        }
                         if (game.pauseButton.oldStatus == 2) {
                             AudioPlayer.readySnd.start();
                         }

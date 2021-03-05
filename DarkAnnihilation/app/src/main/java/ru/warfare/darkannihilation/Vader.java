@@ -5,10 +5,10 @@ public class Vader extends Sprite {
         super(g, ImageHub.vaderImage.getWidth(), ImageHub.vaderImage.getHeight());
         health = 2;
 
-        x = get_random(0, 1920);
+        x = randInt(0, 1920);
         y = -150;
-        speedX = get_random(-5, 5);
-        speedY = get_random(3, 10);
+        speedX = randInt(-5, 5);
+        speedY = randInt(3, 10);
     }
 
     public void newStatus() {
@@ -16,10 +16,10 @@ public class Vader extends Sprite {
             lock = true;
         }
         health = 2;
-        x = get_random(0, 1920);
+        x = randInt(0, 1920);
         y = -150;
-        speedX = get_random(-5, 5);
-        speedY = get_random(3, 10);
+        speedX = randInt(-5, 5);
+        speedY = randInt(3, 10);
     }
 
     @Override
@@ -47,9 +47,10 @@ public class Vader extends Sprite {
     public void check_intersectionPlayer() {
         if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
                 y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
-                game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
-                        game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
+                game.player.x + 20 < x + 15 & x + 15 < game.player.x + game.player.width - 20 &
+                        game.player.y + 25 < y + 15 & y + 15 < game.player.y + game.player.height - 20) {
             AudioPlayer.playMetal();
+            game.player.damage(5);
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + halfWidth, y + halfHeight);
@@ -57,7 +58,6 @@ public class Vader extends Sprite {
                 }
             }
             newStatus();
-            game.player.health -= 5;
         }
     }
 

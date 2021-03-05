@@ -53,6 +53,8 @@ public class Boss extends Sprite {
         game.score += 150;
         game.bosses.remove(this);
         game.numberBosses -= 1;
+        AudioPlayer.bossMusic.stop();
+        AudioPlayer.pirateMusic.start();
     }
 
     @Override
