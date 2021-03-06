@@ -10,9 +10,9 @@ public class ImageHub {
     public static final Bitmap[] explosionImageSmall = new Bitmap[28];
     public static final Bitmap[] explosionImageDefault = new Bitmap[28];
     public static final Bitmap[] explosionImageLarge = new Bitmap[28];
-    public static final Bitmap[] screen_image = new Bitmap[34];
+    public static final Bitmap[] screenImage = new Bitmap[34];
+    public static final Bitmap[] vaderImage = new Bitmap[3];
     public static Bitmap bulletImage;
-    public static Bitmap vaderImage;
     public static Bitmap tripleFighterImg;
     public static Bitmap playerImage;
     public static Bitmap bulletEnemyImage;
@@ -27,46 +27,51 @@ public class ImageHub {
     public static Bitmap laserImage;
     public static Bitmap fightBgImg;
     public static Bitmap healthKitImg;
+    public static Bitmap shotgunKitImg;
+    public static Bitmap shotgunToGun;
+    public static Bitmap gunToShotgun;
+    public static Bitmap gunToNone;
+    public static Bitmap buckshotImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
 
-        screen_image[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable._0);
-        screen_image[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable._1);
-        screen_image[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable._2);
-        screen_image[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable._3);
-        screen_image[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable._4);
-        screen_image[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable._5);
-        screen_image[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable._6);
-        screen_image[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable._7);
-        screen_image[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable._8);
-        screen_image[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable._9);
-        screen_image[10] = BitmapFactory.decodeResource(context.getResources(), R.drawable._10);
-        screen_image[11] = BitmapFactory.decodeResource(context.getResources(), R.drawable._11);
-        screen_image[12] = BitmapFactory.decodeResource(context.getResources(), R.drawable._12);
-        screen_image[13] = BitmapFactory.decodeResource(context.getResources(), R.drawable._13);
-        screen_image[14] = BitmapFactory.decodeResource(context.getResources(), R.drawable._14);
-        screen_image[15] = BitmapFactory.decodeResource(context.getResources(), R.drawable._15);
-        screen_image[16] = BitmapFactory.decodeResource(context.getResources(), R.drawable._16);
-        screen_image[17] = BitmapFactory.decodeResource(context.getResources(), R.drawable._17);
-        screen_image[18] = BitmapFactory.decodeResource(context.getResources(), R.drawable._18);
-        screen_image[19] = BitmapFactory.decodeResource(context.getResources(), R.drawable._19);
-        screen_image[20] = BitmapFactory.decodeResource(context.getResources(), R.drawable._20);
-        screen_image[21] = BitmapFactory.decodeResource(context.getResources(), R.drawable._21);
-        screen_image[22] = BitmapFactory.decodeResource(context.getResources(), R.drawable._22);
-        screen_image[23] = BitmapFactory.decodeResource(context.getResources(), R.drawable._23);
-        screen_image[24] = BitmapFactory.decodeResource(context.getResources(), R.drawable._24);
-        screen_image[25] = BitmapFactory.decodeResource(context.getResources(), R.drawable._25);
-        screen_image[26] = BitmapFactory.decodeResource(context.getResources(), R.drawable._26);
-        screen_image[27] = BitmapFactory.decodeResource(context.getResources(), R.drawable._27);
-        screen_image[28] = BitmapFactory.decodeResource(context.getResources(), R.drawable._28);
-        screen_image[29] = BitmapFactory.decodeResource(context.getResources(), R.drawable._29);
-        screen_image[30] = BitmapFactory.decodeResource(context.getResources(), R.drawable._30);
-        screen_image[31] = BitmapFactory.decodeResource(context.getResources(), R.drawable._31);
-        screen_image[32] = BitmapFactory.decodeResource(context.getResources(), R.drawable._32);
-        screen_image[33] = BitmapFactory.decodeResource(context.getResources(), R.drawable._33);
+        screenImage[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable._0);
+        screenImage[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable._1);
+        screenImage[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable._2);
+        screenImage[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable._3);
+        screenImage[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable._4);
+        screenImage[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable._5);
+        screenImage[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable._6);
+        screenImage[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable._7);
+        screenImage[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable._8);
+        screenImage[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable._9);
+        screenImage[10] = BitmapFactory.decodeResource(context.getResources(), R.drawable._10);
+        screenImage[11] = BitmapFactory.decodeResource(context.getResources(), R.drawable._11);
+        screenImage[12] = BitmapFactory.decodeResource(context.getResources(), R.drawable._12);
+        screenImage[13] = BitmapFactory.decodeResource(context.getResources(), R.drawable._13);
+        screenImage[14] = BitmapFactory.decodeResource(context.getResources(), R.drawable._14);
+        screenImage[15] = BitmapFactory.decodeResource(context.getResources(), R.drawable._15);
+        screenImage[16] = BitmapFactory.decodeResource(context.getResources(), R.drawable._16);
+        screenImage[17] = BitmapFactory.decodeResource(context.getResources(), R.drawable._17);
+        screenImage[18] = BitmapFactory.decodeResource(context.getResources(), R.drawable._18);
+        screenImage[19] = BitmapFactory.decodeResource(context.getResources(), R.drawable._19);
+        screenImage[20] = BitmapFactory.decodeResource(context.getResources(), R.drawable._20);
+        screenImage[21] = BitmapFactory.decodeResource(context.getResources(), R.drawable._21);
+        screenImage[22] = BitmapFactory.decodeResource(context.getResources(), R.drawable._22);
+        screenImage[23] = BitmapFactory.decodeResource(context.getResources(), R.drawable._23);
+        screenImage[24] = BitmapFactory.decodeResource(context.getResources(), R.drawable._24);
+        screenImage[25] = BitmapFactory.decodeResource(context.getResources(), R.drawable._25);
+        screenImage[26] = BitmapFactory.decodeResource(context.getResources(), R.drawable._26);
+        screenImage[27] = BitmapFactory.decodeResource(context.getResources(), R.drawable._27);
+        screenImage[28] = BitmapFactory.decodeResource(context.getResources(), R.drawable._28);
+        screenImage[29] = BitmapFactory.decodeResource(context.getResources(), R.drawable._29);
+        screenImage[30] = BitmapFactory.decodeResource(context.getResources(), R.drawable._30);
+        screenImage[31] = BitmapFactory.decodeResource(context.getResources(), R.drawable._31);
+        screenImage[32] = BitmapFactory.decodeResource(context.getResources(), R.drawable._32);
+        screenImage[33] = BitmapFactory.decodeResource(context.getResources(), R.drawable._33);
         for (int i = 0; i < 34; i++) {
-            screen_image[i] = Bitmap.createScaledBitmap(screen_image[i], (int) (game.screenWidth * 1.4), game.screenHeight, isFilter);
+            screenImage[i] = Bitmap.createScaledBitmap(screenImage[i], (int) (game.screenWidth * 1.4), game.screenHeight, isFilter);
         }
 
         gameoverScreen = BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover);
@@ -113,8 +118,15 @@ public class ImageHub {
         bulletImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bullet);
         bulletImage = Bitmap.createScaledBitmap(bulletImage, (int) (7 * game.resizeK), (int) (30 * game.resizeK), isFilter);
 
-        vaderImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
-        vaderImage = Bitmap.createScaledBitmap(vaderImage, (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
+        Bitmap vaderImg1 = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader1);
+        vaderImg1 = Bitmap.createScaledBitmap(vaderImg1, (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
+        Bitmap vaderImg2 = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader2);
+        vaderImg2 = Bitmap.createScaledBitmap(vaderImg2, vaderImg1.getWidth(), vaderImg1.getHeight(), isFilter);
+        Bitmap vaderImg3 = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.vader3);
+        vaderImg3 = Bitmap.createScaledBitmap(vaderImg3, vaderImg1.getWidth(), vaderImg1.getHeight(), isFilter);
+        vaderImage[0] = vaderImg1;
+        vaderImage[1] = vaderImg2;
+        vaderImage[2] = vaderImg3;
 
         tripleFighterImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.triple_fighter);
         tripleFighterImg = Bitmap.createScaledBitmap(tripleFighterImg, (int) (105 * game.resizeK), (int) (105 * game.resizeK), isFilter);
@@ -140,7 +152,7 @@ public class ImageHub {
         imageHeartNon = Bitmap.createScaledBitmap(imageHeartNon, (int) (70 * game.resizeK), (int) (60 * game.resizeK), isFilter);
 
         pauseButtonImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.pause_button);
-        pauseButtonImg = Bitmap.createScaledBitmap(pauseButtonImg, (int) (150 * game.resizeK), (int) (150 * game.resizeK), isFilter);
+        pauseButtonImg = Bitmap.createScaledBitmap(pauseButtonImg, 100, 100, isFilter);
 
         bossImage = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.boss);
         bossImage = Bitmap.createScaledBitmap(bossImage, (int) (200 * game.resizeK), (int) (200 * game.resizeK), isFilter);
@@ -153,6 +165,21 @@ public class ImageHub {
 
         healthKitImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.health);
         healthKitImg = Bitmap.createScaledBitmap(healthKitImg, (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
+
+        shotgunKitImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.buckshot);
+        shotgunKitImg = Bitmap.createScaledBitmap(shotgunKitImg, (int) (95 * game.resizeK), (int) (95 * game.resizeK), isFilter);
+
+        gunToShotgun = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.gun_to_shotgun);
+        gunToShotgun = Bitmap.createScaledBitmap(gunToShotgun, (int) (400 * game.resizeK), (int) (400 * game.resizeK), isFilter);
+
+        gunToNone = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.gun_to_none);
+        gunToNone = Bitmap.createScaledBitmap(gunToNone, gunToShotgun.getWidth(), gunToShotgun.getWidth(), isFilter);
+
+        shotgunToGun = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.shotgun_to_gun);
+        shotgunToGun = Bitmap.createScaledBitmap(shotgunToGun, gunToShotgun.getWidth(), gunToShotgun.getWidth(), isFilter);
+
+        buckshotImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.cannon_ball);
+        buckshotImg = Bitmap.createScaledBitmap(buckshotImg, (int) (15 * game.resizeK), (int) (15 * game.resizeK), isFilter);
 
     }
 }

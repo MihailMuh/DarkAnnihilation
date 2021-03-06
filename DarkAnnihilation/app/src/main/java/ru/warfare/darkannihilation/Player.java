@@ -3,11 +3,13 @@ package ru.warfare.darkannihilation;
 public class Player extends Sprite {
     public int endX;
     public int endY;
-    private static final int shootTime = 100_000_000;
+    private static final int shootTime = 110_000_000;
+    private static final int shotgunTime = 535_000_000;
     private long lastShoot;
     private static long now;
     public int ai = 1;
     public boolean dontmove = false;
+    public String gun = "gun";
 
     public Player(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
@@ -27,14 +29,15 @@ public class Player extends Sprite {
         if (ai == 0) {
             health -= dmg;
             if (health <= 0) {
-                game.vibrator.vibrate(2000);
+                game.vibrator.vibrate(1800);
             } else {
-                game.vibrator.vibrate(150);
+                game.vibrator.vibrate(70);
             }
         }
     }
 
     public void AI() {
+        gun = "gun";
         ai = 1;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -43,6 +46,7 @@ public class Player extends Sprite {
     }
 
     public void PLAYER() {
+        gun = "gun";
         ai = 0;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -92,12 +96,29 @@ public class Player extends Sprite {
         y += speedY;
 
         if (!lock) {
-            now = System.nanoTime();
-            if (now - lastShoot > shootTime) {
-                lastShoot = now;
-                game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
-                game.bullets.add(new Bullet(game, x + halfWidth, y));
-                game.numberBullets += 2;
+            if (gun.equals("gun")) {
+                now = System.nanoTime();
+                if (now - lastShoot > shootTime) {
+                    lastShoot = now;
+                    AudioPlayer.playShoot();
+                    if (gun.equals("gun")) {
+                        game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
+                        game.bullets.add(new Bullet(game, x + halfWidth, y));
+                        game.numberBullets += 2;
+                    }
+                }
+            } else {
+                now = System.nanoTime();
+                if (now - lastShoot > shotgunTime) {
+                    lastShoot = now;
+                    AudioPlayer.playShotgun();
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -5));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -2));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -0));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 2));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 5));
+                    game.numberBuckshots += 5;
+                }
             }
         }
 

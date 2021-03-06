@@ -1,9 +1,14 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Bitmap;
+
 public class Vader extends Sprite {
+    public Bitmap img;
     public Vader(Game g) {
-        super(g, ImageHub.vaderImage.getWidth(), ImageHub.vaderImage.getHeight());
+        super(g, ImageHub.vaderImage[0].getWidth(), ImageHub.vaderImage[0].getHeight());
         health = 2;
+
+        img = ImageHub.vaderImage[randInt(0, 2)];
 
         x = randInt(0, 1920);
         y = -150;
@@ -40,6 +45,21 @@ public class Vader extends Sprite {
                 game.score += 1;
                 newStatus();
             }
+        }
+    }
+
+    public void check_intersectionBullet(Buckshot bullet) {
+        if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
+                bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
+            for (int i = 0; i < 20; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(x + halfWidth, y + halfHeight);
+                    break;
+                }
+            }
+            AudioPlayer.playBoom();
+            game.score += 1;
+            newStatus();
         }
     }
 
@@ -82,6 +102,6 @@ public class Vader extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.vaderImage, x, y, null);
+        game.canvas.drawBitmap(img, x, y, null);
     }
 }

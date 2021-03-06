@@ -20,7 +20,7 @@ public class Boss extends Sprite {
         paintFill.setColor(Color.RED);
         paintOutLine.setColor(Color.WHITE);
 
-        health = 200;
+        health = 120;
         maxHealth = health;
         speedY = 1;
 
@@ -53,8 +53,12 @@ public class Boss extends Sprite {
         game.score += 150;
         game.bosses.remove(this);
         game.numberBosses -= 1;
-        AudioPlayer.bossMusic.stop();
+        if (Game.random.nextFloat() <= 0.15) {
+            game.tripleFighters.add(new TripleFighter(game));
+        }
+        AudioPlayer.bossMusic.pause();
         AudioPlayer.pirateMusic.start();
+        Game.lastBoss = System.nanoTime();
     }
 
     @Override
@@ -64,6 +68,21 @@ public class Boss extends Sprite {
             health -= bullet.damage;
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void check_intersectionBullet(Buckshot bullet) {
+        if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 20 < bullet.y & bullet.y < y + height - 20 |
+                bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 20 & y + 20 < bullet.y + bullet.height) {
+            health -= bullet.damage;
+            game.buckshots.remove(bullet);
+            game.numberBuckshots -= 1;
             for (int i = 20; i < 40; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);

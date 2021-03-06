@@ -7,7 +7,7 @@ public class Screen extends Sprite {
     private static final int frameRate = 25;
     private long now;
     private int frame = -1;
-    private static final int screenImageLength = ImageHub.screen_image.length;
+    private static final int screenImageLength = ImageHub.screenImage.length;
 
     public Screen(Game g) {
         super(g, 0, 0);
@@ -32,7 +32,7 @@ public class Screen extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.screen_image[frame], x, y, null);
+        game.canvas.drawBitmap(ImageHub.screenImage[frame], x, y, null);
     }
 
     public void render(Bitmap img) {

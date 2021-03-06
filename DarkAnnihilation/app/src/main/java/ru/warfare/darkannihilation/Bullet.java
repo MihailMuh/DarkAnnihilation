@@ -9,7 +9,6 @@ public class Bullet extends Sprite {
 
         x = X;
         y = Y;
-        AudioPlayer.playShoot();
     }
 
     @Override

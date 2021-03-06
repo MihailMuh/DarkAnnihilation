@@ -16,6 +16,7 @@ public class PauseButton extends Sprite {
         mouseX = X;
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width & game.gameStatus != 4 & game.gameStatus != 5) {
+            AudioPlayer.buttonSnd.start();
             mouseX = 0;
             mouseY = 0;
             oldStatus = game.gameStatus;
@@ -24,6 +25,18 @@ public class PauseButton extends Sprite {
             if (game.gameStatus != 4) {
                 game.player.dontmove = false;
             }
+        }
+    }
+
+    public void setCoords(int X, int Y, int count) {
+        mouseX = X;
+        mouseY = Y;
+        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width & game.gameStatus != 4 & game.gameStatus != 5) {
+            AudioPlayer.buttonSnd.start();
+            mouseX = 0;
+            mouseY = 0;
+            oldStatus = game.gameStatus;
+            game.generatePause();
         }
     }
 

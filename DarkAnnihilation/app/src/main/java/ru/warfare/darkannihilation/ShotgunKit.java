@@ -1,8 +1,10 @@
 package ru.warfare.darkannihilation;
 
-public class HealthKit extends Sprite {
-    public HealthKit(Game g) {
-        super(g, ImageHub.healthKitImg.getWidth(), ImageHub.healthKitImg.getHeight());
+public class ShotgunKit extends Sprite {
+    public boolean picked = false;
+
+    public ShotgunKit(Game g) {
+        super(g, ImageHub.shotgunKitImg.getWidth(), ImageHub.shotgunKitImg.getHeight());
         speedY = 2;
         lock = true;
 
@@ -23,12 +25,8 @@ public class HealthKit extends Sprite {
                 game.player.x + 10 < x + 5 & x + 5 < game.player.x + game.player.width - 10 &
                         game.player.y + 10 < y + 5 & y + 5 < game.player.y + game.player.height - 10) {
             stop();
-            AudioPlayer.healSnd.start();
-            if (game.player.health < 30) {
-                game.player.health += 20;
-            } else {
-                game.player.health = 50;
-            }
+            picked = true;
+            game.changerGuns.setCoords(game.changerGuns.x + 50, game.changerGuns.y + 50, 2);
         }
     }
 
@@ -43,6 +41,6 @@ public class HealthKit extends Sprite {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.healthKitImg, x, y, null);
+        game.canvas.drawBitmap(ImageHub.shotgunKitImg, x, y, null);
     }
 }

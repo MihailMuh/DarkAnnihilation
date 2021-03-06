@@ -73,6 +73,32 @@ public class TripleFighter extends Sprite {
         }
     }
 
+    public void check_intersectionBullet(Buckshot bullet) {
+        if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
+                bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
+            health -= bullet.damage;
+            for (int i = 20; i < 40; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
+                    break;
+                }
+            }
+            game.buckshots.remove(bullet);
+            game.numberBuckshots -= 1;
+            if (health <= 0) {
+                for (int i = 0; i < game.numberExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                        break;
+                    }
+                }
+                AudioPlayer.playBoom();
+                game.score += 5;
+                newStatus();
+            }
+        }
+    }
+
     @Override
     public void check_intersectionPlayer() {
         if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &

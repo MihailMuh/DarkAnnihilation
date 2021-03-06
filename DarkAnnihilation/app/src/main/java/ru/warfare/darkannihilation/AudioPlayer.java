@@ -11,6 +11,7 @@ public class AudioPlayer {
     private final Game game;
 
     public static ArrayList<MediaPlayer> sounds = new ArrayList(0);
+    public static int[] reloadSounds = new int[2];
     public static MediaPlayer menuMusic;
     public static MediaPlayer pauseMusic;
     public static MediaPlayer pirateMusic;
@@ -44,6 +45,8 @@ public class AudioPlayer {
         metalSnd = soundPool.load(game.context.getApplicationContext(), R.raw.metal, 1);
         shotgunSnd = soundPool.load(game.context.getApplicationContext(), R.raw.shotgun, 1);
         megaBoom = soundPool.load(game.context.getApplicationContext(), R.raw.megaboom, 1);
+        reloadSounds[0] = soundPool.load(game.context.getApplicationContext(), R.raw.reload0, 1);
+        reloadSounds[1] = soundPool.load(game.context.getApplicationContext(), R.raw.reload1, 1);
 
         menuMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.menu);
         menuMusic.setLooping(true);
@@ -80,6 +83,11 @@ public class AudioPlayer {
         sounds.add(healSnd);
     }
 
+    public static int randInt(int min, int max){
+        max -= min;
+        return (int) (Math.random() * ++max) + min;
+    }
+
     public static void releaseAP() {
         try {
             for (int i = 0; i < sounds.size(); i++) {
@@ -108,4 +116,8 @@ public class AudioPlayer {
     public static void playMegaBoom() {
         soundPool.play(megaBoom, 1f, 1f, 1, 0, 1);
     }
+    public static void playReload() {
+        soundPool.play(reloadSounds[randInt(0, 1)], 1f, 1f, 1, 0, 1);
+    }
+
 }
