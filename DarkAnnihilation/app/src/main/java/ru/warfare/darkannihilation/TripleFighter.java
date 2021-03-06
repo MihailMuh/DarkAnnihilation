@@ -4,7 +4,7 @@ public class TripleFighter extends Sprite {
     public int X;
     public int Y;
     private double angle;
-    private static final int shootTime = 1_500_000_000;
+    private static final int shootTime = 1_500;
     private long lastShoot;
     private static long now;
 
@@ -17,11 +17,11 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
-        lastShoot = System.nanoTime();
+        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
-        now = System.nanoTime();
+        now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
 
@@ -43,7 +43,7 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
-        lastShoot = System.nanoTime();
+        lastShoot = System.currentTimeMillis();
     }
 
     @Override

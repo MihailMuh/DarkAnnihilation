@@ -3,8 +3,8 @@ package ru.warfare.darkannihilation;
 public class Player extends Sprite {
     public int endX;
     public int endY;
-    private static final int shootTime = 110_000_000;
-    private static final int shotgunTime = 535_000_000;
+    private static final int shootTime = 110;
+    private static final int shotgunTime = 535;
     private long lastShoot;
     private static long now;
     public int ai = 1;
@@ -22,7 +22,7 @@ public class Player extends Sprite {
         endX = x;
         endY = y;
 
-        lastShoot = System.nanoTime();
+        lastShoot = System.currentTimeMillis();
     }
 
     public void damage(int dmg) {
@@ -97,7 +97,7 @@ public class Player extends Sprite {
 
         if (!lock) {
             if (gun.equals("gun")) {
-                now = System.nanoTime();
+                now = System.currentTimeMillis();
                 if (now - lastShoot > shootTime) {
                     lastShoot = now;
                     AudioPlayer.playShoot();
@@ -108,7 +108,7 @@ public class Player extends Sprite {
                     }
                 }
             } else {
-                now = System.nanoTime();
+                now = System.currentTimeMillis();
                 if (now - lastShoot > shotgunTime) {
                     lastShoot = now;
                     AudioPlayer.playShotgun();

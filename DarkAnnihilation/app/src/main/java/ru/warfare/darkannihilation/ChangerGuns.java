@@ -6,7 +6,7 @@ public class ChangerGuns extends Sprite {
     public Bitmap image;
     public int mouseX;
     public int mouseY;
-    private static final int shootTime = 700_000_000;
+    private static final int shootTime = 700;
     private long lastShoot;
     private static long now;
 
@@ -25,7 +25,7 @@ public class ChangerGuns extends Sprite {
         }
 
         hide();
-        lastShoot = System.nanoTime();
+        lastShoot = System.currentTimeMillis();
     }
 
     public void hide() {
@@ -44,7 +44,7 @@ public class ChangerGuns extends Sprite {
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
             game.player.dontmove = true;
-            now = System.nanoTime();
+            now = System.currentTimeMillis();
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
                 mouseX = 0;
@@ -69,7 +69,7 @@ public class ChangerGuns extends Sprite {
         mouseX = X;
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-            now = System.nanoTime();
+            now = System.currentTimeMillis();
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
                 mouseX = 0;

@@ -10,7 +10,7 @@ public class Boss extends Sprite {
     private static final Paint paintFill = new Paint();
     private static final Paint paintOutLine = new Paint();
 
-    private static final int shootTime = 500_000_000;
+    private static final int shootTime = 500;
     private long lastShoot;
     private static long now;
 
@@ -27,11 +27,11 @@ public class Boss extends Sprite {
         x = game.halfScreenWidth - halfWidth;
         y = -600;
 
-        lastShoot = System.nanoTime();
+        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
-        now = System.nanoTime();
+        now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
             game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 1));
@@ -53,12 +53,15 @@ public class Boss extends Sprite {
         game.score += 150;
         game.bosses.remove(this);
         game.numberBosses -= 1;
-        if (Game.random.nextFloat() <= 0.15) {
-            game.tripleFighters.add(new TripleFighter(game));
+        for (int i = 0; i < game.numberVaders; i++) {
+            if (Game.random.nextFloat() <= 0.1) {
+                game.tripleFighters.add(new TripleFighter(game));
+                game.numberTripleFighters += 1;
+            }
         }
         AudioPlayer.bossMusic.pause();
         AudioPlayer.pirateMusic.start();
-        Game.lastBoss = System.nanoTime();
+        Game.lastBoss = System.currentTimeMillis();
     }
 
     @Override

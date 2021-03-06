@@ -88,7 +88,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public String maxScore = "";
     public volatile boolean playing = false;
 
-    private static final long BOSS_TIME = 50_000_000_000L;
+    private static final int BOSS_TIME = 50_000;
     public static long lastBoss;
     private static long now;
 
@@ -159,7 +159,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
-            now = System.nanoTime();
+            now = System.currentTimeMillis();
 
             moveAll = player.speedX / 3;
 
@@ -474,7 +474,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         saveScore();
         checkMaxScore();
         count = 0;
-        score = 70;
+        score = 0;
         bulletEnemies = new ArrayList<>(0);
         bulletBosses = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
@@ -528,7 +528,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         gameStatus = 2;
 
-        lastBoss = System.nanoTime();
+        lastBoss = System.currentTimeMillis();
         AudioPlayer.readySnd.start();
     }
 
