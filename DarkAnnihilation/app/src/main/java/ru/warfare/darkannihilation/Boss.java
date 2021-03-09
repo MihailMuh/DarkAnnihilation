@@ -58,10 +58,9 @@ public class Boss extends Sprite {
             }
         }
         AudioPlayer.bossMusic.pause();
-        AudioPlayer.winMusic.seekTo(0);
-        AudioPlayer.winMusic.start();
-        game.winScreen = new WinScreen(game);
-        game.gameStatus = 6;
+        if (game.portal.lock) {
+            game.portal.start();
+        }
     }
 
     @Override

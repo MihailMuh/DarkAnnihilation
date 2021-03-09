@@ -5,8 +5,8 @@ public class Player extends Sprite {
     public int endY;
     private static final int shootTime = 110;
     private static final int shotgunTime = 535;
-    private static long lastShoot;
-    private static long now;
+    private long lastShoot;
+    private long now;
     public int ai = 1;
     public boolean dontmove = false;
     public String gun = "gun";
@@ -90,8 +90,8 @@ public class Player extends Sprite {
                     break;
                 }
             }
-            game.bulletEnemies.remove(bulletEnemy);
-            game.numberBulletsEnemy -= 1;
+            game.bombs.remove(bulletEnemy);
+            game.numberBombs -= 1;
         }
     }
 
@@ -137,25 +137,22 @@ public class Player extends Sprite {
         y += speedY;
 
         if (!lock) {
+            now = System.currentTimeMillis();
             if (gun.equals("gun")) {
-                now = System.currentTimeMillis();
                 if (now - lastShoot > shootTime) {
                     lastShoot = now;
                     AudioPlayer.playShoot();
-                    if (gun.equals("gun")) {
-                        game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
-                        game.bullets.add(new Bullet(game, x + halfWidth, y));
-                        game.numberBullets += 2;
-                    }
+                    game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
+                    game.bullets.add(new Bullet(game, x + halfWidth, y));
+                    game.numberBullets += 2;
                 }
             } else {
-                now = System.currentTimeMillis();
                 if (now - lastShoot > shotgunTime) {
                     lastShoot = now;
                     AudioPlayer.playShotgun();
                     game.buckshots.add(new Buckshot(game, x + halfWidth, y, -5));
                     game.buckshots.add(new Buckshot(game, x + halfWidth, y, -2));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -0));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 0));
                     game.buckshots.add(new Buckshot(game, x + halfWidth, y, 2));
                     game.buckshots.add(new Buckshot(game, x + halfWidth, y, 5));
                     game.numberBuckshots += 5;
@@ -174,7 +171,6 @@ public class Player extends Sprite {
                 speedY = -speedY;
             }
         }
-
     }
 
     @Override
@@ -262,6 +258,5 @@ public class Player extends Sprite {
         }
         game.canvas.drawBitmap(ImageHub.playerImage, x, y, null);
 //        game.canvas.drawRect(x + 20, y + 30, x + width - 20, y + height - 20, paint);
-
     }
 }

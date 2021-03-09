@@ -4,9 +4,9 @@ public class Minion extends Sprite {
     public int X;
     public int Y;
     private double angle;
-    private static final int shootTime = 1_000;
+    private static final int shootMinionTime = 1_000;
     private long lastShoot;
-    private static long now;
+    private long now;
 
     public Minion(Game g, int FX) {
         super(g, ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
@@ -21,7 +21,7 @@ public class Minion extends Sprite {
 
     public void shoot() {
         now = System.currentTimeMillis();
-        if (now - lastShoot > shootTime) {
+        if (now - lastShoot > shootMinionTime) {
             lastShoot = now;
 
             X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;

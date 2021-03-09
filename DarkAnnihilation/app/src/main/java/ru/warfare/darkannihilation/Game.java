@@ -72,6 +72,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Factory factory;
     public Demoman demoman;
     public WinScreen winScreen;
+    public Portal portal;
 
     public int numberVaders = vaders.length;
     public int numberLargeExplosions = 5;
@@ -100,7 +101,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public String maxScore = "";
     public volatile boolean playing = false;
 
-    private static final int BOSS_TIME = 8_000;
+    private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
     private static long now;
 
@@ -166,6 +167,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         attention = new Attention(this);
         factory = new Factory(this);
         demoman = new Demoman(this);
+        portal = new Portal(this);
 
         AudioPlayer.menuMusic.start();
     }
@@ -342,11 +344,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 factory.update();
                 factory.render();
             }
-
             if (!demoman.lock) {
                 demoman.x -= moveAll;
                 demoman.update();
                 demoman.render();
+            }
+            if (gameStatus == 6) {
+                portal.x -= moveAll;
+                portal.update();
+                portal.render();
             }
 
             if (player.health <= 0) {
@@ -383,6 +389,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 case 1:
                     preview();
                     break;
+                case 6:
                 case 2:
                 case 0:
                     gameplay();
@@ -396,7 +403,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 case 5:
                     readyToFight();
                     break;
-                case 6:
+                case 7:
                     win();
                     break;
             }
@@ -460,7 +467,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 if (gameStatus == 4) {
                     AudioPlayer.pauseMusic.pause();
                 } else {
-                    if (gameStatus == 6) {
+                    if (gameStatus == 7) {
                         AudioPlayer.winMusic.pause();
                     }
                 }
@@ -481,7 +488,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         thread = new Thread(this);
         thread.start();
         playing = true;
-        if (gameStatus == 6) {
+        if (gameStatus == 7) {
             AudioPlayer.winMusic.start();
         } else {
             if (numberBosses == 0) {
@@ -600,12 +607,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         numberMinions = 0;
         numberBombs = 0;
 
-        changerGuns = new ChangerGuns(this);
         screen.x = (int) (screenWidth * -0.25);
         player.PLAYER();
         healthKit.hide();
         shotgunKit.hide();
         shotgunKit.picked = false;
+        changerGuns = new ChangerGuns(this);
         attention.hide();
         rocket.hide();
         factory.hide();
@@ -724,6 +731,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 factory.render();
                 demoman.render();
                 player.render();
+                portal.render();
+
                 if (pauseButton.oldStatus == 2) {
                     if (0 <= count & count < 70) {
                         canvas.drawText("1", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
@@ -776,7 +785,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             canvas = holder.lockCanvas();
 
             if (bosses.get(bosses.size()-1).y >= -200 | pointerCount >= 4) {
-                gameStatus = 0;
+                if (portal.lock) {
+                    gameStatus = 0;
+                } else {
+                    gameStatus = 6;
+                }
                 bosses.get(bosses.size()-1).y = -200;
             }
 
@@ -829,6 +842,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             changerGuns.render();
             factory.render();
             demoman.render();
+            portal.render();
             bosses.get(bosses.size()-1).update();
             player.render();
 

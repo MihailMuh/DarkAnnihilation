@@ -4,10 +4,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class Factory extends Sprite {
     private static final int spawnTime = 1_000;
     private long lastSpawn;
-    private static long now;
+    private long now;
 
     private static final Paint paintFill = new Paint();
     private static final Paint paintOutLine = new Paint();
@@ -35,6 +37,8 @@ public class Factory extends Sprite {
         y = -height;
         speedY = 3;
         health = (int) maxHealth;
+        game.minions = new ArrayList<>(0);
+        game.numberMinions = 0;
     }
 
     public void start() {
@@ -57,14 +61,14 @@ public class Factory extends Sprite {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
             health -= bullet.damage;
-            game.bullets.remove(bullet);
-            game.numberBullets -= 1;
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
                 }
             }
+            game.bullets.remove(bullet);
+            game.numberBullets -= 1;
         }
     }
 
@@ -72,14 +76,14 @@ public class Factory extends Sprite {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
             health -= bullet.damage;
-            game.buckshots.remove(bullet);
-            game.numberBuckshots -= 1;
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
                 }
             }
+            game.buckshots.remove(bullet);
+            game.numberBuckshots -= 1;
         }
     }
 

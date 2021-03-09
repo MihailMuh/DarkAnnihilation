@@ -44,18 +44,6 @@ public class Sprite {
     public void update() {}
     public void render() {}
 
-    public void kill() {
-        if (!lock) {
-            for (int i = 0; i < numberDefaultExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-            AudioPlayer.playBoom();
-        }
-    }
-
     public static int randInt(int min, int max){
         max -= min;
         return (int) (Math.random() * ++max) + min;

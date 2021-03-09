@@ -15,6 +15,7 @@ public class ImageHub {
     public static final Bitmap[] screenImage = new Bitmap[34];
     public static final Bitmap[] vaderImage = new Bitmap[3];
     public static final Bitmap[] winScreenImg = new Bitmap[100];
+    public static final Bitmap[] portalImages = new Bitmap[20];
 
     public static Bitmap bulletImage;
     public static Bitmap tripleFighterImg;
@@ -70,6 +71,12 @@ public class ImageHub {
             id = context.getResources().getIdentifier("win_" + (i+1), "drawable", context.getPackageName());
             winScreenImg[i] = BitmapFactory.decodeResource(context.getResources(), id);
             winScreenImg[i] = Bitmap.createScaledBitmap(winScreenImg[i], game.screenWidth, game.screenHeight, isFilter);
+        }
+
+        for (int i = 0; i < portalImages.length; i++) {
+            id = context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName());
+            portalImages[i] = BitmapFactory.decodeResource(context.getResources(), id);
+            portalImages[i] = Bitmap.createScaledBitmap(portalImages[i], (int) (300 * game.resizeK), (int) (300 * game.resizeK), isFilter);
         }
 
         gameoverScreen = BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover);

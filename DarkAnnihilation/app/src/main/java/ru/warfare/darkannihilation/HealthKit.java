@@ -18,10 +18,10 @@ public class HealthKit extends Sprite {
 
     @Override
     public void check_intersectionPlayer() {
-        if (x + 5 < game.player.x + 10 & game.player.x + 10 < x + width - 5 &
-                y + 5 < game.player.y + 10 & game.player.y + 10 < y + height - 5 |
-                game.player.x + 10 < x + 5 & x + 5 < game.player.x + game.player.width - 10 &
-                        game.player.y + 10 < y + 5 & y + 5 < game.player.y + game.player.height - 10) {
+        if (x + 5 < game.player.x + 5 & game.player.x + 5 < x + width - 5 &
+                y + 5 < game.player.y + 5 & game.player.y + 5 < y + height - 5 |
+                game.player.x + 5 < x + 5 & x + 5 < game.player.x + game.player.width - 5 &
+                        game.player.y + 5 < y + 5 & y + 5 < game.player.y + game.player.height - 5) {
             hide();
             AudioPlayer.healSnd.start();
             if (game.player.health < 30) {

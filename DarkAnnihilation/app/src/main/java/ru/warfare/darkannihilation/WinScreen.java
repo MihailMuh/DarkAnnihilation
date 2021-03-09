@@ -2,7 +2,6 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 public class WinScreen extends Sprite {
     private int frame = 0;

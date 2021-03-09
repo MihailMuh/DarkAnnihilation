@@ -4,8 +4,8 @@ public class TripleFighter extends Sprite {
     public int X;
     public int Y;
     private double angle;
-    private static final int shootTime = 1_500;
-    private static long lastShoot;
+    private static final int shootTripleTime = 1_500;
+    private long lastShoot;
     private static long now;
 
     public TripleFighter(Game g) {
@@ -22,7 +22,7 @@ public class TripleFighter extends Sprite {
 
     public void shoot() {
         now = System.currentTimeMillis();
-        if (now - lastShoot > shootTime) {
+        if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
 
             X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;
@@ -125,13 +125,15 @@ public class TripleFighter extends Sprite {
             x += speedX;
             y += speedY;
 
-            shoot();
-
             if (x < -width | x > game.screenWidth | y > game.screenHeight) {
                 newStatus();
+            } else {
+                if (y > 0) {
+                    shoot();
+                }
             }
         } else {
-            if (game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4) {
+            if (game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4 & game.gameStatus != 6 & game.gameStatus != 7) {
                 lock = false;
             }
         }

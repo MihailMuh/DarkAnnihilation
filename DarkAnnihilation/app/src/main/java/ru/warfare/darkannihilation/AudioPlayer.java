@@ -23,6 +23,7 @@ public class AudioPlayer {
     public static MediaPlayer attentionSnd;
     public static MediaPlayer flightSnd;
     public static MediaPlayer winMusic;
+    public static MediaPlayer portalSound;
 
     private static int boomSnd;
     private static int shootSnd;
@@ -100,6 +101,10 @@ public class AudioPlayer {
         winMusic.setVolume(0.3f, 0.3f);
         winMusic.setLooping(true);
         sounds.add(winMusic);
+
+        portalSound = MediaPlayer.create(game.context.getApplicationContext(), R.raw.portal);
+        portalSound.setVolume(0.5f, 0.5f);
+        sounds.add(portalSound);
     }
 
     public static int randInt(int min, int max){
