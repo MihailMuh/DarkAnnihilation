@@ -17,6 +17,9 @@ public class Sprite {
     public int halfScreenWidth;
     public int halfScreenHeight;
     public double resizeK;
+    public int numberSmallExplosions;
+    public int numberLargeExplosions;
+    public int numberDefaultExplosions;
 
     public Sprite(Game g, int w, int h) {
         game = g;
@@ -29,6 +32,9 @@ public class Sprite {
         halfScreenWidth = game.halfScreenWidth;
         halfScreenHeight = game.halfScreenHeight;
         resizeK = game.resizeK;
+        numberDefaultExplosions = game.numberDefaultExplosions;
+        numberLargeExplosions = game.numberExplosionsAll;
+        numberSmallExplosions = game.numberSmallExplosions;
     }
 
     public void check_intersectionBullet(Bullet bullet) {}
@@ -37,6 +43,18 @@ public class Sprite {
     public void check_intersectionPlayer() {}
     public void update() {}
     public void render() {}
+
+    public void kill() {
+        if (!lock) {
+            for (int i = 0; i < numberDefaultExplosions; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(x + halfWidth, y + halfHeight);
+                    break;
+                }
+            }
+            AudioPlayer.playBoom();
+        }
+    }
 
     public static int randInt(int min, int max){
         max -= min;

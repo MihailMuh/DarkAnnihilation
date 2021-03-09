@@ -2,8 +2,6 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.Log;
 
 public class Boss extends Sprite {
     public float maxHealth;
@@ -24,7 +22,7 @@ public class Boss extends Sprite {
         maxHealth = health;
         speedY = 1;
 
-        x = game.halfScreenWidth - halfWidth;
+        x = halfScreenWidth - halfWidth;
         y = -600;
 
         lastShoot = System.currentTimeMillis();
@@ -42,8 +40,8 @@ public class Boss extends Sprite {
         }
     }
 
-    public void kill() {
-        for (int i = 40; i < 45; i++) {
+    public void killAfterFight() {
+        for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
             if (game.explosions[i].lock) {
                 game.explosions[i].start(x + halfWidth, y + halfHeight);
                 break;
@@ -71,7 +69,7 @@ public class Boss extends Sprite {
             health -= bullet.damage;
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
@@ -86,7 +84,7 @@ public class Boss extends Sprite {
             health -= bullet.damage;
             game.buckshots.remove(bullet);
             game.numberBuckshots -= 1;
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
@@ -110,7 +108,7 @@ public class Boss extends Sprite {
         }
 
         if (health <= 0) {
-            kill();
+            killAfterFight();
         }
     }
 

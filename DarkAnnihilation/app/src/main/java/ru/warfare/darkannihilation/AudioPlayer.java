@@ -20,14 +20,17 @@ public class AudioPlayer {
     public static MediaPlayer readySnd;
     public static MediaPlayer bossMusic;
     public static MediaPlayer healSnd;
-    public static int boomSnd;
-    public static int shootSnd;
-    public static int metalSnd;
-    public static int shotgunSnd;
-    public static int megaBoom;
+    public static MediaPlayer attentionSnd;
 
-    public static SoundPool soundPool;
-    public static final int MAX_STREAMS = 500000;
+    private static int boomSnd;
+    private static int shootSnd;
+    private static int metalSnd;
+    private static int shotgunSnd;
+    private static int megaBoom;
+    private static int fallingBombSnd;
+
+    private static SoundPool soundPool;
+    private static final int MAX_STREAMS = 500000;
 
     public AudioPlayer(Game g) {
         game = g;
@@ -47,6 +50,7 @@ public class AudioPlayer {
         megaBoom = soundPool.load(game.context.getApplicationContext(), R.raw.megaboom, 1);
         reloadSounds[0] = soundPool.load(game.context.getApplicationContext(), R.raw.reload0, 1);
         reloadSounds[1] = soundPool.load(game.context.getApplicationContext(), R.raw.reload1, 1);
+        fallingBombSnd = soundPool.load(game.context.getApplicationContext(), R.raw.falling_bomb, 1);
 
         menuMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.menu);
         menuMusic.setLooping(true);
@@ -81,6 +85,10 @@ public class AudioPlayer {
         healSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.heal);
         healSnd.setVolume(0.35f, 0.35f);
         sounds.add(healSnd);
+
+        attentionSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.attention);
+        attentionSnd.setVolume(0.6f, 0.6f);
+        sounds.add(attentionSnd);
     }
 
     public static int randInt(int min, int max){
@@ -117,7 +125,10 @@ public class AudioPlayer {
         soundPool.play(megaBoom, 1f, 1f, 1, 0, 1);
     }
     public static void playReload() {
-        soundPool.play(reloadSounds[randInt(0, 1)], 1f, 1f, 1, 0, 1);
+        soundPool.play(reloadSounds[randInt(0, 1)], 1f, 1f, 1, 0,1);
+    }
+    public static void playFallingBomb() {
+        soundPool.play(fallingBombSnd, 0.2f, 0.2f, 1, 0,1);
     }
 
 }

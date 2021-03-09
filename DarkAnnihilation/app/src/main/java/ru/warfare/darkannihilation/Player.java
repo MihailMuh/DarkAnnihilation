@@ -29,6 +29,13 @@ public class Player extends Sprite {
         if (ai == 0) {
             health -= dmg;
             if (health <= 0) {
+                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                        break;
+                    }
+                }
+                AudioPlayer.playMegaBoom();
                 game.vibrator.vibrate(1800);
             } else {
                 game.vibrator.vibrate(70);
@@ -54,14 +61,48 @@ public class Player extends Sprite {
         health = 50;
     }
 
-    @Override
-    public void check_intersectionBullet(BulletEnemy bulletEnemy) {
+    public void check_intersectionRocket(Rocket rocket) {
+        if (x + 5 < rocket.x & rocket.x < x + width - 5 &
+                y < rocket.y & rocket.y < y + height |
+                rocket.x < x + 5 & x + 5 < rocket.x + rocket.width &
+                        rocket.y < y & y < rocket.y + rocket.height) {
+            game.player.damage(rocket.damage);
+            for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(rocket.x + rocket.halfWidth, rocket.y + rocket.halfHeight);
+                    break;
+                }
+            }
+            AudioPlayer.playMegaBoom();
+            rocket.hide();
+        }
+    }
+
+    public void check_intersectionBullet(Bomb bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
-                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 20 |
+                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 10 |
                 bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
                         bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
             game.player.damage(bulletEnemy.damage);
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
+                    break;
+                }
+            }
+            game.bulletEnemies.remove(bulletEnemy);
+            game.numberBulletsEnemy -= 1;
+        }
+    }
+
+    @Override
+    public void check_intersectionBullet(BulletEnemy bulletEnemy) {
+        if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
+                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 10 |
+                bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
+                        bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
+            game.player.damage(bulletEnemy.damage);
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
                     break;
@@ -79,7 +120,7 @@ public class Player extends Sprite {
                 bulletEnemy.x < x + 15 & x + 15 < bulletEnemy.x + bulletEnemy.width &
                         bulletEnemy.y < y + 15 & y + 15 < bulletEnemy.y + bulletEnemy.height) {
             game.player.damage(bulletEnemy.damage);
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions + numberDefaultExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
                     break;

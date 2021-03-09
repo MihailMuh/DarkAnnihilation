@@ -32,6 +32,12 @@ public class ImageHub {
     public static Bitmap gunToShotgun;
     public static Bitmap gunToNone;
     public static Bitmap buckshotImg;
+    public static Bitmap rocketImg;
+    public static Bitmap attentionImg;
+    public static Bitmap factoryImg;
+    public static Bitmap minionImg;
+    public static Bitmap bombImg;
+    public static Bitmap demomanImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -109,7 +115,7 @@ public class ImageHub {
             explosionImageDefault[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (145 * game.resizeK), (int) (145 * game.resizeK), isFilter);
         }
         for (int i = 0; i < 28; i++) {
-            explosionImageLarge[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (300 * game.resizeK), (int) (300 * game.resizeK), isFilter);
+            explosionImageLarge[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (600 * game.resizeK), (int) (600 * game.resizeK), isFilter);
         }
         for (int i = 0; i < 28; i++) {
             explosionImageSmall[i] = Bitmap.createScaledBitmap(explosionImageSmall[i], (int) (50 * game.resizeK), (int) (50 * game.resizeK), isFilter);
@@ -180,6 +186,25 @@ public class ImageHub {
 
         buckshotImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.cannon_ball);
         buckshotImg = Bitmap.createScaledBitmap(buckshotImg, (int) (15 * game.resizeK), (int) (15 * game.resizeK), isFilter);
+
+        rocketImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.rocket);
+        rocketImg = Bitmap.createScaledBitmap(rocketImg, (int) (50 * game.resizeK), (int) (100 * game.resizeK), isFilter);
+
+        attentionImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.attention);
+        attentionImg = Bitmap.createScaledBitmap(attentionImg, (int) (70 * game.resizeK), (int) (70 * game.resizeK), isFilter);
+
+        factoryImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.factory);
+        factoryImg = Bitmap.createScaledBitmap(factoryImg, (int) ((game.screenWidth / 1.3) * game.resizeK),
+                (int) ((game.screenWidth / 1.3) * game.resizeK * 0.3), isFilter);
+
+        minionImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.minion);
+        minionImg = Bitmap.createScaledBitmap(minionImg, (int) (80 * game.resizeK), (int) (80 * game.resizeK), isFilter);
+
+        bombImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.bomb);
+        bombImg = Bitmap.createScaledBitmap(bombImg, (int) (30 * game.resizeK), (int) (70 * game.resizeK), isFilter);
+
+        demomanImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.demoman);
+        demomanImg = Bitmap.createScaledBitmap(demomanImg, (int) (290 * game.resizeK), (int) (170 * game.resizeK), isFilter);
 
     }
 }

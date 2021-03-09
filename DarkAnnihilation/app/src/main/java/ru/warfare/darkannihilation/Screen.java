@@ -9,7 +9,7 @@ public class Screen extends Sprite {
     public Screen(Game g) {
         super(g, 0, 0);
 
-        x = (int) (game.screenWidth * -0.2);
+        x = (int) (game.screenWidth * -0.25);
         y = 0;
 
     }

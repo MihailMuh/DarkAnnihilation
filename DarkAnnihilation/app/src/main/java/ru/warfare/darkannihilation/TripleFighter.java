@@ -13,7 +13,7 @@ public class TripleFighter extends Sprite {
         lock = true;
         health = 6;
 
-        x = randInt(0, 1920);
+        x = randInt(0, screenWidth);
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
@@ -39,7 +39,7 @@ public class TripleFighter extends Sprite {
             lock = true;
         }
         health = 6;
-        x = randInt(0, 1920);
+        x = randInt(0, screenWidth);
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
@@ -51,7 +51,7 @@ public class TripleFighter extends Sprite {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
@@ -60,7 +60,7 @@ public class TripleFighter extends Sprite {
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
             if (health <= 0) {
-                for (int i = 0; i < game.numberExplosions; i++) {
+                for (int i = 0; i < numberDefaultExplosions; i++) {
                     if (game.explosions[i].lock) {
                         game.explosions[i].start(x + halfWidth, y + halfHeight);
                         break;
@@ -77,7 +77,7 @@ public class TripleFighter extends Sprite {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
@@ -86,7 +86,7 @@ public class TripleFighter extends Sprite {
             game.buckshots.remove(bullet);
             game.numberBuckshots -= 1;
             if (health <= 0) {
-                for (int i = 0; i < game.numberExplosions; i++) {
+                for (int i = 0; i < numberDefaultExplosions; i++) {
                     if (game.explosions[i].lock) {
                         game.explosions[i].start(x + halfWidth, y + halfHeight);
                         break;
@@ -101,13 +101,13 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void check_intersectionPlayer() {
-        if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
-                y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
-                game.player.x + 20 < x & x < game.player.x + game.player.width - 20 &
-                        game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
+        if (x + 5 < game.player.x + 20 & game.player.x + 20 < x + width - 5 &
+                y + 5 < game.player.y + 25 & game.player.y + 25 < y + height - 5 |
+                game.player.x + 20 < x + 5 & x + 5 < game.player.x + game.player.width - 20 &
+                        game.player.y + 25 < y + 5 & y + 5 < game.player.y + game.player.height - 20) {
             AudioPlayer.playMetal();
             game.player.damage(10);
-            for (int i = 20; i < 40; i++) {
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + halfWidth, y + halfHeight);
                     break;
