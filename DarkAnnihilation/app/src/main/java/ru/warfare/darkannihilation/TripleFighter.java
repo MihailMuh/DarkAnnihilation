@@ -5,7 +5,7 @@ public class TripleFighter extends Sprite {
     public int Y;
     private double angle;
     private static final int shootTime = 1_500;
-    private long lastShoot;
+    private static long lastShoot;
     private static long now;
 
     public TripleFighter(Game g) {

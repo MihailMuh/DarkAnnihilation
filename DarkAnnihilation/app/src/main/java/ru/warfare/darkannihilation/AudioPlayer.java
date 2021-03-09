@@ -21,6 +21,8 @@ public class AudioPlayer {
     public static MediaPlayer bossMusic;
     public static MediaPlayer healSnd;
     public static MediaPlayer attentionSnd;
+    public static MediaPlayer flightSnd;
+    public static MediaPlayer winMusic;
 
     private static int boomSnd;
     private static int shootSnd;
@@ -89,6 +91,15 @@ public class AudioPlayer {
         attentionSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.attention);
         attentionSnd.setVolume(0.6f, 0.6f);
         sounds.add(attentionSnd);
+
+        flightSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.fly);
+        flightSnd.setVolume(1f, 1f);
+        sounds.add(flightSnd);
+
+        winMusic = MediaPlayer.create(game.context.getApplicationContext(), R.raw.win);
+        winMusic.setVolume(0.3f, 0.3f);
+        winMusic.setLooping(true);
+        sounds.add(winMusic);
     }
 
     public static int randInt(int min, int max){

@@ -10,7 +10,7 @@ public class Boss extends Sprite {
 
     private static final int shootTime = 500;
     private long lastShoot;
-    private static long now;
+    private long now;
 
     public Boss(Game g) {
         super(g, ImageHub.bossImage.getWidth(), ImageHub.bossImage.getHeight());
@@ -58,8 +58,10 @@ public class Boss extends Sprite {
             }
         }
         AudioPlayer.bossMusic.pause();
-        AudioPlayer.pirateMusic.start();
-        Game.lastBoss = System.currentTimeMillis();
+        AudioPlayer.winMusic.seekTo(0);
+        AudioPlayer.winMusic.start();
+        game.winScreen = new WinScreen(game);
+        game.gameStatus = 6;
     }
 
     @Override

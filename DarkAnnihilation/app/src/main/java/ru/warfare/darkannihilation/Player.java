@@ -5,7 +5,7 @@ public class Player extends Sprite {
     public int endY;
     private static final int shootTime = 110;
     private static final int shotgunTime = 535;
-    private long lastShoot;
+    private static long lastShoot;
     private static long now;
     public int ai = 1;
     public boolean dontmove = false;
