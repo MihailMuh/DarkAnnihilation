@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -14,6 +15,9 @@ import android.view.WindowManager;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
     Game game;
 
     @Override
