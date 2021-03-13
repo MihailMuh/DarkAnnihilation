@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class AudioPlayer {
     private final Game game;
 
-    public static ArrayList<MediaPlayer> sounds = new ArrayList(0);
+    public static ArrayList<MediaPlayer> sounds = new ArrayList<>(0);
     public static int[] reloadSounds = new int[2];
     public static MediaPlayer menuMusic;
     public static MediaPlayer pauseMusic;

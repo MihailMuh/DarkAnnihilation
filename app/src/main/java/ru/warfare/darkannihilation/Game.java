@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
-    public static SurfaceHolder holder;
-    public static Thread thread;
+    private static SurfaceHolder holder;
+    private static Thread thread;
     public Canvas canvas;
     public Context context;
 
@@ -173,250 +173,250 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void gameplay() {
-        timeFrame = System.nanoTime();
+        now = System.currentTimeMillis();
+        moveAll = player.speedX / 3;
 
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-            now = System.currentTimeMillis();
-
-            moveAll = player.speedX / 3;
-
-            screen.update();
-            if (screen.x < 0 & screen.x + screen.width > screenWidth) {
-                screen.x -= moveAll;
+        if (screen.x < 0 & screen.x + screen.width > screenWidth) {
+            screen.x -= moveAll;
+        } else {
+            if (screen.x >= 0) {
+                screen.x -= 10;
             } else {
-                if (screen.x >= 0) {
-                    screen.x -= 10;
-                } else {
-                    if (screen.x + screen.width <= screenWidth) {
-                        screen.x += 10;
-                    }
+                if (screen.x + screen.width <= screenWidth) {
+                    screen.x += 10;
                 }
             }
-            screen.render();
+        }
+        screen.render();
+        screen.update();
 
-            if (now - lastBoss > BOSS_TIME) {
-                lastBoss = now;
-                bosses.add(new Boss(this));
-                numberBosses += 1;
-            }
-            if (random.nextFloat() >= 0.9985 & healthKit.lock & gameStatus == 0) {
+        if (now - lastBoss > BOSS_TIME) {
+            lastBoss = now;
+            bosses.add(new Boss(this));
+            numberBosses += 1;
+        }
+        if (gameStatus == 0) {
+            if (random.nextFloat() >= 0.9985 & healthKit.lock) {
                 healthKit.lock = false;
             }
-            if (random.nextFloat() >= 0.99 & shotgunKit.lock & gameStatus == 0 & score >= 50 & !shotgunKit.picked) {
+            if (random.nextFloat() >= 0.99 & shotgunKit.lock & score >= 50 & !shotgunKit.picked) {
                 shotgunKit.lock = false;
             }
-            if (random.nextFloat() >= 0.996 & attention.lock & gameStatus == 0 & score > 50) {
+            if (random.nextFloat() >= 0.996 & attention.lock & score > 50) {
                 attention.start();
             }
-            if (random.nextFloat() >= 0.9991 & factory.lock & gameStatus == 0 & score >= 170 & numberBosses == 0) {
+            if (random.nextFloat() >= 0.9991 & factory.lock & score >= 170 & numberBosses == 0) {
                 factory.lock = false;
             }
-            if (random.nextFloat() >= 0.9979 & demoman.lock & gameStatus == 0 & score > 70) {
+            if (random.nextFloat() >= 0.9979 & demoman.lock & score > 70) {
                 demoman.lock = false;
             }
-
-            for (int i = 0; i < 150; i++) {
-                if (i < numberVaders) {
-                    Vader vader = vaders[i];
-                    for (int j = 0; j < numberBullets; j++) {
-                        vader.check_intersectionBullet(bullets.get(j));
-                    }
-                    for (int j = 0; j < numberBuckshots; j++) {
-                        vader.check_intersectionBullet(buckshots.get(j));
-                    }
-                    vader.x -= moveAll;
-                    vader.update();
-                    vader.render();
-                }
-
-                if (i < numberTripleFighters) {
-                    TripleFighter tripleFighter = tripleFighters.get(i);
-                    for (int j = 0; j < numberBullets; j++) {
-                        tripleFighter.check_intersectionBullet(bullets.get(j));
-                    }
-                    for (int j = 0; j < numberBuckshots; j++) {
-                        tripleFighter.check_intersectionBullet(buckshots.get(j));
-                    }
-                    tripleFighter.x -= moveAll;
-                    tripleFighter.update();
-                    tripleFighter.render();
-                }
-
-                if (i < numberMinions & !factory.lock) {
-                    Minion minion = minions.get(i);
-                    minion.render();
-                    minion.x -= moveAll;
-                    minion.update();
-                    for (int j = 0; j < numberBullets; j++) {
-                        minion.check_intersectionBullet(bullets.get(j));
-                    }
-                    for (int j = 0; j < numberBuckshots; j++) {
-                        minion.check_intersectionBullet(buckshots.get(j));
-                    }
-                }
-
-                if (i < numberBullets) {
-                    Bullet bullet = bullets.get(i);
-                    bullet.render();
-                    bullet.x -= moveAll;
-                    bullet.update();
-                    if (!factory.lock) {
-                        factory.check_intersectionBullet(bullet);
-                    }
-                    if (!demoman.lock) {
-                        demoman.check_intersectionBullet(bullet);
-                    }
-                }
-
-                if (i < numberBuckshots) {
-                    Buckshot buckshot = buckshots.get(i);
-                    buckshot.render();
-                    buckshot.x -= moveAll;
-                    buckshot.update();
-                    if (!factory.lock) {
-                        factory.check_intersectionBullet(buckshot);
-                    }
-                    if (!demoman.lock) {
-                        demoman.check_intersectionBullet(buckshot);
-                    }
-                }
-
-                if (i < numberBulletsEnemy) {
-                    BulletEnemy bulletEnemy = bulletEnemies.get(i);
-                    bulletEnemy.render();
-                    bulletEnemy.x -= moveAll;
-                    bulletEnemy.update();
-                }
-
-                if (i < numberBombs) {
-                    Bomb bomb = bombs.get(i);
-                    bomb.render();
-                    bomb.x -= moveAll;
-                    bomb.update();
-                }
-
-                if (i < numberBulletsBoss) {
-                    BulletBoss bulletBoss = bulletBosses.get(i);
-                    bulletBoss.render();
-                    bulletBoss.x -= moveAll;
-                    bulletBoss.update();
-                }
-
-                if (i < numberExplosionsAll) {
-                    explosions[i].x -= moveAll;
-                    explosions[i].update();
-                    explosions[i].render();
-                }
-
-                if (i < numberBosses) {
-                    Boss boss = bosses.get(i);
-                    boss.render();
-                    boss.x -= moveAll;
-                    boss.update();
-                    for (int j = 0; j < numberBullets; j++) {
-                        boss.check_intersectionBullet(bullets.get(j));
-                    }
-                    for (int j = 0; j < numberBuckshots; j++) {
-                        boss.check_intersectionBullet(buckshots.get(j));
-                    }
-                    if (boss.y == -400) {
-                        AudioPlayer.bossMusic.seekTo(0);
-                        AudioPlayer.bossMusic.start();
-                        AudioPlayer.pirateMusic.pause();
-                        gameStatus = 5;
-                    }
-                }
-            }
-
-            if (!healthKit.lock) {
-                healthKit.x -= moveAll;
-                healthKit.update();
-                healthKit.render();
-            }
-            if (!shotgunKit.lock & !shotgunKit.picked) {
-                shotgunKit.x -= moveAll;
-                shotgunKit.update();
-                shotgunKit.render();
-            }
-            if (!attention.lock) {
-                attention.x -= moveAll;
-                attention.update();
-                attention.render();
-            }
-            if (!rocket.lock) {
-                rocket.x -= moveAll;
-                rocket.update();
-                rocket.render();
-            }
-            if (!factory.lock) {
-                factory.x -= moveAll;
-                factory.update();
-                factory.render();
-            }
-            if (!demoman.lock) {
-                demoman.x -= moveAll;
-                demoman.update();
-                demoman.render();
-            }
-            if (gameStatus == 6) {
-                portal.x -= moveAll;
-                portal.update();
-                portal.render();
-            }
-
-            if (player.health <= 0) {
-                if (score > lastMax) {
-                    scoreBuilder.append(" ").append(score);
-                }
-                AudioPlayer.gameoverSnd.start();
-                gameStatus = 3;
-            }
-            player.update();
-            player.render();
-
-            pauseButton.render();
-            changerGuns.render();
-
-            if (gameStatus == 2) {
-                timerStart();
-            }
-
-            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            curScore = "Current score: " + score;
-
-            canvas.drawText("FPS: " + fps, screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
-            canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
-            holder.unlockCanvasAndPost(canvas);
         }
-        timeFrame = System.nanoTime();
+
+        for (int i = 0; i < 150; i++) {
+            if (i < numberVaders) {
+                Vader vader = vaders[i];
+                for (int j = 0; j < numberBullets; j++) {
+                    vader.check_intersectionBullet(bullets.get(j));
+                }
+                for (int j = 0; j < numberBuckshots; j++) {
+                    vader.check_intersectionBullet(buckshots.get(j));
+                }
+                vader.x -= moveAll;
+                vader.update();
+                vader.render();
+            }
+
+            if (i < numberTripleFighters) {
+                TripleFighter tripleFighter = tripleFighters.get(i);
+                for (int j = 0; j < numberBullets; j++) {
+                    tripleFighter.check_intersectionBullet(bullets.get(j));
+                }
+                for (int j = 0; j < numberBuckshots; j++) {
+                    tripleFighter.check_intersectionBullet(buckshots.get(j));
+                }
+                tripleFighter.x -= moveAll;
+                tripleFighter.update();
+                tripleFighter.render();
+            }
+
+            if (i < numberMinions & !factory.lock) {
+                Minion minion = minions.get(i);
+                minion.render();
+                minion.x -= moveAll;
+                minion.update();
+                for (int j = 0; j < numberBullets; j++) {
+                    minion.check_intersectionBullet(bullets.get(j));
+                }
+                for (int j = 0; j < numberBuckshots; j++) {
+                    minion.check_intersectionBullet(buckshots.get(j));
+                }
+            }
+
+            if (i < numberBullets) {
+                Bullet bullet = bullets.get(i);
+                bullet.render();
+                bullet.x -= moveAll;
+                bullet.update();
+                if (!factory.lock) {
+                    factory.check_intersectionBullet(bullet);
+                }
+                if (!demoman.lock) {
+                    demoman.check_intersectionBullet(bullet);
+                }
+            }
+
+            if (i < numberBuckshots) {
+                Buckshot buckshot = buckshots.get(i);
+                buckshot.render();
+                buckshot.x -= moveAll;
+                buckshot.update();
+                if (!factory.lock) {
+                    factory.check_intersectionBullet(buckshot);
+                }
+                if (!demoman.lock) {
+                    demoman.check_intersectionBullet(buckshot);
+                }
+            }
+
+            if (i < numberBulletsEnemy) {
+                BulletEnemy bulletEnemy = bulletEnemies.get(i);
+                bulletEnemy.render();
+                bulletEnemy.x -= moveAll;
+                bulletEnemy.update();
+            }
+
+            if (i < numberBombs) {
+                Bomb bomb = bombs.get(i);
+                bomb.render();
+                bomb.x -= moveAll;
+                bomb.update();
+            }
+
+            if (i < numberBulletsBoss) {
+                BulletBoss bulletBoss = bulletBosses.get(i);
+                bulletBoss.render();
+                bulletBoss.x -= moveAll;
+                bulletBoss.update();
+            }
+
+            if (i < numberExplosionsAll) {
+                explosions[i].x -= moveAll;
+                explosions[i].update();
+                explosions[i].render();
+            }
+
+            if (i < numberBosses) {
+                Boss boss = bosses.get(i);
+                boss.render();
+                boss.x -= moveAll;
+                boss.update();
+                for (int j = 0; j < numberBullets; j++) {
+                    boss.check_intersectionBullet(bullets.get(j));
+                }
+                for (int j = 0; j < numberBuckshots; j++) {
+                    boss.check_intersectionBullet(buckshots.get(j));
+                }
+                if (boss.y == -400) {
+                    AudioPlayer.bossMusic.seekTo(0);
+                    AudioPlayer.bossMusic.start();
+                    AudioPlayer.pirateMusic.pause();
+                    gameStatus = 5;
+                }
+            }
+        }
+
+        if (!healthKit.lock) {
+            healthKit.x -= moveAll;
+            healthKit.update();
+            healthKit.render();
+        }
+        if (!shotgunKit.lock & !shotgunKit.picked) {
+            shotgunKit.x -= moveAll;
+            shotgunKit.update();
+            shotgunKit.render();
+        }
+        if (!attention.lock) {
+            attention.x -= moveAll;
+            attention.update();
+            attention.render();
+        }
+        if (!rocket.lock) {
+            rocket.x -= moveAll;
+            rocket.update();
+            rocket.render();
+        }
+        if (!factory.lock) {
+            factory.x -= moveAll;
+            factory.update();
+            factory.render();
+        }
+        if (!demoman.lock) {
+            demoman.x -= moveAll;
+            demoman.update();
+            demoman.render();
+        }
+        if (gameStatus == 6) {
+            portal.x -= moveAll;
+            portal.update();
+            portal.render();
+        }
+
+        if (player.health <= 0) {
+            if (score > lastMax) {
+                scoreBuilder.append(" ").append(score);
+            }
+            AudioPlayer.gameoverSnd.start();
+            gameStatus = 3;
+        }
+        player.update();
+        player.render();
+
+        pauseButton.render();
+        changerGuns.render();
+
+        if (gameStatus == 2) {
+            timerStart();
+        }
+
+        fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        curScore = "Current score: " + score;
+
+        canvas.drawText("FPS: " + fps, screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
+        canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
     }
 
     @Override
     public void run() {
         while (playing) {
-            switch (gameStatus) {
-                case 1:
-                    preview();
-                    break;
-                case 6:
-                case 2:
-                case 0:
-                    gameplay();
-                    break;
-                case 3:
-                    gameover();
-                    break;
-                case 4:
-                    pause();
-                    break;
-                case 5:
-                    readyToFight();
-                    break;
-                case 7:
-                    win();
-                    break;
+            timeFrame = System.nanoTime();
+            if (holder.getSurface().isValid()) {
+                canvas = holder.lockCanvas();
+                switch (gameStatus) {
+                    case 1:
+                        preview();
+                        break;
+                    case 6:
+                    case 2:
+                    case 0:
+                        gameplay();
+                        break;
+                    case 3:
+                        gameover();
+                        break;
+                    case 4:
+                        pause();
+                        break;
+                    case 5:
+                        readyToFight();
+                        break;
+                    case 7:
+                        win();
+                        break;
+                }
+                holder.unlockCanvasAndPost(canvas);
             }
+            timeFrame = System.nanoTime();
         }
     }
 
@@ -659,152 +659,27 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void gameover() {
-        timeFrame = System.nanoTime();
+        screen.render(ImageHub.gameoverScreen);
 
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-
-            screen.render(ImageHub.gameoverScreen);
-
-            if (pointerCount >= 4) {
-                generateNewGame();
-            }
-            pauseButton.render();
-
-            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            curScore = "Current score: " + String.valueOf(score);
-            maxScore = "Max score: " + String.valueOf(lastMax);
-
-            canvas.drawText("Tap this screen with four or more fingers to restart",
-                    (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
-                    (float) (screenHeight * 0.7), gameoverPaint);
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
-            canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
-            canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
-
-            holder.unlockCanvasAndPost(canvas);
+        if (pointerCount >= 4) {
+            generateNewGame();
         }
-        timeFrame = System.nanoTime();
+        pauseButton.render();
+
+        fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        curScore = "Current score: " + String.valueOf(score);
+        maxScore = "Max score: " + String.valueOf(lastMax);
+
+        canvas.drawText("Tap this screen with four or more fingers to restart",
+                (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
+                (float) (screenHeight * 0.7), gameoverPaint);
+        canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
+        canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
+        canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
     }
 
     public void pause() {
-        timeFrame = System.nanoTime();
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-
-            if (player.health > 0) {
-                screen.render();
-                for (int i = 0; i < 150; i++) {
-                    if (i < numberVaders) {
-                        vaders[i].render();
-                    }
-
-                    if (i < numberTripleFighters) {
-                        tripleFighters.get(i).render();
-                    }
-
-                    if (i < numberMinions) {
-                        minions.get(i).render();
-                    }
-
-                    if (i < numberBullets) {
-                        bullets.get(i).render();
-                    }
-
-                    if (i < numberBulletsEnemy) {
-                        bulletEnemies.get(i).render();
-                    }
-
-                    if (i < numberBombs) {
-                        bombs.get(i).render();
-                    }
-
-                    if (i < numberBuckshots) {
-                        buckshots.get(i).render();
-                    }
-
-                    if (i < numberBulletsBoss) {
-                        bulletBosses.get(i).render();
-                    }
-
-                    if (i < numberExplosionsAll) {
-                        explosions[i].render();
-                    }
-
-                    if (i < numberBosses) {
-                        bosses.get(i).render();
-                    }
-                }
-                healthKit.render();
-                shotgunKit.render();
-                changerGuns.render();
-                attention.render();
-                rocket.render();
-                factory.render();
-                demoman.render();
-                player.render();
-                portal.render();
-
-                if (pauseButton.oldStatus == 2) {
-                    if (0 <= count & count < 70) {
-                        canvas.drawText("1", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                    } else {
-                        if (70 <= count & count < 140) {
-                            canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                        } else {
-                            if (140 <= count & count < 210) {
-                                canvas.drawText("3", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                            } else {
-                                if (210 <= count & count < 280) {
-                                    canvas.drawText("SHOOT!", (screenWidth - startPaint.measureText("SHOOT!")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                screen.render(ImageHub.gameoverScreen);
-                canvas.drawText("Tap this screen with four or more fingers to restart",
-                        (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
-                        (float) (screenHeight * 0.7), gameoverPaint);
-            }
-
-            buttonStart.update();
-            buttonStart.render();
-            buttonQuit.update();
-            buttonQuit.render();
-            buttonMenu.update();
-            buttonMenu.render();
-
-            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            curScore = "Current score: " + String.valueOf(score);
-            maxScore = "Max score: " + String.valueOf(lastMax);
-
-
-            canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
-            canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
-            canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
-
-            holder.unlockCanvasAndPost(canvas);
-        }
-        timeFrame = System.nanoTime();
-    }
-
-
-    public void readyToFight() {
-        timeFrame = System.nanoTime();
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-
-            if (bosses.get(bosses.size()-1).y >= -200 | pointerCount >= 4) {
-                if (portal.lock) {
-                    gameStatus = 0;
-                } else {
-                    gameStatus = 6;
-                }
-                bosses.get(bosses.size()-1).y = -200;
-            }
-
+        if (player.health > 0) {
             screen.render();
             for (int i = 0; i < 150; i++) {
                 if (i < numberVaders) {
@@ -850,38 +725,139 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             healthKit.render();
             shotgunKit.render();
             changerGuns.render();
-            shotgunKit.render();
-            changerGuns.render();
+            attention.render();
+            rocket.render();
             factory.render();
             demoman.render();
-            portal.render();
-            bosses.get(bosses.size()-1).update();
             player.render();
+            portal.render();
 
-            pauseButton.render();
-
-            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            curScore = "Current score: " + score;
-
-            canvas.drawText("FPS: " + fps, screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
-            canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
-
-            fightBg.render();
-            holder.unlockCanvasAndPost(canvas);
+            if (pauseButton.oldStatus == 2) {
+                if (0 <= count & count < 70) {
+                    canvas.drawText("1", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                } else {
+                    if (70 <= count & count < 140) {
+                        canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                    } else {
+                        if (140 <= count & count < 210) {
+                            canvas.drawText("3", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                        } else {
+                            if (210 <= count & count < 280) {
+                                canvas.drawText("SHOOT!", (screenWidth - startPaint.measureText("SHOOT!")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            screen.render(ImageHub.gameoverScreen);
+            canvas.drawText("Tap this screen with four or more fingers to restart",
+                    (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
+                    (float) (screenHeight * 0.7), gameoverPaint);
         }
-        timeFrame = System.nanoTime();
+
+        buttonStart.update();
+        buttonStart.render();
+        buttonQuit.update();
+        buttonQuit.render();
+        buttonMenu.update();
+        buttonMenu.render();
+
+        fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        curScore = "Current score: " + String.valueOf(score);
+        maxScore = "Max score: " + String.valueOf(lastMax);
+
+
+        canvas.drawText("FPS: " + String.valueOf(fps), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
+        canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
+        canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 130, scorePaint);
+    }
+
+
+    public void readyToFight() {
+        if (bosses.get(bosses.size()-1).y >= -200 | pointerCount >= 4) {
+            if (portal.lock) {
+                gameStatus = 0;
+            } else {
+                gameStatus = 6;
+            }
+            bosses.get(bosses.size()-1).y = -200;
+        }
+
+        screen.render();
+        for (int i = 0; i < 150; i++) {
+            if (i < numberVaders) {
+                vaders[i].render();
+            }
+
+            if (i < numberTripleFighters) {
+                tripleFighters.get(i).render();
+            }
+
+            if (i < numberMinions) {
+                minions.get(i).render();
+            }
+
+            if (i < numberBullets) {
+                bullets.get(i).render();
+            }
+
+            if (i < numberBulletsEnemy) {
+                bulletEnemies.get(i).render();
+            }
+
+            if (i < numberBombs) {
+                bombs.get(i).render();
+            }
+
+            if (i < numberBuckshots) {
+                buckshots.get(i).render();
+            }
+
+            if (i < numberBulletsBoss) {
+                bulletBosses.get(i).render();
+            }
+
+            if (i < numberExplosionsAll) {
+                explosions[i].render();
+            }
+
+            if (i < numberBosses) {
+                bosses.get(i).render();
+            }
+        }
+        healthKit.render();
+        shotgunKit.render();
+        changerGuns.render();
+        shotgunKit.render();
+        changerGuns.render();
+        factory.render();
+        demoman.render();
+        portal.render();
+        bosses.get(bosses.size()-1).update();
+        player.render();
+
+        pauseButton.render();
+
+        fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        curScore = "Current score: " + score;
+
+        canvas.drawText("FPS: " + fps, screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
+        canvas.drawText(curScore, halfScreenWidth - scorePaint.measureText(curScore) / 2, 50, scorePaint);
+
+        fightBg.render();
     }
 
     public void timerStart() {
         count += 1;
         if (0 <= count & count < 70) {
-            canvas.drawText("1", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+            canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
         } else {
             if (70 <= count & count < 140) {
                 canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
             } else {
                 if (140 <= count & count < 210) {
-                    canvas.drawText("3", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                    canvas.drawText("1", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
                 } else {
                     if (210 <= count & count < 280) {
                         canvas.drawText("SHOOT!", (screenWidth - startPaint.measureText("SHOOT!")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
@@ -904,62 +880,50 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void preview() {
-        timeFrame = System.nanoTime();
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-            screen.update();
-            screen.render();
+        screen.update();
+        screen.render();
 
-            player.update();
-            player.render();
+        player.update();
+        player.render();
 
-            for (int i = 0; i < 100; i++) {
-                if (i < numberVaders) {
-                    for (int j = 0; j < numberBullets; j++) {
-                        vaders[i].check_intersectionBullet(bullets.get(j));
-                    }
-                    vaders[i].update();
-                    vaders[i].render();
+        for (int i = 0; i < 100; i++) {
+            if (i < numberVaders) {
+                for (int j = 0; j < numberBullets; j++) {
+                    vaders[i].check_intersectionBullet(bullets.get(j));
                 }
-
-                if (i < numberBullets) {
-                    bullets.get(i).render();
-                    bullets.get(i).update();
-                }
-
-                if (i < numberExplosionsAll) {
-                    explosions[i].update();
-                    explosions[i].render();
-                }
+                vaders[i].update();
+                vaders[i].render();
             }
 
-            buttonStart.update();
-            buttonStart.render();
-            buttonQuit.update();
-            buttonQuit.render();
+            if (i < numberBullets) {
+                bullets.get(i).render();
+                bullets.get(i).update();
+            }
 
-            fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText("FPS: " + fps, screenWidth - 250, 50, fpsPaint);
-
-            maxScore = "Max score: " + lastMax;
-            canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 50, scorePaint);
-
-            holder.unlockCanvasAndPost(canvas);
+            if (i < numberExplosionsAll) {
+                explosions[i].update();
+                explosions[i].render();
+            }
         }
-        timeFrame = System.nanoTime();
+
+        buttonStart.update();
+        buttonStart.render();
+        buttonQuit.update();
+        buttonQuit.render();
+
+        fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        canvas.drawText("FPS: " + fps, screenWidth - 250, 50, fpsPaint);
+
+        maxScore = "Max score: " + lastMax;
+        canvas.drawText(maxScore, halfScreenWidth - scorePaint.measureText(maxScore) / 2, 50, scorePaint);
     }
 
     public void win() {
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
+        winScreen.update();
+        winScreen.render();
 
-            winScreen.update();
-            winScreen.render();
-
-            if (pointerCount >= 4) {
-                generateMenu();
-            }
-            holder.unlockCanvasAndPost(canvas);
+        if (pointerCount >= 4) {
+            generateMenu();
         }
     }
 

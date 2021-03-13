@@ -8,7 +8,7 @@ public class Boss extends Sprite {
     private static final Paint paintFill = new Paint();
     private static final Paint paintOutLine = new Paint();
 
-    private static final int shootBossTime = 500;
+    private static final int shootBossTime = 350;
     private long lastShoot;
     private long now;
 
@@ -101,7 +101,7 @@ public class Boss extends Sprite {
 
         if (y >= 50) {
             speedY = 0;
-            speedX = -5;
+            speedX = -8;
             shoot();
         }
         if (x < -width) {
