@@ -27,7 +27,7 @@ public class Player extends Sprite {
 
     public void damage(int dmg) {
         if (ai == 0) {
-//            health -= dmg;
+            health -= dmg;
             if (health <= 0) {
                 game.generateGameover();
                 for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {

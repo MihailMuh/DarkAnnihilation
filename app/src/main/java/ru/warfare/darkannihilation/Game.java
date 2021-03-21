@@ -104,6 +104,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
     private long now;
+    public long pauseTimer = 0;
 
     public static int fps;
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
@@ -205,8 +206,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             if (random.nextFloat() >= 0.996 & attention.lock & score > 50) {
                 attention.start();
             }
-            if (random.nextFloat() >= 0 & factory.lock & score >= 170 & numberBosses == 0) {
-                factory.lock = false;
+            if (random.nextFloat() >= 0.9991 & factory.lock & score >= 170 & numberBosses == 0) {
+                factory.lock = false;;
             }
             if (random.nextFloat() >= 0.9979 & demoman.lock & score > 70) {
                 demoman.lock = false;
@@ -627,6 +628,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         rocket.hide();
         factory.hide();
         demoman.hide();
+        portal.hide();
 
         int c = 370;
         for (int i = 0; i < 5; i++) {
@@ -722,12 +724,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
             healthKit.render();
             shotgunKit.render();
-            changerGuns.render();
             attention.render();
             rocket.render();
             factory.render();
             demoman.render();
             player.render();
+            changerGuns.render();
             portal.render();
 
             if (pauseButton.oldStatus == 2) {
@@ -770,6 +772,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 buttonQuit.render();
                 buttonMenu.update();
                 buttonMenu.render();
+                pauseTimer += 20;
                 break;
             case 5:
                 if (bosses.get(bosses.size()-1).y >= -200 | pointerCount >= 4) {

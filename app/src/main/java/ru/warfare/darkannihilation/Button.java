@@ -67,6 +67,8 @@ public class Button extends Sprite {
                             AudioPlayer.readySnd.start();
                         }
                         game.gameStatus = game.pauseButton.oldStatus;
+                        Game.lastBoss += game.pauseTimer;
+                        game.pauseTimer = 0;
                     } else {
                         if (function.equals("menu")) {
                             game.generateMenu();

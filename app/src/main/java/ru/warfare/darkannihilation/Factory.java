@@ -3,8 +3,10 @@ package ru.warfare.darkannihilation;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.ArrayList;
+
 public class Factory extends Sprite {
-    private static final int spawnTime = 500;
+    private static final int spawnTime = 1_000;
     private long lastSpawn;
     private long now;
 
@@ -34,6 +36,10 @@ public class Factory extends Sprite {
         y = -height;
         x = halfScreenWidth - halfWidth;
         health = (int) maxHealth;
+        game.buckshots = new ArrayList<>(0);
+        game.numberBuckshots = 0;
+        game.bullets = new ArrayList<>(0);
+        game.numberBullets = 0;
     }
 
     public void spawn() {
@@ -41,7 +47,8 @@ public class Factory extends Sprite {
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
             game.minions.add(new Minion(game, x));
-            game.numberMinions += 1;
+            game.minions.add(new Minion(game, x));
+            game.numberMinions += 2;
         }
     }
 

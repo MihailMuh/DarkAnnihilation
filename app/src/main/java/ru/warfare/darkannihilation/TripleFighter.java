@@ -121,8 +121,9 @@ public class TripleFighter extends Sprite {
     public void update() {
         if (!lock) {
             check_intersectionPlayer();
-            shoot();
-
+            if (y > 0) {
+                shoot();
+            }
             x += speedX;
             y += speedY;
 

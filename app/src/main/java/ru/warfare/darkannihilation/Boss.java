@@ -61,6 +61,8 @@ public class Boss extends Sprite {
         if (game.portal.lock) {
             game.portal.start();
         }
+        Game.lastBoss += game.pauseTimer;
+        game.pauseTimer = 0;
     }
 
     @Override
@@ -96,6 +98,7 @@ public class Boss extends Sprite {
 
     @Override
     public void update() {
+        game.pauseTimer += 20;
         x += speedX;
         y += speedY;
 
