@@ -39,30 +39,30 @@ public class Minion extends Sprite {
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
+            AudioPlayer.playBoom();
+            game.minions.remove(this);
+            game.numberMinions -= 1;
             for (int i = 0; i < numberDefaultExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + halfWidth, y + halfHeight);
                     break;
                 }
             }
-            AudioPlayer.playBoom();
-            game.minions.remove(this);
-            game.numberMinions -= 1;
         }
     }
 
     public void check_intersectionBullet(Buckshot bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
+            AudioPlayer.playBoom();
+            game.minions.remove(this);
+            game.numberMinions -= 1;
             for (int i = 0; i < numberDefaultExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(x + halfWidth, y + halfHeight);
                     break;
                 }
             }
-            AudioPlayer.playBoom();
-            game.minions.remove(this);
-            game.numberMinions -= 1;
         }
     }
 
@@ -73,6 +73,8 @@ public class Minion extends Sprite {
                 game.player.x + 20 < x + 15 & x + 15 < game.player.x + game.player.width - 20 &
                         game.player.y + 25 < y + 15 & y + 15 < game.player.y + game.player.height - 20) {
             AudioPlayer.playMetal();
+            game.minions.remove(this);
+            game.numberMinions -= 1;
             game.player.damage(5);
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
@@ -80,8 +82,6 @@ public class Minion extends Sprite {
                     break;
                 }
             }
-            game.minions.remove(this);
-            game.numberMinions -= 1;
         }
     }
 

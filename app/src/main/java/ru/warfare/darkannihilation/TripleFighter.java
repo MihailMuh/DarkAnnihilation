@@ -121,16 +121,13 @@ public class TripleFighter extends Sprite {
     public void update() {
         if (!lock) {
             check_intersectionPlayer();
+            shoot();
 
             x += speedX;
             y += speedY;
 
-            if (x < -width | x > game.screenWidth | y > game.screenHeight) {
+            if (x < -width | x > screenWidth | y > screenHeight) {
                 newStatus();
-            } else {
-                if (y > 0) {
-                    shoot();
-                }
             }
         } else {
             if (game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4 & game.gameStatus != 6 & game.gameStatus != 7) {

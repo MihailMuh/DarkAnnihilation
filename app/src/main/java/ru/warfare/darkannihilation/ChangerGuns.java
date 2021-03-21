@@ -40,25 +40,27 @@ public class ChangerGuns extends Sprite {
     }
 
     public void setCoords(int X, int Y) {
-        mouseX = X;
-        mouseY = Y;
-        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-            game.player.dontmove = true;
-            now = System.currentTimeMillis();
-            if (now - lastShoot > clickTime) {
-                lastShoot = now;
-                mouseX = 0;
-                mouseY = 0;
-                if (!game.shotgunKit.picked) {
-                    image = ImageHub.gunToNone;
-                } else {
-                    AudioPlayer.playReload();
-                    if (game.player.gun.equals("shotgun")) {
-                        game.player.gun = "gun";
-                        image = ImageHub.gunToShotgun;
+        if (game.gameStatus == 0 | game.gameStatus == 6) {
+            mouseX = X;
+            mouseY = Y;
+            if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
+                game.player.dontmove = true;
+                now = System.currentTimeMillis();
+                if (now - lastShoot > clickTime) {
+                    lastShoot = now;
+                    mouseX = 0;
+                    mouseY = 0;
+                    if (!game.shotgunKit.picked) {
+                        image = ImageHub.gunToNone;
                     } else {
-                        game.player.gun = "shotgun";
-                        image = ImageHub.shotgunToGun;
+                        AudioPlayer.playReload();
+                        if (game.player.gun.equals("shotgun")) {
+                            game.player.gun = "gun";
+                            image = ImageHub.gunToShotgun;
+                        } else {
+                            game.player.gun = "shotgun";
+                            image = ImageHub.shotgunToGun;
+                        }
                     }
                 }
             }
@@ -66,24 +68,26 @@ public class ChangerGuns extends Sprite {
     }
 
     public void setCoords(int X, int Y, int count) {
-        mouseX = X;
-        mouseY = Y;
-        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-            now = System.currentTimeMillis();
-            if (now - lastShoot > clickTime) {
-                lastShoot = now;
-                mouseX = 0;
-                mouseY = 0;
-                if (!game.shotgunKit.picked) {
-                    image = ImageHub.gunToNone;
-                } else {
-                    AudioPlayer.playReload();
-                    if (game.player.gun.equals("shotgun")) {
-                        game.player.gun = "gun";
-                        image = ImageHub.gunToShotgun;
+        if (game.gameStatus == 0 | game.gameStatus == 6) {
+            mouseX = X;
+            mouseY = Y;
+            if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
+                now = System.currentTimeMillis();
+                if (now - lastShoot > clickTime) {
+                    lastShoot = now;
+                    mouseX = 0;
+                    mouseY = 0;
+                    if (!game.shotgunKit.picked) {
+                        image = ImageHub.gunToNone;
                     } else {
-                        game.player.gun = "shotgun";
-                        image = ImageHub.shotgunToGun;
+                        AudioPlayer.playReload();
+                        if (game.player.gun.equals("shotgun")) {
+                            game.player.gun = "gun";
+                            image = ImageHub.gunToShotgun;
+                        } else {
+                            game.player.gun = "shotgun";
+                            image = ImageHub.shotgunToGun;
+                        }
                     }
                 }
             }

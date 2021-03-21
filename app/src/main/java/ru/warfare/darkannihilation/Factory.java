@@ -2,12 +2,9 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
-
-import java.util.ArrayList;
 
 public class Factory extends Sprite {
-    private static final int spawnTime = 1_000;
+    private static final int spawnTime = 500;
     private long lastSpawn;
     private long now;
 
@@ -35,19 +32,16 @@ public class Factory extends Sprite {
     public void hide() {
         lock = true;
         y = -height;
-        speedY = 3;
+        x = halfScreenWidth - halfWidth;
         health = (int) maxHealth;
-        game.minions = new ArrayList<>(0);
-        game.numberMinions = 0;
     }
 
-    public void shoot() {
+    public void spawn() {
         now = System.currentTimeMillis();
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
             game.minions.add(new Minion(game, x));
-            game.minions.add(new Minion(game, x));
-            game.numberMinions += 2;
+            game.numberMinions += 1;
         }
     }
 
@@ -56,14 +50,25 @@ public class Factory extends Sprite {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
             health -= bullet.damage;
+            game.bullets.remove(bullet);
+            game.numberBullets -= 1;
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
                 }
             }
-            game.bullets.remove(bullet);
-            game.numberBullets -= 1;
+            if (health <= 0) {
+                AudioPlayer.playMegaBoom();
+                game.score += 75;
+                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                        break;
+                    }
+                }
+                hide();
+            }
         }
     }
 
@@ -71,36 +76,34 @@ public class Factory extends Sprite {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
             health -= bullet.damage;
+            game.buckshots.remove(bullet);
+            game.numberBuckshots -= 1;
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
                     break;
                 }
             }
-            game.buckshots.remove(bullet);
-            game.numberBuckshots -= 1;
+            if (health <= 0) {
+                AudioPlayer.playMegaBoom();
+                game.score += 75;
+                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                        break;
+                    }
+                }
+                hide();
+            }
         }
     }
 
     @Override
     public void update() {
-        y += speedY;
-
-        if (y >= 0) {
-            speedY = 0;
-            shoot();
-        }
-
-        if (health <= 0) {
-            AudioPlayer.playMegaBoom();
-            game.score += 75;
-            for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-            hide();
+        if (y < 0) {
+            y += speedY;
+        } else {
+            spawn();
         }
     }
 

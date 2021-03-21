@@ -12,8 +12,6 @@ public class Buckshot extends Sprite {
 
         speedX = speed;
         speedY = 8;
-
-//        Log.e("shoot", "" + speedX + " " + x + " " + (game.player.x + game.player.halfWidth));
     }
 
     @Override
@@ -21,7 +19,7 @@ public class Buckshot extends Sprite {
         y -= speedY;
         x += speedX;
 
-        if (y < -height) {
+        if (y < -height | x < -width | x > screenWidth) {
             game.buckshots.remove(this);
             game.numberBuckshots -= 1;
         }

@@ -9,6 +9,8 @@ public class Bomb extends Sprite {
 
         x = X;
         y = Y;
+
+        AudioPlayer.playFallingBomb();
     }
 
     @Override

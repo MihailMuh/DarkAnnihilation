@@ -20,10 +20,10 @@ public class Demoman extends Sprite {
         y = randInt(0, halfScreenHeight - health);
         direction = randInt(0, 1);
         if (direction == 0) {
-            x = -width * 2;
+            x = -width;
             speedX = randInt(5, 10);
         } else {
-            x = screenWidth + width * 2;
+            x = screenWidth;
             speedX = randInt(-10, -5);
         }
     }
@@ -35,7 +35,6 @@ public class Demoman extends Sprite {
             lastShoot = now;
             game.bombs.add(new Bomb(game, x + halfWidth, y + halfHeight));
             game.numberBombs += 1;
-            AudioPlayer.playFallingBomb();
         }
     }
 
@@ -85,10 +84,9 @@ public class Demoman extends Sprite {
     @Override
     public void update() {
         check_intersectionPlayer();
+        shoot();
 
         x += speedX;
-
-        shoot();
 
         if (health <= 0) {
             for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
@@ -103,16 +101,10 @@ public class Demoman extends Sprite {
         }
 
         if (direction == 0) {
-            if (x > halfWidth) {
-                shoot();
-            }
             if (x > game.screenWidth) {
                 hide();
             }
         } else {
-            if (x < screenWidth - width - halfWidth) {
-                shoot();
-            }
             if (x < -width) {
                 hide();
             }

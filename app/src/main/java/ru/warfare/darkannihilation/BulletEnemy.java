@@ -9,7 +9,6 @@ public class BulletEnemy extends Sprite {
 
     public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
         super(g, ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
-        AudioPlayer.playShotgun();
 
         speedX = spdx;
         speedY = spdy;
@@ -21,6 +20,7 @@ public class BulletEnemy extends Sprite {
 
         x = X;
         y = Y;
+        AudioPlayer.playShotgun();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BulletEnemy extends Sprite {
 
         game.player.check_intersectionBullet(this);
 
-        if (y > screenHeight | x < -100 | x > screenWidth | y < -height) {
+        if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
             game.bulletEnemies.remove(this);
             game.numberBulletsEnemy -= 1;
         }

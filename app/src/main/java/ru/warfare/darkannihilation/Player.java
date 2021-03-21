@@ -27,8 +27,9 @@ public class Player extends Sprite {
 
     public void damage(int dmg) {
         if (ai == 0) {
-            health -= dmg;
+//            health -= dmg;
             if (health <= 0) {
+                game.generateGameover();
                 for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
                     if (game.explosions[i].lock) {
                         game.explosions[i].start(x + halfWidth, y + halfHeight);
@@ -59,6 +60,32 @@ public class Player extends Sprite {
         y = game.halfScreenHeight;
         lock = true;
         health = 50;
+    }
+
+    private void shoot() {
+        if (!lock) {
+            now = System.currentTimeMillis();
+            if (gun.equals("shotgun")) {
+                if (now - lastShoot > shotgunTime) {
+                    lastShoot = now;
+                    AudioPlayer.playShotgun();
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -5));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -2));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 0));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 2));
+                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 5));
+                    game.numberBuckshots += 5;
+                }
+            } else {
+                if (now - lastShoot > shootTime) {
+                    lastShoot = now;
+                    AudioPlayer.playShoot();
+                    game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
+                    game.bullets.add(new Bullet(game, x + halfWidth, y));
+                    game.numberBullets += 2;
+                }
+            }
+        }
     }
 
     public void check_intersectionRocket(Rocket rocket) {
@@ -133,29 +160,7 @@ public class Player extends Sprite {
 
     @Override
     public void update() {
-        if (!lock) {
-            now = System.currentTimeMillis();
-            if (gun.equals("gun")) {
-                if (now - lastShoot > shootTime) {
-                    lastShoot = now;
-                    AudioPlayer.playShoot();
-                    game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
-                    game.bullets.add(new Bullet(game, x + halfWidth, y));
-                    game.numberBullets += 2;
-                }
-            } else {
-                if (now - lastShoot > shotgunTime) {
-                    lastShoot = now;
-                    AudioPlayer.playShotgun();
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -5));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -2));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 0));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 2));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 5));
-                    game.numberBuckshots += 5;
-                }
-            }
-        }
+        shoot();
 
         x += speedX;
         y += speedY;

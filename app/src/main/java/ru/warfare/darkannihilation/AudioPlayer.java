@@ -86,7 +86,7 @@ public class AudioPlayer {
         sounds.add(bossMusic);
 
         healSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.heal);
-        healSnd.setVolume(0.35f, 0.35f);
+        healSnd.setVolume(0.7f, 0.7f);
         sounds.add(healSnd);
 
         attentionSnd = MediaPlayer.create(game.context.getApplicationContext(), R.raw.attention);
