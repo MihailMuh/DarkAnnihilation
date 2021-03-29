@@ -36,10 +36,6 @@ public class Factory extends Sprite {
         y = -height;
         x = halfScreenWidth - halfWidth;
         health = (int) maxHealth;
-        game.buckshots = new ArrayList<>(0);
-        game.numberBuckshots = 0;
-        game.bullets = new ArrayList<>(0);
-        game.numberBullets = 0;
     }
 
     public void spawn() {
@@ -50,6 +46,14 @@ public class Factory extends Sprite {
             game.minions.add(new Minion(game, x));
             game.numberMinions += 2;
         }
+    }
+
+    public void start() {
+        lock = false;
+        game.buckshots = new ArrayList<>(0);
+        game.numberBuckshots = 0;
+        game.bullets = new ArrayList<>(0);
+        game.numberBullets = 0;
     }
 
     @Override

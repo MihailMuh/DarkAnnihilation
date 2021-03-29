@@ -72,6 +72,10 @@ public class Button extends Sprite {
                     } else {
                         if (function.equals("menu")) {
                             game.generateMenu();
+                        } else {
+                            if (function.equals("top")) {
+                                game.generateTopScore();
+                            }
                         }
                     }
                 }
