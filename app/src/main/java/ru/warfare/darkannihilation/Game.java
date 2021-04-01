@@ -493,7 +493,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         try {
             thread.join();
         } catch (Exception e) {
-            Log.e("Error ", "Thread join " + e);
+            Log.e(MainActivity.TAG, "Thread join " + e);
         }
     }
 
@@ -898,7 +898,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText("FPS: " + fps, screenWidth - 250, 50, fpsPaint);
         } catch (Exception e) {
-            Log.e("Error", "" + e);
+            Log.e(MainActivity.TAG, "" + e);
         }
     }
 
@@ -924,7 +924,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 writer_str.write(scoreBuilder.toString());
                 writer_str.close();
             } catch (Exception e) {
-                Log.e("Error ", "Can't save SCORE " + e);
+                Log.e(MainActivity.TAG, "Can't save SCORE " + e);
             }
         }
     }
@@ -949,7 +949,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             reader_cooler.close();
         } catch (IOException e) {
-            Log.e("Error ", "Can't recovery SCORE: " + e);
+            Log.e(MainActivity.TAG, "Can't recovery SCORE: " + e);
         }
     }
 }
