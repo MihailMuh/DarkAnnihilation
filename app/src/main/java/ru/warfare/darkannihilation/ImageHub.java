@@ -43,6 +43,7 @@ public class ImageHub {
     public static Bitmap minionImg;
     public static Bitmap bombImg;
     public static Bitmap demomanImg;
+    public static Bitmap buttonPlayerImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -156,6 +157,9 @@ public class ImageHub {
 
         demomanImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.demoman);
         demomanImg = Bitmap.createScaledBitmap(demomanImg, (int) (290 * game.resizeK), (int) (170 * game.resizeK), isFilter);
+
+        buttonPlayerImg = BitmapFactory.decodeResource(game.context.getResources(), R.drawable.ship_button);
+        buttonPlayerImg = Bitmap.createScaledBitmap(buttonPlayerImg, (int) (100 * game.resizeK), (int) (120 * game.resizeK), isFilter);
 
     }
 }

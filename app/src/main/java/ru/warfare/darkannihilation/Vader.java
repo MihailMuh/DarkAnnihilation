@@ -64,27 +64,9 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public void check_intersectionPlayer() {
-        if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
-                y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
-                game.player.x + 20 < x + 15 & x + 15 < game.player.x + game.player.width - 20 &
-                        game.player.y + 25 < y + 15 & y + 15 < game.player.y + game.player.height - 20) {
-            AudioPlayer.playMetal();
-            game.player.damage(5);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-            newStatus();
-        }
-    }
-
-    @Override
     public void update() {
         if (!lock) {
-            check_intersectionPlayer();
+            game.player.check_intersectionVader(this);
 
             x += speedX;
             y += speedY;

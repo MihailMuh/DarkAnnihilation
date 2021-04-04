@@ -14,7 +14,6 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
-    private static SurfaceHolder holder;
-    private static Thread thread;
+    private final SurfaceHolder holder;
+    private Thread thread;
     public Canvas canvas;
     public Context context;
 
@@ -78,6 +77,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Demoman demoman;
     public WinScreen winScreen;
     public Portal portal;
+    public ButtonPlayer buttonPlayer;
+    public HardWorker hardWorker;
 
     public int numberVaders = vaders.length;
     public int numberLargeExplosions = 5;
@@ -105,6 +106,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public String curScore = "";
     public String maxScore = "";
     public volatile boolean playing = false;
+    public static String character = "ship";
 
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
@@ -131,6 +133,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         imageHub = new ImageHub(this);
         audioPlayer = new AudioPlayer(this);
+        hardWorker = new HardWorker(this);
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -177,6 +180,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         factory = new Factory(this);
         demoman = new Demoman(this);
         portal = new Portal(this);
+        buttonPlayer = new ButtonPlayer(this);
 
         AudioPlayer.menuMusic.start();
     }
@@ -445,11 +449,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (gameStatus != 7) {
                         buttonStart.mouseX = clickX;
                         buttonStart.mouseY = clickY;
-                        buttonQuit.mouseX = clickX;
-                        buttonQuit.mouseY = clickY;
-                        buttonMenu.mouseX = clickX;
-                        buttonMenu.mouseY = clickY;
+                        if (gameStatus != 2) {
+                            buttonQuit.mouseX = clickX;
+                            buttonQuit.mouseY = clickY;
+                            buttonMenu.mouseX = clickX;
+                            buttonMenu.mouseY = clickY;
+                        }
                         pauseButton.setCoords(clickX, clickY);
+                    }
+                    if (gameStatus == 1) {
+                        buttonPlayer.setCoords(clickX, clickY);
                     }
                     changerGuns.setCoords(clickX, clickY);
                     break;
@@ -471,6 +480,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void onPause() {
+        hardWorker.workOnPause();
         playing = false;
         if (gameStatus == 1) {
             AudioPlayer.menuMusic.pause();
@@ -498,6 +508,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void onResume() {
+        hardWorker.workOnResume();
         checkMaxScore();
         thread = new Thread(this);
         thread.start();
@@ -650,6 +661,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         factory.hide();
         demoman.hide();
         portal.hide();
+        buttonPlayer.hide();
 
         int c = 370;
         for (int i = 0; i < 5; i++) {
@@ -665,6 +677,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             vaders[i] = new Vader(this);
             vaders[i].lock = true;
         }
+//        for (int i = 0; i < 6; i++) {
+//            tripleFighters.add(new TripleFighter(this));
+//        }
         numberTripleFighters = tripleFighters.size();
 
         if (AudioPlayer.menuMusic.isPlaying()) {
@@ -874,6 +889,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonQuit.render();
         buttonMenu.update();
         buttonMenu.render();
+        buttonPlayer.render();
 
         fps = (int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
         canvas.drawText("FPS: " + fps, screenWidth - 250, 50, fpsPaint);
@@ -914,9 +930,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void saveScore() {
         if (scoreBuilder.length() > 0) {
             try {
-                jsonScore = new JSONObject();
-                jsonScore.put(MainActivity.nickname, score);
-                MainActivity.postScore(jsonScore.toString());
+                if (score > lastMax) {
+                    jsonScore = new JSONObject();
+                    jsonScore.put(MainActivity.nickname, score);
+                    MainActivity.postScore(jsonScore.toString());
+                }
 
                 FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
                 OutputStreamWriter writer_str = new OutputStreamWriter(writer);

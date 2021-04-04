@@ -14,6 +14,7 @@ public class Bullet extends Sprite {
     @Override
     public void update() {
         y -= speedY;
+
         if (y < -50) {
             game.bullets.remove(this);
             game.numberBullets -= 1;
