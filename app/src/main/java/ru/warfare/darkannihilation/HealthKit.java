@@ -19,10 +19,7 @@ public class HealthKit extends Sprite {
     @Override
     public void update() {
         y += speedY;
-<<<<<<< HEAD
-=======
-        game.player.check_intersectionHealthKit(this);
->>>>>>> 3dbe4906d883a868d20d3cf9308dbfca612e674e
+
         if (y > screenHeight) {
             hide();
         }

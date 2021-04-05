@@ -920,14 +920,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonMenu.update();
         buttonMenu.render();
         buttonPlayer.render();
-<<<<<<< HEAD
 
         textBuilder.append("Max score: ").append(lastMax);
         canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
 
         textBuilder.setLength(0);
-=======
->>>>>>> 3dbe4906d883a868d20d3cf9308dbfca612e674e
 
         textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
         canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
