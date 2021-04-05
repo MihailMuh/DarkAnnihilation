@@ -63,6 +63,11 @@ public class Minion extends Sprite {
 
     @Override
     public void update() {
+<<<<<<< HEAD
+=======
+        game.player.check_intersectionMinion(this);
+
+>>>>>>> 3dbe4906d883a868d20d3cf9308dbfca612e674e
         x += speedX;
         y += speedY;
 
