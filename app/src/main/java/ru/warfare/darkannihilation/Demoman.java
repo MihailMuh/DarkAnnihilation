@@ -70,20 +70,7 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void check_intersectionPlayer() {
-        if (x + 30 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
-                y < game.player.y + 25 & game.player.y + 25 < y + height - 50 |
-                game.player.x + 20 < x + 30 & x + 30 < game.player.x + game.player.width - 20 &
-                        game.player.y + 25 < y & y < game.player.y + game.player.height - 20) {
-            AudioPlayer.playMetal();
-            game.player.damage(20);
-            health = 0;
-        }
-    }
-
-    @Override
     public void update() {
-        check_intersectionPlayer();
         shoot();
 
         x += speedX;

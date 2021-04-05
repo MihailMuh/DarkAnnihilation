@@ -88,6 +88,113 @@ public class Player extends Sprite {
         }
     }
 
+    public void check_intersectionVader(Vader vader) {
+        if (vader.x + 15 < x + 20 & x + 20 < vader.x + vader.width - 15 &
+                vader.y + 15 < y + 25 & y + 25 < vader.y + vader.height - 15 |
+                x + 20 < vader.x + 15 & vader.x + 15 < x + width - 20 &
+                        y + 25 < vader.y + 15 & vader.y + 15 < y + height - 20) {
+            AudioPlayer.playMetal();
+            damage(5);
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(vader.x + vader.halfWidth, vader.y + vader.halfHeight);
+                    break;
+                }
+            }
+            vader.newStatus();
+        }
+    }
+
+    public void check_intersectionTripleFighter(TripleFighter tripleFighter) {
+        if (tripleFighter.x + 5 < x + 20 & x + 20 < tripleFighter.x + tripleFighter.width - 5 &
+                tripleFighter.y + 5 < y + 25 & y + 25 < tripleFighter.y + tripleFighter.height - 5 |
+                x + 20 < tripleFighter.x + 5 & tripleFighter.x + 5 < x + width - 20 &
+                        y + 25 < tripleFighter.y + 5 & tripleFighter.y + 5 < y + height - 20) {
+            AudioPlayer.playMetal();
+            damage(10);
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(tripleFighter.x + tripleFighter.halfWidth,
+                            tripleFighter.y + tripleFighter.halfHeight);
+                    break;
+                }
+            }
+            tripleFighter.newStatus();
+        }
+    }
+
+    public void check_intersectionPortal(Portal portal) {
+        if (portal.x + 15 < x + 20 & x + 20 < portal.x + portal.width - 15 &
+                portal.y + 15 < y + 25 & y + 25 < portal.y + portal.height - 15 |
+                x + 20 < portal.x + 15 & portal.x + 15 < x + width - 20 &
+                        y + 25 < portal.y + 15 & portal.y + 15 < y + height - 20) {
+            game.gameStatus = 7;
+            AudioPlayer.portalSound.pause();
+            if (AudioPlayer.bossMusic.isPlaying()) {
+                AudioPlayer.bossMusic.pause();
+            }
+            AudioPlayer.winMusic.seekTo(0);
+            AudioPlayer.winMusic.start();
+            game.winScreen = new WinScreen(game);
+            portal.hide();
+        }
+    }
+
+    public void check_intersectionMinion(Minion minion) {
+        if (minion.x + 15 < x + 20 & x + 20 < minion.x + minion.width - 15 &
+                minion.y + 15 < y + 25 & y + 25 < minion.y + minion.height - 15 |
+                x + 20 < minion.x + 15 & minion.x + 15 < x + width - 20 &
+                        y + 25 < minion.y + 15 & minion.y + 15 < y + height - 20) {
+            AudioPlayer.playMetal();
+            game.minions.remove(minion);
+            game.numberMinions -= 1;
+            damage(5);
+            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
+                if (game.explosions[i].lock) {
+                    game.explosions[i].start(minion.x + minion.halfWidth, minion.y + minion.halfHeight);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void check_intersectionDemoman(Demoman demoman) {
+        if (demoman.x + 30 < x + 20 & x + 20 < demoman.x + demoman.width - 15 &
+                demoman.y < y + 25 & y + 25 < demoman.y + demoman.height - 50 |
+                x + 20 < demoman.x + 30 & demoman.x + 30 < x + width - 20 &
+                        y + 25 < demoman.y & demoman.y < y + height - 20) {
+            AudioPlayer.playMetal();
+            damage(20);
+            demoman.health = 0;
+        }
+    }
+
+    public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {
+        if (shotgunKit.x + 5 < x + 10 & x + 10 < shotgunKit.x + shotgunKit.width - 5 &
+                shotgunKit.y + 5 < y + 10 & y + 10 < shotgunKit.y + shotgunKit.height - 5 |
+                x + 10 < shotgunKit.x + 5 & shotgunKit.x + 5 < x + width - 10 &
+                        y + 10 < shotgunKit.y + 5 & shotgunKit.y + 5 < y + height - 10) {
+            shotgunKit.hide();
+            shotgunKit.picked = true;
+            game.changerGuns.setCoords(game.changerGuns.x + 50, game.changerGuns.y + 50, 2);
+        }
+    }
+
+    public void check_intersectionHealthKit(HealthKit healthKit) {
+        if (healthKit.x + 5 < x + 5 & x + 5 < healthKit.x + healthKit.width - 5 &
+                healthKit.y + 5 < y + 5 & y + 5 < healthKit.y + healthKit.height - 5 |
+                x + 5 < healthKit.x + 5 & healthKit.x + 5 < x + width - 5 &
+                        y + 5 < healthKit.y + 5 & healthKit.y + 5 < y + height - 5) {
+            healthKit.hide();
+            AudioPlayer.healSnd.start();
+            if (health < 30) {
+                health += 20;
+            } else {
+                health = 50;
+            }
+        }
+    }
+
     public void check_intersectionRocket(Rocket rocket) {
         if (x + 5 < rocket.x & rocket.x < x + width - 5 &
                 y < rocket.y & rocket.y < y + height |

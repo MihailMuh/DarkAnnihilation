@@ -25,8 +25,6 @@ public class Rocket extends Sprite{
     public void update() {
         y += speedY;
 
-        game.player.check_intersectionRocket(this);
-
         if (y > screenHeight) {
             hide();
         }

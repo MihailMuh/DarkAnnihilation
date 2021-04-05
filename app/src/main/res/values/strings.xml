@@ -2,4 +2,5 @@
     <string name="app_name">Dark Annihilation</string>
     <string name="apply">Apply</string>
     <string name="enter_your_nickname">Enter your nickname</string>
+    <string name="warning_text">Please, enable the internet connection and re-enter the game to register there!</string>
 </resources>

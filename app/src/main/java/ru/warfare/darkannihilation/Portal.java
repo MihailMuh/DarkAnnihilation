@@ -34,27 +34,7 @@ public class Portal extends Sprite {
     }
 
     @Override
-    public void check_intersectionPlayer() {
-        if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
-                y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
-                game.player.x + 20 < x + 15 & x + 15 < game.player.x + game.player.width - 20 &
-                        game.player.y + 25 < y + 15 & y + 15 < game.player.y + game.player.height - 20) {
-            game.gameStatus = 7;
-            AudioPlayer.portalSound.pause();
-            if (AudioPlayer.bossMusic.isPlaying()) {
-                AudioPlayer.bossMusic.pause();
-            }
-            AudioPlayer.winMusic.seekTo(0);
-            AudioPlayer.winMusic.start();
-            game.winScreen = new WinScreen(game);
-            hide();
-        }
-    }
-
-    @Override
     public void update() {
-        check_intersectionPlayer();
-
         now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -43,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
     Game game;
-    final Context context = this;
+    private final Context context = this;
     public static Request request;
-    public static OkHttpClient client = new OkHttpClient();;
+    public static OkHttpClient client = new OkHttpClient();
     public static JSONObject json = new JSONObject();
     public static JSONArray names;
     public static SharedPreferences preferences = null;
     public static String nickname = "";
     public static String TAG = "myLog";
-    public static String IP = "http://192.168.31.108:8000/";
+    public static String IP = "http://78.29.33.173:49150/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        preferences = getSharedPreferences("ru.warfare.darkannihilation", MODE_PRIVATE);
-
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
@@ -88,61 +89,7 @@ public class MainActivity extends AppCompatActivity {
         game = findViewById(R.id.gameView);
         game.initGame(size.x, size.y);
 
-        if (preferences.getBoolean("firstrun", true)) {
-            LayoutInflater li = LayoutInflater.from(context);
-            View promptsView = li.inflate(R.layout.dialog, null);
-
-            AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
-
-            mDialogBuilder.setView(promptsView);
-
-            final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
-
-            mDialogBuilder
-                    .setCancelable(false)
-                    .setPositiveButton("Apply", null);
-
-            AlertDialog alertDialog = mDialogBuilder.create();
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                    button.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View view) {
-                            nickname = userInput.getText().toString();
-                            if (nickname.length() == 0) {
-                                Toast toast = Toast.makeText(context, "Nickname must be notnull!", Toast.LENGTH_LONG);
-                                toast.show();
-                            } else {
-                                if (json.has(nickname)) {
-                                    Toast toast = Toast.makeText(context, "This nickname already exists", Toast.LENGTH_LONG);
-                                    toast.show();
-                                } else {
-                                    try {
-                                        saveNickname();
-                                        JSONObject jsonScore = new JSONObject();
-                                        jsonScore.put(nickname, 0);
-                                        postScore(jsonScore.toString());
-                                        Toast toast = Toast.makeText(context, "Congratulations! You have registered!", Toast.LENGTH_LONG);
-                                        toast.show();
-                                        dialog.dismiss();
-                                    } catch (Exception e) {
-                                        Log.e(TAG, "" + e);
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-            alertDialog.show();
-
-            preferences.edit().putBoolean("firstrun", false).apply();
-        } else {
-            loadNickname();
-        }
+        checkOnFirstRun();
     }
 
     @Override
@@ -238,10 +185,97 @@ public class MainActivity extends AppCompatActivity {
             reader_cooler.close();
 
             nickname = builder.toString();
-            Log.e(TAG, nickname);
 
         } catch (IOException e) {
             Log.e(MainActivity.TAG, "Can't recovery NICKNAME: " + e);
+        }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
+
+    private void checkOnFirstRun() {
+        preferences = getSharedPreferences("ru.warfare.darkannihilation", MODE_PRIVATE);
+
+        if (preferences.getBoolean("firstrun", true)) {
+            if (isOnline()) {
+                LayoutInflater li = LayoutInflater.from(context);
+                View promptsView = li.inflate(R.layout.dialog, null);
+
+                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+
+                mDialogBuilder.setView(promptsView);
+
+                final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
+
+                mDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("Apply", null);
+
+                AlertDialog alertDialog = mDialogBuilder.create();
+                alertDialog.setOnShowListener(dialog -> {
+                    Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(view -> {
+                        nickname = userInput.getText().toString();
+                        if (nickname.length() == 0) {
+                            Toast toast = Toast.makeText(context, "Nickname must be notnull!", Toast.LENGTH_LONG);
+                            toast.show();
+                        } else {
+                            if (json.has(nickname)) {
+                                Toast toast = Toast.makeText(context, "This nickname already exists", Toast.LENGTH_LONG);
+                                toast.show();
+                            } else {
+                                try {
+                                    preferences.edit().putBoolean("firstrun", false).apply();
+                                    saveNickname();
+                                    JSONObject jsonScore = new JSONObject();
+                                    jsonScore.put(nickname, 0);
+                                    postScore(jsonScore.toString());
+                                    Toast toast = Toast.makeText(context, "Congratulations! You have registered!", Toast.LENGTH_LONG);
+                                    toast.show();
+                                    dialog.dismiss();
+                                } catch (Exception e) {
+                                    Log.e(TAG, "" + e);
+                                }
+                            }
+                        }
+                    });
+                });
+                alertDialog.show();
+            } else {
+                LayoutInflater li = LayoutInflater.from(context);
+                View promptsView = li.inflate(R.layout.warning, null);
+
+                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+
+                mDialogBuilder.setView(promptsView);
+
+                mDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("Exit", null)
+                        .setNegativeButton("Later", null)
+                        .setNeutralButton("I enabled internet and want to register", null);
+
+                AlertDialog alertDialog = mDialogBuilder.create();
+                alertDialog.setOnShowListener(dialog -> {
+                    Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(view -> System.exit(0));
+
+                    Button buttonCancel = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    buttonCancel.setOnClickListener(view -> dialog.dismiss());
+
+                    Button buttonRegister = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    buttonRegister.setOnClickListener(view -> {
+                        checkOnFirstRun();
+                        dialog.dismiss();
+                    });
+                });
+                alertDialog.show();
+            }
+        } else {
+            loadNickname();
         }
     }
 }

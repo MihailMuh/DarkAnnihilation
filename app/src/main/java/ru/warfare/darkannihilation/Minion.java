@@ -1,10 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class Minion extends Sprite {
-    public int X;
-    public int Y;
-    private double angle;
-    private static final int shootMinionTime = 1_000;
+    private static final int shootMinionTime = 900;
     private long lastShoot;
     private long now;
 
@@ -23,13 +20,11 @@ public class Minion extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastShoot > shootMinionTime) {
             lastShoot = now;
-
-            X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;
-            Y = ((game.player.y + game.player.halfHeight) - (y + halfHeight)) / 50;
-            angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
-
-            game.bulletEnemies.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, angle, X, Y));
-            game.numberBulletsEnemy += 1;
+            HardWorker.x = x;
+            HardWorker.y = y;
+            HardWorker.halfHeight = halfHeight;
+            HardWorker.halfWidth = halfWidth;
+            HardWorker.typeWork = 1;
         }
     }
 
@@ -67,28 +62,7 @@ public class Minion extends Sprite {
     }
 
     @Override
-    public void check_intersectionPlayer() {
-        if (x + 15 < game.player.x + 20 & game.player.x + 20 < x + width - 15 &
-                y + 15 < game.player.y + 25 & game.player.y + 25 < y + height - 15 |
-                game.player.x + 20 < x + 15 & x + 15 < game.player.x + game.player.width - 20 &
-                        game.player.y + 25 < y + 15 & y + 15 < game.player.y + game.player.height - 20) {
-            AudioPlayer.playMetal();
-            game.minions.remove(this);
-            game.numberMinions -= 1;
-            game.player.damage(5);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
     public void update() {
-        check_intersectionPlayer();
-
         x += speedX;
         y += speedY;
 
