@@ -7,7 +7,6 @@ import android.util.Log;
 
 public class ImageHub {
     public static final boolean isFilter = true;
-    private int id;
 
     public static final Bitmap[] explosionImageSmall = new Bitmap[28];
     public static final Bitmap[] explosionImageDefault = new Bitmap[28];
@@ -48,6 +47,7 @@ public class ImageHub {
     public ImageHub(Game game) {
         Context context = game.context;
 
+        int id;
         for (int i = 0; i < screenImage.length; i++) {
             id = context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName());
             screenImage[i] = BitmapFactory.decodeResource(context.getResources(), id);

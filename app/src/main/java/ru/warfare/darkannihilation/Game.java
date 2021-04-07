@@ -109,7 +109,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
-    private long now;
     public long pauseTimer = 0;
 
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
@@ -184,7 +183,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void gameplay() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         moveAll = player.speedX / 3;
 
         if (screen.x < 0 & screen.x + screen.width > screenWidth) {
@@ -201,12 +200,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.render();
         screen.update();
 
-        if (now - lastBoss > BOSS_TIME) {
-            lastBoss = now;
-            bosses.add(new Boss(this));
-            numberBosses += 1;
-        }
         if (gameStatus == 0) {
+            if (now - lastBoss > BOSS_TIME) {
+                lastBoss = now;
+                bosses.add(new Boss(this));
+                numberBosses += 1;
+            }
             if (random.nextFloat() >= 0.9985 & healthKit.lock) {
                 healthKit.lock = false;
             }
@@ -217,130 +216,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 attention.start();
             }
             if (random.nextFloat() >= 0.9991 & factory.lock & score >= 170 & numberBosses == 0) {
-                factory.start();
+                factory.lock = false;
             }
             if (random.nextFloat() >= 0.9979 & demoman.lock & score > 70) {
                 demoman.lock = false;
-            }
-        }
-
-        for (int i = 0; i < 150; i++) {
-            if (i < numberVaders) {
-                Vader vader = vaders[i];
-                player.check_intersectionVader(vader);
-                vader.x -= moveAll;
-                vader.update();
-                vader.render();
-            }
-
-            if (i < numberTripleFighters) {
-                TripleFighter tripleFighter = tripleFighters.get(i);
-                player.check_intersectionTripleFighter(tripleFighter);
-                tripleFighter.x -= moveAll;
-                tripleFighter.update();
-                tripleFighter.render();
-            }
-
-            if (i < numberMinions) {
-                Minion minion = minions.get(i);
-                minion.render();
-                minion.x -= moveAll;
-                minion.update();
-                player.check_intersectionMinion(minion);
-            }
-
-            if (i < numberBullets) {
-                Bullet bullet = bullets.get(i);
-                bullet.render();
-                bullet.x -= moveAll;
-                bullet.update();
-                for (int j = 0; j < 30; j++) {
-                    if (j < numberMinions) {
-                        minions.get(j).check_intersectionBullet(bullet);
-                    }
-                    if (j < numberTripleFighters) {
-                        tripleFighters.get(j).check_intersectionBullet(bullet);
-                    }
-                    if (j < numberVaders) {
-                        vaders[j].check_intersectionBullet(bullet);
-                    }
-                    if (j < numberBosses) {
-                        bosses.get(j).check_intersectionBullet(bullet);
-                    }
-                }
-                if (!factory.lock) {
-                    factory.check_intersectionBullet(bullet);
-                }
-                if (!demoman.lock) {
-                    demoman.check_intersectionBullet(bullet);
-                }
-            }
-
-            if (i < numberBuckshots) {
-                Buckshot buckshot = buckshots.get(i);
-                buckshot.render();
-                buckshot.x -= moveAll;
-                buckshot.update();
-                for (int j = 0; j < 30; j++) {
-                    if (j < numberMinions) {
-                        minions.get(j).check_intersectionBullet(buckshot);
-                    }
-                    if (j < numberTripleFighters) {
-                        tripleFighters.get(j).check_intersectionBullet(buckshot);
-                    }
-                    if (j < numberVaders) {
-                        vaders[j].check_intersectionBullet(buckshot);
-                    }
-                    if (j < numberBosses) {
-                        bosses.get(j).check_intersectionBullet(buckshot);
-                    }
-                }
-                if (!factory.lock) {
-                    factory.check_intersectionBullet(buckshot);
-                }
-                if (!demoman.lock) {
-                    demoman.check_intersectionBullet(buckshot);
-                }
-            }
-
-            if (i < numberBulletsEnemy) {
-                BulletEnemy bulletEnemy = bulletEnemies.get(i);
-                bulletEnemy.render();
-                bulletEnemy.x -= moveAll;
-                bulletEnemy.update();
-            }
-
-            if (i < numberBombs) {
-                Bomb bomb = bombs.get(i);
-                bomb.render();
-                bomb.x -= moveAll;
-                bomb.update();
-            }
-
-            if (i < numberBulletsBoss) {
-                BulletBoss bulletBoss = bulletBosses.get(i);
-                bulletBoss.render();
-                bulletBoss.x -= moveAll;
-                bulletBoss.update();
-            }
-
-            if (i < numberExplosionsAll) {
-                explosions[i].x -= moveAll;
-                explosions[i].update();
-                explosions[i].render();
-            }
-
-            if (i < numberBosses) {
-                Boss boss = bosses.get(i);
-                boss.render();
-                boss.x -= moveAll;
-                boss.update();
-                if (boss.y == -400) {
-                    AudioPlayer.bossMusic.seekTo(0);
-                    AudioPlayer.bossMusic.start();
-                    AudioPlayer.pirateMusic.pause();
-                    gameStatus = 5;
-                }
             }
         }
 
@@ -371,12 +250,28 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             factory.x -= moveAll;
             factory.update();
             factory.render();
+            for (int j = 0; j < 30; j++) {
+                if (j < numberBullets) {
+                    factory.check_intersectionBullet(bullets.get(j));
+                }
+                if (j < numberBuckshots) {
+                    factory.check_intersectionBullet(buckshots.get(j));
+                }
+            }
         }
         if (!demoman.lock) {
             demoman.x -= moveAll;
             demoman.update();
             demoman.render();
             player.check_intersectionDemoman(demoman);
+            for (int j = 0; j < 30; j++) {
+                if (j < numberBullets) {
+                    demoman.check_intersectionBullet(bullets.get(j));
+                }
+                if (j < numberBuckshots) {
+                    demoman.check_intersectionBullet(buckshots.get(j));
+                }
+            }
         }
         if (gameStatus == 6) {
             portal.x -= moveAll;
@@ -384,6 +279,125 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             portal.render();
             player.check_intersectionPortal(portal);
         }
+
+        for (int i = 0; i < 150; i++) {
+            Vader vader = null;
+            TripleFighter tripleFighter = null;
+            Minion minion = null;
+            Boss boss = null;
+
+            if (i < numberVaders) {
+                vader = vaders[i];
+                player.check_intersectionVader(vader);
+                vader.x -= moveAll;
+                vader.update();
+                vader.render();
+            }
+
+            if (i < numberTripleFighters) {
+                tripleFighter = tripleFighters.get(i);
+                player.check_intersectionTripleFighter(tripleFighter);
+                tripleFighter.x -= moveAll;
+                tripleFighter.update();
+                tripleFighter.render();
+            }
+
+            if (i < numberMinions) {
+                minion = minions.get(i);
+                minion.render();
+                minion.x -= moveAll;
+                minion.update();
+                player.check_intersectionMinion(minion);
+            }
+
+            if (i < numberBosses) {
+                boss = bosses.get(i);
+                boss.render();
+                boss.x -= moveAll;
+                boss.update();
+                if (boss.y == -400) {
+                    AudioPlayer.bossMusic.seekTo(0);
+                    AudioPlayer.bossMusic.start();
+                    AudioPlayer.pirateMusic.pause();
+                    gameStatus = 5;
+                }
+            }
+
+            for (int j = 0; j < 30; j++) {
+                if (j < numberBullets) {
+                    Bullet bullet = bullets.get(j);
+                    if (vader != null) {
+                        vader.check_intersectionBullet(bullet);
+                    }
+                    if (tripleFighter != null) {
+                        tripleFighter.check_intersectionBullet(bullet);
+                    }
+                    if (minion != null) {
+                        minion.check_intersectionBullet(bullet);
+                    }
+                    if (boss != null) {
+                        boss.check_intersectionBullet(bullet);
+                    }
+                }
+                if (j < numberBuckshots) {
+                    Buckshot buckshot = buckshots.get(j);
+                    if (vader != null) {
+                        vader.check_intersectionBullet(buckshot);
+                    }
+                    if (tripleFighter != null) {
+                        tripleFighter.check_intersectionBullet(buckshot);
+                    }
+                    if (minion != null) {
+                        minion.check_intersectionBullet(buckshot);
+                    }
+                    if (boss != null) {
+                        boss.check_intersectionBullet(buckshot);
+                    }
+                }
+            }
+
+            if (i < numberBulletsEnemy) {
+                BulletEnemy bulletEnemy = bulletEnemies.get(i);
+                bulletEnemy.render();
+                bulletEnemy.x -= moveAll;
+                bulletEnemy.update();
+            }
+
+            if (i < numberBombs) {
+                Bomb bomb = bombs.get(i);
+                bomb.render();
+                bomb.x -= moveAll;
+                bomb.update();
+            }
+
+            if (i < numberBulletsBoss) {
+                BulletBoss bulletBoss = bulletBosses.get(i);
+                bulletBoss.render();
+                bulletBoss.x -= moveAll;
+                bulletBoss.update();
+            }
+
+            if (i < numberBullets) {
+                Bullet bullet = bullets.get(i);
+                bullet.render();
+                bullet.x -= moveAll;
+                bullet.update();
+            }
+
+            if (i < numberBuckshots) {
+                Buckshot buckshot = buckshots.get(i);
+                buckshot.render();
+                buckshot.x -= moveAll;
+                buckshot.update();
+            }
+
+            if (i < numberExplosionsAll) {
+                explosions[i].x -= moveAll;
+                explosions[i].update();
+                explosions[i].render();
+            }
+        }
+
         player.update();
         player.render();
 
@@ -563,6 +577,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generatePause() {
+        hardWorker.workOnPause();
         if (bosses.size() == 0) {
             AudioPlayer.pirateMusic.pause();
             AudioPlayer.pauseMusic.seekTo(0);
@@ -635,6 +650,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         saveScore();
         checkMaxScore();
+        hardWorker.workOnPause();
+        hardWorker.workOnResume();
         count = 0;
         score = 0;
         gameStatus = 2;
@@ -691,9 +708,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             vaders[i] = new Vader(this);
             vaders[i].lock = true;
         }
-//        for (int i = 0; i < 6; i++) {
-//            tripleFighters.add(new TripleFighter(this));
-//        }
         numberTripleFighters = tripleFighters.size();
 
         if (AudioPlayer.menuMusic.isPlaying()) {
@@ -715,6 +729,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             generateNewGame();
         }
         pauseButton.render();
+
+        for (int i = 0; i < numberExplosionsAll; i++) {
+            explosions[i].update();
+            explosions[i].render();
+        }
 
         canvas.drawText("Tap this screen with four or more fingers to restart",
                 (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
@@ -892,7 +911,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.update();
         player.render();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 60; i++) {
             if (i < numberVaders) {
                 for (int j = 0; j < numberBullets; j++) {
                     vaders[i].check_intersectionBullet(bullets.get(j));

@@ -33,8 +33,7 @@ public class Demoman extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
-            game.bombs.add(new Bomb(game, x + halfWidth, y + halfHeight));
-            game.numberBombs += 1;
+            HardWorker.makeBomb = 1;
         }
     }
 
@@ -51,6 +50,17 @@ public class Demoman extends Sprite {
             }
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
+            if (health <= 0) {
+                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                        break;
+                    }
+                }
+                AudioPlayer.playMegaBoom();
+                game.score += 35;
+                hide();
+            }
         }
     }
 
@@ -66,6 +76,17 @@ public class Demoman extends Sprite {
             }
             game.buckshots.remove(bullet);
             game.numberBuckshots -= 1;
+            if (health <= 0) {
+                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
+                    if (game.explosions[i].lock) {
+                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                        break;
+                    }
+                }
+                AudioPlayer.playMegaBoom();
+                game.score += 35;
+                hide();
+            }
         }
     }
 
@@ -74,18 +95,6 @@ public class Demoman extends Sprite {
         shoot();
 
         x += speedX;
-
-        if (health <= 0) {
-            for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-            AudioPlayer.playMegaBoom();
-            game.score += 35;
-            hide();
-        }
 
         if (direction == 0) {
             if (x > game.screenWidth) {

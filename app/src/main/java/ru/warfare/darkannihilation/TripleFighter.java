@@ -4,9 +4,6 @@ public class TripleFighter extends Sprite {
     private static final int shootTripleTime = 1_500;
     private long lastShoot;
     private long now;
-    public int X;
-    public int Y;
-    private double angle;
 
     public TripleFighter(Game g) {
         super(g, ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
@@ -30,7 +27,7 @@ public class TripleFighter extends Sprite {
             HardWorker.y = y;
             HardWorker.halfHeight = halfHeight;
             HardWorker.halfWidth = halfWidth;
-            HardWorker.typeWork = 1;
+            HardWorker.makeAngle = 1;
         }
     }
 

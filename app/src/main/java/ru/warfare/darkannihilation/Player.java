@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Rect;
+
 public class Player extends Sprite {
     public int endX;
     public int endY;
@@ -37,7 +39,7 @@ public class Player extends Sprite {
                     }
                 }
                 AudioPlayer.playMegaBoom();
-                game.vibrator.vibrate(1700);
+                game.vibrator.vibrate(1550);
             } else {
                 game.vibrator.vibrate(70);
             }

@@ -24,7 +24,7 @@ public class Minion extends Sprite {
             HardWorker.y = y;
             HardWorker.halfHeight = halfHeight;
             HardWorker.halfWidth = halfWidth;
-            HardWorker.typeWork = 1;
+            HardWorker.makeAngle = 1;
         }
     }
 

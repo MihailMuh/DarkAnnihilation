@@ -5,7 +5,8 @@ import android.util.Log;
 public class HardWorker implements Runnable {
     private Thread thread;
     private boolean work = false;
-    static int typeWork = 0;
+    static int makeAngle = 0;
+    static int makeBomb = 0;
     static int x = 0;
     static int y = 0;
     static int X = 0;
@@ -22,29 +23,40 @@ public class HardWorker implements Runnable {
     @Override
     public void run() {
         while (work) {
-            if (typeWork == 1) {
+            if (makeAngle == 1) {
                 X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;
                 Y = ((game.player.y + game.player.halfHeight) - (y + halfHeight)) / 50;
                 angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
-                game.bulletEnemies.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, HardWorker.angle, HardWorker.X, HardWorker.Y));
+                game.bulletEnemies.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, angle, X, Y));
                 game.numberBulletsEnemy += 1;
-                typeWork = 0;
+                makeAngle = 0;
+            }
+            if (makeBomb == 1) {
+                game.bombs.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
+                game.numberBombs += 1;
+                makeBomb = 0;
             }
         }
     }
 
     public void workOnPause() {
+        work = false;
         try {
             thread.join();
         } catch (Exception e) {
             Log.e(MainActivity.TAG, "Thread join " + e);
         }
-        work = false;
     }
 
     public void workOnResume() {
-        thread = new Thread(this);
-        thread.start();
-        work = true;
+        try {
+            work = true;
+            makeAngle = 0;
+            makeBomb = 0;
+            thread = new Thread(this);
+            thread.start();
+        } catch (Exception e) {
+            Log.e(MainActivity.TAG, "" + e);
+        }
     }
 }

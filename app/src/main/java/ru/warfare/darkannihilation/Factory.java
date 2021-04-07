@@ -48,14 +48,6 @@ public class Factory extends Sprite {
         }
     }
 
-    public void start() {
-        lock = false;
-        game.buckshots = new ArrayList<>(0);
-        game.numberBuckshots = 0;
-        game.bullets = new ArrayList<>(0);
-        game.numberBullets = 0;
-    }
-
     @Override
     public void check_intersectionBullet(Bullet bullet) {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
