@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        config {
+        storeFile file('C:\\Program Files\\Android\\KeyStore\\key1.jks')
+            storePassword '1234567mli'
+            keyAlias 'key0'
+            keyPassword '1234567mli'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -15,13 +23,20 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
 
     buildTypes {
         release {
-            debuggable false
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
+            shrinkResources false
+            debuggable true
             minifyEnabled true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            ext.enableCrashlytics = false
         }
     }
     compileOptions {

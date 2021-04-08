@@ -16,6 +16,7 @@
         android:theme="@style/Theme.DarkAnnihilation"
         android:usesCleartextTraffic="true">
         <activity
+            android:screenOrientation="landscape"
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
