@@ -41,6 +41,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint gameoverPaint = new Paint();
     private static final Paint scorePaint = new Paint();
     private static final Paint topPaint = new Paint();
+    private static final Paint topPaintRed = new Paint();
 
     public static final Random random = new Random();
     public JSONObject jsonScore = new JSONObject();
@@ -142,6 +143,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         scorePaint.setTextSize(40);
         topPaint.setColor(Color.WHITE);
         topPaint.setTextSize(30);
+        topPaintRed.setColor(Color.RED);
+        topPaintRed.setTextSize(30);
 
         screen = new Screen(this);
         player = new Player(this);
@@ -908,17 +911,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.update();
         screen.render();
 
-        player.update();
-        player.render();
-
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 150; i++) {
             if (i < numberVaders) {
+                player.check_intersectionVader(vaders[i]);
                 for (int j = 0; j < numberBullets; j++) {
                     vaders[i].check_intersectionBullet(bullets.get(j));
                 }
                 vaders[i].update();
                 vaders[i].render();
-                player.check_intersectionVader(vaders[i]);
             }
 
             if (i < numberBullets) {
@@ -931,6 +931,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 explosions[i].render();
             }
         }
+
+        player.update();
+        player.render();
 
         buttonStart.update();
         buttonStart.render();
@@ -961,7 +964,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             for (int i = 0; i < MainActivity.json.length(); i++) {
                 String str = (i + 1) + ") " + MainActivity.names.get(i) + " - " + MainActivity.json.get(MainActivity.names.get(i).toString());
-                canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i+1) * 45, topPaint);
+                if (MainActivity.nickname.equals(MainActivity.names.get(i))) {
+                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaintRed);
+                } else {
+                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaint);
+                }
             }
 
             textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));

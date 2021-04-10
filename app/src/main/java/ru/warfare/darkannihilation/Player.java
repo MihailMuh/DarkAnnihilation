@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Rect;
-
 public class Player extends Sprite {
     public int endX;
     public int endY;
