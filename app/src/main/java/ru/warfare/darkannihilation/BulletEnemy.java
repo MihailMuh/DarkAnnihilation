@@ -28,8 +28,6 @@ public class BulletEnemy extends Sprite {
         y += speedY;
         x += speedX;
 
-        game.player.check_intersectionBullet(this);
-
         if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
             game.bulletEnemies.remove(this);
             game.numberBulletsEnemy -= 1;

@@ -17,8 +17,6 @@ public class Bomb extends Sprite {
     public void update() {
         y += speedY;
 
-        game.player.check_intersectionBullet(this);
-
         if (y > screenHeight) {
             game.bombs.remove(this);
             game.numberBombs -= 1;

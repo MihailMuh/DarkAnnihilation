@@ -60,8 +60,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ArrayList<Buckshot> buckshots = new ArrayList<>(0);
     public ArrayList<Minion> minions = new ArrayList<>(0);
     public ArrayList<Bomb> bombs = new ArrayList<>(0);
+    public Character[] player = new Character[1];
 
-    public Player player;
     public Screen screen;
     public Button buttonStart;
     public Button buttonQuit;
@@ -80,6 +80,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public WinScreen winScreen;
     public Portal portal;
     public ButtonPlayer buttonPlayer;
+    public ButtonGunner buttonGunner;
     public HardWorker hardWorker;
 
     public int numberVaders = vaders.length;
@@ -114,6 +115,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
     private static long timeFrame;
+    private static long now;
 
     public Game(Context cont, AttributeSet attrs) {
         super(cont, attrs);
@@ -147,7 +149,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setTextSize(30);
 
         screen = new Screen(this);
-        player = new Player(this);
+        player[0] = new Player(this);
 
         numberVaders *= 2;
         vaders = new Vader[numberVaders];
@@ -181,13 +183,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         demoman = new Demoman(this);
         portal = new Portal(this);
         buttonPlayer = new ButtonPlayer(this);
+        buttonGunner = new ButtonGunner(this);
 
         AudioPlayer.menuMusic.start();
     }
 
     public void gameplay() {
-        long now = System.currentTimeMillis();
-        moveAll = player.speedX / 3;
+        now = System.currentTimeMillis();
+        moveAll = player[0].speedX / 3;
 
         if (screen.x < 0 & screen.x + screen.width > screenWidth) {
             screen.x -= moveAll;
@@ -230,13 +233,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             healthKit.x -= moveAll;
             healthKit.update();
             healthKit.render();
-            player.check_intersectionHealthKit(healthKit);
+            player[0].check_intersectionHealthKit(healthKit);
         }
         if (!shotgunKit.lock & !shotgunKit.picked) {
             shotgunKit.x -= moveAll;
             shotgunKit.update();
             shotgunKit.render();
-            player.check_intersectionShotgunKit(shotgunKit);
+            player[0].check_intersectionShotgunKit(shotgunKit);
         }
         if (!attention.lock) {
             attention.x -= moveAll;
@@ -247,7 +250,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             rocket.x -= moveAll;
             rocket.update();
             rocket.render();
-            player.check_intersectionRocket(rocket);
+            player[0].check_intersectionRocket(rocket);
         }
         if (!factory.lock) {
             factory.x -= moveAll;
@@ -266,7 +269,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             demoman.x -= moveAll;
             demoman.update();
             demoman.render();
-            player.check_intersectionDemoman(demoman);
+            player[0].check_intersectionDemoman(demoman);
             for (int j = 0; j < 30; j++) {
                 if (j < numberBullets) {
                     demoman.check_intersectionBullet(bullets.get(j));
@@ -280,7 +283,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             portal.x -= moveAll;
             portal.update();
             portal.render();
-            player.check_intersectionPortal(portal);
+            player[0].check_intersectionPortal(portal);
         }
 
         for (int i = 0; i < 150; i++) {
@@ -291,7 +294,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             if (i < numberVaders) {
                 vader = vaders[i];
-                player.check_intersectionVader(vader);
+                player[0].check_intersectionVader(vader);
                 vader.x -= moveAll;
                 vader.update();
                 vader.render();
@@ -299,7 +302,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             if (i < numberTripleFighters) {
                 tripleFighter = tripleFighters.get(i);
-                player.check_intersectionTripleFighter(tripleFighter);
+                player[0].check_intersectionTripleFighter(tripleFighter);
                 tripleFighter.x -= moveAll;
                 tripleFighter.update();
                 tripleFighter.render();
@@ -310,7 +313,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 minion.render();
                 minion.x -= moveAll;
                 minion.update();
-                player.check_intersectionMinion(minion);
+                player[0].check_intersectionMinion(minion);
             }
 
             if (i < numberBosses) {
@@ -364,6 +367,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bulletEnemy.render();
                 bulletEnemy.x -= moveAll;
                 bulletEnemy.update();
+                player[0].check_intersectionBullet(bulletEnemy);
             }
 
             if (i < numberBombs) {
@@ -371,6 +375,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bomb.render();
                 bomb.x -= moveAll;
                 bomb.update();
+                player[0].check_intersectionBullet(bomb);
             }
 
             if (i < numberBulletsBoss) {
@@ -378,6 +383,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bulletBoss.render();
                 bulletBoss.x -= moveAll;
                 bulletBoss.update();
+                player[0].check_intersectionBullet(bulletBoss);
             }
 
             if (i < numberBullets) {
@@ -401,8 +407,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
         }
 
-        player.update();
-        player.render();
+        player[0].update();
+        player[0].render();
 
         pauseButton.render();
         changerGuns.render();
@@ -416,7 +422,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textBuilder.setLength(0);
 
-        textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
+        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
         canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
 
         textBuilder.setLength(0);
@@ -471,24 +477,22 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         changerGuns.setCoords((int) event.getX(1), (int) event.getY(1), 2);
                         pauseButton.setCoords((int) event.getX(1), (int) event.getY(1), 2);
                     }
-                    if (!player.dontmove) {
-                        player.endX = clickX - player.halfWidth;
-                        player.endY = clickY - player.halfHeight;
+                    if (!player[0].dontmove) {
+                        player[0].endX = clickX - player[0].halfWidth;
+                        player[0].endY = clickY - player[0].halfHeight;
                     }
                     break;
                 case MotionEvent.ACTION_DOWN:
                     if (gameStatus != 7) {
-                        buttonStart.mouseX = clickX;
-                        buttonStart.mouseY = clickY;
+                        buttonStart.setCoords(clickX, clickY);
                         if (gameStatus != 2) {
-                            buttonQuit.mouseX = clickX;
-                            buttonQuit.mouseY = clickY;
-                            buttonMenu.mouseX = clickX;
-                            buttonMenu.mouseY = clickY;
+                            buttonQuit.setCoords(clickX, clickY);
+                            buttonMenu.setCoords(clickX, clickY);
                         }
                         pauseButton.setCoords(clickX, clickY);
                     }
                     if (gameStatus == 1) {
+                        buttonGunner.setCoords(clickX, clickY);
                         buttonPlayer.setCoords(clickX, clickY);
                     }
                     changerGuns.setCoords(clickX, clickY);
@@ -591,7 +595,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         gameStatus = 4;
 
-        player.dontmove = true;
+        player[0].dontmove = true;
 
         buttonStart.newFunc("Resume", halfScreenWidth - buttonQuit.halfWidth, screenHeight / 3 - buttonStart.halfHeight, "pause");
         buttonMenu.newFunc("To menu", halfScreenWidth - buttonQuit.halfWidth, buttonStart.height + buttonStart.y + 30, "menu");
@@ -627,7 +631,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         numberBosses = 0;
 
         screen.x = (int) (screenWidth * -0.2);
-        player.AI();
+        player[0] = new Player(this);
         shotgunKit.picked = false;
 
         gameStatus = 1;
@@ -685,7 +689,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         numberBombs = 0;
 
         screen.x = (int) (screenWidth * -0.2);
-        player.PLAYER();
+
+        switch (character)
+        {
+            case "gunner":
+                player[0] = new Gunner(this);
+                break;
+        }
+
+        player[0].PLAYER();
         healthKit.hide();
         shotgunKit.hide();
         shotgunKit.picked = false;
@@ -696,6 +708,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         demoman.hide();
         portal.hide();
         buttonPlayer.hide();
+        buttonGunner.hide();
 
         int c = 370;
         for (int i = 0; i < 5; i++) {
@@ -747,7 +760,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textBuilder.setLength(0);
 
-        textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
+        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
         canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
 
         textBuilder.setLength(0);
@@ -808,7 +821,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             rocket.render();
             factory.render();
             demoman.render();
-            player.render();
+            player[0].render();
             changerGuns.render();
             portal.render();
 
@@ -841,7 +854,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textBuilder.setLength(0);
 
-        textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
+        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
         canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
 
         textBuilder.setLength(0);
@@ -853,11 +866,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
                 textBuilder.setLength(0);
 
-                buttonStart.update();
                 buttonStart.render();
-                buttonQuit.update();
                 buttonQuit.render();
-                buttonMenu.update();
                 buttonMenu.render();
                 pauseTimer += 20;
                 break;
@@ -898,7 +908,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                             for (int i = 0; i < numberTripleFighters; i++) {
                                 tripleFighters.get(i).lock = false;
                             }
-                            player.lock = false;
+                            player[0].lock = false;
                             changerGuns.unHide();
                         }
                     }
@@ -913,7 +923,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         for (int i = 0; i < 150; i++) {
             if (i < numberVaders) {
-                player.check_intersectionVader(vaders[i]);
+                player[0].check_intersectionVader(vaders[i]);
                 for (int j = 0; j < numberBullets; j++) {
                     vaders[i].check_intersectionBullet(bullets.get(j));
                 }
@@ -932,23 +942,21 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
         }
 
-        player.update();
-        player.render();
+        player[0].update();
+        player[0].render();
 
-        buttonStart.update();
         buttonStart.render();
-        buttonQuit.update();
         buttonQuit.render();
-        buttonMenu.update();
         buttonMenu.render();
         buttonPlayer.render();
+        buttonGunner.render();
 
         textBuilder.append("Max score: ").append(lastMax);
         canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
 
         textBuilder.setLength(0);
 
-        textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
+        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
         canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
 
         textBuilder.setLength(0);
@@ -959,7 +967,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             screen.update();
             screen.render();
 
-            buttonMenu.update();
             buttonMenu.render();
 
             for (int i = 0; i < MainActivity.json.length(); i++) {
@@ -971,7 +978,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
             }
 
-            textBuilder.append("FPS: ").append((int) (MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
+            textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
 
             textBuilder.setLength(0);

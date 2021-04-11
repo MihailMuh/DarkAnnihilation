@@ -1,7 +1,6 @@
 package ru.warfare.darkannihilation;
 
 public class ButtonPlayer extends Sprite {
-
     public ButtonPlayer(Game g) {
         super(g, ImageHub.buttonPlayerImg.getWidth(), ImageHub.buttonPlayerImg.getHeight());
 
@@ -18,7 +17,7 @@ public class ButtonPlayer extends Sprite {
     }
 
     public void setCoords(int X, int Y) {
-        if (x < X & X < x + width & y < Y & Y < y + width) {
+        if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioPlayer.buttonSnd.start();
             Game.character = "ship";
             game.generateNewGame();

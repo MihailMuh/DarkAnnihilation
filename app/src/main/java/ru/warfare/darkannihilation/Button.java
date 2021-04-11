@@ -9,8 +9,6 @@ import androidx.annotation.RequiresApi;
 
 public class Button extends Sprite {
     private Bitmap img;
-    public int mouseX;
-    public int mouseY;
     public static final Paint paint = new Paint();
     public String function;
     private String text;
@@ -47,41 +45,45 @@ public class Button extends Sprite {
         textHeight = (int) (paint.getTextSize() / 4);
     }
 
-    @Override
-    public void update() {
-        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
+    public void setCoords(int X, int Y) {
+        if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioPlayer.buttonSnd.start();
             img = ImageHub.buttonImagePressed;
-            if (function.equals("start")) {
-                game.generateNewGame();
-            } else {
-                if (function.equals("quit")) {
+
+            switch (function)
+            {
+                case "start":
+                    game.buttonPlayer.show();
+                    game.buttonGunner.show();
+                    x = screenWidth;
+                    break;
+                case "quit":
                     System.exit(0);
-                } else {
-                    if (function.equals("pause")) {
-                        Game.lastBoss += game.pauseTimer;
-                        game.hardWorker.workOnResume();
-                        AudioPlayer.pauseMusic.pause();
-                        if (game.bosses.size() == 0) {
-                            AudioPlayer.pirateMusic.start();
-                        }
-                        if (game.pauseButton.oldStatus == 2) {
-                            AudioPlayer.readySnd.start();
-                        }
-                        game.gameStatus = game.pauseButton.oldStatus;
-                        game.pauseTimer = 0;
-                    } else {
-                        if (function.equals("menu")) {
-                            game.generateMenu();
-                        } else {
-                            if (function.equals("top")) {
-                                game.score = 0;
-                                game.generateTopScore();
-                            }
-                        }
+                    break;
+                case "pause":
+                    Game.lastBoss += game.pauseTimer;
+                    game.hardWorker.workOnResume();
+                    AudioPlayer.pauseMusic.pause();
+                    if (game.bosses.size() == 0) {
+                        AudioPlayer.pirateMusic.start();
                     }
-                }
+                    if (game.pauseButton.oldStatus == 2) {
+                        AudioPlayer.readySnd.start();
+                    }
+                    game.gameStatus = game.pauseButton.oldStatus;
+                    game.pauseTimer = 0;
+                    break;
+                case "menu":
+                    game.generateMenu();
+                    break;
+                case "top":
+                    game.buttonPlayer.hide();
+                    game.buttonGunner.hide();
+                    game.score = 0;
+                    game.generateTopScore();
+                    break;
             }
+
         } else {
             img = ImageHub.buttonImageNotPressed;
         }

@@ -23,7 +23,7 @@ public class PauseButton extends Sprite {
             game.generatePause();
         } else {
             if (game.gameStatus != 4) {
-                game.player.dontmove = false;
+                game.player[0].dontmove = false;
             }
         }
     }

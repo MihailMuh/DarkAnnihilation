@@ -15,11 +15,11 @@ public class ChangerGuns extends Sprite {
         if (!game.shotgunKit.picked) {
             image = ImageHub.gunToNone;
         } else {
-            if (game.player.gun.equals("shotgun")) {
-                game.player.gun = "gun";
+            if (game.player[0].gun.equals("shotgun")) {
+                game.player[0].gun = "gun";
                 image = ImageHub.gunToShotgun;
             } else {
-                game.player.gun = "shotgun";
+                game.player[0].gun = "shotgun";
                 image = ImageHub.shotgunToGun;
             }
         }
@@ -44,7 +44,7 @@ public class ChangerGuns extends Sprite {
             mouseX = X;
             mouseY = Y;
             if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-                game.player.dontmove = true;
+                game.player[0].dontmove = true;
                 now = System.currentTimeMillis();
                 if (now - lastShoot > clickTime) {
                     lastShoot = now;
@@ -54,11 +54,11 @@ public class ChangerGuns extends Sprite {
                         image = ImageHub.gunToNone;
                     } else {
                         AudioPlayer.playReload();
-                        if (game.player.gun.equals("shotgun")) {
-                            game.player.gun = "gun";
+                        if (game.player[0].gun.equals("shotgun")) {
+                            game.player[0].gun = "gun";
                             image = ImageHub.gunToShotgun;
                         } else {
-                            game.player.gun = "shotgun";
+                            game.player[0].gun = "shotgun";
                             image = ImageHub.shotgunToGun;
                         }
                     }
@@ -81,11 +81,11 @@ public class ChangerGuns extends Sprite {
                         image = ImageHub.gunToNone;
                     } else {
                         AudioPlayer.playReload();
-                        if (game.player.gun.equals("shotgun")) {
-                            game.player.gun = "gun";
+                        if (game.player[0].gun.equals("shotgun")) {
+                            game.player[0].gun = "gun";
                             image = ImageHub.gunToShotgun;
                         } else {
-                            game.player.gun = "shotgun";
+                            game.player[0].gun = "shotgun";
                             image = ImageHub.shotgunToGun;
                         }
                     }

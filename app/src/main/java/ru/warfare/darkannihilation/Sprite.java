@@ -39,8 +39,6 @@ public class Sprite {
 
     public void check_intersectionBullet(Bullet bullet) {}
     public void check_intersectionBullet(BulletEnemy bulletEnemy) {}
-    public void check_intersectionBullet(BulletBoss bulletBoss) {}
-    public void check_intersectionPlayer() {}
     public void update() {}
     public void render() {}
 

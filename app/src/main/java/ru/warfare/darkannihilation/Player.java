@@ -1,16 +1,6 @@
 package ru.warfare.darkannihilation;
 
-public class Player extends Sprite {
-    public int endX;
-    public int endY;
-    private static final int shootTime = 110;
-    private static final int shotgunTime = 535;
-    private long lastShoot;
-    private long now;
-    public int ai = 1;
-    public boolean dontmove = false;
-    public String gun = "gun";
-
+public class Player extends Character {
     public Player(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
         health = 50;
@@ -22,28 +12,12 @@ public class Player extends Sprite {
         endX = x;
         endY = y;
 
+        shootTime = 110;
+        shotgunTime = 535;
         lastShoot = System.currentTimeMillis();
     }
 
-    public void damage(int dmg) {
-        if (ai == 0) {
-            health -= dmg;
-            if (health <= 0) {
-                game.generateGameover();
-                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                AudioPlayer.playMegaBoom();
-                game.vibrator.vibrate(1550);
-            } else {
-                game.vibrator.vibrate(70);
-            }
-        }
-    }
-
+    @Override
     public void AI() {
         gun = "gun";
         ai = 1;
@@ -53,6 +27,7 @@ public class Player extends Sprite {
         speedY = randInt(3, 7);
     }
 
+    @Override
     public void PLAYER() {
         gun = "gun";
         ai = 0;
@@ -62,7 +37,8 @@ public class Player extends Sprite {
         health = 50;
     }
 
-    private void shoot() {
+    @Override
+    public void shoot() {
         if (!lock) {
             now = System.currentTimeMillis();
             if (gun.equals("shotgun")) {
@@ -88,6 +64,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionVader(Vader vader) {
         if (vader.x + 15 < x + 20 & x + 20 < vader.x + vader.width - 15 &
                 vader.y + 15 < y + 25 & y + 25 < vader.y + vader.height - 15 |
@@ -105,6 +82,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionTripleFighter(TripleFighter tripleFighter) {
         if (tripleFighter.x + 5 < x + 20 & x + 20 < tripleFighter.x + tripleFighter.width - 5 &
                 tripleFighter.y + 5 < y + 25 & y + 25 < tripleFighter.y + tripleFighter.height - 5 |
@@ -123,6 +101,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionPortal(Portal portal) {
         if (portal.x + 15 < x + 20 & x + 20 < portal.x + portal.width - 15 &
                 portal.y + 15 < y + 25 & y + 25 < portal.y + portal.height - 15 |
@@ -140,6 +119,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionMinion(Minion minion) {
         if (minion.x + 15 < x + 20 & x + 20 < minion.x + minion.width - 15 &
                 minion.y + 15 < y + 25 & y + 25 < minion.y + minion.height - 15 |
@@ -158,6 +138,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionDemoman(Demoman demoman) {
         if (demoman.x + 30 < x + 20 & x + 20 < demoman.x + demoman.width - 15 &
                 demoman.y < y + 25 & y + 25 < demoman.y + demoman.height - 50 |
@@ -169,6 +150,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {
         if (shotgunKit.x + 5 < x + 10 & x + 10 < shotgunKit.x + shotgunKit.width - 5 &
                 shotgunKit.y + 5 < y + 10 & y + 10 < shotgunKit.y + shotgunKit.height - 5 |
@@ -180,6 +162,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionHealthKit(HealthKit healthKit) {
         if (healthKit.x + 5 < x + 5 & x + 5 < healthKit.x + healthKit.width - 5 &
                 healthKit.y + 5 < y + 5 & y + 5 < healthKit.y + healthKit.height - 5 |
@@ -195,6 +178,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionRocket(Rocket rocket) {
         if (x + 5 < rocket.x & rocket.x < x + width - 5 &
                 y < rocket.y & rocket.y < y + height |
@@ -212,6 +196,7 @@ public class Player extends Sprite {
         }
     }
 
+    @Override
     public void check_intersectionBullet(Bomb bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 10 |

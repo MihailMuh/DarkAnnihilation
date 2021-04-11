@@ -38,8 +38,6 @@ public class BulletBoss extends Sprite {
         y += speedY;
         x -= speedX;
 
-        game.player.check_intersectionBullet(this);
-
         if (y > screenHeight | x < -100 | x > screenWidth) {
             game.bulletBosses.remove(this);
             game.numberBulletsBoss -= 1;

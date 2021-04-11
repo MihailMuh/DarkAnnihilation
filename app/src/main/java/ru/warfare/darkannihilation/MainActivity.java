@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mDialogBuilder.setView(promptsView);
 
-                final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
+                final EditText userInput = promptsView.findViewById(R.id.input_text);
 
                 mDialogBuilder
                         .setCancelable(false)
