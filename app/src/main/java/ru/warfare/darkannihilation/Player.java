@@ -148,7 +148,7 @@ public class Player extends Character {
                         y + 10 < shotgunKit.y + 5 & shotgunKit.y + 5 < y + height - 10) {
             shotgunKit.hide();
             shotgunKit.picked = true;
-            game.changerGuns.setCoords(game.changerGuns.x + 50, game.changerGuns.y + 50, 2);
+            game.changerGuns.changeGun();
         }
     }
 

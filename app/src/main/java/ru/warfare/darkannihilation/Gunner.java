@@ -12,7 +12,7 @@ public class Gunner extends Character {
         endX = x;
         endY = y;
 
-        shootTime = 50;
+        shootTime = 200;
         shotgunTime = 270;
         lastShoot = System.currentTimeMillis();
     }
@@ -46,9 +46,10 @@ public class Gunner extends Character {
                 if (now - lastShoot > shootTime) {
                     lastShoot = now;
                     AudioPlayer.playShoot();
-                    game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
-                    game.bullets.add(new Bullet(game, x + halfWidth, y));
-                    game.numberBullets += 2;
+                    for (int i = 0; i < 5; i++) {
+                        game.bullets.add(new BulletGunner(game, x + halfWidth, y));
+                    }
+                    game.numberBullets += 5;
                 }
             }
         }
@@ -148,7 +149,7 @@ public class Gunner extends Character {
                         y + 10 < shotgunKit.y + 5 & shotgunKit.y + 5 < y + height - 10) {
             shotgunKit.hide();
             shotgunKit.picked = true;
-            game.changerGuns.setCoords(game.changerGuns.x + 50, game.changerGuns.y + 50, 2);
+            game.changerGuns.changeGun();
         }
     }
 

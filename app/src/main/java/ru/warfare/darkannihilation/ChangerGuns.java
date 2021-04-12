@@ -44,7 +44,6 @@ public class ChangerGuns extends Sprite {
             mouseX = X;
             mouseY = Y;
             if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-                game.player[0].dontmove = true;
                 now = System.currentTimeMillis();
                 if (now - lastShoot > clickTime) {
                     lastShoot = now;
@@ -67,8 +66,9 @@ public class ChangerGuns extends Sprite {
         }
     }
 
-    public void setCoords(int X, int Y, int count) {
+    public void setCoords(int X, int Y, int r) {
         if (game.gameStatus == 0 | game.gameStatus == 6) {
+            game.player[0].dontmove = true;
             mouseX = X;
             mouseY = Y;
             if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
@@ -89,6 +89,27 @@ public class ChangerGuns extends Sprite {
                             image = ImageHub.shotgunToGun;
                         }
                     }
+                }
+            } else {
+                game.player[0].dontmove = false;
+            }
+        }
+    }
+
+    public void changeGun() {
+        now = System.currentTimeMillis();
+        if (now - lastShoot > clickTime) {
+            lastShoot = now;
+            if (!game.shotgunKit.picked) {
+                image = ImageHub.gunToNone;
+            } else {
+                AudioPlayer.playReload();
+                if (game.player[0].gun.equals("shotgun")) {
+                    game.player[0].gun = "gun";
+                    image = ImageHub.gunToShotgun;
+                } else {
+                    game.player[0].gun = "shotgun";
+                    image = ImageHub.shotgunToGun;
                 }
             }
         }

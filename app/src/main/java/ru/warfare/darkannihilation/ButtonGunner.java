@@ -13,7 +13,7 @@ public class ButtonGunner extends Sprite{
     }
 
     public void show() {
-        x = halfScreenWidth + game.buttonPlayer.width * 2;
+        x = halfScreenWidth + game.buttonPlayer.width;
     }
 
     public void setCoords(int X, int Y) {

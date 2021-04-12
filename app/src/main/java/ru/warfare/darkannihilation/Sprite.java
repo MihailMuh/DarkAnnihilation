@@ -40,7 +40,6 @@ public class Sprite {
     }
 
     public void check_intersectionBullet(BulletBase bullet) {}
-    public void check_intersectionBullet(BulletEnemy bulletEnemy) {}
     public void update() {}
     public void render() {}
 

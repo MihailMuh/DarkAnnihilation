@@ -2,13 +2,16 @@ package ru.warfare.darkannihilation;
 
 public class BulletGunner extends BulletBase {
     public double damage = 0.5;
-    private final double speedx;
+    private double speedx;
 
     public BulletGunner(Game g, int X, int Y) {
         super(g, ImageHub.bulletGunnerImg.getWidth(), ImageHub.bulletGunnerImg.getHeight());
 
-        speedY = 6;
-        speedx = (random.nextDouble() * 2) - 1;
+        speedY = randInt(6, 13);
+        speedx = random.nextDouble() * 4;
+        if (randInt(1, 2) == 1) {
+            speedx = -speedx;
+        }
 
         x = X;
         y = Y;
@@ -27,6 +30,6 @@ public class BulletGunner extends BulletBase {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.buttonGunnerImg, x, y, null);
+        game.canvas.drawBitmap(ImageHub.bulletGunnerImg, x, y, null);
     }
 }

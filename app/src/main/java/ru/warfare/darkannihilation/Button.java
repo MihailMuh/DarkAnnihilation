@@ -14,6 +14,8 @@ public class Button extends Sprite {
     private String text;
     private int textWidth;
     private int textHeight;
+    public int mouseX;
+    public int mouseY;
 
     public Button(Game g, String t, int X, int Y, String func) {
         super(g, ImageHub.buttonImagePressed.getWidth(), ImageHub.buttonImagePressed.getHeight());
@@ -46,16 +48,21 @@ public class Button extends Sprite {
     }
 
     public void setCoords(int X, int Y) {
-        if (x < X & X < x + width & y < Y & Y < y + height) {
+        mouseX = X;
+        mouseY = Y;
+        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
             AudioPlayer.buttonSnd.start();
             img = ImageHub.buttonImagePressed;
+
+            mouseX = 0;
+            mouseY = 0;
 
             switch (function)
             {
                 case "start":
                     game.buttonPlayer.show();
                     game.buttonGunner.show();
-                    x = screenWidth;
+                    img = ImageHub.buttonImageNotPressed;
                     break;
                 case "quit":
                     System.exit(0);

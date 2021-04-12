@@ -382,6 +382,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 1:
                         preview();
                         break;
+                    case 10:
                     case 6:
                     case 2:
                     case 0:
@@ -427,15 +428,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     buttonPlayer.setCoords(clickX, clickY);
                 }
                 pauseButton.setCoords(clickX, clickY);
-                changerGuns.setCoords(clickX, clickY);
+                changerGuns.setCoords(clickX, clickY, 1);
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (pointerCount >= 2) {
-                    changerGuns.setCoords((int) event.getX(1), (int) event.getY(1), 2);
-                    pauseButton.setCoords((int) event.getX(1), (int) event.getY(1), 2);
+                    changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
+                    pauseButton.setCoords((int) event.getX(1), (int) event.getY(1));
                 }
-//                player[0].dontmove = !(gameStatus == 6 | gameStatus == 2 | gameStatus == 0);
-                if (gameStatus == 6 | gameStatus == 2 | gameStatus == 0) {
+                if ((gameStatus == 6 | gameStatus == 2 | gameStatus == 0) & !player[0].dontmove) {
                     player[0].endX = clickX - player[0].halfWidth;
                     player[0].endY = clickY - player[0].halfHeight;
                 }
@@ -639,13 +639,22 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         screen.x = (int) (screenWidth * -0.2);
 
-        switch (character)
-        {
-            case "gunner":
-                player[0] = new Gunner(this);
-                break;
+        int c = 370;
+        for (int i = 0; i < 5; i++) {
+            Heart heart = new Heart(this, c, 10);
+            hearts[i] = heart;
+            c -= 90;
         }
 
+        if ("gunner".equals(character)) {
+            player[0] = new Gunner(this);
+        }
+//        switch (character)
+//        {
+//            case "gunner":
+//                player[0] = new Gunner(this);
+//                break;
+//        }
         player[0].PLAYER();
         healthKit.hide();
         shotgunKit.hide();
@@ -658,13 +667,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         portal.hide();
         buttonPlayer.hide();
         buttonGunner.hide();
-
-        int c = 370;
-        for (int i = 0; i < 5; i++) {
-            Heart heart = new Heart(this, c, 10);
-            hearts[i] = heart;
-            c -= 90;
-        }
 
         for (int i = 0; i < numberVaders; i++) {
             if (random.nextFloat() <= 0.15) {
@@ -690,9 +692,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void gameover() {
         screen.render(ImageHub.gameoverScreen);
 
-        if (pointerCount >= 4) {
-            generateNewGame();
-        }
         pauseButton.render();
 
         for (int i = 0; i < numberExplosionsAll; i++) {
@@ -718,6 +717,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
 
         textBuilder.setLength(0);
+        if (pointerCount >= 4) {
+            generateNewGame();
+        }
     }
 
     public void pause() {
@@ -847,6 +849,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         }
                     }
                 }
+                break;
         }
     }
 
@@ -925,6 +928,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         canvas.drawText(textBuilder.toString(), screenWidth - 250, pauseButton.y + pauseButton.width + 50, fpsPaint);
 
         textBuilder.setLength(0);
+
+        if (buttonPlayer.x < screenWidth) {
+            canvas.drawText("Choose your character",
+                    (screenWidth - Game.gameoverPaint.measureText("Choose your character")) / 2,
+                    (float) (screenHeight * 0.3), Game.gameoverPaint);
+        }
     }
 
     public void topScore() {
