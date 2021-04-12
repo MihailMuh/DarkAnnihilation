@@ -44,6 +44,7 @@ public class ImageHub {
     public static Bitmap buttonPlayerImg;
     public static Bitmap buttonGunnerImg;
     public static Bitmap gunnerImg;
+    public static Bitmap bulletGunnerImg;
 
     public ImageHub(Game game) {
         Context context = game.context;
@@ -167,6 +168,9 @@ public class ImageHub {
 
         gunnerImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.gunner);
         gunnerImg = Bitmap.createScaledBitmap(gunnerImg, (int) (100 * game.resizeK), (int) (207 * game.resizeK), isFilter);
+
+        bulletGunnerImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.gun_bullet);
+        bulletGunnerImg = Bitmap.createScaledBitmap(bulletGunnerImg, (int) (17 * game.resizeK), (int) (17 * game.resizeK), isFilter);
 
     }
 }

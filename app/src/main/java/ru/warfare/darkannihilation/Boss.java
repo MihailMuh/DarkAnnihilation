@@ -32,10 +32,10 @@ public class Boss extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
-            game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 1));
-            game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 2));
-            game.bulletBosses.add(new BulletBoss(game, x + width - 65, y + 20, 3));
-            game.numberBulletsBoss += 3;
+            game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 1));
+            game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 2));
+            game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 3));
+            game.numberBulletsEnemy += 3;
             AudioPlayer.playShoot();
         }
     }
@@ -66,27 +66,12 @@ public class Boss extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Bullet bullet) {
+    public void check_intersectionBullet(BulletBase bullet) {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 20 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 20 & y + 20 < bullet.y + bullet.height) {
             health -= bullet.damage;
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void check_intersectionBullet(Buckshot bullet) {
-        if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 20 < bullet.y & bullet.y < y + height - 20 |
-                bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 20 & y + 20 < bullet.y + bullet.height) {
-            health -= bullet.damage;
-            game.buckshots.remove(bullet);
-            game.numberBuckshots -= 1;
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);

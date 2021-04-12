@@ -3,13 +3,13 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
-public class BulletBoss extends Sprite {
+public class BulletBoss extends BulletBase {
     private Bitmap img;
-    public int damage = 5;
 
     public BulletBoss(Game g, int X, int Y, int type) {
         super(g, ImageHub.laserImage.getWidth(), ImageHub.laserImage.getHeight());
         speedY = 6;
+        damage = 5;
 
         Matrix matrix = new Matrix();
         switch (type)
@@ -39,8 +39,8 @@ public class BulletBoss extends Sprite {
         x -= speedX;
 
         if (y > screenHeight | x < -100 | x > screenWidth) {
-            game.bulletBosses.remove(this);
-            game.numberBulletsBoss -= 1;
+            game.bulletEnemies.remove(this);
+            game.numberBulletsEnemy -= 1;
         }
     }
 

@@ -29,26 +29,11 @@ public class Minion extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Bullet bullet) {
+    public void check_intersectionBullet(BulletBase bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
-            AudioPlayer.playBoom();
-            game.minions.remove(this);
-            game.numberMinions -= 1;
-            for (int i = 0; i < numberDefaultExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void check_intersectionBullet(Buckshot bullet) {
-        if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
-                bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             AudioPlayer.playBoom();
             game.minions.remove(this);
             game.numberMinions -= 1;

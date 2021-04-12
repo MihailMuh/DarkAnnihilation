@@ -61,6 +61,7 @@ public class Button extends Sprite {
                     System.exit(0);
                     break;
                 case "pause":
+                    game.player[0].dontmove = true;
                     Game.lastBoss += game.pauseTimer;
                     game.hardWorker.workOnResume();
                     AudioPlayer.pauseMusic.pause();
@@ -70,8 +71,18 @@ public class Button extends Sprite {
                     if (game.pauseButton.oldStatus == 2) {
                         AudioPlayer.readySnd.start();
                     }
-                    game.gameStatus = game.pauseButton.oldStatus;
+                    if (game.pauseButton.oldStatus != 0) {
+                        game.gameStatus = game.pauseButton.oldStatus;
+                        game.pauseButton.show();
+                    } else {
+                        game.gameStatus = 9;
+                    }
                     game.pauseTimer = 0;
+
+                    game.buttonMenu.x = screenWidth;
+                    x = screenWidth;
+                    img = ImageHub.buttonImageNotPressed;
+                    game.buttonQuit.x = screenWidth;
                     break;
                 case "menu":
                     game.generateMenu();

@@ -1,14 +1,13 @@
 package ru.warfare.darkannihilation;
 
 
-public class Buckshot extends Sprite {
-    public int damage = 2;
-
+public class Buckshot extends BulletBase {
     public Buckshot(Game g, int X, int Y, int speed) {
         super(g, ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
 
         x = X - halfWidth;
         y = Y;
+        damage = 2;
 
         speedX = speed;
         speedY = 8;
@@ -20,8 +19,8 @@ public class Buckshot extends Sprite {
         x += speedX;
 
         if (y < -height | x < -width | x > screenWidth) {
-            game.buckshots.remove(this);
-            game.numberBuckshots -= 1;
+            game.bullets.remove(this);
+            game.numberBullets -= 1;
         }
     }
 

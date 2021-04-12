@@ -49,38 +49,12 @@ public class Factory extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Bullet bullet) {
+    public void check_intersectionBullet(BulletBase bullet) {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
             health -= bullet.damage;
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
-                    break;
-                }
-            }
-            if (health <= 0) {
-                AudioPlayer.playMegaBoom();
-                game.score += 75;
-                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                hide();
-            }
-        }
-    }
-
-    public void check_intersectionBullet(Buckshot bullet) {
-        if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
-                bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
-            health -= bullet.damage;
-            game.buckshots.remove(bullet);
-            game.numberBuckshots -= 1;
             for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
                 if (game.explosions[i].lock) {
                     game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);

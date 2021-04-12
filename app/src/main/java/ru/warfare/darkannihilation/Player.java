@@ -18,16 +18,6 @@ public class Player extends Character {
     }
 
     @Override
-    public void AI() {
-        gun = "gun";
-        ai = 1;
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
-        speedX = randInt(3, 7);
-        speedY = randInt(3, 7);
-    }
-
-    @Override
     public void PLAYER() {
         gun = "gun";
         ai = 0;
@@ -45,12 +35,12 @@ public class Player extends Character {
                 if (now - lastShoot > shotgunTime) {
                     lastShoot = now;
                     AudioPlayer.playShotgun();
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -5));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, -2));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 0));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 2));
-                    game.buckshots.add(new Buckshot(game, x + halfWidth, y, 5));
-                    game.numberBuckshots += 5;
+                    game.bullets.add(new Buckshot(game, x + halfWidth, y, -5));
+                    game.bullets.add(new Buckshot(game, x + halfWidth, y, -2));
+                    game.bullets.add(new Buckshot(game, x + halfWidth, y, 0));
+                    game.bullets.add(new Buckshot(game, x + halfWidth, y, 2));
+                    game.bullets.add(new Buckshot(game, x + halfWidth, y, 5));
+                    game.numberBullets += 5;
                 }
             } else {
                 if (now - lastShoot > shootTime) {
@@ -197,25 +187,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void check_intersectionBullet(Bomb bulletEnemy) {
-        if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
-                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 10 |
-                bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
-                        bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
-            damage(bulletEnemy.damage);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
-                    break;
-                }
-            }
-            game.bombs.remove(bulletEnemy);
-            game.numberBombs -= 1;
-        }
-    }
-
-    @Override
-    public void check_intersectionBullet(BulletEnemy bulletEnemy) {
+    public void check_intersectionBullet(BulletBase bulletEnemy) {
         if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
                 y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 10 |
                 bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
@@ -229,24 +201,6 @@ public class Player extends Character {
             }
             game.bulletEnemies.remove(bulletEnemy);
             game.numberBulletsEnemy -= 1;
-        }
-    }
-
-    @Override
-    public void check_intersectionBullet(BulletBoss bulletEnemy) {
-        if (x + 15 < bulletEnemy.x & bulletEnemy.x < x + width - 15 &
-                y + 15 < bulletEnemy.y & bulletEnemy.y < y + height - 15 |
-                bulletEnemy.x < x + 15 & x + 15 < bulletEnemy.x + bulletEnemy.width &
-                        bulletEnemy.y < y + 15 & y + 15 < bulletEnemy.y + bulletEnemy.height) {
-            damage(bulletEnemy.damage);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
-                    break;
-                }
-            }
-            game.bulletBosses.remove(bulletEnemy);
-            game.numberBulletsBoss -= 1;
         }
     }
 

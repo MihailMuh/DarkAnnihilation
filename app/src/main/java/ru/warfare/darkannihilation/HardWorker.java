@@ -32,8 +32,8 @@ public class HardWorker implements Runnable {
                 makeAngle = 0;
             }
             if (makeBomb == 1) {
-                game.bombs.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
-                game.numberBombs += 1;
+                game.bulletEnemies.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
+                game.numberBulletsEnemy += 1;
                 makeBomb = 0;
             }
         }

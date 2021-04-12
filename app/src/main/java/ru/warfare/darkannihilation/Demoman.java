@@ -38,7 +38,7 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Bullet bullet) {
+    public void check_intersectionBullet(BulletBase bullet) {
         if (x + 30 < bullet.x & bullet.x < x + width - 15 & y < bullet.y & bullet.y < y + height - 50 |
                 bullet.x < x + 30 & x + 30 < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
@@ -50,32 +50,6 @@ public class Demoman extends Sprite {
             }
             game.bullets.remove(bullet);
             game.numberBullets -= 1;
-            if (health <= 0) {
-                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                AudioPlayer.playMegaBoom();
-                game.score += 35;
-                hide();
-            }
-        }
-    }
-
-    public void check_intersectionBullet(Buckshot bullet) {
-        if (x + 30 < bullet.x & bullet.x < x + width - 15 & y < bullet.y & bullet.y < y + height - 50 |
-                bullet.x < x + 30 & x + 30 < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
-            health -= bullet.damage;
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
-                    break;
-                }
-            }
-            game.buckshots.remove(bullet);
-            game.numberBuckshots -= 1;
             if (health <= 0) {
                 for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
                     if (game.explosions[i].lock) {

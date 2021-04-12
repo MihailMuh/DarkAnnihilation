@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import java.util.Random;
+
 public class Sprite {
     public int x = 0;
     public int y = 0;
@@ -37,7 +39,7 @@ public class Sprite {
         numberSmallExplosions = game.numberSmallExplosions;
     }
 
-    public void check_intersectionBullet(Bullet bullet) {}
+    public void check_intersectionBullet(BulletBase bullet) {}
     public void check_intersectionBullet(BulletEnemy bulletEnemy) {}
     public void update() {}
     public void render() {}

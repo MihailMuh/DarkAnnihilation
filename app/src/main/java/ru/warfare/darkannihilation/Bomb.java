@@ -1,11 +1,10 @@
 package ru.warfare.darkannihilation;
 
-public class Bomb extends Sprite {
-    public int damage = 5;
-
+public class Bomb extends BulletBase {
     public Bomb(Game g, int X, int Y) {
         super(g, ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
         speedY = 15;
+        damage = 5;
 
         x = X;
         y = Y;
@@ -18,8 +17,8 @@ public class Bomb extends Sprite {
         y += speedY;
 
         if (y > screenHeight) {
-            game.bombs.remove(this);
-            game.numberBombs -= 1;
+            game.bulletEnemies.remove(this);
+            game.numberBulletsEnemy -= 1;
         }
     }
 

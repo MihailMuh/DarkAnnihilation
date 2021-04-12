@@ -3,12 +3,12 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
-public class BulletEnemy extends Sprite {
+public class BulletEnemy extends BulletBase {
     private final Bitmap img;
-    public int damage = 5;
 
     public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
         super(g, ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
+        damage = 5;
 
         speedX = spdx;
         speedY = spdy;

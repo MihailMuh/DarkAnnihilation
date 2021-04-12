@@ -34,7 +34,6 @@ public class Character extends Sprite {
         }
     }
 
-    public void AI() {}
     public void PLAYER() {}
     public void shoot() {}
     public void check_intersectionVader(Vader vader) {}
@@ -45,8 +44,4 @@ public class Character extends Sprite {
     public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {}
     public void check_intersectionHealthKit(HealthKit healthKit) {}
     public void check_intersectionRocket(Rocket rocket) {}
-    public void check_intersectionBullet(Bomb bulletEnemy) {}
-    public void check_intersectionBullet(BulletBoss bulletBoss) {}
-
-
 }
