@@ -13,6 +13,18 @@ public class Bomb extends BulletBase {
     }
 
     @Override
+    public void intersection() {
+        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        game.bulletEnemies.remove(this);
+        game.numberBulletsEnemy -= 1;
+    }
+
+    @Override
     public void update() {
         y += speedY;
 

@@ -10,6 +10,18 @@ public class Bullet extends BulletBase {
     }
 
     @Override
+    public void intersection() {
+        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        game.bullets.remove(this);
+        game.numberBullets -= 1;
+    }
+
+    @Override
     public void update() {
         y -= speedY;
 

@@ -10,4 +10,6 @@ public class BulletBase extends Sprite {
         super(g, w, h);
     }
 
+    public void intersection() {}
+
 }

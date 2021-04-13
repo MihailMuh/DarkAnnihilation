@@ -37,9 +37,9 @@ public class Minion extends Sprite {
             AudioPlayer.playBoom();
             game.minions.remove(this);
             game.numberMinions -= 1;
-            for (int i = 0; i < numberDefaultExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(x + halfWidth, y + halfHeight);
+            for (int i = 0; i < numberMediumExplosionsTriple; i++) {
+                if (game.allExplosions[i].lock) {
+                    game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                     break;
                 }
             }

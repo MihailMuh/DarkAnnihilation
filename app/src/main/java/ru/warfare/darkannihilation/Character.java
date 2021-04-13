@@ -20,9 +20,9 @@ public class Character extends Sprite {
             health -= dmg;
             if (health <= 0) {
                 game.generateGameover();
-                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+                    if (game.allExplosions[i].lock) {
+                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                         break;
                     }
                 }

@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import java.util.Random;
-
 public class Sprite {
     public int x = 0;
     public int y = 0;
@@ -19,9 +17,11 @@ public class Sprite {
     public int halfScreenWidth;
     public int halfScreenHeight;
     public double resizeK;
-    public int numberSmallExplosions;
+    public int numberSmallExplosionsTriple;
     public int numberLargeExplosions;
-    public int numberDefaultExplosions;
+    public int numberMediumExplosionsTriple;
+    public int numberSmallExplosionsDefault;
+    public int numberMediumExplosionsDefault;
 
     public Sprite(Game g, int w, int h) {
         game = g;
@@ -34,9 +34,12 @@ public class Sprite {
         halfScreenWidth = game.halfScreenWidth;
         halfScreenHeight = game.halfScreenHeight;
         resizeK = game.resizeK;
-        numberDefaultExplosions = game.numberDefaultExplosions;
-        numberLargeExplosions = game.numberExplosionsAll;
-        numberSmallExplosions = game.numberSmallExplosions;
+        numberMediumExplosionsTriple = game.numberMediumExplosionsTriple;
+        numberSmallExplosionsTriple = game.numberSmallExplosionsTriple;
+        numberLargeExplosions = game.numberExplosionsALL;
+        numberSmallExplosionsDefault = game.numberSmallExplosionsDefault;
+        numberMediumExplosionsDefault = game.numberMediumExplosionsDefault;
+
     }
 
     public void check_intersectionBullet(BulletBase bullet) {}

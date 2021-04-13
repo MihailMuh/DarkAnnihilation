@@ -51,7 +51,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public Vader[] vaders = new Vader[10];
     public Heart[] hearts = new Heart[5];
-    public Explosion[] explosions = new Explosion[85];
+    public Explosion[] allExplosions = new Explosion[73];
     public ArrayList<BulletBase> bullets = new ArrayList<>(0);
     public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
     public ArrayList<BulletBase> bulletEnemies = new ArrayList<>(0);
@@ -81,10 +81,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public HardWorker hardWorker;
 
     public int numberVaders = vaders.length;
-    public int numberLargeExplosions = 5;
-    public int numberDefaultExplosions = explosions.length - 20 - numberLargeExplosions;
-    public int numberSmallExplosions = numberDefaultExplosions + 20;
-    public int numberExplosionsAll = explosions.length;
+    public int numberMediumExplosionsTriple = 20;
+    public int numberSmallExplosionsTriple = 15 + numberMediumExplosionsTriple;
+    public int numberMediumExplosionsDefault = numberSmallExplosionsTriple + 20;
+    public int numberSmallExplosionsDefault = numberMediumExplosionsDefault + 15;
+    public int numberExplosionsALL = allExplosions.length;
     public int numberBullets = 0;
     public int numberTripleFighters = 0;
     public int numberBulletsEnemy = 0;
@@ -150,14 +151,22 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         for (int i = 0; i < numberVaders; i++) {
             vaders[i] = new Vader(this);
         }
-        for (int i = 0; i < numberExplosionsAll; i++) {
-            if (i < numberDefaultExplosions) {
-                explosions[i] = new Explosion(this, "default");
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            if (i < numberMediumExplosionsTriple) {
+                allExplosions[i] = new ExplosionTriple(this, "default");
             } else {
-                if (i < numberSmallExplosions) {
-                    explosions[i] = new Explosion(this, "small");
+                if (i < numberSmallExplosionsTriple) {
+                    allExplosions[i] = new ExplosionTriple(this, "small");
                 } else {
-                    explosions[i] = new Explosion(this, "large");
+                    if (i < numberMediumExplosionsDefault) {
+                        allExplosions[i] = new DefaultExplosion(this, "default");
+                    } else {
+                        if (i < numberSmallExplosionsDefault) {
+                            allExplosions[i] = new DefaultExplosion(this, "small");
+                        } else {
+                            allExplosions[i] = new ExplosionSkull(this);
+                        }
+                    }
                 }
             }
         }
@@ -200,27 +209,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.render();
         screen.update();
 
-        if (gameStatus == 0) {
-            if (now - lastBoss > BOSS_TIME) {
-                lastBoss = now;
-                bosses.add(new Boss(this));
-                numberBosses += 1;
-            }
-            if (random.nextFloat() >= 0.9985 & healthKit.lock) {
-                healthKit.lock = false;
-            }
-            if (random.nextFloat() >= 0.99 & shotgunKit.lock & score >= 50 & !shotgunKit.picked) {
-                shotgunKit.lock = false;
-            }
-            if (random.nextFloat() >= 0.996 & attention.lock & score > 50) {
-                attention.start();
-            }
-            if (random.nextFloat() >= 0.9991 & factory.lock & score >= 170 & numberBosses == 0) {
-                factory.lock = false;
-            }
-            if (random.nextFloat() >= 0.9979 & demoman.lock & score > 70) {
-                demoman.lock = false;
-            }
+        if ((now - lastBoss > BOSS_TIME) & gameStatus == 0) {
+            lastBoss = now;
+            bosses.add(new Boss(this));
+            numberBosses += 1;
         }
 
         if (!healthKit.lock) {
@@ -228,18 +220,35 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             healthKit.update();
             healthKit.render();
             player[0].check_intersectionHealthKit(healthKit);
+        } else {
+            if (random.nextFloat() >= 0.9985) {
+                healthKit.lock = false;
+            }
         }
-        if (!shotgunKit.lock & !shotgunKit.picked) {
-            shotgunKit.x -= moveAll;
-            shotgunKit.update();
-            shotgunKit.render();
-            player[0].check_intersectionShotgunKit(shotgunKit);
+
+        if (!shotgunKit.picked) {
+            if (!shotgunKit.lock) {
+                shotgunKit.x -= moveAll;
+                shotgunKit.update();
+                shotgunKit.render();
+                player[0].check_intersectionShotgunKit(shotgunKit);
+            } else {
+                if (random.nextFloat() >= 0.99 & score >= 50) {
+                    shotgunKit.lock = false;
+                }
+            }
         }
+
         if (!attention.lock) {
             attention.x -= moveAll;
             attention.update();
             attention.render();
+        } else {
+            if (random.nextFloat() >= 0.996 & score > 50) {
+                attention.start();
+            }
         }
+
         if (!rocket.lock) {
             rocket.x -= moveAll;
             rocket.update();
@@ -253,6 +262,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             for (int j = 0; j < numberBullets; j++) {
                 factory.check_intersectionBullet(bullets.get(j));
             }
+        } else {
+            if (random.nextFloat() >= 0.9991 & score >= 170 & numberBosses == 0) {
+                factory.lock = false;
+            }
         }
         if (!demoman.lock) {
             demoman.x -= moveAll;
@@ -262,7 +275,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             for (int j = 0; j < numberBullets; j++) {
                 demoman.check_intersectionBullet(bullets.get(j));
             }
+        } else {
+            if (random.nextFloat() >= 0.9979 & score > 70) {
+                demoman.lock = false;
+            }
         }
+
         if (gameStatus == 6) {
             portal.x -= moveAll;
             portal.update();
@@ -331,10 +349,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             if (i < numberBulletsEnemy) {
                 BulletBase bulletEnemy = bulletEnemies.get(i);
-                bulletEnemy.render();
-                bulletEnemy.x -= moveAll;
-                bulletEnemy.update();
-                player[0].check_intersectionBullet(bulletEnemy);
+                if (bulletEnemy != null) {
+                    bulletEnemy.render();
+                    bulletEnemy.x -= moveAll;
+                    bulletEnemy.update();
+                    player[0].check_intersectionBullet(bulletEnemy);
+                }
             }
 
             if (i < numberBullets) {
@@ -344,10 +364,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bullet.update();
             }
 
-            if (i < numberExplosionsAll) {
-                explosions[i].x -= moveAll;
-                explosions[i].update();
-                explosions[i].render();
+            if (i < numberExplosionsALL) {
+                if (!allExplosions[i].lock) {
+                    allExplosions[i].x -= moveAll;
+                    allExplosions[i].update();
+                    allExplosions[i].render();
+                }
             }
         }
 
@@ -597,8 +619,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         bullets = new ArrayList<>(0);
         numberBullets = 0;
-        for (int i = 0; i < numberExplosionsAll; i++) {
-            explosions[i].stop();
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            allExplosions[i].stop();
         }
     }
 
@@ -615,16 +637,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         gameStatus = 2;
 
         bulletEnemies = new ArrayList<>(0);
-        bulletEnemies = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
         tripleFighters = new ArrayList<>(0);
         bullets = new ArrayList<>(0);
-        bulletEnemies = new ArrayList<>(0);
         minions = new ArrayList<>(0);
-        bulletEnemies = new ArrayList<>(0);
 
-        for (int i = 0; i < numberExplosionsAll; i++) {
-            explosions[i].stop();
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            allExplosions[i].stop();
         }
 
         numberVaders = 12;
@@ -677,6 +696,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         numberTripleFighters = tripleFighters.size();
 
+        bullets = new ArrayList<>(0);
+        numberBullets = 0;
+
         if (AudioPlayer.menuMusic.isPlaying()) {
             AudioPlayer.menuMusic.pause();
         } else {
@@ -685,7 +707,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.pirateMusic.seekTo(0);
         AudioPlayer.pirateMusic.start();
 
-        lastBoss = System.currentTimeMillis();
         AudioPlayer.readySnd.start();
     }
 
@@ -694,9 +715,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         pauseButton.render();
 
-        for (int i = 0; i < numberExplosionsAll; i++) {
-            explosions[i].update();
-            explosions[i].render();
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            if (!allExplosions[i].lock) {
+                allExplosions[i].update();
+                allExplosions[i].render();
+            }
         }
 
         canvas.drawText("Tap this screen with four or more fingers to restart",
@@ -754,8 +777,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     bulletEnemies.get(i).render();
                 }
 
-                if (i < numberExplosionsAll) {
-                    explosions[i].render();
+                if (i < numberExplosionsALL) {
+                    if (!allExplosions[i].lock) {
+                        allExplosions[i].render();
+                    }
                 }
 
                 if (i < numberBosses) {
@@ -826,6 +851,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         gameStatus = 6;
                     }
                     bosses.get(bosses.size()-1).y = -200;
+                    bullets = new ArrayList<>(0);
+                    numberBullets = 0;
                 }
                 bosses.get(bosses.size()-1).update();
                 fightBg.render();
@@ -878,6 +905,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                             player[0].lock = false;
                             changerGuns.unHide();
                             count = 0;
+                            lastBoss = System.currentTimeMillis();
+
                         }
                     }
                 }
@@ -904,9 +933,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 bullets.get(i).update();
             }
 
-            if (i < numberExplosionsAll) {
-                explosions[i].update();
-                explosions[i].render();
+            if (i < numberExplosionsALL) {
+                if (!allExplosions[i].lock) {
+                    allExplosions[i].update();
+                    allExplosions[i].render();
+                }
             }
         }
 

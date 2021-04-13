@@ -42,18 +42,11 @@ public class Demoman extends Sprite {
         if (x + 30 < bullet.x & bullet.x < x + width - 15 & y < bullet.y & bullet.y < y + height - 50 |
                 bullet.x < x + 30 & x + 30 < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
-                    break;
-                }
-            }
-            game.bullets.remove(bullet);
-            game.numberBullets -= 1;
+            bullet.intersection();
             if (health <= 0) {
-                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+                    if (game.allExplosions[i].lock) {
+                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                         break;
                     }
                 }

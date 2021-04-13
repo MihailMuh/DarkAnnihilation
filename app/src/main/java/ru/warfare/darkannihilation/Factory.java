@@ -3,8 +3,6 @@ package ru.warfare.darkannihilation;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import java.util.ArrayList;
-
 public class Factory extends Sprite {
     private static final int spawnTime = 1_000;
     private long lastSpawn;
@@ -53,20 +51,13 @@ public class Factory extends Sprite {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 80 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 80 & y + 80 < bullet.y + bullet.height) {
             health -= bullet.damage;
-            game.bullets.remove(bullet);
-            game.numberBullets -= 1;
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
-                    break;
-                }
-            }
+            bullet.intersection();
             if (health <= 0) {
                 AudioPlayer.playMegaBoom();
                 game.score += 75;
-                for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+                    if (game.allExplosions[i].lock) {
+                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                         break;
                     }
                 }

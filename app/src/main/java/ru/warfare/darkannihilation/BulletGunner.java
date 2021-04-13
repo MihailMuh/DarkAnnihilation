@@ -8,13 +8,25 @@ public class BulletGunner extends BulletBase {
         super(g, ImageHub.bulletGunnerImg.getWidth(), ImageHub.bulletGunnerImg.getHeight());
 
         speedY = randInt(6, 13);
-        speedx = random.nextDouble() * 4;
+        speedx = random.nextDouble() * 6.5;
         if (randInt(1, 2) == 1) {
             speedx = -speedx;
         }
 
         x = X;
         y = Y;
+    }
+
+    @Override
+    public void intersection() {
+        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        game.bullets.remove(this);
+        game.numberBullets -= 1;
     }
 
     @Override

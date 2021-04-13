@@ -62,9 +62,9 @@ public class Player extends Character {
                         y + 25 < vader.y + 15 & vader.y + 15 < y + height - 20) {
             AudioPlayer.playMetal();
             damage(5);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(vader.x + vader.halfWidth, vader.y + vader.halfHeight);
+            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+                if (game.allExplosions[i].lock) {
+                    game.allExplosions[i].start(vader.x + vader.halfWidth, vader.y + vader.halfHeight);
                     break;
                 }
             }
@@ -80,9 +80,9 @@ public class Player extends Character {
                         y + 25 < tripleFighter.y + 5 & tripleFighter.y + 5 < y + height - 20) {
             AudioPlayer.playMetal();
             damage(10);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(tripleFighter.x + tripleFighter.halfWidth,
+            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+                if (game.allExplosions[i].lock) {
+                    game.allExplosions[i].start(tripleFighter.x + tripleFighter.halfWidth,
                             tripleFighter.y + tripleFighter.halfHeight);
                     break;
                 }
@@ -119,9 +119,9 @@ public class Player extends Character {
             game.minions.remove(minion);
             game.numberMinions -= 1;
             damage(5);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(minion.x + minion.halfWidth, minion.y + minion.halfHeight);
+            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+                if (game.allExplosions[i].lock) {
+                    game.allExplosions[i].start(minion.x + minion.halfWidth, minion.y + minion.halfHeight);
                     break;
                 }
             }
@@ -175,9 +175,9 @@ public class Player extends Character {
                 rocket.x < x + 5 & x + 5 < rocket.x + rocket.width &
                         rocket.y < y & y < rocket.y + rocket.height) {
             damage(rocket.damage);
-            for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(rocket.x + rocket.halfWidth, rocket.y + rocket.halfHeight);
+            for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+                if (game.allExplosions[i].lock) {
+                    game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                     break;
                 }
             }
@@ -193,9 +193,9 @@ public class Player extends Character {
                 bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
                         bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
             damage(bulletEnemy.damage);
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
+            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+                if (game.allExplosions[i].lock) {
+                    game.allExplosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
                     break;
                 }
             }

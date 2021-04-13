@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class Vader extends Sprite {
     public Bitmap img;
@@ -33,12 +34,12 @@ public class Vader extends Sprite {
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             if (bullet.damage < health) {
                 health -= bullet.damage;
-                game.bullets.remove(bullet);
-                game.numberBullets -= 1;
+                bullet.intersection();
                 if (health <= 0) {
-                    for (int i = 0; i < numberDefaultExplosions; i++) {
-                        if (game.explosions[i].lock) {
-                            game.explosions[i].start(x + halfWidth, y + halfHeight);
+                    for (int i = numberSmallExplosionsTriple; i < numberMediumExplosionsDefault; i++) {
+                        Log.e(MainActivity.TAG, i + "");
+                        if (game.allExplosions[i].lock) {
+                            game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                             break;
                         }
                     }
@@ -47,9 +48,9 @@ public class Vader extends Sprite {
                     newStatus();
                 }
             } else {
-                for (int i = 0; i < numberDefaultExplosions; i++) {
-                    if (game.explosions[i].lock) {
-                        game.explosions[i].start(x + halfWidth, y + halfHeight);
+                for (int i = numberSmallExplosionsTriple; i < numberMediumExplosionsDefault; i++) {
+                    if (game.allExplosions[i].lock) {
+                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                         break;
                     }
                 }

@@ -41,9 +41,9 @@ public class Boss extends Sprite {
     }
 
     public void killAfterFight() {
-        for (int i = numberSmallExplosions; i < numberLargeExplosions; i++) {
-            if (game.explosions[i].lock) {
-                game.explosions[i].start(x + halfWidth, y + halfHeight);
+        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                 break;
             }
         }
@@ -70,13 +70,9 @@ public class Boss extends Sprite {
         if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 20 < bullet.y & bullet.y < y + height - 20 |
                 bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 20 & y + 20 < bullet.y + bullet.height) {
             health -= bullet.damage;
-            game.bullets.remove(bullet);
-            game.numberBullets -= 1;
-            for (int i = numberDefaultExplosions; i < numberSmallExplosions; i++) {
-                if (game.explosions[i].lock) {
-                    game.explosions[i].start(bullet.x + bullet.halfWidth, bullet.y + bullet.halfHeight);
-                    break;
-                }
+            bullet.intersection();
+            if (health <= 0) {
+                killAfterFight();
             }
         }
     }
@@ -94,10 +90,6 @@ public class Boss extends Sprite {
         }
         if (x < -width) {
             x = game.screenWidth;
-        }
-
-        if (health <= 0) {
-            killAfterFight();
         }
     }
 
