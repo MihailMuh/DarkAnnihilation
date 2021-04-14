@@ -9,6 +9,7 @@ public class TripleFighter extends Sprite {
         super(g, ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
         lock = true;
         health = 6;
+        damage = 10;
 
         x = randInt(0, screenWidth);
         y = -150;
@@ -44,21 +45,38 @@ public class TripleFighter extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        for (int i = 0; i < numberMediumExplosionsTriple; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        AudioPlayer.playBoom();
+        game.score += 5;
+        newStatus();
+    }
+
+    @Override
+    public void intersectionPlayer() {
+        AudioPlayer.playMetal();
+        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        newStatus();
+    }
+
+    @Override
     public void check_intersectionBullet(BulletBase bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {
-                for (int i = 0; i < numberMediumExplosionsTriple; i++) {
-                    if (game.allExplosions[i].lock) {
-                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                AudioPlayer.playBoom();
-                game.score += 5;
-                newStatus();
+                intersection();
             }
         }
     }

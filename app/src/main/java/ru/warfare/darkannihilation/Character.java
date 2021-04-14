@@ -44,4 +44,5 @@ public class Character extends Sprite {
     public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {}
     public void check_intersectionHealthKit(HealthKit healthKit) {}
     public void check_intersectionRocket(Rocket rocket) {}
+    public void checkIntersections(Sprite sprite) {}
 }

@@ -181,7 +181,7 @@ public class ImageHub {
         gunnerImg = Bitmap.createScaledBitmap(gunnerImg, (int) (100 * game.resizeK), (int) (207 * game.resizeK), isFilter);
 
         bulletGunnerImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.gun_bullet);
-        bulletGunnerImg = Bitmap.createScaledBitmap(bulletGunnerImg, (int) (11 * game.resizeK), (int) (11 * game.resizeK), isFilter);
+        bulletGunnerImg = Bitmap.createScaledBitmap(bulletGunnerImg, (int) (13 * game.resizeK), (int) (13 * game.resizeK), isFilter);
 
     }
 }

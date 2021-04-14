@@ -34,6 +34,20 @@ public class Portal extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        game.gameStatus = 7;
+        AudioPlayer.portalSound.pause();
+        if (AudioPlayer.bossMusic.isPlaying()) {
+            AudioPlayer.bossMusic.pause();
+        }
+        AudioPlayer.winMusic.seekTo(0);
+        AudioPlayer.winMusic.start();
+        game.winScreen = new WinScreen(game);
+        hide();
+    }
+
+
+    @Override
     public void update() {
         now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {

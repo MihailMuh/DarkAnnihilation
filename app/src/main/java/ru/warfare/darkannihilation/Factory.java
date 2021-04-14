@@ -40,10 +40,22 @@ public class Factory extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
-            game.minions.add(new Minion(game, x));
-            game.minions.add(new Minion(game, x));
-            game.numberMinions += 2;
+            game.empire.add(new Minion(game, x));
+            game.empire.add(new Minion(game, x));
         }
+    }
+
+    @Override
+    public void intersection() {
+        AudioPlayer.playMegaBoom();
+        game.score += 75;
+        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        hide();
     }
 
     @Override
@@ -53,15 +65,7 @@ public class Factory extends Sprite {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {
-                AudioPlayer.playMegaBoom();
-                game.score += 75;
-                for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-                    if (game.allExplosions[i].lock) {
-                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                hide();
+                intersection();
             }
         }
     }

@@ -10,7 +10,7 @@ public class ExplosionSkull extends Explosion {
     public ExplosionSkull(Game g) {
         super(g, ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
         lock = true;
-        shotgunTime = 35;
+        shotgunTime = 27;
         img = new Bitmap[ImageHub.explosionLarge.length];
         img = ImageHub.explosionLarge.clone();
 

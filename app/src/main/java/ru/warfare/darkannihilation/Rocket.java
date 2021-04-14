@@ -1,12 +1,11 @@
 package ru.warfare.darkannihilation;
 
 public class Rocket extends Sprite{
-    public int damage = 100;
-
     public Rocket(Game g) {
         super(g, ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
         speedY = 35;
         lock = true;
+        damage = 100000;
 
         y = -height;
     }
@@ -20,6 +19,19 @@ public class Rocket extends Sprite{
         x = X - halfWidth;
         lock = false;
     }
+
+    @Override
+    public void intersection() {
+        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        AudioPlayer.playMegaBoom();
+        hide();
+    }
+
 
     @Override
     public void update() {

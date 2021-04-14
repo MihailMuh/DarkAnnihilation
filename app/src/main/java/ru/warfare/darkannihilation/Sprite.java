@@ -12,6 +12,7 @@ public class Sprite {
     public final Game game;
     public boolean lock = false;
     public int health = 0;
+    public int damage = 0;
     public int screenWidth;
     public int screenHeight;
     public int halfScreenWidth;
@@ -45,6 +46,8 @@ public class Sprite {
     public void check_intersectionBullet(BulletBase bullet) {}
     public void update() {}
     public void render() {}
+    public void intersection() {}
+    public void intersectionPlayer() {}
 
     public static int randInt(int min, int max) {
         max -= min;

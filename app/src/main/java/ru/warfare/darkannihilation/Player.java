@@ -40,7 +40,6 @@ public class Player extends Character {
                     game.bullets.add(new Buckshot(game, x + halfWidth, y, 0));
                     game.bullets.add(new Buckshot(game, x + halfWidth, y, 2));
                     game.bullets.add(new Buckshot(game, x + halfWidth, y, 5));
-                    game.numberBullets += 5;
                 }
             } else {
                 if (now - lastShoot > shootTime) {
@@ -48,46 +47,8 @@ public class Player extends Character {
                     AudioPlayer.playShoot();
                     game.bullets.add(new Bullet(game, x + halfWidth - 6, y));
                     game.bullets.add(new Bullet(game, x + halfWidth, y));
-                    game.numberBullets += 2;
                 }
             }
-        }
-    }
-
-    @Override
-    public void check_intersectionVader(Vader vader) {
-        if (vader.x + 15 < x + 20 & x + 20 < vader.x + vader.width - 15 &
-                vader.y + 15 < y + 25 & y + 25 < vader.y + vader.height - 15 |
-                x + 20 < vader.x + 15 & vader.x + 15 < x + width - 20 &
-                        y + 25 < vader.y + 15 & vader.y + 15 < y + height - 20) {
-            AudioPlayer.playMetal();
-            damage(5);
-            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-                if (game.allExplosions[i].lock) {
-                    game.allExplosions[i].start(vader.x + vader.halfWidth, vader.y + vader.halfHeight);
-                    break;
-                }
-            }
-            vader.newStatus();
-        }
-    }
-
-    @Override
-    public void check_intersectionTripleFighter(TripleFighter tripleFighter) {
-        if (tripleFighter.x + 5 < x + 20 & x + 20 < tripleFighter.x + tripleFighter.width - 5 &
-                tripleFighter.y + 5 < y + 25 & y + 25 < tripleFighter.y + tripleFighter.height - 5 |
-                x + 20 < tripleFighter.x + 5 & tripleFighter.x + 5 < x + width - 20 &
-                        y + 25 < tripleFighter.y + 5 & tripleFighter.y + 5 < y + height - 20) {
-            AudioPlayer.playMetal();
-            damage(10);
-            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-                if (game.allExplosions[i].lock) {
-                    game.allExplosions[i].start(tripleFighter.x + tripleFighter.halfWidth,
-                            tripleFighter.y + tripleFighter.halfHeight);
-                    break;
-                }
-            }
-            tripleFighter.newStatus();
         }
     }
 
@@ -97,34 +58,7 @@ public class Player extends Character {
                 portal.y + 15 < y + 25 & y + 25 < portal.y + portal.height - 15 |
                 x + 20 < portal.x + 15 & portal.x + 15 < x + width - 20 &
                         y + 25 < portal.y + 15 & portal.y + 15 < y + height - 20) {
-            game.gameStatus = 7;
-            AudioPlayer.portalSound.pause();
-            if (AudioPlayer.bossMusic.isPlaying()) {
-                AudioPlayer.bossMusic.pause();
-            }
-            AudioPlayer.winMusic.seekTo(0);
-            AudioPlayer.winMusic.start();
-            game.winScreen = new WinScreen(game);
-            portal.hide();
-        }
-    }
-
-    @Override
-    public void check_intersectionMinion(Minion minion) {
-        if (minion.x + 15 < x + 20 & x + 20 < minion.x + minion.width - 15 &
-                minion.y + 15 < y + 25 & y + 25 < minion.y + minion.height - 15 |
-                x + 20 < minion.x + 15 & minion.x + 15 < x + width - 20 &
-                        y + 25 < minion.y + 15 & minion.y + 15 < y + height - 20) {
-            AudioPlayer.playMetal();
-            game.minions.remove(minion);
-            game.numberMinions -= 1;
-            damage(5);
-            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-                if (game.allExplosions[i].lock) {
-                    game.allExplosions[i].start(minion.x + minion.halfWidth, minion.y + minion.halfHeight);
-                    break;
-                }
-            }
+            portal.intersection();
         }
     }
 
@@ -134,9 +68,8 @@ public class Player extends Character {
                 demoman.y < y + 25 & y + 25 < demoman.y + demoman.height - 50 |
                 x + 20 < demoman.x + 30 & demoman.x + 30 < x + width - 20 &
                         y + 25 < demoman.y & demoman.y < y + height - 20) {
-            AudioPlayer.playMetal();
-            damage(20);
-            demoman.health = 0;
+            damage(demoman.damage);
+            demoman.intersectionPlayer();
         }
     }
 
@@ -146,9 +79,7 @@ public class Player extends Character {
                 shotgunKit.y + 5 < y + 10 & y + 10 < shotgunKit.y + shotgunKit.height - 5 |
                 x + 10 < shotgunKit.x + 5 & shotgunKit.x + 5 < x + width - 10 &
                         y + 10 < shotgunKit.y + 5 & shotgunKit.y + 5 < y + height - 10) {
-            shotgunKit.hide();
-            shotgunKit.picked = true;
-            game.changerGuns.changeGun();
+            shotgunKit.intersection();
         }
     }
 
@@ -158,8 +89,7 @@ public class Player extends Character {
                 healthKit.y + 5 < y + 5 & y + 5 < healthKit.y + healthKit.height - 5 |
                 x + 5 < healthKit.x + 5 & healthKit.x + 5 < x + width - 5 &
                         y + 5 < healthKit.y + 5 & healthKit.y + 5 < y + height - 5) {
-            healthKit.hide();
-            AudioPlayer.healSnd.start();
+            healthKit.intersection();
             if (health < 30) {
                 health += 20;
             } else {
@@ -175,14 +105,7 @@ public class Player extends Character {
                 rocket.x < x + 5 & x + 5 < rocket.x + rocket.width &
                         rocket.y < y & y < rocket.y + rocket.height) {
             damage(rocket.damage);
-            for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-                if (game.allExplosions[i].lock) {
-                    game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
-            AudioPlayer.playMegaBoom();
-            rocket.hide();
+            rocket.intersection();
         }
     }
 
@@ -193,14 +116,18 @@ public class Player extends Character {
                 bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
                         bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
             damage(bulletEnemy.damage);
-            for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-                if (game.allExplosions[i].lock) {
-                    game.allExplosions[i].start(bulletEnemy.x + bulletEnemy.halfWidth, bulletEnemy.y + bulletEnemy.halfHeight);
-                    break;
-                }
-            }
-            game.bulletEnemies.remove(bulletEnemy);
-            game.numberBulletsEnemy -= 1;
+            bulletEnemy.intersection();
+        }
+    }
+
+    @Override
+    public void checkIntersections(Sprite enemy) {
+        if (enemy.x + 15 < x + 20 & x + 20 < enemy.x + enemy.width - 15 &
+                enemy.y + 15 < y + 25 & y + 25 < enemy.y + enemy.height - 15 |
+                x + 20 < enemy.x + 15 & enemy.x + 15 < x + width - 20 &
+                        y + 25 < enemy.y + 15 & enemy.y + 15 < y + height - 20) {
+            damage(enemy.damage);
+            enemy.intersectionPlayer();
         }
     }
 

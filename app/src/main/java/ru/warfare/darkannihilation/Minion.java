@@ -8,6 +8,7 @@ public class Minion extends Sprite {
     public Minion(Game g, int FX) {
         super(g, ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
         health = 2;
+        damage = 5;
 
         x = randInt(FX, FX + ImageHub.factoryImg.getWidth());
         y = ImageHub.factoryImg.getHeight() - 100;
@@ -29,20 +30,36 @@ public class Minion extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        AudioPlayer.playBoom();
+        game.empire.remove(this);
+        for (int i = 0; i < numberMediumExplosionsTriple; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void intersectionPlayer() {
+        AudioPlayer.playMetal();
+        game.empire.remove(this);
+        for (int i = numberMediumExplosionsTriple; i < numberSmallExplosionsTriple; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
+
+
+    @Override
     public void check_intersectionBullet(BulletBase bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
-            game.bullets.remove(bullet);
-            game.numberBullets -= 1;
-            AudioPlayer.playBoom();
-            game.minions.remove(this);
-            game.numberMinions -= 1;
-            for (int i = 0; i < numberMediumExplosionsTriple; i++) {
-                if (game.allExplosions[i].lock) {
-                    game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                    break;
-                }
-            }
+            bullet.intersection();
+            intersection();
         }
     }
 
@@ -54,8 +71,7 @@ public class Minion extends Sprite {
         shoot();
 
         if (x < -width | x > game.screenWidth | y > game.screenHeight) {
-            game.minions.remove(this);
-            game.numberMinions -= 1;
+            game.empire.remove(this);
         }
     }
 

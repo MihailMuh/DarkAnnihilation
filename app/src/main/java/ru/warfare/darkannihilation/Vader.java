@@ -5,9 +5,11 @@ import android.util.Log;
 
 public class Vader extends Sprite {
     public Bitmap img;
+
     public Vader(Game g) {
         super(g, ImageHub.vaderImage[0].getWidth(), ImageHub.vaderImage[0].getHeight());
         health = 2;
+        damage = 5;
 
         img = ImageHub.vaderImage[randInt(0, 2)];
 
@@ -29,6 +31,32 @@ public class Vader extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        for (int i = numberSmallExplosionsTriple; i < numberMediumExplosionsDefault; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        AudioPlayer.playBoom();
+        game.score += 1;
+        newStatus();
+    }
+
+    @Override
+    public void intersectionPlayer() {
+        AudioPlayer.playMetal();
+        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        AudioPlayer.playBoom();
+        newStatus();
+    }
+
+    @Override
     public void check_intersectionBullet(BulletBase bullet) {
         if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
                 bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
@@ -36,27 +64,10 @@ public class Vader extends Sprite {
                 health -= bullet.damage;
                 bullet.intersection();
                 if (health <= 0) {
-                    for (int i = numberSmallExplosionsTriple; i < numberMediumExplosionsDefault; i++) {
-                        Log.e(MainActivity.TAG, i + "");
-                        if (game.allExplosions[i].lock) {
-                            game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                            break;
-                        }
-                    }
-                    AudioPlayer.playBoom();
-                    game.score += 1;
-                    newStatus();
+                    intersection();
                 }
             } else {
-                for (int i = numberSmallExplosionsTriple; i < numberMediumExplosionsDefault; i++) {
-                    if (game.allExplosions[i].lock) {
-                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                AudioPlayer.playBoom();
-                game.score += 1;
-                newStatus();
+                intersection();
             }
         }
     }

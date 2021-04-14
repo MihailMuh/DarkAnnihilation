@@ -32,7 +32,6 @@ public class BulletEnemy extends BulletBase {
             }
         }
         game.bulletEnemies.remove(this);
-        game.numberBulletsEnemy -= 1;
     }
 
     @Override
@@ -42,7 +41,6 @@ public class BulletEnemy extends BulletBase {
 
         if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
             game.bulletEnemies.remove(this);
-            game.numberBulletsEnemy -= 1;
         }
     }
 

@@ -1,7 +1,6 @@
 package ru.warfare.darkannihilation;
 
 public class BulletGunner extends BulletBase {
-    public double damage = 0.5;
     private double speedx;
 
     public BulletGunner(Game g, int X, int Y) {
@@ -12,6 +11,7 @@ public class BulletGunner extends BulletBase {
         if (randInt(1, 2) == 1) {
             speedx = -speedx;
         }
+        damage = 1;
 
         x = X;
         y = Y;
@@ -26,7 +26,6 @@ public class BulletGunner extends BulletBase {
             }
         }
         game.bullets.remove(this);
-        game.numberBullets -= 1;
     }
 
     @Override
@@ -36,7 +35,6 @@ public class BulletGunner extends BulletBase {
 
         if (y < -height | x < -width | x > screenWidth) {
             game.bullets.remove(this);
-            game.numberBullets -= 1;
         }
     }
 

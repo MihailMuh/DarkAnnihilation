@@ -17,6 +17,12 @@ public class HealthKit extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        hide();
+        AudioPlayer.healSnd.start();
+    }
+
+    @Override
     public void update() {
         y += speedY;
 

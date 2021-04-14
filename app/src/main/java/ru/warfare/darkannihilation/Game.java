@@ -36,28 +36,26 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int halfScreenHeight;
     public double resizeK;
 
-    private static final Paint fpsPaint = new Paint();
-    private static final Paint startPaint = new Paint();
+    public static final Paint fpsPaint = new Paint();
+    public static final Paint startPaint = new Paint();
     public static final Paint gameoverPaint = new Paint();
-    private static final Paint scorePaint = new Paint();
-    private static final Paint topPaint = new Paint();
-    private static final Paint topPaintRed = new Paint();
+    public static final Paint scorePaint = new Paint();
+    public static final Paint topPaint = new Paint();
+    public static final Paint topPaintRed = new Paint();
 
     public static final Random random = new Random();
-    public JSONObject jsonScore = new JSONObject();
-    public StringBuilder scoreBuilder = new StringBuilder();
-    public Vibrator vibrator;
+    public static JSONObject jsonScore = new JSONObject();
+    public static final StringBuilder scoreBuilder = new StringBuilder();
+    public final Vibrator vibrator;
     private static final StringBuilder textBuilder = new StringBuilder();
 
-    public Vader[] vaders = new Vader[10];
     public Heart[] hearts = new Heart[5];
     public Explosion[] allExplosions = new Explosion[73];
     public ArrayList<BulletBase> bullets = new ArrayList<>(0);
-    public ArrayList<TripleFighter> tripleFighters = new ArrayList<>(0);
     public ArrayList<BulletBase> bulletEnemies = new ArrayList<>(0);
     public ArrayList<Boss> bosses = new ArrayList<>(0);
-    public ArrayList<Minion> minions = new ArrayList<>(0);
     public Character[] player = new Character[1];
+    public ArrayList<Sprite> empire = new ArrayList<>(0);
 
     public Screen screen;
     public Button buttonStart;
@@ -80,17 +78,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ButtonGunner buttonGunner;
     public HardWorker hardWorker;
 
-    public int numberVaders = vaders.length;
+    public final int numberVaders = 10;
     public int numberMediumExplosionsTriple = 20;
     public int numberSmallExplosionsTriple = 15 + numberMediumExplosionsTriple;
     public int numberMediumExplosionsDefault = numberSmallExplosionsTriple + 20;
     public int numberSmallExplosionsDefault = numberMediumExplosionsDefault + 15;
     public int numberExplosionsALL = allExplosions.length;
-    public int numberBullets = 0;
-    public int numberTripleFighters = 0;
-    public int numberBulletsEnemy = 0;
     public int numberBosses = 0;
-    public int numberMinions = 0;
 
     public int gameStatus = 1;
     public int count = 0;
@@ -117,18 +111,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         context = cont;
         holder = getHolder();
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    }
-
-    public void initGame(int width, int height) {
-        screenWidth = width;
-        screenHeight = height;
-        halfScreenWidth = screenWidth / 2;
-        halfScreenHeight = screenHeight / 2;
-        resizeK = (double) screenWidth / 1920;
-
-        imageHub = new ImageHub(this);
-        audioPlayer = new AudioPlayer(this);
-        hardWorker = new HardWorker(this);
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -143,13 +125,24 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setColor(Color.RED);
         topPaintRed.setTextSize(30);
 
+    }
+
+    public void initGame(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
+        halfScreenWidth = screenWidth / 2;
+        halfScreenHeight = screenHeight / 2;
+        resizeK = (double) screenWidth / 1920;
+
+        imageHub = new ImageHub(this);
+        audioPlayer = new AudioPlayer(this);
+        hardWorker = new HardWorker(this);
+
         screen = new Screen(this);
         player[0] = new Player(this);
 
-        numberVaders *= 2;
-        vaders = new Vader[numberVaders];
-        for (int i = 0; i < numberVaders; i++) {
-            vaders[i] = new Vader(this);
+        for (int i = 0; i < numberVaders * 2; i++) {
+            empire.add(new Vader(this));
         }
         for (int i = 0; i < numberExplosionsALL; i++) {
             if (i < numberMediumExplosionsTriple) {
@@ -259,7 +252,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             factory.x -= moveAll;
             factory.update();
             factory.render();
-            for (int j = 0; j < numberBullets; j++) {
+            for (int j = 0; j < bullets.size(); j++) {
                 factory.check_intersectionBullet(bullets.get(j));
             }
         } else {
@@ -272,7 +265,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             demoman.update();
             demoman.render();
             player[0].check_intersectionDemoman(demoman);
-            for (int j = 0; j < numberBullets; j++) {
+            for (int j = 0; j < bullets.size(); j++) {
                 demoman.check_intersectionBullet(bullets.get(j));
             }
         } else {
@@ -289,65 +282,28 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
 
         for (int i = 0; i < 150; i++) {
-            Vader vader = null;
-            TripleFighter tripleFighter = null;
-            Minion minion = null;
-            Boss boss = null;
-
-            if (i < numberVaders) {
-                vader = vaders[i];
-                player[0].check_intersectionVader(vader);
-                vader.x -= moveAll;
-                vader.update();
-                vader.render();
-            }
-
-            if (i < numberTripleFighters) {
-                tripleFighter = tripleFighters.get(i);
-                player[0].check_intersectionTripleFighter(tripleFighter);
-                tripleFighter.x -= moveAll;
-                tripleFighter.update();
-                tripleFighter.render();
-            }
-
-            if (i < numberMinions) {
-                minion = minions.get(i);
-                minion.render();
-                minion.x -= moveAll;
-                minion.update();
-                player[0].check_intersectionMinion(minion);
+            if (i < empire.size()) {
+                Sprite sprite = empire.get(i);
+                player[0].checkIntersections(sprite);
+                sprite.x -= moveAll;
+                sprite.update();
+                sprite.render();
+                for (int j = 0; j < bullets.size(); j++) {
+                    sprite.check_intersectionBullet(bullets.get(j));
+                }
             }
 
             if (i < numberBosses) {
-                boss = bosses.get(i);
+                Boss boss = bosses.get(i);
                 boss.render();
                 boss.x -= moveAll;
                 boss.update();
-                if (boss.y == -400) {
-                    AudioPlayer.bossMusic.seekTo(0);
-                    AudioPlayer.bossMusic.start();
-                    AudioPlayer.pirateMusic.pause();
-                    gameStatus = 5;
+                for (int j = 0; j < bullets.size(); j++) {
+                    boss.check_intersectionBullet(bullets.get(j));
                 }
             }
 
-            for (int j = 0; j < numberBullets; j++) {
-                BulletBase bullet = bullets.get(j);
-                if (vader != null) {
-                    vader.check_intersectionBullet(bullet);
-                }
-                if (tripleFighter != null) {
-                    tripleFighter.check_intersectionBullet(bullet);
-                }
-                if (minion != null) {
-                    minion.check_intersectionBullet(bullet);
-                }
-                if (boss != null) {
-                    boss.check_intersectionBullet(bullet);
-                }
-            }
-
-            if (i < numberBulletsEnemy) {
+            if (i < bulletEnemies.size()) {
                 BulletBase bulletEnemy = bulletEnemies.get(i);
                 if (bulletEnemy != null) {
                     bulletEnemy.render();
@@ -357,7 +313,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
             }
 
-            if (i < numberBullets) {
+            if (i < bullets.size()) {
                 BulletBase bullet = bullets.get(i);
                 bullet.render();
                 bullet.x -= moveAll;
@@ -404,7 +360,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 1:
                         preview();
                         break;
-                    case 10:
                     case 6:
                     case 2:
                     case 0:
@@ -423,6 +378,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         break;
                     case 8:
                         topScore();
+                        break;
+                    case 42:
                         break;
                 }
                 holder.unlockCanvasAndPost(canvas);
@@ -535,16 +492,18 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateTopScore() {
+        gameStatus = 42;
         pauseButton.x = screenWidth;
         buttonStart.x = screenWidth * 2;
         buttonQuit.x = screenWidth * 2;
         buttonMenu.x = screenWidth * 2;
-        gameStatus = 8;
         buttonMenu = new Button(this, "Back", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "menu");
         MainActivity.getTop();
+        gameStatus = 8;
     }
 
     public void generateGameover() {
+        gameStatus = 42;
         buttonStart.x = screenWidth * 2;
         buttonQuit.x = screenWidth * 2;
         buttonMenu.x = screenWidth * 2;
@@ -556,6 +515,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generatePause() {
+        gameStatus = 42;
         hardWorker.workOnPause();
         if (bosses.size() == 0) {
             AudioPlayer.pirateMusic.pause();
@@ -565,15 +525,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (gameStatus == 2) {
             AudioPlayer.readySnd.pause();
         }
-        gameStatus = 4;
 
         pauseButton.x = screenWidth;
         buttonStart.newFunc("Resume", halfScreenWidth - buttonQuit.halfWidth, screenHeight / 3 - buttonStart.halfHeight, "pause");
         buttonMenu.newFunc("To menu", halfScreenWidth - buttonQuit.halfWidth, buttonStart.height + buttonStart.y + 30, "menu");
         buttonQuit.newFunc("Quit", halfScreenWidth - buttonQuit.halfWidth, buttonStart.height + buttonMenu.y + 30, "quit");
+        gameStatus = 4;
     }
 
     public void generateMenu() {
+        gameStatus = 42;
         if (AudioPlayer.winMusic.isPlaying()) {
             AudioPlayer.winMusic.pause();
         }
@@ -591,6 +552,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             AudioPlayer.menuMusic.seekTo(0);
             AudioPlayer.menuMusic.start();
         }
+        if (AudioPlayer.readySnd.isPlaying()) {
+            AudioPlayer.readySnd.pause();
+            AudioPlayer.readySnd.seekTo(0);
+        }
 
         if (score > lastMax) {
             scoreBuilder.append(" ").append(score);
@@ -601,15 +566,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         score = 0;
         numberBosses = 0;
 
+        empire = new ArrayList<>(0);
+
         screen.x = (int) (screenWidth * -0.2);
         player[0] = new Player(this);
         shotgunKit.picked = false;
 
-        gameStatus = 1;
-        numberVaders = 20;
-        vaders = new Vader[numberVaders];
-        for (int i = 0; i < numberVaders; i++) {
-            vaders[i] = new Vader(this);
+        for (int i = 0; i < numberVaders * 2; i++) {
+            empire.add(new Vader(this));
         }
 
         pauseButton.x = screenWidth;
@@ -618,43 +582,45 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonMenu = new Button(this, "Top score", (int) (buttonStart.x + 300 * resizeK), (int) (screenHeight - 70 * resizeK), "top");
 
         bullets = new ArrayList<>(0);
-        numberBullets = 0;
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
         }
+        gameStatus = 1;
     }
 
     public void generateNewGame() {
+        gameStatus = 42;
         if (AudioPlayer.bossMusic.isPlaying()) {
             AudioPlayer.bossMusic.pause();
         }
+        if (AudioPlayer.menuMusic.isPlaying()) {
+            AudioPlayer.menuMusic.pause();
+        } else {
+            AudioPlayer.pirateMusic.pause();
+        }
+        AudioPlayer.pirateMusic.seekTo(0);
+
         saveScore();
         checkMaxScore();
         hardWorker.workOnPause();
         hardWorker.workOnResume();
         count = 0;
         score = 0;
-        gameStatus = 2;
 
         bulletEnemies = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
-        tripleFighters = new ArrayList<>(0);
         bullets = new ArrayList<>(0);
-        minions = new ArrayList<>(0);
+        empire = new ArrayList<>(0);
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
         }
 
-        numberVaders = 12;
-        numberBullets = 0;
-        numberBulletsEnemy = 0;
         numberBosses = 0;
         pauseButton.show();
         buttonStart.x = screenWidth * 2;
         buttonQuit.x = screenWidth * 2;
         buttonMenu.x = screenWidth * 2;
-        numberMinions = 0;
 
         screen.x = (int) (screenWidth * -0.2);
 
@@ -687,26 +653,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonPlayer.hide();
         buttonGunner.hide();
 
+        gameStatus = 2;
         for (int i = 0; i < numberVaders; i++) {
             if (random.nextFloat() <= 0.15) {
-                tripleFighters.add(new TripleFighter(this));
+                empire.add(new TripleFighter(this));
             }
-            vaders[i] = new Vader(this);
-            vaders[i].lock = true;
+            Vader v = new Vader(this);
+            v.lock = true;
+            empire.add(v);
         }
-        numberTripleFighters = tripleFighters.size();
 
-        bullets = new ArrayList<>(0);
-        numberBullets = 0;
-
-        if (AudioPlayer.menuMusic.isPlaying()) {
-            AudioPlayer.menuMusic.pause();
-        } else {
-            AudioPlayer.pirateMusic.pause();
-        }
-        AudioPlayer.pirateMusic.seekTo(0);
         AudioPlayer.pirateMusic.start();
-
         AudioPlayer.readySnd.start();
     }
 
@@ -749,31 +706,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (pauseButton.oldStatus != 3) {
             screen.render();
             for (int i = 0; i < 150; i++) {
-                if (i < numberVaders) {
-                    vaders[i].render();
+                if (i < empire.size()) {
+                    empire.get(i).render();
                 }
 
-                if (i < numberTripleFighters) {
-                    tripleFighters.get(i).render();
-                }
-
-                if (i < numberMinions) {
-                    minions.get(i).render();
-                }
-
-                if (i < numberBullets) {
+                if (i < bullets.size()) {
                     bullets.get(i).render();
                 }
 
-                if (i < numberBulletsEnemy) {
-                    bulletEnemies.get(i).render();
-                }
-
-                if (i < numberBulletsEnemy) {
-                    bulletEnemies.get(i).render();
-                }
-
-                if (i < numberBulletsEnemy) {
+                if (i < bulletEnemies.size()) {
                     bulletEnemies.get(i).render();
                 }
 
@@ -852,7 +793,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     }
                     bosses.get(bosses.size()-1).y = -200;
                     bullets = new ArrayList<>(0);
-                    numberBullets = 0;
                 }
                 bosses.get(bosses.size()-1).update();
                 fightBg.render();
@@ -896,11 +836,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     } else {
                         if (count >= 280) {
                             gameStatus = 0;
-                            for (int i = 0; i < numberVaders; i++) {
-                                vaders[i].lock = false;
-                            }
-                            for (int i = 0; i < numberTripleFighters; i++) {
-                                tripleFighters.get(i).lock = false;
+                            for (int i = 0; i < empire.size(); i++) {
+                                empire.get(i).lock = false;
                             }
                             player[0].lock = false;
                             changerGuns.unHide();
@@ -919,16 +856,18 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.render();
 
         for (int i = 0; i < 150; i++) {
-            if (i < numberVaders) {
-                player[0].check_intersectionVader(vaders[i]);
-                for (int j = 0; j < numberBullets; j++) {
-                    vaders[i].check_intersectionBullet(bullets.get(j));
+            if (i < empire.size()) {
+                Sprite sprite = empire.get(i);
+                player[0].checkIntersections(sprite);
+                sprite.x -= moveAll;
+                sprite.update();
+                sprite.render();
+                for (int j = 0; j < bullets.size(); j++) {
+                    sprite.check_intersectionBullet(bullets.get(j));
                 }
-                vaders[i].update();
-                vaders[i].render();
             }
 
-            if (i < numberBullets) {
+            if (i < bullets.size()) {
                 bullets.get(i).render();
                 bullets.get(i).update();
             }

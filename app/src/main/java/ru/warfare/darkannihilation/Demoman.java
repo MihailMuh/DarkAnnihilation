@@ -10,6 +10,8 @@ public class Demoman extends Sprite {
     public Demoman(Game g) {
         super(g, ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
 
+        damage = 20;
+
         hide();
         lastShoot = System.currentTimeMillis();
     }
@@ -38,21 +40,39 @@ public class Demoman extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        AudioPlayer.playMegaBoom();
+        game.score += 35;
+        hide();
+    }
+
+    @Override
+    public void intersectionPlayer() {
+        AudioPlayer.playMetal();
+        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+        AudioPlayer.playMegaBoom();
+        hide();
+    }
+
+    @Override
     public void check_intersectionBullet(BulletBase bullet) {
         if (x + 30 < bullet.x & bullet.x < x + width - 15 & y < bullet.y & bullet.y < y + height - 50 |
                 bullet.x < x + 30 & x + 30 < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {
-                for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-                    if (game.allExplosions[i].lock) {
-                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
-                AudioPlayer.playMegaBoom();
-                game.score += 35;
-                hide();
+                intersection();
             }
         }
     }

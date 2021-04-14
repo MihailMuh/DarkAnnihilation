@@ -35,7 +35,6 @@ public class Boss extends Sprite {
             game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 1));
             game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 2));
             game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 3));
-            game.numberBulletsEnemy += 3;
             AudioPlayer.playShoot();
         }
     }
@@ -53,8 +52,7 @@ public class Boss extends Sprite {
         game.numberBosses -= 1;
         for (int i = 0; i < game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.1) {
-                game.tripleFighters.add(new TripleFighter(game));
-                game.numberTripleFighters += 1;
+                game.empire.add(new TripleFighter(game));
             }
         }
         AudioPlayer.bossMusic.pause();
@@ -83,6 +81,12 @@ public class Boss extends Sprite {
         x += speedX;
         y += speedY;
 
+        if (y == -400) {
+            AudioPlayer.bossMusic.seekTo(0);
+            AudioPlayer.bossMusic.start();
+            AudioPlayer.pirateMusic.pause();
+            game.gameStatus = 5;
+        }
         if (y >= 50) {
             speedY = 0;
             speedX = -8;

@@ -19,6 +19,14 @@ public class ShotgunKit extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        hide();
+        picked = true;
+        game.changerGuns.changeGun();
+    }
+
+
+    @Override
     public void update() {
         y += speedY;
         if (y > screenHeight) {

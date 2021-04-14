@@ -4,6 +4,7 @@ public class Bullet extends BulletBase {
     public Bullet(Game g, int X, int Y) {
         super(g, ImageHub.bulletImage.getWidth(), ImageHub.bulletImage.getHeight());
         speedY = 10;
+        damage = 1;
 
         x = X;
         y = Y;
@@ -18,7 +19,6 @@ public class Bullet extends BulletBase {
             }
         }
         game.bullets.remove(this);
-        game.numberBullets -= 1;
     }
 
     @Override
@@ -27,7 +27,6 @@ public class Bullet extends BulletBase {
 
         if (y < -50) {
             game.bullets.remove(this);
-            game.numberBullets -= 1;
         }
     }
 
