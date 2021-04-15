@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 public class Boss extends Sprite {
     public float maxHealth;
@@ -64,9 +65,13 @@ public class Boss extends Sprite {
     }
 
     @Override
+    public Rect getRect() {
+        return new Rect(x + 20, y + 20, x + width - 20, y + height - 20);
+    }
+
+    @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if (x + 20 < bullet.x & bullet.x < x + width - 20 & y + 20 < bullet.y & bullet.y < y + height - 20 |
-                bullet.x < x + 20 & x + 20 < bullet.x + bullet.width & bullet.y < y + 20 & y + 20 < bullet.y + bullet.height) {
+        if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {

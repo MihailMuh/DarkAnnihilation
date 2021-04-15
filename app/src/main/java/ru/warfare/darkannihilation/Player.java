@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Rect;
+
 public class Player extends Character {
     public Player(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
@@ -53,21 +55,20 @@ public class Player extends Character {
     }
 
     @Override
+    public Rect getRect() {
+        return new Rect(x + 20, y + 25, x + width - 20, y + height - 20);
+    }
+
+    @Override
     public void check_intersectionPortal(Portal portal) {
-        if (portal.x + 15 < x + 20 & x + 20 < portal.x + portal.width - 15 &
-                portal.y + 15 < y + 25 & y + 25 < portal.y + portal.height - 15 |
-                x + 20 < portal.x + 15 & portal.x + 15 < x + width - 20 &
-                        y + 25 < portal.y + 15 & portal.y + 15 < y + height - 20) {
+        if (getRect().intersect(portal.getRect())) {
             portal.intersection();
         }
     }
 
     @Override
     public void check_intersectionDemoman(Demoman demoman) {
-        if (demoman.x + 30 < x + 20 & x + 20 < demoman.x + demoman.width - 15 &
-                demoman.y < y + 25 & y + 25 < demoman.y + demoman.height - 50 |
-                x + 20 < demoman.x + 30 & demoman.x + 30 < x + width - 20 &
-                        y + 25 < demoman.y & demoman.y < y + height - 20) {
+        if (getRect().intersect(demoman.getRect())) {
             damage(demoman.damage);
             demoman.intersectionPlayer();
         }
@@ -75,20 +76,14 @@ public class Player extends Character {
 
     @Override
     public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {
-        if (shotgunKit.x + 5 < x + 10 & x + 10 < shotgunKit.x + shotgunKit.width - 5 &
-                shotgunKit.y + 5 < y + 10 & y + 10 < shotgunKit.y + shotgunKit.height - 5 |
-                x + 10 < shotgunKit.x + 5 & shotgunKit.x + 5 < x + width - 10 &
-                        y + 10 < shotgunKit.y + 5 & shotgunKit.y + 5 < y + height - 10) {
+        if (getRect().intersect(shotgunKit.getRect())) {
             shotgunKit.intersection();
         }
     }
 
     @Override
     public void check_intersectionHealthKit(HealthKit healthKit) {
-        if (healthKit.x + 5 < x + 5 & x + 5 < healthKit.x + healthKit.width - 5 &
-                healthKit.y + 5 < y + 5 & y + 5 < healthKit.y + healthKit.height - 5 |
-                x + 5 < healthKit.x + 5 & healthKit.x + 5 < x + width - 5 &
-                        y + 5 < healthKit.y + 5 & healthKit.y + 5 < y + height - 5) {
+        if (getRect().intersect(healthKit.getRect())) {
             healthKit.intersection();
             if (health < 30) {
                 health += 20;
@@ -100,10 +95,7 @@ public class Player extends Character {
 
     @Override
     public void check_intersectionRocket(Rocket rocket) {
-        if (x + 5 < rocket.x & rocket.x < x + width - 5 &
-                y < rocket.y & rocket.y < y + height |
-                rocket.x < x + 5 & x + 5 < rocket.x + rocket.width &
-                        rocket.y < y & y < rocket.y + rocket.height) {
+        if (getRect().intersect(rocket.getRect())) {
             damage(rocket.damage);
             rocket.intersection();
         }
@@ -111,10 +103,7 @@ public class Player extends Character {
 
     @Override
     public void check_intersectionBullet(BulletBase bulletEnemy) {
-        if (x + 10 < bulletEnemy.x & bulletEnemy.x < x + width - 10 &
-                y + 10 < bulletEnemy.y & bulletEnemy.y < y + height - 10 |
-                bulletEnemy.x < x + 10 & x + 10 < bulletEnemy.x + bulletEnemy.width &
-                        bulletEnemy.y < y + 10 & y + 10 < bulletEnemy.y + bulletEnemy.height) {
+        if (getRect().intersect(bulletEnemy.getRect())) {
             damage(bulletEnemy.damage);
             bulletEnemy.intersection();
         }
@@ -122,10 +111,7 @@ public class Player extends Character {
 
     @Override
     public void checkIntersections(Sprite enemy) {
-        if (enemy.x + 15 < x + 20 & x + 20 < enemy.x + enemy.width - 15 &
-                enemy.y + 15 < y + 25 & y + 25 < enemy.y + enemy.height - 15 |
-                x + 20 < enemy.x + 15 & enemy.x + 15 < x + width - 20 &
-                        y + 25 < enemy.y + 15 & enemy.y + 15 < y + height - 20) {
+        if (getRect().intersect(enemy.getRect())) {
             damage(enemy.damage);
             enemy.intersectionPlayer();
         }

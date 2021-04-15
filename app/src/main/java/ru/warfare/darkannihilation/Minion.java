@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Rect;
+
 public class Minion extends Sprite {
     private static final int shootMinionTime = 900;
     private long lastShoot;
@@ -30,6 +32,11 @@ public class Minion extends Sprite {
     }
 
     @Override
+    public Rect getRect() {
+        return new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
+    }
+
+    @Override
     public void intersection() {
         AudioPlayer.playBoom();
         game.empire.remove(this);
@@ -56,8 +63,7 @@ public class Minion extends Sprite {
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if (x < bullet.x & bullet.x < x + width & y < bullet.y & bullet.y < y + height |
-                bullet.x < x & x < bullet.x + bullet.width & bullet.y < y & y < bullet.y + bullet.height) {
+        if ((new Rect(x, y, x + width, y + height)).intersect(bullet.getRect())) {
             bullet.intersection();
             intersection();
         }

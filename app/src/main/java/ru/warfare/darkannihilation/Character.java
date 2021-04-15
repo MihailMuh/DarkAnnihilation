@@ -36,10 +36,7 @@ public class Character extends Sprite {
 
     public void PLAYER() {}
     public void shoot() {}
-    public void check_intersectionVader(Vader vader) {}
-    public void check_intersectionTripleFighter(TripleFighter tripleFighter) {}
     public void check_intersectionPortal(Portal portal) {}
-    public void check_intersectionMinion(Minion minion) {}
     public void check_intersectionDemoman(Demoman demoman) {}
     public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {}
     public void check_intersectionHealthKit(HealthKit healthKit) {}

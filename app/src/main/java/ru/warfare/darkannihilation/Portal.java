@@ -1,6 +1,8 @@
 package ru.warfare.darkannihilation;
 
 
+import android.graphics.Rect;
+
 public class Portal extends Sprite {
     private int frame = 0;
     private static final int portalImageLength = ImageHub.portalImages.length;
@@ -31,6 +33,11 @@ public class Portal extends Sprite {
         AudioPlayer.portalSound.seekTo(0);
         AudioPlayer.portalSound.start();
         lastFrame = System.currentTimeMillis();
+    }
+
+    @Override
+    public Rect getRect() {
+        return new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Rect;
+
 public class Sprite {
     public int x = 0;
     public int y = 0;
@@ -48,6 +50,10 @@ public class Sprite {
     public void render() {}
     public void intersection() {}
     public void intersectionPlayer() {}
+
+    public Rect getRect() {
+        return new Rect(x, y, x + width, y + height);
+    }
 
     public static int randInt(int min, int max) {
         max -= min;

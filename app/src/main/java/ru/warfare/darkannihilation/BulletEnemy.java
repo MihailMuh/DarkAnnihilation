@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 
 public class BulletEnemy extends BulletBase {
     private final Bitmap img;
