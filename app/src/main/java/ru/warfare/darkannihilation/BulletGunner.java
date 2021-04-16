@@ -12,6 +12,7 @@ public class BulletGunner extends BulletBase {
             speedx = -speedx;
         }
         damage = 1;
+        isPassive = true;
 
         x = X;
         y = Y;

@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.util.Log;
+
 public class Character extends Sprite {
     public int endX;
     public int endY;
@@ -10,7 +12,7 @@ public class Character extends Sprite {
     public boolean dontmove = false;
     public String gun = "gun";
     public int ai = 1;
-    public int maxHealth = 50;
+    public final int maxHealth = 50;
     public Heart[] hearts = new Heart[5];
 
     public Character(Game g, int w, int h) {
@@ -46,13 +48,6 @@ public class Character extends Sprite {
 
     public void renderHearts() {
         switch (health) {
-            default:
-                hearts[0].render("full");
-                hearts[1].render("full");
-                hearts[2].render("full");
-                hearts[3].render("full");
-                hearts[4].render("full");
-                break;
             case 45:
                 hearts[0].render("half");
                 hearts[1].render("full");
@@ -122,6 +117,13 @@ public class Character extends Sprite {
                 hearts[2].render("non");
                 hearts[3].render("non");
                 hearts[4].render("non");
+                break;
+            default:
+                hearts[0].render("full");
+                hearts[1].render("full");
+                hearts[2].render("full");
+                hearts[3].render("full");
+                hearts[4].render("full");
                 break;
         }
     }
