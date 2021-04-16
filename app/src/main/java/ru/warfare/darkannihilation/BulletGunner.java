@@ -26,6 +26,7 @@ public class BulletGunner extends BulletBase {
             }
         }
         game.bullets.remove(this);
+        game.allSprites.remove(this);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class BulletGunner extends BulletBase {
 
         if (y < -height | x < -width | x > screenWidth) {
             game.bullets.remove(this);
+            game.allSprites.remove(this);
         }
     }
 

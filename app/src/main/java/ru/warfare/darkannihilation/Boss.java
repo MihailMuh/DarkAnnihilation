@@ -51,6 +51,7 @@ public class Boss extends Sprite {
         AudioPlayer.playMegaBoom();
         game.score += 150;
         game.bosses.remove(this);
+        game.allSprites.remove(this);
         game.numberBosses -= 1;
         for (int i = 0; i < game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.1) {
@@ -60,6 +61,9 @@ public class Boss extends Sprite {
         AudioPlayer.bossMusic.pause();
         if (game.portal.lock) {
             game.portal.start();
+        }
+        for (int i = 0; i < game.allSprites.size(); i++) {
+            game.allSprites.get(i).empireStart();
         }
         Game.lastBoss += game.pauseTimer;
         game.pauseTimer = 0;

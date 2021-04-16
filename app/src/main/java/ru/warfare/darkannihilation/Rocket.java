@@ -5,7 +5,7 @@ public class Rocket extends Sprite{
         super(g, ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
         speedY = 35;
         lock = true;
-        damage = 100000;
+        damage = 100;
         isBullet = true;
 
         y = -height;

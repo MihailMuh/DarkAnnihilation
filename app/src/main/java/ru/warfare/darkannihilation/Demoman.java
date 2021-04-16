@@ -12,7 +12,7 @@ public class Demoman extends Sprite {
     public Demoman(Game g) {
         super(g, ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
 
-        damage = 20;
+        damage = 40;
 
         hide();
         lastShoot = System.currentTimeMillis();

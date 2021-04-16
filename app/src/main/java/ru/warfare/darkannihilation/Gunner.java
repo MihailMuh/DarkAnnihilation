@@ -26,7 +26,13 @@ public class Gunner extends Character {
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
         lock = true;
-        health = 50;
+        health = maxHealth;
+        int c = 370;
+        for (int i = 0; i < 5; i++) {
+            Heart heart = new Heart(game, c, 10);
+            hearts[i] = heart;
+            c -= 90;
+        }
     }
 
     @Override
@@ -37,18 +43,34 @@ public class Gunner extends Character {
                 if (now - lastShoot > shotgunTime) {
                     lastShoot = now;
                     AudioPlayer.playShotgun();
-                    game.bullets.add(new Buckshot(game, x + halfWidth, y, -5));
-                    game.bullets.add(new Buckshot(game, x + halfWidth, y, -2));
-                    game.bullets.add(new Buckshot(game, x + halfWidth, y, 0));
-                    game.bullets.add(new Buckshot(game, x + halfWidth, y, 2));
-                    game.bullets.add(new Buckshot(game, x + halfWidth, y, 5));
+                    Buckshot buckshot = new Buckshot(game, x + halfWidth, y, -5);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
+
+                    buckshot = new Buckshot(game, x + halfWidth, y, -2);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
+
+                    buckshot = new Buckshot(game, x + halfWidth, y, 0);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
+
+                    buckshot = new Buckshot(game, x + halfWidth, y, 2);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
+
+                    buckshot = new Buckshot(game, x + halfWidth, y, 5);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
                 }
             } else {
                 if (now - lastShoot > shootTime) {
                     lastShoot = now;
                     AudioPlayer.playShoot();
                     for (int i = 0; i < randInt(1, 6); i++) {
-                        game.bullets.add(new BulletGunner(game, x + halfWidth, y));
+                        BulletGunner bulletGunner = new BulletGunner(game, x + halfWidth, y);
+                        game.bullets.add(bulletGunner);
+                        game.allSprites.add(bulletGunner);
                     }
                 }
             }
@@ -91,85 +113,7 @@ public class Gunner extends Character {
     @Override
     public void render () {
         if (ai == 0) {
-            switch (health) {
-                case 50:
-                    game.hearts[0].render("full");
-                    game.hearts[1].render("full");
-                    game.hearts[2].render("full");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 45:
-                    game.hearts[0].render("half");
-                    game.hearts[1].render("full");
-                    game.hearts[2].render("full");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 40:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("full");
-                    game.hearts[2].render("full");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 35:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("half");
-                    game.hearts[2].render("full");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 30:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("full");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 25:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("half");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 20:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("non");
-                    game.hearts[3].render("full");
-                    game.hearts[4].render("full");
-                    break;
-                case 15:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("non");
-                    game.hearts[3].render("half");
-                    game.hearts[4].render("full");
-                    break;
-                case 10:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("non");
-                    game.hearts[3].render("non");
-                    game.hearts[4].render("full");
-                    break;
-                case 5:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("non");
-                    game.hearts[3].render("non");
-                    game.hearts[4].render("half");
-                    break;
-                case 0:
-                    game.hearts[0].render("non");
-                    game.hearts[1].render("non");
-                    game.hearts[2].render("non");
-                    game.hearts[3].render("non");
-                    game.hearts[4].render("non");
-                    break;
-            }
+            renderHearts();
         }
         game.canvas.drawBitmap(ImageHub.gunnerImg, x, y, null);
     }

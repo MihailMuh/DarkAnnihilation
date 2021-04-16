@@ -78,10 +78,12 @@ public class Vader extends Sprite {
     }
 
     @Override
+    public void empireStart() {
+        lock = false;
+    }
+
+    @Override
     public void update() {
-        if (lock & game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4 & game.gameStatus != 6 & game.gameStatus != 7) {
-            lock = false;
-        }
         x += speedX;
         y += speedY;
 

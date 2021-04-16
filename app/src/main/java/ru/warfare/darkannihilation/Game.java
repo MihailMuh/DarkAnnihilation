@@ -49,7 +49,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public final Vibrator vibrator;
     private static final StringBuilder textBuilder = new StringBuilder();
 
-    public Heart[] hearts = new Heart[5];
     public Explosion[] allExplosions = new Explosion[73];
     public ArrayList<BulletBase> bullets = new ArrayList<>(0);
     public ArrayList<Boss> bosses = new ArrayList<>(0);
@@ -161,6 +160,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     }
                 }
             }
+            allSprites.add(allExplosions[i]);
         }
         buttonStart = new Button(this, "Start", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 70 * resizeK), "start");
         buttonQuit = new Button(this, "Quit", (int) (buttonStart.x - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
@@ -210,7 +210,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (gameStatus == 0) {
             if (now - lastBoss > BOSS_TIME) {
                 lastBoss = now;
-                bosses.add(new Boss(this));
+                Boss boss = new Boss(this);
+                bosses.add(boss);
+                allSprites.add(boss);
                 numberBosses += 1;
             }
 
@@ -248,51 +250,23 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             player.checkIntersections(portal);
         }
 
-        for (int i = 0; i < 150; i++) {
-            if (i < allSprites.size()) {
-                Sprite sprite = allSprites.get(i);
-                if (!sprite.lock) {
-                    if (!sprite.isPassive) {
-                        player.checkIntersections(sprite);
-                    }
-                    sprite.x -= moveAll;
-                    sprite.update();
-                    sprite.render();
-                    if (!sprite.isBullet) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            sprite.check_intersectionBullet(bullets.get(j));
-                        }
-                    }
+        for (int i = 0; i < allSprites.size(); i++) {
+            Sprite sprite = allSprites.get(i);
+            if (!sprite.lock) {
+                if (!sprite.isPassive) {
+                    player.checkIntersections(sprite);
                 }
-            }
-
-            if (i < numberBosses) {
-                Boss boss = bosses.get(i);
-                boss.render();
-                boss.x -= moveAll;
-                boss.update();
-                for (int j = 0; j < bullets.size(); j++) {
-                    boss.check_intersectionBullet(bullets.get(j));
-                }
-            }
-
-            if (i < bullets.size()) {
-                BulletBase bullet = bullets.get(i);
-                bullet.render();
-                bullet.x -= moveAll;
-                bullet.update();
-            }
-
-            if (i < numberExplosionsALL) {
-                if (!allExplosions[i].lock) {
-                    allExplosions[i].x -= moveAll;
-                    allExplosions[i].update();
-                    allExplosions[i].render();
+                sprite.x -= moveAll;
+                sprite.update();
+                sprite.render();
+                if (!sprite.isBullet) {
+                    for (int j = 0; j < bullets.size(); j++) {
+                        sprite.check_intersectionBullet(bullets.get(j));
+                    }
                 }
             }
         }
 
-        Log.e(MainActivity.TAG, allSprites.size() + " " + bullets.size() + " " + numberExplosionsALL);
         player.update();
         player.render();
 
@@ -321,13 +295,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();
                 switch (gameStatus) {
-                    case 1:
-                        preview();
-                        break;
                     case 6:
                     case 2:
                     case 0:
                         gameplay();
+                        break;
+                    case 1:
+                        preview();
                         break;
                     case 3:
                         gameover();
@@ -531,6 +505,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         numberBosses = 0;
 
         allSprites = new ArrayList<>(0);
+        bullets = new ArrayList<>(0);
 
         screen.x = (int) (screenWidth * -0.2);
         player = new Player(this);
@@ -545,9 +520,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonQuit = new Button(this, "Quit", (int) (buttonStart.x - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
         buttonMenu = new Button(this, "Top score", (int) (buttonStart.x + 300 * resizeK), (int) (screenHeight - 70 * resizeK), "top");
 
-        bullets = new ArrayList<>(0);
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
+            allSprites.add(allExplosions[i]);
         }
         gameStatus = 1;
     }
@@ -574,11 +549,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         allSprites = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
         bullets = new ArrayList<>(0);
-        allSprites = new ArrayList<>(0);
-
-        for (int i = 0; i < numberExplosionsALL; i++) {
-            allExplosions[i].stop();
-        }
 
         numberBosses = 0;
         pauseButton.show();
@@ -587,13 +557,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonMenu.x = screenWidth * 2;
 
         screen.x = (int) (screenWidth * -0.2);
-
-        int c = 370;
-        for (int i = 0; i < 5; i++) {
-            Heart heart = new Heart(this, c, 10);
-            hearts[i] = heart;
-            c -= 90;
-        }
 
         if ("gunner".equals(character)) {
             player = new Gunner(this);
@@ -616,6 +579,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         portal.hide();
         buttonPlayer.hide();
         buttonGunner.hide();
+
+        allSprites.add(demoman);
+        allSprites.add(factory);
+        allSprites.add(healthKit);
+        allSprites.add(rocket);
+        allSprites.add(attention);
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            allExplosions[i].stop();
+            allSprites.add(allExplosions[i]);
+        }
 
         gameStatus = 2;
         for (int i = 0; i < numberVaders; i++) {
@@ -669,31 +642,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void pause() {
         if (pauseButton.oldStatus != 3) {
             screen.render();
-            for (int i = 0; i < 150; i++) {
-                if (i < allSprites.size()) {
+            for (int i = 0; i < allSprites.size(); i++) {
+                if (!allSprites.get(i).lock) {
                     allSprites.get(i).render();
                 }
-
-                if (i < bullets.size()) {
-                    bullets.get(i).render();
-                }
-
-                if (i < numberExplosionsALL) {
-                    if (!allExplosions[i].lock) {
-                        allExplosions[i].render();
-                    }
-                }
-
-                if (i < numberBosses) {
-                    bosses.get(i).render();
-                }
             }
-            healthKit.render();
-            shotgunKit.render();
-            attention.render();
-            rocket.render();
-            factory.render();
-            demoman.render();
             player.render();
             changerGuns.render();
             portal.render();
@@ -752,7 +705,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         gameStatus = 6;
                     }
                     bosses.get(bosses.size()-1).y = -200;
-                    bullets = new ArrayList<>(0);
                 }
                 bosses.get(bosses.size()-1).update();
                 fightBg.render();
@@ -797,18 +749,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         if (count >= 280) {
                             gameStatus = 0;
                             for (int i = 0; i < allSprites.size(); i++) {
-                                allSprites.get(i).lock = false;
+                                allSprites.get(i).empireStart();
                             }
-                            allSprites.add(factory);
-                            allSprites.add(demoman);
-                            allSprites.add(healthKit);
-                            allSprites.add(rocket);
-                            allSprites.add(attention);
                             player.lock = false;
                             changerGuns.unHide();
                             count = 0;
                             lastBoss = System.currentTimeMillis();
-
                         }
                     }
                 }
@@ -820,40 +766,24 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.update();
         screen.render();
 
-        for (int i = 0; i < 150; i++) {
-            if (i < allSprites.size()) {
-                Sprite sprite = allSprites.get(i);
-                if (!sprite.lock) {
-                    if (!sprite.isPassive) {
-                        player.checkIntersections(sprite);
-                    }
-                    sprite.x -= moveAll;
-                    sprite.update();
-                    sprite.render();
-                    if (!sprite.isBullet) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            sprite.check_intersectionBullet(bullets.get(j));
-                        }
-                    }
+        for (int i = 0; i < allSprites.size(); i++) {
+            Sprite sprite = allSprites.get(i);
+            if (!sprite.lock) {
+                if (!sprite.isPassive) {
+                    player.checkIntersections(sprite);
                 }
-            }
-
-            if (i < bullets.size()) {
-                bullets.get(i).render();
-                bullets.get(i).update();
-            }
-
-            if (i < numberExplosionsALL) {
-                if (!allExplosions[i].lock) {
-                    allExplosions[i].update();
-                    allExplosions[i].render();
+                sprite.update();
+                sprite.render();
+                if (!sprite.isBullet) {
+                    for (int j = 0; j < bullets.size(); j++) {
+                        sprite.check_intersectionBullet(bullets.get(j));
+                    }
                 }
             }
         }
 
         player.update();
         player.render();
-
 
         buttonStart.render();
         buttonQuit.render();

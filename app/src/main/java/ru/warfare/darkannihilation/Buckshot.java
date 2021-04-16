@@ -23,6 +23,7 @@ public class Buckshot extends BulletBase {
             }
         }
         game.bullets.remove(this);
+        game.allSprites.remove(this);
     }
 
     @Override
@@ -32,6 +33,7 @@ public class Buckshot extends BulletBase {
 
         if (y < -height | x < -width | x > screenWidth) {
             game.bullets.remove(this);
+            game.allSprites.remove(this);
         }
     }
 

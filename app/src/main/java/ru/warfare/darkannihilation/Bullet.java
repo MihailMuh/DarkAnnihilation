@@ -20,6 +20,7 @@ public class Bullet extends BulletBase {
             }
         }
         game.bullets.remove(this);
+        game.allSprites.remove(this);
     }
 
     @Override
@@ -28,6 +29,7 @@ public class Bullet extends BulletBase {
 
         if (y < -50) {
             game.bullets.remove(this);
+            game.allSprites.remove(this);
         }
     }
 

@@ -52,6 +52,7 @@ public class Sprite {
     public void render() {}
     public void intersection() {}
     public void intersectionPlayer() {}
+    public void empireStart() {}
 
     public Rect getRect() {
         return new Rect(x, y, x + width, y + height);
