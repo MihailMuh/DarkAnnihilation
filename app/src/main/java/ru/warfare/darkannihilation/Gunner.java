@@ -61,56 +61,6 @@ public class Gunner extends Character {
     }
 
     @Override
-    public void check_intersectionPortal(Portal portal) {
-        if (getRect().intersect(portal.getRect())) {
-            portal.intersection();
-        }
-    }
-
-    @Override
-    public void check_intersectionDemoman(Demoman demoman) {
-        if (getRect().intersect(demoman.getRect())) {
-            damage(demoman.damage);
-            demoman.intersection();
-        }
-    }
-
-    @Override
-    public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {
-        if (getRect().intersect(shotgunKit.getRect())) {
-            shotgunKit.intersection();
-        }
-    }
-
-    @Override
-    public void check_intersectionHealthKit(HealthKit healthKit) {
-        if (getRect().intersect(healthKit.getRect())) {
-            healthKit.intersection();
-            if (health < 30) {
-                health += 20;
-            } else {
-                health = 50;
-            }
-        }
-    }
-
-    @Override
-    public void check_intersectionRocket(Rocket rocket) {
-        if (getRect().intersect(rocket.getRect())) {
-            damage(rocket.damage);
-            rocket.intersection();
-        }
-    }
-
-    @Override
-    public void check_intersectionBullet(BulletBase bulletEnemy) {
-        if (getRect().intersect(bulletEnemy.getRect())) {
-            damage(bulletEnemy.damage);
-            bulletEnemy.intersection();
-        }
-    }
-
-    @Override
     public void checkIntersections(Sprite enemy) {
         if (getRect().intersect(enemy.getRect())) {
             damage(enemy.damage);

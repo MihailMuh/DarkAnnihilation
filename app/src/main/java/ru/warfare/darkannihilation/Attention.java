@@ -4,6 +4,8 @@ public class Attention extends Sprite{
     public Attention(Game g) {
         super(g, ImageHub.attentionImg.getWidth(), ImageHub.attentionImg.getHeight());
         lock = true;
+        isPassive = true;
+        isBullet = true;
 
         y = -height;
     }

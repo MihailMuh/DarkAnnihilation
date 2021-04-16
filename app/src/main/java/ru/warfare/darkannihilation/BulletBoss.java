@@ -34,14 +34,14 @@ public class BulletBoss extends BulletBase {
     }
 
     @Override
-    public void intersection() {
+    public void intersectionPlayer() {
         for (int i = numberMediumExplosionsTriple; i < numberSmallExplosionsTriple; i++) {
             if (game.allExplosions[i].lock) {
                 game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                 break;
             }
         }
-        game.bulletEnemies.remove(this);
+        game.allSprites.remove(this);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BulletBoss extends BulletBase {
         x -= speedX;
 
         if (y > screenHeight | x < -100 | x > screenWidth) {
-            game.bulletEnemies.remove(this);
+            game.allSprites.remove(this);
         }
     }
 

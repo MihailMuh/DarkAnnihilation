@@ -20,7 +20,7 @@ public class PauseButton extends Sprite {
         mouseX = X;
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width & game.gameStatus != 4 & game.gameStatus != 5) {
-            game.player[0].dontmove = true;
+            game.player.dontmove = true;
             AudioPlayer.buttonSnd.start();
             mouseX = 0;
             mouseY = 0;
@@ -28,7 +28,7 @@ public class PauseButton extends Sprite {
             game.generatePause();
         } else {
             if (game.gameStatus != 4) {
-                game.player[0].dontmove = false;
+                game.player.dontmove = false;
             }
         }
     }

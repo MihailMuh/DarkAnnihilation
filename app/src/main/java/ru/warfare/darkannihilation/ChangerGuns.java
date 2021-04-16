@@ -15,11 +15,11 @@ public class ChangerGuns extends Sprite {
         if (!game.shotgunKit.picked) {
             image = ImageHub.gunToNone;
         } else {
-            if (game.player[0].gun.equals("shotgun")) {
-                game.player[0].gun = "gun";
+            if (game.player.gun.equals("shotgun")) {
+                game.player.gun = "gun";
                 image = ImageHub.gunToShotgun;
             } else {
-                game.player[0].gun = "shotgun";
+                game.player.gun = "shotgun";
                 image = ImageHub.shotgunToGun;
             }
         }
@@ -53,11 +53,11 @@ public class ChangerGuns extends Sprite {
                         image = ImageHub.gunToNone;
                     } else {
                         AudioPlayer.playReload();
-                        if (game.player[0].gun.equals("shotgun")) {
-                            game.player[0].gun = "gun";
+                        if (game.player.gun.equals("shotgun")) {
+                            game.player.gun = "gun";
                             image = ImageHub.gunToShotgun;
                         } else {
-                            game.player[0].gun = "shotgun";
+                            game.player.gun = "shotgun";
                             image = ImageHub.shotgunToGun;
                         }
                     }
@@ -68,7 +68,7 @@ public class ChangerGuns extends Sprite {
 
     public void setCoords(int X, int Y, int r) {
         if (game.gameStatus == 0 | game.gameStatus == 6) {
-            game.player[0].dontmove = true;
+            game.player.dontmove = true;
             mouseX = X;
             mouseY = Y;
             if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
@@ -81,17 +81,17 @@ public class ChangerGuns extends Sprite {
                         image = ImageHub.gunToNone;
                     } else {
                         AudioPlayer.playReload();
-                        if (game.player[0].gun.equals("shotgun")) {
-                            game.player[0].gun = "gun";
+                        if (game.player.gun.equals("shotgun")) {
+                            game.player.gun = "gun";
                             image = ImageHub.gunToShotgun;
                         } else {
-                            game.player[0].gun = "shotgun";
+                            game.player.gun = "shotgun";
                             image = ImageHub.shotgunToGun;
                         }
                     }
                 }
             } else {
-                game.player[0].dontmove = false;
+                game.player.dontmove = false;
             }
         }
     }
@@ -104,11 +104,11 @@ public class ChangerGuns extends Sprite {
                 image = ImageHub.gunToNone;
             } else {
                 AudioPlayer.playReload();
-                if (game.player[0].gun.equals("shotgun")) {
-                    game.player[0].gun = "gun";
+                if (game.player.gun.equals("shotgun")) {
+                    game.player.gun = "gun";
                     image = ImageHub.gunToShotgun;
                 } else {
-                    game.player[0].gun = "shotgun";
+                    game.player.gun = "shotgun";
                     image = ImageHub.shotgunToGun;
                 }
             }

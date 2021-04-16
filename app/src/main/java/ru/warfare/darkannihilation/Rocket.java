@@ -6,6 +6,7 @@ public class Rocket extends Sprite{
         speedY = 35;
         lock = true;
         damage = 100000;
+        isBullet = true;
 
         y = -height;
     }
@@ -21,7 +22,7 @@ public class Rocket extends Sprite{
     }
 
     @Override
-    public void intersection() {
+    public void intersectionPlayer() {
         for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
             if (game.allExplosions[i].lock) {
                 game.allExplosions[i].start(x + halfWidth, y + halfHeight);

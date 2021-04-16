@@ -7,6 +7,7 @@ public class BulletBase extends Sprite {
 
     public BulletBase(Game g, int w, int h) {
         super(g, w, h);
+        isBullet = true;
     }
 
 }

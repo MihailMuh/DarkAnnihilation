@@ -25,6 +25,8 @@ public class Sprite {
     public int numberMediumExplosionsTriple;
     public int numberSmallExplosionsDefault;
     public int numberMediumExplosionsDefault;
+    public boolean isPassive = false;
+    public boolean isBullet = false;
 
     public Sprite(Game g, int w, int h) {
         game = g;

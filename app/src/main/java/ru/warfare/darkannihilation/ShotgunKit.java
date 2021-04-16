@@ -7,6 +7,8 @@ public class ShotgunKit extends Sprite {
         super(g, ImageHub.shotgunKitImg.getWidth(), ImageHub.shotgunKitImg.getHeight());
         speedY = 2;
         lock = true;
+        isPassive = true;
+        isBullet = true;
 
         x = randInt(0, screenWidth);
         y = -height;
@@ -19,7 +21,7 @@ public class ShotgunKit extends Sprite {
     }
 
     @Override
-    public void intersection() {
+    public void intersectionPlayer() {
         hide();
         picked = true;
         game.changerGuns.changeGun();

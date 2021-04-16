@@ -5,6 +5,7 @@ public class HealthKit extends Sprite {
         super(g, ImageHub.healthKitImg.getWidth(), ImageHub.healthKitImg.getHeight());
         speedY = 2;
         lock = true;
+        isBullet = true;
 
         x = randInt(0, screenWidth);
         y = -height;
@@ -17,9 +18,10 @@ public class HealthKit extends Sprite {
     }
 
     @Override
-    public void intersection() {
+    public void intersectionPlayer() {
         hide();
         AudioPlayer.healSnd.start();
+        game.player.heal();
     }
 
     @Override

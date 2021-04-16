@@ -24,14 +24,14 @@ public class HardWorker implements Runnable {
     public void run() {
         while (work) {
             if (makeAngle == 1) {
-                X = ((game.player[0].x + game.player[0].halfWidth) - (x + halfWidth)) / 50;
-                Y = ((game.player[0].y + game.player[0].halfHeight) - (y + halfHeight)) / 50;
+                X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;
+                Y = ((game.player.y + game.player.halfHeight) - (y + halfHeight)) / 50;
                 angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
-                game.bulletEnemies.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, angle, X, Y));
+                game.allSprites.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, angle, X, Y));
                 makeAngle = 0;
             }
             if (makeBomb == 1) {
-                game.bulletEnemies.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
+                game.allSprites.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
                 makeBomb = 0;
             }
         }

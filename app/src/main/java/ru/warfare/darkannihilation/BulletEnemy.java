@@ -2,7 +2,6 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 
 public class BulletEnemy extends BulletBase {
     private final Bitmap img;
@@ -25,14 +24,14 @@ public class BulletEnemy extends BulletBase {
     }
 
     @Override
-    public void intersection() {
+    public void intersectionPlayer() {
         for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
             if (game.allExplosions[i].lock) {
                 game.allExplosions[i].start(x + halfWidth, y + halfHeight);
                 break;
             }
         }
-        game.bulletEnemies.remove(this);
+        game.allSprites.remove(this);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class BulletEnemy extends BulletBase {
         x += speedX;
 
         if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
-            game.bulletEnemies.remove(this);
+            game.allSprites.remove(this);
         }
     }
 

@@ -16,6 +16,7 @@ public class Portal extends Sprite {
         x = halfScreenWidth - halfWidth;
         y = 100;
         lock = true;
+        isPassive = true;
 
         lastFrame = System.currentTimeMillis();
     }
@@ -41,7 +42,7 @@ public class Portal extends Sprite {
     }
 
     @Override
-    public void intersection() {
+    public void intersectionPlayer() {
         game.gameStatus = 7;
         AudioPlayer.portalSound.pause();
         if (AudioPlayer.bossMusic.isPlaying()) {

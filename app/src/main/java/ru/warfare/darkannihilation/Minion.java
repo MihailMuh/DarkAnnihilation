@@ -39,7 +39,7 @@ public class Minion extends Sprite {
     @Override
     public void intersection() {
         AudioPlayer.playBoom();
-        game.empire.remove(this);
+        game.allSprites.remove(this);
         for (int i = 0; i < numberMediumExplosionsTriple; i++) {
             if (game.allExplosions[i].lock) {
                 game.allExplosions[i].start(x + halfWidth, y + halfHeight);
@@ -51,7 +51,7 @@ public class Minion extends Sprite {
     @Override
     public void intersectionPlayer() {
         AudioPlayer.playMetal();
-        game.empire.remove(this);
+        game.allSprites.remove(this);
         for (int i = numberMediumExplosionsTriple; i < numberSmallExplosionsTriple; i++) {
             if (game.allExplosions[i].lock) {
                 game.allExplosions[i].start(x + halfWidth, y + halfHeight);
@@ -77,7 +77,7 @@ public class Minion extends Sprite {
         shoot();
 
         if (x < -width | x > game.screenWidth | y > game.screenHeight) {
-            game.empire.remove(this);
+            game.allSprites.remove(this);
         }
     }
 

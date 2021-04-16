@@ -23,6 +23,7 @@ public class Factory extends Sprite {
         speedY = 3;
         lock = true;
         maxHealth = health;
+        isPassive = true;
 
         x = halfScreenWidth - halfWidth;
         y = -height;
@@ -41,8 +42,8 @@ public class Factory extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
-            game.empire.add(new Minion(game, x));
-            game.empire.add(new Minion(game, x));
+            game.allSprites.add(new Minion(game, x));
+            game.allSprites.add(new Minion(game, x));
         }
     }
 

@@ -10,9 +10,18 @@ public class Character extends Sprite {
     public boolean dontmove = false;
     public String gun = "gun";
     public int ai = 1;
+    public int maxHealth = 50;
 
     public Character(Game g, int w, int h) {
         super(g, w, h);
+    }
+
+    public void heal() {
+        if (health < maxHealth - 20) {
+            health += 20;
+        } else {
+            health = maxHealth;
+        }
     }
 
     public void damage(int dmg) {
@@ -29,17 +38,14 @@ public class Character extends Sprite {
                 AudioPlayer.playMegaBoom();
                 game.vibrator.vibrate(1550);
             } else {
-                game.vibrator.vibrate(70);
+                if (dmg != 0) {
+                    game.vibrator.vibrate(70);
+                }
             }
         }
     }
 
     public void PLAYER() {}
     public void shoot() {}
-    public void check_intersectionPortal(Portal portal) {}
-    public void check_intersectionDemoman(Demoman demoman) {}
-    public void check_intersectionShotgunKit(ShotgunKit shotgunKit) {}
-    public void check_intersectionHealthKit(HealthKit healthKit) {}
-    public void check_intersectionRocket(Rocket rocket) {}
     public void checkIntersections(Sprite sprite) {}
 }

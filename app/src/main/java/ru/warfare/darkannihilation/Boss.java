@@ -22,6 +22,7 @@ public class Boss extends Sprite {
         health = 120;
         maxHealth = health;
         speedY = 1;
+        isPassive = true;
 
         x = halfScreenWidth - halfWidth;
         y = -600;
@@ -33,9 +34,9 @@ public class Boss extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
-            game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 1));
-            game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 2));
-            game.bulletEnemies.add(new BulletBoss(game, x + width - 65, y + 20, 3));
+            game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 1));
+            game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 2));
+            game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 3));
             AudioPlayer.playShoot();
         }
     }
@@ -53,7 +54,7 @@ public class Boss extends Sprite {
         game.numberBosses -= 1;
         for (int i = 0; i < game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.1) {
-                game.empire.add(new TripleFighter(game));
+                game.allSprites.add(new TripleFighter(game));
             }
         }
         AudioPlayer.bossMusic.pause();

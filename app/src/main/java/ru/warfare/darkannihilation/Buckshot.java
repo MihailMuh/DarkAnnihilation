@@ -8,6 +8,7 @@ public class Buckshot extends BulletBase {
         x = X - halfWidth;
         y = Y;
         damage = 2;
+        isPassive = true;
 
         speedX = speed;
         speedY = 8;

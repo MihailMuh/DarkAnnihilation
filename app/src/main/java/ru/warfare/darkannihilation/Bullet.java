@@ -5,6 +5,7 @@ public class Bullet extends BulletBase {
         super(g, ImageHub.bulletImage.getWidth(), ImageHub.bulletImage.getHeight());
         speedY = 10;
         damage = 1;
+        isPassive = true;
 
         x = X;
         y = Y;

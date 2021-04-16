@@ -89,20 +89,17 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void update() {
-        if (!lock) {
-            if (y > 0) {
-                shoot();
-            }
-            x += speedX;
-            y += speedY;
+        if (lock & game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4 & game.gameStatus != 6 & game.gameStatus != 7) {
+            lock = false;
+        }
+        if (y > 0) {
+            shoot();
+        }
+        x += speedX;
+        y += speedY;
 
-            if (x < -width | x > screenWidth | y > screenHeight) {
-                newStatus();
-            }
-        } else {
-            if (game.numberBosses == 0 & game.gameStatus != 2 & game.gameStatus != 4 & game.gameStatus != 6 & game.gameStatus != 7) {
-                lock = false;
-            }
+        if (x < -width | x > screenWidth | y > screenHeight) {
+            newStatus();
         }
     }
 
