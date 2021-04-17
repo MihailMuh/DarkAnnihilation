@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
-        setContentView(R.layout.activity_main);
 
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -76,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "" + e);
         }
 
-        game = findViewById(R.id.gameView);
-        game.initGame(size.x, size.y);
+        game = new Game(this, size.x, size.y);
+        setContentView(game);
 
         checkOnFirstRun();
-        Log.e(TAG, "" + Runtime.getRuntime().maxMemory() / 1024);
     }
 
     @Override

@@ -24,6 +24,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
+@SuppressLint("ViewConstructor")
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder;
     private Thread thread;
@@ -104,8 +105,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static long timeFrame;
     private static long now;
 
-    public Game(Context cont, AttributeSet attrs) {
-        super(cont, attrs);
+    public Game(Context cont, int width, int height) {
+        super(cont);
         context = cont;
         holder = getHolder();
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -123,9 +124,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setColor(Color.RED);
         topPaintRed.setTextSize(30);
 
-    }
-
-    public void initGame(int width, int height) {
         screenWidth = width;
         screenHeight = height;
         halfScreenWidth = screenWidth / 2;
@@ -187,6 +185,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         allSprites.add(attention);
 
         AudioPlayer.menuMusic.start();
+
     }
 
     public void gameplay() {
