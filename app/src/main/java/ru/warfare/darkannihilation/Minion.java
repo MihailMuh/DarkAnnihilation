@@ -16,6 +16,9 @@ public class Minion extends Sprite {
         y = ImageHub.factoryImg.getHeight() - 100;
         speedX = randInt(-8, 8);
         speedY = randInt(2, 5);
+
+        rect = new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
+
         lastShoot = System.currentTimeMillis();
     }
 
@@ -29,11 +32,6 @@ public class Minion extends Sprite {
             HardWorker.halfWidth = halfWidth;
             HardWorker.makeAngle = 1;
         }
-    }
-
-    @Override
-    public Rect getRect() {
-        return new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
     }
 
     @Override
@@ -60,10 +58,15 @@ public class Minion extends Sprite {
         }
     }
 
+    @Override
+    public Rect getRect() {
+        rect.offsetTo(x + 15, y + 15);
+        return rect;
+    }
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if ((new Rect(x, y, x + width, y + height)).intersect(bullet.getRect())) {
+        if (Rect.intersects(getRect(), bullet.getRect())) {
             bullet.intersection();
             intersection();
         }

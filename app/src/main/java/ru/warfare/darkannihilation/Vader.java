@@ -18,6 +18,8 @@ public class Vader extends Sprite {
         y = -150;
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
+
+        rect = new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
     }
 
     public void newStatus() {
@@ -33,7 +35,8 @@ public class Vader extends Sprite {
 
     @Override
     public Rect getRect() {
-        return new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
+        rect.offsetTo(x + 15, y + 15);
+        return rect;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class Vader extends Sprite {
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if ((new Rect(x, y, x + width, y + height)).intersect(bullet.getRect())) {
+        if (Rect.intersects(getRect(), bullet.getRect())) {
             if (bullet.damage < health) {
                 health -= bullet.damage;
                 bullet.intersection();

@@ -17,6 +17,7 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
+        rect = new Rect(x + 5, y + 5, x + width - 5, y + height - 5);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -48,7 +49,8 @@ public class TripleFighter extends Sprite {
 
     @Override
     public Rect getRect() {
-        return new Rect(x + 5, y + 5, x + width - 5, y + height - 5);
+        rect.offsetTo(x + 5, y + 5);
+        return rect;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if ((new Rect(x, y, x + width, y + height)).intersect(bullet.getRect())) {
+        if (Rect.intersects(getRect(), bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {
@@ -94,9 +96,8 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void update() {
-        if (y > 0) {
-            shoot();
-        }
+        shoot();
+
         x += speedX;
         y += speedY;
 

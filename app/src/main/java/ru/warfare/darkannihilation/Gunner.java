@@ -14,6 +14,8 @@ public class Gunner extends Character {
         endX = x;
         endY = y;
 
+        rect = new Rect(x + 25, y + 25, x + width - 25, y + height - 17);
+
         shootTime = 130;
         shotgunTime = 270;
         lastShoot = System.currentTimeMillis();
@@ -37,41 +39,39 @@ public class Gunner extends Character {
 
     @Override
     public void shoot() {
-        if (!lock) {
-            now = System.currentTimeMillis();
-            if (gun.equals("shotgun")) {
-                if (now - lastShoot > shotgunTime) {
-                    lastShoot = now;
-                    AudioPlayer.playShotgun();
-                    Buckshot buckshot = new Buckshot(game, x + halfWidth, y, -5);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+        now = System.currentTimeMillis();
+        if (gun.equals("shotgun")) {
+            if (now - lastShoot > shotgunTime) {
+                lastShoot = now;
+                AudioPlayer.playShotgun();
+                Buckshot buckshot = new Buckshot(game, x + halfWidth, y, -5);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, -2);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                buckshot = new Buckshot(game, x + halfWidth, y, -2);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, 0);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                buckshot = new Buckshot(game, x + halfWidth, y, 0);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, 2);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                buckshot = new Buckshot(game, x + halfWidth, y, 2);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, 5);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
-                }
-            } else {
-                if (now - lastShoot > shootTime) {
-                    lastShoot = now;
-                    AudioPlayer.playShoot();
-                    for (int i = 0; i < randInt(1, 6); i++) {
-                        BulletGunner bulletGunner = new BulletGunner(game, x + halfWidth, y);
-                        game.bullets.add(bulletGunner);
-                        game.allSprites.add(bulletGunner);
-                    }
+                buckshot = new Buckshot(game, x + halfWidth, y, 5);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
+            }
+        } else {
+            if (now - lastShoot > shootTime) {
+                lastShoot = now;
+                AudioPlayer.playShoot();
+                for (int i = 0; i < randInt(1, 6); i++) {
+                    BulletGunner bulletGunner = new BulletGunner(game, x + halfWidth, y);
+                    game.bullets.add(bulletGunner);
+                    game.allSprites.add(bulletGunner);
                 }
             }
         }
@@ -79,12 +79,13 @@ public class Gunner extends Character {
 
     @Override
     public Rect getRect() {
-        return new Rect(x + 25, y + 25, x + width - 25, y + height - 17);
+        rect.offsetTo(x + 25, y + 25);
+        return rect;
     }
 
     @Override
     public void checkIntersections(Sprite enemy) {
-        if (getRect().intersect(enemy.getRect())) {
+        if (Rect.intersects(getRect(), enemy.getRect())) {
             damage(enemy.damage);
             enemy.intersectionPlayer();
         }
@@ -92,7 +93,9 @@ public class Gunner extends Character {
 
     @Override
     public void update() {
-        shoot();
+        if (!lock) {
+            shoot();
+        }
 
         x += speedX;
         y += speedY;

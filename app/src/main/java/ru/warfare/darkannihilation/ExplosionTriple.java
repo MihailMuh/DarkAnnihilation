@@ -45,7 +45,7 @@ public class ExplosionTriple extends Explosion {
 
     @Override
     public void render () {
-        if (!lock & frame != 23) {
+        if (frame != 23) {
             game.canvas.drawBitmap(img[frame], x, y, null);
         }
     }

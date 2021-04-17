@@ -15,6 +15,9 @@ public class Demoman extends Sprite {
         damage = 40;
 
         hide();
+
+        rect = new Rect(x + 30, y + 25, x + width - 20, y + height - 50);
+
         lastShoot = System.currentTimeMillis();
     }
 
@@ -32,17 +35,18 @@ public class Demoman extends Sprite {
         }
     }
 
-    @Override
-    public Rect getRect() {
-        return new Rect(x + 30, y + 25, x + width - 20, y + height - 50);
-    }
-
     public void shoot() {
         now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
             HardWorker.makeBomb = 1;
         }
+    }
+
+    @Override
+    public Rect getRect() {
+        rect.offsetTo(x + 30, y + 25);
+        return rect;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class Demoman extends Sprite {
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (Rect.intersects(getRect(), bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {

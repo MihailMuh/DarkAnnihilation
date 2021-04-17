@@ -27,6 +27,7 @@ public class Sprite {
     public int numberMediumExplosionsDefault;
     public boolean isPassive = false;
     public boolean isBullet = false;
+    public Rect rect;
 
     public Sprite(Game g, int w, int h) {
         game = g;
@@ -44,7 +45,7 @@ public class Sprite {
         numberLargeExplosions = game.numberExplosionsALL;
         numberSmallExplosionsDefault = game.numberSmallExplosionsDefault;
         numberMediumExplosionsDefault = game.numberMediumExplosionsDefault;
-
+        rect = new Rect(x, y, x + width, y + height);
     }
 
     public void check_intersectionBullet(BulletBase bullet) {}
@@ -55,7 +56,8 @@ public class Sprite {
     public void empireStart() {}
 
     public Rect getRect() {
-        return new Rect(x, y, x + width, y + height);
+        rect.offsetTo(x, y);
+        return rect;
     }
 
     public static int randInt(int min, int max) {

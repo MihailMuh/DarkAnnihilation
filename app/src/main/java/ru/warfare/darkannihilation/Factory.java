@@ -28,6 +28,8 @@ public class Factory extends Sprite {
         x = halfScreenWidth - halfWidth;
         y = -height;
 
+        rect = new Rect(x + 20, y + 80, x + width - 20, y + height - 20);
+
         lastSpawn = System.currentTimeMillis();
     }
 
@@ -49,7 +51,8 @@ public class Factory extends Sprite {
 
     @Override
     public Rect getRect() {
-        return new Rect(x + 20, y + 80, x + width - 20, y + height - 20);
+        rect.offsetTo(x + 20, y + 80);
+        return rect;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Factory extends Sprite {
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (Rect.intersects(getRect(), bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {

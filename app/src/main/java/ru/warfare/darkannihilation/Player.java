@@ -14,6 +14,8 @@ public class Player extends Character {
         endX = x;
         endY = y;
 
+        rect = new Rect(x + 20, y + 25, x + width - 20, y + height - 20);
+
         shootTime = 110;
         shotgunTime = 535;
         lastShoot = System.currentTimeMillis();
@@ -37,56 +39,55 @@ public class Player extends Character {
 
     @Override
     public void shoot() {
-        if (!lock) {
-            now = System.currentTimeMillis();
-            if (gun.equals("shotgun")) {
-                if (now - lastShoot > shotgunTime) {
-                    lastShoot = now;
-                    AudioPlayer.playShotgun();
-                    Buckshot buckshot = new Buckshot(game, x + halfWidth, y, -5);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+        now = System.currentTimeMillis();
+        if (gun.equals("shotgun")) {
+            if (now - lastShoot > shotgunTime) {
+                lastShoot = now;
+                AudioPlayer.playShotgun();
+                Buckshot buckshot = new Buckshot(game, x + halfWidth, y, -5);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, -2);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                buckshot = new Buckshot(game, x + halfWidth, y, -2);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, 0);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                buckshot = new Buckshot(game, x + halfWidth, y, 0);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, 2);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                buckshot = new Buckshot(game, x + halfWidth, y, 2);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
 
-                    buckshot = new Buckshot(game, x + halfWidth, y, 5);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
-                }
-            } else {
-                if (now - lastShoot > shootTime) {
-                    lastShoot = now;
-                    AudioPlayer.playShoot();
-                    Bullet bullet = new Bullet(game, x + halfWidth - 6, y);
-                    game.bullets.add(bullet);
-                    game.allSprites.add(bullet);
+                buckshot = new Buckshot(game, x + halfWidth, y, 5);
+                game.bullets.add(buckshot);
+                game.allSprites.add(buckshot);
+            }
+        } else {
+            if (now - lastShoot > shootTime) {
+                lastShoot = now;
+                AudioPlayer.playShoot();
+                Bullet bullet = new Bullet(game, x + halfWidth - 6, y);
+                game.bullets.add(bullet);
+                game.allSprites.add(bullet);
 
-                    bullet = new Bullet(game, x + halfWidth, y);
-                    game.bullets.add(bullet);
-                    game.allSprites.add(bullet);
-                }
+                bullet = new Bullet(game, x + halfWidth, y);
+                game.bullets.add(bullet);
+                game.allSprites.add(bullet);
             }
         }
     }
 
     @Override
     public Rect getRect() {
-        return new Rect(x + 20, y + 25, x + width - 20, y + height - 20);
+        rect.offsetTo(x + 20, y + 25);
+        return rect;
     }
 
     @Override
     public void checkIntersections(Sprite sprite) {
-        if (getRect().intersect(sprite.getRect())) {
+        if (Rect.intersects(getRect(), sprite.getRect())) {
             damage(sprite.damage);
             sprite.intersectionPlayer();
         }
@@ -94,8 +95,9 @@ public class Player extends Character {
 
     @Override
     public void update() {
-        shoot();
-
+        if (!lock) {
+            shoot();
+        }
         x += speedX;
         y += speedY;
 

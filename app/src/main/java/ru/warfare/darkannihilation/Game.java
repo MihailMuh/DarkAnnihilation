@@ -252,12 +252,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         for (int i = 0; i < allSprites.size(); i++) {
             Sprite sprite = allSprites.get(i);
             if (!sprite.lock) {
+                sprite.render();
+                sprite.update();
+                sprite.x -= moveAll;
                 if (!sprite.isPassive) {
                     player.checkIntersections(sprite);
                 }
-                sprite.x -= moveAll;
-                sprite.update();
-                sprite.render();
                 if (!sprite.isBullet) {
                     for (int j = 0; j < bullets.size(); j++) {
                         sprite.check_intersectionBullet(bullets.get(j));
@@ -328,36 +328,37 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        pointerCount = event.getPointerCount();
-        action = event.getActionMasked();
-        clickX = (int) event.getX(0);
-        clickY = (int) event.getY(0);
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (gameStatus != 0) {
-                    buttonStart.setCoords(clickX, clickY);
-                    buttonQuit.setCoords(clickX, clickY);
-                    buttonMenu.setCoords(clickX, clickY);
-                }
-                if (gameStatus == 1) {
-                    buttonGunner.setCoords(clickX, clickY);
-                    buttonPlayer.setCoords(clickX, clickY);
-                }
-                pauseButton.setCoords(clickX, clickY);
-                changerGuns.setCoords(clickX, clickY, 1);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (pointerCount >= 2) {
-                    changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
-                    pauseButton.setCoords((int) event.getX(1), (int) event.getY(1));
-                }
-                if ((gameStatus == 6 | gameStatus == 2 | gameStatus == 0) & !player.dontmove) {
-                    player.endX = clickX - player.halfWidth;
-                    player.endY = clickY - player.halfHeight;
-                }
-                break;
+        synchronized (getHolder()) {
+            pointerCount = event.getPointerCount();
+            action = event.getActionMasked();
+            clickX = (int) event.getX(0);
+            clickY = (int) event.getY(0);
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    if (gameStatus != 0) {
+                        buttonStart.setCoords(clickX, clickY);
+                        buttonQuit.setCoords(clickX, clickY);
+                        buttonMenu.setCoords(clickX, clickY);
+                    }
+                    if (gameStatus == 1) {
+                        buttonGunner.setCoords(clickX, clickY);
+                        buttonPlayer.setCoords(clickX, clickY);
+                    }
+                    pauseButton.setCoords(clickX, clickY);
+                    changerGuns.setCoords(clickX, clickY, 1);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (pointerCount >= 2) {
+                        changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
+                        pauseButton.setCoords((int) event.getX(1), (int) event.getY(1));
+                    }
+                    if ((gameStatus == 6 | gameStatus == 2 | gameStatus == 0) & !player.dontmove) {
+                        player.endX = clickX - player.halfWidth;
+                        player.endY = clickY - player.halfHeight;
+                    }
+                    break;
+            }
         }
-
         return true;
     }
 
@@ -545,9 +546,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         count = 0;
         score = 0;
 
-        allSprites = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
-        bullets = new ArrayList<>(0);
+        allSprites = new ArrayList<>(0);
 
         numberBosses = 0;
         pauseButton.show();
@@ -768,11 +768,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         for (int i = 0; i < allSprites.size(); i++) {
             Sprite sprite = allSprites.get(i);
             if (!sprite.lock) {
+                sprite.render();
+                sprite.update();
                 if (!sprite.isPassive) {
                     player.checkIntersections(sprite);
                 }
-                sprite.update();
-                sprite.render();
                 if (!sprite.isBullet) {
                     for (int j = 0; j < bullets.size(); j++) {
                         sprite.check_intersectionBullet(bullets.get(j));

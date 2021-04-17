@@ -4,9 +4,9 @@ import android.util.Log;
 
 public class HardWorker implements Runnable {
     private Thread thread;
-    private boolean work = false;
-    static int makeAngle = 0;
-    static int makeBomb = 0;
+    private volatile boolean work = false;
+    static volatile int makeAngle = 0;
+    static volatile int makeBomb = 0;
     static int x = 0;
     static int y = 0;
     static int X = 0;

@@ -32,6 +32,7 @@ public class BulletEnemy extends BulletBase {
             }
         }
         game.allSprites.remove(this);
+        img.recycle();
     }
 
     @Override
@@ -41,6 +42,7 @@ public class BulletEnemy extends BulletBase {
 
         if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
             game.allSprites.remove(this);
+            img.recycle();
         }
     }
 

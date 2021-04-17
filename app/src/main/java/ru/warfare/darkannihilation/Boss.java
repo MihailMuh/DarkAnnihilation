@@ -27,6 +27,8 @@ public class Boss extends Sprite {
         x = halfScreenWidth - halfWidth;
         y = -600;
 
+        rect = new Rect(x + 20, y + 20, x + width - 20, y + height - 20);
+
         lastShoot = System.currentTimeMillis();
     }
 
@@ -71,12 +73,13 @@ public class Boss extends Sprite {
 
     @Override
     public Rect getRect() {
-        return new Rect(x + 20, y + 20, x + width - 20, y + height - 20);
+        rect.offsetTo(x + 20, y + 20);
+        return rect;
     }
 
     @Override
     public void check_intersectionBullet(BulletBase bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (Rect.intersects(getRect(), bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {
