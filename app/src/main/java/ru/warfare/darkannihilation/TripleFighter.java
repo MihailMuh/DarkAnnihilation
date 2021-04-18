@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Rect;
-
 public class TripleFighter extends Sprite {
     private static final int shootTripleTime = 1_500;
     private long lastShoot;
@@ -17,7 +15,7 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
-        rect = new Rect(x + 5, y + 5, x + width - 5, y + height - 5);
+        recreateRect(x + 5, y + 5, x + width - 5, y + height - 5);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -48,9 +46,8 @@ public class TripleFighter extends Sprite {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 5, y + 5);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 5, y + 5);
     }
 
     @Override
@@ -79,8 +76,8 @@ public class TripleFighter extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BulletBase bullet) {
-        if (Rect.intersects(getRect(), bullet.getRect())) {
+    public void check_intersectionBullet(BaseBullet bullet) {
+        if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {
@@ -96,7 +93,9 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void update() {
-        shoot();
+        if (x > 0 & x < screenWidth - width & y > 0 & y < screenHeight - height) {
+            shoot();
+        }
 
         x += speedX;
         y += speedY;

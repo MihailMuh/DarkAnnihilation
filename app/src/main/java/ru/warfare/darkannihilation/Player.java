@@ -1,8 +1,6 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Rect;
-
-public class Player extends Character {
+public class Player extends BaseCharacter {
     public Player(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
         health = 50;
@@ -14,27 +12,11 @@ public class Player extends Character {
         endX = x;
         endY = y;
 
-        rect = new Rect(x + 20, y + 25, x + width - 20, y + height - 20);
+        recreateRect(x + 20, y + 25, x + width - 20, y + height - 20);
 
         shootTime = 110;
         shotgunTime = 535;
         lastShoot = System.currentTimeMillis();
-    }
-
-    @Override
-    public void PLAYER() {
-        gun = "gun";
-        ai = 0;
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
-        lock = true;
-        health = maxHealth;
-        int c = 370;
-        for (int i = 0; i < 5; i++) {
-            Heart heart = new Heart(game, c, 10);
-            hearts[i] = heart;
-            c -= 90;
-        }
     }
 
     @Override
@@ -80,14 +62,13 @@ public class Player extends Character {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 20, y + 25);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 20, y + 25);
     }
 
     @Override
     public void checkIntersections(Sprite sprite) {
-        if (Rect.intersects(getRect(), sprite.getRect())) {
+        if (getRect().intersect(sprite.getRect())) {
             damage(sprite.damage);
             sprite.intersectionPlayer();
         }

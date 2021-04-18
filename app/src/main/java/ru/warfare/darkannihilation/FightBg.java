@@ -13,8 +13,8 @@ public class FightBg extends Sprite {
         int min = 10;
 
         while ((y - halfScreenHeight) + height > screenHeight) {
-            img = Bitmap.createScaledBitmap(ImageHub.fightBgImg, (int) ((screenWidth-min) * resizeK),
-                    (int) ((screenWidth-150-min) * resizeK), ImageHub.isFilter);
+            img = Bitmap.createScaledBitmap(ImageHub.fightBgImg, (int) ((screenWidth-min) * game.resizeK),
+                    (int) ((screenWidth-150-min) * game.resizeK), ImageHub.isFilter);
             height = img.getHeight();
             min += 10;
         }

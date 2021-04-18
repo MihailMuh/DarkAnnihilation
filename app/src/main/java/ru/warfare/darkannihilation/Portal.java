@@ -1,9 +1,5 @@
 package ru.warfare.darkannihilation;
 
-
-import android.graphics.Rect;
-import android.util.Log;
-
 public class Portal extends Sprite {
     private int frame = 0;
     private static final int portalImageLength = ImageHub.portalImages.length;
@@ -19,7 +15,7 @@ public class Portal extends Sprite {
         lock = true;
         isPassive = true;
 
-        rect = new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
 
         lastFrame = System.currentTimeMillis();
     }
@@ -39,9 +35,8 @@ public class Portal extends Sprite {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 15, y + 15);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 15, y + 15);
     }
 
     @Override
@@ -77,7 +72,6 @@ public class Portal extends Sprite {
                 }
             }
         }
-        Log.e(MainActivity.TAG, "" + game.numberBosses);
     }
 
     @Override

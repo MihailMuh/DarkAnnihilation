@@ -2,10 +2,10 @@ package ru.warfare.darkannihilation;
 
 import java.util.Random;
 
-public class BulletBase extends Sprite {
+public class BaseBullet extends Sprite {
     public Random random = new Random();
 
-    public BulletBase(Game g, int w, int h) {
+    public BaseBullet(Game g, int w, int h) {
         super(g, w, h);
         isBullet = true;
     }

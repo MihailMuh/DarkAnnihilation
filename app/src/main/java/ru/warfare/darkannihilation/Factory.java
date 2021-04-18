@@ -2,7 +2,6 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 
 public class Factory extends Sprite {
     private static final int spawnTime = 1_000;
@@ -28,7 +27,7 @@ public class Factory extends Sprite {
         x = halfScreenWidth - halfWidth;
         y = -height;
 
-        rect = new Rect(x + 20, y + 80, x + width - 20, y + height - 20);
+        recreateRect(x + 20, y + 80, x + width - 20, y + height - 20);
 
         lastSpawn = System.currentTimeMillis();
     }
@@ -50,9 +49,8 @@ public class Factory extends Sprite {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 20, y + 80);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 20, y + 80);
     }
 
     @Override
@@ -69,8 +67,8 @@ public class Factory extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BulletBase bullet) {
-        if (Rect.intersects(getRect(), bullet.getRect())) {
+    public void check_intersectionBullet(BaseBullet bullet) {
+        if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {

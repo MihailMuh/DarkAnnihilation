@@ -1,8 +1,6 @@
 package ru.warfare.darkannihilation;
 
-import android.util.Log;
-
-public class Character extends Sprite {
+public class BaseCharacter extends Sprite {
     public int endX;
     public int endY;
     public int shootTime;
@@ -13,10 +11,28 @@ public class Character extends Sprite {
     public String gun = "gun";
     public int ai = 1;
     public final int maxHealth = 50;
-    public Heart[] hearts = new Heart[5];
+    public static final Heart[] hearts = new Heart[5];
 
-    public Character(Game g, int w, int h) {
+    public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
+    }
+
+    public void shoot() {}
+    public void checkIntersections(Sprite sprite) {}
+
+    public void PLAYER() {
+        gun = "gun";
+        ai = 0;
+        x = game.halfScreenWidth;
+        y = game.halfScreenHeight;
+        lock = true;
+        health = maxHealth;
+        int c = 370;
+        for (int i = 0; i < 5; i++) {
+            Heart heart = new Heart(game, c, 10);
+            hearts[i] = heart;
+            c -= 90;
+        }
     }
 
     public void heal() {
@@ -29,7 +45,7 @@ public class Character extends Sprite {
 
     public void damage(int dmg) {
         if (ai == 0 & dmg != 0) {
-//            health -= dmg;
+            health -= dmg;
             if (health <= 0) {
                 game.generateGameover();
                 for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
@@ -48,6 +64,13 @@ public class Character extends Sprite {
 
     public void renderHearts() {
         switch (health) {
+            case 50:
+                hearts[0].render("full");
+                hearts[1].render("full");
+                hearts[2].render("full");
+                hearts[3].render("full");
+                hearts[4].render("full");
+                break;
             case 45:
                 hearts[0].render("half");
                 hearts[1].render("full");
@@ -111,24 +134,13 @@ public class Character extends Sprite {
                 hearts[3].render("non");
                 hearts[4].render("half");
                 break;
-            case 0:
+            default:
                 hearts[0].render("non");
                 hearts[1].render("non");
                 hearts[2].render("non");
                 hearts[3].render("non");
                 hearts[4].render("non");
                 break;
-            default:
-                hearts[0].render("full");
-                hearts[1].render("full");
-                hearts[2].render("full");
-                hearts[3].render("full");
-                hearts[4].render("full");
-                break;
         }
     }
-
-    public void PLAYER() {}
-    public void shoot() {}
-    public void checkIntersections(Sprite sprite) {}
 }

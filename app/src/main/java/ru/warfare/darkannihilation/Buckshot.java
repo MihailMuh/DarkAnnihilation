@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 
-public class Buckshot extends BulletBase {
+public class Buckshot extends BaseBullet {
     public Buckshot(Game g, int X, int Y, int speed) {
         super(g, ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
 

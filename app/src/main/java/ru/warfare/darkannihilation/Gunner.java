@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Rect;
 
-public class Gunner extends Character {
+public class Gunner extends BaseCharacter {
     public Gunner(Game g) {
         super(g, ImageHub.gunnerImg.getWidth(), ImageHub.gunnerImg.getHeight());
         health = 50;
@@ -14,27 +14,11 @@ public class Gunner extends Character {
         endX = x;
         endY = y;
 
-        rect = new Rect(x + 25, y + 25, x + width - 25, y + height - 17);
+        recreateRect(x + 25, y + 25, x + width - 25, y + height - 17);
 
         shootTime = 130;
         shotgunTime = 270;
         lastShoot = System.currentTimeMillis();
-    }
-
-    @Override
-    public void PLAYER() {
-        gun = "gun";
-        ai = 0;
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
-        lock = true;
-        health = maxHealth;
-        int c = 370;
-        for (int i = 0; i < 5; i++) {
-            Heart heart = new Heart(game, c, 10);
-            hearts[i] = heart;
-            c -= 90;
-        }
     }
 
     @Override
@@ -78,16 +62,15 @@ public class Gunner extends Character {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 25, y + 25);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 25, y + 25);
     }
 
     @Override
-    public void checkIntersections(Sprite enemy) {
-        if (Rect.intersects(getRect(), enemy.getRect())) {
-            damage(enemy.damage);
-            enemy.intersectionPlayer();
+    public void checkIntersections(Sprite sprite) {
+        if (getRect().intersect(sprite.getRect())) {
+            damage(sprite.damage);
+            sprite.intersectionPlayer();
         }
     }
 

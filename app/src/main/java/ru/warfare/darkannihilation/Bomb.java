@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation;
 
-public class Bomb extends BulletBase {
+public class Bomb extends BaseBullet {
     public Bomb(Game g, int X, int Y) {
         super(g, ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
         speedY = 15;

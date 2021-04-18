@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Rect;
-
 public class Demoman extends Sprite {
     private static final int shootTime = 150;
     private long lastShoot;
@@ -16,7 +14,7 @@ public class Demoman extends Sprite {
 
         hide();
 
-        rect = new Rect(x + 30, y + 25, x + width - 20, y + height - 50);
+        recreateRect(x + 30, y + 25, x + width - 20, y + height - 50);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -44,9 +42,8 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 30, y + 25);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 30, y + 25);
     }
 
     @Override
@@ -76,8 +73,8 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BulletBase bullet) {
-        if (Rect.intersects(getRect(), bullet.getRect())) {
+    public void check_intersectionBullet(BaseBullet bullet) {
+        if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
             if (health <= 0) {

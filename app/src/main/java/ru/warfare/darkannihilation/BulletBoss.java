@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
-public class BulletBoss extends BulletBase {
+public class BulletBoss extends BaseBullet {
     private Bitmap img;
 
     public BulletBoss(Game g, int X, int Y, int type) {

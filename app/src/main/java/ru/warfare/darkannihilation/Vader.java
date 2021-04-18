@@ -1,8 +1,6 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.util.Log;
 
 public class Vader extends Sprite {
     public Bitmap img;
@@ -19,7 +17,7 @@ public class Vader extends Sprite {
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
 
-        rect = new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
     }
 
     public void newStatus() {
@@ -34,9 +32,8 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 15, y + 15);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 15, y + 15);
     }
 
     @Override
@@ -66,8 +63,8 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BulletBase bullet) {
-        if (Rect.intersects(getRect(), bullet.getRect())) {
+    public void check_intersectionBullet(BaseBullet bullet) {
+        if (getRect().intersect(bullet.getRect())) {
             if (bullet.damage < health) {
                 health -= bullet.damage;
                 bullet.intersection();

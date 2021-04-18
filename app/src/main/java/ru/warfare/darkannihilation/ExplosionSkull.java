@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
-public class ExplosionSkull extends Explosion {
+public class ExplosionSkull extends BaseExplosion {
     private final int shotgunTime;
     private long lastShoot;
     private long now;
@@ -10,7 +10,7 @@ public class ExplosionSkull extends Explosion {
     public ExplosionSkull(Game g) {
         super(g, ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
         lock = true;
-        shotgunTime = 27;
+        shotgunTime = 33;
         img = new Bitmap[ImageHub.explosionLarge.length];
         img = ImageHub.explosionLarge.clone();
 

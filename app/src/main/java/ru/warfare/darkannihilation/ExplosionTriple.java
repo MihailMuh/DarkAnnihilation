@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
-public class ExplosionTriple extends Explosion {
+public class ExplosionTriple extends BaseExplosion {
     private final int shotgunTime;
     private long lastShoot;
     private long now;

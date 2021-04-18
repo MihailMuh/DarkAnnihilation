@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation;
 
-public class BulletGunner extends BulletBase {
+public class BulletGunner extends BaseBullet {
     private double speedx;
 
     public BulletGunner(Game g, int X, int Y) {

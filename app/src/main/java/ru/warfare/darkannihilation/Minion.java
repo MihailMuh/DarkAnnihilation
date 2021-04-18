@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Rect;
-
 public class Minion extends Sprite {
     private static final int shootMinionTime = 900;
     private long lastShoot;
@@ -17,7 +15,7 @@ public class Minion extends Sprite {
         speedX = randInt(-8, 8);
         speedY = randInt(2, 5);
 
-        rect = new Rect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -59,14 +57,13 @@ public class Minion extends Sprite {
     }
 
     @Override
-    public Rect getRect() {
-        rect.offsetTo(x + 15, y + 15);
-        return rect;
+    public Sprite getRect() {
+        return goTO(x + 15, y + 15);
     }
 
     @Override
-    public void check_intersectionBullet(BulletBase bullet) {
-        if (Rect.intersects(getRect(), bullet.getRect())) {
+    public void check_intersectionBullet(BaseBullet bullet) {
+        if (getRect().intersect(bullet.getRect())) {
             bullet.intersection();
             intersection();
         }

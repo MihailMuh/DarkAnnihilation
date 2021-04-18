@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Vibrator;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -50,8 +49,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public final Vibrator vibrator;
     private static final StringBuilder textBuilder = new StringBuilder();
 
-    public Explosion[] allExplosions = new Explosion[73];
-    public ArrayList<BulletBase> bullets = new ArrayList<>(0);
+    public BaseExplosion[] allExplosions = new BaseExplosion[73];
+    public ArrayList<BaseBullet> bullets = new ArrayList<>(0);
     public ArrayList<Boss> bosses = new ArrayList<>(0);
     public ArrayList<Sprite> allSprites = new ArrayList<>(0);
 
@@ -75,7 +74,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public ButtonPlayer buttonPlayer;
     public ButtonGunner buttonGunner;
     public HardWorker hardWorker;
-    public Character player;
+    public BaseCharacter player;
 
     public final int numberVaders = 10;
     public int numberMediumExplosionsTriple = 20;
@@ -610,8 +609,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             if (!allExplosions[i].lock) {
-                allExplosions[i].update();
                 allExplosions[i].render();
+                allExplosions[i].update();
             }
         }
 
