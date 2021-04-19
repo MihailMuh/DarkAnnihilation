@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Rect;
-
 public class Gunner extends BaseCharacter {
     public Gunner(Game g) {
         super(g, ImageHub.gunnerImg.getWidth(), ImageHub.gunnerImg.getHeight());

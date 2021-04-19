@@ -24,11 +24,11 @@ public class Minion extends Sprite {
         now = System.currentTimeMillis();
         if (now - lastShoot > shootMinionTime) {
             lastShoot = now;
-            HardWorker.x = x;
-            HardWorker.y = y;
-            HardWorker.halfHeight = halfHeight;
-            HardWorker.halfWidth = halfWidth;
-            HardWorker.makeAngle = 1;
+            if (HardWorker.makeAngle == 0) {
+                HardWorker.x = x + halfWidth;
+                HardWorker.y = y + halfHeight;
+                HardWorker.makeAngle = 1;
+            }
         }
     }
 

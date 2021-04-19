@@ -9,12 +9,8 @@ public class HardWorker implements Runnable {
     static volatile int makeBomb = 0;
     static int x = 0;
     static int y = 0;
-    static int X = 0;
-    static int Y = 0;
-    static int halfWidth = 0;
-    static int halfHeight = 0;
-    static double angle = 0;
     private final Game game;
+    private final Vector vector = new Vector();
 
     public HardWorker(Game g) {
         game = g;
@@ -24,10 +20,9 @@ public class HardWorker implements Runnable {
     public void run() {
         while (work) {
             if (makeAngle == 1) {
-                X = ((game.player.x + game.player.halfWidth) - (x + halfWidth)) / 50;
-                Y = ((game.player.y + game.player.halfHeight) - (y + halfHeight)) / 50;
-                angle = Math.toDegrees(Math.atan2(Y, X) + (Math.PI / 2));
-                game.allSprites.add(new BulletEnemy(game, x + halfWidth, y + halfHeight, angle, X, Y));
+                vector.makeVector(x, y, game.player.x + game.player.halfWidth,
+                        game.player.y + game.player.halfHeight, 20);
+                game.allSprites.add(new BulletEnemy(game, x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                 makeAngle = 0;
             }
             if (makeBomb == 1) {
