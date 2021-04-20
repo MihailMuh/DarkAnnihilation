@@ -559,12 +559,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if ("gunner".equals(character)) {
             player = new Gunner(this);
         }
-//        switch (character)
-//        {
-//            case "gunner":
-//                player[0] = new Gunner(this);
-//                break;
-//        }
+        fightBg.newImg(character);
+
         player.PLAYER();
         healthKit.hide();
         shotgunKit.hide();
