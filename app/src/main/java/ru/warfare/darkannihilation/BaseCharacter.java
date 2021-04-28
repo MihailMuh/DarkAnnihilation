@@ -29,8 +29,7 @@ public class BaseCharacter extends Sprite {
         health = maxHealth;
         int c = 370;
         for (int i = 0; i < 5; i++) {
-            Heart heart = new Heart(game, c, 10);
-            hearts[i] = heart;
+            hearts[i] = new Heart(game, c, 10);
             c -= 90;
         }
     }

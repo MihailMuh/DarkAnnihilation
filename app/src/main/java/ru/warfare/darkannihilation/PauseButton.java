@@ -19,7 +19,8 @@ public class PauseButton extends Sprite {
     public void setCoords(int X, int Y) {
         mouseX = X;
         mouseY = Y;
-        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width & game.gameStatus != 4 & game.gameStatus != 5) {
+        if ((game.gameStatus == 6 | game.gameStatus == 2 | game.gameStatus == 0 | game.gameStatus == 3)
+            & x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
             game.player.dontmove = true;
             AudioPlayer.buttonSnd.start();
             mouseX = 0;

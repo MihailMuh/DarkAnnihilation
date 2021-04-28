@@ -26,25 +26,11 @@ public class Gunner extends BaseCharacter {
             if (now - lastShoot > shotgunTime) {
                 lastShoot = now;
                 AudioPlayer.playShotgun();
-                Buckshot buckshot = new Buckshot(game, x + halfWidth, y, -5);
-                game.bullets.add(buckshot);
-                game.allSprites.add(buckshot);
-
-                buckshot = new Buckshot(game, x + halfWidth, y, -2);
-                game.bullets.add(buckshot);
-                game.allSprites.add(buckshot);
-
-                buckshot = new Buckshot(game, x + halfWidth, y, 0);
-                game.bullets.add(buckshot);
-                game.allSprites.add(buckshot);
-
-                buckshot = new Buckshot(game, x + halfWidth, y, 2);
-                game.bullets.add(buckshot);
-                game.allSprites.add(buckshot);
-
-                buckshot = new Buckshot(game, x + halfWidth, y, 5);
-                game.bullets.add(buckshot);
-                game.allSprites.add(buckshot);
+                for (int i = -4; i <= 4; i+=2) {
+                    Buckshot buckshot = new Buckshot(game, x + halfWidth, y, i);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
+                }
             }
         } else {
             if (now - lastShoot > shootTime) {

@@ -35,6 +35,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static ru.warfare.darkannihilation.Game.jsonScore;
+
 public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -219,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     preferences.edit().putBoolean("firstrun", false).apply();
                                     saveNickname();
-                                    JSONObject jsonScore = new JSONObject();
                                     jsonScore.put(nickname, 0);
                                     postScore(jsonScore.toString());
                                     Toast toast = Toast.makeText(context, "Congratulations! You have registered!", Toast.LENGTH_LONG);

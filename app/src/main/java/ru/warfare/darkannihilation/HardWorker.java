@@ -21,7 +21,7 @@ public class HardWorker implements Runnable {
         while (work) {
             if (makeAngle == 1) {
                 vector.makeVector(x, y, game.player.x + game.player.halfWidth,
-                        game.player.y + game.player.halfHeight, 20);
+                        game.player.y + game.player.halfHeight, 13);
                 game.allSprites.add(new BulletEnemy(game, x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                 makeAngle = 0;
             }
