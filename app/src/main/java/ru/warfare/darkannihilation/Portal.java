@@ -5,7 +5,6 @@ public class Portal extends Sprite {
     private static final int portalImageLength = ImageHub.portalImages.length;
     private static final int frameTime = 50;
     private long lastFrame;
-    private long now;
 
     public Portal(Game g) {
         super(g, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
@@ -22,6 +21,7 @@ public class Portal extends Sprite {
 
     public void hide() {
         x = -width;
+        frame = 0;
         frame = 0;
         lock = true;
     }
@@ -41,21 +41,25 @@ public class Portal extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        game.gameStatus = 7;
-        AudioPlayer.portalSound.pause();
-        if (AudioPlayer.bossMusic.isPlaying()) {
-            AudioPlayer.bossMusic.pause();
+        if (game.level == 2) {
+            game.gameStatus = 7;
+            AudioPlayer.portalSound.pause();
+            if (AudioPlayer.bossMusic.isPlaying()) {
+                AudioPlayer.bossMusic.pause();
+            }
+            AudioPlayer.winMusic.seekTo(0);
+            AudioPlayer.winMusic.start();
+            game.winScreen = new WinScreen(game);
+            hide();
+        } else {
+            game.level++;
+            game.generateNewGame();
         }
-        AudioPlayer.winMusic.seekTo(0);
-        AudioPlayer.winMusic.start();
-        game.winScreen = new WinScreen(game);
-        hide();
     }
-
 
     @Override
     public void update() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;
             if (AudioPlayer.portalSound.isPlaying()) {

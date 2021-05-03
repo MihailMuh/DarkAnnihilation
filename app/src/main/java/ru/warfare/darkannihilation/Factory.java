@@ -6,7 +6,6 @@ import android.graphics.Paint;
 public class Factory extends Sprite {
     private static final int spawnTime = 1_000;
     private long lastSpawn;
-    private long now;
 
     private static final Paint paintFill = new Paint();
     private static final Paint paintOutLine = new Paint();
@@ -40,7 +39,7 @@ public class Factory extends Sprite {
     }
 
     public void spawn() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
             game.allSprites.add(new Minion(game, x));
@@ -67,7 +66,7 @@ public class Factory extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
+    public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();

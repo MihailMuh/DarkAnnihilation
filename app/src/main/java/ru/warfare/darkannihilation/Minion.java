@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation;
 public class Minion extends Sprite {
     private static final int shootMinionTime = 900;
     private long lastShoot;
-    private long now;
 
     public Minion(Game g, int FX) {
         super(g, ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
@@ -21,13 +20,13 @@ public class Minion extends Sprite {
     }
 
     public void shoot() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastShoot > shootMinionTime) {
             lastShoot = now;
-            if (HardWorker.makeAngle == 0) {
+            if (!HardWorker.makeAngle) {
                 HardWorker.x = x + halfWidth;
                 HardWorker.y = y + halfHeight;
-                HardWorker.makeAngle = 1;
+                HardWorker.makeAngle = true;
             }
         }
     }
@@ -62,7 +61,7 @@ public class Minion extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
+    public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
             bullet.intersection();
             intersection();

@@ -12,6 +12,10 @@ public class PauseButton extends Sprite {
         x = game.screenWidth - width * 2;
     }
 
+    public PauseButton(Game game, boolean fun) {
+        super(game, 0, 0);
+    }
+
     public void show() {
         x = game.screenWidth - width * 2;
     }

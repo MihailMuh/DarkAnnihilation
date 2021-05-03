@@ -1,10 +1,12 @@
 package ru.warfare.darkannihilation;
 
-public class Bomb extends BaseBullet {
+public class Bomb extends Sprite {
     public Bomb(Game g, int X, int Y) {
         super(g, ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
         speedY = 15;
         damage = 5;
+        status = "bulletEnemy";
+        isBullet = true;
 
         x = X;
         y = Y;

@@ -15,7 +15,7 @@ public class Gunner extends BaseCharacter {
         recreateRect(x + 25, y + 25, x + width - 25, y + height - 17);
 
         shootTime = 130;
-        shotgunTime = 270;
+        shotgunTime = 60;
         lastShoot = System.currentTimeMillis();
     }
 
@@ -25,12 +25,7 @@ public class Gunner extends BaseCharacter {
         if (gun.equals("shotgun")) {
             if (now - lastShoot > shotgunTime) {
                 lastShoot = now;
-                AudioPlayer.playShotgun();
-                for (int i = -4; i <= 4; i+=2) {
-                    Buckshot buckshot = new Buckshot(game, x + halfWidth, y, i);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
-                }
+                HardWorker.makeShotgun = true;
             }
         } else {
             if (now - lastShoot > shootTime) {
@@ -67,7 +62,7 @@ public class Gunner extends BaseCharacter {
         x += speedX;
         y += speedY;
 
-        if (ai == 0) {
+        if (!ai) {
             speedX = (endX - x) / 13;
             speedY = (endY - y) / 13;
         } else {
@@ -82,7 +77,7 @@ public class Gunner extends BaseCharacter {
 
     @Override
     public void render () {
-        if (ai == 0) {
+        if (!ai) {
             renderHearts();
         }
         game.canvas.drawBitmap(ImageHub.gunnerImg, x, y, null);

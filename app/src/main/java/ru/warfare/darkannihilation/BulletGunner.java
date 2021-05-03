@@ -1,18 +1,14 @@
 package ru.warfare.darkannihilation;
 
-public class BulletGunner extends BaseBullet {
-    private double speedx;
-
+public class BulletGunner extends Sprite {
     public BulletGunner(Game g, int X, int Y) {
         super(g, ImageHub.bulletGunnerImg.getWidth(), ImageHub.bulletGunnerImg.getHeight());
 
         speedY = randInt(6, 13);
-        speedx = random.nextDouble() * 6.5;
-        if (randInt(1, 2) == 1) {
-            speedx = -speedx;
-        }
+        speedX = randInt(-6, 6);
         damage = 1;
         isPassive = true;
+        isBullet = true;
 
         x = X;
         y = Y;
@@ -33,7 +29,7 @@ public class BulletGunner extends BaseBullet {
     @Override
     public void update() {
         y -= speedY;
-        x += speedx;
+        x += speedX;
 
         if (y < -height | x < -width | x > screenWidth) {
             game.bullets.remove(this);

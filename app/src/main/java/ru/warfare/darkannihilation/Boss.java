@@ -10,7 +10,6 @@ public class Boss extends Sprite {
 
     private static final int shootBossTime = 350;
     private long lastShoot;
-    private long now;
 
     public Boss(Game g) {
         super(g, ImageHub.bossImage.getWidth(), ImageHub.bossImage.getHeight());
@@ -32,7 +31,7 @@ public class Boss extends Sprite {
     }
 
     public void shoot() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
             game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 1));
@@ -53,7 +52,6 @@ public class Boss extends Sprite {
         game.score += 150;
         game.bosses.remove(this);
         game.allSprites.remove(this);
-        game.numberBosses -= 1;
         for (int i = 0; i < game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.1) {
                 game.allSprites.add(new TripleFighter(game));
@@ -76,13 +74,10 @@ public class Boss extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
+    public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
-            if (health <= 0) {
-                killAfterFight();
-            }
         }
     }
 
@@ -105,6 +100,10 @@ public class Boss extends Sprite {
         }
         if (x < -width) {
             x = game.screenWidth;
+        }
+
+        if (health <= 0) {
+            killAfterFight();
         }
     }
 

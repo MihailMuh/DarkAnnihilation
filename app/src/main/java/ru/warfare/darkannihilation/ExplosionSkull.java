@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 public class ExplosionSkull extends BaseExplosion {
     private final int shotgunTime;
     private long lastShoot;
-    private long now;
 
     public ExplosionSkull(Game g) {
         super(g, ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
@@ -19,7 +18,7 @@ public class ExplosionSkull extends BaseExplosion {
 
     @Override
     public void update() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastShoot > shotgunTime) {
             lastShoot = now;
             if (frame != 13) {

@@ -3,13 +3,15 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
-public class BulletBoss extends BaseBullet {
+public class BulletBoss extends Sprite {
     private Bitmap img;
 
     public BulletBoss(Game g, int X, int Y, int type) {
         super(g, ImageHub.laserImage.getWidth(), ImageHub.laserImage.getHeight());
         speedY = 6;
         damage = 5;
+        status = "bulletEnemy";
+        isBullet = true;
 
         Matrix matrix = new Matrix();
         switch (type)

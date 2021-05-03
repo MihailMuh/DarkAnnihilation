@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation;
 public class TripleFighter extends Sprite {
     private static final int shootTripleTime = 1_500;
     private long lastShoot;
-    private long now;
 
     public TripleFighter(Game g) {
         super(g, ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
@@ -21,20 +20,20 @@ public class TripleFighter extends Sprite {
     }
 
     public void shoot() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
 
-            if (HardWorker.makeAngle == 0) {
+            if (!HardWorker.makeAngle) {
                 HardWorker.x = x + halfWidth;
                 HardWorker.y = y + halfHeight;
-                HardWorker.makeAngle = 1;
+                HardWorker.makeAngle = true;
             }
         }
     }
 
     public void newStatus() {
-        if (game.numberBosses != 0) {
+        if (game.bosses.size() != 0) {
             lock = true;
         }
         health = 6;
@@ -42,7 +41,6 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
-        lastShoot = System.currentTimeMillis();
     }
 
     @Override
@@ -76,7 +74,7 @@ public class TripleFighter extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
+    public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();

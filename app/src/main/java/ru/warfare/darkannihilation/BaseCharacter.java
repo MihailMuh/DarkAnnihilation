@@ -9,9 +9,9 @@ public class BaseCharacter extends Sprite {
     public long now;
     public boolean dontmove = false;
     public String gun = "gun";
-    public int ai = 1;
+    public boolean ai = true;
     public final int maxHealth = 50;
-    public static final Heart[] hearts = new Heart[5];
+    public final Heart[] hearts = new Heart[5];
 
     public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
@@ -22,7 +22,7 @@ public class BaseCharacter extends Sprite {
 
     public void PLAYER() {
         gun = "gun";
-        ai = 0;
+        ai = false;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
         lock = true;
@@ -43,7 +43,7 @@ public class BaseCharacter extends Sprite {
     }
 
     public void damage(int dmg) {
-        if (ai == 0 & dmg != 0) {
+        if (!ai & dmg != 0) {
             health -= dmg;
             if (health <= 0) {
                 game.generateGameover();

@@ -21,7 +21,7 @@ public class Vader extends Sprite {
     }
 
     public void newStatus() {
-        if (game.numberBosses != 0) {
+        if (game.bosses.size() != 0) {
             lock = true;
         }
         health = 2;
@@ -63,7 +63,7 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
+    public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
             if (bullet.damage < health) {
                 health -= bullet.damage;

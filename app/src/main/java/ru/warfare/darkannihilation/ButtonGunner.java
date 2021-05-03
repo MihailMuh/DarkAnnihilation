@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation;
 
-public class ButtonGunner extends Sprite{
+public class ButtonGunner extends Sprite {
     public ButtonGunner(Game g) {
         super(g, ImageHub.buttonGunnerImg.getWidth(), ImageHub.buttonGunnerImg.getHeight());
 

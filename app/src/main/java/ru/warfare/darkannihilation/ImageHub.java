@@ -17,6 +17,7 @@ public class ImageHub {
     public static final Bitmap[] vaderImage = new Bitmap[3];
     public static final Bitmap[] winScreenImg = new Bitmap[100];
     public static final Bitmap[] portalImages = new Bitmap[20];
+    public static final Bitmap[] thunderScreen = new Bitmap[20];
 
     public static Bitmap bulletImage;
     public static Bitmap tripleFighterImg;
@@ -51,6 +52,7 @@ public class ImageHub {
     public static Bitmap bulletGunnerImg;
 
     public ImageHub(Game game) {
+        HardWorker.makeImages = true;
         Context context = game.context;
 
         int id;
@@ -70,16 +72,6 @@ public class ImageHub {
                 id = context.getResources().getIdentifier("vader" + (i+1), "drawable", context.getPackageName());
                 vaderImage[i] = BitmapFactory.decodeResource(game.context.getResources(), id);
                 vaderImage[i] = Bitmap.createScaledBitmap(vaderImage[i], (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
-            }
-            if (i < winScreenImg.length) {
-                id = context.getResources().getIdentifier("win_" + (i+1), "drawable", context.getPackageName());
-                winScreenImg[i] = BitmapFactory.decodeResource(context.getResources(), id);
-                winScreenImg[i] = Bitmap.createScaledBitmap(winScreenImg[i], game.screenWidth, game.screenHeight, isFilter);
-            }
-            if (i < portalImages.length) {
-                id = context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName());
-                portalImages[i] = BitmapFactory.decodeResource(context.getResources(), id);
-                portalImages[i] = Bitmap.createScaledBitmap(portalImages[i], (int) (300 * game.resizeK), (int) (300 * game.resizeK), isFilter);
             }
             if (i < explosionDefaultImageSmall.length) {
                 id = context.getResources().getIdentifier("default_explosion_" + (i+1), "drawable", context.getPackageName());

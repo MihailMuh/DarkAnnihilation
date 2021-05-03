@@ -68,7 +68,7 @@ public class Player extends BaseCharacter {
         x += speedX;
         y += speedY;
 
-        if (ai == 0) {
+        if (!ai) {
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
         } else {
@@ -83,7 +83,7 @@ public class Player extends BaseCharacter {
 
     @Override
     public void render () {
-        if (ai == 0) {
+        if (!ai) {
             renderHearts();
         }
         game.canvas.drawBitmap(ImageHub.playerImage, x, y, null);

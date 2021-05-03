@@ -28,6 +28,10 @@ public class ChangerGuns extends Sprite {
         lastShoot = System.currentTimeMillis();
     }
 
+    public ChangerGuns(Game game, boolean fun) {
+        super(game, 0, 0);
+    }
+
     public void hide() {
         x = screenWidth * 2;
         lock = true;

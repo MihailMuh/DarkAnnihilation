@@ -7,6 +7,7 @@ public class Rocket extends Sprite{
         lock = true;
         damage = 100;
         isBullet = true;
+        status = "rocket";
 
         y = -height;
     }

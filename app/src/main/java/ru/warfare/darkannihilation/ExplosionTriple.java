@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 public class ExplosionTriple extends BaseExplosion {
     private final int shotgunTime;
     private long lastShoot;
-    private long now;
 
     public ExplosionTriple(Game g, String size) {
         super(g, ImageHub.explosionTripleImageSmall[0].getWidth(), ImageHub.explosionTripleImageSmall[0].getHeight());
@@ -31,7 +30,7 @@ public class ExplosionTriple extends BaseExplosion {
 
     @Override
     public void update() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastShoot > shotgunTime) {
             lastShoot = now;
             if (frame != 23) {

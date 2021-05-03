@@ -12,7 +12,7 @@
         android:theme="@style/Theme.DarkAnnihilation"
 
         android:allowBackup="false"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:isGame="true"
@@ -29,5 +29,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

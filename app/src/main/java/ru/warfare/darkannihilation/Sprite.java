@@ -30,6 +30,8 @@ public class Sprite {
     public boolean isPassive = false;
     public boolean isBullet = false;
 
+    public String status = "";
+
     public int left;
     public int top;
     public int right;
@@ -60,7 +62,7 @@ public class Sprite {
         bottom = y + height;
     }
 
-    public void check_intersectionBullet(BaseBullet bullet) {}
+    public void check_intersectionBullet(Sprite bullet) {}
     public void update() {}
     public void render() {}
     public void intersection() {}
@@ -99,7 +101,8 @@ public class Sprite {
     }
 
     public static int randInt(int min, int max) {
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
+        return (int) (Math.random() * ((max - min) + 1)) + min;
     }
+
+    public int getDistance() {return 0;}
 }

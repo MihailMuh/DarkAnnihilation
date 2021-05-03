@@ -3,9 +3,6 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 public class Button extends Sprite {
     private Bitmap img;

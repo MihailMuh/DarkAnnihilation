@@ -1,7 +1,6 @@
 package ru.warfare.darkannihilation;
 
-
-public class Buckshot extends BaseBullet {
+public class Buckshot extends Sprite {
     public Buckshot(Game g, int X, int Y, int speed) {
         super(g, ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
 
@@ -9,6 +8,7 @@ public class Buckshot extends BaseBullet {
         y = Y;
         damage = 2;
         isPassive = true;
+        isBullet = true;
 
         speedX = speed;
         speedY = 8;

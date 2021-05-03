@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation;
 public class Demoman extends Sprite {
     private static final int shootTime = 150;
     private long lastShoot;
-    private long now;
 
     public int direction = 0;
 
@@ -34,10 +33,10 @@ public class Demoman extends Sprite {
     }
 
     public void shoot() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
-            HardWorker.makeBomb = 1;
+            HardWorker.makeBomb = true;
         }
     }
 
@@ -73,7 +72,7 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
+    public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
             health -= bullet.damage;
             bullet.intersection();
