@@ -6,7 +6,7 @@ public class Buckshot extends Sprite {
 
         x = X - halfWidth;
         y = Y;
-        damage = 2;
+        damage = 3;
         isPassive = true;
         isBullet = true;
 

@@ -3,8 +3,10 @@ package ru.warfare.darkannihilation;
 public class Portal extends Sprite {
     private int frame = 0;
     private static final int portalImageLength = ImageHub.portalImages.length;
-    private static final int frameTime = 50;
+    private float frameTime = 50;
     private long lastFrame;
+    public boolean touch = false;
+    private float alpha = 0;
 
     public Portal(Game g) {
         super(g, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
@@ -22,8 +24,10 @@ public class Portal extends Sprite {
     public void hide() {
         x = -width;
         frame = 0;
-        frame = 0;
         lock = true;
+        touch = false;
+        frameTime = 50;
+        alpha = 0;
     }
 
     public void start() {
@@ -52,27 +56,34 @@ public class Portal extends Sprite {
             game.winScreen = new WinScreen(game);
             hide();
         } else {
-            game.level++;
-            game.generateNewGame();
+            touch = true;
+            BaseCharacter.god = true;
+            frameTime = 0;
+            game.player.lock = true;
+            if (AudioPlayer.bossMusic.isPlaying()) {
+                AudioPlayer.bossMusic.pause();
+            }
+            AudioPlayer.timeMachineSnd.start();
         }
     }
 
     @Override
     public void update() {
-        long now = System.currentTimeMillis();
-        if (now - lastFrame > frameTime) {
-            lastFrame = now;
-            if (AudioPlayer.portalSound.isPlaying()) {
+        if (!lock) {
+            long now = System.currentTimeMillis();
+            if (now - lastFrame > frameTime) {
+                lastFrame = now;
                 if (frame < portalImageLength - 1) {
                     frame += 1;
                 } else {
                     frame = 0;
                 }
-            } else {
-                if (game.gameStatus != 7) {
-                    game.gameStatus = 0;
-                    hide();
-                    AudioPlayer.pirateMusic.start();
+                if (!AudioPlayer.portalSound.isPlaying() & !touch) {
+                    if (game.gameStatus != 7) {
+                        game.gameStatus = 0;
+                        hide();
+                        AudioPlayer.pirateMusic.start();
+                    }
                 }
             }
         }
@@ -82,6 +93,17 @@ public class Portal extends Sprite {
     public void render() {
         if (!lock) {
             game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
+            if (touch) {
+                Game.blackPaint.setAlpha((int) alpha);
+                game.canvas.drawRect(0, 0, screenWidth, screenHeight, Game.blackPaint);
+                alpha += 0.5;
+                if (alpha >= 256) {
+                    hide();
+                    game.level++;
+                    LoadingScreen.jobs = "newGame";
+                    game.gameStatus = 41;
+                }
+            }
         }
     }
 }

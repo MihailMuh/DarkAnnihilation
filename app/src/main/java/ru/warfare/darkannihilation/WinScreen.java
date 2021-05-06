@@ -8,7 +8,6 @@ public class WinScreen extends Sprite {
     private static final int screenImageLength = ImageHub.winScreenImg.length;
     private static final int frameTime = 45;
     private long lastFrame;
-    private long now;
     private final Paint paint = new Paint();
 
     public WinScreen(Game g) {
@@ -21,7 +20,7 @@ public class WinScreen extends Sprite {
 
     @Override
     public void update() {
-        now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;
             if (frame < screenImageLength - 1) {
@@ -36,7 +35,7 @@ public class WinScreen extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.winScreenImg[frame], x, y, null);
+        game.canvas.drawBitmap(ImageHub.winScreenImg[frame], 0, 0, null);
         if (frame == screenImageLength - 1) {
             game.canvas.drawText("Thanks For Playing!",
                     (screenWidth - paint.measureText("Thanks For Playing!")) / 2,

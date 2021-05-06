@@ -20,7 +20,7 @@ public class HealthKit extends Sprite {
     @Override
     public void intersectionPlayer() {
         hide();
-        AudioPlayer.healSnd.start();
+        AudioPlayer.playHealSnd();
         game.player.heal();
     }
 

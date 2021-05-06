@@ -6,7 +6,7 @@ import android.graphics.Matrix;
 public class BulletEnemy extends Sprite {
     private final Bitmap img;
 
-    public BulletEnemy(Game g, int X, int Y, double angle, int spdx, int spdy) {
+    public BulletEnemy(Game g, int X, int Y, int angle, int spdx, int spdy) {
         super(g, ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
         damage = 5;
         status = "bulletEnemy";
@@ -18,11 +18,10 @@ public class BulletEnemy extends Sprite {
         Matrix matrix = new Matrix();
         matrix.postRotate((float) angle);
 
-        img = Bitmap.createBitmap(ImageHub.bulletEnemyImage, 0, 0, width, height, matrix, ImageHub.isFilter);
+        img = Bitmap.createBitmap(ImageHub.bulletEnemyImage, 0, 0, width, height, matrix, true);
 
         x = X;
         y = Y;
-        AudioPlayer.playShotgun();
     }
 
     @Override

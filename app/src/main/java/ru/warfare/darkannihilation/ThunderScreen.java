@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class ThunderScreen extends BaseScreen {
-    private static final int frameTime = 80;
+    private static final int frameTime = 135;
     private long lastFrame;
 
     public ThunderScreen(Game g) {

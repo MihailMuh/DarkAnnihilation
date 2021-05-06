@@ -1,11 +1,9 @@
 package ru.warfare.darkannihilation;
 
-public class Gunner extends BaseCharacter {
-    public Gunner(Game g) {
+public class Saturn extends BaseCharacter {
+    public Saturn(Game g) {
         super(g, ImageHub.gunnerImg.getWidth(), ImageHub.gunnerImg.getHeight());
         health = 50;
-        speedX = randInt(3, 7);
-        speedY = randInt(3, 7);
 
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -15,8 +13,36 @@ public class Gunner extends BaseCharacter {
         recreateRect(x + 25, y + 25, x + width - 25, y + height - 17);
 
         shootTime = 130;
-        shotgunTime = 60;
+        shotgunTime = 40;
         lastShoot = System.currentTimeMillis();
+    }
+
+    @Override
+    public void PLAYER() {
+        god = false;
+
+        shootTime = 130;
+        shotgunTime = 40;
+        switch (game.level)
+        {
+            case 1:
+                gun = "gun";
+                break;
+            case 2:
+                shootTime = 90;
+                shotgunTime = 33;
+                break;
+        }
+        ai = false;
+        x = game.halfScreenWidth;
+        y = game.halfScreenHeight;
+        lock = true;
+        health = maxHealth;
+        int c = 370;
+        for (int i = 0; i < 5; i++) {
+            hearts[i] = new Heart(game, c, 10);
+            c -= 90;
+        }
     }
 
     @Override
@@ -25,7 +51,9 @@ public class Gunner extends BaseCharacter {
         if (gun.equals("shotgun")) {
             if (now - lastShoot > shotgunTime) {
                 lastShoot = now;
-                HardWorker.makeShotgun = true;
+                if (HardWorker.job == 0) {
+                    HardWorker.job = 2;
+                }
             }
         } else {
             if (now - lastShoot > shootTime) {
@@ -62,24 +90,13 @@ public class Gunner extends BaseCharacter {
         x += speedX;
         y += speedY;
 
-        if (!ai) {
-            speedX = (endX - x) / 13;
-            speedY = (endY - y) / 13;
-        } else {
-            if (x < 30 | x > game.screenWidth - height - 30) {
-                speedX = -speedX;
-            }
-            if (y < 30 | y > game.screenHeight - width - 30) {
-                speedY = -speedY;
-            }
-        }
+        speedX = (endX - x) / 20;
+        speedY = (endY - y) / 20;
     }
 
     @Override
     public void render () {
-        if (!ai) {
-            renderHearts();
-        }
+        renderHearts();
         game.canvas.drawBitmap(ImageHub.gunnerImg, x, y, null);
     }
 }

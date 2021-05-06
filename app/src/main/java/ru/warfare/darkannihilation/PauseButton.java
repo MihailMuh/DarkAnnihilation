@@ -12,30 +12,20 @@ public class PauseButton extends Sprite {
         x = game.screenWidth - width * 2;
     }
 
-    public PauseButton(Game game, boolean fun) {
-        super(game, 0, 0);
-    }
-
     public void show() {
         x = game.screenWidth - width * 2;
     }
 
-    public void setCoords(int X, int Y) {
-        mouseX = X;
-        mouseY = Y;
-        if ((game.gameStatus == 6 | game.gameStatus == 2 | game.gameStatus == 0 | game.gameStatus == 3)
-            & x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-            game.player.dontmove = true;
-            AudioPlayer.buttonSnd.start();
-            mouseX = 0;
-            mouseY = 0;
-            oldStatus = game.gameStatus;
-            game.generatePause();
-        } else {
-            if (game.gameStatus != 4) {
-                game.player.dontmove = false;
-            }
-        }
+    public void make() {
+        AudioPlayer.playClick();
+        mouseX = 0;
+        mouseY = 0;
+        oldStatus = game.gameStatus;
+        game.generatePause();
+    }
+
+    public boolean checkCoords(int X, int Y) {
+        return (x < X & X < x + width & y < Y & Y < y + width);
     }
 
     @Override

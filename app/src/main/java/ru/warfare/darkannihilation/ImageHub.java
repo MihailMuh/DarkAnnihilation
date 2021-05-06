@@ -15,9 +15,11 @@ public class ImageHub {
 
     public static final Bitmap[] screenImage = new Bitmap[34];
     public static final Bitmap[] vaderImage = new Bitmap[3];
+    public static final Bitmap[] vaderOldImage = new Bitmap[3];
     public static final Bitmap[] winScreenImg = new Bitmap[100];
     public static final Bitmap[] portalImages = new Bitmap[20];
     public static final Bitmap[] thunderScreen = new Bitmap[20];
+    public static final Bitmap[] loadingImages = new Bitmap[12];
 
     public static Bitmap bulletImage;
     public static Bitmap tripleFighterImg;
@@ -50,9 +52,14 @@ public class ImageHub {
     public static Bitmap buttonGunnerImg;
     public static Bitmap gunnerImg;
     public static Bitmap bulletGunnerImg;
+    public static Bitmap spiderImg;
+    public static Bitmap gunnerSaturnImg;
+    public static Bitmap XWingImg;
+    public static Bitmap sunriseImg;
+    public static Bitmap bossVadersImg;
+    public static Bitmap bulletBossVadersImg;
 
     public ImageHub(Game game) {
-        HardWorker.makeImages = true;
         Context context = game.context;
 
         int id;
@@ -63,26 +70,50 @@ public class ImageHub {
                 screenImage[i] = Bitmap.createScaledBitmap(screenImage[i], (int) (game.screenWidth * 1.4), game.screenHeight, isFilter);
             }
             if (i < explosionTripleImageSmall.length) {
-                id = context.getResources().getIdentifier("explosion_" + (i+1), "drawable", context.getPackageName());
+                id = context.getResources().getIdentifier("explosion_" + (i + 1), "drawable", context.getPackageName());
                 explosionTripleImageSmall[i] = BitmapFactory.decodeResource(context.getResources(), id);
                 explosionTripleImageMedium[i] = Bitmap.createScaledBitmap(explosionTripleImageSmall[i], (int) (145 * game.resizeK), (int) (152 * game.resizeK), isFilter);
                 explosionTripleImageSmall[i] = Bitmap.createScaledBitmap(explosionTripleImageSmall[i], (int) (50 * game.resizeK), (int) (52 * game.resizeK), isFilter);
             }
             if (i < 3) {
-                id = context.getResources().getIdentifier("vader" + (i+1), "drawable", context.getPackageName());
+                id = context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName());
                 vaderImage[i] = BitmapFactory.decodeResource(game.context.getResources(), id);
                 vaderImage[i] = Bitmap.createScaledBitmap(vaderImage[i], (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
+
+                id = context.getResources().getIdentifier("vader1" + (i + 1), "drawable", context.getPackageName());
+                vaderOldImage[i] = BitmapFactory.decodeResource(context.getResources(), id);
+                vaderOldImage[i] = Bitmap.createScaledBitmap(vaderOldImage[i], (int) (75 * game.resizeK), (int) (75 * game.resizeK), isFilter);
             }
             if (i < explosionDefaultImageSmall.length) {
-                id = context.getResources().getIdentifier("default_explosion_" + (i+1), "drawable", context.getPackageName());
+                id = context.getResources().getIdentifier("default_explosion_" + (i + 1), "drawable", context.getPackageName());
                 explosionDefaultImageSmall[i] = BitmapFactory.decodeResource(context.getResources(), id);
                 explosionDefaultImageMedium[i] = Bitmap.createScaledBitmap(explosionDefaultImageSmall[i], (int) (145 * game.resizeK), (int) (145 * game.resizeK), isFilter);
                 explosionDefaultImageSmall[i] = Bitmap.createScaledBitmap(explosionDefaultImageSmall[i], (int) (50 * game.resizeK), (int) (50 * game.resizeK), isFilter);
             }
             if (i < explosionLarge.length) {
-                id = context.getResources().getIdentifier("explosion_skull_" + (i+1), "drawable", context.getPackageName());
+                id = context.getResources().getIdentifier("explosion_skull_" + (i + 1), "drawable", context.getPackageName());
                 explosionLarge[i] = BitmapFactory.decodeResource(context.getResources(), id);
                 explosionLarge[i] = Bitmap.createScaledBitmap(explosionLarge[i], (int) (435 * game.resizeK), (int) (500 * game.resizeK), isFilter);
+            }
+            if (i < portalImages.length) {
+                id = game.context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName());
+                portalImages[i] = BitmapFactory.decodeResource(context.getResources(), id);
+                portalImages[i] = Bitmap.createScaledBitmap(portalImages[i], (int) (300 * game.resizeK), (int) (300 * game.resizeK), isFilter);
+            }
+            if (i < thunderScreen.length) {
+                id = game.context.getResources().getIdentifier("thunder" + i, "drawable", context.getPackageName());
+                thunderScreen[i] = BitmapFactory.decodeResource(context.getResources(), id);
+                thunderScreen[i] = Bitmap.createScaledBitmap(thunderScreen[i], (int) (game.screenWidth * 1.4), game.screenHeight, isFilter);
+            }
+            if (i < loadingImages.length) {
+                id = game.context.getResources().getIdentifier("loading" + i, "drawable", context.getPackageName());
+                loadingImages[i] = BitmapFactory.decodeResource(context.getResources(), id);
+                loadingImages[i] = Bitmap.createScaledBitmap(loadingImages[i], game.screenWidth, game.screenHeight, isFilter);
+            }
+            if (i < winScreenImg.length) {
+                id = context.getResources().getIdentifier("win_" + (i + 1), "drawable", context.getPackageName());
+                winScreenImg[i] = BitmapFactory.decodeResource(context.getResources(), id);
+                winScreenImg[i] = Bitmap.createScaledBitmap(winScreenImg[i], game.screenWidth, game.screenHeight, ImageHub.isFilter);
             }
         }
 
@@ -178,6 +209,24 @@ public class ImageHub {
 
         bulletGunnerImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.gun_bullet);
         bulletGunnerImg = Bitmap.createScaledBitmap(bulletGunnerImg, (int) (13 * game.resizeK), (int) (13 * game.resizeK), isFilter);
+
+        spiderImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.spider);
+        spiderImg = Bitmap.createScaledBitmap(spiderImg, (int) (350 * game.resizeK), (int) (175 * game.resizeK), isFilter);
+
+        gunnerSaturnImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.bullet_gunner);
+        gunnerSaturnImg = Bitmap.createScaledBitmap(gunnerSaturnImg, (int) (15 * game.resizeK), (int) (15 * game.resizeK), isFilter);
+
+        XWingImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.x_wing);
+        XWingImg = Bitmap.createScaledBitmap(XWingImg, (int) (200 * game.resizeK), (int) (146 * game.resizeK), isFilter);
+
+        sunriseImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.area);
+        sunriseImg = Bitmap.createScaledBitmap(sunriseImg, (int) (450 * game.resizeK), (int) (279 * game.resizeK), isFilter);
+
+        bossVadersImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.boss_vaders);
+        bossVadersImg = Bitmap.createScaledBitmap(bossVadersImg, (int) (350 * game.resizeK), (int) (250 * game.resizeK), isFilter);
+
+        bulletBossVadersImg = BitmapFactory.decodeResource(game.getResources(), R.drawable.bull_boss_vader);
+        bulletBossVadersImg = Bitmap.createScaledBitmap(bulletBossVadersImg, (int) (140 * game.resizeK), (int) (140 * game.resizeK), isFilter);
 
     }
 }

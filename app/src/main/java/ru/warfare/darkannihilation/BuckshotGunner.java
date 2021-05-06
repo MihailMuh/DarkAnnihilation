@@ -9,7 +9,7 @@ public class BuckshotGunner extends Sprite {
     private float fly = 0;
 
     public BuckshotGunner(Game game, int X, int Y) {
-        super(game, ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
+        super(game, ImageHub.gunnerSaturnImg.getWidth(), ImageHub.gunnerSaturnImg.getHeight());
 
         damage = 1;
         isPassive = true;
@@ -30,9 +30,7 @@ public class BuckshotGunner extends Sprite {
 
     @Override
     public int getDistance() {
-        double x = X - game.player.x;
-        double y = Y - game.player.y;
-        return (int) Math.sqrt((x * x) + (y * y));
+        return getDistance((int) X - game.player.x, (int) Y - game.player.y);
     }
 
     @Override
@@ -64,9 +62,7 @@ public class BuckshotGunner extends Sprite {
         Y = (float) (Y + speeds[1] + game.player.speedY);
 
         if (!orbite) {
-            double x = X - game.player.x;
-            double y = Y - game.player.y;
-            if (Math.sqrt((x * x) + (y * y)) > 80) {
+            if (getDistance((int) X - game.player.x, (int) Y - game.player.y) > 80) {
                 vector.len += 0.035;
                 deg += 0.03;
             } else {
@@ -84,6 +80,6 @@ public class BuckshotGunner extends Sprite {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.buckshotImg, X, Y, null);
+        game.canvas.drawBitmap(ImageHub.gunnerSaturnImg, X, Y, null);
     }
 }

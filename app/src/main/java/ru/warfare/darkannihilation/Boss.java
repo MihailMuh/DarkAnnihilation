@@ -17,7 +17,7 @@ public class Boss extends Sprite {
         paintFill.setColor(Color.RED);
         paintOutLine.setColor(Color.WHITE);
 
-        health = 120;
+        health = 150;
         maxHealth = health;
         speedY = 1;
         isPassive = true;
@@ -52,10 +52,22 @@ public class Boss extends Sprite {
         game.score += 150;
         game.bosses.remove(this);
         game.allSprites.remove(this);
-        for (int i = 0; i < game.numberVaders; i++) {
-            if (Game.random.nextFloat() <= 0.1) {
-                game.allSprites.add(new TripleFighter(game));
-            }
+        switch (game.level)
+        {
+            case 1:
+                for (int i = 0; i < game.numberVaders; i++) {
+                    if (Game.random.nextFloat() <= 0.1) {
+                        game.allSprites.add(new TripleFighter(game));
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < game.numberVaders; i++) {
+                    if (Game.random.nextFloat() <= 0.1) {
+                        game.allSprites.add(new XWing(game));
+                    }
+                }
+                break;
         }
         AudioPlayer.bossMusic.pause();
         if (game.portal.lock) {

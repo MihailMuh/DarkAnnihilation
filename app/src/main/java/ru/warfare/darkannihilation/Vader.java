@@ -10,7 +10,15 @@ public class Vader extends Sprite {
         health = 2;
         damage = 5;
 
-        img = ImageHub.vaderImage[randInt(0, 2)];
+        switch (game.level)
+        {
+            case 1:
+                img = ImageHub.vaderImage[randInt(0, 2)];
+                break;
+            case 2:
+                img = ImageHub.vaderOldImage[randInt(0, 2)];
+                break;
+        }
 
         x = randInt(0, screenWidth);
         y = -150;
@@ -94,6 +102,6 @@ public class Vader extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(img, x, y, null);
+        game.canvas.drawBitmap(img, x, y, Game.alphaPaint);
     }
 }

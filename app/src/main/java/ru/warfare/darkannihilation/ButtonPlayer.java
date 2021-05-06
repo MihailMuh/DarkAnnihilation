@@ -18,9 +18,13 @@ public class ButtonPlayer extends Sprite {
 
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
-            AudioPlayer.buttonSnd.start();
+            AudioPlayer.playClick();
             Game.character = "ship";
-            game.generateNewGame();
+            if (AudioPlayer.menuMusic.isPlaying()) {
+                AudioPlayer.menuMusic.pause();
+            }
+            LoadingScreen.jobs = "newGame";
+            game.gameStatus = 41;
         }
     }
 

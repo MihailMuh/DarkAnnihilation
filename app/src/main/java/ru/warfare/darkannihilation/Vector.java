@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class Vector {
-    public int a;
+    public int a = 0;
     public int b;
     public double c;
     public double ac;
@@ -39,5 +39,16 @@ public class Vector {
         double cos = Math.cos(-angle);
         double sin =  Math.sin(-angle);
         return new double[] {((x * cos) - (y * sin)), ((x * sin) + (y * cos))};
+    }
+
+    public int[] rotateVector(int angle) {
+        /**
+         * It rotates the vector counterclockwise (right direction).
+         */
+        double x = ac * len;
+        double y = bc * len;
+        double cos = Math.cos(-angle);
+        double sin =  Math.sin(-angle);
+        return new int[] {(int) ((x * cos) - (y * sin)), (int) ((x * sin) + (y * cos))};
     }
 }

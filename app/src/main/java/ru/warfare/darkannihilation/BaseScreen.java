@@ -24,6 +24,8 @@ public class BaseScreen extends Sprite {
         }
     }
 
+
+
     @Override
     public void render() {
         switch (game.level)

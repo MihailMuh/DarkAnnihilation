@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
-public class Player extends BaseCharacter {
-    public Player(Game g) {
+public class MillenniumFalcon extends BaseCharacter {
+    public MillenniumFalcon(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
         health = 50;
         speedX = randInt(3, 7);
@@ -17,6 +17,34 @@ public class Player extends BaseCharacter {
         shootTime = 110;
         shotgunTime = 535;
         lastShoot = System.currentTimeMillis();
+    }
+
+    @Override
+    public void PLAYER() {
+        god = false;
+
+        shootTime = 110;
+        shotgunTime = 535;
+        switch (game.level)
+        {
+            case 1:
+                gun = "gun";
+                break;
+            case 2:
+                shootTime = 55;
+                shotgunTime = 335;
+                break;
+        }
+        ai = false;
+        x = game.halfScreenWidth;
+        y = game.halfScreenHeight;
+        lock = true;
+        health = maxHealth;
+        int c = 370;
+        for (int i = 0; i < 5; i++) {
+            hearts[i] = new Heart(game, c, 10);
+            c -= 90;
+        }
     }
 
     @Override

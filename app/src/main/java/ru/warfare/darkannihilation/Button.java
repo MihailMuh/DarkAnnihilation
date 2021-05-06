@@ -48,7 +48,7 @@ public class Button extends Sprite {
         mouseX = X;
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
-            AudioPlayer.buttonSnd.start();
+            AudioPlayer.playClick();
             img = ImageHub.buttonImagePressed;
 
             mouseX = 0;
@@ -84,9 +84,10 @@ public class Button extends Sprite {
                     game.pauseTimer = 0;
 
                     game.buttonMenu.x = screenWidth;
+                    game.buttonRestart.x = screenWidth;
+                    game.buttonQuit.x = screenWidth;
                     x = screenWidth;
                     img = ImageHub.buttonImageNotPressed;
-                    game.buttonQuit.x = screenWidth;
                     break;
                 case "menu":
                     game.generateMenu();
@@ -96,6 +97,15 @@ public class Button extends Sprite {
                     game.buttonGunner.hide();
                     game.score = 0;
                     game.generateTopScore();
+                    break;
+                case "restart":
+                    if (AudioPlayer.pauseMusic.isPlaying()) {
+                        AudioPlayer.pauseMusic.pause();
+                    }
+                    game.level = 1;
+                    img = ImageHub.buttonImageNotPressed;
+                    LoadingScreen.jobs = "newGame";
+                    game.gameStatus = 41;
                     break;
             }
 

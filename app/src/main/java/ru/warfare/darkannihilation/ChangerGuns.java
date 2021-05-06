@@ -28,10 +28,6 @@ public class ChangerGuns extends Sprite {
         lastShoot = System.currentTimeMillis();
     }
 
-    public ChangerGuns(Game game, boolean fun) {
-        super(game, 0, 0);
-    }
-
     public void hide() {
         x = screenWidth * 2;
         lock = true;
@@ -70,32 +66,25 @@ public class ChangerGuns extends Sprite {
         }
     }
 
-    public void setCoords(int X, int Y, int r) {
-        if (game.gameStatus == 0 | game.gameStatus == 6) {
-            game.player.dontmove = true;
-            mouseX = X;
-            mouseY = Y;
-            if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
-                now = System.currentTimeMillis();
-                if (now - lastShoot > clickTime) {
-                    lastShoot = now;
-                    mouseX = 0;
-                    mouseY = 0;
-                    if (!game.shotgunKit.picked) {
-                        image = ImageHub.gunToNone;
-                    } else {
-                        AudioPlayer.playReload();
-                        if (game.player.gun.equals("shotgun")) {
-                            game.player.gun = "gun";
-                            image = ImageHub.gunToShotgun;
-                        } else {
-                            game.player.gun = "shotgun";
-                            image = ImageHub.shotgunToGun;
-                        }
-                    }
-                }
+    public boolean checkCoords(int X, int Y) {
+        return (x < X & X < x + width & y < Y & Y < y + width);
+    }
+
+    public void make() {
+        now = System.currentTimeMillis();
+        if (now - lastShoot > clickTime) {
+            lastShoot = now;
+            if (!game.shotgunKit.picked) {
+                image = ImageHub.gunToNone;
             } else {
-                game.player.dontmove = false;
+                AudioPlayer.playReload();
+                if (game.player.gun.equals("shotgun")) {
+                    game.player.gun = "gun";
+                    image = ImageHub.gunToShotgun;
+                } else {
+                    game.player.gun = "shotgun";
+                    image = ImageHub.shotgunToGun;
+                }
             }
         }
     }

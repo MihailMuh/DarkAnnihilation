@@ -104,5 +104,9 @@ public class Sprite {
         return (int) (Math.random() * ((max - min) + 1)) + min;
     }
 
+    public static int getDistance(int a, int b) {
+        return (int) Math.sqrt((a * a) + (b * b));
+    }
+
     public int getDistance() {return 0;}
 }

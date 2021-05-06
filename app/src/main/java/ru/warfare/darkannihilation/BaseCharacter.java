@@ -12,6 +12,7 @@ public class BaseCharacter extends Sprite {
     public boolean ai = true;
     public final int maxHealth = 50;
     public final Heart[] hearts = new Heart[5];
+    public static boolean god = false;
 
     public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
@@ -21,7 +22,17 @@ public class BaseCharacter extends Sprite {
     public void checkIntersections(Sprite sprite) {}
 
     public void PLAYER() {
-        gun = "gun";
+        god = false;
+        switch (game.level)
+        {
+            case 1:
+                gun = "gun";
+                break;
+            case 2:
+                shootTime /= 2;
+                shotgunTime /= 1.5;
+                break;
+        }
         ai = false;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -43,7 +54,7 @@ public class BaseCharacter extends Sprite {
     }
 
     public void damage(int dmg) {
-        if (!ai & dmg != 0) {
+        if (!ai & dmg != 0 & !god) {
             health -= dmg;
             if (health <= 0) {
                 game.generateGameover();

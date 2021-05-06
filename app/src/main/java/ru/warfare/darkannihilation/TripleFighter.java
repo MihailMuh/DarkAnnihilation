@@ -24,10 +24,10 @@ public class TripleFighter extends Sprite {
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
 
-            if (!HardWorker.makeAngle) {
+            if (HardWorker.job == 0) {
                 HardWorker.x = x + halfWidth;
                 HardWorker.y = y + halfHeight;
-                HardWorker.makeAngle = true;
+                HardWorker.job = 1;
             }
         }
     }
