@@ -19,7 +19,7 @@ public class XWing extends Sprite {
 
         recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
 
-        if (Game.character.equals("gunner")) {
+        if (Game.character.equals("saturn")) {
             distance = 600;
         }
 

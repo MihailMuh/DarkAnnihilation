@@ -30,11 +30,17 @@ public class FightBg extends Sprite {
     public void newImg(String character) {
         switch (character)
         {
-            case "gunner":
-                img = Bitmap.createScaledBitmap(ImageHub.gunnerVsBoss, width, height, ImageHub.isFilter);
+            case "saturn":
+                img = Bitmap.createScaledBitmap(ImageHub.saturnVsBoss, width, height, ImageHub.isFilter);
                 break;
-            case "ship":
+            case "falcon":
                 img = Bitmap.createScaledBitmap(ImageHub.playerVsBoss, width, height, ImageHub.isFilter);
+                break;
+            case "saturn-vaders":
+                img = Bitmap.createScaledBitmap(ImageHub.saturnVsVaders, width, height, ImageHub.isFilter);
+                break;
+            case "falcon-vaders":
+                img = Bitmap.createScaledBitmap(ImageHub.playerVsVaders, width, height, ImageHub.isFilter);
                 break;
         }
     }

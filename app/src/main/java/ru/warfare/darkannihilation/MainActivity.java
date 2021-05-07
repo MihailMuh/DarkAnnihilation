@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public static JSONArray names;
     public static SharedPreferences preferences = null;
     public static String nickname = "";
-    public static String TAG = "myLog";
+    public static String TAG = "D'Ark";
     public static String IP = "http://78.29.33.173:49150/";
 
     @Override

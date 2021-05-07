@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation;
 
-public class BuckshotGunner extends Sprite {
+public class BuckshotSaturn extends Sprite {
     private double deg;
     private final Vector vector = new Vector();
     private float X;
@@ -8,8 +8,8 @@ public class BuckshotGunner extends Sprite {
     private boolean orbite = false;
     private float fly = 0;
 
-    public BuckshotGunner(Game game, int X, int Y) {
-        super(game, ImageHub.gunnerSaturnImg.getWidth(), ImageHub.gunnerSaturnImg.getHeight());
+    public BuckshotSaturn(Game game, int X, int Y) {
+        super(game, ImageHub.bulletBuckshotSaturnImg.getWidth(), ImageHub.bulletBuckshotSaturnImg.getHeight());
 
         damage = 1;
         isPassive = true;
@@ -80,6 +80,6 @@ public class BuckshotGunner extends Sprite {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.gunnerSaturnImg, X, Y, null);
+        game.canvas.drawBitmap(ImageHub.bulletBuckshotSaturnImg, X, Y, null);
     }
 }

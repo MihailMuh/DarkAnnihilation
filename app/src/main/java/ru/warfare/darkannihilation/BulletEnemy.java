@@ -33,7 +33,6 @@ public class BulletEnemy extends Sprite {
             }
         }
         game.allSprites.remove(this);
-        img.recycle();
     }
 
     @Override
@@ -43,7 +42,6 @@ public class BulletEnemy extends Sprite {
 
         if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
             game.allSprites.remove(this);
-            img.recycle();
         }
     }
 

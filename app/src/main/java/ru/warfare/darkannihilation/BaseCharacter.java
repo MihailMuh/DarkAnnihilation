@@ -21,18 +21,8 @@ public class BaseCharacter extends Sprite {
     public void shoot() {}
     public void checkIntersections(Sprite sprite) {}
 
-    public void PLAYER() {
+    public void baseSetting() {
         god = false;
-        switch (game.level)
-        {
-            case 1:
-                gun = "gun";
-                break;
-            case 2:
-                shootTime /= 2;
-                shotgunTime /= 1.5;
-                break;
-        }
         ai = false;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -42,6 +32,20 @@ public class BaseCharacter extends Sprite {
         for (int i = 0; i < 5; i++) {
             hearts[i] = new Heart(game, c, 10);
             c -= 90;
+        }
+    }
+
+    public void PLAYER() {
+        baseSetting();
+        switch (game.level)
+        {
+            case 1:
+                gun = "gun";
+                break;
+            case 2:
+                shootTime /= 2;
+                shotgunTime /= 1.5;
+                break;
         }
     }
 

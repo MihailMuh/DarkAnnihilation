@@ -31,7 +31,7 @@ public class Sunrise extends Sprite {
     public void hide() {
         field = false;
         lock = true;
-        health = 45;
+        health = 55;
         x = randInt(width, screenWidth - width);
         y = -height;
         speedX = randInt(2, 4);

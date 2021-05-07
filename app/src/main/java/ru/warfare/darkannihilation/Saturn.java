@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 public class Saturn extends BaseCharacter {
     public Saturn(Game g) {
-        super(g, ImageHub.gunnerImg.getWidth(), ImageHub.gunnerImg.getHeight());
+        super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight());
         health = 50;
 
         x = game.halfScreenWidth;
@@ -19,7 +19,7 @@ public class Saturn extends BaseCharacter {
 
     @Override
     public void PLAYER() {
-        god = false;
+        baseSetting();
 
         shootTime = 130;
         shotgunTime = 40;
@@ -29,19 +29,8 @@ public class Saturn extends BaseCharacter {
                 gun = "gun";
                 break;
             case 2:
-                shootTime = 90;
-                shotgunTime = 33;
+                shootTime = 100;
                 break;
-        }
-        ai = false;
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
-        lock = true;
-        health = maxHealth;
-        int c = 370;
-        for (int i = 0; i < 5; i++) {
-            hearts[i] = new Heart(game, c, 10);
-            c -= 90;
         }
     }
 
@@ -60,9 +49,9 @@ public class Saturn extends BaseCharacter {
                 lastShoot = now;
                 AudioPlayer.playShoot();
                 for (int i = 0; i < randInt(1, 6); i++) {
-                    BulletGunner bulletGunner = new BulletGunner(game, x + halfWidth, y);
-                    game.bullets.add(bulletGunner);
-                    game.allSprites.add(bulletGunner);
+                    BulletSaturn bulletSaturn = new BulletSaturn(game, x + halfWidth, y);
+                    game.bullets.add(bulletSaturn);
+                    game.allSprites.add(bulletSaturn);
                 }
             }
         }
@@ -97,6 +86,6 @@ public class Saturn extends BaseCharacter {
     @Override
     public void render () {
         renderHearts();
-        game.canvas.drawBitmap(ImageHub.gunnerImg, x, y, null);
+        game.canvas.drawBitmap(ImageHub.saturnImg, x, y, null);
     }
 }

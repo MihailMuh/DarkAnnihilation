@@ -158,7 +158,7 @@ public class AudioPlayer {
         soundPool.play(buttonSound, 1f, 1f, 1, 0, 1);
     }
     public static void playDeagle() {
-        soundPool.play(deagleSnd, 0.8f, 0.8f, 1, 0, 1);
+        soundPool.play(deagleSnd, 1f, 1f, 1, 0, 1);
     }
     public static void playBossShoot() {
         soundPool.play(bossShootSnd, 1f, 1f, 1, 0, 1);

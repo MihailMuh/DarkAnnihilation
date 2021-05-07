@@ -19,7 +19,7 @@ public class ButtonPlayer extends Sprite {
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioPlayer.playClick();
-            Game.character = "ship";
+            Game.character = "falcon";
             if (AudioPlayer.menuMusic.isPlaying()) {
                 AudioPlayer.menuMusic.pause();
             }

@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation;
 
+import android.content.Context;
 import android.util.Log;
 
 public class HardWorker implements Runnable {
@@ -15,9 +16,11 @@ public class HardWorker implements Runnable {
     static int x = 0;
     static int y = 0;
     private final Game game;
+    private final Context context;
 
     public HardWorker(Game g) {
         game = g;
+        context = g.context;
     }
 
     @Override
@@ -33,9 +36,9 @@ public class HardWorker implements Runnable {
                     job = 0;
                     break;
                 case 2:
-                    BuckshotGunner buckshotGunner = new BuckshotGunner(game, game.player.x + game.player.halfWidth, game.player.y);
-                    game.bullets.add(buckshotGunner);
-                    game.allSprites.add(buckshotGunner);
+                    BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, game.player.x + game.player.halfWidth, game.player.y);
+                    game.bullets.add(buckshotSaturn);
+                    game.allSprites.add(buckshotSaturn);
                     job = 0;
                     break;
                 case 3:

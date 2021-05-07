@@ -21,7 +21,7 @@ public class MillenniumFalcon extends BaseCharacter {
 
     @Override
     public void PLAYER() {
-        god = false;
+        baseSetting();
 
         shootTime = 110;
         shotgunTime = 535;
@@ -34,16 +34,6 @@ public class MillenniumFalcon extends BaseCharacter {
                 shootTime = 55;
                 shotgunTime = 335;
                 break;
-        }
-        ai = false;
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
-        lock = true;
-        health = maxHealth;
-        int c = 370;
-        for (int i = 0; i < 5; i++) {
-            hearts[i] = new Heart(game, c, 10);
-            c -= 90;
         }
     }
 

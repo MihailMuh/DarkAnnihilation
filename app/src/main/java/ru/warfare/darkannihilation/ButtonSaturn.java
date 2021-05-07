@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
-public class ButtonGunner extends Sprite {
-    public ButtonGunner(Game g) {
+public class ButtonSaturn extends Sprite {
+    public ButtonSaturn(Game g) {
         super(g, ImageHub.buttonGunnerImg.getWidth(), ImageHub.buttonGunnerImg.getHeight());
 
         y = halfScreenHeight - halfHeight;
@@ -19,7 +19,7 @@ public class ButtonGunner extends Sprite {
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioPlayer.playClick();
-            Game.character = "gunner";
+            Game.character = "saturn";
             if (AudioPlayer.menuMusic.isPlaying()) {
                 AudioPlayer.menuMusic.pause();
             }

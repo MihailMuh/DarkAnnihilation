@@ -58,7 +58,7 @@ public class Button extends Sprite {
             {
                 case "start":
                     game.buttonPlayer.show();
-                    game.buttonGunner.show();
+                    game.buttonSaturn.show();
                     img = ImageHub.buttonImageNotPressed;
                     break;
                 case "quit":
@@ -94,7 +94,7 @@ public class Button extends Sprite {
                     break;
                 case "top":
                     game.buttonPlayer.hide();
-                    game.buttonGunner.hide();
+                    game.buttonSaturn.hide();
                     game.score = 0;
                     game.generateTopScore();
                     break;
