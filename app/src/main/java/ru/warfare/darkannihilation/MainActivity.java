@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.e(TAG, "" + e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     json = new JSONObject(response.body().string());
                     names = json.names();
@@ -141,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.e(TAG, "" + e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) {}
+            public void onResponse(@NotNull Call call, @NotNull Response response) {}
         });
     }
 
@@ -183,8 +184,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
+        return ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
     private void checkOnFirstRun() {

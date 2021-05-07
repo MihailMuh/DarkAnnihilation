@@ -93,7 +93,7 @@ public class Portal extends Sprite {
     public void render() {
         if (!lock) {
             game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
-            if (touch) {
+            if (touch & game.gameStatus != 4) {
                 Game.blackPaint.setAlpha((int) alpha);
                 game.canvas.drawRect(0, 0, screenWidth, screenHeight, Game.blackPaint);
                 alpha += 0.5;

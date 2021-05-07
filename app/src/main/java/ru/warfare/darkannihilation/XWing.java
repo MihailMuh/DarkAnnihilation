@@ -8,7 +8,6 @@ public class XWing extends Sprite {
 
     public XWing(Game g) {
         super(g, ImageHub.XWingImg.getWidth(), ImageHub.XWingImg.getHeight());
-        lock = true;
         health = 5;
         damage = 10;
 

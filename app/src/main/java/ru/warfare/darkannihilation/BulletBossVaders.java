@@ -11,12 +11,12 @@ public class BulletBossVaders extends Sprite {
         x = X - halfWidth;
         y = Y -  halfWidth;
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 25, y + 25, x + width - 25, y + height - 25);
     }
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 15, y + 15);
+        return goTO(x + 25, y + 25);
     }
 
     @Override

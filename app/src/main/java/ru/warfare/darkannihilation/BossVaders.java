@@ -9,7 +9,7 @@ public class BossVaders extends Sprite {
     private static final Paint paintOutLine = new Paint();
     private static final Vector vector = new Vector();
 
-    private static final int shootBossTime = 1000;
+    private static final int shootBossTime = 1500;
     private long lastShoot;
 
     public boolean field = false;
@@ -112,12 +112,13 @@ public class BossVaders extends Sprite {
             AudioPlayer.pirateMusic.pause();
             game.gameStatus = 5;
         }
-        if ((y > 0) & !field) {
+        if (y > 0 & !field) {
             field = true;
         }
-        if (field) {
+        if (y > -halfHeight) {
             shoot();
-
+        }
+        if (field) {
             if (x <= 0) {
                 left = true;
             }

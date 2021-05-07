@@ -81,7 +81,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public LoadingScreen loadingScreen;
     public Spider spider;
     public Sunrise sunrise;
-    public ImageLoader imageLoader;
 
     public final int numberVaders = 10;
     public int numberMediumExplosionsTriple = 20;
@@ -124,8 +123,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         halfScreenHeight = screenHeight / 2;
         resizeK = (double) screenWidth / 1920;
 
-        imageHub = new ImageHub(this);
         audioPlayer = new AudioPlayer(this);
+        imageHub = new ImageHub(this);
         hardWorker = new HardWorker(this);
 
         fpsPaint.setColor(Color.RED);
@@ -255,72 +254,70 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.update();
         player.render();
 
-        if (gameStatus == 0) {
-            if (now - lastBoss > BOSS_TIME) {
-                lastBoss = now;
-                Sprite boss = null;
-                switch (level)
-                {
-                    case 1:
-                        boss = new Boss(this);
-                        fightBg.newImg(character);
-                        break;
-                    case 2:
-                        boss = new BossVaders(this);
-                        fightBg.newImg(character + "-vaders");
-                        break;
-                }
-                bosses.add(boss);
-                allSprites.add(boss);
-                for (int i = 0; i < bullets.size(); i++) {
-                    Sprite bullet = bullets.get(i);
-                    if (bullet.status.equals("saturn")) {
-                        if (bullet.getDistance() >= screenWidth - 100) {
-                            bullets.remove(bullet);
-                            allSprites.remove(bullet);
-                        }
-                    }
-                }
-            }
-
-            if (!shotgunKit.picked) {
-                if (!shotgunKit.lock) {
-                    shotgunKit.x -= moveAll;
-                    shotgunKit.update();
-                    shotgunKit.render();
-                    player.checkIntersections(shotgunKit);
-                } else {
-                    if (random.nextFloat() >= 0.99 & score >= 50) {
-                        shotgunKit.lock = false;
-                    }
-                }
-            }
-
+        if (now - lastBoss > BOSS_TIME) {
+            lastBoss = now;
+            Sprite boss = null;
             switch (level)
             {
                 case 1:
-                    if (healthKit.lock & random.nextFloat() >= 0.9985) {
-                        healthKit.lock = false;
-                    }
-                    if (attention.lock & random.nextFloat() >= 0.996 & score > 50) {
-                        attention.start();
-                    }
-                    if (factory.lock & random.nextFloat() >= 0.9991 & score >= 170 & bosses.size() == 0) {
-                        factory.lock = false;
-                    }
-                    if (demoman.lock & random.nextFloat() >= 0.9979 & score > 70) {
-                        demoman.lock = false;
-                    }
+                    boss = new Boss(this);
+                    fightBg.newImg(character);
                     break;
                 case 2:
-                    if (spider.lock & random.nextFloat() >= 0.999) {
-                        spider.lock = false;
-                    }
-                    if (sunrise.lock & random.nextFloat() >= 0.9991 & bosses.size() == 0) {
-                        sunrise.lock = false;
-                    }
+                    boss = new BossVaders(this);
+                    fightBg.newImg(character + "-vaders");
                     break;
             }
+            bosses.add(boss);
+            allSprites.add(boss);
+            for (int i = 0; i < bullets.size(); i++) {
+                Sprite bullet = bullets.get(i);
+                if (bullet.status.equals("saturn")) {
+                    if (bullet.getDistance() >= screenWidth - 100) {
+                        bullets.remove(bullet);
+                        allSprites.remove(bullet);
+                    }
+                }
+            }
+        }
+
+        if (!shotgunKit.picked) {
+            if (!shotgunKit.lock) {
+                shotgunKit.x -= moveAll;
+                shotgunKit.update();
+                shotgunKit.render();
+                player.checkIntersections(shotgunKit);
+            } else {
+                if (random.nextFloat() >= 0.99 & score >= 50) {
+                    shotgunKit.lock = false;
+                }
+            }
+        }
+
+        switch (level)
+        {
+            case 1:
+                if (healthKit.lock & random.nextFloat() >= 0.9985) {
+                    healthKit.lock = false;
+                }
+                if (attention.lock & random.nextFloat() >= 0.996 & score > 50) {
+                    attention.start();
+                }
+                if (factory.lock & random.nextFloat() >= 0.9991 & score >= 170 & bosses.size() == 0) {
+                    factory.lock = false;
+                }
+                if (demoman.lock & random.nextFloat() >= 0.9979 & score > 70) {
+                    demoman.lock = false;
+                }
+                break;
+            case 2:
+                if (spider.lock & random.nextFloat() >= 0.999) {
+                    spider.lock = false;
+                }
+                if (sunrise.lock & random.nextFloat() >= 0.9991 & bosses.size() == 0) {
+                    sunrise.lock = false;
+                }
+                break;
         }
 
         pauseButton.render();
@@ -336,9 +333,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textBuilder.setLength(0);
 
-        if (gameStatus == 2) {
-            timerStart();
-        }
         if (gameStatus == 6) {
             if (!portal.touch) {
                 player.checkIntersections(portal);
@@ -356,8 +350,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();
                 switch (gameStatus) {
-                    case 6:
                     case 2:
+                        ready();
+                        break;
+                    case 6:
                     case 0:
                         gameplay();
                         break;
@@ -368,9 +364,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         gameover();
                         break;
                     case 4:
-                    case 5:
-                    case 9:
                         pause();
+                        break;
+                    case 5:
+                        bossIncoming();
+                        break;
+                    case 9:
+                        afterPause();
                         break;
                     case 7:
                         win();
@@ -559,6 +559,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (pauseButton.oldStatus == 2) {
             AudioPlayer.readySnd.pause();
         }
+        if (portal.touch) {
+            AudioPlayer.timeMachineSnd.pause();
+        }
 
         int X = halfScreenWidth - buttonQuit.halfWidth;
 
@@ -572,6 +575,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateMenu() {
         gameStatus = 42;
+
+        alphaPaint.setAlpha(255);
+
         if (AudioPlayer.winMusic.isPlaying()) {
             AudioPlayer.winMusic.pause();
         }
@@ -633,6 +639,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         if (AudioPlayer.pirateMusic.isPlaying()) {
             AudioPlayer.pirateMusic.pause();
+        }
+        if (AudioPlayer.pauseMusic.isPlaying()) {
+            AudioPlayer.pauseMusic.pause();
         }
         AudioPlayer.pirateMusic.seekTo(0);
 
@@ -698,9 +707,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (random.nextFloat() <= 0.15) {
                         allSprites.add(new TripleFighter(this));
                     }
-                    Vader v = new Vader(this);
-                    v.lock = true;
-                    allSprites.add(v);
+                    allSprites.add(new Vader(this));
                 }
                 break;
             case 2:
@@ -712,9 +719,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (random.nextFloat() <= 0.2) {
                         allSprites.add(new XWing(this));
                     }
-                    Vader v = new Vader(this);
-                    v.lock = true;
-                    allSprites.add(v);
+                    allSprites.add(new Vader(this));
                 }
 
                 allSprites.add(spider);
@@ -757,11 +762,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textBuilder.setLength(0);
         if (pointerCount >= 4) {
-            generateNewGame();
+            gameStatus = 41;
         }
     }
 
-    public void pause() {
+    public void bossIncoming() {
         screen.render();
         for (int i = 0; i < allSprites.size(); i++) {
             if (allSprites.get(i) != null) {
@@ -770,26 +775,115 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
             }
         }
+        shotgunKit.render();
         player.render();
         changerGuns.render();
         portal.render();
 
-        if (pauseButton.oldStatus == 2) {
-            if (0 <= count & count < 70) {
-                canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+        Sprite boss = bosses.get(bosses.size()-1);
+        if (boss.y >= -200 | pointerCount >= 4) {
+            if (portal.lock) {
+                gameStatus = 0;
             } else {
-                if (70 <= count & count < 140) {
-                    canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                gameStatus = 6;
+            }
+            boss.y = -boss.height;
+        }
+        boss.update();
+        fightBg.render();
+
+        textBuilder.append("Current score: ").append(score);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+
+        textBuilder.setLength(0);
+
+        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        canvas.drawText(textBuilder.toString(), screenWidth - 250, 170, fpsPaint);
+
+        textBuilder.setLength(0);
+    }
+
+    public void afterPause() {
+        screen.render();
+        for (int i = 0; i < allSprites.size(); i++) {
+            if (allSprites.get(i) != null) {
+                if (!allSprites.get(i).lock) {
+                    allSprites.get(i).render();
+                }
+            }
+        }
+        shotgunKit.render();
+        player.render();
+        changerGuns.render();
+        portal.render();
+
+        textBuilder.append("Current score: ").append(score);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+
+        textBuilder.setLength(0);
+
+        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+        canvas.drawText(textBuilder.toString(), screenWidth - 250, 170, fpsPaint);
+
+        textBuilder.setLength(0);
+
+        count += 1;
+        if (0 <= count & count < 23) {
+            canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+        } else {
+            if (23 <= count & count < 46) {
+                canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+            } else {
+                if (46 <= count & count < 69) {
+                    canvas.drawText("1", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
                 } else {
-                    if (140 <= count & count < 210) {
-                        canvas.drawText("1", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                    if (count >= 70) {
+                        pauseButton.show();
+                        gameStatus = 0;
+                        count = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    public void pause() {
+        if (pauseButton.oldStatus != 3) {
+            screen.render();
+            for (int i = 0; i < allSprites.size(); i++) {
+                if (allSprites.get(i) != null) {
+                    if (!allSprites.get(i).lock) {
+                        allSprites.get(i).render();
+                    }
+                }
+            }
+            shotgunKit.render();
+            player.render();
+            changerGuns.render();
+            portal.render();
+
+            if (pauseButton.oldStatus == 2) {
+                if (0 <= count & count < 70) {
+                    canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                } else {
+                    if (70 <= count & count < 140) {
+                        canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
                     } else {
-                        if (210 <= count & count < 280) {
-                            canvas.drawText("SHOOT!", (screenWidth - startPaint.measureText("SHOOT!")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                        if (140 <= count & count < 210) {
+                            canvas.drawText("1", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                        } else {
+                            if (210 <= count & count < 280) {
+                                canvas.drawText("SHOOT!", (screenWidth - startPaint.measureText("SHOOT!")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
+                            }
                         }
                     }
                 }
             }
+        } else {
+            screen.render(ImageHub.gameoverScreen);
+            canvas.drawText("Tap this screen with four or more fingers to restart",
+                    (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
+                    (float) (screenHeight * 0.7), gameoverPaint);
         }
 
         textBuilder.append("Current score: ").append(score);
@@ -802,56 +896,50 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         textBuilder.setLength(0);
 
-        switch (gameStatus) {
-            case 4:
-                textBuilder.append("Max score: ").append(lastMax);
-                canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
+        textBuilder.append("Max score: ").append(lastMax);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
 
-                textBuilder.setLength(0);
+        textBuilder.setLength(0);
 
-                buttonStart.render();
-                buttonQuit.render();
-                buttonMenu.render();
-                buttonRestart.render();
-                pauseTimer += 20;
-                break;
-            case 5:
-                Sprite boss = bosses.get(bosses.size()-1);
-                if (boss.y >= -200 | pointerCount >= 4) {
-                    if (portal.lock) {
-                        gameStatus = 0;
-                    } else {
-                        gameStatus = 6;
-                    }
-                    boss.y = -boss.height;
-                }
-                boss.update();
-                fightBg.render();
-                break;
-            case 9:
-                count += 1;
-                if (0 <= count & count < 23) {
-                    canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                } else {
-                    if (23 <= count & count < 46) {
-                        canvas.drawText("2", (screenWidth - startPaint.measureText("2")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                    } else {
-                        if (46 <= count & count < 69) {
-                            canvas.drawText("1", (screenWidth - startPaint.measureText("3")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
-                        } else {
-                            if (count >= 70) {
-                                pauseButton.show();
-                                gameStatus = 0;
-                                count = 0;
-                            }
-                        }
-                    }
-                }
-                break;
-        }
+        buttonStart.render();
+        buttonQuit.render();
+        buttonMenu.render();
+        buttonRestart.render();
+        pauseTimer += 20;
     }
 
-    public void timerStart() {
+    public void ready() {
+        moveAll = player.speedX / 3;
+
+        if (screen.x < 0 & screen.x + screen.width > screenWidth) {
+            screen.x -= moveAll;
+        } else {
+            if (screen.x >= 0) {
+                screen.x -= 10;
+            } else {
+                if (screen.x + screen.width <= screenWidth) {
+                    screen.x += 10;
+                }
+            }
+        }
+        screen.update();
+        screen.render();
+
+        player.update();
+        player.render();
+
+        pauseButton.render();
+
+        textBuilder.append("Current score: ").append(score);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+
+        textBuilder.setLength(0);
+
+        textBuilder.append("FPS: ").append((MILLIS_IN_SECOND / (System.nanoTime() - timeFrame)));
+        canvas.drawText(textBuilder.toString(), screenWidth - 250, 170, fpsPaint);
+
+        textBuilder.setLength(0);
+
         count += 1;
         if (0 <= count & count < 70) {
             canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
@@ -866,13 +954,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         canvas.drawText("SHOOT!", (screenWidth - startPaint.measureText("SHOOT!")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
                     } else {
                         if (count >= 280) {
-                            gameStatus = 0;
-                            for (int i = 0; i < allSprites.size(); i++) {
-                                allSprites.get(i).empireStart();
-                            }
                             player.lock = false;
                             changerGuns.unHide();
                             count = 0;
+                            gameStatus = 0;
                             lastBoss = System.currentTimeMillis();
                         }
                     }

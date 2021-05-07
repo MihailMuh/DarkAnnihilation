@@ -85,11 +85,11 @@ public class Sunrise extends Sprite {
 
     @Override
     public void update() {
-        if (y > 0) {
+        if (y > 0 & !field) {
+            field = true;
+        }
+        if (y > -halfHeight) {
             shoot();
-            if (!field) {
-                field = true;
-            }
         }
         if (x <= 0) {
             left = true;
@@ -100,7 +100,6 @@ public class Sunrise extends Sprite {
         if ((y + height >= screenHeight) | (field & y <= 0)) {
             speedY = -speedY;
         }
-
         if (left) {
             x += speedX;
         } else {

@@ -6,7 +6,6 @@ public class TripleFighter extends Sprite {
 
     public TripleFighter(Game g) {
         super(g, ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
-        lock = true;
         health = 6;
         damage = 10;
 
