@@ -45,12 +45,9 @@ public class Portal extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        if (game.level == 2) {
+        if (Game.level == 2) {
             game.gameStatus = 7;
             AudioPlayer.portalSound.pause();
-            if (AudioPlayer.bossMusic.isPlaying()) {
-                AudioPlayer.bossMusic.pause();
-            }
             AudioPlayer.winMusic.seekTo(0);
             AudioPlayer.winMusic.start();
             game.winScreen = new WinScreen(game);
@@ -60,9 +57,6 @@ public class Portal extends Sprite {
             BaseCharacter.god = true;
             frameTime = 0;
             game.player.lock = true;
-            if (AudioPlayer.bossMusic.isPlaying()) {
-                AudioPlayer.bossMusic.pause();
-            }
             AudioPlayer.timeMachineSnd.start();
         }
     }
@@ -82,7 +76,7 @@ public class Portal extends Sprite {
                     if (game.gameStatus != 7) {
                         game.gameStatus = 0;
                         hide();
-                        AudioPlayer.pirateMusic.start();
+                        Service.resumeBackgroundMusic();
                     }
                 }
             }
@@ -99,7 +93,7 @@ public class Portal extends Sprite {
                 alpha += 0.5;
                 if (alpha >= 256) {
                     hide();
-                    game.level++;
+                    Game.level++;
                     LoadingScreen.jobs = "newGame";
                     game.gameStatus = 41;
                 }

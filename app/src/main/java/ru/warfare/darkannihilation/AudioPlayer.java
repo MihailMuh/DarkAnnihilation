@@ -22,6 +22,8 @@ public class AudioPlayer {
     public static MediaPlayer timeMachineSnd;
     public static MediaPlayer attentionSnd;
     public static MediaPlayer readySnd;
+    public static MediaPlayer forgottenMusic;
+    public static MediaPlayer forgottenBossMusic;
 
     private static int healSound;
     private static int buttonSound;
@@ -83,7 +85,7 @@ public class AudioPlayer {
                 sounds.add(gameoverSnd);
 
                 pauseMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.pause);
-                pauseMusic.setVolume(1f, 1f);
+                pauseMusic.setVolume(0.75f, 0.75f);
                 pauseMusic.setLooping(true);
                 sounds.add(pauseMusic);
 
@@ -112,6 +114,17 @@ public class AudioPlayer {
                 timeMachineSnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.time_machine);
                 timeMachineSnd.setVolume(1f, 1f);
                 sounds.add(timeMachineSnd);
+
+                forgottenMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.forgotten_snd);
+                forgottenMusic.setVolume(1f, 1f);
+                forgottenMusic.setLooping(true);
+                sounds.add(forgottenMusic);
+
+                forgottenBossMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.forgotten_boss);
+                forgottenBossMusic.setVolume(1f, 1f);
+                forgottenBossMusic.setLooping(true);
+                sounds.add(forgottenBossMusic);
+
             }
         }; thread.start();
     }
@@ -144,7 +157,7 @@ public class AudioPlayer {
         soundPool.play(metalSnd, 0.45f, 0.45f, 1, 0, 1);
     }
     public static void playShotgun() {
-        soundPool.play(shotgunSnd, 0.3f, 0.3f, 1, 0, 1);
+        soundPool.play(shotgunSnd, 0.23f, 0.23f, 1, 0, 1);
     }
     public static void playMegaBoom() {
         soundPool.play(megaBoom, 1f, 1f, 1, 0, 1);

@@ -52,7 +52,7 @@ public class Boss extends Sprite {
         game.score += 150;
         game.bosses.remove(this);
         game.allSprites.remove(this);
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 for (int i = 0; i < game.numberVaders; i++) {
@@ -100,9 +100,8 @@ public class Boss extends Sprite {
         y += speedY;
 
         if (y == -400) {
-            AudioPlayer.bossMusic.seekTo(0);
-            AudioPlayer.bossMusic.start();
-            AudioPlayer.pirateMusic.pause();
+            Service.restartBossMusic();
+            Service.pauseBackgroundMusic();
             game.gameStatus = 5;
         }
         if (y >= 50) {

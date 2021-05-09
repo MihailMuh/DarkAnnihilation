@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 public class Button extends Sprite {
     private Bitmap img;
@@ -13,6 +14,8 @@ public class Button extends Sprite {
     private int textHeight;
     public int mouseX;
     public int mouseY;
+    private static final int clickTime = 500;
+    private long lastClick;
 
     public Button(Game g, String t, int X, int Y, String func) {
         super(g, ImageHub.buttonImagePressed.getWidth(), ImageHub.buttonImagePressed.getHeight());
@@ -29,91 +32,92 @@ public class Button extends Sprite {
         paint.setTextSize(35);
         textWidth = (int) paint.measureText(text);
         textHeight = (int) (paint.getTextSize() / 4);
+
+        lastClick = System.currentTimeMillis();
     }
 
-    public void newFunc(String t, int X, int Y, String func) {
+    public void newFunc(String name, int X, int Y, String func) {
         function = func;
 
         x = X;
         y = Y;
 
-        text = t;
+        text = name;
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
         textWidth = (int) paint.measureText(text);
         textHeight = (int) (paint.getTextSize() / 4);
+
+        img = ImageHub.buttonImageNotPressed;
     }
 
     public void setCoords(int X, int Y) {
         mouseX = X;
         mouseY = Y;
         if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
-            AudioPlayer.playClick();
-            img = ImageHub.buttonImagePressed;
+            long now = System.currentTimeMillis();
+            if (now - lastClick > clickTime) {
+                lastClick = now;
+                AudioPlayer.playClick();
+                img = ImageHub.buttonImagePressed;
 
-            mouseX = 0;
-            mouseY = 0;
-
-            switch (function)
-            {
-                case "start":
-                    game.buttonPlayer.show();
-                    game.buttonSaturn.show();
-                    img = ImageHub.buttonImageNotPressed;
-                    break;
-                case "quit":
-                    System.exit(0);
-                    break;
-                case "pause":
-                    game.player.dontmove = true;
-                    Game.lastBoss += game.pauseTimer;
-                    game.hardWorker.workOnResume();
-                    AudioPlayer.pauseMusic.pause();
-                    if (game.bosses.size() == 0) {
-                        AudioPlayer.pirateMusic.start();
-                    }
-                    if (game.pauseButton.oldStatus == 2) {
-                        AudioPlayer.readySnd.start();
-                    }
-                    if (game.pauseButton.oldStatus != 0) {
-                        game.gameStatus = game.pauseButton.oldStatus;
-                        game.pauseButton.show();
-                        if (game.portal.touch) {
-                            AudioPlayer.timeMachineSnd.start();
+                mouseX = 0;
+                mouseY = 0;
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(90);
+                            img = ImageHub.buttonImageNotPressed;
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            Log.e(MainActivity.TAG, "" + e);
                         }
-                    } else {
-                        game.gameStatus = 9;
+                        switch (function) {
+                            case "start":
+                                game.buttonPlayer.show();
+                                game.buttonSaturn.show();
+                                break;
+                            case "quit":
+                                System.exit(0);
+                                break;
+                            case "pause":
+                                game.player.dontmove = true;
+                                Game.lastBoss += game.pauseTimer;
+                                game.hardWorker.workOnResume();
+                                AudioPlayer.pauseMusic.pause();
+                                Service.resumeBackgroundMusic();
+                                if (game.pauseButton.oldStatus == 2) {
+                                    AudioPlayer.readySnd.start();
+                                }
+                                if (game.pauseButton.oldStatus != 0) {
+                                    game.gameStatus = game.pauseButton.oldStatus;
+                                    if (game.portal.touch) {
+                                        AudioPlayer.timeMachineSnd.start();
+                                    }
+                                } else {
+                                    game.gameStatus = 9;
+                                }
+                                game.pauseTimer = 0;
+                                break;
+                            case "menu":
+                                game.gameStatus = 41;
+                                LoadingScreen.jobs = "menu";
+                                break;
+                            case "top":
+                                LoadingScreen.jobs = "topScore";
+                                game.gameStatus = 41;
+                                break;
+                            case "restart":
+                                Game.level = 1;
+                                LoadingScreen.jobs = "newGame";
+                                game.gameStatus = 41;
+                                break;
+                        }
                     }
-                    game.pauseTimer = 0;
-
-                    game.buttonMenu.x = screenWidth;
-                    game.buttonRestart.x = screenWidth;
-                    game.buttonQuit.x = screenWidth;
-                    x = screenWidth;
-                    img = ImageHub.buttonImageNotPressed;
-                    break;
-                case "menu":
-                    game.generateMenu();
-                    break;
-                case "top":
-                    game.buttonPlayer.hide();
-                    game.buttonSaturn.hide();
-                    game.score = 0;
-                    game.generateTopScore();
-                    break;
-                case "restart":
-                    if (AudioPlayer.pauseMusic.isPlaying()) {
-                        AudioPlayer.pauseMusic.pause();
-                    }
-                    game.level = 1;
-                    img = ImageHub.buttonImageNotPressed;
-                    LoadingScreen.jobs = "newGame";
-                    game.gameStatus = 41;
-                    break;
+                };
+                thread.start();
             }
-
-        } else {
-            img = ImageHub.buttonImageNotPressed;
         }
     }
 

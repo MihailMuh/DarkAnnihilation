@@ -22,7 +22,7 @@ public class BaseCharacter extends Sprite {
     public void checkIntersections(Sprite sprite) {}
 
     public void baseSetting() {
-        god = false;
+        god = true;
         ai = false;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -37,7 +37,7 @@ public class BaseCharacter extends Sprite {
 
     public void PLAYER() {
         baseSetting();
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 gun = "gun";

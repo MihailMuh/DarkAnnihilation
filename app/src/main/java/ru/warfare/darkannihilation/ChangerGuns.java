@@ -7,7 +7,7 @@ public class ChangerGuns extends Sprite {
     public int mouseX;
     public int mouseY;
     private static final int clickTime = 700;
-    private long lastShoot;
+    private long lastClick;
     private long now;
 
     public ChangerGuns(Game g) {
@@ -25,7 +25,7 @@ public class ChangerGuns extends Sprite {
         }
 
         hide();
-        lastShoot = System.currentTimeMillis();
+        lastClick = System.currentTimeMillis();
     }
 
     public void hide() {
@@ -45,8 +45,8 @@ public class ChangerGuns extends Sprite {
             mouseY = Y;
             if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
                 now = System.currentTimeMillis();
-                if (now - lastShoot > clickTime) {
-                    lastShoot = now;
+                if (now - lastClick > clickTime) {
+                    lastClick = now;
                     mouseX = 0;
                     mouseY = 0;
                     if (!game.shotgunKit.picked) {
@@ -72,8 +72,8 @@ public class ChangerGuns extends Sprite {
 
     public void make() {
         now = System.currentTimeMillis();
-        if (now - lastShoot > clickTime) {
-            lastShoot = now;
+        if (now - lastClick > clickTime) {
+            lastClick = now;
             if (!game.shotgunKit.picked) {
                 image = ImageHub.gunToNone;
             } else {
@@ -91,8 +91,8 @@ public class ChangerGuns extends Sprite {
 
     public void changeGun() {
         now = System.currentTimeMillis();
-        if (now - lastShoot > clickTime) {
-            lastShoot = now;
+        if (now - lastClick > clickTime) {
+            lastClick = now;
             if (!game.shotgunKit.picked) {
                 image = ImageHub.gunToNone;
             } else {

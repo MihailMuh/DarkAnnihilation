@@ -79,7 +79,7 @@ public class BossVaders extends Sprite {
                 }
                 break;
         }
-        AudioPlayer.bossMusic.pause();
+        AudioPlayer.forgottenBossMusic.pause();
         if (game.portal.lock) {
             game.portal.start();
         }
@@ -107,9 +107,8 @@ public class BossVaders extends Sprite {
     public void update() {
         game.pauseTimer += 20;
         if (y == -400) {
-            AudioPlayer.bossMusic.seekTo(0);
-            AudioPlayer.bossMusic.start();
-            AudioPlayer.pirateMusic.pause();
+            Service.restartBossMusic();
+            Service.pauseBackgroundMusic();
             game.gameStatus = 5;
         }
         if (y > 0 & !field) {

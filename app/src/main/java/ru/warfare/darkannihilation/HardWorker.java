@@ -16,11 +16,9 @@ public class HardWorker implements Runnable {
     static int x = 0;
     static int y = 0;
     private final Game game;
-    private final Context context;
 
     public HardWorker(Game g) {
         game = g;
-        context = g.context;
     }
 
     @Override

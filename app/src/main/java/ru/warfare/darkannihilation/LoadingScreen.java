@@ -21,17 +21,24 @@ public class LoadingScreen extends Sprite {
             if (frame == 12) {
                 frame = 0;
             }
-            if (c == 18) {
+            if (c == 14) {
                 c = 0;
-                switch (jobs)
-                {
-                    case "newGame":
-                        game.generateNewGame();
-                        break;
-                    case "topScore":
-                        game.gameStatus = 8;
-                        break;
-                }
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        switch (jobs) {
+                            case "newGame":
+                                game.generateNewGame();
+                                break;
+                            case "topScore":
+                                game.generateTopScore();
+                                break;
+                            case "menu":
+                                game.generateMenu();
+                                break;
+                        }
+                    }
+                }; thread.start();
             }
         }
     }
