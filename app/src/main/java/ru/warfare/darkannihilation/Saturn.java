@@ -18,23 +18,6 @@ public class Saturn extends BaseCharacter {
     }
 
     @Override
-    public void PLAYER() {
-        baseSetting();
-
-        shootTime = 130;
-        shotgunTime = 40;
-        switch (game.level)
-        {
-            case 1:
-                gun = "gun";
-                break;
-            case 2:
-                shootTime = 100;
-                break;
-        }
-    }
-
-    @Override
     public void shoot() {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {

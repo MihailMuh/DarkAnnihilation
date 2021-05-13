@@ -4,7 +4,7 @@ public class Demoman extends Sprite {
     private static final int shootTime = 150;
     private long lastShoot;
 
-    public int direction = 0;
+    private int direction = 0;
 
     public Demoman(Game g) {
         super(g, ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());

@@ -3,17 +3,14 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 public class Button extends Sprite {
     private Bitmap img;
-    public static final Paint paint = new Paint();
-    public String function;
+    private static final Paint paint = new Paint();
+    private String function;
     private String text;
     private int textWidth;
     private int textHeight;
-    public int mouseX;
-    public int mouseY;
     private static final int clickTime = 500;
     private long lastClick;
 
@@ -52,17 +49,13 @@ public class Button extends Sprite {
     }
 
     public void setCoords(int X, int Y) {
-        mouseX = X;
-        mouseY = Y;
-        if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + height) {
+        if (x < X & X < x + width & y < Y & Y < y + height) {
             long now = System.currentTimeMillis();
             if (now - lastClick > clickTime) {
                 lastClick = now;
                 AudioPlayer.playClick();
                 img = ImageHub.buttonImagePressed;
 
-                mouseX = 0;
-                mouseY = 0;
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
@@ -71,7 +64,7 @@ public class Button extends Sprite {
                             img = ImageHub.buttonImageNotPressed;
                             Thread.sleep(50);
                         } catch (InterruptedException e) {
-                            Log.e(MainActivity.TAG, "" + e);
+                            Service.print(e.toString());
                         }
                         switch (function) {
                             case "start":

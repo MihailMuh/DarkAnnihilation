@@ -5,15 +5,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
-
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -46,9 +43,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint alphaPaint = new Paint();
 
     public static final Random random = new Random();
-    public static JSONObject jsonScore = new JSONObject();
     public static final StringBuilder scoreBuilder = new StringBuilder();
-    public final Vibrator vibrator;
     private static final StringBuilder textBuilder = new StringBuilder();
 
     public BaseExplosion[] allExplosions = new BaseExplosion[73];
@@ -81,7 +76,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public LoadingScreen loadingScreen;
     public Spider spider;
     public Sunrise sunrise;
-    public Service service;
 
     public final int numberVaders = 10;
     public int numberMediumExplosionsTriple = 20;
@@ -90,7 +84,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int numberSmallExplosionsDefault = numberMediumExplosionsDefault + 15;
     public int numberExplosionsALL = allExplosions.length;
 
-    public static int level = 2;
+    public static int level = 1;
     public int gameStatus;
     public int count = 0;
     public int score = 0;
@@ -115,7 +109,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         context = cont;
         holder = getHolder();
-        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         screenWidth = width;
         screenHeight = height;
@@ -126,7 +119,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         audioPlayer = new AudioPlayer(this);
         imageHub = new ImageHub(this);
         hardWorker = new HardWorker(this);
-        service = new Service();
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -139,8 +131,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaint.setColor(Color.WHITE);
         topPaint.setTextSize(30);
         topPaintRed.setColor(Color.RED);
-        topPaintRed.setTextSize(30);
+        topPaintRed.setTextSize(35);
         blackPaint.setColor(Color.BLACK);
+        blackPaint.setAlpha(0);
 
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader(this));
@@ -256,7 +249,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.update();
         player.render();
 
-        if (now - lastBoss > BOSS_TIME) {
+        if ((now - lastBoss > BOSS_TIME) && gameStatus == 0) {
             lastBoss = now;
             Sprite boss = null;
             switch (level)
@@ -488,7 +481,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         try {
             thread.join();
         } catch (Exception e) {
-            Log.e(MainActivity.TAG, "Thread join " + e);
+            Log.e(Service.TAG, "Thread join " + e);
         }
     }
 
@@ -524,12 +517,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonSaturn.hide();
         score = 0;
         buttonMenu.newFunc("Back", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "menu");
-        try {
-            jsonScore.put(MainActivity.nickname, lastMax);
-            MainActivity.postScore(jsonScore.toString());
-        } catch (Exception e) {
-            Log.e(MainActivity.TAG, "" + e);
-        }
+        MainActivity.postScore(Service.generateJSONString(MainActivity.nickname, lastMax));
         MainActivity.getTop();
         gameStatus = 8;
     }
@@ -660,8 +648,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         spider.hide();
         sunrise.hide();
 
-        changerGuns = new ChangerGuns(this);
-
         player.PLAYER();
 
         allSprites.add(healthKit);
@@ -711,6 +697,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 allSprites.add(sunrise);
                 break;
         }
+        changerGuns = new ChangerGuns(this);
 
         Service.restartBackgroundMusic();
     }
@@ -968,7 +955,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             renderFPS();
         } catch (Exception e) {
-            Log.e(MainActivity.TAG, "" + e);
+            Log.e(Service.TAG, "" + e);
         }
     }
 
@@ -986,9 +973,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (scoreBuilder.length() > 0) {
             try {
                 if (score > lastMax) {
-                    jsonScore = new JSONObject();
-                    jsonScore.put(MainActivity.nickname, score);
-                    MainActivity.postScore(jsonScore.toString());
+                    MainActivity.postScore(Service.generateJSONString(MainActivity.nickname, score));
                 }
 
                 FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
@@ -997,7 +982,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 writer_str.write(scoreBuilder.toString());
                 writer_str.close();
             } catch (Exception e) {
-                Log.e(MainActivity.TAG, "Can't save SCORE " + e);
+                Log.e(Service.TAG, "Can't save SCORE " + e);
             }
         }
     }
@@ -1022,7 +1007,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             reader_cooler.close();
         } catch (IOException e) {
-            Log.e(MainActivity.TAG, "Can't recovery SCORE: " + e);
+            Log.e(Service.TAG, "Can't recovery SCORE: " + e);
         }
     }
 

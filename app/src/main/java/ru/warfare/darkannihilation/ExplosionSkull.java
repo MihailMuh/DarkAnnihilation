@@ -3,13 +3,11 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 
 public class ExplosionSkull extends BaseExplosion {
-    private final int shotgunTime;
     private long lastShoot;
 
     public ExplosionSkull(Game g) {
         super(g, ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
         lock = true;
-        shotgunTime = 33;
         img = new Bitmap[ImageHub.explosionLarge.length];
         img = ImageHub.explosionLarge.clone();
 
@@ -19,7 +17,7 @@ public class ExplosionSkull extends BaseExplosion {
     @Override
     public void update() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shotgunTime) {
+        if (now - lastShoot > 33) {
             lastShoot = now;
             if (frame != 13) {
                 frame += 1;

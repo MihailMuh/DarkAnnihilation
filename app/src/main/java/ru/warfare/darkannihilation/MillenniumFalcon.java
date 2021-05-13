@@ -25,7 +25,7 @@ public class MillenniumFalcon extends BaseCharacter {
 
         shootTime = 110;
         shotgunTime = 535;
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 gun = "gun";

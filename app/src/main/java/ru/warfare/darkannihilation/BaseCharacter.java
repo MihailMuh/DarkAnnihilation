@@ -22,7 +22,7 @@ public class BaseCharacter extends Sprite {
     public void checkIntersections(Sprite sprite) {}
 
     public void baseSetting() {
-        god = true;
+        god = false;
         ai = false;
         x = game.halfScreenWidth;
         y = game.halfScreenHeight;
@@ -37,16 +37,6 @@ public class BaseCharacter extends Sprite {
 
     public void PLAYER() {
         baseSetting();
-        switch (Game.level)
-        {
-            case 1:
-                gun = "gun";
-                break;
-            case 2:
-                shootTime /= 2;
-                shotgunTime /= 1.5;
-                break;
-        }
     }
 
     public void heal() {
@@ -69,9 +59,9 @@ public class BaseCharacter extends Sprite {
                     }
                 }
                 AudioPlayer.playMegaBoom();
-                game.vibrator.vibrate(1550);
+                Service.vibrator.vibrate(1550);
             } else {
-                game.vibrator.vibrate(70);
+                Service.vibrator.vibrate(70);
             }
         }
     }

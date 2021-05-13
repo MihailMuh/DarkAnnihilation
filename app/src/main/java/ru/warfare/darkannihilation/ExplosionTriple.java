@@ -3,13 +3,11 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 
 public class ExplosionTriple extends BaseExplosion {
-    private final int shotgunTime;
     private long lastShoot;
 
     public ExplosionTriple(Game g, String size) {
         super(g, ImageHub.explosionTripleImageSmall[0].getWidth(), ImageHub.explosionTripleImageSmall[0].getHeight());
         lock = true;
-        shotgunTime = 30;
         img = new Bitmap[ImageHub.explosionTripleImageSmall.length];
 
         switch (size)
@@ -31,7 +29,7 @@ public class ExplosionTriple extends BaseExplosion {
     @Override
     public void update() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shotgunTime) {
+        if (now - lastShoot > 30) {
             lastShoot = now;
             if (frame != 23) {
                 frame += 1;

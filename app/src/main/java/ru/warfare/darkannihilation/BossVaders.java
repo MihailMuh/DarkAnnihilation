@@ -1,25 +1,16 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 public class BossVaders extends Sprite {
-    public float maxHealth;
-    private static final Paint paintFill = new Paint();
-    private static final Paint paintOutLine = new Paint();
+    private final float maxHealth;
     private static final Vector vector = new Vector();
-
     private static final int shootBossTime = 1500;
     private long lastShoot;
 
-    public boolean field = false;
+    private boolean field = false;
     private boolean left = false;
 
     public BossVaders(Game g) {
         super(g, ImageHub.bossVadersImg.getWidth(), ImageHub.bossVadersImg.getHeight());
-
-        paintFill.setColor(Color.RED);
-        paintOutLine.setColor(Color.WHITE);
 
         health = 250;
         maxHealth = health;
@@ -62,7 +53,7 @@ public class BossVaders extends Sprite {
         game.score += 300;
         game.bosses.remove(this);
         game.allSprites.remove(this);
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 for (int i = 0; i < game.numberVaders; i++) {
@@ -79,7 +70,7 @@ public class BossVaders extends Sprite {
                 }
                 break;
         }
-        AudioPlayer.forgottenBossMusic.pause();
+        Service.pauseBossMusic();
         if (game.portal.lock) {
             game.portal.start();
         }
@@ -145,7 +136,7 @@ public class BossVaders extends Sprite {
     public void render() {
         game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
 
-        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, paintOutLine);
-        game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, paintFill);
+        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, Game.scorePaint);
+        game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
     }
 }

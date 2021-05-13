@@ -1,6 +1,35 @@
 package ru.warfare.darkannihilation;
 
+import android.content.Context;
+import android.os.Vibrator;
+import android.util.Log;
+
+import org.json.JSONObject;
+
 public class Service {
+    public static Vibrator vibrator;
+    public static final String IP = "http://78.29.33.173:49150/";
+    public static final String TAG = "D'Ark";
+
+    public Service(Context context) {
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    }
+
+    public static void print(String text) {
+        Log.e(TAG, text);
+    }
+
+    public static String generateJSONString(String nickname, int score) {
+        try {
+            JSONObject jsonScore = new JSONObject();
+            jsonScore.put(nickname, score);
+            return jsonScore.toString();
+        } catch (Exception e) {
+            Log.e(TAG, "" + e);
+            return "";
+        }
+    }
+
     public static void resumeBackgroundMusic() {
         switch (Game.level)
         {

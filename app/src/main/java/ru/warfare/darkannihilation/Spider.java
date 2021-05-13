@@ -1,27 +1,18 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 public class Spider extends Sprite {
-    private static int shootTripleTime;
+    private int shootTripleTime;
     private long lastShoot;
 
     private int ammo;
     private boolean reload;
-
-    private static final Paint paintFill = new Paint();
-    private static final Paint paintOutLine = new Paint();
-    public float maxHealth;
+    private final float maxHealth;
 
     public Spider(Game g) {
         super(g, ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
         damage = 20;
         maxHealth = 200;
         hide();
-
-        paintFill.setColor(Color.RED);
-        paintOutLine.setColor(Color.WHITE);
 
         recreateRect(x + 25, y + 5, x + width - 5, y + halfHeight + (halfHeight / 2));
 
@@ -119,7 +110,7 @@ public class Spider extends Sprite {
     public void render() {
         game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
 
-        game.canvas.drawRect(x + halfWidth - 75, y + 10, x + halfWidth + 75, y + 25 , paintOutLine);
-        game.canvas.drawRect(x + halfWidth - 73, y + 12, x + halfWidth - 77 + (health / maxHealth) * 150, y + 23, paintFill);
+        game.canvas.drawRect(x + halfWidth - 75, y + 10, x + halfWidth + 75, y + 25 , Game.scorePaint);
+        game.canvas.drawRect(x + halfWidth - 73, y + 12, x + halfWidth - 77 + (health / maxHealth) * 150, y + 23, Game.fpsPaint);
     }
 }

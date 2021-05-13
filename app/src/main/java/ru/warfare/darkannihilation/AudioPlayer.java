@@ -143,7 +143,7 @@ public class AudioPlayer {
             soundPool.release();
             soundPool = null;
         } catch (Exception e) {
-            Log.e(MainActivity.TAG, "Can't release AP " + e);
+            Service.print("Can't release AP " + e);
         }
     }
 

@@ -3,9 +3,7 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 
 public class ChangerGuns extends Sprite {
-    public Bitmap image;
-    public int mouseX;
-    public int mouseY;
+    private Bitmap image;
     private static final int clickTime = 700;
     private long lastClick;
     private long now;
@@ -41,14 +39,10 @@ public class ChangerGuns extends Sprite {
 
     public void setCoords(int X, int Y) {
         if (game.gameStatus == 0 | game.gameStatus == 6) {
-            mouseX = X;
-            mouseY = Y;
-            if (x < mouseX & mouseX < x + width & y < mouseY & mouseY < y + width) {
+            if (x < X & X < x + width & y < Y & Y < y + width) {
                 now = System.currentTimeMillis();
                 if (now - lastClick > clickTime) {
                     lastClick = now;
-                    mouseX = 0;
-                    mouseY = 0;
                     if (!game.shotgunKit.picked) {
                         image = ImageHub.gunToNone;
                     } else {

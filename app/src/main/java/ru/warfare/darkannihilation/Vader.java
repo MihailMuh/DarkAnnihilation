@@ -3,14 +3,14 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 
 public class Vader extends Sprite {
-    public Bitmap img;
+    private Bitmap img;
 
     public Vader(Game g) {
         super(g, ImageHub.vaderImage[0].getWidth(), ImageHub.vaderImage[0].getHeight());
         health = 2;
         damage = 5;
 
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 img = ImageHub.vaderImage[randInt(0, 2)];

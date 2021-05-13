@@ -1,8 +1,6 @@
 package ru.warfare.darkannihilation;
 
 public class PauseButton extends Sprite {
-    public int mouseX;
-    public int mouseY;
     public int oldStatus;
 
     public PauseButton(Game g) {
@@ -18,8 +16,6 @@ public class PauseButton extends Sprite {
 
     public void make() {
         AudioPlayer.playClick();
-        mouseX = 0;
-        mouseY = 0;
         oldStatus = game.gameStatus;
         game.generatePause();
     }

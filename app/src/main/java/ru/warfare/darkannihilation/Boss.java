@@ -1,21 +1,12 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 public class Boss extends Sprite {
-    public float maxHealth;
-    private static final Paint paintFill = new Paint();
-    private static final Paint paintOutLine = new Paint();
-
+    private final float maxHealth;
     private static final int shootBossTime = 350;
     private long lastShoot;
 
     public Boss(Game g) {
         super(g, ImageHub.bossImage.getWidth(), ImageHub.bossImage.getHeight());
-
-        paintFill.setColor(Color.RED);
-        paintOutLine.setColor(Color.WHITE);
 
         health = 150;
         maxHealth = health;
@@ -69,7 +60,7 @@ public class Boss extends Sprite {
                 }
                 break;
         }
-        AudioPlayer.bossMusic.pause();
+        Service.pauseBossMusic();
         if (game.portal.lock) {
             game.portal.start();
         }
@@ -122,7 +113,7 @@ public class Boss extends Sprite {
     public void render() {
         game.canvas.drawBitmap(ImageHub.bossImage, x, y, null);
 
-        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, paintOutLine);
-        game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, paintFill);
+        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, Game.scorePaint);
+        game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
     }
 }

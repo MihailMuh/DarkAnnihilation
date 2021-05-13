@@ -89,8 +89,7 @@ public class Portal extends Sprite {
             game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
             if (touch & game.gameStatus != 4) {
                 Game.blackPaint.setAlpha((int) alpha);
-                game.canvas.drawRect(0, 0, screenWidth, screenHeight, Game.blackPaint);
-                alpha += 0.5;
+                alpha += 0.495;
                 if (alpha >= 256) {
                     hide();
                     Game.level++;
@@ -98,6 +97,7 @@ public class Portal extends Sprite {
                     game.gameStatus = 41;
                 }
             }
+            game.canvas.drawRect(0, 0, screenWidth, screenHeight, Game.blackPaint);
         }
     }
 }

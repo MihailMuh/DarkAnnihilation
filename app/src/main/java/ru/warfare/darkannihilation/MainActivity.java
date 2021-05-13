@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,22 +35,18 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static ru.warfare.darkannihilation.Game.jsonScore;
-
 public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-    Game game;
-    private final Context context = this;
+    public Game game;
     public static Request request;
     public static OkHttpClient client = new OkHttpClient();
     public static JSONObject json = new JSONObject();
     public static JSONArray names;
-    public static SharedPreferences preferences = null;
+    private SharedPreferences preferences = null;
     public static String nickname = "";
-    public static String TAG = "D'Ark";
-    public static String IP = "http://78.29.33.173:49150/";
+    public Service service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +67,10 @@ public class MainActivity extends AppCompatActivity {
         Point size = new Point();
         display.getRealSize(size);
 
-        try {
-            getTop();
-        } catch (Exception e) {
-            Log.e(TAG, "" + e);
-        }
+        getTop();
 
         game = new Game(this, size.x, size.y);
+        service = new Service(this);
         setContentView(game);
 
         checkOnFirstRun();
@@ -116,21 +108,20 @@ public class MainActivity extends AppCompatActivity {
 
     public static void getTop() {
         request = new Request.Builder()
-                .url(IP + "get")
+                .url(Service.IP + "get")
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "" + e);
+                Service.print(e.toString());
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
-                    json = new JSONObject(response.body().string());
-                    names = json.names();
+                    names = new JSONObject(response.body().string()).names();
                 } catch (JSONException e) {
-                    Log.e(TAG, "" + e);
+                    Service.print(e.toString());
                 }
             }
         });
@@ -138,12 +129,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static void postScore(String string) {
         request = new Request.Builder()
-                .url(IP + "write?data=" + string)
+                .url(Service.IP + "write?data=" + string)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "" + e);
+                Service.print(e.toString());
             }
 
             @Override
@@ -159,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             writer_str.write(MainActivity.nickname);
             writer_str.close();
         } catch (Exception e) {
-            Log.e(MainActivity.TAG, "Can't save NICKNAME " + e);
+            Service.print("Can't save NICKNAME " + e);
         }
     }
 
@@ -177,14 +168,13 @@ public class MainActivity extends AppCompatActivity {
             reader_cooler.close();
 
             nickname = builder.toString();
-
         } catch (IOException e) {
-            Log.e(MainActivity.TAG, "Can't recovery NICKNAME: " + e);
+            Service.print("Can't recovery NICKNAME " + e);
         }
     }
 
     private boolean isOnline() {
-        return ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
+        return ((ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
     private void checkOnFirstRun() {
@@ -192,10 +182,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (preferences.getBoolean("firstrun", true)) {
             if (isOnline()) {
-                LayoutInflater li = LayoutInflater.from(context);
+                LayoutInflater li = LayoutInflater.from(this);
                 View promptsView = li.inflate(R.layout.dialog, null);
 
-                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
 
                 mDialogBuilder.setView(promptsView);
 
@@ -211,34 +201,29 @@ public class MainActivity extends AppCompatActivity {
                     button.setOnClickListener(view -> {
                         nickname = userInput.getText().toString();
                         if (nickname.length() == 0) {
-                            Toast toast = Toast.makeText(context, "Nickname must be notnull!", Toast.LENGTH_LONG);
+                            Toast toast = Toast.makeText(this, "Nickname must be notnull!", Toast.LENGTH_LONG);
                             toast.show();
                         } else {
                             if (json.has(nickname)) {
-                                Toast toast = Toast.makeText(context, "This nickname already exists", Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(this, "This nickname already exists", Toast.LENGTH_LONG);
                                 toast.show();
                             } else {
-                                try {
-                                    preferences.edit().putBoolean("firstrun", false).apply();
-                                    saveNickname();
-                                    jsonScore.put(nickname, 0);
-                                    postScore(jsonScore.toString());
-                                    Toast toast = Toast.makeText(context, "Congratulations! You have registered!", Toast.LENGTH_LONG);
-                                    toast.show();
-                                    dialog.dismiss();
-                                } catch (Exception e) {
-                                    Log.e(TAG, "" + e);
-                                }
+                                preferences.edit().putBoolean("firstrun", false).apply();
+                                saveNickname();
+                                postScore(Service.generateJSONString(nickname, 0));
+                                Toast toast = Toast.makeText(this, "Congratulations! You have registered!", Toast.LENGTH_LONG);
+                                toast.show();
+                                dialog.dismiss();
                             }
                         }
                     });
                 });
                 alertDialog.show();
             } else {
-                LayoutInflater li = LayoutInflater.from(context);
+                LayoutInflater li = LayoutInflater.from(this);
                 View promptsView = li.inflate(R.layout.warning, null);
 
-                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
 
                 mDialogBuilder.setView(promptsView);
 

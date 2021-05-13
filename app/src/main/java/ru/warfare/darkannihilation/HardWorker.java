@@ -1,20 +1,17 @@
 package ru.warfare.darkannihilation;
 
-import android.content.Context;
-import android.util.Log;
-
 public class HardWorker implements Runnable {
 //    1 - bullets enemy
 //    2 - saturn
 //    3 - sunrise
 //    4 - bomb
     private Thread thread;
-    private volatile boolean work = false;
-    static volatile int job = 0;
+    private boolean work = false;
+    public static volatile int job = 0;
     public static final Vector vector = new Vector();
 
-    static int x = 0;
-    static int y = 0;
+    public static int x = 0;
+    public static int y = 0;
     private final Game game;
 
     public HardWorker(Game g) {
@@ -78,7 +75,7 @@ public class HardWorker implements Runnable {
         try {
             thread.join();
         } catch (Exception e) {
-            Log.e(MainActivity.TAG, "Thread join " + e);
+            Service.print("Thread join " + e);
         }
     }
 
@@ -89,7 +86,7 @@ public class HardWorker implements Runnable {
             thread = new Thread(this);
             thread.start();
         } catch (Exception e) {
-            Log.e(MainActivity.TAG, "" + e);
+            Service.print(e.toString());
         }
     }
 }

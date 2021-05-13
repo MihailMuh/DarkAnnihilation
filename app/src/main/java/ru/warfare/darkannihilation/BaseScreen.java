@@ -13,7 +13,7 @@ public class BaseScreen extends Sprite {
 
         screenImageLength = len;
 
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 screenImageLength = ImageHub.screenImage.length;
@@ -24,11 +24,9 @@ public class BaseScreen extends Sprite {
         }
     }
 
-
-
     @Override
     public void render() {
-        switch (game.level)
+        switch (Game.level)
         {
             case 1:
                 game.canvas.drawBitmap(ImageHub.screenImage[frame], x, y, null);

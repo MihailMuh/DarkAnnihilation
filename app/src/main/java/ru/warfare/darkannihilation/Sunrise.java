@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 public class Sunrise extends Sprite {
     private long lastShoot;
-    public boolean field;
+    private boolean field;
     private boolean left = false;
 
     public Sunrise(Game g) {

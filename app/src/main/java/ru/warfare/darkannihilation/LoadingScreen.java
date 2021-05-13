@@ -3,8 +3,8 @@ package ru.warfare.darkannihilation;
 public class LoadingScreen extends Sprite {
     private static final int frameTime = 45;
     private long lastFrame;
-    public int frame = 0;
-    public int c = 0;
+    private int frame = 0;
+    private int c = 0;
     public static String jobs = "newGame";
     public LoadingScreen(Game g) {
         super(g, ImageHub.loadingImages[0].getWidth(), ImageHub.loadingImages[0].getHeight());
