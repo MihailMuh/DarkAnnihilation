@@ -29,10 +29,10 @@ public class BaseScreen extends Sprite {
         switch (Game.level)
         {
             case 1:
-                game.canvas.drawBitmap(ImageHub.screenImage[frame], x, y, null);
+                game.canvas.drawBitmap(ImageHub.screenImage[frame], x, 0, null);
                 break;
             case 2:
-                game.canvas.drawBitmap(ImageHub.thunderScreen[frame], x, y, null);
+                game.canvas.drawBitmap(ImageHub.thunderScreen[frame], x, 0, null);
                 break;
         }
     }

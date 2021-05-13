@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -131,7 +130,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaint.setColor(Color.WHITE);
         topPaint.setTextSize(30);
         topPaintRed.setColor(Color.RED);
-        topPaintRed.setTextSize(35);
+        topPaintRed.setTextSize(30);
         blackPaint.setColor(Color.BLACK);
         blackPaint.setAlpha(0);
 
@@ -166,7 +165,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonSaturn = new ButtonSaturn(this);
         pauseButton = new PauseButton(this);
 
-        screen = new StarScreen(this);
         loadingScreen = new LoadingScreen(this);
         player = new MillenniumFalcon(this);
         fightBg = new FightBg(this);
@@ -180,6 +178,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         portal = new Portal(this);
         spider = new Spider(this);
         sunrise = new Sunrise(this);
+        screen = new StarScreen(this);
 
         AudioPlayer.menuMusic.start();
 
@@ -481,7 +480,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         try {
             thread.join();
         } catch (Exception e) {
-            Log.e(Service.TAG, "Thread join " + e);
+            Service.print("Thread join " + e);
         }
     }
 
@@ -955,7 +954,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             renderFPS();
         } catch (Exception e) {
-            Log.e(Service.TAG, "" + e);
+            Service.print(e.toString());
         }
     }
 
@@ -982,7 +981,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 writer_str.write(scoreBuilder.toString());
                 writer_str.close();
             } catch (Exception e) {
-                Log.e(Service.TAG, "Can't save SCORE " + e);
+                Service.print("Can't save SCORE " + e);
             }
         }
     }
@@ -1007,7 +1006,18 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             reader_cooler.close();
         } catch (IOException e) {
-            Log.e(Service.TAG, "Can't recovery SCORE: " + e);
+            Service.print("Can't recovery SCORE: " + e);
+            Service.print("Creating new file...");
+            try {
+                FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
+                OutputStreamWriter writer_str = new OutputStreamWriter(writer);
+
+                writer_str.write("");
+                writer_str.close();
+                Service.print("Successful");
+            } catch (IOException e2) {
+                Service.print("Err: " + e2);
+            }
         }
     }
 

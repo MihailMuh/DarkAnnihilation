@@ -28,6 +28,7 @@ public class Portal extends Sprite {
         touch = false;
         frameTime = 50;
         alpha = 0;
+        Game.blackPaint.setAlpha(0);
     }
 
     public void start() {

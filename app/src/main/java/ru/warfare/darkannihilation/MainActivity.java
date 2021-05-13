@@ -119,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
-                    names = new JSONObject(response.body().string()).names();
+                    json = new JSONObject(response.body().string());
+                    names = json.names();
                 } catch (JSONException e) {
                     Service.print(e.toString());
                 }
