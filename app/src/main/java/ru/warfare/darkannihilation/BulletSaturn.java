@@ -16,14 +16,9 @@ public class BulletSaturn extends Sprite {
 
     @Override
     public void intersection() {
-        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
-        game.bullets.remove(this);
-        game.allSprites.remove(this);
+        createSmallExplosion();
+        Game.bullets.remove(this);
+        Game.allSprites.remove(this);
     }
 
     @Override
@@ -31,14 +26,14 @@ public class BulletSaturn extends Sprite {
         y -= speedY;
         x += speedX;
 
-        if (y < -height | x < -width | x > screenWidth) {
-            game.bullets.remove(this);
-            game.allSprites.remove(this);
+        if (y < -height | x < -width | x > Game.screenWidth) {
+            Game.bullets.remove(this);
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.bulletSaturnImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.bulletSaturnImg, x, y, null);
     }
 }

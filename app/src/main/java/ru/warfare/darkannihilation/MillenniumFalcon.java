@@ -7,8 +7,8 @@ public class MillenniumFalcon extends BaseCharacter {
         speedX = randInt(3, 7);
         speedY = randInt(3, 7);
 
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
         endX = x;
         endY = y;
 
@@ -46,8 +46,8 @@ public class MillenniumFalcon extends BaseCharacter {
                 AudioPlayer.playShotgun();
                 for (int i = -4; i <= 4; i+=2) {
                     Buckshot buckshot = new Buckshot(game, x + halfWidth, y, i);
-                    game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
+                    Game.bullets.add(buckshot);
+                    Game.allSprites.add(buckshot);
                 }
             }
         } else {
@@ -55,12 +55,12 @@ public class MillenniumFalcon extends BaseCharacter {
                 lastShoot = now;
                 AudioPlayer.playShoot();
                 Bullet bullet = new Bullet(game, x + halfWidth - 6, y);
-                game.bullets.add(bullet);
-                game.allSprites.add(bullet);
+                Game.bullets.add(bullet);
+                Game.allSprites.add(bullet);
 
                 bullet = new Bullet(game, x + halfWidth, y);
-                game.bullets.add(bullet);
-                game.allSprites.add(bullet);
+                Game.bullets.add(bullet);
+                Game.allSprites.add(bullet);
             }
         }
     }
@@ -90,10 +90,10 @@ public class MillenniumFalcon extends BaseCharacter {
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
         } else {
-            if (x < 30 | x > game.screenWidth - height - 30) {
+            if (x < 30 | x > Game.screenWidth - height - 30) {
                 speedX = -speedX;
             }
-            if (y < 30 | y > game.screenHeight - width - 30) {
+            if (y < 30 | y > Game.screenHeight - width - 30) {
                 speedY = -speedY;
             }
         }
@@ -104,6 +104,6 @@ public class MillenniumFalcon extends BaseCharacter {
         if (!ai) {
             renderHearts();
         }
-        game.canvas.drawBitmap(ImageHub.playerImage, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.playerImage, x, y, null);
     }
 }

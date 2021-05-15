@@ -11,7 +11,7 @@ public class Portal extends Sprite {
     public Portal(Game g) {
         super(g, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
 
-        x = halfScreenWidth - halfWidth;
+        x = Game.halfScreenWidth - halfWidth;
         y = 100;
         lock = true;
         isPassive = true;
@@ -32,8 +32,8 @@ public class Portal extends Sprite {
     }
 
     public void start() {
-        game.gameStatus = 6;
-        x = halfScreenWidth - halfWidth;
+        Game.gameStatus = 6;
+        x = Game.halfScreenWidth - halfWidth;
         lock = false;
         AudioPlayer.portalSound.seekTo(0);
         AudioPlayer.portalSound.start();
@@ -47,7 +47,7 @@ public class Portal extends Sprite {
     @Override
     public void intersectionPlayer() {
         if (Game.level == 2) {
-            game.gameStatus = 7;
+            Game.gameStatus = 7;
             AudioPlayer.portalSound.pause();
             AudioPlayer.winMusic.seekTo(0);
             AudioPlayer.winMusic.start();
@@ -74,8 +74,8 @@ public class Portal extends Sprite {
                     frame = 0;
                 }
                 if (!AudioPlayer.portalSound.isPlaying() & !touch) {
-                    if (game.gameStatus != 7) {
-                        game.gameStatus = 0;
+                    if (Game.gameStatus != 7) {
+                        Game.gameStatus = 0;
                         hide();
                         Service.resumeBackgroundMusic();
                     }
@@ -87,18 +87,18 @@ public class Portal extends Sprite {
     @Override
     public void render() {
         if (!lock) {
-            game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
-            if (touch & game.gameStatus != 4) {
+            Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
+            if (touch & Game.gameStatus != 4) {
                 Game.blackPaint.setAlpha((int) alpha);
-                alpha += 0.495;
-                if (alpha >= 256) {
+                alpha += 0.49;
+                if (alpha >= 255) {
                     hide();
                     Game.level++;
                     LoadingScreen.jobs = "newGame";
-                    game.gameStatus = 41;
+                    Game.gameStatus = 41;
                 }
             }
-            game.canvas.drawRect(0, 0, screenWidth, screenHeight, Game.blackPaint);
+            Game.canvas.drawRect(0, 0, Game.screenWidth, Game.screenHeight, Game.blackPaint);
         }
     }
 }

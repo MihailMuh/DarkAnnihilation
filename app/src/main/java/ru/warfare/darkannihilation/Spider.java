@@ -51,7 +51,7 @@ public class Spider extends Sprite {
         shootTripleTime = 100;
         ammo = 0;
         health = (int) maxHealth;
-        x = randInt(width, screenWidth - width);
+        x = randInt(width, Game.screenWidth - width);
         y = -height;
         speedY = randInt(5, 10);
     }
@@ -64,12 +64,7 @@ public class Spider extends Sprite {
     @Override
     public void intersection() {
         AudioPlayer.playMegaBoom();
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         game.score += 50;
         hide();
     }
@@ -77,12 +72,7 @@ public class Spider extends Sprite {
     @Override
     public void intersectionPlayer() {
         AudioPlayer.playMegaBoom();
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         hide();
     }
 
@@ -108,9 +98,9 @@ public class Spider extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
 
-        game.canvas.drawRect(x + halfWidth - 75, y + 10, x + halfWidth + 75, y + 25 , Game.scorePaint);
-        game.canvas.drawRect(x + halfWidth - 73, y + 12, x + halfWidth - 77 + (health / maxHealth) * 150, y + 23, Game.fpsPaint);
+        Game.canvas.drawRect(x + halfWidth - 75, y + 10, x + halfWidth + 75, y + 25 , Game.scorePaint);
+        Game.canvas.drawRect(x + halfWidth - 73, y + 12, x + halfWidth - 77 + (health / maxHealth) * 150, y + 23, Game.fpsPaint);
     }
 }

@@ -27,44 +27,44 @@ public class HardWorker implements Runnable {
                     vector.makeVector(x, y, game.player.x + game.player.halfWidth,
                             game.player.y + game.player.halfHeight, 13);
                     AudioPlayer.playShotgun();
-                    game.allSprites.add(new BulletEnemy(game, x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
+                    Game.allSprites.add(new BulletEnemy(game, x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                     job = 0;
                     break;
                 case 2:
                     BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, game.player.x + game.player.halfWidth, game.player.y);
-                    game.bullets.add(buckshotSaturn);
-                    game.allSprites.add(buckshotSaturn);
+                    Game.bullets.add(buckshotSaturn);
+                    Game.allSprites.add(buckshotSaturn);
                     job = 0;
                     break;
                 case 3:
                     AudioPlayer.playDeagle();
-                    game.allSprites.add(new BulletEnemy(game, x, y, 0, 0, -10));
-                    game.allSprites.add(new BulletEnemy(game, x, y, 90, 10, 0));
-                    game.allSprites.add(new BulletEnemy(game, x, y, 180, 0, 10));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -90, -10, 0));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 0, 0, -10));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 90, 10, 0));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 180, 0, 10));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -90, -10, 0));
 
-                    game.allSprites.add(new BulletEnemy(game, x, y, 45, 7, -7));
-                    game.allSprites.add(new BulletEnemy(game, x, y, 135, 7, 7));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -45, -7, -7));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -135, -7, 7));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 45, 7, -7));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 135, 7, 7));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -45, -7, -7));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -135, -7, 7));
 
-                    game.allSprites.add(new BulletEnemy(game, x, y, 67, 10, -4));
-                    game.allSprites.add(new BulletEnemy(game, x, y, 22, 4, -10));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -67, -10, -4));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -22, -4, -10));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 67, 10, -4));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 22, 4, -10));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -67, -10, -4));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -22, -4, -10));
 
-                    game.allSprites.add(new BulletEnemy(game, x, y, 157, 4, 10));
-                    game.allSprites.add(new BulletEnemy(game, x, y, 113, 10, 4));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -157, -4, 10));
-                    game.allSprites.add(new BulletEnemy(game, x, y, -113, -10, 4));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 157, 4, 10));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, 113, 10, 4));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -157, -4, 10));
+                    Game.allSprites.add(new BulletEnemy(game, x, y, -113, -10, 4));
 
                     job = 0;
                     break;
                 case 4:
-                    game.allSprites.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
+                    Game.allSprites.add(new Bomb(game, game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
                     job = 0;
                     break;
-                case 0:
+                default:
                     break;
             }
         }

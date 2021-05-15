@@ -21,7 +21,7 @@ public class BossVaders extends Sprite {
         }
         isPassive = true;
 
-        x = randInt(width, screenWidth - width - width);
+        x = randInt(width, Game.screenWidth - width - width);
         y = -600;
 
         recreateRect(x + 35, y + 20, x + width - 35, y + height - 20);
@@ -37,35 +37,30 @@ public class BossVaders extends Sprite {
             int Y = y + halfHeight;
             vector.makeVector(X, Y, game.player.x + game.player.halfWidth,
                     game.player.y + game.player.halfHeight, 10);
-            game.allSprites.add(new BulletBossVaders(game, X, Y, vector.getSpeedX(), vector.getSpeedY()));
+            Game.allSprites.add(new BulletBossVaders(game, X, Y, vector.getSpeedX(), vector.getSpeedY()));
             AudioPlayer.playBossShoot();
         }
     }
 
     public void killAfterFight() {
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         AudioPlayer.playMegaBoom();
         game.score += 300;
-        game.bosses.remove(this);
-        game.allSprites.remove(this);
+        Game.bosses.remove(this);
+        Game.allSprites.remove(this);
         switch (Game.level)
         {
             case 1:
-                for (int i = 0; i < game.numberVaders; i++) {
+                for (int i = 0; i < Game.numberVaders; i++) {
                     if (Game.random.nextFloat() <= 0.1) {
-                        game.allSprites.add(new TripleFighter(game));
+                        Game.allSprites.add(new TripleFighter(game));
                     }
                 }
                 break;
             case 2:
-                for (int i = 0; i < game.numberVaders; i++) {
+                for (int i = 0; i < Game.numberVaders; i++) {
                     if (Game.random.nextFloat() <= 0.1) {
-                        game.allSprites.add(new XWing(game));
+                        Game.allSprites.add(new XWing(game));
                     }
                 }
                 break;
@@ -74,8 +69,8 @@ public class BossVaders extends Sprite {
         if (game.portal.lock) {
             game.portal.start();
         }
-        for (int i = 0; i < game.allSprites.size(); i++) {
-            game.allSprites.get(i).empireStart();
+        for (int i = 0; i < Game.allSprites.size(); i++) {
+            Game.allSprites.get(i).empireStart();
         }
         Game.lastBoss += game.pauseTimer;
         game.pauseTimer = 0;
@@ -100,7 +95,7 @@ public class BossVaders extends Sprite {
         if (y == -400) {
             Service.restartBossMusic();
             Service.pauseBackgroundMusic();
-            game.gameStatus = 5;
+            Game.gameStatus = 5;
         }
         if (y > 0 & !field) {
             field = true;
@@ -112,10 +107,10 @@ public class BossVaders extends Sprite {
             if (x <= 0) {
                 left = true;
             }
-            if (x + width >= screenWidth) {
+            if (x + width >= Game.screenWidth) {
                 left = false;
             }
-            if ((y + height >= screenHeight) | (y <= 0)) {
+            if ((y + height >= Game.screenHeight) | (y <= 0)) {
                 speedY = -speedY;
             }
 
@@ -134,9 +129,9 @@ public class BossVaders extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
 
-        game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, Game.scorePaint);
-        game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
+        Game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, Game.scorePaint);
+        Game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
     }
 }

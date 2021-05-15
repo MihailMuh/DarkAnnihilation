@@ -16,14 +16,9 @@ public class Buckshot extends Sprite {
 
     @Override
     public void intersection() {
-        for (int i = numberMediumExplosionsTriple; i < numberSmallExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
-        game.bullets.remove(this);
-        game.allSprites.remove(this);
+        createSmallTripleExplosion();
+        Game.bullets.remove(this);
+        Game.allSprites.remove(this);
     }
 
     @Override
@@ -31,14 +26,14 @@ public class Buckshot extends Sprite {
         y -= speedY;
         x += speedX;
 
-        if (y < -height | x < -width | x > screenWidth) {
-            game.bullets.remove(this);
-            game.allSprites.remove(this);
+        if (y < -height | x < -width | x > Game.screenWidth) {
+            Game.bullets.remove(this);
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.buckshotImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.buckshotImg, x, y, null);
     }
 }

@@ -7,12 +7,12 @@ public class HealthKit extends Sprite {
         lock = true;
         isBullet = true;
 
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -height;
     }
 
     public void hide() {
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -height;
         lock = true;
     }
@@ -28,13 +28,13 @@ public class HealthKit extends Sprite {
     public void update() {
         y += speedY;
 
-        if (y > screenHeight) {
+        if (y > Game.screenHeight) {
             hide();
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.healthKitImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.healthKitImg, x, y, null);
     }
 }

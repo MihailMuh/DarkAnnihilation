@@ -32,7 +32,7 @@ public class Sunrise extends Sprite {
         field = false;
         lock = true;
         health = 55;
-        x = randInt(width, screenWidth - width);
+        x = randInt(width, Game.screenWidth - width);
         y = -height;
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
@@ -50,12 +50,7 @@ public class Sunrise extends Sprite {
     @Override
     public void intersection() {
         AudioPlayer.playMegaBoom();
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         game.score += 100;
         hide();
     }
@@ -63,12 +58,7 @@ public class Sunrise extends Sprite {
     @Override
     public void intersectionPlayer() {
         AudioPlayer.playMegaBoom();
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         hide();
     }
 
@@ -94,10 +84,10 @@ public class Sunrise extends Sprite {
         if (x <= 0) {
             left = true;
         }
-        if (x + width >= screenWidth) {
+        if (x + width >= Game.screenWidth) {
             left = false;
         }
-        if ((y + height >= screenHeight) | (field & y <= 0)) {
+        if ((y + height >= Game.screenHeight) | (field & y <= 0)) {
             speedY = -speedY;
         }
         if (left) {
@@ -110,6 +100,6 @@ public class Sunrise extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.sunriseImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.sunriseImg, x, y, Game.alphaPaint);
     }
 }

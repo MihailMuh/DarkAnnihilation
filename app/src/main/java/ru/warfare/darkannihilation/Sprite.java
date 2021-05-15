@@ -16,16 +16,6 @@ public class Sprite {
     public int health = 0;
     public int damage = 0;
 
-    public int screenWidth;
-    public int screenHeight;
-    public int halfScreenWidth;
-    public int halfScreenHeight;
-    public int numberSmallExplosionsTriple;
-    public int numberLargeExplosions;
-    public int numberMediumExplosionsTriple;
-    public int numberSmallExplosionsDefault;
-    public int numberMediumExplosionsDefault;
-
     public boolean lock = false;
     public boolean isPassive = false;
     public boolean isBullet = false;
@@ -45,16 +35,16 @@ public class Sprite {
         halfWidth = width / 2;
         halfHeight = height / 2;
 
-        screenHeight = game.screenHeight;
-        screenWidth = game.screenWidth;
-        halfScreenWidth = game.halfScreenWidth;
-        halfScreenHeight = game.halfScreenHeight;
-
-        numberMediumExplosionsTriple = game.numberMediumExplosionsTriple;
-        numberSmallExplosionsTriple = game.numberSmallExplosionsTriple;
-        numberLargeExplosions = game.numberExplosionsALL;
-        numberSmallExplosionsDefault = game.numberSmallExplosionsDefault;
-        numberMediumExplosionsDefault = game.numberMediumExplosionsDefault;
+//        screenHeight = game.screenHeight;
+//        screenWidth = game.screenWidth;
+//        halfScreenWidth = game.halfScreenWidth;
+//        halfScreenHeight = game.halfScreenHeight;
+//
+//        numberMediumExplosionsTriple = Game.numberMediumExplosionsTriple;
+//        numberSmallExplosionsTriple = game.numberSmallExplosionsTriple;
+//        numberLargeExplosions = game.numberExplosionsALL;
+//        numberSmallExplosionsDefault = game.numberSmallExplosionsDefault;
+//        numberMediumExplosionsDefault = game.numberMediumExplosionsDefault;
 
         left = x;
         top = y;
@@ -68,6 +58,51 @@ public class Sprite {
     public void intersection() {}
     public void intersectionPlayer() {}
     public void empireStart() {}
+
+    public void createLargeExplosion() {
+        for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
+            if (Game.allExplosions[i].lock) {
+                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
+
+    public void createSmallExplosion() {
+        for (int i = Game.numberMediumExplosionsDefault; i < Game.numberSmallExplosionsDefault; i++) {
+            if (Game.allExplosions[i].lock) {
+                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
+
+    public void createLargeTripleExplosion() {
+        for (int i = 0; i < Game.numberMediumExplosionsTriple; i++) {
+            if (Game.allExplosions[i].lock) {
+                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
+
+    public void createSmallTripleExplosion() {
+        for (int i = Game.numberMediumExplosionsTriple; i < Game.numberSmallExplosionsTriple; i++) {
+            if (Game.allExplosions[i].lock) {
+                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
+
+    public void createSkullExplosion() {
+        for (int i = Game.numberSmallExplosionsDefault; i < Game.numberExplosionsALL; i++) {
+            if (Game.allExplosions[i].lock) {
+                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                break;
+            }
+        }
+    }
 
     public void recreateRect(int left, int top, int right, int bottom) {
         this.left = left;

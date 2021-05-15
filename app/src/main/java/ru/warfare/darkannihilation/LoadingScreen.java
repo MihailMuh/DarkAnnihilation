@@ -23,28 +23,25 @@ public class LoadingScreen extends Sprite {
             }
             if (c == 14) {
                 c = 0;
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        switch (jobs) {
-                            case "newGame":
-                                game.generateNewGame();
-                                break;
-                            case "topScore":
-                                game.generateTopScore();
-                                break;
-                            case "menu":
-                                game.generateMenu();
-                                break;
-                        }
+                Thread thread = new Thread(() -> {
+                    switch (jobs) {
+                        case "newGame":
+                            game.generateNewGame();
+                            break;
+                        case "topScore":
+                            game.generateTopScore();
+                            break;
+                        case "menu":
+                            game.generateMenu();
+                            break;
                     }
-                }; thread.start();
+                }); thread.start();
             }
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.loadingImages[frame], 0, 0, null);
+        Game.canvas.drawBitmap(ImageHub.loadingImages[frame], 0, 0, null);
     }
 }

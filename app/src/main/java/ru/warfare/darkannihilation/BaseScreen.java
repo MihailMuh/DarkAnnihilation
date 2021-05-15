@@ -9,7 +9,7 @@ public class BaseScreen extends Sprite {
     public BaseScreen(Game g, int w, int h, int len) {
         super(g, w, h);
 
-        x = (int) (game.screenWidth * -0.2);
+        x = (int) (Game.screenWidth * -0.2);
 
         screenImageLength = len;
 
@@ -29,15 +29,15 @@ public class BaseScreen extends Sprite {
         switch (Game.level)
         {
             case 1:
-                game.canvas.drawBitmap(ImageHub.screenImage[frame], x, 0, null);
+                Game.canvas.drawBitmap(ImageHub.screenImage[frame], x, 0, null);
                 break;
             case 2:
-                game.canvas.drawBitmap(ImageHub.thunderScreen[frame], x, 0, null);
+                Game.canvas.drawBitmap(ImageHub.thunderScreen[frame], x, 0, null);
                 break;
         }
     }
 
     public void render(Bitmap img) {
-        game.canvas.drawBitmap(img, 0, 0, null);
+        Game.canvas.drawBitmap(img, 0, 0, null);
     }
 }

@@ -39,14 +39,13 @@ public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-    public Game game;
-    public static Request request;
-    public static OkHttpClient client = new OkHttpClient();
+    private Game game;
+    public static final OkHttpClient client = new OkHttpClient();
     public static JSONObject json = new JSONObject();
     public static JSONArray names;
     private SharedPreferences preferences = null;
     public static String nickname = "";
-    public Service service;
+    public static boolean firstRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +61,18 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
 
+
+
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
         display.getRealSize(size);
 
         getTop();
+        checkOnFirstRun();
 
         game = new Game(this, size.x, size.y);
-        service = new Service(this);
         setContentView(game);
-
-        checkOnFirstRun();
     }
 
     @Override
@@ -107,10 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getTop() {
-        request = new Request.Builder()
-                .url(Service.IP + "get")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
+        client.newCall(new Request.Builder().url(Service.IP + "get").build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Service.print(e.toString());
@@ -119,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
+                    assert response.body() != null;
                     json = new JSONObject(response.body().string());
                     names = json.names();
                 } catch (JSONException e) {
@@ -129,10 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void postScore(String string) {
-        request = new Request.Builder()
-                .url(Service.IP + "write?data=" + string)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
+        client.newCall(new Request.Builder().url(Service.IP + "write?data=" + string).build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Service.print(e.toString());
@@ -175,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isOnline() {
-        return ((ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
+        return ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
     private void checkOnFirstRun() {
@@ -252,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             loadNickname();
+            firstRun = false;
         }
     }
 }

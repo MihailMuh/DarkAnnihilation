@@ -11,7 +11,7 @@ public class Attention extends Sprite {
 
     public void hide() {
         lock = true;
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -height;
     }
 
@@ -31,6 +31,6 @@ public class Attention extends Sprite {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.attentionImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.attentionImg, x, y, null);
     }
 }

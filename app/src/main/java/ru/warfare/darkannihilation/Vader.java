@@ -20,7 +20,7 @@ public class Vader extends Sprite {
                 break;
         }
 
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -150;
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
@@ -29,11 +29,11 @@ public class Vader extends Sprite {
     }
 
     public void newStatus() {
-        if (game.bosses.size() != 0) {
+        if (Game.bosses.size() != 0) {
             lock = true;
         }
         health = 2;
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -150;
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
@@ -46,12 +46,7 @@ public class Vader extends Sprite {
 
     @Override
     public void intersection() {
-        for (int i = numberSmallExplosionsTriple; i < numberMediumExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createLargeExplosion();
         AudioPlayer.playBoom();
         game.score += 1;
         newStatus();
@@ -60,12 +55,7 @@ public class Vader extends Sprite {
     @Override
     public void intersectionPlayer() {
         AudioPlayer.playMetal();
-        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSmallExplosion();
         AudioPlayer.playBoom();
         newStatus();
     }
@@ -95,13 +85,13 @@ public class Vader extends Sprite {
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > game.screenWidth | y > game.screenHeight) {
+        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
             newStatus();
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(img, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(img, x, y, Game.alphaPaint);
     }
 }

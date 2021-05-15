@@ -1,19 +1,16 @@
 package ru.warfare.darkannihilation;
 
-import android.content.Context;
-import android.os.Vibrator;
 import android.util.Log;
 
 import org.json.JSONObject;
 
-public class Service {
-    public static Vibrator vibrator;
+public final class Service {
     public static final String IP = "http://78.29.33.173:49150/";
     public static final String TAG = "D'Ark";
 
-    public Service(Context context) {
-        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    }
+//    public static void vibrate() {
+//        ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(150,10));
+//    }
 
     public static void print(String text) {
         Log.e(TAG, text);
@@ -110,5 +107,54 @@ public class Service {
                 AudioPlayer.forgottenBossMusic.start();
                 break;
         }
+    }
+
+    public static void pausePauseMusic() {
+        if (AudioPlayer.pauseMusic.isPlaying()) {
+            AudioPlayer.pauseMusic.pause();
+        }
+    }
+
+    public static void restartPauseMusic() {
+        pausePauseMusic();
+        AudioPlayer.pauseMusic.seekTo(0);
+        AudioPlayer.pauseMusic.start();
+    }
+
+    public static void pauseMenuMusic() {
+        if (AudioPlayer.menuMusic.isPlaying()) {
+            AudioPlayer.menuMusic.pause();
+        }
+    }
+
+    public static void restartMenuMusic() {
+        if (!AudioPlayer.menuMusic.isPlaying()) {
+            AudioPlayer.menuMusic.seekTo(0);
+            AudioPlayer.menuMusic.start();
+        }
+    }
+
+    public static void pauseFlightMusic() {
+        if (AudioPlayer.flightSnd.isPlaying()) {
+            AudioPlayer.flightSnd.pause();
+        }
+    }
+
+    public static void restartFlightMusic() {
+        pauseFlightMusic();
+        AudioPlayer.flightSnd.seekTo(0);
+        AudioPlayer.flightSnd.start();
+    }
+
+    public static void pauseReadySound() {
+        if (AudioPlayer.readySnd.isPlaying()) {
+            AudioPlayer.readySnd.pause();
+        }
+    }
+
+    public static void restartReadySound() {
+        pauseReadySound();
+        AudioPlayer.readySnd.seekTo(0);
+        AudioPlayer.readySnd.start();
     }
 }

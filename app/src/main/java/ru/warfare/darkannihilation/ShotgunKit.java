@@ -10,12 +10,12 @@ public class ShotgunKit extends Sprite {
         isPassive = true;
         isBullet = true;
 
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -height;
     }
 
     public void hide() {
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -height;
         lock = true;
     }
@@ -24,20 +24,20 @@ public class ShotgunKit extends Sprite {
     public void intersectionPlayer() {
         hide();
         picked = true;
-        game.changerGuns.changeGun();
+        game.changerGuns.make();
     }
 
 
     @Override
     public void update() {
         y += speedY;
-        if (y > screenHeight) {
+        if (y > Game.screenHeight) {
             hide();
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.shotgunKitImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.shotgunKitImg, x, y, null);
     }
 }

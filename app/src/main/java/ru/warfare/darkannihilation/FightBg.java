@@ -9,12 +9,12 @@ public class FightBg extends Sprite {
         super(g, ImageHub.playerVsBoss.getWidth(), ImageHub.playerVsBoss.getHeight());
 
         x = 0;
-        y = halfScreenHeight;
+        y = Game.halfScreenHeight;
         int min = 10;
 
-        while ((y - halfScreenHeight) + height > screenHeight) {
-            img = Bitmap.createScaledBitmap(ImageHub.playerVsBoss, (int) ((screenWidth-min) * game.resizeK),
-                    (int) ((screenWidth-150-min) * game.resizeK), ImageHub.isFilter);
+        while ((y - Game.halfScreenHeight) + height > Game.screenHeight) {
+            img = Bitmap.createScaledBitmap(ImageHub.playerVsBoss, (int) ((Game.screenWidth-min) * Game.resizeK),
+                    (int) ((Game.screenWidth-150-min) * Game.resizeK), ImageHub.isFilter);
             height = img.getHeight();
             min += 10;
         }
@@ -23,8 +23,8 @@ public class FightBg extends Sprite {
         halfHeight = height / 2;
         halfWidth = width / 2;
 
-        x = halfScreenWidth;
-        y = halfScreenHeight;
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
     }
 
     public void newImg(String character) {
@@ -47,6 +47,6 @@ public class FightBg extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(img, x - halfHeight, y - halfHeight, null);
+        Game.canvas.drawBitmap(img, x - halfHeight, y - halfHeight, null);
     }
 }

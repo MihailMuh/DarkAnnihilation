@@ -5,8 +5,8 @@ public class Saturn extends BaseCharacter {
         super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight());
         health = 50;
 
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
         endX = x;
         endY = y;
 
@@ -33,8 +33,8 @@ public class Saturn extends BaseCharacter {
                 AudioPlayer.playShoot();
                 for (int i = 0; i < randInt(1, 6); i++) {
                     BulletSaturn bulletSaturn = new BulletSaturn(game, x + halfWidth, y);
-                    game.bullets.add(bulletSaturn);
-                    game.allSprites.add(bulletSaturn);
+                    Game.bullets.add(bulletSaturn);
+                    Game.allSprites.add(bulletSaturn);
                 }
             }
         }
@@ -69,6 +69,6 @@ public class Saturn extends BaseCharacter {
     @Override
     public void render () {
         renderHearts();
-        game.canvas.drawBitmap(ImageHub.saturnImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.saturnImg, x, y, null);
     }
 }

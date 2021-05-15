@@ -21,14 +21,9 @@ public class BulletBossVaders extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         AudioPlayer.playMegaBoom();
-        game.allSprites.remove(this);
+        Game.allSprites.remove(this);
     }
 
     @Override
@@ -43,13 +38,13 @@ public class BulletBossVaders extends Sprite {
         y += speedY;
         x += speedX;
 
-        if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
-            game.allSprites.remove(this);
+        if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.bulletBossVadersImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.bulletBossVadersImg, x, y, null);
     }
 }

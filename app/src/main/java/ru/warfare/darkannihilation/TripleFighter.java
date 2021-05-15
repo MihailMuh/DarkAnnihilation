@@ -9,7 +9,7 @@ public class TripleFighter extends Sprite {
         health = 6;
         damage = 10;
 
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
@@ -32,11 +32,11 @@ public class TripleFighter extends Sprite {
     }
 
     public void newStatus() {
-        if (game.bosses.size() != 0) {
+        if (Game.bosses.size() != 0) {
             lock = true;
         }
         health = 6;
-        x = randInt(0, screenWidth);
+        x = randInt(0, Game.screenWidth);
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
@@ -49,12 +49,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void intersection() {
-        for (int i = 0; i < numberMediumExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createLargeTripleExplosion();
         AudioPlayer.playBoom();
         game.score += 5;
         newStatus();
@@ -63,12 +58,7 @@ public class TripleFighter extends Sprite {
     @Override
     public void intersectionPlayer() {
         AudioPlayer.playMetal();
-        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSmallExplosion();
         newStatus();
     }
 
@@ -90,20 +80,20 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void update() {
-        if (x > 0 & x < screenWidth - width & y > 0 & y < screenHeight - height) {
+        if (x > 0 & x < Game.screenWidth - width & y > 0 & y < Game.screenHeight - height) {
             shoot();
         }
 
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > screenWidth | y > screenHeight) {
+        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
             newStatus();
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
     }
 }

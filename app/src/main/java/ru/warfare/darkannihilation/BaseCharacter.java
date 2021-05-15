@@ -1,5 +1,9 @@
 package ru.warfare.darkannihilation;
 
+import android.content.Context;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+
 public class BaseCharacter extends Sprite {
     public int endX;
     public int endY;
@@ -24,8 +28,8 @@ public class BaseCharacter extends Sprite {
     public void baseSetting() {
         god = false;
         ai = false;
-        x = game.halfScreenWidth;
-        y = game.halfScreenHeight;
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
         lock = true;
         health = maxHealth;
         int c = 370;
@@ -52,16 +56,11 @@ public class BaseCharacter extends Sprite {
             health -= dmg;
             if (health <= 0) {
                 game.generateGameover();
-                for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-                    if (game.allExplosions[i].lock) {
-                        game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                        break;
-                    }
-                }
+                createSkullExplosion();
                 AudioPlayer.playMegaBoom();
-                Service.vibrator.vibrate(1550);
+                ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(1550,10));
             } else {
-                Service.vibrator.vibrate(70);
+                ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(70,10));
             }
         }
     }

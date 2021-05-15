@@ -31,7 +31,7 @@ public class ExplosionSkull extends BaseExplosion {
     @Override
     public void render () {
         if (frame != 13) {
-            game.canvas.drawBitmap(img[frame], x, y, null);
+            Game.canvas.drawBitmap(img[frame], x, y, null);
         }
     }
 }

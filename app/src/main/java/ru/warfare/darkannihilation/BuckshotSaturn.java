@@ -44,14 +44,14 @@ public class BuckshotSaturn extends Sprite {
 
     @Override
     public void intersection() {
-        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start((int) X + halfWidth, (int) Y + halfHeight);
+        for (int i = Game.numberMediumExplosionsDefault; i < Game.numberSmallExplosionsDefault; i++) {
+            if (Game.allExplosions[i].lock) {
+                Game.allExplosions[i].start((int) X + halfWidth, (int) Y + halfHeight);
                 break;
             }
         }
-        game.bullets.remove(this);
-        game.allSprites.remove(this);
+        Game.bullets.remove(this);
+        Game.allSprites.remove(this);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class BuckshotSaturn extends Sprite {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.bulletBuckshotSaturnImg, X, Y, null);
+        Game.canvas.drawBitmap(ImageHub.bulletBuckshotSaturnImg, X, Y, null);
     }
 }

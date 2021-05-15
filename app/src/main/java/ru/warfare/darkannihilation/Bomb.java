@@ -16,26 +16,21 @@ public class Bomb extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
-        game.allSprites.remove(this);
+        createSmallExplosion();
+        Game.allSprites.remove(this);
     }
 
     @Override
     public void update() {
         y += speedY;
 
-        if (y > screenHeight) {
-            game.allSprites.remove(this);
+        if (y > Game.screenHeight) {
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.bombImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.bombImg, x, y, null);
     }
 }

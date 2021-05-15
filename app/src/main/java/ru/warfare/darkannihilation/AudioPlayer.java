@@ -1,13 +1,15 @@
 package ru.warfare.darkannihilation;
 
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-public class AudioPlayer {
+import static ru.warfare.darkannihilation.Sprite.randInt;
+
+public final class AudioPlayer {
     public static ArrayList<MediaPlayer> sounds = new ArrayList<>(0);
     public static int[] reloadSounds = new int[2];
 
@@ -39,8 +41,8 @@ public class AudioPlayer {
     private static SoundPool soundPool;
     private static final int MAX_STREAMS = 50000;
 
-    public AudioPlayer(Game g) {
-        Thread thread = new Thread(() -> {
+    public static void init(Context context) {
+//        Thread thread = new Thread(() -> {
             soundPool = new SoundPool.Builder()
                     .setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_GAME)
@@ -48,87 +50,78 @@ public class AudioPlayer {
                             .build())
                     .setMaxStreams(MAX_STREAMS)
                     .build();
-            boomSnd = soundPool.load(g.context.getApplicationContext(), R.raw.boom, 1);
-            shootSnd = soundPool.load(g.context.getApplicationContext(), R.raw.laser, 1);
-            metalSnd = soundPool.load(g.context.getApplicationContext(), R.raw.metal, 1);
-            shotgunSnd = soundPool.load(g.context.getApplicationContext(), R.raw.shotgun, 1);
-            megaBoom = soundPool.load(g.context.getApplicationContext(), R.raw.megaboom, 1);
-            reloadSounds[0] = soundPool.load(g.context.getApplicationContext(), R.raw.reload0, 1);
-            reloadSounds[1] = soundPool.load(g.context.getApplicationContext(), R.raw.reload1, 1);
-            fallingBombSnd = soundPool.load(g.context.getApplicationContext(), R.raw.falling_bomb, 1);
-            buttonSound = soundPool.load(g.context.getApplicationContext(), R.raw.spacebar, 1);
-            deagleSnd = soundPool.load(g.context.getApplicationContext(), R.raw.deagle, 1);
-            healSound = soundPool.load(g.context.getApplicationContext(), R.raw.heal, 1);
-            bossShootSnd = soundPool.load(g.context.getApplicationContext(), R.raw.boss_shoot, 1);
+            boomSnd = soundPool.load(context.getApplicationContext(), R.raw.boom, 1);
+            shootSnd = soundPool.load(context.getApplicationContext(), R.raw.laser, 1);
+            metalSnd = soundPool.load(context.getApplicationContext(), R.raw.metal, 1);
+            shotgunSnd = soundPool.load(context.getApplicationContext(), R.raw.shotgun, 1);
+            megaBoom = soundPool.load(context.getApplicationContext(), R.raw.megaboom, 1);
+            reloadSounds[0] = soundPool.load(context.getApplicationContext(), R.raw.reload0, 1);
+            reloadSounds[1] = soundPool.load(context.getApplicationContext(), R.raw.reload1, 1);
+            fallingBombSnd = soundPool.load(context.getApplicationContext(), R.raw.falling_bomb, 1);
+            buttonSound = soundPool.load(context.getApplicationContext(), R.raw.spacebar, 1);
+            deagleSnd = soundPool.load(context.getApplicationContext(), R.raw.deagle, 1);
+            healSound = soundPool.load(context.getApplicationContext(), R.raw.heal, 1);
+            bossShootSnd = soundPool.load(context.getApplicationContext(), R.raw.boss_shoot, 1);
 
-            menuMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.menu);
+            menuMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.menu);
             menuMusic.setLooping(true);
             sounds.add(menuMusic);
 
-            readySnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.ready);
+            readySnd = MediaPlayer.create(context.getApplicationContext(), R.raw.ready);
             readySnd.setVolume(3f, 3f);
             sounds.add(readySnd);
 
-            attentionSnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.attention);
+            attentionSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.attention);
             attentionSnd.setVolume(0.6f, 0.6f);
             sounds.add(attentionSnd);
 
-            pirateMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.pirate);
+            pirateMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.pirate);
             pirateMusic.setLooping(true);
             pirateMusic.setVolume(0.7f, 0.7f);
             sounds.add(pirateMusic);
 
-            gameoverSnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.gameover_phrase);
+            gameoverSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.gameover_phrase);
             gameoverSnd.setVolume(1f, 1f);
             sounds.add(gameoverSnd);
 
-            pauseMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.pause);
+            pauseMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.pause);
             pauseMusic.setVolume(0.75f, 0.75f);
             pauseMusic.setLooping(true);
             sounds.add(pauseMusic);
 
-            bossMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.shadow_boss);
+            bossMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.shadow_boss);
             bossMusic.setVolume(0.45f, 0.45f);
             bossMusic.setLooping(true);
             sounds.add(bossMusic);
 
-            MediaPlayer attentionSnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.attention);
-            attentionSnd.setVolume(0.6f, 0.6f);
-            sounds.add(attentionSnd);
-
-            flightSnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.fly);
+            flightSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.fly);
             flightSnd.setVolume(1f, 1f);
             sounds.add(flightSnd);
 
-            winMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.win);
+            winMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.win);
             winMusic.setVolume(0.3f, 0.3f);
             winMusic.setLooping(true);
             sounds.add(winMusic);
 
-            portalSound = MediaPlayer.create(g.context.getApplicationContext(), R.raw.portal);
+            portalSound = MediaPlayer.create(context.getApplicationContext(), R.raw.portal);
             portalSound.setVolume(0.5f, 0.5f);
             sounds.add(portalSound);
 
-            timeMachineSnd = MediaPlayer.create(g.context.getApplicationContext(), R.raw.time_machine);
+            timeMachineSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.time_machine);
             timeMachineSnd.setVolume(1f, 1f);
             sounds.add(timeMachineSnd);
 
-            forgottenMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.forgotten_snd);
+            forgottenMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.forgotten_snd);
             forgottenMusic.setVolume(1f, 1f);
             forgottenMusic.setLooping(true);
             sounds.add(forgottenMusic);
 
-            forgottenBossMusic = MediaPlayer.create(g.context.getApplicationContext(), R.raw.forgotten_boss);
+            forgottenBossMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.forgotten_boss);
             forgottenBossMusic.setVolume(1f, 1f);
             forgottenBossMusic.setLooping(true);
             sounds.add(forgottenBossMusic);
 
-        }); thread.start();
-    }
-
-    public static int randInt(int min, int max){
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
+//        }); thread.start();
     }
 
     public static void releaseAP() {
@@ -177,5 +170,4 @@ public class AudioPlayer {
     public static void playBossShoot() {
         soundPool.play(bossShootSnd, 1f, 1f, 1, 0, 1);
     }
-
 }

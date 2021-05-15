@@ -24,12 +24,7 @@ public class Rocket extends Sprite{
 
     @Override
     public void intersectionPlayer() {
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         AudioPlayer.playMegaBoom();
         hide();
     }
@@ -39,13 +34,13 @@ public class Rocket extends Sprite{
     public void update() {
         y += speedY;
 
-        if (y > screenHeight) {
+        if (y > Game.screenHeight) {
             hide();
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(ImageHub.rocketImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.rocketImg, x, y, null);
     }
 }

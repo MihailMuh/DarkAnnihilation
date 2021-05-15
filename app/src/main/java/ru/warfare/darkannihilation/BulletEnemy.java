@@ -26,13 +26,8 @@ public class BulletEnemy extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        for (int i = numberMediumExplosionsDefault; i < numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
-        game.allSprites.remove(this);
+        createSmallExplosion();
+        Game.allSprites.remove(this);
     }
 
     @Override
@@ -40,13 +35,13 @@ public class BulletEnemy extends Sprite {
         y += speedY;
         x += speedX;
 
-        if (x < -width | x > screenWidth | y > screenHeight | y < -height) {
-            game.allSprites.remove(this);
+        if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(img, x, y, null);
+        Game.canvas.drawBitmap(img, x, y, null);
     }
 }

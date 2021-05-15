@@ -56,59 +56,58 @@ public class Button extends Sprite {
                 AudioPlayer.playClick();
                 img = ImageHub.buttonImagePressed;
 
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(90);
-                            img = ImageHub.buttonImageNotPressed;
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            Service.print(e.toString());
-                        }
-                        switch (function) {
-                            case "start":
-                                game.buttonPlayer.show();
-                                game.buttonSaturn.show();
-                                break;
-                            case "quit":
-                                System.exit(0);
-                                break;
-                            case "pause":
-                                game.player.dontmove = true;
-                                Game.lastBoss += game.pauseTimer;
-                                game.hardWorker.workOnResume();
-                                AudioPlayer.pauseMusic.pause();
-                                Service.resumeBackgroundMusic();
-                                if (game.pauseButton.oldStatus == 2) {
-                                    AudioPlayer.readySnd.start();
-                                }
-                                if (game.pauseButton.oldStatus != 0) {
-                                    game.gameStatus = game.pauseButton.oldStatus;
-                                    if (game.portal.touch) {
-                                        AudioPlayer.timeMachineSnd.start();
-                                    }
-                                } else {
-                                    game.gameStatus = 9;
-                                }
-                                game.pauseTimer = 0;
-                                break;
-                            case "menu":
-                                game.gameStatus = 41;
-                                LoadingScreen.jobs = "menu";
-                                break;
-                            case "top":
-                                LoadingScreen.jobs = "topScore";
-                                game.gameStatus = 41;
-                                break;
-                            case "restart":
-                                Game.level = 1;
-                                LoadingScreen.jobs = "newGame";
-                                game.gameStatus = 41;
-                                break;
-                        }
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(90);
+                        img = ImageHub.buttonImageNotPressed;
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Service.print(e.toString());
                     }
-                };
+                    switch (function) {
+                        case "start":
+                            game.buttonPlayer.show();
+                            game.buttonSaturn.show();
+                            break;
+                        case "quit":
+                            System.exit(0);
+                            break;
+                        case "pause":
+                            game.player.dontmove = true;
+                            Game.lastBoss += game.pauseTimer;
+                            game.hardWorker.workOnResume();
+                            Service.pausePauseMusic();
+                            Service.resumeBackgroundMusic();
+                            if (PauseButton.oldStatus == 2) {
+                                AudioPlayer.readySnd.start();
+                            }
+                            if (PauseButton.oldStatus != 0) {
+                                Game.gameStatus = PauseButton.oldStatus;
+                                if (game.portal.touch) {
+                                    AudioPlayer.timeMachineSnd.start();
+                                }
+                            } else {
+                                Game.gameStatus = 9;
+                            }
+                            game.pauseTimer = 0;
+                            break;
+                        case "menu":
+                            Game.gameStatus = 41;
+                            LoadingScreen.jobs = "menu";
+                            break;
+                        case "top":
+                            LoadingScreen.jobs = "topScore";
+                            Game.gameStatus = 41;
+                            MainActivity.postScore(Service.generateJSONString(MainActivity.nickname, game.lastMax));
+                            MainActivity.getTop();
+                            break;
+                        case "restart":
+                            Game.level = 1;
+                            LoadingScreen.jobs = "newGame";
+                            Game.gameStatus = 41;
+                            break;
+                    }
+                });
                 thread.start();
             }
         }
@@ -116,7 +115,7 @@ public class Button extends Sprite {
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(img, x, y, null);
-        game.canvas.drawText(text, x + (float) ((width - textWidth) / 2),y + (halfHeight + textHeight), paint);
+        Game.canvas.drawBitmap(img, x, y, null);
+        Game.canvas.drawText(text, x + (float) ((width - textWidth) / 2),y + (halfHeight + textHeight), paint);
     }
 }

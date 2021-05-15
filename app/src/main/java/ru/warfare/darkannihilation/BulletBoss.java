@@ -37,13 +37,8 @@ public class BulletBoss extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        for (int i = numberMediumExplosionsTriple; i < numberSmallExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
-        game.allSprites.remove(this);
+        createSmallTripleExplosion();
+        Game.allSprites.remove(this);
     }
 
     @Override
@@ -51,13 +46,13 @@ public class BulletBoss extends Sprite {
         y += speedY;
         x -= speedX;
 
-        if (y > screenHeight | x < -100 | x > screenWidth) {
-            game.allSprites.remove(this);
+        if (y > Game.screenHeight | x < -100 | x > Game.screenWidth) {
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render () {
-        game.canvas.drawBitmap(img, x, y, null);
+        Game.canvas.drawBitmap(img, x, y, null);
     }
 }

@@ -34,25 +34,15 @@ public class Minion extends Sprite {
     @Override
     public void intersection() {
         AudioPlayer.playBoom();
-        game.allSprites.remove(this);
-        for (int i = 0; i < numberMediumExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        Game.allSprites.remove(this);
+        createLargeTripleExplosion();
     }
 
     @Override
     public void intersectionPlayer() {
         AudioPlayer.playMetal();
-        game.allSprites.remove(this);
-        for (int i = numberMediumExplosionsTriple; i < numberSmallExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        Game.allSprites.remove(this);
+        createSmallTripleExplosion();
     }
 
     @Override
@@ -75,13 +65,13 @@ public class Minion extends Sprite {
 
         shoot();
 
-        if (x < -width | x > game.screenWidth | y > game.screenHeight) {
-            game.allSprites.remove(this);
+        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
+            Game.allSprites.remove(this);
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.minionImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.minionImg, x, y, null);
     }
 }

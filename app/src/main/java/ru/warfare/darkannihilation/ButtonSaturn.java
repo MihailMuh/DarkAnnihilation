@@ -2,34 +2,32 @@ package ru.warfare.darkannihilation;
 
 public class ButtonSaturn extends Sprite {
     public ButtonSaturn(Game g) {
-        super(g, ImageHub.buttonGunnerImg.getWidth(), ImageHub.buttonGunnerImg.getHeight());
+        super(g, ImageHub.buttonSaturnImg.getWidth(), ImageHub.buttonSaturnImg.getHeight());
 
-        y = halfScreenHeight - halfHeight;
+        y = Game.halfScreenHeight - halfHeight;
         hide();
     }
 
     public void hide() {
-        x = screenWidth;
+        x = Game.screenWidth;
     }
 
     public void show() {
-        x = halfScreenWidth + game.buttonPlayer.width;
+        x = Game.halfScreenWidth + game.buttonPlayer.width;
     }
 
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioPlayer.playClick();
             Game.character = "saturn";
-            if (AudioPlayer.menuMusic.isPlaying()) {
-                AudioPlayer.menuMusic.pause();
-            }
+            Service.pauseMenuMusic();
             LoadingScreen.jobs = "newGame";
-            game.gameStatus = 41;
+            Game.gameStatus = 41;
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.buttonGunnerImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.buttonSaturnImg, x, y, null);
     }
 }

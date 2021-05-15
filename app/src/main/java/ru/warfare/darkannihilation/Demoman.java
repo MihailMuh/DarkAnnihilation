@@ -21,13 +21,13 @@ public class Demoman extends Sprite {
     public void hide() {
         lock = true;
         health = 20;
-        y = randInt(0, halfScreenHeight - health);
+        y = randInt(0, Game.halfScreenHeight - health);
         direction = randInt(0, 1);
         if (direction == 0) {
             x = -width;
             speedX = randInt(5, 10);
         } else {
-            x = screenWidth;
+            x = Game.screenWidth;
             speedX = randInt(-10, -5);
         }
     }
@@ -49,26 +49,13 @@ public class Demoman extends Sprite {
 
     @Override
     public void intersection() {
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
-        AudioPlayer.playMegaBoom();
+        intersectionPlayer();
         game.score += 35;
-        hide();
     }
 
     @Override
     public void intersectionPlayer() {
-        AudioPlayer.playMetal();
-        for (int i = numberSmallExplosionsDefault; i < numberLargeExplosions; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(x + halfWidth, y + halfHeight);
-                break;
-            }
-        }
+        createSkullExplosion();
         AudioPlayer.playMegaBoom();
         hide();
     }
@@ -91,7 +78,7 @@ public class Demoman extends Sprite {
         x += speedX;
 
         if (direction == 0) {
-            if (x > game.screenWidth) {
+            if (x > Game.screenWidth) {
                 hide();
             }
         } else {
@@ -103,6 +90,6 @@ public class Demoman extends Sprite {
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.demomanImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.demomanImg, x, y, null);
     }
 }

@@ -27,22 +27,21 @@ public class WinScreen extends Sprite {
                 frame += 1;
             }
             if (frame == 14) {
-                AudioPlayer.flightSnd.seekTo(0);
-                AudioPlayer.flightSnd.start();
+                Service.restartFlightMusic();
             }
         }
     }
 
     @Override
     public void render() {
-        game.canvas.drawBitmap(ImageHub.winScreenImg[frame], 0, 0, null);
+        Game.canvas.drawBitmap(ImageHub.winScreenImg[frame], 0, 0, null);
         if (frame == screenImageLength - 1) {
-            game.canvas.drawText("Thanks For Playing!",
-                    (screenWidth - paint.measureText("Thanks For Playing!")) / 2,
-                    (float) ((screenHeight + paint.getTextSize()) / 2.7), paint);
-            game.canvas.drawText("Tap this screen with four or more fingers to enter start menu",
-                    (screenWidth - Game.gameoverPaint.measureText("Tap this screen with four or more fingers to enter start menu")) / 2,
-                    (float) (screenHeight * 0.65), Game.gameoverPaint);
+            Game.canvas.drawText("Thanks For Playing!",
+                    (Game.screenWidth - paint.measureText("Thanks For Playing!")) / 2,
+                    (float) ((Game.screenHeight + paint.getTextSize()) / 2.7), paint);
+            Game.canvas.drawText("Tap this screen with four or more fingers to enter start menu",
+                    (Game.screenWidth - Game.gameoverPaint.measureText("Tap this screen with four or more fingers to enter start menu")) / 2,
+                    (float) (Game.screenHeight * 0.65), Game.gameoverPaint);
         }
     }
 }
