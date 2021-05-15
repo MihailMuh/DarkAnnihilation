@@ -8,8 +8,8 @@ public class Spider extends Sprite {
     private boolean reload;
     private final float maxHealth;
 
-    public Spider(Game g) {
-        super(g, ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
+    public Spider() {
+        super(ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
         damage = 20;
         maxHealth = 200;
         hide();
@@ -65,7 +65,7 @@ public class Spider extends Sprite {
     public void intersection() {
         AudioPlayer.playMegaBoom();
         createSkullExplosion();
-        game.score += 50;
+        Game.score += 50;
         hide();
     }
 

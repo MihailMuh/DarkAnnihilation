@@ -45,7 +45,7 @@ public class MillenniumFalcon extends BaseCharacter {
                 lastShoot = now;
                 AudioPlayer.playShotgun();
                 for (int i = -4; i <= 4; i+=2) {
-                    Buckshot buckshot = new Buckshot(game, x + halfWidth, y, i);
+                    Buckshot buckshot = new Buckshot(x + halfWidth, y, i);
                     Game.bullets.add(buckshot);
                     Game.allSprites.add(buckshot);
                 }
@@ -54,11 +54,11 @@ public class MillenniumFalcon extends BaseCharacter {
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
                 AudioPlayer.playShoot();
-                Bullet bullet = new Bullet(game, x + halfWidth - 6, y);
+                Bullet bullet = new Bullet(x + halfWidth - 6, y);
                 Game.bullets.add(bullet);
                 Game.allSprites.add(bullet);
 
-                bullet = new Bullet(game, x + halfWidth, y);
+                bullet = new Bullet(x + halfWidth, y);
                 Game.bullets.add(bullet);
                 Game.allSprites.add(bullet);
             }

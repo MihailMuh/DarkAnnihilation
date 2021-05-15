@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class Sprite {
-    public final Game game;
+    public Game game;
 
     public int x = 0;
     public int y = 0;
@@ -35,16 +35,17 @@ public class Sprite {
         halfWidth = width / 2;
         halfHeight = height / 2;
 
-//        screenHeight = game.screenHeight;
-//        screenWidth = game.screenWidth;
-//        halfScreenWidth = game.halfScreenWidth;
-//        halfScreenHeight = game.halfScreenHeight;
-//
-//        numberMediumExplosionsTriple = Game.numberMediumExplosionsTriple;
-//        numberSmallExplosionsTriple = game.numberSmallExplosionsTriple;
-//        numberLargeExplosions = game.numberExplosionsALL;
-//        numberSmallExplosionsDefault = game.numberSmallExplosionsDefault;
-//        numberMediumExplosionsDefault = game.numberMediumExplosionsDefault;
+        left = x;
+        top = y;
+        right = x + width;
+        bottom = y + height;
+    }
+
+    public Sprite(int w, int h) {
+        width = w;
+        height = h;
+        halfWidth = width / 2;
+        halfHeight = height / 2;
 
         left = x;
         top = y;

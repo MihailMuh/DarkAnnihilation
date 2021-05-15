@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 public class FightBg extends Sprite {
     private Bitmap img;
 
-    public FightBg(Game g) {
-        super(g, ImageHub.playerVsBoss.getWidth(), ImageHub.playerVsBoss.getHeight());
+    public FightBg() {
+        super(ImageHub.playerVsBoss.getWidth(), ImageHub.playerVsBoss.getHeight());
 
         x = 0;
         y = Game.halfScreenHeight;

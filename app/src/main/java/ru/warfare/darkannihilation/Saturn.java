@@ -32,7 +32,7 @@ public class Saturn extends BaseCharacter {
                 lastShoot = now;
                 AudioPlayer.playShoot();
                 for (int i = 0; i < randInt(1, 6); i++) {
-                    BulletSaturn bulletSaturn = new BulletSaturn(game, x + halfWidth, y);
+                    BulletSaturn bulletSaturn = new BulletSaturn(x + halfWidth, y);
                     Game.bullets.add(bulletSaturn);
                     Game.allSprites.add(bulletSaturn);
                 }

@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 public class ExplosionTriple extends BaseExplosion {
     private long lastShoot;
 
-    public ExplosionTriple(Game g, String size) {
-        super(g, ImageHub.explosionTripleImageSmall[0].getWidth(), ImageHub.explosionTripleImageSmall[0].getHeight());
+    public ExplosionTriple(String size) {
+        super(ImageHub.explosionTripleImageSmall[0].getWidth(), ImageHub.explosionTripleImageSmall[0].getHeight());
         lock = true;
         img = new Bitmap[ImageHub.explosionTripleImageSmall.length];
 

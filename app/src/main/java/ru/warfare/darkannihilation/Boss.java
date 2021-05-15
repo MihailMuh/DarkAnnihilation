@@ -25,9 +25,9 @@ public class Boss extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
-            Game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 1));
-            Game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 2));
-            Game.allSprites.add(new BulletBoss(game, x + width - 65, y + 20, 3));
+            Game.allSprites.add(new BulletBoss(x + width - 65, y + 20, 1));
+            Game.allSprites.add(new BulletBoss(x + width - 65, y + 20, 2));
+            Game.allSprites.add(new BulletBoss(x + width - 65, y + 20, 3));
             AudioPlayer.playShoot();
         }
     }
@@ -35,7 +35,7 @@ public class Boss extends Sprite {
     public void killAfterFight() {
         createSkullExplosion();
         AudioPlayer.playMegaBoom();
-        game.score += 150;
+        Game.score += 150;
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
         switch (Game.level)
@@ -43,19 +43,19 @@ public class Boss extends Sprite {
             case 1:
                 for (int i = 0; i < Game.numberVaders; i++) {
                     if (Game.random.nextFloat() <= 0.1) {
-                        Game.allSprites.add(new TripleFighter(game));
+                        Game.allSprites.add(new TripleFighter());
                     }
                 }
                 break;
             case 2:
                 for (int i = 0; i < Game.numberVaders; i++) {
-                    if (Game.random.nextFloat() <= 0.1) {
+                    if (Game.random.nextFloat() <= 0.3) {
                         Game.allSprites.add(new XWing(game));
                     }
                 }
                 break;
         }
-        Service.pauseBossMusic();
+        AudioPlayer.pauseBossMusic();
         if (game.portal.lock) {
             game.portal.start();
         }
@@ -86,8 +86,8 @@ public class Boss extends Sprite {
         y += speedY;
 
         if (y == -400) {
-            Service.restartBossMusic();
-            Service.pauseBackgroundMusic();
+            AudioPlayer.restartBossMusic();
+            AudioPlayer.pauseBackgroundMusic();
             Game.gameStatus = 5;
         }
         if (y >= 50) {

@@ -11,11 +11,6 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -42,7 +37,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint alphaPaint = new Paint();
 
     public static final Random random = new Random();
-    public static final StringBuilder scoreBuilder = new StringBuilder();
     private static final StringBuilder textBuilder = new StringBuilder();
 
     public static final BaseExplosion[] allExplosions = new BaseExplosion[73];
@@ -85,8 +79,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static int level = 1;
     public static int gameStatus;
     private int count = 0;
-    public int score = 0;
-    public int lastMax = 0;
+    public static int score = 0;
+    public int bestScore = 0;
     private int pointerCount = 0;
     private int moveAll = 0;
     private boolean playing = false;
@@ -113,14 +107,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         ImageHub.init(context);
         AudioPlayer.init(context);
 
-        if (MainActivity.firstRun) {
-            try {
+        try {
+            Thread.sleep(1000);
+            if (MainActivity.firstRun) {
                 Thread.sleep(4000);
-                Service.print("Wait...");
-            } catch (InterruptedException e) {
-                Service.print(e.toString());
+                Service.print("Wait on first run...");
             }
+        } catch (InterruptedException e) {
+            Service.print(e.toString());
         }
+
+        getMaxScore();
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -138,45 +135,45 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         blackPaint.setAlpha(0);
 
         for (int i = 0; i < numberVaders * 2; i++) {
-            allSprites.add(new Vader(this));
+            allSprites.add(new Vader());
         }
         buttonStart = new Button(this, "Start", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 70 * resizeK), "start");
         buttonQuit = new Button(this, "Quit", (int) (buttonStart.x - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
         buttonMenu = new Button(this, "Top score", (int) (buttonStart.x + 300 * resizeK), (int) (screenHeight - 70 * resizeK), "top");
         buttonRestart = new Button(this, "Restart", screenWidth, 0, "restart");
-        buttonPlayer = new ButtonPlayer(this);
+        buttonPlayer = new ButtonPlayer();
         buttonSaturn = new ButtonSaturn(this);
         pauseButton = new PauseButton(this);
         player = new MillenniumFalcon(this);
-        fightBg = new FightBg(this);
+        fightBg = new FightBg();
         healthKit = new HealthKit(this);
         shotgunKit = new ShotgunKit(this);
         changerGuns = new ChangerGuns(this);
-        rocket = new Rocket(this);
+        rocket = new Rocket();
         attention = new Attention(this);
-        factory = new Factory(this);
-        demoman = new Demoman(this);
+        factory = new Factory();
+        demoman = new Demoman();
         portal = new Portal(this);
-        spider = new Spider(this);
-        sunrise = new Sunrise(this);
+        spider = new Spider();
+        sunrise = new Sunrise();
         hardWorker = new HardWorker(this);
-        screen = new StarScreen(this);
+        screen = new StarScreen();
         loadingScreen = new LoadingScreen(this);
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             if (i < numberMediumExplosionsTriple) {
-                allExplosions[i] = new ExplosionTriple(this, "default");
+                allExplosions[i] = new ExplosionTriple("default");
             } else {
                 if (i < numberSmallExplosionsTriple) {
-                    allExplosions[i] = new ExplosionTriple(this, "small");
+                    allExplosions[i] = new ExplosionTriple("small");
                 } else {
                     if (i < numberMediumExplosionsDefault) {
-                        allExplosions[i] = new DefaultExplosion(this, "default");
+                        allExplosions[i] = new DefaultExplosion("default");
                     } else {
                         if (i < numberSmallExplosionsDefault) {
-                            allExplosions[i] = new DefaultExplosion(this, "small");
+                            allExplosions[i] = new DefaultExplosion("small");
                         } else {
-                            allExplosions[i] = new ExplosionSkull(this);
+                            allExplosions[i] = new ExplosionSkull();
                         }
                     }
                 }
@@ -339,15 +336,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();
                 switch (gameStatus) {
-                    case 2:
-                        ready();
-                        break;
                     case 6:
                     case 0:
                         gameplay();
                         break;
                     case 1:
                         preview();
+                        break;
+                    case 2:
+                        ready();
                         break;
                     case 3:
                         gameover();
@@ -393,21 +390,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 1:
                         buttonSaturn.setCoords(clickX, clickY);
                         buttonPlayer.setCoords(clickX, clickY);
-
                         buttonStart.setCoords(clickX, clickY);
                         buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
                         break;
                     case 4:
                         buttonRestart.setCoords(clickX, clickY);
-
                         buttonStart.setCoords(clickX, clickY);
                         buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
                         break;
                     case 8:
-                        buttonStart.setCoords(clickX, clickY);
-                        buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
                         break;
                 }
@@ -464,10 +457,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (gameStatus == 7) {
             AudioPlayer.winMusic.pause();
         }
-        Service.pauseMenuMusic();
-        Service.pauseBossMusic();
-        Service.pauseBackgroundMusic();
-        Service.pausePauseMusic();
+        AudioPlayer.pauseMenuMusic();
+        AudioPlayer.pauseBossMusic();
+        AudioPlayer.pauseBackgroundMusic();
+        AudioPlayer.pausePauseMusic();
         playing = false;
         try {
             thread.join();
@@ -478,7 +471,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void onResume() {
         hardWorker.workOnResume();
-        checkMaxScore();
         if (gameStatus == 7) {
             AudioPlayer.winMusic.start();
         } else {
@@ -488,7 +480,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 0:
                     case 2:
                     case 3:
-                        Service.resumeBackgroundMusic();
+                        AudioPlayer.resumeBackgroundMusic();
                         break;
                     case 1:
                         AudioPlayer.menuMusic.start();
@@ -498,7 +490,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         break;
                 }
             } else {
-                Service.resumeBossMusic();
+                AudioPlayer.resumeBossMusic();
             }
         }
         playing = true;
@@ -509,7 +501,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generateTopScore() {
         buttonPlayer.hide();
         buttonSaturn.hide();
-        score = 0;
         buttonMenu.newFunc("Back", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "menu");
         gameStatus = 8;
     }
@@ -517,18 +508,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generateGameover() {
         gameStatus = 42;
         level = 1;
-        if (score > lastMax) {
-            scoreBuilder.append(" ").append(score);
-        }
+        saveScore();
+        getMaxScore();
         AudioPlayer.gameoverSnd.start();
         gameStatus = 3;
     }
 
     public void generatePause() {
         hardWorker.workOnPause();
-        Service.pauseBackgroundMusic();
-        Service.restartPauseMusic();
-        Service.pauseReadySound();
+        AudioPlayer.pauseBackgroundMusic();
+        AudioPlayer.restartPauseMusic();
+        AudioPlayer.pauseReadySound();
         if (portal.touch) {
             AudioPlayer.timeMachineSnd.pause();
         }
@@ -549,18 +539,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             AudioPlayer.winMusic.pause();
         }
 
-        Service.pauseReadySound();
-        Service.pauseFlightMusic();
-        Service.restartMenuMusic();
-        Service.pausePauseMusic();
-        Service.pauseBackgroundMusic();
-        Service.pauseBossMusic();
+        AudioPlayer.pauseReadySound();
+        AudioPlayer.pauseFlightMusic();
+        AudioPlayer.restartMenuMusic();
+        AudioPlayer.pausePauseMusic();
+        AudioPlayer.pauseBackgroundMusic();
+        AudioPlayer.pauseBossMusic();
 
-        if (score > lastMax) {
-            scoreBuilder.append(" ").append(score);
-            saveScore();
-        }
-        checkMaxScore();
+        getMaxScore();
         count = 0;
         score = 0;
         level = 1;
@@ -569,12 +555,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         bullets = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
 
-        screen = new StarScreen(this);
+        screen = new StarScreen();
         player = new MillenniumFalcon(this);
         shotgunKit.picked = false;
 
         for (int i = 0; i < numberVaders * 2; i++) {
-            allSprites.add(new Vader(this));
+            allSprites.add(new Vader());
         }
 
         buttonStart.newFunc("Start", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 70 * resizeK), "start");
@@ -589,12 +575,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateNewGame() {
-        Service.pauseReadySound();
-        Service.pauseBossMusic();
-        Service.pausePauseMusic();
+        AudioPlayer.pauseReadySound();
+        AudioPlayer.pauseBossMusic();
+        AudioPlayer.pausePauseMusic();
 
-        saveScore();
-        checkMaxScore();
         hardWorker.workOnPause();
         hardWorker.workOnResume();
         count = 0;
@@ -627,7 +611,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             allSprites.add(allExplosions[i]);
         }
 
-        Service.restartReadySound();
+        AudioPlayer.restartReadySound();
 
         switch (level)
         {
@@ -635,7 +619,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 score = 0;
 
                 shotgunKit.picked = false;
-                screen = new StarScreen(this);
+                screen = new StarScreen();
                 alphaPaint.setAlpha(255);
 
                 allSprites.add(demoman);
@@ -644,16 +628,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 allSprites.add(attention);
 
                 gameStatus = 2;
-                allSprites.add(new TripleFighter(this));
+                allSprites.add(new TripleFighter());
                 for (int i = 0; i < numberVaders; i++) {
                     if (random.nextFloat() <= 0.15) {
-                        allSprites.add(new TripleFighter(this));
+                        allSprites.add(new TripleFighter());
                     }
-                    allSprites.add(new Vader(this));
+                    allSprites.add(new Vader());
                 }
                 break;
             case 2:
-                screen = new ThunderScreen(this);
+                screen = new ThunderScreen();
                 alphaPaint.setAlpha(165);
 
                 gameStatus = 2;
@@ -661,7 +645,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (random.nextFloat() <= 0.2) {
                         allSprites.add(new XWing(this));
                     }
-                    allSprites.add(new Vader(this));
+                    allSprites.add(new Vader());
                 }
 
                 allSprites.add(spider);
@@ -670,7 +654,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         changerGuns.hide();
 
-        Service.restartBackgroundMusic();
+        AudioPlayer.restartBackgroundMusic();
     }
 
     public void renderSprites() {
@@ -703,7 +687,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void renderMaxScore() {
-        textBuilder.append("Max score: ").append(lastMax);
+        textBuilder.append("Max score: ").append(bestScore);
         canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
 
         textBuilder.setLength(0);
@@ -728,7 +712,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         renderFPS();
         renderCurrentScore();
 
-        textBuilder.append("Max score: ").append(lastMax);
+        textBuilder.append("Max score: ").append(bestScore);
         canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
 
         textBuilder.setLength(0);
@@ -809,7 +793,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
 
         renderFPS();
-        renderMaxScore();
+        renderCurrentScore();
+
+        textBuilder.append("Max score: ").append(bestScore);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
+
+        textBuilder.setLength(0);
 
         buttonStart.render();
         buttonQuit.render();
@@ -915,9 +904,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
             buttonMenu.render();
 
-            for (int i = 0; i < MainActivity.json.length(); i++) {
-                String str = (i + 1) + ") " + MainActivity.names.get(i) + " - " + MainActivity.json.get(MainActivity.names.get(i).toString());
-                if (MainActivity.nickname.equals(MainActivity.names.get(i))) {
+            for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
+                String str = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
+                        " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
+                if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
                     canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaintRed);
                 } else {
                     canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaint);
@@ -941,56 +931,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void saveScore() {
-        if (scoreBuilder.length() > 0) {
-            try {
-                if (score > lastMax) {
-                    MainActivity.postScore(Service.generateJSONString(MainActivity.nickname, score));
-                }
-
-                FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
-                OutputStreamWriter writer_str = new OutputStreamWriter(writer);
-
-                writer_str.write(scoreBuilder.toString());
-                writer_str.close();
-            } catch (Exception e) {
-                Service.print("Can't save SCORE " + e);
-            }
+        if (score > bestScore) {
+            Clerk.saveBestScore(score);
         }
     }
 
-    public void checkMaxScore() {
-        try {
-            InputStreamReader reader_cooler = new InputStreamReader(context.getApplicationContext().openFileInput("SCORE.txt"));
-            BufferedReader reader_buffer = new BufferedReader(reader_cooler);
-            String line;
-            StringBuilder builder = new StringBuilder();
-
-            while ((line = reader_buffer.readLine()) != null) {
-                builder.append(line);
-            }
-            String[] scoreList = builder.toString().split(" ");
-            for (int i = 1; i < scoreList.length; i++) {
-                int j = Integer.parseInt(scoreList[i]);
-                if (j > lastMax) {
-                    lastMax = j;
-                }
-            }
-
-            reader_cooler.close();
-        } catch (IOException e) {
-            Service.print("Can't recovery SCORE: " + e);
-            Service.print("Creating new file...");
-            try {
-                FileOutputStream writer = context.getApplicationContext().openFileOutput("SCORE.txt", Context.MODE_PRIVATE);
-                OutputStreamWriter writer_str = new OutputStreamWriter(writer);
-
-                writer_str.write("");
-                writer_str.close();
-                Service.print("Successful");
-            } catch (IOException e2) {
-                Service.print("Err: " + e2);
-            }
-        }
+    public void getMaxScore() {
+        bestScore = Clerk.getMaxScore();
     }
 
     public void onLoading() {

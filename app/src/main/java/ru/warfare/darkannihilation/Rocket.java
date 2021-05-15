@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class Rocket extends Sprite{
-    public Rocket(Game g) {
-        super(g, ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
+    public Rocket() {
+        super(ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
         speedY = 35;
         lock = true;
         damage = 100;

@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class Heart extends Sprite {
-    public Heart(Game g, int X, int Y) {
-        super(g, 0, 0);
+    public Heart(int X, int Y) {
+        super(0, 0);
         x = X;
         y = Y;
     }

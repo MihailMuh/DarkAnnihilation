@@ -8,8 +8,8 @@ public class Portal extends Sprite {
     public boolean touch = false;
     private float alpha = 0;
 
-    public Portal(Game g) {
-        super(g, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
+    public Portal(Game game) {
+        super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
 
         x = Game.halfScreenWidth - halfWidth;
         y = 100;
@@ -51,7 +51,7 @@ public class Portal extends Sprite {
             AudioPlayer.portalSound.pause();
             AudioPlayer.winMusic.seekTo(0);
             AudioPlayer.winMusic.start();
-            game.winScreen = new WinScreen(game);
+            game.winScreen = new WinScreen();
             hide();
         } else {
             touch = true;
@@ -77,7 +77,7 @@ public class Portal extends Sprite {
                     if (Game.gameStatus != 7) {
                         Game.gameStatus = 0;
                         hide();
-                        Service.resumeBackgroundMusic();
+                        AudioPlayer.resumeBackgroundMusic();
                     }
                 }
             }

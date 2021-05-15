@@ -170,4 +170,136 @@ public final class AudioPlayer {
     public static void playBossShoot() {
         soundPool.play(bossShootSnd, 1f, 1f, 1, 0, 1);
     }
+
+
+    public static void resumeBackgroundMusic() {
+        switch (Game.level)
+        {
+            case 1:
+                pirateMusic.start();
+                break;
+            case 2:
+                forgottenMusic.start();
+                break;
+        }
+    }
+
+    public static void pauseBackgroundMusic() {
+        if (pirateMusic.isPlaying()) {
+            pirateMusic.pause();
+        }
+        if (forgottenMusic.isPlaying()) {
+            forgottenMusic.pause();
+        }
+    }
+
+    public static void restartBackgroundMusic() {
+        switch (Game.level)
+        {
+            case 1:
+                if (pirateMusic.isPlaying()) {
+                    pirateMusic.pause();
+                }
+                pirateMusic.seekTo(0);
+                pirateMusic.start();
+                break;
+            case 2:
+                if (AudioPlayer.forgottenMusic.isPlaying()) {
+                    AudioPlayer.forgottenMusic.pause();
+                }
+                AudioPlayer.forgottenMusic.seekTo(0);
+                AudioPlayer.forgottenMusic.start();
+                break;
+        }
+    }
+
+    public static void restartBossMusic() {
+        switch (Game.level)
+        {
+            case 1:
+                if (bossMusic.isPlaying()) {
+                    bossMusic.pause();
+                }
+                bossMusic.seekTo(0);
+                bossMusic.start();
+                break;
+            case 2:
+                if (forgottenBossMusic.isPlaying()) {
+                    forgottenBossMusic.pause();
+                }
+                forgottenBossMusic.seekTo(0);
+                forgottenBossMusic.start();
+                break;
+        }
+    }
+
+    public static void pauseBossMusic() {
+        if (bossMusic.isPlaying()) {
+            bossMusic.pause();
+        }
+        if (forgottenBossMusic.isPlaying()) {
+            forgottenBossMusic.pause();
+        }
+    }
+
+    public static void resumeBossMusic() {
+        switch (Game.level)
+        {
+            case 1:
+                bossMusic.start();
+                break;
+            case 2:
+                forgottenBossMusic.start();
+                break;
+        }
+    }
+
+    public static void pausePauseMusic() {
+        if (pauseMusic.isPlaying()) {
+            pauseMusic.pause();
+        }
+    }
+
+    public static void restartPauseMusic() {
+        pausePauseMusic();
+        pauseMusic.seekTo(0);
+        pauseMusic.start();
+    }
+
+    public static void pauseMenuMusic() {
+        if (menuMusic.isPlaying()) {
+            menuMusic.pause();
+        }
+    }
+
+    public static void restartMenuMusic() {
+        if (!menuMusic.isPlaying()) {
+            menuMusic.seekTo(0);
+            menuMusic.start();
+        }
+    }
+
+    public static void pauseFlightMusic() {
+        if (flightSnd.isPlaying()) {
+            flightSnd.pause();
+        }
+    }
+
+    public static void restartFlightMusic() {
+        pauseFlightMusic();
+        flightSnd.seekTo(0);
+        flightSnd.start();
+    }
+
+    public static void pauseReadySound() {
+        if (readySnd.isPlaying()) {
+            readySnd.pause();
+        }
+    }
+
+    public static void restartReadySound() {
+        pauseReadySound();
+        readySnd.seekTo(0);
+        readySnd.start();
+    }
 }

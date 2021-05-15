@@ -9,6 +9,14 @@ public class ChangerGuns extends Sprite {
 
     public ChangerGuns(Game g) {
         super(g, ImageHub.gunToNone.getWidth(), ImageHub.gunToNone.getHeight());
+        hide();
+        lastClick = System.currentTimeMillis();
+    }
+
+    public void hide() {
+        x = Game.screenWidth;
+        lock = true;
+
         if (!game.shotgunKit.picked) {
             image = ImageHub.gunToNone;
         } else {
@@ -20,15 +28,6 @@ public class ChangerGuns extends Sprite {
                 image = ImageHub.shotgunToGun;
             }
         }
-
-        hide();
-        lastClick = System.currentTimeMillis();
-    }
-
-    public void hide() {
-        x = Game.screenWidth;
-        lock = true;
-        make();
     }
 
     public void start() {

@@ -6,8 +6,8 @@ import android.graphics.Matrix;
 public class BulletEnemy extends Sprite {
     private final Bitmap img;
 
-    public BulletEnemy(Game g, int X, int Y, int angle, int spdx, int spdy) {
-        super(g, ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
+    public BulletEnemy(int X, int Y, int angle, int spdx, int spdy) {
+        super(ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
         damage = 5;
         status = "bulletEnemy";
         isBullet = true;

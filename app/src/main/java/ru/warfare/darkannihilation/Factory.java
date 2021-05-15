@@ -5,8 +5,8 @@ public class Factory extends Sprite {
     private long lastSpawn;
     private final float maxHealth;
 
-    public Factory(Game g) {
-        super(g, ImageHub.factoryImg.getWidth(), ImageHub.factoryImg.getHeight());
+    public Factory() {
+        super(ImageHub.factoryImg.getWidth(), ImageHub.factoryImg.getHeight());
 
         health = 200;
         speedY = 3;
@@ -32,8 +32,8 @@ public class Factory extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
-            Game.allSprites.add(new Minion(game, x));
-            Game.allSprites.add(new Minion(game, x));
+            Game.allSprites.add(new Minion(x));
+            Game.allSprites.add(new Minion(x));
         }
     }
 
@@ -45,7 +45,7 @@ public class Factory extends Sprite {
     @Override
     public void intersection() {
         AudioPlayer.playMegaBoom();
-        game.score += 75;
+        Game.score += 75;
         createSkullExplosion();
         hide();
     }

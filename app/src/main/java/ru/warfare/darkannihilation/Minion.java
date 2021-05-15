@@ -4,8 +4,8 @@ public class Minion extends Sprite {
     private static final int shootMinionTime = 900;
     private long lastShoot;
 
-    public Minion(Game g, int FX) {
-        super(g, ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
+    public Minion(int FX) {
+        super(ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
         health = 2;
         damage = 5;
 

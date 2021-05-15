@@ -20,7 +20,7 @@ public class ButtonSaturn extends Sprite {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioPlayer.playClick();
             Game.character = "saturn";
-            Service.pauseMenuMusic();
+            AudioPlayer.pauseMenuMusic();
             LoadingScreen.jobs = "newGame";
             Game.gameStatus = 41;
         }

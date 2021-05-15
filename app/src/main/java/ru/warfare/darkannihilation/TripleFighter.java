@@ -4,8 +4,8 @@ public class TripleFighter extends Sprite {
     private static final int shootTripleTime = 1_500;
     private long lastShoot;
 
-    public TripleFighter(Game g) {
-        super(g, ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
+    public TripleFighter() {
+        super(ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
         health = 6;
         damage = 10;
 
@@ -51,7 +51,7 @@ public class TripleFighter extends Sprite {
     public void intersection() {
         createLargeTripleExplosion();
         AudioPlayer.playBoom();
-        game.score += 5;
+        Game.score += 5;
         newStatus();
     }
 

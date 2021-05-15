@@ -34,7 +34,7 @@ public class BaseCharacter extends Sprite {
         health = maxHealth;
         int c = 370;
         for (int i = 0; i < 5; i++) {
-            hearts[i] = new Heart(game, c, 10);
+            hearts[i] = new Heart(c, 10);
             c -= 90;
         }
     }
@@ -58,9 +58,9 @@ public class BaseCharacter extends Sprite {
                 game.generateGameover();
                 createSkullExplosion();
                 AudioPlayer.playMegaBoom();
-                ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(1550,10));
+                ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(1550,30));
             } else {
-                ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(70,10));
+                ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(70,30));
             }
         }
     }

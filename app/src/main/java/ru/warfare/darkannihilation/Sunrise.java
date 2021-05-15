@@ -5,8 +5,8 @@ public class Sunrise extends Sprite {
     private boolean field;
     private boolean left = false;
 
-    public Sunrise(Game g) {
-        super(g, ImageHub.sunriseImg.getWidth(), ImageHub.sunriseImg.getHeight());
+    public Sunrise() {
+        super(ImageHub.sunriseImg.getWidth(), ImageHub.sunriseImg.getHeight());
         damage = 20;
         hide();
 
@@ -51,7 +51,7 @@ public class Sunrise extends Sprite {
     public void intersection() {
         AudioPlayer.playMegaBoom();
         createSkullExplosion();
-        game.score += 100;
+        Game.score += 100;
         hide();
     }
 

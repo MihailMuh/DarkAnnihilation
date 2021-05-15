@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 public class Vader extends Sprite {
     private Bitmap img;
 
-    public Vader(Game g) {
-        super(g, ImageHub.vaderImage[0].getWidth(), ImageHub.vaderImage[0].getHeight());
+    public Vader() {
+        super(ImageHub.vaderImage[0].getWidth(), ImageHub.vaderImage[0].getHeight());
         health = 2;
         damage = 5;
 
@@ -48,7 +48,9 @@ public class Vader extends Sprite {
     public void intersection() {
         createLargeExplosion();
         AudioPlayer.playBoom();
-        game.score += 1;
+        if (Game.gameStatus == 0) {
+            Game.score += 1;
+        }
         newStatus();
     }
 

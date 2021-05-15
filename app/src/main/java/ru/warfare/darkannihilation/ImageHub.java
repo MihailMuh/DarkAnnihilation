@@ -224,7 +224,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.minion)
-                .override(eX80, eX80)
+                .override(eX80, eX50)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -418,7 +418,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.pause_button)
-                .override(eX105, eX105)
+                .override(eX120, eX120)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {

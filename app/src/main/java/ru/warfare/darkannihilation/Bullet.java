@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class Bullet extends Sprite {
-    public Bullet(Game g, int X, int Y) {
-        super(g, ImageHub.bulletImage.getWidth(), ImageHub.bulletImage.getHeight());
+    public Bullet(int X, int Y) {
+        super(ImageHub.bulletImage.getWidth(), ImageHub.bulletImage.getHeight());
         speedY = 10;
         damage = 1;
         isPassive = true;

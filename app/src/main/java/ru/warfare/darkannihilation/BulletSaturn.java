@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class BulletSaturn extends Sprite {
-    public BulletSaturn(Game g, int X, int Y) {
-        super(g, ImageHub.bulletSaturnImg.getWidth(), ImageHub.bulletSaturnImg.getHeight());
+    public BulletSaturn(int X, int Y) {
+        super(ImageHub.bulletSaturnImg.getWidth(), ImageHub.bulletSaturnImg.getHeight());
 
         speedY = randInt(6, 13);
         speedX = randInt(-6, 6);

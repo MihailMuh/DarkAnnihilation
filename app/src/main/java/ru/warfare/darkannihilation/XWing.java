@@ -6,8 +6,8 @@ public class XWing extends Sprite {
     private int distance = 350;
     private static final Vector vector = new Vector();
 
-    public XWing(Game g) {
-        super(g, ImageHub.XWingImg.getWidth(), ImageHub.XWingImg.getHeight());
+    public XWing(Game game) {
+        super(game, ImageHub.XWingImg.getWidth(), ImageHub.XWingImg.getHeight());
         health = 5;
         damage = 10;
 
@@ -37,7 +37,7 @@ public class XWing extends Sprite {
             if (getDistance(myX - plX, myY - plY) < distance) {
                 vector.makeVector(myX, myY, plX, plY, 9);
                 AudioPlayer.playShoot();
-                Game.allSprites.add(new BulletEnemy(game, myX, myY , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
+                Game.allSprites.add(new BulletEnemy(myX, myY , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
             }
         }
     }
@@ -62,7 +62,7 @@ public class XWing extends Sprite {
     public void intersection() {
         createLargeTripleExplosion();
         AudioPlayer.playBoom();
-        game.score += 10;
+        Game.score += 10;
         newStatus();
     }
 

@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class Buckshot extends Sprite {
-    public Buckshot(Game g, int X, int Y, int speed) {
-        super(g, ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
+    public Buckshot(int X, int Y, int speed) {
+        super(ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
 
         x = X - halfWidth;
         y = Y;

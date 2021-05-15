@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class StarScreen extends BaseScreen {
-    public StarScreen(Game g) {
-        super(g, ImageHub.screenImage[0].getWidth(), ImageHub.screenImage[0].getHeight(), ImageHub.screenImage.length);
+    public StarScreen() {
+        super(ImageHub.screenImage[0].getWidth(), ImageHub.screenImage[0].getHeight(), ImageHub.screenImage.length);
     }
 
     @Override

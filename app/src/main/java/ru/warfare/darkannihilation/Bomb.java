@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class Bomb extends Sprite {
-    public Bomb(Game g, int X, int Y) {
-        super(g, ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
+    public Bomb(int X, int Y) {
+        super(ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
         speedY = 15;
         damage = 5;
         status = "bulletEnemy";

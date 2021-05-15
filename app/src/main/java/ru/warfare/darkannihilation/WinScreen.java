@@ -10,8 +10,8 @@ public class WinScreen extends Sprite {
     private long lastFrame;
     private final Paint paint = new Paint();
 
-    public WinScreen(Game g) {
-        super(g, 0, 0);
+    public WinScreen() {
+        super(0, 0);
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(100);
@@ -27,7 +27,7 @@ public class WinScreen extends Sprite {
                 frame += 1;
             }
             if (frame == 14) {
-                Service.restartFlightMusic();
+                AudioPlayer.restartFlightMusic();
             }
         }
     }

@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class Attention extends Sprite {
-    public Attention(Game g) {
-        super(g, ImageHub.attentionImg.getWidth(), ImageHub.attentionImg.getHeight());
+    public Attention(Game game) {
+        super(game, ImageHub.attentionImg.getWidth(), ImageHub.attentionImg.getHeight());
         isPassive = true;
         isBullet = true;
 

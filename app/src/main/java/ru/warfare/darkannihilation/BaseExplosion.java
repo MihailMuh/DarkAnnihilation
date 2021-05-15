@@ -6,8 +6,8 @@ public class BaseExplosion extends Sprite {
     public Bitmap[] img;
     public int frame = 0;
 
-    public BaseExplosion(Game g, int w, int h) {
-        super(g, w, h);
+    public BaseExplosion(int w, int h) {
+        super(w, h);
         isPassive = true;
         isBullet = true;
     }

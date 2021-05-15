@@ -6,8 +6,8 @@ public class Demoman extends Sprite {
 
     private int direction = 0;
 
-    public Demoman(Game g) {
-        super(g, ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
+    public Demoman() {
+        super(ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
 
         damage = 40;
 

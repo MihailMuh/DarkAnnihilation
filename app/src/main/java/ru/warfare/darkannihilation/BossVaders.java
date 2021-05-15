@@ -12,7 +12,7 @@ public class BossVaders extends Sprite {
     public BossVaders(Game g) {
         super(g, ImageHub.bossVadersImg.getWidth(), ImageHub.bossVadersImg.getHeight());
 
-        health = 250;
+        health = 350;
         maxHealth = health;
         speedY = 1;
         speedX = 5;
@@ -37,7 +37,7 @@ public class BossVaders extends Sprite {
             int Y = y + halfHeight;
             vector.makeVector(X, Y, game.player.x + game.player.halfWidth,
                     game.player.y + game.player.halfHeight, 10);
-            Game.allSprites.add(new BulletBossVaders(game, X, Y, vector.getSpeedX(), vector.getSpeedY()));
+            Game.allSprites.add(new BulletBossVaders(X, Y, vector.getSpeedX(), vector.getSpeedY()));
             AudioPlayer.playBossShoot();
         }
     }
@@ -45,7 +45,7 @@ public class BossVaders extends Sprite {
     public void killAfterFight() {
         createSkullExplosion();
         AudioPlayer.playMegaBoom();
-        game.score += 300;
+        Game.score += 300;
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
         switch (Game.level)
@@ -53,19 +53,19 @@ public class BossVaders extends Sprite {
             case 1:
                 for (int i = 0; i < Game.numberVaders; i++) {
                     if (Game.random.nextFloat() <= 0.1) {
-                        Game.allSprites.add(new TripleFighter(game));
+                        Game.allSprites.add(new TripleFighter());
                     }
                 }
                 break;
             case 2:
                 for (int i = 0; i < Game.numberVaders; i++) {
-                    if (Game.random.nextFloat() <= 0.1) {
+                    if (Game.random.nextFloat() <= 0.3) {
                         Game.allSprites.add(new XWing(game));
                     }
                 }
                 break;
         }
-        Service.pauseBossMusic();
+        AudioPlayer.pauseBossMusic();
         if (game.portal.lock) {
             game.portal.start();
         }
@@ -93,8 +93,8 @@ public class BossVaders extends Sprite {
     public void update() {
         game.pauseTimer += 20;
         if (y == -400) {
-            Service.restartBossMusic();
-            Service.pauseBackgroundMusic();
+            AudioPlayer.restartBossMusic();
+            AudioPlayer.pauseBackgroundMusic();
             Game.gameStatus = 5;
         }
         if (y > 0 & !field) {

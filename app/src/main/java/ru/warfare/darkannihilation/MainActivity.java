@@ -17,34 +17,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Objects;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
     private Game game;
-    public static final OkHttpClient client = new OkHttpClient();
-    public static JSONObject json = new JSONObject();
-    public static JSONArray names;
     private SharedPreferences preferences = null;
-    public static String nickname = "";
     public static boolean firstRun = true;
 
     @Override
@@ -61,14 +41,13 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
 
-
-
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
         display.getRealSize(size);
 
-        getTop();
+        ClientServer.getStatistics();
+        Clerk.init(this);
         checkOnFirstRun();
 
         game = new Game(this, size.x, size.y);
@@ -105,69 +84,6 @@ public class MainActivity extends AppCompatActivity {
         game.onResume();
     }
 
-    public static void getTop() {
-        client.newCall(new Request.Builder().url(Service.IP + "get").build()).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Service.print(e.toString());
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try {
-                    assert response.body() != null;
-                    json = new JSONObject(response.body().string());
-                    names = json.names();
-                } catch (JSONException e) {
-                    Service.print(e.toString());
-                }
-            }
-        });
-    }
-
-    public static void postScore(String string) {
-        client.newCall(new Request.Builder().url(Service.IP + "write?data=" + string).build()).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Service.print(e.toString());
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {}
-        });
-    }
-
-    public void saveNickname() {
-        try {
-            FileOutputStream writer = this.openFileOutput("NICKNAME.txt", Context.MODE_PRIVATE);
-            OutputStreamWriter writer_str = new OutputStreamWriter(writer);
-
-            writer_str.write(MainActivity.nickname);
-            writer_str.close();
-        } catch (Exception e) {
-            Service.print("Can't save NICKNAME " + e);
-        }
-    }
-
-    public void loadNickname() {
-        try {
-            InputStreamReader reader_cooler = new InputStreamReader(this.openFileInput("NICKNAME.txt"));
-            BufferedReader reader_buffer = new BufferedReader(reader_cooler);
-            String line;
-            StringBuilder builder = new StringBuilder();
-
-            while ((line = reader_buffer.readLine()) != null) {
-                builder.append(line);
-            }
-
-            reader_cooler.close();
-
-            nickname = builder.toString();
-        } catch (IOException e) {
-            Service.print("Can't recovery NICKNAME " + e);
-        }
-    }
-
     private boolean isOnline() {
         return ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
@@ -194,18 +110,19 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.setOnShowListener(dialog -> {
                     Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     button.setOnClickListener(view -> {
-                        nickname = userInput.getText().toString();
-                        if (nickname.length() == 0) {
+                        String nick = userInput.getText().toString();
+                        if (nick.length() == 0) {
                             Toast toast = Toast.makeText(this, "Nickname must be notnull!", Toast.LENGTH_LONG);
                             toast.show();
                         } else {
-                            if (json.has(nickname)) {
+                            if (ClientServer.info_from_server.has(nick)) {
                                 Toast toast = Toast.makeText(this, "This nickname already exists", Toast.LENGTH_LONG);
                                 toast.show();
                             } else {
                                 preferences.edit().putBoolean("firstrun", false).apply();
-                                saveNickname();
-                                postScore(Service.generateJSONString(nickname, 0));
+                                Clerk.nickname = nick;
+                                Clerk.saveNickname();
+                                ClientServer.postBestScore(nick, 0);
                                 Toast toast = Toast.makeText(this, "Congratulations! You have registered!", Toast.LENGTH_LONG);
                                 toast.show();
                                 dialog.dismiss();
@@ -245,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.show();
             }
         } else {
-            loadNickname();
+            Clerk.getNickname();
             firstRun = false;
         }
     }

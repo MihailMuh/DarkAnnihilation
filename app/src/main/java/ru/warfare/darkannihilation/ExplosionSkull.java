@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 public class ExplosionSkull extends BaseExplosion {
     private long lastShoot;
 
-    public ExplosionSkull(Game g) {
-        super(g, ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
+    public ExplosionSkull() {
+        super(ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
         lock = true;
         img = new Bitmap[ImageHub.explosionLarge.length];
         img = ImageHub.explosionLarge.clone();

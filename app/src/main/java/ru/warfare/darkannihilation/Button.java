@@ -33,6 +33,10 @@ public class Button extends Sprite {
         lastClick = System.currentTimeMillis();
     }
 
+    public void hide() {
+        x = -width;
+    }
+
     public void newFunc(String name, int X, int Y, String func) {
         function = func;
 
@@ -76,8 +80,8 @@ public class Button extends Sprite {
                             game.player.dontmove = true;
                             Game.lastBoss += game.pauseTimer;
                             game.hardWorker.workOnResume();
-                            Service.pausePauseMusic();
-                            Service.resumeBackgroundMusic();
+                            AudioPlayer.pausePauseMusic();
+                            AudioPlayer.resumeBackgroundMusic();
                             if (PauseButton.oldStatus == 2) {
                                 AudioPlayer.readySnd.start();
                             }
@@ -92,16 +96,19 @@ public class Button extends Sprite {
                             game.pauseTimer = 0;
                             break;
                         case "menu":
+                            game.saveScore();
                             Game.gameStatus = 41;
                             LoadingScreen.jobs = "menu";
                             break;
                         case "top":
                             LoadingScreen.jobs = "topScore";
                             Game.gameStatus = 41;
-                            MainActivity.postScore(Service.generateJSONString(MainActivity.nickname, game.lastMax));
-                            MainActivity.getTop();
+                            ClientServer.postBestScore(Clerk.nickname, game.bestScore);
+                            ClientServer.getStatistics();
                             break;
                         case "restart":
+                            game.saveScore();
+                            game.getMaxScore();
                             Game.level = 1;
                             LoadingScreen.jobs = "newGame";
                             Game.gameStatus = 41;

@@ -6,8 +6,8 @@ public class BaseScreen extends Sprite {
     public int frame = -1;
     public int screenImageLength;
 
-    public BaseScreen(Game g, int w, int h, int len) {
-        super(g, w, h);
+    public BaseScreen(int w, int h, int len) {
+        super(w, h);
 
         x = (int) (Game.screenWidth * -0.2);
 
