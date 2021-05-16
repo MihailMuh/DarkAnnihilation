@@ -46,7 +46,7 @@ public class BulletBoss extends Sprite {
         y += speedY;
         x -= speedX;
 
-        if (y > Game.screenHeight | x < -100 | x > Game.screenWidth) {
+        if (y > Game.screenHeight | x < -height | x > Game.screenWidth) {
             Game.allSprites.remove(this);
         }
     }

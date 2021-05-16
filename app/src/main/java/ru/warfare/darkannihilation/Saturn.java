@@ -10,7 +10,7 @@ public class Saturn extends BaseCharacter {
         endX = x;
         endY = y;
 
-        recreateRect(x + 25, y + 25, x + width - 25, y + height - 17);
+        recreateRect(x + 25, y + 25, right() - 25, bottom() - 17);
 
         shootTime = 130;
         shotgunTime = 40;
@@ -32,7 +32,7 @@ public class Saturn extends BaseCharacter {
                 lastShoot = now;
                 AudioPlayer.playShoot();
                 for (int i = 0; i < randInt(1, 6); i++) {
-                    BulletSaturn bulletSaturn = new BulletSaturn(x + halfWidth, y);
+                    BulletSaturn bulletSaturn = new BulletSaturn(centerX(), y);
                     Game.bullets.add(bulletSaturn);
                     Game.allSprites.add(bulletSaturn);
                 }

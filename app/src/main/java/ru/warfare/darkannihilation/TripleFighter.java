@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class TripleFighter extends Sprite {
-    private static final int shootTripleTime = 1_500;
+    private int shootTripleTime = 1_500;
     private long lastShoot;
 
     public TripleFighter() {
@@ -13,7 +13,8 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
-        recreateRect(x + 5, y + 5, x + width - 5, y + height - 5);
+
+        recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -24,8 +25,8 @@ public class TripleFighter extends Sprite {
             lastShoot = now;
 
             if (HardWorker.job == 0) {
-                HardWorker.x = x + halfWidth;
-                HardWorker.y = y + halfHeight;
+                HardWorker.x = centerX();
+                HardWorker.y = centerY();
                 HardWorker.job = 1;
             }
         }
@@ -40,6 +41,32 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
+
+        if (buff) {
+            up();
+        } else {
+            shootTripleTime = 1_500;
+        }
+    }
+
+    private void up() {
+        speedX *= 2;
+        speedY *= 2;
+        shootTripleTime /= 2;
+        health *= 2;
+    }
+
+    @Override
+    public void buff() {
+        buff = true;
+        up();
+    }
+
+    @Override
+    public void stopBuff() {
+        speedX /= 2;
+        speedY /= 2;
+        shootTripleTime = 1_500;
     }
 
     @Override
@@ -80,7 +107,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void update() {
-        if (x > 0 & x < Game.screenWidth - width & y > 0 & y < Game.screenHeight - height) {
+        if (x > 0 & x < screenWidthWidth & y > 0 & y < screenHeightHeight) {
             shoot();
         }
 

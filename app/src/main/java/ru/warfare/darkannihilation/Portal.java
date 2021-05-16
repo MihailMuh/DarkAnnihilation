@@ -16,7 +16,7 @@ public class Portal extends Sprite {
         lock = true;
         isPassive = true;
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
 
         lastFrame = System.currentTimeMillis();
     }
@@ -47,11 +47,7 @@ public class Portal extends Sprite {
     @Override
     public void intersectionPlayer() {
         if (Game.level == 2) {
-            Game.gameStatus = 7;
-            AudioPlayer.portalSound.pause();
-            AudioPlayer.winMusic.seekTo(0);
-            AudioPlayer.winMusic.start();
-            game.winScreen = new WinScreen();
+            game.generateWin();
             hide();
         } else {
             touch = true;
@@ -90,7 +86,7 @@ public class Portal extends Sprite {
             Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
             if (touch & Game.gameStatus != 4) {
                 Game.blackPaint.setAlpha((int) alpha);
-                alpha += 0.49;
+                alpha += 0.491;
                 if (alpha >= 255) {
                     hide();
                     Game.level++;

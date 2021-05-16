@@ -16,7 +16,7 @@ public class Boss extends Sprite {
         x = Game.halfScreenWidth - halfWidth;
         y = -600;
 
-        recreateRect(x + 20, y + 20, x + width - 20, y + height - 20);
+        recreateRect(x + 20, y + 20, right() - 20, bottom() - 20);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -25,9 +25,11 @@ public class Boss extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
-            Game.allSprites.add(new BulletBoss(x + width - 65, y + 20, 1));
-            Game.allSprites.add(new BulletBoss(x + width - 65, y + 20, 2));
-            Game.allSprites.add(new BulletBoss(x + width - 65, y + 20, 3));
+            int r = right() - 65;
+            int y20 = y + 20;
+            Game.allSprites.add(new BulletBoss(r, y20, 1));
+            Game.allSprites.add(new BulletBoss(r, y20, 2));
+            Game.allSprites.add(new BulletBoss(r, y20, 3));
             AudioPlayer.playShoot();
         }
     }
@@ -108,7 +110,7 @@ public class Boss extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(ImageHub.bossImage, x, y, null);
 
-        Game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, Game.scorePaint);
-        Game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 70, y - 10, centerX() + 70, y + 5, Game.scorePaint);
+        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
     }
 }

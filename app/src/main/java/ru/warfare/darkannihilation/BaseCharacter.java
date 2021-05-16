@@ -25,22 +25,21 @@ public class BaseCharacter extends Sprite {
     public void shoot() {}
     public void checkIntersections(Sprite sprite) {}
 
-    public void baseSetting() {
+    public void PLAYER() {
         god = false;
         ai = false;
+        if (Game.level == 1 | !game.shotgunKit.picked) {
+            gun = "gun";
+        }
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
         lock = true;
         health = maxHealth;
         int c = 370;
         for (int i = 0; i < 5; i++) {
-            hearts[i] = new Heart(c, 10);
+            hearts[i] = new Heart(c);
             c -= 90;
         }
-    }
-
-    public void PLAYER() {
-        baseSetting();
     }
 
     public void heal() {

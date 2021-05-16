@@ -14,7 +14,7 @@ public class Minion extends Sprite {
         speedX = randInt(-8, 8);
         speedY = randInt(2, 5);
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -24,8 +24,8 @@ public class Minion extends Sprite {
         if (now - lastShoot > shootMinionTime) {
             lastShoot = now;
             if (HardWorker.job == 0) {
-                HardWorker.x = x + halfWidth;
-                HardWorker.y = y + halfHeight;
+                HardWorker.x = centerX();
+                HardWorker.y = centerY();
                 HardWorker.job = 1;
             }
         }

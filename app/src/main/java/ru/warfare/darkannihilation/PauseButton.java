@@ -4,14 +4,14 @@ public class PauseButton extends Sprite {
     public static int oldStatus;
 
     public PauseButton(Game g) {
-        super(g, ImageHub.pauseButtonImg.getWidth(), 0);
+        super(g, ImageHub.pauseButtonImg.getWidth(), ImageHub.pauseButtonImg.getHeight());
 
         y = 20;
-        x = Game.screenWidth - width * 2;
+        show();
     }
 
     public void show() {
-        x = Game.screenWidth - width * 2;
+        x = Game.screenWidth - (width * 2);
     }
 
     public void make() {
@@ -21,7 +21,7 @@ public class PauseButton extends Sprite {
     }
 
     public boolean checkCoords(int X, int Y) {
-        return (x < X & X < x + width & y < Y & Y < y + width);
+        return (x < X & X < right() & y < Y & Y < bottom());
     }
 
     @Override

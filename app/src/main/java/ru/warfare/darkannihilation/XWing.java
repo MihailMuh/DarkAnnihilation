@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class XWing extends Sprite {
-    private static final int shootTripleTime = 200;
+    private static final int shootTripleTime = 180;
     private long lastShoot;
     private int distance = 350;
     private static final Vector vector = new Vector();
@@ -16,7 +16,7 @@ public class XWing extends Sprite {
         speedX = randInt(-3, 3);
         speedY = randInt(1, 8);
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
 
         if (Game.character.equals("saturn")) {
             distance = 600;
@@ -25,19 +25,19 @@ public class XWing extends Sprite {
         lastShoot = System.currentTimeMillis();
     }
 
-    public void shoot() {
+    private void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
 
-            int myX = x + halfWidth;
-            int myY = y + halfHeight;
-            int plX = game.player.x + game.player.halfWidth;
-            int plY = game.player.y + game.player.halfHeight;
+            int myX = centerX();
+            int myY = centerY();
+            int plX = game.player.centerX();
+            int plY = game.player.centerY();
             if (getDistance(myX - plX, myY - plY) < distance) {
                 vector.makeVector(myX, myY, plX, plY, 9);
                 AudioPlayer.playShoot();
-                Game.allSprites.add(new BulletEnemy(myX, myY , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
+                Game.allSprites.add(new BulletEnemy(myX, myY, vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
             }
         }
     }
@@ -48,9 +48,30 @@ public class XWing extends Sprite {
         }
         health = 5;
         x = randInt(0, Game.screenWidth);
-        y = -height;
+        y = -height - 50;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 8);
+
+        if (buff) {
+            up();
+        }
+    }
+
+    private void up() {
+        speedX *= 2;
+        speedY *= 2;
+    }
+
+    @Override
+    public void buff() {
+        buff = true;
+        up();
+    }
+
+    @Override
+    public void stopBuff() {
+        speedX /= 2;
+        speedY /= 2;
     }
 
     @Override
@@ -91,7 +112,7 @@ public class XWing extends Sprite {
 
     @Override
     public void update() {
-        if (x > 0 & x < Game.screenWidth - width & y > 0 & y < Game.screenHeight - height) {
+        if (x > 0 & x < screenWidthWidth & y > 0 & y < screenHeightHeight) {
             shoot();
         }
 

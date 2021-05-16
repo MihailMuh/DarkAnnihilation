@@ -13,7 +13,7 @@ public class ButtonPlayer extends Sprite {
     }
 
     public void show() {
-        x = Game.halfScreenWidth - width * 2;
+        x = Game.halfScreenWidth - (width * 2);
     }
 
     public void setCoords(int X, int Y) {

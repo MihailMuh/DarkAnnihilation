@@ -13,7 +13,7 @@ public class Demoman extends Sprite {
 
         hide();
 
-        recreateRect(x + 30, y + 25, x + width - 20, y + height - 50);
+        recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -21,7 +21,7 @@ public class Demoman extends Sprite {
     public void hide() {
         lock = true;
         health = 20;
-        y = randInt(0, Game.halfScreenHeight - health);
+        y = randInt(0, Game.halfScreenHeight - height);
         direction = randInt(0, 1);
         if (direction == 0) {
             x = -width;
@@ -50,7 +50,7 @@ public class Demoman extends Sprite {
     @Override
     public void intersection() {
         intersectionPlayer();
-        game.score += 35;
+        Game.score += 35;
     }
 
     @Override

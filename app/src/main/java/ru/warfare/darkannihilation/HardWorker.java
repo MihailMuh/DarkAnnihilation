@@ -10,8 +10,8 @@ public class HardWorker implements Runnable {
     public static volatile int job = 0;
     public static final Vector vector = new Vector();
 
-    public static int x = 0;
-    public static int y = 0;
+    public static volatile int x = 0;
+    public static volatile int y = 0;
     private final Game game;
 
     public HardWorker(Game g) {
@@ -24,14 +24,13 @@ public class HardWorker implements Runnable {
             switch (job)
             {
                 case 1:
-                    vector.makeVector(x, y, game.player.x + game.player.halfWidth,
-                            game.player.y + game.player.halfHeight, 13);
+                    vector.makeVector(x, y, game.player.centerX(), game.player.centerY(), 13);
                     AudioPlayer.playShotgun();
                     Game.allSprites.add(new BulletEnemy(x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                     job = 0;
                     break;
                 case 2:
-                    BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, game.player.x + game.player.halfWidth, game.player.y);
+                    BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, game.player.centerX(), game.player.y);
                     Game.bullets.add(buckshotSaturn);
                     Game.allSprites.add(buckshotSaturn);
                     job = 0;
@@ -61,7 +60,7 @@ public class HardWorker implements Runnable {
                     job = 0;
                     break;
                 case 4:
-                    Game.allSprites.add(new Bomb(game.demoman.x + game.demoman.halfWidth, game.demoman.y + game.demoman.halfHeight));
+                    Game.allSprites.add(new Bomb(game.demoman.centerX(), game.demoman.centerY()));
                     job = 0;
                     break;
                 default:

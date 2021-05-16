@@ -24,7 +24,7 @@ public class Attention extends Sprite {
     @Override
     public void update() {
         if (!AudioPlayer.attentionSnd.isPlaying()) {
-            game.rocket.start(x + halfWidth);
+            game.rocket.start(centerX());
             hide();
         }
     }

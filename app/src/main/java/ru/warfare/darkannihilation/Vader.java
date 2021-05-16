@@ -25,7 +25,7 @@ public class Vader extends Sprite {
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
     public void newStatus() {
@@ -34,9 +34,30 @@ public class Vader extends Sprite {
         }
         health = 2;
         x = randInt(0, Game.screenWidth);
-        y = -150;
+        y = -height;
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
+
+        if (buff) {
+            up();
+        }
+    }
+
+    private void up() {
+        speedX *= 2;
+        speedY *= 2;
+    }
+
+    @Override
+    public void buff() {
+        buff = true;
+        up();
+    }
+
+    @Override
+    public void stopBuff() {
+        speedX /= 2;
+        speedY /= 2;
     }
 
     @Override

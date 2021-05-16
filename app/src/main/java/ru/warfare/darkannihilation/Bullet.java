@@ -23,7 +23,7 @@ public class Bullet extends Sprite {
     public void update() {
         y -= speedY;
 
-        if (y < -50) {
+        if (y < -height) {
             Game.bullets.remove(this);
             Game.allSprites.remove(this);
         }

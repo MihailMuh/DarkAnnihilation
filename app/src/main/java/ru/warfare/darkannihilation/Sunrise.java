@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class Sunrise extends Sprite {
+    private int shootTime = 500;
     private long lastShoot;
     private boolean field;
     private boolean left = false;
@@ -10,19 +11,19 @@ public class Sunrise extends Sprite {
         damage = 20;
         hide();
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
 
         lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > 500) {
+        if (now - lastShoot > shootTime) {
             lastShoot = now;
 
             if (HardWorker.job == 0) {
-                HardWorker.x = x + halfWidth;
-                HardWorker.y = y + halfHeight;
+                HardWorker.x = centerX();
+                HardWorker.y = centerY();
                 HardWorker.job = 3;
             }
         }
@@ -32,7 +33,7 @@ public class Sunrise extends Sprite {
         field = false;
         lock = true;
         health = 55;
-        x = randInt(width, Game.screenWidth - width);
+        x = randInt(width, screenWidthWidth);
         y = -height;
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
@@ -40,6 +41,27 @@ public class Sunrise extends Sprite {
         if (randInt(0, 1) == 1) {
             left = true;
         }
+
+        if (buff) {
+            up();
+        }
+    }
+
+    private void up() {
+        speedX *= 5;
+        speedY *= 5;
+    }
+
+    @Override
+    public void buff() {
+        buff = true;
+        up();
+    }
+
+    @Override
+    public void stopBuff() {
+        speedX /= 5;
+        speedY /= 5;
     }
 
     @Override
@@ -49,10 +71,8 @@ public class Sunrise extends Sprite {
 
     @Override
     public void intersection() {
-        AudioPlayer.playMegaBoom();
-        createSkullExplosion();
+        intersectionPlayer();
         Game.score += 100;
-        hide();
     }
 
     @Override
@@ -84,10 +104,10 @@ public class Sunrise extends Sprite {
         if (x <= 0) {
             left = true;
         }
-        if (x + width >= Game.screenWidth) {
+        if (x >= screenWidthWidth) {
             left = false;
         }
-        if ((y + height >= Game.screenHeight) | (field & y <= 0)) {
+        if ((y >= screenHeightHeight) | (field & y <= 0)) {
             speedY = -speedY;
         }
         if (left) {

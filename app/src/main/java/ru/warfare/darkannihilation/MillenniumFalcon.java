@@ -12,30 +12,30 @@ public class MillenniumFalcon extends BaseCharacter {
         endX = x;
         endY = y;
 
-        recreateRect(x + 20, y + 25, x + width - 20, y + height - 20);
+        recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 
         shootTime = 110;
         shotgunTime = 535;
         lastShoot = System.currentTimeMillis();
     }
 
-    @Override
-    public void PLAYER() {
-        baseSetting();
-
-        shootTime = 110;
-        shotgunTime = 535;
-        switch (Game.level)
-        {
-            case 1:
-                gun = "gun";
-                break;
-            case 2:
-                shootTime = 55;
-                shotgunTime = 335;
-                break;
-        }
-    }
+//    @Override
+//    public void PLAYER() {
+//        baseSetting();
+//
+//        shootTime = 110;
+//        shotgunTime = 535;
+//        switch (Game.level)
+//        {
+//            case 1:
+//                gun = "gun";
+//                break;
+//            case 2:
+//                shootTime = 55;
+//                shotgunTime = 335;
+//                break;
+//        }
+//    }
 
     @Override
     public void shoot() {
@@ -44,8 +44,9 @@ public class MillenniumFalcon extends BaseCharacter {
             if (now - lastShoot > shotgunTime) {
                 lastShoot = now;
                 AudioPlayer.playShotgun();
+                int centerX = centerX();
                 for (int i = -4; i <= 4; i+=2) {
-                    Buckshot buckshot = new Buckshot(x + halfWidth, y, i);
+                    Buckshot buckshot = new Buckshot(centerX, y, i);
                     Game.bullets.add(buckshot);
                     Game.allSprites.add(buckshot);
                 }
@@ -54,11 +55,11 @@ public class MillenniumFalcon extends BaseCharacter {
             if (now - lastShoot > shootTime) {
                 lastShoot = now;
                 AudioPlayer.playShoot();
-                Bullet bullet = new Bullet(x + halfWidth - 6, y);
+                Bullet bullet = new Bullet(centerX() - 6, y);
                 Game.bullets.add(bullet);
                 Game.allSprites.add(bullet);
 
-                bullet = new Bullet(x + halfWidth, y);
+                bullet = new Bullet(centerX(), y);
                 Game.bullets.add(bullet);
                 Game.allSprites.add(bullet);
             }
@@ -90,10 +91,10 @@ public class MillenniumFalcon extends BaseCharacter {
             speedX = (endX - x) / 5;
             speedY = (endY - y) / 5;
         } else {
-            if (x < 30 | x > Game.screenWidth - height - 30) {
+            if (x < 30 | x > screenWidthWidth - 30) {
                 speedX = -speedX;
             }
-            if (y < 30 | y > Game.screenHeight - width - 30) {
+            if (y < 30 | y > screenHeightHeight - 30) {
                 speedY = -speedY;
             }
         }

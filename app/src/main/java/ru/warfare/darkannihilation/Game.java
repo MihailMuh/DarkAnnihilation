@@ -68,6 +68,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public LoadingScreen loadingScreen;
     public Spider spider;
     public Sunrise sunrise;
+    public Buffer buffer;
 
     public static final int numberVaders = 10;
     public static final int numberMediumExplosionsTriple = 20;
@@ -156,6 +157,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         portal = new Portal(this);
         spider = new Spider();
         sunrise = new Sunrise();
+        buffer = new Buffer();
         hardWorker = new HardWorker(this);
         screen = new StarScreen();
         loadingScreen = new LoadingScreen(this);
@@ -310,6 +312,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 if (sunrise.lock & random.nextFloat() >= 0.9991 & bosses.size() == 0) {
                     sunrise.lock = false;
                 }
+                if (buffer.lock & random.nextFloat() >= 0.999 & bosses.size() == 0) {
+                    buffer.lock = false;
+                }
                 break;
         }
 
@@ -378,7 +383,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public synchronized boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         pointerCount = event.getPointerCount();
         int clickX = (int) event.getX(0);
         int clickY = (int) event.getY(0);
@@ -505,6 +510,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         gameStatus = 8;
     }
 
+    public void generateWin() {
+        gameStatus = 7;
+        AudioPlayer.portalSound.pause();
+        AudioPlayer.winMusic.seekTo(0);
+        AudioPlayer.winMusic.start();
+        winScreen = new WinScreen();
+        saveScore();
+    }
+
     public void generateGameover() {
         gameStatus = 42;
         level = 1;
@@ -517,7 +531,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generatePause() {
         hardWorker.workOnPause();
         AudioPlayer.pauseBackgroundMusic();
-        AudioPlayer.restartPauseMusic();
+        if (bosses.size() == 0) {
+            AudioPlayer.restartPauseMusic();
+        }
         AudioPlayer.pauseReadySound();
         if (portal.touch) {
             AudioPlayer.timeMachineSnd.pause();
@@ -604,6 +620,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         spider.hide();
         sunrise.hide();
         player.PLAYER();
+        buffer.hide();
 
         allSprites.add(healthKit);
         for (int i = 0; i < numberExplosionsALL; i++) {
@@ -650,6 +667,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
                 allSprites.add(spider);
                 allSprites.add(sunrise);
+                allSprites.add(buffer);
                 break;
         }
         changerGuns.hide();

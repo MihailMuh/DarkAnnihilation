@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation;
 public class BossVaders extends Sprite {
     private final float maxHealth;
     private static final Vector vector = new Vector();
-    private static final int shootBossTime = 1500;
+    private int shootBossTime = 1200;
     private long lastShoot;
 
     private boolean field = false;
@@ -21,10 +21,10 @@ public class BossVaders extends Sprite {
         }
         isPassive = true;
 
-        x = randInt(width, Game.screenWidth - width - width);
+        x = randInt(width, screenWidthWidth - width);
         y = -600;
 
-        recreateRect(x + 35, y + 20, x + width - 35, y + height - 20);
+        recreateRect(x + 35, y + 20, right() - 35, bottom() - 20);
 
         lastShoot = System.currentTimeMillis();
     }
@@ -33,13 +33,27 @@ public class BossVaders extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
-            int X = x + halfWidth;
-            int Y = y + halfHeight;
-            vector.makeVector(X, Y, game.player.x + game.player.halfWidth,
-                    game.player.y + game.player.halfHeight, 10);
+            int X = centerX();
+            int Y = centerY();
+            vector.makeVector(X, Y, game.player.centerX(), game.player.centerY(), 10);
             Game.allSprites.add(new BulletBossVaders(X, Y, vector.getSpeedX(), vector.getSpeedY()));
             AudioPlayer.playBossShoot();
         }
+    }
+
+    @Override
+    public void buff() {
+        speedX *= 2;
+        speedY *= 2;
+        shootBossTime /= 2;
+        health *= 2;
+    }
+
+    @Override
+    public void stopBuff() {
+        speedX /= 2;
+        speedY /= 2;
+        shootBossTime = 1200;
     }
 
     public void killAfterFight() {
@@ -48,22 +62,10 @@ public class BossVaders extends Sprite {
         Game.score += 300;
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
-        switch (Game.level)
-        {
-            case 1:
-                for (int i = 0; i < Game.numberVaders; i++) {
-                    if (Game.random.nextFloat() <= 0.1) {
-                        Game.allSprites.add(new TripleFighter());
-                    }
-                }
-                break;
-            case 2:
-                for (int i = 0; i < Game.numberVaders; i++) {
-                    if (Game.random.nextFloat() <= 0.3) {
-                        Game.allSprites.add(new XWing(game));
-                    }
-                }
-                break;
+        for (int i = 0; i < Game.numberVaders; i++) {
+            if (Game.random.nextFloat() <= 0.3) {
+                Game.allSprites.add(new XWing(game));
+            }
         }
         AudioPlayer.pauseBossMusic();
         if (game.portal.lock) {
@@ -107,10 +109,10 @@ public class BossVaders extends Sprite {
             if (x <= 0) {
                 left = true;
             }
-            if (x + width >= Game.screenWidth) {
+            if (x >= screenWidthWidth) {
                 left = false;
             }
-            if ((y + height >= Game.screenHeight) | (y <= 0)) {
+            if ((y >= screenHeightHeight) | (y <= 0)) {
                 speedY = -speedY;
             }
 
@@ -131,7 +133,7 @@ public class BossVaders extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
 
-        Game.canvas.drawRect(x + halfWidth - 70, y - 10, x + halfWidth + 70, y + 5, Game.scorePaint);
-        Game.canvas.drawRect(x + halfWidth - 68, y - 8, x + halfWidth - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 70, y - 10, centerX() + 70, y + 5, Game.scorePaint);
+        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
     }
 }

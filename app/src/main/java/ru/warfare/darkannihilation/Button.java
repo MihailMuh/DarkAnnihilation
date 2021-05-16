@@ -17,24 +17,12 @@ public class Button extends Sprite {
     public Button(Game g, String t, int X, int Y, String func) {
         super(g, ImageHub.buttonImagePressed.getWidth(), ImageHub.buttonImagePressed.getHeight());
 
-        img = ImageHub.buttonImageNotPressed;
-
-        function = func;
-
-        x = X;
-        y = Y;
-
-        text = t;
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
-        textWidth = (int) paint.measureText(text);
-        textHeight = (int) (paint.getTextSize() / 4);
+
+        newFunc(t, X, Y, func);
 
         lastClick = System.currentTimeMillis();
-    }
-
-    public void hide() {
-        x = -width;
     }
 
     public void newFunc(String name, int X, int Y, String func) {
@@ -44,8 +32,6 @@ public class Button extends Sprite {
         y = Y;
 
         text = name;
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(35);
         textWidth = (int) paint.measureText(text);
         textHeight = (int) (paint.getTextSize() / 4);
 
@@ -53,14 +39,14 @@ public class Button extends Sprite {
     }
 
     public void setCoords(int X, int Y) {
-        if (x < X & X < x + width & y < Y & Y < y + height) {
+        if (x < X & X < right() & y < Y & Y < bottom()) {
             long now = System.currentTimeMillis();
             if (now - lastClick > clickTime) {
                 lastClick = now;
-                AudioPlayer.playClick();
-                img = ImageHub.buttonImagePressed;
 
-                Thread thread = new Thread(() -> {
+                new Thread(() -> {
+                    AudioPlayer.playClick();
+                    img = ImageHub.buttonImagePressed;
                     try {
                         Thread.sleep(90);
                         img = ImageHub.buttonImageNotPressed;
@@ -101,10 +87,10 @@ public class Button extends Sprite {
                             LoadingScreen.jobs = "menu";
                             break;
                         case "top":
-                            LoadingScreen.jobs = "topScore";
-                            Game.gameStatus = 41;
                             ClientServer.postBestScore(Clerk.nickname, game.bestScore);
                             ClientServer.getStatistics();
+                            LoadingScreen.jobs = "topScore";
+                            Game.gameStatus = 41;
                             break;
                         case "restart":
                             game.saveScore();
@@ -114,8 +100,7 @@ public class Button extends Sprite {
                             Game.gameStatus = 41;
                             break;
                     }
-                });
-                thread.start();
+                }).start();
             }
         }
     }

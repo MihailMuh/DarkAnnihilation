@@ -14,7 +14,7 @@ public class Spider extends Sprite {
         maxHealth = 200;
         hide();
 
-        recreateRect(x + 25, y + 5, x + width - 5, y + halfHeight + (halfHeight / 2));
+        recreateRect(x + 25, y + 5, right() - 5, y + halfHeight + (halfHeight / 2));
 
         lastShoot = System.currentTimeMillis();
     }
@@ -25,8 +25,8 @@ public class Spider extends Sprite {
             lastShoot = now;
             if (!reload) {
                 if (HardWorker.job == 0) {
-                    HardWorker.x = x + halfWidth;
-                    HardWorker.y = y + halfHeight;
+                    HardWorker.x = centerX();
+                    HardWorker.y = centerY();
                     HardWorker.job = 1;
                     ammo++;
                     reload = false;
@@ -48,12 +48,27 @@ public class Spider extends Sprite {
     public void hide() {
         lock = true;
         reload = false;
-        shootTripleTime = 100;
         ammo = 0;
         health = (int) maxHealth;
-        x = randInt(width, Game.screenWidth - width);
+        x = randInt(width, screenWidthWidth);
         y = -height;
         speedY = randInt(5, 10);
+        shootTripleTime = 100;
+
+        if (buff) {
+            shootTripleTime /= 2;
+        }
+    }
+
+    @Override
+    public void buff() {
+        buff = true;
+        shootTripleTime /= 2;
+    }
+
+    @Override
+    public void stopBuff() {
+        shootTripleTime = 100;
     }
 
     @Override
@@ -63,10 +78,8 @@ public class Spider extends Sprite {
 
     @Override
     public void intersection() {
-        AudioPlayer.playMegaBoom();
-        createSkullExplosion();
+        intersectionPlayer();
         Game.score += 50;
-        hide();
     }
 
     @Override
@@ -100,7 +113,7 @@ public class Spider extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
 
-        Game.canvas.drawRect(x + halfWidth - 75, y + 10, x + halfWidth + 75, y + 25 , Game.scorePaint);
-        Game.canvas.drawRect(x + halfWidth - 73, y + 12, x + halfWidth - 77 + (health / maxHealth) * 150, y + 23, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 75, y + 10, centerX() + 75, y + 25 , Game.scorePaint);
+        Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + (health / maxHealth) * 150, y + 23, Game.fpsPaint);
     }
 }

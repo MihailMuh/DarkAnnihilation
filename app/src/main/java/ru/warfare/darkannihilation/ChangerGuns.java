@@ -43,7 +43,7 @@ public class ChangerGuns extends Sprite {
     }
 
     public boolean checkCoords(int X, int Y) {
-        return (x < X & X < x + width & y < Y & Y < y + width);
+        return (x < X & X < right() & y < Y & Y < bottom());
     }
 
     public void make() {

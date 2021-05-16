@@ -1,10 +1,10 @@
 package ru.warfare.darkannihilation;
 
 public class Heart extends Sprite {
-    public Heart(int X, int Y) {
+    public Heart(int X) {
         super(0, 0);
         x = X;
-        y = Y;
+        y = 10;
     }
 
     public void render(String type) {

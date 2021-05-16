@@ -17,7 +17,7 @@ public class Factory extends Sprite {
         x = Game.halfScreenWidth - halfWidth;
         y = -height;
 
-        recreateRect(x + 20, y + 80, x + width - 20, y + height - 20);
+        recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
 
         lastSpawn = System.currentTimeMillis();
     }
@@ -74,7 +74,7 @@ public class Factory extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(ImageHub.factoryImg, x, y, null);
 
-        Game.canvas.drawRect(x + halfWidth - 250, y + 60, x + halfWidth + 250, y + 75 , Game.scorePaint);
-        Game.canvas.drawRect(x + halfWidth - 248, y + 62, x + halfWidth - 252 + (health / maxHealth) * 500, y + 73, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 250, y + 60, centerX() + 250, y + 75 , Game.scorePaint);
+        Game.canvas.drawRect(centerX() - 248, y + 62, centerX() - 252 + (health / maxHealth) * 500, y + 73, Game.fpsPaint);
     }
 }

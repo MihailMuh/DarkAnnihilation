@@ -34,16 +34,10 @@ public final class Clerk {
         try {
             InputStreamReader reader_cooler = new InputStreamReader(context.openFileInput("NICKNAME.txt"));
             BufferedReader reader_buffer = new BufferedReader(reader_cooler);
-            String line;
-            StringBuilder builder = new StringBuilder();
 
-            while ((line = reader_buffer.readLine()) != null) {
-                builder.append(line);
-            }
+            nickname = reader_buffer.readLine();
 
             reader_cooler.close();
-
-            nickname = builder.toString();
         } catch (IOException e) {
             Service.print("Can't recovery NICKNAME " + e);
         }
@@ -65,11 +59,17 @@ public final class Clerk {
         try {
             InputStreamReader reader_cooler = new InputStreamReader(context.openFileInput("SCORE.txt"));
             BufferedReader reader_buffer = new BufferedReader(reader_cooler);
-            int bestScore = Integer.parseInt(reader_buffer.readLine());
+
+            String string = reader_buffer.readLine();
+            int bestScore = 0;
+            if (string != null) {
+                bestScore = Integer.parseInt(string);
+            }
             reader_cooler.close();
+
             return bestScore;
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             Service.print("Can't recovery SCORE: " + e);
             Service.print("Creating new file...");
             try {
@@ -82,7 +82,7 @@ public final class Clerk {
             } catch (IOException e2) {
                 Service.print("Err: " + e2);
             }
+            return 0;
         }
-        return 0;
     }
 }

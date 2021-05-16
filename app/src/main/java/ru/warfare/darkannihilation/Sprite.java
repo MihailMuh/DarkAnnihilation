@@ -13,6 +13,9 @@ public class Sprite {
     public int halfWidth;
     public int halfHeight;
 
+    public final int screenHeightHeight;
+    public final int screenWidthWidth;
+
     public int health = 0;
     public int damage = 0;
 
@@ -21,6 +24,7 @@ public class Sprite {
     public boolean isBullet = false;
 
     public String status = "";
+    public boolean buff = false;
 
     public int left;
     public int top;
@@ -39,6 +43,9 @@ public class Sprite {
         top = y;
         right = x + width;
         bottom = y + height;
+
+        screenHeightHeight = Game.screenHeight - height;
+        screenWidthWidth = Game.screenWidth - width;
     }
 
     public Sprite(int w, int h) {
@@ -51,6 +58,9 @@ public class Sprite {
         top = y;
         right = x + width;
         bottom = y + height;
+
+        screenHeightHeight = Game.screenHeight - height;
+        screenWidthWidth = Game.screenWidth - width;
     }
 
     public void check_intersectionBullet(Sprite bullet) {}
@@ -59,6 +69,8 @@ public class Sprite {
     public void intersection() {}
     public void intersectionPlayer() {}
     public void empireStart() {}
+    public void buff() {}
+    public void stopBuff() {}
 
     public void createLargeExplosion() {
         for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
@@ -103,6 +115,22 @@ public class Sprite {
                 break;
             }
         }
+    }
+
+    public int centerX() {
+        return x + halfWidth;
+    }
+
+    public int centerY() {
+        return y + halfHeight;
+    }
+
+    public int right() {
+        return x + width;
+    }
+
+    public int bottom() {
+        return y + height;
     }
 
     public void recreateRect(int left, int top, int right, int bottom) {

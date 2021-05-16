@@ -71,6 +71,7 @@ public final class ImageHub {
     public static Bitmap sunriseImg;
     public static Bitmap bossVadersImg;
     public static Bitmap bulletBossVadersImg;
+    public static Bitmap bufferImg;
 
     public static void init(Context context) {
 
@@ -652,6 +653,21 @@ public final class ImageHub {
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletBuckshotSaturnImg = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
+
+        requestBuilder.load(R.drawable.buffer)
+                .override(eX400, (int) (Game.resizeK * 353))
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  bufferImg = resource;
                                   return true;
                               }
                           }
