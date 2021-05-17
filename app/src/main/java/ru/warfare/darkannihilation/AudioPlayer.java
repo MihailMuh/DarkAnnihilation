@@ -42,7 +42,7 @@ public final class AudioPlayer {
     private static final int MAX_STREAMS = 50000;
 
     public static void init(Context context) {
-//        Thread thread = new Thread(() -> {
+        Thread thread = new Thread(() -> {
             soundPool = new SoundPool.Builder()
                     .setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_GAME)
@@ -121,7 +121,7 @@ public final class AudioPlayer {
             forgottenBossMusic.setLooping(true);
             sounds.add(forgottenBossMusic);
 
-//        }); thread.start();
+        }); thread.start();
     }
 
     public static void releaseAP() {

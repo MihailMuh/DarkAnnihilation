@@ -5,10 +5,17 @@ public class LoadingScreen extends Sprite {
     private long lastFrame;
     private int frame = 0;
     private int c = 0;
-    public static String jobs = "newGame";
+    private String jobs = "newGame";
+
     public LoadingScreen(Game g) {
         super(g, ImageHub.loadingImages[0].getWidth(), ImageHub.loadingImages[0].getHeight());
         lastFrame = System.currentTimeMillis();
+    }
+
+    public void newJob(String job) {
+        c = 0;
+        jobs = job;
+        Game.gameStatus = 41;
     }
 
     @Override
@@ -21,8 +28,7 @@ public class LoadingScreen extends Sprite {
             if (frame == 12) {
                 frame = 0;
             }
-            if (c == 14) {
-                c = 0;
+            if (c == 11) {
                 Thread thread = new Thread(() -> {
                     switch (jobs) {
                         case "newGame":

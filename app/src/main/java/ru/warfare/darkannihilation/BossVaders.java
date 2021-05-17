@@ -63,9 +63,10 @@ public class BossVaders extends Sprite {
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
         AudioPlayer.pauseBossMusic();
-        if (game.portal.lock) {
-            game.portal.start();
+        if (game.portal == null) {
+            game.portal = new Portal(game);
         }
+        Game.gameStatus = 6;
         for (int i = 0; i < Game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.3) {
                 Game.allSprites.add(new XWing(game));
@@ -98,6 +99,8 @@ public class BossVaders extends Sprite {
             AudioPlayer.restartBossMusic();
             AudioPlayer.pauseBackgroundMusic();
             Game.gameStatus = 5;
+            ImageHub.loadPortalImages(game.context);
+            ImageHub.loadWinImages(game.context);
         }
         if (y > 0 & !field) {
             field = true;

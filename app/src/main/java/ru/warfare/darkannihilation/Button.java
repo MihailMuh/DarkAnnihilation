@@ -73,9 +73,9 @@ public class Button extends Sprite {
                             }
                             if (PauseButton.oldStatus != 0) {
                                 Game.gameStatus = PauseButton.oldStatus;
-                                if (game.portal.touch) {
-                                    AudioPlayer.timeMachineSnd.start();
-                                }
+//                                if (game.portal.touch) {
+//                                    AudioPlayer.timeMachineSnd.start();
+//                                }
                             } else {
                                 Game.gameStatus = 9;
                             }
@@ -83,21 +83,18 @@ public class Button extends Sprite {
                             break;
                         case "menu":
                             game.saveScore();
-                            Game.gameStatus = 41;
-                            LoadingScreen.jobs = "menu";
+                            game.loadingScreen.newJob("menu");
                             break;
                         case "top":
                             ClientServer.postBestScore(Clerk.nickname, game.bestScore);
                             ClientServer.getStatistics();
-                            LoadingScreen.jobs = "topScore";
-                            Game.gameStatus = 41;
+                            game.loadingScreen.newJob("topScore");
                             break;
                         case "restart":
                             game.saveScore();
                             game.getMaxScore();
                             Game.level = 1;
-                            LoadingScreen.jobs = "newGame";
-                            Game.gameStatus = 41;
+                            game.loadingScreen.newJob("newGame");
                             break;
                     }
                 }).start();

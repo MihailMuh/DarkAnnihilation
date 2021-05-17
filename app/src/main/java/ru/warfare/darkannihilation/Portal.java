@@ -3,40 +3,28 @@ package ru.warfare.darkannihilation;
 public class Portal extends Sprite {
     private int frame = 0;
     private static final int portalImageLength = ImageHub.portalImages.length;
-    private float frameTime = 50;
+    private float frameTime = 100;
     private long lastFrame;
     public boolean touch = false;
-    private float alpha = 0;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
 
         x = Game.halfScreenWidth - halfWidth;
         y = 100;
-        lock = true;
         isPassive = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
 
         lastFrame = System.currentTimeMillis();
-    }
 
-    public void hide() {
-        x = -width;
-        frame = 0;
-        lock = true;
-        touch = false;
-        frameTime = 50;
-        alpha = 0;
-        Game.blackPaint.setAlpha(0);
-    }
-
-    public void start() {
-        Game.gameStatus = 6;
-        x = Game.halfScreenWidth - halfWidth;
-        lock = false;
         AudioPlayer.portalSound.seekTo(0);
         AudioPlayer.portalSound.start();
+    }
+
+    public void kill() {
+        ImageHub.deletePortalImages();
+        game.portal = null;
     }
 
     @Override
@@ -48,33 +36,32 @@ public class Portal extends Sprite {
     public void intersectionPlayer() {
         if (Game.level == 2) {
             game.generateWin();
-            hide();
+            kill();
         } else {
             touch = true;
             BaseCharacter.god = true;
             frameTime = 0;
             game.player.lock = true;
             AudioPlayer.timeMachineSnd.start();
+            ImageHub.loadThunderImages(game.context);
         }
     }
 
     @Override
     public void update() {
-        if (!lock) {
-            long now = System.currentTimeMillis();
-            if (now - lastFrame > frameTime) {
-                lastFrame = now;
-                if (frame < portalImageLength - 1) {
-                    frame += 1;
-                } else {
-                    frame = 0;
-                }
-                if (!AudioPlayer.portalSound.isPlaying() & !touch) {
-                    if (Game.gameStatus != 7) {
-                        Game.gameStatus = 0;
-                        hide();
-                        AudioPlayer.resumeBackgroundMusic();
-                    }
+        long now = System.currentTimeMillis();
+        if (now - lastFrame > frameTime) {
+            lastFrame = now;
+            if (frame < portalImageLength - 1) {
+                frame += 1;
+            } else {
+                frame = 0;
+            }
+            if (!AudioPlayer.portalSound.isPlaying() & !touch) {
+                if (Game.gameStatus != 7) {
+                    Game.gameStatus = 0;
+                    kill();
+                    AudioPlayer.resumeBackgroundMusic();
                 }
             }
         }
@@ -82,17 +69,11 @@ public class Portal extends Sprite {
 
     @Override
     public void render() {
-        if (!lock) {
-            Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
-            if (touch & Game.gameStatus != 4) {
-                alpha += 0.6;
-                if (alpha >= 255) {
-                    hide();
-                    Game.level++;
-                    LoadingScreen.jobs = "newGame";
-                    Game.gameStatus = 41;
-                }
-            }
+        Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
+        if (touch & !AudioPlayer.timeMachineSnd.isPlaying()) {
+            Game.level++;
+            game.loadingScreen.newJob("newGame");
+            kill();
         }
     }
 }

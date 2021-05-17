@@ -21,8 +21,7 @@ public class ButtonSaturn extends Sprite {
             AudioPlayer.playClick();
             Game.character = "saturn";
             AudioPlayer.pauseMenuMusic();
-            LoadingScreen.jobs = "newGame";
-            Game.gameStatus = 41;
+            game.loadingScreen.newJob("newGame");
         }
     }
 

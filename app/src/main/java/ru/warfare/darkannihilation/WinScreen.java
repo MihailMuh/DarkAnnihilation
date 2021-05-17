@@ -15,6 +15,7 @@ public class WinScreen extends Sprite {
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(100);
+
         lastFrame = System.currentTimeMillis();
     }
 

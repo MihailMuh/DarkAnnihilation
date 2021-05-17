@@ -41,9 +41,10 @@ public class Boss extends Sprite {
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
         AudioPlayer.pauseBossMusic();
-        if (game.portal.lock) {
-            game.portal.start();
+        if (game.portal == null) {
+            game.portal = new Portal(game);
         }
+        Game.gameStatus = 6;
         for (int i = 0; i < Game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.1) {
                 Game.allSprites.add(new TripleFighter());
@@ -79,6 +80,7 @@ public class Boss extends Sprite {
             AudioPlayer.restartBossMusic();
             AudioPlayer.pauseBackgroundMusic();
             Game.gameStatus = 5;
+            ImageHub.loadPortalImages(game.context);
         }
         if (y >= 50) {
             speedY = 0;

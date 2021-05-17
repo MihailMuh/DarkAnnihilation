@@ -23,12 +23,12 @@ public final class ImageHub {
     public static final Bitmap[] explosionDefaultImageMedium = new Bitmap[28];
     public static final Bitmap[] explosionLarge = new Bitmap[13];
 
-    public static final Bitmap[] screenImage = new Bitmap[34];
+    public static Bitmap[] screenImage = new Bitmap[34];
     public static final Bitmap[] vaderImage = new Bitmap[3];
     public static final Bitmap[] vaderOldImage = new Bitmap[3];
-    public static final Bitmap[] winScreenImg = new Bitmap[100];
+    public static Bitmap[] winScreenImg = new Bitmap[100];
     public static final Bitmap[] portalImages = new Bitmap[20];
-    public static final Bitmap[] thunderScreen = new Bitmap[20];
+    public static Bitmap[] thunderScreen = new Bitmap[20];
     public static final Bitmap[] loadingImages = new Bitmap[12];
 
     public static Bitmap bulletImage;
@@ -48,7 +48,6 @@ public final class ImageHub {
     public static Bitmap saturnVsBoss;
     public static Bitmap saturnVsVaders;
     public static Bitmap playerVsVaders;
-
     public static Bitmap healthKitImg;
     public static Bitmap shotgunKitImg;
     public static Bitmap shotgunToGun;
@@ -73,33 +72,33 @@ public final class ImageHub {
     public static Bitmap bulletBossVadersImg;
     public static Bitmap bufferImg;
 
-    public static void init(Context context) {
+    private static int screensSizeX;
 
-        int screensSizeX = (int) (Game.screenWidth * 1.4);
-        int vaderSize = (int) (75 * Game.resizeK);
-        int eX145 = (int) (145 * Game.resizeK);
-        int eX152 = (int) (152 * Game.resizeK);
-        int eX50 = (int) (50 * Game.resizeK);
-        int eX52 = (int) (52 * Game.resizeK);
-        int eX500 = (int) (500 * Game.resizeK);
-        int eX435 = (int) (435 * Game.resizeK);
-        int sW150 = (int) ((Game.screenWidth -150) * Game.resizeK);
-        int sW = (int) (Game.screenWidth * Game.resizeK);
-        int portalSize = (int) (300 * Game.resizeK);
-        int eX70 = (int) (70 * Game.resizeK);
-        int eX300 = (int) (300 * Game.resizeK);
-        int eX60 = (int) (60 * Game.resizeK);
-        int eX100 = (int) (100 * Game.resizeK);
-        int eX105 = (int) (105 * Game.resizeK);
-        int eX15 = (int) (15 * Game.resizeK);
-        int fact = (int) ((Game.screenWidth / 1.3) * Game.resizeK);
-        int eX200 = (int) (200 * Game.resizeK);
-        int eX400 = (int) (400 * Game.resizeK);
-        int eX80 = (int) (80 * Game.resizeK);
-        int eX13 = (int) (13 * Game.resizeK);
-        int eX175 = (int) (175 * Game.resizeK);
-        int eX207 = (int) (207 * Game.resizeK);
-        int eX120 = (int) (120 * Game.resizeK);
+    public static void init(Context context, double resizeK, int screenWidth, int screenHeight) {
+        screensSizeX = (int) (screenWidth * 1.4);
+        int vaderSize = (int) (75 * resizeK);
+        int eX145 = (int) (145 * resizeK);
+        int eX152 = (int) (152 * resizeK);
+        int eX50 = (int) (50 * resizeK);
+        int eX52 = (int) (52 * resizeK);
+        int eX500 = (int) (500 * resizeK);
+        int eX435 = (int) (435 * resizeK);
+        int sW150 = (int) ((screenWidth - 150) * resizeK);
+        int sW = (int) (screenWidth * resizeK);
+        int eX70 = (int) (70 * resizeK);
+        int eX300 = (int) (300 * resizeK);
+        int eX60 = (int) (60 * resizeK);
+        int eX100 = (int) (100 * resizeK);
+        int eX105 = (int) (105 * resizeK);
+        int eX15 = (int) (15 * resizeK);
+        int fact = (int) ((screenWidth / 1.3) * resizeK);
+        int eX200 = (int) (200 * resizeK);
+        int eX400 = (int) (400 * resizeK);
+        int eX80 = (int) (80 * resizeK);
+        int eX13 = (int) (13 * resizeK);
+        int eX175 = (int) (175 * resizeK);
+        int eX207 = (int) (207 * resizeK);
+        int eX120 = (int) (120 * resizeK);
 
         RequestBuilder<Bitmap> requestBuilder =
                 Glide.with(context)
@@ -107,7 +106,7 @@ public final class ImageHub {
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         requestBuilder.load(R.drawable.bullet)
-                .override((int) (7 * Game.resizeK), (int) (30 * Game.resizeK))
+                .override((int) (7 * resizeK), (int) (30 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -167,7 +166,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.buckshot)
-                .override((int) (97 * Game.resizeK), (int) (120 * Game.resizeK))
+                .override((int) (97 * resizeK), (int) (120 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -240,7 +239,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.demoman)
-                .override((int) (290 * Game.resizeK), eX175)
+                .override((int) (290 * resizeK), eX175)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -270,7 +269,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.spider)
-                .override((int) (350 * Game.resizeK), eX175)
+                .override((int) (350 * resizeK), eX175)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -285,7 +284,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.x_wing)
-                .override(eX200, (int) (146 * Game.resizeK))
+                .override(eX200, (int) (146 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -300,7 +299,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.area)
-                .override((int) (450 * Game.resizeK), (int) (279 * Game.resizeK))
+                .override((int) (450 * resizeK), (int) (279 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -315,7 +314,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.boss_vaders)
-                .override((int) (350 * Game.resizeK), (int) (255 * Game.resizeK))
+                .override((int) (350 * resizeK), (int) (255 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -330,7 +329,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.bull_boss_vader)
-                .override((int) (140 * Game.resizeK), (int) (135 * Game.resizeK))
+                .override((int) (140 * resizeK), (int) (135 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -346,7 +345,7 @@ public final class ImageHub {
 
         requestBuilder.load(R.drawable.gameover)
                 .centerCrop()
-                .override(Game.screenWidth, Game.screenHeight)
+                .override(screenWidth, screenHeight)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -361,7 +360,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.bullet_enemy)
-                .override((int) (17 * Game.resizeK), eX50)
+                .override((int) (17 * resizeK), eX50)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -569,7 +568,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.bomb)
-                .override((int) (30 * Game.resizeK), eX70)
+                .override((int) (30 * resizeK), eX70)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -659,7 +658,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.buffer)
-                .override(eX400, (int) (Game.resizeK * 353))
+                .override(eX400, (int) (resizeK * 353))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -677,7 +676,7 @@ public final class ImageHub {
                 eX300, eX70, isFilter);
         buttonImageNotPressed = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.button_notpress),
                 eX300, eX70, isFilter);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 34; i++) {
             int finalI = i;
             if (i < 3) {
                 requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
@@ -712,7 +711,7 @@ public final class ImageHub {
             if (i < 12) {
                 requestBuilder.load(context.getResources().getIdentifier("loading" + i, "drawable", context.getPackageName()))
                         .centerCrop()
-                        .override(Game.screenWidth, Game.screenHeight)
+                        .override(screenWidth, screenHeight)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -737,38 +736,6 @@ public final class ImageHub {
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionLarge[finalI] = resource;
-                                          return true;
-                                      }
-                                  }
-                        ).submit();
-            }
-            if (i < 20) {
-                requestBuilder.load(context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName()))
-                        .override(portalSize, portalSize)
-                        .listener(new RequestListener<Bitmap>() {
-                                      @Override
-                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                          return false;
-                                      }
-                                      @Override
-                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                          portalImages[finalI] = resource;
-                                          return true;
-                                      }
-                                  }
-                        ).submit();
-
-                requestBuilder.load(context.getResources().getIdentifier("thunder" + i, "drawable", context.getPackageName()))
-                        .centerCrop()
-                        .override(screensSizeX, Game.screenHeight)
-                        .listener(new RequestListener<Bitmap>() {
-                                      @Override
-                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                          return false;
-                                      }
-                                      @Override
-                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                          thunderScreen[finalI] = resource;
                                           return true;
                                       }
                                   }
@@ -834,13 +801,137 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            if (i < 34) {
-                screenImage[i] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(),
-                        context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName())),
-                        screensSizeX, Game.screenHeight, isFilter);
-            }
-            requestBuilder.load(context.getResources().getIdentifier("win_" + (i + 1), "drawable", context.getPackageName()))
+            requestBuilder.load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
                     .centerCrop()
+                    .override(screensSizeX, screenHeight)
+                    .listener(new RequestListener<Bitmap>() {
+                                  @Override
+                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                      return false;
+                                  }
+                                  @Override
+                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                      screenImage[finalI] = resource;
+                                      if (finalI > 31) {
+                                          Game.endImgInit = true;
+                                      }
+                                      return true;
+                                  }
+                              }
+                    ).submit();
+        }
+    }
+
+    public static void loadPortalImages(Context context) {
+        int portalSize = (int) (300 * Game.resizeK);
+        for (int i = 0; i < 20; i++) {
+            int finalI = i;
+            Glide.with(context)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName()))
+                    .override(portalSize, portalSize)
+                    .listener(new RequestListener<Bitmap>() {
+                                  @Override
+                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                      return false;
+                                  }
+                                  @Override
+                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                      portalImages[finalI] = resource;
+                                      return true;
+                                  }
+                              }
+                    ).submit();
+        }
+    }
+
+    public static void deletePortalImages() {
+        if (portalImages[0] != null) {
+            for (int i = 0; i < 20; i++) {
+                portalImages[i].recycle();
+            }
+        }
+    }
+
+    public static void loadThunderImages(Context context) {
+        for (int i = 0; i < 20; i++) {
+            int finalI = i;
+            Glide.with(context)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .load(context.getResources().getIdentifier("thunder" + i, "drawable", context.getPackageName()))
+                    .override(screensSizeX, Game.screenHeight)
+                    .listener(new RequestListener<Bitmap>() {
+                                  @Override
+                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                      return false;
+                                  }
+                                  @Override
+                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                      thunderScreen[finalI] = resource;
+                                      return true;
+                                  }
+                              }
+                    ).submit();
+        }
+    }
+
+    public static void deleteThunderImages() {
+        if (thunderScreen[0] != null) {
+            for (int i = 0; i < 20; i++) {
+                thunderScreen[i].recycle();
+            }
+            thunderScreen = new Bitmap[20];
+        }
+    }
+
+    public static boolean needAStar() {
+        return screenImage[0] == null;
+    }
+
+    public static void loadScreenImages(Context context) {
+        for (int i = 0; i < 34; i++) {
+            int finalI = i;
+            Glide.with(context)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
+                    .override(screensSizeX, Game.screenHeight)
+                    .listener(new RequestListener<Bitmap>() {
+                                  @Override
+                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                      return false;
+                                  }
+                                  @Override
+                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                      screenImage[finalI] = resource;
+                                      return true;
+                                  }
+                              }
+                    ).submit();
+        }
+    }
+
+    public static void deleteScreenImages() {
+        if (screenImage[0] != null) {
+            for (int i = 0; i < 34; i++) {
+                screenImage[i].recycle();
+            }
+            screenImage = new Bitmap[34];
+        }
+    }
+
+    public static void loadWinImages(Context context) {
+        for (int i = 0; i < 100; i++) {
+            int finalI = i;
+            Glide.with(context)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .load(context.getResources().getIdentifier("win_" + (i + 1), "drawable", context.getPackageName()))
                     .override(Game.screenWidth, Game.screenHeight)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -854,6 +945,15 @@ public final class ImageHub {
                                   }
                               }
                     ).submit();
+        }
+    }
+
+    public static void deleteWinImages() {
+        if (winScreenImg[0] != null) {
+            for (int i = 0; i < 100; i++) {
+                winScreenImg[i].recycle();
+            }
+            winScreenImg = new Bitmap[100];
         }
     }
 }

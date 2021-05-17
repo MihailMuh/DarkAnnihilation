@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class ButtonPlayer extends Sprite {
-    public ButtonPlayer() {
-        super(ImageHub.buttonPlayerImg.getWidth(), ImageHub.buttonPlayerImg.getHeight());
+    public ButtonPlayer(Game game) {
+        super(game, ImageHub.buttonPlayerImg.getWidth(), ImageHub.buttonPlayerImg.getHeight());
 
         y = Game.halfScreenHeight - halfHeight;
         hide();
@@ -21,8 +21,7 @@ public class ButtonPlayer extends Sprite {
             AudioPlayer.playClick();
             Game.character = "falcon";
             AudioPlayer.pauseMenuMusic();
-            LoadingScreen.jobs = "newGame";
-            Game.gameStatus = 41;
+            game.loadingScreen.newJob("newGame");
         }
     }
 
