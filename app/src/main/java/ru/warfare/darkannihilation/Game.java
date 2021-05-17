@@ -87,7 +87,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = false;
     public static String character = "falcon";
 
-    private static final int BOSS_TIME = 100_000;
+    private static final int BOSS_TIME = 20_000;
     public static long lastBoss;
     public long pauseTimer = 0;
 
@@ -947,6 +947,26 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             LoadingScreen.jobs = "menu";
         }
     }
+//
+//    private void portalTime() {
+//        screen.update();
+//        screen.render();
+//
+//        pauseButton.render();
+//        changerGuns.render();
+//
+//        renderFPS();
+//        renderCurrentScore();
+//
+//        if (gameStatus == 6) {
+//            if (!portal.touch) {
+//                player.checkIntersections(portal);
+//            }
+//            portal.x -= moveAll;
+//            portal.update();
+//            portal.render();
+//        }
+//    }
 
     public void saveScore() {
         if (score > bestScore) {

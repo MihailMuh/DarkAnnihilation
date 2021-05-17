@@ -40,26 +40,14 @@ public class Boss extends Sprite {
         Game.score += 150;
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
-        switch (Game.level)
-        {
-            case 1:
-                for (int i = 0; i < Game.numberVaders; i++) {
-                    if (Game.random.nextFloat() <= 0.1) {
-                        Game.allSprites.add(new TripleFighter());
-                    }
-                }
-                break;
-            case 2:
-                for (int i = 0; i < Game.numberVaders; i++) {
-                    if (Game.random.nextFloat() <= 0.3) {
-                        Game.allSprites.add(new XWing(game));
-                    }
-                }
-                break;
-        }
         AudioPlayer.pauseBossMusic();
         if (game.portal.lock) {
             game.portal.start();
+        }
+        for (int i = 0; i < Game.numberVaders; i++) {
+            if (Game.random.nextFloat() <= 0.1) {
+                Game.allSprites.add(new TripleFighter());
+            }
         }
         for (int i = 0; i < Game.allSprites.size(); i++) {
             Game.allSprites.get(i).empireStart();

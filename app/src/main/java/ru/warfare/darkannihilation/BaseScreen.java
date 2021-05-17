@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 
 public class BaseScreen extends Sprite {
     public int frame = -1;

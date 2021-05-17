@@ -62,14 +62,14 @@ public class BossVaders extends Sprite {
         Game.score += 300;
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
+        AudioPlayer.pauseBossMusic();
+        if (game.portal.lock) {
+            game.portal.start();
+        }
         for (int i = 0; i < Game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.3) {
                 Game.allSprites.add(new XWing(game));
             }
-        }
-        AudioPlayer.pauseBossMusic();
-        if (game.portal.lock) {
-            game.portal.start();
         }
         for (int i = 0; i < Game.allSprites.size(); i++) {
             Game.allSprites.get(i).empireStart();
