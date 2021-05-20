@@ -43,7 +43,7 @@ public class Portal extends Sprite {
             frameTime = 0;
             game.player.lock = true;
             AudioPlayer.timeMachineSnd.start();
-            ImageHub.loadThunderImages(game.context);
+            ImageHub.loadSecondLevelImages(game.context);
         }
     }
 

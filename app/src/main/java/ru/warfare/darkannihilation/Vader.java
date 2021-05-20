@@ -6,7 +6,7 @@ public class Vader extends Sprite {
     private Bitmap img;
 
     public Vader() {
-        super(ImageHub.vaderImage[0].getWidth(), ImageHub.vaderImage[0].getHeight());
+        super(ImageHub.vaderSize, ImageHub.vaderSize);
         health = 2;
         damage = 5;
 

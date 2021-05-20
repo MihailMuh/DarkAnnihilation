@@ -144,9 +144,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         attention = new Attention(this);
         factory = new Factory();
         demoman = new Demoman();
-        spider = new Spider();
-        sunrise = new Sunrise();
-        buffer = new Buffer();
+//        spider = new Spider();
+//        sunrise = new Sunrise();
+//        buffer = new Buffer();
         hardWorker = new HardWorker(this);
         screen = new StarScreen();
         loadingScreen = new LoadingScreen(this);
@@ -177,7 +177,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         gameStatus = 1;
     }
 
-    public void gameplay() {
+    private void gameplay() {
         long now = System.currentTimeMillis();
         moveAll = player.speedX / 3;
 
@@ -531,6 +531,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateMenu() {
         alphaPaint.setAlpha(255);
+        endImgInit = false;
 
         if (AudioPlayer.winMusic.isPlaying()) {
             AudioPlayer.winMusic.pause();
@@ -543,15 +544,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.pauseBackgroundMusic();
         AudioPlayer.pauseBossMusic();
 
-        ImageHub.deleteThunderImages();
+        ImageHub.deleteSecondLevelImages();
         ImageHub.deleteWinImages();
-        if (ImageHub.needAStar()) {
-            ImageHub.loadScreenImages(context);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Service.print(e.toString());
-            }
+        if (ImageHub.needImagesForFirstLevel()) {
+            ImageHub.loadFirstLevelImages(context);
+            while (!endImgInit) {}
         }
 
         getMaxScore();
@@ -583,6 +580,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateNewGame() {
+        endImgInit = false;
+
         AudioPlayer.pauseReadySound();
         AudioPlayer.pauseBossMusic();
         AudioPlayer.pausePauseMusic();
@@ -601,17 +600,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         shotgunKit.hide();
         healthKit.hide();
-        attention.hide();
-        rocket.hide();
-        factory.hide();
-        demoman.hide();
+//        attention.hide();
+//        rocket.hide();
+//        factory.hide();
+//        demoman.hide();
         buttonPlayer.hide();
         buttonSaturn.hide();
         pauseButton.show();
-        spider.hide();
-        sunrise.hide();
         player.PLAYER();
-        buffer.hide();
         if (portal != null) {
             portal.kill();
         }
@@ -627,18 +623,23 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             case 1:
                 score = 0;
 
-                ImageHub.deleteThunderImages();
+                spider = null;
+                sunrise = null;
+                buffer = null;
+
+                ImageHub.deleteSecondLevelImages();
                 ImageHub.deleteWinImages();
-                if (ImageHub.needAStar()) {
-                    ImageHub.loadScreenImages(context);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        Service.print(e.toString());
-                    }
+                if (ImageHub.needImagesForFirstLevel()) {
+                    ImageHub.loadFirstLevelImages(context);
+                    while (!endImgInit) {}
                 }
 
                 shotgunKit.picked = false;
+
+                rocket = new Rocket();
+                attention = new Attention(this);
+                factory = new Factory();
+                demoman = new Demoman();
                 screen = new StarScreen();
                 alphaPaint.setAlpha(255);
 
@@ -657,8 +658,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 break;
             case 2:
-                ImageHub.deleteScreenImages();
+                attention = null;
+                rocket = null;
+                factory = null;
+                demoman = null;
 
+                ImageHub.deleteFirstLevelImages();
+
+                spider = new Spider();
+                sunrise = new Sunrise();
+                buffer = new Buffer();
                 screen = new ThunderScreen();
                 alphaPaint.setAlpha(165);
 
