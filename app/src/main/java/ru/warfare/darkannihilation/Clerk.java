@@ -38,8 +38,20 @@ public final class Clerk {
             nickname = reader_buffer.readLine();
 
             reader_cooler.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Service.print("Can't recovery NICKNAME " + e);
+            Service.print("Creating new file...");
+            try {
+                FileOutputStream writer = context.openFileOutput("NICKNAME.txt", Context.MODE_PRIVATE);
+                OutputStreamWriter writer_str = new OutputStreamWriter(writer);
+
+                writer_str.write("");
+                writer_str.close();
+                Service.print("Successful");
+            } catch (Exception e2) {
+                Service.print("Err: " + e2);
+            }
+            nickname = "";
         }
     }
 

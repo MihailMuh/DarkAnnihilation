@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private Game game;
     private SharedPreferences preferences = null;
-    public static boolean firstRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +166,17 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             Clerk.getNickname();
-            firstRun = false;
+            try {
+                if (Clerk.nickname.equals("")) {
+                    preferences.edit().putBoolean("firstrun", true).apply();
+                    checkOnFirstRun();
+                } else {
+                    preferences.edit().putBoolean("firstrun", false).apply();
+                }
+            } catch (Exception e) {
+                preferences.edit().putBoolean("firstrun", true).apply();
+                checkOnFirstRun();
+            }
         }
     }
 }

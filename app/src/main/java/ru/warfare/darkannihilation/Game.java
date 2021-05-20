@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -97,8 +98,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public Game(Context cont, int width, int height) {
         super(cont);
+        setZOrderOnTop(true);
+
         context = cont;
         holder = getHolder();
+        holder.setFormat(PixelFormat.TRANSLUCENT);
 
         screenWidth = width;
         screenHeight = height;
@@ -560,6 +564,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         bullets = new ArrayList<>(0);
         bosses = new ArrayList<>(0);
 
+        spider = null;
+        sunrise = null;
+        buffer = null;
         screen = new StarScreen();
         player = new MillenniumFalcon(this);
         shotgunKit.picked = false;
