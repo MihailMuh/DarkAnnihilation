@@ -23,10 +23,10 @@ public class Minion extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootMinionTime) {
             lastShoot = now;
-            if (HardWorker.job == 0) {
-                HardWorker.x = centerX();
-                HardWorker.y = centerY();
-                HardWorker.job = 1;
+            if (HardThread.job == 0) {
+                HardThread.x = centerX();
+                HardThread.y = centerY();
+                HardThread.job = 1;
             }
         }
     }

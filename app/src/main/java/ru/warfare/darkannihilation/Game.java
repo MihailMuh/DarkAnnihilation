@@ -45,13 +45,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static ArrayList<Sprite> bosses = new ArrayList<>(0);
     public static ArrayList<Sprite> allSprites = new ArrayList<>(0);
 
+    public HardThread hardThread;
+//    public HardWorker hardWorker;
     public BaseScreen screen;
     public Button buttonStart;
     public Button buttonQuit;
     public Button buttonMenu;
     public Button buttonRestart;
     public PauseButton pauseButton;
-    public ImageHub imageHub;
     public FightBg fightBg;
     public HealthKit healthKit;
     public ShotgunKit shotgunKit;
@@ -64,7 +65,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Portal portal;
     public ButtonPlayer buttonPlayer;
     public ButtonSaturn buttonSaturn;
-    public HardWorker hardWorker;
     public BaseCharacter player;
     public LoadingScreen loadingScreen;
     public Spider spider;
@@ -89,7 +89,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
 
-    private static final int BOSS_TIME = 100_000;
+    private static int BOSS_TIME = 10_000;
     public static long lastBoss;
     public long pauseTimer = 0;
 
@@ -147,7 +147,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         attention = new Attention(this);
         factory = new Factory();
         demoman = new Demoman();
-        hardWorker = new HardWorker(this);
+        hardThread = new HardThread(this);
         screen = new StarScreen();
         loadingScreen = new LoadingScreen(this);
 
@@ -442,7 +442,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void onPause() {
-        hardWorker.workOnPause();
+        hardThread.workOnPause();
+//        if (hardWorker != null) {
+//            hardWorker.workOnPause();
+//        }
         if (gameStatus == 7) {
             AudioPlayer.winMusic.pause();
         }
@@ -459,7 +462,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void onResume() {
-        hardWorker.workOnResume();
+        hardThread.workOnResume();
+//        if (hardWorker != null) {
+//            hardWorker.workOnResume();
+//        }
         if (gameStatus == 7) {
             AudioPlayer.winMusic.start();
         } else {
@@ -512,7 +518,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generatePause() {
-        hardWorker.workOnPause();
+        hardThread.workOnPause();
+//        if (hardWorker != null) {
+//            hardWorker.workOnPause();
+//        }
         AudioPlayer.pauseBackgroundMusic();
         if (bosses.size() == 0) {
             AudioPlayer.restartPauseMusic();
@@ -588,8 +597,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.pauseBossMusic();
         AudioPlayer.pausePauseMusic();
 
-        hardWorker.workOnPause();
-        hardWorker.workOnResume();
+        hardThread.workOnPause();
+        hardThread.workOnResume();
         count = 0;
 
         bosses = new ArrayList<>(0);
@@ -624,6 +633,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 spider = null;
                 sunrise = null;
                 buffer = null;
+//                if (hardWorker != null) {
+//                    hardWorker.workOnPause();
+//                    hardWorker = null;
+//                }
 
                 ImageHub.deleteSecondLevelImages();
                 ImageHub.deleteWinImages();
@@ -656,10 +669,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 break;
             case 2:
+                BOSS_TIME = 1_000_000_000;
                 attention = null;
                 rocket = null;
                 factory = null;
                 demoman = null;
+//                hardWorker = new HardWorker(this);
+//                hardWorker.workOnResume();
 
                 ImageHub.deleteFirstLevelImages();
 
@@ -1032,8 +1048,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         if (portal != null) {
             portal.x -= moveAll;
-            portal.update();
             portal.render();
+            portal.update();
         }
     }
 

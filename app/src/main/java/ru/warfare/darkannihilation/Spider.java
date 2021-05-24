@@ -24,10 +24,10 @@ public class Spider extends Sprite {
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
             if (!reload) {
-                if (HardWorker.job == 0) {
-                    HardWorker.x = centerX();
-                    HardWorker.y = centerY();
-                    HardWorker.job = 1;
+                if (HardThread.job == 0) {
+                    HardThread.x = centerX();
+                    HardThread.y = centerY();
+                    HardThread.job = 1;
                     ammo++;
                     reload = false;
                 }
@@ -69,6 +69,7 @@ public class Spider extends Sprite {
     @Override
     public void stopBuff() {
         shootTripleTime = 100;
+        buff = false;
     }
 
     @Override

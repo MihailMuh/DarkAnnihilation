@@ -24,10 +24,10 @@ public class TripleFighter extends Sprite {
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
 
-            if (HardWorker.job == 0) {
-                HardWorker.x = centerX();
-                HardWorker.y = centerY();
-                HardWorker.job = 1;
+            if (HardThread.job == 0) {
+                HardThread.x = centerX();
+                HardThread.y = centerY();
+                HardThread.job = 1;
             }
         }
     }

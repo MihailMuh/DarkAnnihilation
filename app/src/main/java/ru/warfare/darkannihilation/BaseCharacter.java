@@ -26,7 +26,7 @@ public class BaseCharacter extends Sprite {
     public void checkIntersections(Sprite sprite) {}
 
     public void PLAYER() {
-        god = false;
+        god = true;
         ai = false;
         if (Game.level == 1 | !game.shotgunKit.picked) {
             gun = "gun";

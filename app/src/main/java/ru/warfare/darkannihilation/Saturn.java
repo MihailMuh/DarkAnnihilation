@@ -23,8 +23,8 @@ public class Saturn extends BaseCharacter {
         if (gun.equals("shotgun")) {
             if (now - lastShoot > shotgunTime) {
                 lastShoot = now;
-                if (HardWorker.job == 0) {
-                    HardWorker.job = 2;
+                if (HardThread.job == 0) {
+                    HardThread.job = 2;
                 }
             }
         } else {

@@ -65,7 +65,7 @@ public class Button extends Sprite {
                         case "pause":
                             game.player.dontmove = true;
                             Game.lastBoss += game.pauseTimer;
-                            game.hardWorker.workOnResume();
+                            game.hardThread.workOnResume();
                             AudioPlayer.pausePauseMusic();
                             AudioPlayer.resumeBackgroundMusic();
                             if (PauseButton.oldStatus == 2) {

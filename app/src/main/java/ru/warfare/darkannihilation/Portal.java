@@ -5,7 +5,6 @@ public class Portal extends Sprite {
     private float frameTime = 100;
     private long lastFrame;
     public boolean touch = false;
-//    private float alpha = 0;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
@@ -66,11 +65,12 @@ public class Portal extends Sprite {
                         kill();
                         AudioPlayer.resumeBackgroundMusic();
                     }
-                } else {
-                    Game.level++;
-                    game.loadingScreen.newJob("newGame");
-                    kill();
                 }
+            }
+            if (!AudioPlayer.timeMachineSnd.isPlaying() & touch) {
+                Game.level++;
+                game.loadingScreen.newJob("newGame");
+                kill();
             }
         }
     }

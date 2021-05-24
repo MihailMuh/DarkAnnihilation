@@ -36,8 +36,8 @@ public class Demoman extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
             lastShoot = now;
-            if (HardWorker.job == 0) {
-                HardWorker.job = 4;
+            if (HardThread.job == 0) {
+                HardThread.job = 4;
             }
         }
     }

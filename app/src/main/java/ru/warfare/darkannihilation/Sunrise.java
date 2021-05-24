@@ -21,10 +21,10 @@ public class Sunrise extends Sprite {
         if (now - lastShoot > shootTime) {
             lastShoot = now;
 
-            if (HardWorker.job == 0) {
-                HardWorker.x = centerX();
-                HardWorker.y = centerY();
-                HardWorker.job = 3;
+            if (HardThread.job == 0) {
+                HardThread.x = centerX();
+                HardThread.y = centerY();
+                HardThread.job = 3;
             }
         }
     }
@@ -48,8 +48,8 @@ public class Sunrise extends Sprite {
     }
 
     private void up() {
-        speedX *= 5;
-        speedY *= 5;
+        speedX *= 3;
+        speedY *= 3;
     }
 
     @Override
@@ -62,6 +62,7 @@ public class Sunrise extends Sprite {
     public void stopBuff() {
         speedX /= 5;
         speedY /= 5;
+        buff = false;
     }
 
     @Override

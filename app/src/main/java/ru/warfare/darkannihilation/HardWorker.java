@@ -1,10 +1,8 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Sprite.getDistance;
+
 public class HardWorker implements Runnable {
-//    1 - bullets enemy
-//    2 - saturn
-//    3 - sunrise
-//    4 - bomb
     private Thread thread;
     private boolean work = false;
     public static volatile int job = 0;
@@ -12,6 +10,8 @@ public class HardWorker implements Runnable {
 
     public static volatile int x = 0;
     public static volatile int y = 0;
+    public static volatile int distance = 0;
+
     private final Game game;
 
     public HardWorker(Game g) {
@@ -21,50 +21,15 @@ public class HardWorker implements Runnable {
     @Override
     public void run() {
         while (work) {
-            switch (job)
-            {
-                case 1:
-                    vector.makeVector(x, y, game.player.centerX(), game.player.centerY(), 13);
-                    AudioPlayer.playShotgun();
-                    Game.allSprites.add(new BulletEnemy(x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
-                    job = 0;
-                    break;
-                case 2:
-                    BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, game.player.centerX(), game.player.y);
-                    Game.bullets.add(buckshotSaturn);
-                    Game.allSprites.add(buckshotSaturn);
-                    job = 0;
-                    break;
-                case 3:
-                    AudioPlayer.playDeagle();
-                    Game.allSprites.add(new BulletEnemy(x, y, 0, 0, -10));
-                    Game.allSprites.add(new BulletEnemy(x, y, 90, 10, 0));
-                    Game.allSprites.add(new BulletEnemy(x, y, 180, 0, 10));
-                    Game.allSprites.add(new BulletEnemy(x, y, -90, -10, 0));
-
-                    Game.allSprites.add(new BulletEnemy(x, y, 45, 7, -7));
-                    Game.allSprites.add(new BulletEnemy(x, y, 135, 7, 7));
-                    Game.allSprites.add(new BulletEnemy(x, y, -45, -7, -7));
-                    Game.allSprites.add(new BulletEnemy(x, y, -135, -7, 7));
-
-                    Game.allSprites.add(new BulletEnemy(x, y, 67, 10, -4));
-                    Game.allSprites.add(new BulletEnemy(x, y, 22, 4, -10));
-                    Game.allSprites.add(new BulletEnemy(x, y, -67, -10, -4));
-                    Game.allSprites.add(new BulletEnemy(x, y, -22, -4, -10));
-
-                    Game.allSprites.add(new BulletEnemy(x, y, 157, 4, 10));
-                    Game.allSprites.add(new BulletEnemy(x, y, 113, 10, 4));
-                    Game.allSprites.add(new BulletEnemy(x, y, -157, -4, 10));
-                    Game.allSprites.add(new BulletEnemy(x, y, -113, -10, 4));
-
-                    job = 0;
-                    break;
-                case 4:
-                    Game.allSprites.add(new Bomb(game.demoman.centerX(), game.demoman.centerY()));
-                    job = 0;
-                    break;
-                default:
-                    break;
+            if (job == 1) {
+                int plX = game.player.centerX();
+                int plY = game.player.centerY();
+                if (getDistance(x - plX, y - plY) < distance) {
+                    vector.makeVector(x, y, plX, plY, 9);
+                    AudioPlayer.playShoot();
+                    Game.allSprites.add(new BulletEnemy(x, y, vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
+                }
+                job = 0;
             }
         }
     }
