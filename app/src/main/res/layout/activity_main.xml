@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-
     <ru.warfare.darkannihilation.Game
         android:id="@+id/gameView"
         app:layout_constraintTop_toTopOf="parent"

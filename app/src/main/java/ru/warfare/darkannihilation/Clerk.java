@@ -91,7 +91,7 @@ public final class Clerk {
                 writer_str.write("");
                 writer_str.close();
                 Service.print("Successful");
-            } catch (IOException e2) {
+            } catch (Exception e2) {
                 Service.print("Err: " + e2);
             }
             return 0;

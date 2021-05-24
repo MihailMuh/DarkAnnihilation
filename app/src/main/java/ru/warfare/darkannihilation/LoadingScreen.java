@@ -6,6 +6,7 @@ public class LoadingScreen extends Sprite {
     private int frame = 0;
     private int c = 0;
     private String jobs = "newGame";
+    private boolean sooFast = false;
 
     public LoadingScreen(Game g) {
         super(g, ImageHub.loadingImages[0].getWidth(), ImageHub.loadingImages[0].getHeight());
@@ -16,10 +17,17 @@ public class LoadingScreen extends Sprite {
         c = 0;
         jobs = job;
         Game.gameStatus = 41;
+        if (ImageHub.needImagesForFirstLevel()) {
+            sooFast = true;
+        }
     }
 
     @Override
     public void update() {
+        if (sooFast) {
+            c = 10;
+            sooFast = false;
+        }
         long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;

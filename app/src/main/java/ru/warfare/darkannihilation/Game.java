@@ -5,7 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -96,21 +96,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
     private long timeFrame;
 
-    public Game(Context cont, int width, int height) {
-        super(cont);
-        setZOrderOnTop(true);
-
-        context = cont;
+    public Game(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
         holder = getHolder();
-        holder.setFormat(PixelFormat.TRANSLUCENT);
-
-        screenWidth = width;
-        screenHeight = height;
-        halfScreenWidth = screenWidth / 2;
-        halfScreenHeight = screenHeight / 2;
-        resizeK = (double) screenWidth / 1920;
-
-        getMaxScore();
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -126,6 +115,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setTextSize(30);
         blackPaint.setColor(Color.BLACK);
         blackPaint.setAlpha(0);
+    }
+
+    public void init() {
+        screenWidth = Service.getScreenWidth();
+        screenHeight = Service.getScreenHeight();
+        halfScreenWidth = screenWidth / 2;
+        halfScreenHeight = screenHeight / 2;
+        resizeK = Service.getResizeCoefficient();
+
+        getMaxScore();
 
         while (!endImgInit) {}
 
@@ -148,9 +147,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         attention = new Attention(this);
         factory = new Factory();
         demoman = new Demoman();
-//        spider = new Spider();
-//        sunrise = new Sunrise();
-//        buffer = new Buffer();
         hardWorker = new HardWorker(this);
         screen = new StarScreen();
         loadingScreen = new LoadingScreen(this);
@@ -509,7 +505,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateGameover() {
         gameStatus = 42;
-        level = 1;
         saveScore();
         getMaxScore();
         AudioPlayer.gameoverSnd.start();
@@ -607,10 +602,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         shotgunKit.hide();
         healthKit.hide();
-//        attention.hide();
-//        rocket.hide();
-//        factory.hide();
-//        demoman.hide();
         buttonPlayer.hide();
         buttonSaturn.hide();
         pauseButton.show();
@@ -760,6 +751,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         textBuilder.setLength(0);
 
         if (pointerCount >= 4) {
+            level = 1;
             loadingScreen.newJob("newGame");
         }
     }

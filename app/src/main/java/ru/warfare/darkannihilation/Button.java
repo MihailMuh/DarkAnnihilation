@@ -73,9 +73,6 @@ public class Button extends Sprite {
                             }
                             if (PauseButton.oldStatus != 0) {
                                 Game.gameStatus = PauseButton.oldStatus;
-//                                if (game.portal.touch) {
-//                                    AudioPlayer.timeMachineSnd.start();
-//                                }
                             } else {
                                 Game.gameStatus = 9;
                             }

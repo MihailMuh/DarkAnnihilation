@@ -39,22 +39,16 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
+        setContentView(R.layout.activity_main);
+        game = findViewById(R.id.gameView);
 
         AudioPlayer.init(this);
-
-        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getRealSize(size);
-
-        ImageHub.init(this, (double) size.x / 1920, size.x, size.y);
-
-        ClientServer.getStatistics();
+        Service.init(this);
+        ImageHub.init(this, Service.getResizeCoefficient(), Service.getScreenWidth(), Service.getScreenHeight());
         Clerk.init(this);
+        game.init();
+        ClientServer.getStatistics();
         checkOnFirstRun();
-
-        game = new Game(this, size.x, size.y);
-        setContentView(game);
     }
 
     @Override

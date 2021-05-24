@@ -2,15 +2,15 @@ package ru.warfare.darkannihilation;
 
 public class Portal extends Sprite {
     private int frame = 0;
-    private static final int portalImageLength = ImageHub.portalImages.length;
     private float frameTime = 100;
     private long lastFrame;
     public boolean touch = false;
+//    private float alpha = 0;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
 
-        x = Game.halfScreenWidth - halfWidth;
+        x = randInt(0, Game.screenWidth);
         y = 100;
         isPassive = true;
 
@@ -38,12 +38,14 @@ public class Portal extends Sprite {
             game.generateWin();
             kill();
         } else {
-            touch = true;
-            BaseCharacter.god = true;
-            frameTime = 0;
-            game.player.lock = true;
-            AudioPlayer.timeMachineSnd.start();
-            ImageHub.loadSecondLevelImages(game.context);
+            new Thread(() -> {
+                touch = true;
+                BaseCharacter.god = true;
+                frameTime = 0;
+                game.player.lock = true;
+                AudioPlayer.timeMachineSnd.start();
+                ImageHub.loadSecondLevelImages(game.context);
+            }).start();
         }
     }
 
@@ -52,16 +54,22 @@ public class Portal extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;
-            if (frame < portalImageLength - 1) {
+            if (frame < ImageHub.portalImages.length - 1) {
                 frame += 1;
             } else {
                 frame = 0;
             }
-            if (!AudioPlayer.portalSound.isPlaying() & !touch) {
-                if (Game.gameStatus != 7) {
-                    Game.gameStatus = 0;
+            if (!AudioPlayer.portalSound.isPlaying()) {
+                if (!touch) {
+                    if (Game.gameStatus != 7) {
+                        Game.gameStatus = 0;
+                        kill();
+                        AudioPlayer.resumeBackgroundMusic();
+                    }
+                } else {
+                    Game.level++;
+                    game.loadingScreen.newJob("newGame");
                     kill();
-                    AudioPlayer.resumeBackgroundMusic();
                 }
             }
         }
@@ -70,10 +78,5 @@ public class Portal extends Sprite {
     @Override
     public void render() {
         Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
-        if (touch & !AudioPlayer.timeMachineSnd.isPlaying()) {
-            Game.level++;
-            game.loadingScreen.newJob("newGame");
-            kill();
-        }
     }
 }
