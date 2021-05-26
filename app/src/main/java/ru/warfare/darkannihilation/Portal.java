@@ -37,14 +37,14 @@ public class Portal extends Sprite {
             game.generateWin();
             kill();
         } else {
-            new Thread(() -> {
-                touch = true;
-                BaseCharacter.god = true;
-                frameTime = 0;
-                game.player.lock = true;
-                AudioPlayer.timeMachineSnd.start();
-                ImageHub.loadSecondLevelImages(game.context);
-            }).start();
+            AudioPlayer.timeMachineFirstSnd.start();
+            AudioPlayer.timeMachineNoneSnd.start();
+
+            touch = true;
+            BaseCharacter.god = true;
+            frameTime = 0;
+            game.player.lock = true;
+            ImageHub.loadSecondLevelImages(game.context);
         }
     }
 
@@ -67,11 +67,12 @@ public class Portal extends Sprite {
                     }
                 }
             }
-            if (!AudioPlayer.timeMachineSnd.isPlaying() & touch) {
-                Game.level++;
-                game.loadingScreen.newJob("newGame");
-                kill();
-            }
+        }
+        if (!AudioPlayer.timeMachineNoneSnd.isPlaying() & touch) {
+            AudioPlayer.timeMachineSecondSnd.start();
+            Game.level++;
+            game.loadingScreen.newJob("newGame");
+            kill();
         }
     }
 

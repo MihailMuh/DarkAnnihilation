@@ -21,7 +21,10 @@ public final class AudioPlayer {
     public static MediaPlayer flightSnd;
     public static MediaPlayer winMusic;
     public static MediaPlayer portalSound;
-    public static MediaPlayer timeMachineSnd;
+    public static MediaPlayer timeMachineFirstSnd;
+    public static MediaPlayer timeMachineSecondSnd;
+    public static MediaPlayer timeMachineNoneSnd;
+
     public static MediaPlayer attentionSnd;
     public static MediaPlayer readySnd;
     public static MediaPlayer forgottenMusic;
@@ -107,9 +110,17 @@ public final class AudioPlayer {
             portalSound.setVolume(0.5f, 0.5f);
             sounds.add(portalSound);
 
-            timeMachineSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.time_machine);
-            timeMachineSnd.setVolume(1f, 1f);
-            sounds.add(timeMachineSnd);
+            timeMachineFirstSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.time_machine);
+            timeMachineFirstSnd.setVolume(1f, 1f);
+            sounds.add(timeMachineFirstSnd);
+
+            timeMachineSecondSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.time_machine1);
+            timeMachineSecondSnd.setVolume(1f, 1f);
+            sounds.add(timeMachineSecondSnd);
+
+            timeMachineNoneSnd = MediaPlayer.create(context.getApplicationContext(), R.raw.time_machine_none);
+            timeMachineNoneSnd.setVolume(0f, 0f);
+            sounds.add(timeMachineNoneSnd);
 
             forgottenMusic = MediaPlayer.create(context.getApplicationContext(), R.raw.forgotten_snd);
             forgottenMusic.setVolume(1f, 1f);

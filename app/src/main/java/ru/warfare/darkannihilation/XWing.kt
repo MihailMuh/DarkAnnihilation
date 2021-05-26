@@ -8,6 +8,8 @@ class XWing(game: Game) : Sprite(game, ImageHub.XWingImg.width, ImageHub.XWingIm
     private val shootTripleTime = 180
     private var lastShoot: Long = 0
     private var radius = 350
+    private val vector = Vector()
+    private var now: Long = 0
 
     init {
         health = 5
@@ -27,20 +29,23 @@ class XWing(game: Game) : Sprite(game, ImageHub.XWingImg.width, ImageHub.XWingIm
         lastShoot = System.currentTimeMillis()
     }
 
-    private fun shoot() = runBlocking {
-        val now: Long = System.currentTimeMillis()
+    private fun shoot() {
+        now = System.currentTimeMillis()
         if (now - lastShoot > shootTripleTime) {
-            lastShoot = now
-            val job = launch(Dispatchers.IO) {
-                val plX = game.player.centerX()
-                val plY = game.player.centerY()
-                if (getDistance(HardWorker.x - plX, HardWorker.y - plY) < HardWorker.distance) {
-                    HardWorker.vector.makeVector(HardWorker.x, HardWorker.y, plX, plY, 9)
-                    AudioPlayer.playShoot()
-                    Game.allSprites.add(BulletEnemy(HardWorker.x, HardWorker.y, HardWorker.vector.angle, HardWorker.vector.speedX, HardWorker.vector.speedY))
+            runBlocking {
+                launch(Dispatchers.IO) {
+                    lastShoot = now
+                    val myX = centerX()
+                    val myY = centerY()
+                    val plX = game.player.centerX()
+                    val plY = game.player.centerY()
+                    if (getDistance(myX - plX, myY - plY) < radius) {
+                        vector.makeVector(myX, myY, plX, plY, 9)
+                        AudioPlayer.playShoot()
+                        Game.allSprites.add(BulletEnemy(myX, myY, vector.angle, vector.speedX, vector.speedY))
+                    }
                 }
             }
-            job.join()
         }
     }
 

@@ -6,7 +6,7 @@ public class Buffer extends Sprite {
 
     public Buffer() {
         super(ImageHub.bufferImg.getWidth(), ImageHub.bufferImg.getHeight());
-        maxHealth = 30;
+        maxHealth = 35;
         hide();
 
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);

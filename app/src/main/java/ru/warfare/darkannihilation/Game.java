@@ -46,7 +46,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static ArrayList<Sprite> allSprites = new ArrayList<>(0);
 
     public HardThread hardThread;
-//    public HardWorker hardWorker;
     public BaseScreen screen;
     public Button buttonStart;
     public Button buttonQuit;
@@ -89,7 +88,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
 
-    private static int BOSS_TIME = 10_000;
+    private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
     public long pauseTimer = 0;
 
@@ -181,8 +180,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         long now = System.currentTimeMillis();
         moveAll = player.speedX / 3;
 
-        int sX = screen.x + screen.width;
-        if (screen.x < 0 & sX > screenWidth) {
+        if (screen.x < 0 & screen.x + screen.width > screenWidth) {
             screen.x -= moveAll;
         } else {
             if (screen.x >= 0) {
@@ -633,10 +631,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 spider = null;
                 sunrise = null;
                 buffer = null;
-//                if (hardWorker != null) {
-//                    hardWorker.workOnPause();
-//                    hardWorker = null;
-//                }
 
                 ImageHub.deleteSecondLevelImages();
                 ImageHub.deleteWinImages();
@@ -669,13 +663,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 break;
             case 2:
-                BOSS_TIME = 1_000_000_000;
                 attention = null;
                 rocket = null;
                 factory = null;
                 demoman = null;
-//                hardWorker = new HardWorker(this);
-//                hardWorker.workOnResume();
 
                 ImageHub.deleteFirstLevelImages();
 
