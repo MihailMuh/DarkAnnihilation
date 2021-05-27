@@ -5,7 +5,7 @@ public class BuckshotSaturn extends Sprite {
     private final Vector vector = new Vector();
     private float X;
     private float Y;
-    private boolean orbite = false;
+    private boolean orbit = false;
     private float fly = 0;
 
     public BuckshotSaturn(Game game, int X, int Y) {
@@ -61,7 +61,7 @@ public class BuckshotSaturn extends Sprite {
         X = (float) (X + speeds[0] + game.player.speedX);
         Y = (float) (Y + speeds[1] + game.player.speedY);
 
-        if (!orbite) {
+        if (!orbit) {
             if (getDistance((int) X - game.player.x, (int) Y - game.player.y) > 80) {
                 vector.len += 0.035;
                 deg += 0.03;
@@ -69,7 +69,7 @@ public class BuckshotSaturn extends Sprite {
                 deg += 0.0025;
             }
             if (deg >= 4) {
-                orbite = true;
+                orbit = true;
                 vector.len += 2;
             }
         } else {

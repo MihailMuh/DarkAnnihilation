@@ -87,10 +87,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = false;
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
+    private static final boolean drawFPS = true;
 
-    private static final int BOSS_TIME = 100_000;
+    private static int BOSS_TIME = 100_000;
     public static long lastBoss;
-    public long pauseTimer = 0;
+    public long pauseTimer;
 
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
     private long timeFrame;
@@ -270,38 +271,62 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 shotgunKit.render();
                 player.checkIntersections(shotgunKit);
             } else {
-                if (random.nextFloat() >= 0.99 & score >= 50) {
-                    shotgunKit.lock = false;
+                if (score >= 50) {
+                    if (random.nextFloat() >= 0.99) {
+                        shotgunKit.lock = false;
+                    }
                 }
             }
         }
 
-        if (healthKit.lock & random.nextFloat() >= 0.9985) {
-            healthKit.lock = false;
+        if (healthKit.lock) {
+            if (random.nextFloat() >= 0.9985) {
+                healthKit.lock = false;
+            }
         }
         switch (level)
         {
             case 1:
-                if (attention.lock & random.nextFloat() >= 0.996 & score > 50) {
-                    attention.start();
+                if (score > 50) {
+                    if (attention.lock) {
+                        if (random.nextFloat() >= 0.996) {
+                            attention.start();
+                        }
+                    }
                 }
-                if (factory.lock & random.nextFloat() >= 0.9991 & score >= 170 & bosses.size() == 0) {
-                    factory.lock = false;
+                if (score > 170) {
+                    if (bosses.size() == 0) {
+                        if (factory.lock) {
+                            if (random.nextFloat() >= 0.9991) {
+                                factory.lock = false;
+                            }
+                        }
+                    }
                 }
-                if (demoman.lock & random.nextFloat() >= 0.9979 & score > 70) {
-                    demoman.lock = false;
+                if (score > 70) {
+                    if (demoman.lock) {
+                        if (random.nextFloat() >= 0.9979) {
+                            demoman.lock = false;
+                        }
+                    }
                 }
                 break;
             case 2:
-                if (spider.lock & random.nextFloat() >= 0.998) {
-                    spider.lock = false;
+                if (spider.lock) {
+                    if (random.nextFloat() >= 0.998) {
+                        spider.lock = false;
+                    }
                 }
                 if (bosses.size() == 0) {
-                    if (sunrise.lock & random.nextFloat() >= 0.9991) {
-                        sunrise.lock = false;
+                    if (sunrise.lock) {
+                        if (random.nextFloat() >= 0.9991) {
+                            sunrise.lock = false;
+                        }
                     }
-                    if (buffer.lock & random.nextFloat() >= 0.999) {
-                        buffer.lock = false;
+                    if (buffer.lock) {
+                        if (random.nextFloat() >= 0.999) {
+                            buffer.lock = false;
+                        }
                     }
                 }
                 break;
@@ -317,7 +342,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     @Override
     public void run() {
         while (playing) {
-            timeFrame = System.nanoTime();
+            if (drawFPS) {
+                timeFrame = System.nanoTime();
+            }
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();
                 switch (gameStatus) {
@@ -359,7 +386,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 holder.unlockCanvasAndPost(canvas);
             }
-            timeFrame = System.nanoTime();
         }
     }
 
@@ -441,9 +467,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void onPause() {
         hardThread.workOnPause();
-//        if (hardWorker != null) {
-//            hardWorker.workOnPause();
-//        }
         if (gameStatus == 7) {
             AudioPlayer.winMusic.pause();
         }
@@ -461,9 +484,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void onResume() {
         hardThread.workOnResume();
-//        if (hardWorker != null) {
-//            hardWorker.workOnResume();
-//        }
         if (gameStatus == 7) {
             AudioPlayer.winMusic.start();
         } else {
@@ -517,9 +537,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generatePause() {
         hardThread.workOnPause();
-//        if (hardWorker != null) {
-//            hardWorker.workOnPause();
-//        }
         AudioPlayer.pauseBackgroundMusic();
         if (bosses.size() == 0) {
             AudioPlayer.restartPauseMusic();
@@ -663,6 +680,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 break;
             case 2:
+                BOSS_TIME = 1_000_000;
                 attention = null;
                 rocket = null;
                 factory = null;
@@ -695,45 +713,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.restartReadySound();
     }
 
-    public void renderSprites() {
-        screen.render();
-        for (int i = 0; i < allSprites.size(); i++) {
-            if (allSprites.get(i) != null) {
-                if (!allSprites.get(i).lock) {
-                    allSprites.get(i).render();
-                }
-            }
-        }
-        shotgunKit.render();
-        player.render();
-        changerGuns.render();
-        if (portal != null) {
-            portal.render();
-        }
-    }
-
-    public void renderFPS() {
-        textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-        canvas.drawText(textBuilder.toString(), screenWidth - 250, 170, fpsPaint);
-
-        textBuilder.setLength(0);
-    }
-
-    public void renderCurrentScore() {
-        textBuilder.append("Current score: ").append(score);
-        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
-
-        textBuilder.setLength(0);
-    }
-
-    public void renderMaxScore() {
-        textBuilder.append("Max score: ").append(bestScore);
-        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
-
-        textBuilder.setLength(0);
-    }
-
-    public void gameover() {
+    private void gameover() {
         screen.render(ImageHub.gameoverScreen);
 
         pauseButton.render();
@@ -763,7 +743,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    public void bossIncoming() {
+    private void bossIncoming() {
         renderSprites();
         renderFPS();
         renderCurrentScore();
@@ -780,7 +760,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         fightBg.render();
     }
 
-    public void afterPause() {
+    private void afterPause() {
         renderSprites();
         renderFPS();
         renderCurrentScore();
@@ -805,7 +785,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    public void pause() {
+    private void pause() {
         if (PauseButton.oldStatus != 3) {
             renderSprites();
 
@@ -848,7 +828,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         pauseTimer += 20;
     }
 
-    public void ready() {
+    private void ready() {
         moveAll = player.speedX / 3;
 
         if (screen.x < 0 & screen.x + screen.width > screenWidth) {
@@ -899,7 +879,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    public void preview() {
+    private void preview() {
         screen.update();
         screen.render();
 
@@ -938,7 +918,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    public void topScore() {
+    private void topScore() {
         try {
             screen.update();
             screen.render();
@@ -961,7 +941,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
-    public void win() {
+    private void win() {
         winScreen.update();
         winScreen.render();
 
@@ -1044,6 +1024,46 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
+    private void renderSprites() {
+        screen.render();
+        for (int i = 0; i < allSprites.size(); i++) {
+            if (allSprites.get(i) != null) {
+                if (!allSprites.get(i).lock) {
+                    allSprites.get(i).render();
+                }
+            }
+        }
+        shotgunKit.render();
+        player.render();
+        changerGuns.render();
+        if (portal != null) {
+            portal.render();
+        }
+    }
+
+    private void renderFPS() {
+        if (drawFPS) {
+            textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
+            canvas.drawText(textBuilder.toString(), screenWidth - 250, 170, fpsPaint);
+
+            textBuilder.setLength(0);
+        }
+    }
+
+    private void renderCurrentScore() {
+        textBuilder.append("Current score: ").append(score);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+
+        textBuilder.setLength(0);
+    }
+
+    private void renderMaxScore() {
+        textBuilder.append("Max score: ").append(bestScore);
+        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+
+        textBuilder.setLength(0);
+    }
+
     public void saveScore() {
         if (score > bestScore) {
             Clerk.saveBestScore(score);
@@ -1054,7 +1074,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         bestScore = Clerk.getMaxScore();
     }
 
-    public void onLoading() {
+    private void onLoading() {
         loadingScreen.render();
         loadingScreen.update();
     }

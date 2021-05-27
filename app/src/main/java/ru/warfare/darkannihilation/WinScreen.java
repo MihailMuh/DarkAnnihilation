@@ -8,7 +8,7 @@ public class WinScreen extends Sprite {
     private static final int screenImageLength = ImageHub.winScreenImg.length;
     private static final int frameTime = 45;
     private long lastFrame;
-    private final Paint paint = new Paint();
+    private static final Paint paint = new Paint();
 
     public WinScreen() {
         super(0, 0);

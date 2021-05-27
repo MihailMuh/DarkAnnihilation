@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class TripleFighter extends Sprite {
-    private int shootTripleTime = 1_500;
+    private static final int shootTripleTime = 1_500;
     private long lastShoot;
 
     public TripleFighter() {
@@ -41,32 +41,6 @@ public class TripleFighter extends Sprite {
         y = -150;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
-
-        if (buff) {
-            up();
-        } else {
-            shootTripleTime = 1_500;
-        }
-    }
-
-    private void up() {
-        speedX *= 2;
-        speedY *= 2;
-        shootTripleTime /= 2;
-        health *= 2;
-    }
-
-    @Override
-    public void buff() {
-        buff = true;
-        up();
-    }
-
-    @Override
-    public void stopBuff() {
-        speedX /= 2;
-        speedY /= 2;
-        shootTripleTime = 1_500;
     }
 
     @Override

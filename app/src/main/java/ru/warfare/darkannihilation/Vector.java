@@ -1,11 +1,11 @@
 package ru.warfare.darkannihilation;
 
 public class Vector {
-    public int a = 0;
-    public int b;
-    public double c;
-    public double ac;
-    public double bc;
+    private int a;
+    private int b;
+    private double c;
+    private double ac;
+    private double bc;
     public double len;
 
     public void makeVector(int startX, int startY, int endX, int endY, int len) {
@@ -31,9 +31,6 @@ public class Vector {
     }
 
     public double[] rotateVector(double angle) {
-        /**
-         * It rotates the vector counterclockwise (right direction).
-         */
         double x = ac * len;
         double y = bc * len;
         double cos = Math.cos(-angle);

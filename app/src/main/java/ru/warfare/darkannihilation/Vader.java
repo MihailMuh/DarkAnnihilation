@@ -44,8 +44,8 @@ public class Vader extends Sprite {
     }
 
     private void up() {
-        speedX *= 2;
-        speedY *= 2;
+        speedX *= 3;
+        speedY *= 3;
     }
 
     @Override

@@ -4,6 +4,7 @@ public class Factory extends Sprite {
     private static final int spawnTime = 1_000;
     private long lastSpawn;
     private final float maxHealth;
+    private static final int minionY = ImageHub.factoryImg.getHeight() - 100;
 
     public Factory() {
         super(ImageHub.factoryImg.getWidth(), ImageHub.factoryImg.getHeight());
@@ -32,8 +33,8 @@ public class Factory extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastSpawn > spawnTime) {
             lastSpawn = now;
-            Game.allSprites.add(new Minion(x));
-            Game.allSprites.add(new Minion(x));
+            Game.allSprites.add(new Minion(randInt(x, x + ImageHub.factoryImg.getWidth()), minionY));
+            Game.allSprites.add(new Minion(randInt(x, x + ImageHub.factoryImg.getWidth()), minionY));
         }
     }
 

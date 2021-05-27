@@ -4,13 +4,13 @@ public class Minion extends Sprite {
     private static final int shootMinionTime = 900;
     private long lastShoot;
 
-    public Minion(int FX) {
+    public Minion(int x, int y) {
         super(ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
         health = 2;
         damage = 5;
 
-        x = randInt(FX, FX + ImageHub.factoryImg.getWidth());
-        y = ImageHub.factoryImg.getHeight() - 100;
+        this.x = x;
+        this.y = y;
         speedX = randInt(-8, 8);
         speedY = randInt(2, 5);
 
