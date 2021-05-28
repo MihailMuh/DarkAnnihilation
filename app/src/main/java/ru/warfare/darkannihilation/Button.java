@@ -67,7 +67,9 @@ public class Button extends Sprite {
                             Game.lastBoss += game.pauseTimer;
                             game.hardThread.workOnResume();
                             AudioPlayer.pausePauseMusic();
-                            AudioPlayer.resumeBackgroundMusic();
+                            if (Game.bosses.size() == 0) {
+                                AudioPlayer.resumeBackgroundMusic();
+                            }
                             if (PauseButton.oldStatus == 2) {
                                 AudioPlayer.readySnd.start();
                             }

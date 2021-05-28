@@ -20,13 +20,13 @@ public class BulletBoss extends Sprite {
                 img = ImageHub.laserImage;
                 break;
             case 2:
-                speedX = 4;
-                matrix.postRotate(30);
+                speedX = 6;
+                matrix.postRotate(45);
                 img = Bitmap.createBitmap(ImageHub.laserImage, 0, 0, width, height, matrix, ImageHub.isFilter);
                 break;
             case 3:
-                speedX = -4;
-                matrix.postRotate(330);
+                speedX = -6;
+                matrix.postRotate(-45);
                 img = Bitmap.createBitmap(ImageHub.laserImage, 0, 0, width, height, matrix, ImageHub.isFilter);
                 break;
         }

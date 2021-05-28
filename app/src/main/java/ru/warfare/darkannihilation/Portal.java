@@ -62,7 +62,7 @@ public class Portal extends Sprite {
                 if (!touch) {
                     if (Game.gameStatus != 7) {
                         Game.gameStatus = 0;
-                        kill();
+                        game.portal = null;
                         AudioPlayer.resumeBackgroundMusic();
                     }
                 }

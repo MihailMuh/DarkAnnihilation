@@ -89,7 +89,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = true;
 
-    private static int BOSS_TIME = 100_000;
+    private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
     public long pauseTimer;
 
@@ -680,7 +680,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 break;
             case 2:
-                BOSS_TIME = 1_000_000;
                 attention = null;
                 rocket = null;
                 factory = null;
@@ -748,13 +747,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         renderFPS();
         renderCurrentScore();
         Sprite boss = bosses.get(bosses.size()-1);
-        if (boss.y >= -200 | pointerCount >= 4) {
+        if (boss.y >= -400 | pointerCount >= 4) {
             if (portal == null) {
                 gameStatus = 0;
             } else {
                 gameStatus = 6;
             }
             boss.y = -boss.height;
+            boss.speedY = 3;
         }
         boss.update();
         fightBg.render();

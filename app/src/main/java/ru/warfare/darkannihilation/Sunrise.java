@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class Sunrise extends Sprite {
-    private int shootTime = 500;
+    private final static int shootTime = 650;
     private long lastShoot;
     private boolean field;
     private boolean left = false;
@@ -19,9 +19,9 @@ public class Sunrise extends Sprite {
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
-            lastShoot = now;
 
             if (HardThread.job == 0) {
+                lastShoot = now;
                 HardThread.x = centerX();
                 HardThread.y = centerY();
                 HardThread.job = 3;

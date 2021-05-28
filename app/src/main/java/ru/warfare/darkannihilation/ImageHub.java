@@ -83,9 +83,10 @@ public final class ImageHub {
     private static int eX105;
     private static int eX15;
     private static int fact;
-    private static int eX200;
+//    private static int eX200;
     private static int eX80;
     private static int eX175;
+    private static int eX400;
     @SuppressLint("StaticFieldLeak")
     private static RequestBuilder<Bitmap> requestBuilder;
 
@@ -99,10 +100,11 @@ public final class ImageHub {
         eX100 = (int) (100 * resizeK);
         eX105 = (int) (105 * resizeK);
         eX15 = (int) (15 * resizeK);
-        eX200 = (int) (200 * resizeK);
+//        eX200 = (int) (200 * resizeK);
         eX80 = (int) (80 * resizeK);
         eX175 = (int) (175 * resizeK);
         fact = (int) ((screenWidth / 1.3) * resizeK);
+        eX400 = (int) (400 * resizeK);
         int eX145 = (int) (145 * resizeK);
         int eX152 = (int) (152 * resizeK);
         int eX52 = (int) (52 * resizeK);
@@ -111,7 +113,6 @@ public final class ImageHub {
         int sW150 = (int) ((screenWidth - 150) * resizeK);
         int sW = (int) (screenWidth * resizeK);
         int eX300 = (int) (300 * resizeK);
-        int eX400 = (int) (400 * resizeK);
         int eX13 = (int) (13 * resizeK);
         int eX207 = (int) (207 * resizeK);
         int eX120 = (int) (120 * resizeK);
@@ -152,7 +153,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.boss)
-                .override(eX200, eX200)
+                .override(eX400, eX400)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -937,7 +938,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.boss)
-                .override(eX200, eX200)
+                .override(eX400, eX400)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
