@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 
 import androidx.annotation.Nullable;
 
@@ -1160,5 +1161,17 @@ public final class ImageHub {
             }
             winScreenImg = new Bitmap[100];
         }
+    }
+
+    public static Bitmap rotateImage(Bitmap image, float degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
+    }
+
+    public static Bitmap rotateImage(Bitmap image, double degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate((float) degree);
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
     }
 }

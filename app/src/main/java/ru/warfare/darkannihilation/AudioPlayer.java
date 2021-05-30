@@ -205,19 +205,14 @@ public final class AudioPlayer {
     }
 
     public static void restartBackgroundMusic() {
+        pauseBackgroundMusic();
         switch (Game.level)
         {
             case 1:
-                if (pirateMusic.isPlaying()) {
-                    pirateMusic.pause();
-                }
                 pirateMusic.seekTo(0);
                 pirateMusic.start();
                 break;
             case 2:
-                if (AudioPlayer.forgottenMusic.isPlaying()) {
-                    AudioPlayer.forgottenMusic.pause();
-                }
                 AudioPlayer.forgottenMusic.seekTo(0);
                 AudioPlayer.forgottenMusic.start();
                 break;

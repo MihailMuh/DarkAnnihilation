@@ -13,7 +13,7 @@ public class Saturn extends BaseCharacter {
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 17);
 
         shootTime = 130;
-        shotgunTime = 40;
+        shotgunTime = 65;
         lastShoot = System.currentTimeMillis();
     }
 

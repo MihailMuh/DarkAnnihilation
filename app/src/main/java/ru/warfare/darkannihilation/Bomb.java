@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Bitmap;
+
 public class Bomb extends Sprite {
     public Bomb(int X, int Y) {
         super(ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
@@ -12,6 +14,11 @@ public class Bomb extends Sprite {
         y = Y;
 
         AudioPlayer.playFallingBomb();
+    }
+
+    @Override
+    public Object[] getBox(int a, int b, Bitmap image) {
+        return new Object[] {ImageHub.rotateImage(ImageHub.bombImg, 180)};
     }
 
     @Override

@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
         Service.init(this);
         ImageHub.init(this, Service.getResizeCoefficient(), Service.getScreenWidth(), Service.getScreenHeight());
         Clerk.init(this);
-        game.init();
         ClientServer.getStatistics();
         checkOnFirstRun();
+        game.init();
     }
 
     @Override

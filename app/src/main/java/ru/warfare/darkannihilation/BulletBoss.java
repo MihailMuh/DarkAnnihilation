@@ -36,6 +36,11 @@ public class BulletBoss extends Sprite {
     }
 
     @Override
+    public Object[] getBox(int a, int b, Bitmap image) {
+        return new Object[] {ImageHub.laserImage};
+    }
+
+    @Override
     public void intersectionPlayer() {
         createSmallTripleExplosion();
         Game.allSprites.remove(this);

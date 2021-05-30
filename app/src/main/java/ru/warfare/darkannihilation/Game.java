@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -89,7 +90,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = true;
 
-    private static final int BOSS_TIME = 100_000;
+    private static final int BOSS_TIME = 10_000;
     public static long lastBoss;
     public long pauseTimer;
 
@@ -194,38 +195,50 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.render();
 
         for (int i = 0; i < allSprites.size(); i++) {
-            Sprite sprite = allSprites.get(i);
-            if (sprite != null) {
-                if (!sprite.lock) {
-                    sprite.x -= moveAll;
-                    sprite.render();
-                    sprite.update();
-                    if (!sprite.isPassive) {
-                        player.checkIntersections(sprite);
+            Sprite anySprite = allSprites.get(i);
+            if (anySprite != null) {
+                if (!anySprite.lock) {
+                    anySprite.x -= moveAll;
+                    anySprite.render();
+                    anySprite.update();
+                    if (!anySprite.isPassive) {
+                        player.checkIntersections(anySprite);
                     }
-                    if (!sprite.isBullet) {
+                    if (!anySprite.isBullet) {
                         for (int j = 0; j < bullets.size(); j++) {
-                            sprite.check_intersectionBullet(bullets.get(j));
+                            anySprite.check_intersectionBullet(bullets.get(j));
                         }
                     }
-                    if (sprite.status.equals("bulletEnemy")) {
+                    if (anySprite.status.equals("rocket")) {
                         for (int j = 0; j < bullets.size(); j++) {
                             Sprite bullet = bullets.get(j);
                             if (bullet.status.equals("saturn")) {
-                                if (sprite.getRect().intersect(bullet.getRect())) {
-                                    sprite.intersectionPlayer();
+                                if (anySprite.getRect().intersect(bullet.getRect())) {
                                     bullet.intersection();
-                                    break;
                                 }
                             }
                         }
                     }
-                    if (sprite.status.equals("rocket")) {
+                    if (anySprite.status.equals("bulletEnemy")) {
                         for (int j = 0; j < bullets.size(); j++) {
-                            Sprite bullet = bullets.get(j);
-                            if (bullet.status.equals("saturn")) {
-                                if (sprite.getRect().intersect(bullet.getRect())) {
-                                    bullet.intersection();
+                            Sprite bulletPlayer = bullets.get(j);
+                            if (bulletPlayer.status.equals("saturn")) {
+                                if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
+                                    if (random.nextFloat() <= 0.7) {
+                                        Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
+                                                (Bitmap) anySprite.getBox(0, 0, null)[0]);
+                                        if ((boolean) info[3]) {
+                                            BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                            allSprites.add(bulletEnemyOrbit);
+                                            bullets.add(bulletEnemyOrbit);
+
+                                            allSprites.remove(anySprite);
+                                        }
+                                    } else {
+                                        anySprite.intersectionPlayer();
+                                        bulletPlayer.intersection();
+                                    }
+                                    break;
                                 }
                             }
                         }

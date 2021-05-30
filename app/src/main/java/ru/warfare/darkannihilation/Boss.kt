@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class Boss(g: Game?) : Sprite(g, ImageHub.bossImage.width, ImageHub.bossImage.height) {
+class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossImage.height) {
     private var lastShoot: Long
     private val maxHealth = 250f
     private val shootBossTime = 300
@@ -100,20 +100,6 @@ class Boss(g: Game?) : Sprite(g, ImageHub.bossImage.width, ImageHub.bossImage.he
             }
             y += speedY
         }
-//        if (x < -width) {
-//            if (randInt(1, 2) == 1) {
-//                x = Game.screenWidth
-//            } else {
-//                speedX = -speedX
-//            }
-//        }
-//        if (x > Game.screenWidth) {
-//            if (randInt(1, 2) == 1) {
-//                x = -width
-//            } else {
-//                speedX = -speedX
-//            }
-//        }
         if (health <= 0) {
             killAfterFight()
         }

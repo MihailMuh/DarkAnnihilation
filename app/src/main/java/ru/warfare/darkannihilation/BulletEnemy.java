@@ -1,10 +1,9 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 
 public class BulletEnemy extends Sprite {
-    private final Bitmap img;
+    private final Bitmap image;
 
     public BulletEnemy(int X, int Y, int angle, int spdx, int spdy) {
         super(ImageHub.bulletEnemyImage.getWidth(), ImageHub.bulletEnemyImage.getHeight());
@@ -15,13 +14,15 @@ public class BulletEnemy extends Sprite {
         speedX = spdx;
         speedY = spdy;
 
-        Matrix matrix = new Matrix();
-        matrix.postRotate((float) angle);
-
-        img = Bitmap.createBitmap(ImageHub.bulletEnemyImage, 0, 0, width, height, matrix, true);
+        image = ImageHub.rotateImage(ImageHub.bulletEnemyImage, angle);
 
         x = X;
         y = Y;
+    }
+
+    @Override
+    public Object[] getBox(int a, int b, Bitmap image) {
+        return new Object[] {ImageHub.bulletEnemyImage};
     }
 
     @Override
@@ -42,6 +43,6 @@ public class BulletEnemy extends Sprite {
 
     @Override
     public void render () {
-        Game.canvas.drawBitmap(img, x, y, null);
+        Game.canvas.drawBitmap(image, x, y, null);
     }
 }

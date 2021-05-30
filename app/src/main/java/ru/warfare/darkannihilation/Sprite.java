@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import android.graphics.Bitmap;
+
 public class Sprite {
     public Game game;
 
@@ -75,7 +77,7 @@ public class Sprite {
     public void createLargeExplosion() {
         for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
             if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                Game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -84,7 +86,7 @@ public class Sprite {
     public void createSmallExplosion() {
         for (int i = Game.numberMediumExplosionsDefault; i < Game.numberSmallExplosionsDefault; i++) {
             if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                Game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -93,7 +95,7 @@ public class Sprite {
     public void createLargeTripleExplosion() {
         for (int i = 0; i < Game.numberMediumExplosionsTriple; i++) {
             if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                Game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -102,7 +104,7 @@ public class Sprite {
     public void createSmallTripleExplosion() {
         for (int i = Game.numberMediumExplosionsTriple; i < Game.numberSmallExplosionsTriple; i++) {
             if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                Game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -111,7 +113,7 @@ public class Sprite {
     public void createSkullExplosion() {
         for (int i = Game.numberSmallExplosionsDefault; i < Game.numberExplosionsALL; i++) {
             if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(x + halfWidth, y + halfHeight);
+                Game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -141,7 +143,14 @@ public class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
-        return left < sprite.right && sprite.left < right && top < sprite.bottom && sprite.top < bottom;
+        if (left < sprite.right) {
+            if (sprite.left < right) {
+                if (top < sprite.bottom) {
+                    return sprite.top < bottom;
+                }
+            }
+        }
+        return false;
     }
 
     public Sprite goTO(int newLeft, int newTop) {
@@ -171,6 +180,12 @@ public class Sprite {
     public static int getDistance(int a, int b) {
         return (int) Math.sqrt((a * a) + (b * b));
     }
-
+    public static double getDistance(double a, double b) {
+        return Math.sqrt((a * a) + (b * b));
+    }
     public int getDistance() {return 0;}
+    public Object[] getBox(int a, int b, Bitmap bitmap) {
+        return new Object[8];
+    }
+
 }

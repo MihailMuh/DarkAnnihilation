@@ -22,7 +22,7 @@ public class BossVaders extends Sprite {
         isPassive = true;
 
         x = randInt(width, screenWidthWidth - width);
-        y = -600;
+        y = -800;
 
         recreateRect(x + 35, y + 20, right() - 35, bottom() - 20);
 
@@ -46,7 +46,6 @@ public class BossVaders extends Sprite {
         speedX *= 2;
         speedY *= 2;
         shootBossTime /= 2;
-        health *= 2;
     }
 
     @Override
@@ -95,7 +94,7 @@ public class BossVaders extends Sprite {
     @Override
     public void update() {
         game.pauseTimer += 20;
-        if (y == -400) {
+        if (y == -600) {
             AudioPlayer.restartBossMusic();
             AudioPlayer.pauseBackgroundMusic();
             Game.gameStatus = 5;
