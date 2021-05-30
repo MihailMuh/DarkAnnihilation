@@ -88,9 +88,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = false;
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = true;
+    private static final boolean drawFPS = false;
 
-    private static final int BOSS_TIME = 10_000;
+    private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
     public long pauseTimer;
 
@@ -209,36 +209,38 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                             anySprite.check_intersectionBullet(bullets.get(j));
                         }
                     }
-                    if (anySprite.status.equals("rocket")) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            Sprite bullet = bullets.get(j);
-                            if (bullet.status.equals("saturn")) {
-                                if (anySprite.getRect().intersect(bullet.getRect())) {
-                                    bullet.intersection();
+                    if (character.equals("saturn")) {
+                        if (anySprite.status.equals("rocket")) {
+                            for (int j = 0; j < bullets.size(); j++) {
+                                Sprite bullet = bullets.get(j);
+                                if (bullet.status.equals("saturn")) {
+                                    if (anySprite.getRect().intersect(bullet.getRect())) {
+                                        bullet.intersection();
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (anySprite.status.equals("bulletEnemy")) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            Sprite bulletPlayer = bullets.get(j);
-                            if (bulletPlayer.status.equals("saturn")) {
-                                if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
-                                    if (random.nextFloat() <= 0.7) {
-                                        Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
-                                                (Bitmap) anySprite.getBox(0, 0, null)[0]);
-                                        if ((boolean) info[3]) {
-                                            BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                            allSprites.add(bulletEnemyOrbit);
-                                            bullets.add(bulletEnemyOrbit);
+                        if (anySprite.status.equals("bulletEnemy")) {
+                            for (int j = 0; j < bullets.size(); j++) {
+                                Sprite bulletPlayer = bullets.get(j);
+                                if (bulletPlayer.status.equals("saturn")) {
+                                    if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
+                                        if (random.nextFloat() <= 0.7) {
+                                            Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
+                                                    (Bitmap) anySprite.getBox(0, 0, null)[0]);
+                                            if ((boolean) info[3]) {
+                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                allSprites.add(bulletEnemyOrbit);
+                                                bullets.add(bulletEnemyOrbit);
 
-                                            allSprites.remove(anySprite);
+                                                allSprites.remove(anySprite);
+                                            }
+                                        } else {
+                                            anySprite.intersectionPlayer();
+                                            bulletPlayer.intersection();
                                         }
-                                    } else {
-                                        anySprite.intersectionPlayer();
-                                        bulletPlayer.intersection();
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
@@ -266,12 +268,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
             bosses.add(boss);
             allSprites.add(boss);
-            for (int i = 0; i < bullets.size(); i++) {
-                Sprite bullet = bullets.get(i);
-                if (bullet.status.equals("saturn")) {
-                    if (bullet.getDistance() >= screenWidth - 100) {
-                        bullets.remove(bullet);
-                        allSprites.remove(bullet);
+            if (character.equals("saturn")) {
+                for (int i = 0; i < bullets.size(); i++) {
+                    Sprite bullet = bullets.get(i);
+                    if (bullet.status.equals("saturn")) {
+                        if (bullet.getDistance() >= screenWidth - 100) {
+                            bullets.remove(bullet);
+                            allSprites.remove(bullet);
+                        }
                     }
                 }
             }

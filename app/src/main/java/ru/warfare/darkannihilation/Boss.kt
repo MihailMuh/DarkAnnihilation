@@ -65,10 +65,12 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         return goTO(x + 20, y + 20)
     }
 
-    override fun check_intersectionBullet(bullet: Sprite) {
-        if (rect.intersect(bullet.rect)) {
-            health -= bullet.damage
-            bullet.intersection()
+    override fun check_intersectionBullet(bullet: Sprite?) {
+        if (bullet != null) {
+            if (rect.intersect(bullet.rect)) {
+                health -= bullet.damage
+                bullet.intersection()
+            }
         }
     }
 
