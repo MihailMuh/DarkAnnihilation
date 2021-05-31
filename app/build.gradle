@@ -31,7 +31,7 @@ android {
         release {
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
             shrinkResources false
-            debuggable true
+            debuggable false
             minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
