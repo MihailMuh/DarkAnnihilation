@@ -1,18 +1,22 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Sprite.randInt;
+
 public class HardThread implements Runnable {
 //    1 - bullets enemy
-//    2 - saturn
+//    2 - saturn second gun
 //    3 - sunrise
 //    4 - bomb
-    private Thread thread;
-    private boolean work = false;
-    public static volatile int job = 0;
-    public static final Vector vector = new Vector();
+//    5 - saturn first gun
 
+    private static final Vector vector = new Vector();
+    private Thread thread;
+    private final Game game;
+    private boolean work = false;
+
+    public static volatile int job = 0;
     public static volatile int x = 0;
     public static volatile int y = 0;
-    private final Game game;
 
     public HardThread(Game g) {
         game = g;
@@ -61,6 +65,15 @@ public class HardThread implements Runnable {
                     break;
                 case 4:
                     Game.allSprites.add(new Bomb(game.demoman.centerX(), game.demoman.centerY()));
+                    job = 0;
+                    break;
+                case 5:
+                    for (int i = 0; i < randInt(2, 6); i++) {
+                        BulletSaturn bulletSaturn = new BulletSaturn(game.player.centerX(), game.player.y);
+                        Game.bullets.add(bulletSaturn);
+                        Game.allSprites.add(bulletSaturn);
+                    }
+                    AudioPlayer.playShoot();
                     job = 0;
                     break;
                 default:

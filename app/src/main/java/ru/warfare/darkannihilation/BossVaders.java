@@ -33,10 +33,8 @@ public class BossVaders extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootBossTime) {
             lastShoot = now;
-            int X = centerX();
-            int Y = centerY();
-            vector.makeVector(X, Y, game.player.centerX(), game.player.centerY(), 10);
-            Game.allSprites.add(new BulletBossVaders(X, Y, vector.getSpeedX(), vector.getSpeedY()));
+            vector.makeVector(centerX(), centerY(), game.player.centerX(), game.player.centerY(), 10);
+            Game.allSprites.add(new BulletBossVaders(centerX(), centerY(), vector.getSpeedX(), vector.getSpeedY()));
             AudioPlayer.playBossShoot();
         }
     }

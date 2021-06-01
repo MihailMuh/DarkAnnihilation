@@ -22,8 +22,8 @@ public class Minion extends Sprite {
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootMinionTime) {
-            lastShoot = now;
             if (HardThread.job == 0) {
+                lastShoot = now;
                 HardThread.x = centerX();
                 HardThread.y = centerY();
                 HardThread.job = 1;

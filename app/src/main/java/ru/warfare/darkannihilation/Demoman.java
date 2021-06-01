@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation;
 public class Demoman extends Sprite {
     private static final int shootTime = 150;
     private long lastShoot;
-
     private int direction = 0;
 
     public Demoman() {
@@ -20,7 +19,7 @@ public class Demoman extends Sprite {
 
     public void hide() {
         lock = true;
-        health = 20;
+        health = 30;
         y = randInt(0, Game.halfScreenHeight - height);
         direction = randInt(0, 1);
         if (direction == 0) {
@@ -35,8 +34,8 @@ public class Demoman extends Sprite {
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
-            lastShoot = now;
             if (HardThread.job == 0) {
+                lastShoot = now;
                 HardThread.job = 4;
             }
         }

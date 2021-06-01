@@ -22,19 +22,16 @@ public class Saturn extends BaseCharacter {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
             if (now - lastShoot > shotgunTime) {
-                lastShoot = now;
                 if (HardThread.job == 0) {
+                    lastShoot = now;
                     HardThread.job = 2;
                 }
             }
         } else {
             if (now - lastShoot > shootTime) {
-                lastShoot = now;
-                AudioPlayer.playShoot();
-                for (int i = 0; i < randInt(1, 6); i++) {
-                    BulletSaturn bulletSaturn = new BulletSaturn(centerX(), y);
-                    Game.bullets.add(bulletSaturn);
-                    Game.allSprites.add(bulletSaturn);
+                if (HardThread.job == 0) {
+                    lastShoot = now;
+                    HardThread.job = 5;
                 }
             }
         }

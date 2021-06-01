@@ -19,7 +19,6 @@ public class Sunrise extends Sprite {
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTime) {
-
             if (HardThread.job == 0) {
                 lastShoot = now;
                 HardThread.x = centerX();

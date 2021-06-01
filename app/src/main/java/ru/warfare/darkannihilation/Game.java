@@ -219,27 +219,31 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                     }
                                 }
                             }
-                        }
-                        if (anySprite.status.equals("bulletEnemy")) {
-                            for (int j = 0; j < bullets.size(); j++) {
-                                Sprite bulletPlayer = bullets.get(j);
-                                if (bulletPlayer.status.equals("saturn")) {
-                                    if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
-                                        if (random.nextFloat() <= 0.7) {
-                                            Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
-                                                    (Bitmap) anySprite.getBox(0, 0, null)[0]);
-                                            if ((boolean) info[3]) {
-                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                allSprites.add(bulletEnemyOrbit);
-                                                bullets.add(bulletEnemyOrbit);
+                        } else {
+                            if (anySprite.status.equals("bulletEnemy")) {
+                                for (int j = 0; j < bullets.size(); j++) {
+                                    Sprite bulletPlayer = bullets.get(j);
+                                    if (bulletPlayer.status.equals("saturn")) {
+                                        if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
+                                            if (random.nextFloat() <= 0.6) {
+                                                Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
+                                                        (Bitmap) anySprite.getBox(0, 0, null)[0]);
+                                                if ((boolean) info[3]) {
+                                                    BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                    allSprites.add(bulletEnemyOrbit);
+                                                    bullets.add(bulletEnemyOrbit);
 
-                                                allSprites.remove(anySprite);
+                                                    allSprites.remove(anySprite);
+                                                } else {
+                                                    anySprite.intersectionPlayer();
+                                                    bulletPlayer.intersection();
+                                                }
+                                            } else {
+                                                anySprite.intersectionPlayer();
+                                                bulletPlayer.intersection();
                                             }
-                                        } else {
-                                            anySprite.intersectionPlayer();
-                                            bulletPlayer.intersection();
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
                             }

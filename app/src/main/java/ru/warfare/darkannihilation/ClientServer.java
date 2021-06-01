@@ -66,4 +66,28 @@ public final class ClientServer {
             public void onResponse(@NotNull Call call, @NotNull Response response) {}
         });
     }
+
+    public static void postAndGetBestScore(String nickname, int bestScore) {
+        JSONObject jsonScore = new JSONObject();
+        try {
+            jsonScore.put(nickname, bestScore);
+        } catch (JSONException e) {
+            Service.print(e.toString());
+        }
+        client.newCall(
+                new Request.Builder()
+                        .url(SERVER_IP + "write?data=" + jsonScore.toString())
+                        .build())
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Service.print(e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) {
+                        getStatistics();
+                    }
+                });
+    }
 }

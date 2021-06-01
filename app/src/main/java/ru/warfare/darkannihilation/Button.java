@@ -85,8 +85,7 @@ public class Button extends Sprite {
                             game.loadingScreen.newJob("menu");
                             break;
                         case "top":
-                            ClientServer.postBestScore(Clerk.nickname, game.bestScore);
-                            ClientServer.getStatistics();
+                            ClientServer.postAndGetBestScore(Clerk.nickname, game.bestScore);
                             game.loadingScreen.newJob("topScore");
                             break;
                         case "restart":
