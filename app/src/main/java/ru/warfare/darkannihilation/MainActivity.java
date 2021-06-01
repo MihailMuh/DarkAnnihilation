@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         AudioPlayer.init(this);
         Service.init(this);
-        ImageHub.init(this, Service.getResizeCoefficient(), Service.getScreenWidth(), Service.getScreenHeight());
+        ImageHub.init(this);
         Clerk.init(this);
         ClientServer.getStatistics();
         checkOnFirstRun();

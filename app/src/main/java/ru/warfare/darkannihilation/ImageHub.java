@@ -74,38 +74,29 @@ public final class ImageHub {
     public static Bitmap bulletBossVadersImg;
     public static Bitmap bufferImg;
 
-    private static int screensSizeX;
-    public static int vaderSize;
-    private static double resizeK;
-    private static int eX50;
-    private static int eX70;
-    private static int eX60;
-    private static int eX100;
-    private static int eX105;
-    private static int eX15;
-    private static int fact;
-//    private static int eX200;
-    private static int eX80;
-    private static int eX175;
-    private static int eX400;
+    private static final int screenWidth = Service.getScreenWidth();
+    private static final int screenHeight = Service.getScreenHeight();
+    private static final double resizeK = Service.getResizeCoefficient();
+
+    public static final int eX75 = (int) (75 * resizeK);
+    private static final int screensSizeX = (int) (screenWidth * 1.4);
+    private static final int eX50 = (int) (50 * resizeK);
+    private static final int eX70 = (int) (70 * resizeK);
+    private static final int eX60 = (int) (60 * resizeK);
+    private static final int eX100 = (int) (100 * resizeK);
+    private static final int eX105 = (int) (105 * resizeK);
+    private static final int eX15 = (int) (15 * resizeK);
+    private static final int fact = (int) ((screenWidth / 1.3) * resizeK);
+    private static final int eX200 = (int) (200 * resizeK);
+    private static final int eX80 = (int) (80 * resizeK);
+    private static final int eX175 = (int) (175 * resizeK);
+    private static final int eX400 = (int) (400 * resizeK);
+    private static final int portalSize = (int) (300 * resizeK);
+
     @SuppressLint("StaticFieldLeak")
     private static RequestBuilder<Bitmap> requestBuilder;
 
-    public static void init(Context context, double resizeK, int screenWidth, int screenHeight) {
-        ImageHub.resizeK = resizeK;
-        screensSizeX = (int) (screenWidth * 1.4);
-        vaderSize = (int) (75 * resizeK);
-        eX50 = (int) (50 * resizeK);
-        eX70 = (int) (70 * resizeK);
-        eX60 = (int) (60 * resizeK);
-        eX100 = (int) (100 * resizeK);
-        eX105 = (int) (105 * resizeK);
-        eX15 = (int) (15 * resizeK);
-//        eX200 = (int) (200 * resizeK);
-        eX80 = (int) (80 * resizeK);
-        eX175 = (int) (175 * resizeK);
-        fact = (int) ((screenWidth / 1.3) * resizeK);
-        eX400 = (int) (400 * resizeK);
+    public static void init(Context context) {
         int eX145 = (int) (145 * resizeK);
         int eX152 = (int) (152 * resizeK);
         int eX52 = (int) (52 * resizeK);
@@ -130,6 +121,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletImage = resource;
@@ -145,6 +137,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   tripleFighterImg = resource;
@@ -160,6 +153,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bossImage = resource;
@@ -169,12 +163,13 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.health)
-                .override(vaderSize, vaderSize)
+                .override(eX75, eX75)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   healthKitImg = resource;
@@ -190,6 +185,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   shotgunKitImg = resource;
@@ -205,6 +201,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   gunToShotgun = resource;
@@ -219,6 +216,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   gunToNone = resource;
@@ -233,6 +231,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   shotgunToGun = resource;
@@ -248,6 +247,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   minionImg = resource;
@@ -263,6 +263,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   demomanImg = resource;
@@ -278,6 +279,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletSaturnImg = resource;
@@ -294,6 +296,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   gameoverScreen = resource;
@@ -309,6 +312,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletEnemyImage = resource;
@@ -324,6 +328,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   imageHeartFull = resource;
@@ -338,6 +343,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   imageHeartHalf = resource;
@@ -352,6 +358,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   imageHeartNon = resource;
@@ -367,6 +374,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   pauseButtonImg = resource;
@@ -382,6 +390,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   laserImage = resource;
@@ -397,6 +406,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   playerVsBoss = resource;
@@ -412,6 +422,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   playerVsVaders = resource;
@@ -427,6 +438,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   saturnVsBoss = resource;
@@ -442,6 +454,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   saturnVsVaders = resource;
@@ -457,6 +470,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   buckshotImg = resource;
@@ -472,6 +486,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   rocketImg = resource;
@@ -487,6 +502,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   attentionImg = resource;
@@ -502,6 +518,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   factoryImg = resource;
@@ -517,6 +534,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bombImg = resource;
@@ -532,6 +550,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   buttonPlayerImg = resource;
@@ -547,6 +566,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   playerImage = resource;
@@ -562,6 +582,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   buttonSaturnImg = resource;
@@ -577,6 +598,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   saturnImg = resource;
@@ -592,6 +614,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletBuckshotSaturnImg = resource;
@@ -608,12 +631,13 @@ public final class ImageHub {
             int finalI = i;
             if (i < 3) {
                 requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
-                        .override(vaderSize, vaderSize)
+                        .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           vaderImage[finalI] = resource;
@@ -631,6 +655,7 @@ public final class ImageHub {
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           loadingImages[finalI] = resource;
@@ -647,6 +672,7 @@ public final class ImageHub {
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionLarge[finalI] = resource;
@@ -663,6 +689,7 @@ public final class ImageHub {
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionTripleImageMedium[finalI] = resource;
@@ -677,6 +704,7 @@ public final class ImageHub {
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionTripleImageSmall[finalI] = resource;
@@ -693,6 +721,7 @@ public final class ImageHub {
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionDefaultImageMedium[finalI] = resource;
@@ -707,6 +736,7 @@ public final class ImageHub {
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionDefaultImageSmall[finalI] = resource;
@@ -723,6 +753,7 @@ public final class ImageHub {
                                   public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                       return false;
                                   }
+
                                   @Override
                                   public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                       screenImage[finalI] = resource;
@@ -737,7 +768,6 @@ public final class ImageHub {
     }
 
     public static void loadPortalImages(Context context) {
-        int portalSize = (int) (300 * resizeK);
         for (int i = 0; i < 20; i++) {
             int finalI = i;
             requestBuilder.load(context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName()))
@@ -747,6 +777,7 @@ public final class ImageHub {
                                   public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                       return false;
                                   }
+
                                   @Override
                                   public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                       portalImages[finalI] = resource;
@@ -767,12 +798,13 @@ public final class ImageHub {
 
     public static void loadSecondLevelImages(Context context) {
         requestBuilder.load(R.drawable.spider)
-                .override((int) (350 * resizeK), (int) (175 * resizeK))
+                .override((int) (350 * resizeK), eX175)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   spiderImg = resource;
@@ -782,12 +814,13 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.x_wing)
-                .override((int) (200 * resizeK), (int) (146 * resizeK))
+                .override(eX200, (int) (146 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   XWingImg = resource;
@@ -803,6 +836,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   sunriseImg = resource;
@@ -817,6 +851,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bossVadersImg = resource;
@@ -831,6 +866,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletBossVadersImg = resource;
@@ -839,12 +875,13 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.buffer)
-                .override((int) (resizeK * 400), (int) (resizeK * 353))
+                .override(eX400, (int) (resizeK * 353))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bufferImg = resource;
@@ -856,12 +893,13 @@ public final class ImageHub {
             int finalI = i;
             if (i < 3) {
                 requestBuilder.load(context.getResources().getIdentifier("vader1" + (i + 1), "drawable", context.getPackageName()))
-                        .override(vaderSize, vaderSize)
+                        .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
+
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           vaderOldImage[finalI] = resource;
@@ -872,12 +910,13 @@ public final class ImageHub {
             }
             requestBuilder.load(context.getResources().getIdentifier("thunder" + i, "drawable", context.getPackageName()))
                     .centerCrop()
-                    .override(screensSizeX, Game.screenHeight)
+                    .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
                                   public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                       return false;
                                   }
+
                                   @Override
                                   public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                       thunderScreen[finalI] = resource;
@@ -931,6 +970,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   tripleFighterImg = resource;
@@ -945,6 +985,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bossImage = resource;
@@ -959,6 +1000,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   minionImg = resource;
@@ -973,6 +1015,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   demomanImg = resource;
@@ -987,6 +1030,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   laserImage = resource;
@@ -1001,6 +1045,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   rocketImg = resource;
@@ -1015,6 +1060,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   attentionImg = resource;
@@ -1029,6 +1075,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   factoryImg = resource;
@@ -1043,6 +1090,7 @@ public final class ImageHub {
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                   return false;
                               }
+
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bombImg = resource;
@@ -1054,14 +1102,14 @@ public final class ImageHub {
             int finalI = i;
             if (i < 3) {
                 requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
-                        .override(vaderSize, vaderSize)
+                        .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                           return false;
                                       }
 
-                            @Override
+                                      @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           vaderImage[finalI] = resource;
                                           return true;
@@ -1069,17 +1117,15 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            Glide.with(context)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            requestBuilder.load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
                     .centerCrop()
-                    .load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
-                    .override(screensSizeX, Game.screenHeight)
+                    .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
                                   public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                       return false;
                                   }
+
                                   @Override
                                   public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                       screenImage[finalI] = resource;
@@ -1133,17 +1179,15 @@ public final class ImageHub {
     public static void loadWinImages(Context context) {
         for (int i = 0; i < 100; i++) {
             int finalI = i;
-            Glide.with(context)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            requestBuilder.load(context.getResources().getIdentifier("win_" + (i + 1), "drawable", context.getPackageName()))
                     .centerCrop()
-                    .load(context.getResources().getIdentifier("win_" + (i + 1), "drawable", context.getPackageName()))
-                    .override(Game.screenWidth, Game.screenHeight)
+                    .override(screenWidth, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
                                   public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                                       return false;
                                   }
+
                                   @Override
                                   public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                       winScreenImg[finalI] = resource;
@@ -1166,12 +1210,6 @@ public final class ImageHub {
     public static Bitmap rotateImage(Bitmap image, float degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
-        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
-    }
-
-    public static Bitmap rotateImage(Bitmap image, double degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate((float) degree);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
     }
 }

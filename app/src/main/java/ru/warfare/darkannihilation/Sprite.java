@@ -21,12 +21,12 @@ public class Sprite {
     public int health = 0;
     public int damage = 0;
 
+    public boolean buff = false;
     public boolean lock = false;
     public boolean isPassive = false;
     public boolean isBullet = false;
 
     public String status = "";
-    public boolean buff = false;
 
     public int left;
     public int top;
