@@ -17,8 +17,8 @@ public class BulletEnemyOrbit extends Sprite {
         isPassive = true;
         isBullet = true;
 
-        X = (int) info[1];
-        Y = (int) info[2];
+        X = (float) info[1];
+        Y = (float) info[2];
         deg = (double) info[4];
         fly = (float) info[5];
         image = (Bitmap) info[7];
@@ -39,6 +39,23 @@ public class BulletEnemyOrbit extends Sprite {
     @Override
     public int centerY() {
         return (int) (Y + halfHeight);
+    }
+
+    private float getAngle() {
+        double yy = game.player.y - Y;
+        double xx = game.player.x - X;
+        double R = getDistance(yy, xx);
+        double b = getDistance(xx + R, yy);
+        double a = 2 * R * R;
+        double cos = (a - (b * b)) / a;
+        if (cos <= -1) {
+            return 180;
+        }
+        if (yy < 0) {
+            b = getDistance(xx - R, yy);
+            return (float) Math.toDegrees(Math.acos((a - (b * b)) / a)) + 180;
+        }
+        return (float) Math.toDegrees(Math.acos(cos));
     }
 
     @Override
@@ -70,7 +87,6 @@ public class BulletEnemyOrbit extends Sprite {
 
     @Override
     public void render () {
-        Game.canvas.drawBitmap(ImageHub.rotateImage(image, -Vector.getAngle(X, Y,
-                game.player.x, game.player.y)), X, Y, null);
+        Game.canvas.drawBitmap(ImageHub.rotateImage(image, -getAngle()), X, Y, null);
     }
 }

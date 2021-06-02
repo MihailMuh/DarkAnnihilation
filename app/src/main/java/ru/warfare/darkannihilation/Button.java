@@ -38,8 +38,19 @@ public class Button extends Sprite {
         img = ImageHub.buttonImageNotPressed;
     }
 
+    public boolean checkCoords(int X, int Y) {
+        if (x < X) {
+            if (X < right()) {
+                if (y < Y) {
+                    return Y < bottom();
+                }
+            }
+        }
+        return false;
+    }
+
     public void setCoords(int X, int Y) {
-        if (x < X & X < right() & y < Y & Y < bottom()) {
+        if (checkCoords(X, Y)) {
             long now = System.currentTimeMillis();
             if (now - lastClick > clickTime) {
                 lastClick = now;

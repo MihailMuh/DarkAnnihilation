@@ -86,6 +86,7 @@ public class HardThread implements Runnable {
         work = false;
         try {
             thread.join();
+            thread = null;
         } catch (Exception e) {
             Service.print("Thread join " + e);
         }

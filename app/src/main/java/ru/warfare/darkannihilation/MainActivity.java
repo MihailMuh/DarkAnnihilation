@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
         setContentView(R.layout.activity_main);
-        game = findViewById(R.id.gameView);
 
-        AudioPlayer.init(this);
         Service.init(this);
         ImageHub.init(this);
+        AudioPlayer.init(this);
         Clerk.init(this);
         ClientServer.getStatistics();
         checkOnFirstRun();
+        game = findViewById(R.id.gameView);
         game.init();
     }
 

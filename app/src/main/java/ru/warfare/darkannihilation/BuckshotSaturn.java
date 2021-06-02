@@ -42,7 +42,7 @@ public class BuckshotSaturn extends Sprite {
 
     @Override
     public Object[] getBox(int enemyX, int enemyY, Bitmap image) {
-        return new Object[] {game, enemyX, enemyY, orbit, deg, fly, vector.len, image};
+        return new Object[] {game, (float) enemyX, (float) enemyY, orbit, deg, fly, vector.len, image};
     }
 
     @Override

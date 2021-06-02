@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import static ru.warfare.darkannihilation.Sprite.getDistance;
-
 public class Vector {
     private int a;
     private int b;
@@ -48,22 +46,5 @@ public class Vector {
         double cos = Math.cos(-angle);
         double sin =  Math.sin(-angle);
         return new double[] {((x * cos) - (y * sin)), ((x * sin) + (y * cos))};
-    }
-
-    public static float getAngle(float x1, float y1, float x2, float y2) {
-        double yy = y2 - y1;
-        double xx = x2 - x1;
-        double R = getDistance(yy, xx);
-        double b = getDistance(xx + R, yy);
-        double a = 2 * R * R;
-        double cos = (a - (b * b)) / a;
-        if (cos <= -1f) {
-            return 180;
-        }
-        if (y1 > y2) {
-            b = getDistance(xx - R, yy);
-            return (float) Math.toDegrees(Math.acos((a - (b * b)) / a)) + 180;
-        }
-        return (float) Math.toDegrees(Math.acos(cos));
     }
 }

@@ -42,6 +42,11 @@ public class BaseCharacter extends Sprite {
         }
     }
 
+    public void setCoords(int X, int Y) {
+        endX = X - halfWidth;
+        endY = Y - halfHeight;
+    }
+
     public void heal() {
         if (health < maxHealth - 20) {
             health += 20;

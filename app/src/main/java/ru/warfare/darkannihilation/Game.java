@@ -83,8 +83,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private int count = 0;
     public static int score = 0;
     public int bestScore = 0;
-    private int pointerCount = 0;
-    private int moveAll = 0;
+    private int pointerCount;
+    private int moveAll;
     private boolean playing = false;
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
@@ -101,6 +101,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         super(context, attrs);
         this.context = context;
         holder = getHolder();
+    }
+
+    public void init() {
+        screenWidth = Service.getScreenWidth();
+        screenHeight = Service.getScreenHeight();
+        halfScreenWidth = screenWidth / 2;
+        halfScreenHeight = screenHeight / 2;
+        resizeK = Service.getResizeCoefficient();
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -116,14 +124,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setTextSize(30);
         blackPaint.setColor(Color.BLACK);
         blackPaint.setAlpha(0);
-    }
-
-    public void init() {
-        screenWidth = Service.getScreenWidth();
-        screenHeight = Service.getScreenHeight();
-        halfScreenWidth = screenWidth / 2;
-        halfScreenHeight = screenHeight / 2;
-        resizeK = Service.getResizeCoefficient();
 
         getMaxScore();
 
@@ -225,7 +225,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                     Sprite bulletPlayer = bullets.get(j);
                                     if (bulletPlayer.status.equals("saturn")) {
                                         if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
-                                            if (random.nextFloat() <= 0.6) {
+                                            if (random.nextFloat() <= 0.5) {
                                                 Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
                                                         (Bitmap) anySprite.getBox(0, 0, null)[0]);
                                                 if ((boolean) info[3]) {
@@ -416,8 +416,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         pointerCount = event.getPointerCount();
         int clickX = (int) event.getX(0);
         int clickY = (int) event.getY(0);
+
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+
+                boolean pb = false;
+                boolean cg = false;
 
                 switch (gameStatus)
                 {
@@ -437,12 +441,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 8:
                         buttonMenu.setCoords(clickX, clickY);
                         break;
-                }
-
-                boolean pb = false;
-                boolean cg = false;
-                if (gameStatus == 2 | gameStatus == 0 | gameStatus == 3) {
-                    pb = pauseButton.checkCoords(clickX, clickY);
+                    case 0:
+                    case 2:
+                    case 3:
+                        pb = pauseButton.checkCoords(clickX, clickY);
+                        break;
                 }
                 if (gameStatus == 6 | gameStatus == 0) {
                     cg = changerGuns.checkCoords(clickX, clickY);
@@ -466,24 +469,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
                 }
                 if ((gameStatus == 6 | gameStatus == 2 | gameStatus == 0) & !player.dontmove) {
-                    player.endX = clickX - player.halfWidth;
-                    player.endY = clickY - player.halfHeight;
+                    player.setCoords(clickX, clickY);
                 }
                 break;
         }
         return true;
-    }
-
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
     }
 
     public void onPause() {
@@ -1099,4 +1089,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         loadingScreen.render();
         loadingScreen.update();
     }
+
+    @Override
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {}
+    @Override
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
 }
