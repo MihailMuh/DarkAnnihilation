@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
-import android.view.Display;
 import android.view.WindowManager;
 
 import static android.content.Context.WINDOW_SERVICE;
@@ -13,9 +12,7 @@ public final class Service {
     private static final Point size = new Point();
 
     public static void init(Context context) {
-        WindowManager windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        display.getRealSize(size);
+        (((WindowManager) context.getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRealSize(size);
     }
 
     public static int getScreenWidth() {

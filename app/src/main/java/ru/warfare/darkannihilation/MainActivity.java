@@ -2,9 +2,13 @@ package ru.warfare.darkannihilation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,26 +20,21 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Objects;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
     private Game game;
-    private SharedPreferences preferences = null;
+    private SharedPreferences preferences;
+    public static GifImageView gif;
+    public static Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.darkTheme);
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        this.getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LOW_PROFILE
-        );
         setContentView(R.layout.activity_main);
 
         Service.init(this);
@@ -44,7 +43,15 @@ public class MainActivity extends AppCompatActivity {
         Clerk.init(this);
         ClientServer.getStatistics();
         checkOnFirstRun();
+
+        gif = findViewById(R.id.gifView);
+
+        handler = new Handler(Looper.getMainLooper());
+
         game = findViewById(R.id.gameView);
+        game.setZOrderOnTop(true);
+        SurfaceHolder surfaceHolder = game.getHolder();
+        surfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
         game.init();
     }
 
@@ -65,16 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        this.getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LOW_PROFILE
-        );
+        fullscreen();
         game.onResume();
     }
 
@@ -170,4 +168,40 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void fullscreen() {
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LOW_PROFILE
+        );
+    }
+//
+//    public void loadGif() {
+//        Game.endImgInit = true;
+//        GlideApp.with(getApplicationContext())
+//                .asGif()
+//                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+//                .override(Game.screenWidth, Game.screenHeight)
+//                .load(R.drawable.win)
+//                .addListener(new RequestListener<GifDrawable>() {
+//                    @Override
+//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+//                        resource.setLoopCount(1);
+//                        Game.endImgInit = false;
+//                        return false;
+//                    }
+//                })
+//                .into(gif);
+//    }
 }

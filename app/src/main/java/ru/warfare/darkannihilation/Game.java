@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -37,6 +38,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint topPaintRed = new Paint();
     public static final Paint blackPaint = new Paint();
     public static final Paint alphaPaint = new Paint();
+    public static final Paint winPaint = new Paint();
 
     public static final Random random = new Random();
     private static final StringBuilder textBuilder = new StringBuilder();
@@ -61,7 +63,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Attention attention;
     public Factory factory;
     public Demoman demoman;
-    public WinScreen winScreen;
     public Portal portal;
     public ButtonPlayer buttonPlayer;
     public ButtonSaturn buttonSaturn;
@@ -89,6 +90,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
+    public static volatile boolean flag = false;
 
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
@@ -124,6 +126,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setTextSize(30);
         blackPaint.setColor(Color.BLACK);
         blackPaint.setAlpha(0);
+        winPaint.setColor(Color.WHITE);
+        winPaint.setTextSize(100);
 
         getMaxScore();
 
@@ -334,7 +338,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 break;
             case 2:
                 if (spider.lock) {
-                    if (random.nextFloat() >= 0.998) {
+                    if (random.nextFloat() >= 0.999) {
                         spider.lock = false;
                     }
                 }
@@ -531,10 +535,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateWin() {
         gameStatus = 7;
+        AudioPlayer.pauseBossMusic();
         AudioPlayer.portalSound.pause();
         AudioPlayer.winMusic.seekTo(0);
         AudioPlayer.winMusic.start();
-        winScreen = new WinScreen();
+//        winScreen = new WinScreen();
         saveScore();
     }
 
@@ -953,11 +958,27 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void win() {
-        winScreen.update();
-        winScreen.render();
-
-        if (pointerCount >= 4) {
-            loadingScreen.newJob("menu");
+        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        if (flag) {
+            long now = System.currentTimeMillis();
+            long x = now - lastBoss;
+            if (x > 50) {
+                if (!endImgInit) {
+                    AudioPlayer.restartFlightMusic();
+                    endImgInit = true;
+                }
+                if (x > 3850) {
+                    canvas.drawText("Thanks For Playing!",
+                            (Game.screenWidth - winPaint.measureText("Thanks For Playing!")) / 2,
+                            (float) ((Game.screenHeight + winPaint.getTextSize()) / 2.7), winPaint);
+                    canvas.drawText("Tap this screen with four or more fingers to enter start menu",
+                            (Game.screenWidth - Game.gameoverPaint.measureText("Tap this screen with four or more fingers to enter start menu")) / 2,
+                            (float) (Game.screenHeight * 0.65), Game.gameoverPaint);
+                }
+            }
+            if (pointerCount >= 4) {
+                loadingScreen.newJob("menu");
+            }
         }
     }
 
@@ -978,38 +999,56 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.render();
 
         for (int i = 0; i < allSprites.size(); i++) {
-            Sprite sprite = allSprites.get(i);
-            if (sprite != null) {
-                if (!sprite.lock) {
-                    sprite.x -= moveAll;
-                    sprite.render();
-                    sprite.update();
-                    if (!sprite.isPassive) {
-                        player.checkIntersections(sprite);
+            Sprite anySprite = allSprites.get(i);
+            if (anySprite != null) {
+                if (!anySprite.lock) {
+                    anySprite.x -= moveAll;
+                    anySprite.render();
+                    anySprite.update();
+                    if (!anySprite.isPassive) {
+                        player.checkIntersections(anySprite);
                     }
-                    if (!sprite.isBullet) {
+                    if (!anySprite.isBullet) {
                         for (int j = 0; j < bullets.size(); j++) {
-                            sprite.check_intersectionBullet(bullets.get(j));
+                            anySprite.check_intersectionBullet(bullets.get(j));
                         }
                     }
-                    if (sprite.status.equals("bulletEnemy")) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            Sprite bullet = bullets.get(j);
-                            if (bullet.status.equals("saturn")) {
-                                if (sprite.getRect().intersect(bullet.getRect())) {
-                                    sprite.intersectionPlayer();
-                                    bullet.intersection();
-                                    break;
+                    if (character.equals("saturn")) {
+                        if (anySprite.status.equals("rocket")) {
+                            for (int j = 0; j < bullets.size(); j++) {
+                                Sprite bullet = bullets.get(j);
+                                if (bullet.status.equals("saturn")) {
+                                    if (anySprite.getRect().intersect(bullet.getRect())) {
+                                        bullet.intersection();
+                                    }
                                 }
                             }
-                        }
-                    }
-                    if (sprite.status.equals("rocket")) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            Sprite bullet = bullets.get(j);
-                            if (bullet.status.equals("saturn")) {
-                                if (sprite.getRect().intersect(bullet.getRect())) {
-                                    bullet.intersection();
+                        } else {
+                            if (anySprite.status.equals("bulletEnemy")) {
+                                for (int j = 0; j < bullets.size(); j++) {
+                                    Sprite bulletPlayer = bullets.get(j);
+                                    if (bulletPlayer.status.equals("saturn")) {
+                                        if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
+                                            if (random.nextFloat() <= 0.5) {
+                                                Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
+                                                        (Bitmap) anySprite.getBox(0, 0, null)[0]);
+                                                if ((boolean) info[3]) {
+                                                    BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                    allSprites.add(bulletEnemyOrbit);
+                                                    bullets.add(bulletEnemyOrbit);
+
+                                                    allSprites.remove(anySprite);
+                                                } else {
+                                                    anySprite.intersectionPlayer();
+                                                    bulletPlayer.intersection();
+                                                }
+                                            } else {
+                                                anySprite.intersectionPlayer();
+                                                bulletPlayer.intersection();
+                                            }
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }

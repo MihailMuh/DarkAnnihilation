@@ -34,6 +34,7 @@ public class Portal extends Sprite {
     @Override
     public void intersectionPlayer() {
         if (Game.level == 2) {
+            ImageHub.loadWinImages(game.context);
             game.generateWin();
             kill();
         } else {

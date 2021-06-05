@@ -97,7 +97,7 @@ public class BossVaders extends Sprite {
             AudioPlayer.pauseBackgroundMusic();
             Game.gameStatus = 5;
             ImageHub.loadPortalImages(game.context);
-            ImageHub.loadWinImages(game.context);
+//            ImageHub.loadWinImages(game.context);
         }
         if (y > 0 & !field) {
             field = true;
@@ -121,12 +121,12 @@ public class BossVaders extends Sprite {
             } else {
                 x -= speedX;
             }
-        }
-        y += speedY;
 
-        if (health <= 0) {
-            killAfterFight();
+            if (health <= 0) {
+                killAfterFight();
+            }
         }
+        y += (speedY + 0.5);
     }
 
     @Override

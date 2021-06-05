@@ -15,8 +15,7 @@
         android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:isGame="true"
-        >
+        android:isGame="true">
         <activity
             android:screenOrientation="landscape"
             android:immersive="true"

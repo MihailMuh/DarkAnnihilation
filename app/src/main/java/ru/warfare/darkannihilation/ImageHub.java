@@ -8,11 +8,11 @@ import android.graphics.Matrix;
 
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
@@ -110,9 +110,11 @@ public final class ImageHub {
         int eX120 = (int) (120 * resizeK);
 
         requestBuilder =
-                Glide.with(context)
+                GlideApp.with(context)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+        loadFirstLevelBitmaps();
 
         requestBuilder.load(R.drawable.bullet)
                 .override((int) (7 * resizeK), (int) (30 * resizeK))
@@ -125,38 +127,6 @@ public final class ImageHub {
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   bulletImage = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.triple_fighter)
-                .override(eX105, eX105)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  tripleFighterImg = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.boss)
-                .override(eX400, eX400)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  bossImage = resource;
                                   return true;
                               }
                           }
@@ -235,38 +205,6 @@ public final class ImageHub {
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   shotgunToGun = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.minion)
-                .override(eX80, eX50)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  minionImg = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.demoman)
-                .override((int) (290 * resizeK), eX175)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  demomanImg = resource;
                                   return true;
                               }
                           }
@@ -383,22 +321,6 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.laser)
-                .override(eX15, eX60)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  laserImage = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
         requestBuilder.load(R.drawable.player_vs_boss)
                 .override(sW, sW150)
                 .listener(new RequestListener<Bitmap>() {
@@ -474,70 +396,6 @@ public final class ImageHub {
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   buckshotImg = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.rocket)
-                .override(eX50, eX100)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  rocketImg = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.attention)
-                .override(eX70, eX70)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  attentionImg = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.factory)
-                .override(fact, (int) (fact * 0.3))
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  factoryImg = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.bomb)
-                .override((int) (30 * resizeK), eX70)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  bombImg = resource;
                                   return true;
                               }
                           }
@@ -963,6 +821,49 @@ public final class ImageHub {
     }
 
     public static void loadFirstLevelImages(Context context) {
+        loadFirstLevelBitmaps();
+        for (int i = 0; i < 34; i++) {
+            int finalI = i;
+            if (i < 3) {
+                requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
+                        .override(eX75, eX75)
+                        .listener(new RequestListener<Bitmap>() {
+                                      @Override
+                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                          return false;
+                                      }
+
+                                      @Override
+                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                          vaderImage[finalI] = resource;
+                                          return true;
+                                      }
+                                  }
+                        ).submit();
+            }
+            requestBuilder.load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
+                    .centerCrop()
+                    .override(screensSizeX, screenHeight)
+                    .listener(new RequestListener<Bitmap>() {
+                                  @Override
+                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                      return false;
+                                  }
+
+                                  @Override
+                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                      screenImage[finalI] = resource;
+                                      if (finalI == 33) {
+                                          Game.endImgInit = true;
+                                      }
+                                      return true;
+                                  }
+                              }
+                    ).submit();
+        }
+    }
+
+    private static void loadFirstLevelBitmaps() {
         requestBuilder.load(R.drawable.triple_fighter)
                 .override(eX105, eX105)
                 .listener(new RequestListener<Bitmap>() {
@@ -1098,45 +999,6 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        for (int i = 0; i < 34; i++) {
-            int finalI = i;
-            if (i < 3) {
-                requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
-                        .override(eX75, eX75)
-                        .listener(new RequestListener<Bitmap>() {
-                                      @Override
-                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                          return false;
-                                      }
-
-                                      @Override
-                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                          vaderImage[finalI] = resource;
-                                          return true;
-                                      }
-                                  }
-                        ).submit();
-            }
-            requestBuilder.load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
-                    .centerCrop()
-                    .override(screensSizeX, screenHeight)
-                    .listener(new RequestListener<Bitmap>() {
-                                  @Override
-                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                      return false;
-                                  }
-
-                                  @Override
-                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                      screenImage[finalI] = resource;
-                                      if (finalI == 33) {
-                                          Game.endImgInit = true;
-                                      }
-                                      return true;
-                                  }
-                              }
-                    ).submit();
-        }
     }
 
     public static void deleteFirstLevelImages() {
@@ -1177,34 +1039,32 @@ public final class ImageHub {
     }
 
     public static void loadWinImages(Context context) {
-        for (int i = 0; i < 100; i++) {
-            int finalI = i;
-            requestBuilder.load(context.getResources().getIdentifier("win_" + (i + 1), "drawable", context.getPackageName()))
-                    .centerCrop()
-                    .override(screenWidth, screenHeight)
-                    .listener(new RequestListener<Bitmap>() {
-                                  @Override
-                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                      return false;
-                                  }
+        Game.flag = false;
+        MainActivity.handler.post(() ->
+                GlideApp.with(context)
+                        .asGif()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .override(Game.screenWidth, Game.screenHeight)
+                        .load(R.drawable.win)
+                        .addListener(new RequestListener<GifDrawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                                return false;
+                            }
 
-                                  @Override
-                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                      winScreenImg[finalI] = resource;
-                                      return true;
-                                  }
-                              }
-                    ).submit();
-        }
+                            @Override
+                            public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                                resource.setLoopCount(1);
+                                Game.lastBoss = System.currentTimeMillis();
+                                Game.flag = true;
+                                return false;
+                            }
+                        })
+                        .into(MainActivity.gif));
     }
 
     public static void deleteWinImages() {
-        if (winScreenImg[0] != null) {
-            for (int i = 0; i < 100; i++) {
-                winScreenImg[i].recycle();
-            }
-            winScreenImg = new Bitmap[100];
-        }
+        MainActivity.handler.post(() -> MainActivity.gif.setImageDrawable(null));
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {
