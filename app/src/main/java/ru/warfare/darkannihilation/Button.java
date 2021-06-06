@@ -93,17 +93,24 @@ public class Button extends Sprite {
                             break;
                         case "menu":
                             game.saveScore();
-                            game.loadingScreen.newJob("menu");
+                            game.loadingScreen.newJob(function);
                             break;
                         case "top":
                             ClientServer.postAndGetBestScore(Clerk.nickname, game.bestScore);
-                            game.loadingScreen.newJob("topScore");
+                            game.loadingScreen.newJob(function);
                             break;
                         case "restart":
                             game.saveScore();
                             game.getMaxScore();
                             Game.level = 1;
                             game.loadingScreen.newJob("newGame");
+                            break;
+                        case "fromSetting":
+                            game.settings.hideSettings();
+                            game.loadingScreen.newJob("menu");
+                            break;
+                        case "settings":
+                            game.loadingScreen.newJob(function);
                             break;
                     }
                 }).start();
@@ -112,8 +119,8 @@ public class Button extends Sprite {
     }
 
     @Override
-    public void render () {
+    public void render() {
         Game.canvas.drawBitmap(img, x, y, null);
-        Game.canvas.drawText(text, x + (float) ((width - textWidth) / 2),y + (halfHeight + textHeight), paint);
+        Game.canvas.drawText(text, x + (float) ((width - textWidth) / 2), y + (halfHeight + textHeight), paint);
     }
 }

@@ -17,7 +17,8 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Random;
 
-@SuppressLint("ViewConstructor")
+import pl.droidsonroids.gif.GifImageView;
+
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder;
     public final Context context;
@@ -71,6 +72,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Spider spider;
     public Sunrise sunrise;
     public Buffer buffer;
+    public Settings settings;
 
     public static final int numberVaders = 10;
     public static final int numberMediumExplosionsTriple = 20;
@@ -90,7 +92,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
-    public static volatile boolean flag = false;
 
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
@@ -105,7 +106,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         holder = getHolder();
     }
 
-    public void init() {
+    public void init(Settings settings) {
         screenWidth = Service.getScreenWidth();
         screenHeight = Service.getScreenHeight();
         halfScreenWidth = screenWidth / 2;
@@ -131,15 +132,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         getMaxScore();
 
-        while (!endImgInit) {}
+        this.settings = settings;
+
+        while (!endImgInit) {
+        }
 
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader());
         }
-        buttonStart = new Button(this, "Start", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 70 * resizeK), "start");
-        buttonQuit = new Button(this, "Quit", (int) (buttonStart.x - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
-        buttonMenu = new Button(this, "Top score", (int) (buttonStart.x + 300 * resizeK), (int) (screenHeight - 70 * resizeK), "top");
-        buttonRestart = new Button(this, "Restart", screenWidth, 0, "restart");
+        int y = screenHeight - ImageHub.eX70;
+        buttonMenu = new Button(this, "Top score", halfScreenWidth, y, "top");
+        buttonStart = new Button(this, "Start", halfScreenWidth - ImageHub.eX300, y, "start");
+        buttonQuit = new Button(this, "Quit", buttonStart.x - ImageHub.eX300, y, "quit");
+        buttonRestart = new Button(this, "Settings", buttonMenu.x + ImageHub.eX300, y, "settings");
         buttonPlayer = new ButtonPlayer(this);
         buttonSaturn = new ButtonSaturn(this);
         pauseButton = new PauseButton(this);
@@ -263,8 +268,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         if (now - lastBoss > BOSS_TIME) {
             lastBoss = now;
             Sprite boss = null;
-            switch (level)
-            {
+            switch (level) {
                 case 1:
                     boss = new Boss(this);
                     fightBg.newImg(character);
@@ -309,8 +313,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 healthKit.lock = false;
             }
         }
-        switch (level)
-        {
+        switch (level) {
             case 1:
                 if (score > 50) {
                     if (attention.lock) {
@@ -403,6 +406,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 8:
                         topScore();
                         break;
+                    case 10:
+                        settings();
+                        break;
                     case 41:
                         onLoading();
                         break;
@@ -427,14 +433,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 boolean pb = false;
                 boolean cg = false;
 
-                switch (gameStatus)
-                {
+                switch (gameStatus) {
                     case 1:
                         buttonSaturn.setCoords(clickX, clickY);
                         buttonPlayer.setCoords(clickX, clickY);
                         buttonStart.setCoords(clickX, clickY);
                         buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
+                        buttonRestart.setCoords(clickX, clickY);
                         break;
                     case 4:
                         buttonRestart.setCoords(clickX, clickY);
@@ -442,6 +448,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
                         break;
+                    case 10:
                     case 8:
                         buttonMenu.setCoords(clickX, clickY);
                         break;
@@ -503,8 +510,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             AudioPlayer.winMusic.start();
         } else {
             if (bosses.size() == 0) {
-                switch (gameStatus)
-                {
+                switch (gameStatus) {
                     case 0:
                     case 2:
                     case 3:
@@ -539,7 +545,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.portalSound.pause();
         AudioPlayer.winMusic.seekTo(0);
         AudioPlayer.winMusic.start();
-//        winScreen = new WinScreen();
         saveScore();
     }
 
@@ -560,12 +565,20 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioPlayer.pauseReadySound();
 
         int X = halfScreenWidth - buttonQuit.halfWidth;
+        int Y = buttonStart.height + 30;
 
         buttonStart.newFunc("Resume", X, screenHeight / 3 - buttonStart.halfHeight, "pause");
-        buttonRestart.newFunc("Restart", X, buttonStart.height + buttonStart.y + 30, "restart");
-        buttonMenu.newFunc("To menu", X, buttonStart.height + buttonRestart.y + 30, "menu");
-        buttonQuit.newFunc("Quit", X, buttonStart.height + buttonMenu.y + 30, "quit");
+        buttonRestart.newFunc("Restart", X, buttonStart.y + Y, "restart");
+        buttonMenu.newFunc("To menu", X, buttonRestart.y + Y, "menu");
+        buttonQuit.newFunc("Quit", X, buttonMenu.y + Y, "quit");
         gameStatus = 4;
+    }
+
+    public void generateSettings() {
+        buttonPlayer.hide();
+        buttonSaturn.hide();
+        buttonMenu.newFunc("Back", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "fromSetting");
+        settings.showSettings();
     }
 
     public void generateMenu() {
@@ -587,7 +600,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         ImageHub.deleteWinImages();
         if (ImageHub.needImagesForFirstLevel()) {
             ImageHub.loadFirstLevelImages(context);
-            while (!endImgInit) {}
+            while (!endImgInit) {
+            }
         }
 
         getMaxScore();
@@ -610,9 +624,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             allSprites.add(new Vader());
         }
 
-        buttonStart.newFunc("Start", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 70 * resizeK), "start");
-        buttonQuit.newFunc("Quit", (int) (buttonStart.x - 300 * resizeK), (int) (screenHeight - 70 * resizeK), "quit");
-        buttonMenu.newFunc("Top score", (int) (buttonStart.x + 300 * resizeK), (int) (screenHeight - 70 * resizeK), "top");
+        int y = screenHeight - ImageHub.eX70;
+        buttonMenu.newFunc("Top score", halfScreenWidth, y, "top");
+        buttonStart.newFunc("Start", halfScreenWidth - ImageHub.eX300, y, "start");
+        buttonQuit.newFunc("Quit", buttonStart.x - ImageHub.eX300, y, "quit");
+        buttonRestart.newFunc("Settings", buttonMenu.x + ImageHub.eX300, y, "settings");
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
@@ -656,8 +672,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             allSprites.add(allExplosions[i]);
         }
 
-        switch (level)
-        {
+        switch (level) {
             case 1:
                 score = 0;
 
@@ -669,7 +684,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 ImageHub.deleteWinImages();
                 if (ImageHub.needImagesForFirstLevel()) {
                     ImageHub.loadFirstLevelImages(context);
-                    while (!endImgInit) {}
+                    while (!endImgInit) {
+                    }
                 }
 
                 shotgunKit.picked = false;
@@ -762,7 +778,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         renderSprites();
         renderFPS();
         renderCurrentScore();
-        Sprite boss = bosses.get(bosses.size()-1);
+        Sprite boss = bosses.get(bosses.size() - 1);
         if (boss.y >= -400 | pointerCount >= 4) {
             if (portal == null) {
                 gameStatus = 0;
@@ -921,6 +937,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonStart.render();
         buttonQuit.render();
         buttonMenu.render();
+        buttonRestart.render();
         buttonPlayer.render();
         buttonSaturn.render();
 
@@ -957,23 +974,37 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
     }
 
+    private void settings() {
+        screen.update();
+        screen.render();
+
+        buttonMenu.render();
+
+        renderFPS();
+    }
+
     private void win() {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        if (flag) {
+        if (endImgInit) {
             long now = System.currentTimeMillis();
             long x = now - lastBoss;
             if (x > 50) {
-                if (!endImgInit) {
+                if (count < 10000) {
                     AudioPlayer.restartFlightMusic();
-                    endImgInit = true;
+                    count = 10003;
                 }
                 if (x > 3850) {
-                    canvas.drawText("Thanks For Playing!",
-                            (Game.screenWidth - winPaint.measureText("Thanks For Playing!")) / 2,
-                            (float) ((Game.screenHeight + winPaint.getTextSize()) / 2.7), winPaint);
-                    canvas.drawText("Tap this screen with four or more fingers to enter start menu",
-                            (Game.screenWidth - Game.gameoverPaint.measureText("Tap this screen with four or more fingers to enter start menu")) / 2,
-                            (float) (Game.screenHeight * 0.65), Game.gameoverPaint);
+                    if (moveAll < 10000) {
+                        MainActivity.handler.post(() -> MainActivity.gif.setVisibility(GifImageView.GONE));
+                        moveAll = 10003;
+                    } else {
+                        canvas.drawText("Thanks For Playing!",
+                                (Game.screenWidth - winPaint.measureText("Thanks For Playing!")) / 2,
+                                (float) ((Game.screenHeight + winPaint.getTextSize()) / 2.7), winPaint);
+                        canvas.drawText("Tap this screen with four or more fingers to enter start menu",
+                                (Game.screenWidth - Game.gameoverPaint.measureText("Tap this screen with four or more fingers to enter start menu")) / 2,
+                                (float) (Game.screenHeight * 0.65), Game.gameoverPaint);
+                    }
                 }
             }
             if (pointerCount >= 4) {
@@ -1130,9 +1161,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {}
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
+    }
+
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
+    }
+
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
+    }
 }

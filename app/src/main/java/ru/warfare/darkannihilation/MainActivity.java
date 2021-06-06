@@ -1,14 +1,13 @@
 package ru.warfare.darkannihilation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Game game;
     private SharedPreferences preferences;
     public static GifImageView gif;
-    public static Handler handler;
+    public final static Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         gif = findViewById(R.id.gifView);
 
-        handler = new Handler(Looper.getMainLooper());
-
         game = findViewById(R.id.gameView);
-        game.setZOrderOnTop(true);
-        SurfaceHolder surfaceHolder = game.getHolder();
-        surfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
-        game.init();
+        game.init(new Settings(this));
     }
 
     @Override
@@ -80,29 +74,27 @@ public class MainActivity extends AppCompatActivity {
         return ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
+    @SuppressLint("InflateParams")
     private void checkOnFirstRun() {
         preferences = getSharedPreferences("ru.warfare.darkannihilation", MODE_PRIVATE);
 
         if (preferences.getBoolean("firstrun", true)) {
+            LayoutInflater li = LayoutInflater.from(this);
+            AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
+
             if (isOnline()) {
-                LayoutInflater li = LayoutInflater.from(this);
                 View promptsView = li.inflate(R.layout.dialog, null);
 
-                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
-
-                mDialogBuilder.setView(promptsView);
-
-                final EditText userInput = promptsView.findViewById(R.id.input_text);
-
-                mDialogBuilder
+                AlertDialog alertDialog = mDialogBuilder
+                        .setView(promptsView)
                         .setCancelable(false)
-                        .setPositiveButton("Apply", null);
+                        .setPositiveButton("Apply", null)
+                        .create();
 
-                AlertDialog alertDialog = mDialogBuilder.create();
                 alertDialog.setOnShowListener(dialog -> {
                     Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     button.setOnClickListener(view -> {
-                        String nick = userInput.getText().toString();
+                        String nick = ((EditText) promptsView.findViewById(R.id.input_text)).getText().toString();
                         if (nick.length() == 0) {
                             Toast toast = Toast.makeText(this, "Nickname must be notnull!", Toast.LENGTH_LONG);
                             toast.show();
@@ -124,20 +116,13 @@ public class MainActivity extends AppCompatActivity {
                 });
                 alertDialog.show();
             } else {
-                LayoutInflater li = LayoutInflater.from(this);
-                View promptsView = li.inflate(R.layout.warning, null);
-
-                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
-
-                mDialogBuilder.setView(promptsView);
-
-                mDialogBuilder
+                AlertDialog alertDialog = mDialogBuilder.setView(li.inflate(R.layout.warning, null))
                         .setCancelable(false)
                         .setPositiveButton("Exit", null)
                         .setNegativeButton("Later", null)
-                        .setNeutralButton("I enabled internet and want to register", null);
+                        .setNeutralButton("I enabled internet and want to register", null)
+                        .create();
 
-                AlertDialog alertDialog = mDialogBuilder.create();
                 alertDialog.setOnShowListener(dialog -> {
                     Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     button.setOnClickListener(view -> System.exit(0));
@@ -181,27 +166,4 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
         );
     }
-//
-//    public void loadGif() {
-//        Game.endImgInit = true;
-//        GlideApp.with(getApplicationContext())
-//                .asGif()
-//                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-//                .override(Game.screenWidth, Game.screenHeight)
-//                .load(R.drawable.win)
-//                .addListener(new RequestListener<GifDrawable>() {
-//                    @Override
-//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-//                        resource.setLoopCount(1);
-//                        Game.endImgInit = false;
-//                        return false;
-//                    }
-//                })
-//                .into(gif);
-//    }
 }

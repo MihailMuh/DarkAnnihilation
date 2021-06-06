@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -15,6 +16,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public final class ImageHub {
     public static final boolean isFilter = true;
@@ -79,9 +82,10 @@ public final class ImageHub {
     private static final double resizeK = Service.getResizeCoefficient();
 
     public static final int eX75 = (int) (75 * resizeK);
+    public static final int eX70 = (int) (70 * resizeK);
+    public static final int eX300 = (int) (300 * resizeK);
     private static final int screensSizeX = (int) (screenWidth * 1.4);
     private static final int eX50 = (int) (50 * resizeK);
-    private static final int eX70 = (int) (70 * resizeK);
     private static final int eX60 = (int) (60 * resizeK);
     private static final int eX100 = (int) (100 * resizeK);
     private static final int eX105 = (int) (105 * resizeK);
@@ -104,7 +108,6 @@ public final class ImageHub {
         int eX435 = (int) (435 * resizeK);
         int sW150 = (int) ((screenWidth - 150) * resizeK);
         int sW = (int) (screenWidth * resizeK);
-        int eX300 = (int) (300 * resizeK);
         int eX13 = (int) (13 * resizeK);
         int eX207 = (int) (207 * resizeK);
         int eX120 = (int) (120 * resizeK);
@@ -1039,12 +1042,11 @@ public final class ImageHub {
     }
 
     public static void loadWinImages(Context context) {
-        Game.flag = false;
         MainActivity.handler.post(() ->
                 GlideApp.with(context)
                         .asGif()
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .override(Game.screenWidth, Game.screenHeight)
+                        .override(screenWidth, screenHeight)
                         .load(R.drawable.win)
                         .addListener(new RequestListener<GifDrawable>() {
                             @Override
@@ -1054,9 +1056,10 @@ public final class ImageHub {
 
                             @Override
                             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                                MainActivity.gif.setVisibility(GifImageView.VISIBLE);
                                 resource.setLoopCount(1);
                                 Game.lastBoss = System.currentTimeMillis();
-                                Game.flag = true;
+                                Game.endImgInit = true;
                                 return false;
                             }
                         })

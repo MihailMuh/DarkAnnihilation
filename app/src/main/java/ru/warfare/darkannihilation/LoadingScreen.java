@@ -37,19 +37,22 @@ public class LoadingScreen extends Sprite {
                 frame = 0;
             }
             if (c == 11) {
-                Thread thread = new Thread(() -> {
+                new Thread(() -> {
                     switch (jobs) {
                         case "newGame":
                             game.generateNewGame();
                             break;
-                        case "topScore":
+                        case "top":
                             game.generateTopScore();
                             break;
                         case "menu":
                             game.generateMenu();
                             break;
+                        case "settings":
+                            game.generateSettings();
+                            break;
                     }
-                }); thread.start();
+                }).start();
             }
         }
     }
