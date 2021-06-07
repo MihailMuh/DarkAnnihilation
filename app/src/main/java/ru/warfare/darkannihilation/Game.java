@@ -21,7 +21,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder;
-    public final Context context;
+    public Context context;
     private Thread thread;
     public static Canvas canvas;
 
@@ -102,11 +102,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public Game(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         holder = getHolder();
     }
 
-    public void init(Settings settings) {
+    public void init(MainActivity mainActivity) {
+        context = mainActivity;
         screenWidth = Service.getScreenWidth();
         screenHeight = Service.getScreenHeight();
         halfScreenWidth = screenWidth / 2;
@@ -132,10 +132,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         getMaxScore();
 
-        this.settings = settings;
-
         while (!endImgInit) {
         }
+
+        settings = new Settings(mainActivity);
 
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader());
@@ -182,7 +182,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             allSprites.add(allExplosions[i]);
         }
 
-        AudioPlayer.menuMusic.start();
+        AudioHub.menuMusic.start();
 
         gameStatus = 1;
     }
@@ -490,12 +490,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void onPause() {
         hardThread.workOnPause();
         if (gameStatus == 7) {
-            AudioPlayer.winMusic.pause();
+            AudioHub.winMusic.pause();
         }
-        AudioPlayer.pauseMenuMusic();
-        AudioPlayer.pauseBossMusic();
-        AudioPlayer.pauseBackgroundMusic();
-        AudioPlayer.pausePauseMusic();
+        AudioHub.pauseMenuMusic();
+        AudioHub.pauseBossMusic();
+        AudioHub.pauseBackgroundMusic();
+        AudioHub.pausePauseMusic();
         playing = false;
         try {
             thread.join();
@@ -507,24 +507,24 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void onResume() {
         hardThread.workOnResume();
         if (gameStatus == 7) {
-            AudioPlayer.winMusic.start();
+            AudioHub.winMusic.start();
         } else {
             if (bosses.size() == 0) {
                 switch (gameStatus) {
                     case 0:
                     case 2:
                     case 3:
-                        AudioPlayer.resumeBackgroundMusic();
+                        AudioHub.resumeBackgroundMusic();
                         break;
                     case 1:
-                        AudioPlayer.menuMusic.start();
+                        AudioHub.menuMusic.start();
                         break;
                     case 4:
-                        AudioPlayer.pauseMusic.start();
+                        AudioHub.pauseMusic.start();
                         break;
                 }
             } else {
-                AudioPlayer.resumeBossMusic();
+                AudioHub.resumeBossMusic();
             }
         }
         playing = true;
@@ -541,10 +541,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateWin() {
         gameStatus = 7;
-        AudioPlayer.pauseBossMusic();
-        AudioPlayer.portalSound.pause();
-        AudioPlayer.winMusic.seekTo(0);
-        AudioPlayer.winMusic.start();
+        AudioHub.pauseBossMusic();
+        AudioHub.portalSound.pause();
+        AudioHub.winMusic.seekTo(0);
+        AudioHub.winMusic.start();
         saveScore();
     }
 
@@ -552,17 +552,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         gameStatus = 42;
         saveScore();
         getMaxScore();
-        AudioPlayer.gameoverSnd.start();
+        AudioHub.gameoverSnd.start();
         gameStatus = 3;
     }
 
     public void generatePause() {
         hardThread.workOnPause();
-        AudioPlayer.pauseBackgroundMusic();
+        AudioHub.pauseBackgroundMusic();
         if (bosses.size() == 0) {
-            AudioPlayer.restartPauseMusic();
+            AudioHub.restartPauseMusic();
         }
-        AudioPlayer.pauseReadySound();
+        AudioHub.pauseReadySound();
 
         int X = halfScreenWidth - buttonQuit.halfWidth;
         int Y = buttonStart.height + 30;
@@ -585,16 +585,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         alphaPaint.setAlpha(255);
         endImgInit = false;
 
-        if (AudioPlayer.winMusic.isPlaying()) {
-            AudioPlayer.winMusic.pause();
+        if (AudioHub.winMusic.isPlaying()) {
+            AudioHub.winMusic.pause();
         }
 
-        AudioPlayer.pauseReadySound();
-        AudioPlayer.pauseFlightMusic();
-        AudioPlayer.restartMenuMusic();
-        AudioPlayer.pausePauseMusic();
-        AudioPlayer.pauseBackgroundMusic();
-        AudioPlayer.pauseBossMusic();
+        AudioHub.pauseReadySound();
+        AudioHub.pauseFlightMusic();
+        AudioHub.restartMenuMusic();
+        AudioHub.pausePauseMusic();
+        AudioHub.pauseBackgroundMusic();
+        AudioHub.pauseBossMusic();
 
         ImageHub.deleteSecondLevelImages();
         ImageHub.deleteWinImages();
@@ -640,9 +640,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generateNewGame() {
         endImgInit = false;
 
-        AudioPlayer.pauseReadySound();
-        AudioPlayer.pauseBossMusic();
-        AudioPlayer.pausePauseMusic();
+        AudioHub.pauseReadySound();
+        AudioHub.pauseBossMusic();
+        AudioHub.pausePauseMusic();
 
         hardThread.workOnPause();
         hardThread.workOnResume();
@@ -740,8 +740,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         changerGuns.hide();
 
-        AudioPlayer.restartBackgroundMusic();
-        AudioPlayer.restartReadySound();
+        AudioHub.restartBackgroundMusic();
+        AudioHub.restartReadySound();
     }
 
     private void gameover() {
@@ -990,7 +990,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             long x = now - lastBoss;
             if (x > 50) {
                 if (count < 10000) {
-                    AudioPlayer.restartFlightMusic();
+                    AudioHub.restartFlightMusic();
                     count = 10003;
                 }
                 if (x > 3850) {

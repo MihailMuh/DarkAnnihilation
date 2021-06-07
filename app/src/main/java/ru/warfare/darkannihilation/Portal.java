@@ -17,8 +17,8 @@ public class Portal extends Sprite {
 
         lastFrame = System.currentTimeMillis();
 
-        AudioPlayer.portalSound.seekTo(0);
-        AudioPlayer.portalSound.start();
+        AudioHub.portalSound.seekTo(0);
+        AudioHub.portalSound.start();
     }
 
     public void kill() {
@@ -38,8 +38,8 @@ public class Portal extends Sprite {
             game.generateWin();
             kill();
         } else {
-            AudioPlayer.timeMachineFirstSnd.start();
-            AudioPlayer.timeMachineNoneSnd.start();
+            AudioHub.timeMachineFirstSnd.start();
+            AudioHub.timeMachineNoneSnd.start();
 
             touch = true;
             BaseCharacter.god = true;
@@ -59,18 +59,18 @@ public class Portal extends Sprite {
             } else {
                 frame = 0;
             }
-            if (!AudioPlayer.portalSound.isPlaying()) {
+            if (!AudioHub.portalSound.isPlaying()) {
                 if (!touch) {
                     if (Game.gameStatus != 7) {
                         Game.gameStatus = 0;
                         game.portal = null;
-                        AudioPlayer.resumeBackgroundMusic();
+                        AudioHub.resumeBackgroundMusic();
                     }
                 }
             }
         }
-        if (!AudioPlayer.timeMachineNoneSnd.isPlaying() & touch) {
-            AudioPlayer.timeMachineSecondSnd.start();
+        if (!AudioHub.timeMachineNoneSnd.isPlaying() & touch) {
+            AudioHub.timeMachineSecondSnd.start();
             Game.level++;
             game.loadingScreen.newJob("newGame");
             kill();

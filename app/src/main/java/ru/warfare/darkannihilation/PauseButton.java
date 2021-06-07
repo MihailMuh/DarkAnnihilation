@@ -15,7 +15,7 @@ public class PauseButton extends Sprite {
     }
 
     public void make() {
-        AudioPlayer.playClick();
+        AudioHub.playClick();
         oldStatus = Game.gameStatus;
         game.generatePause();
     }

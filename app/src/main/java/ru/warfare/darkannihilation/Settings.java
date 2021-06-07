@@ -1,69 +1,89 @@
 package ru.warfare.darkannihilation;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.widget.TextView;
 
 import com.triggertrap.seekarc.SeekArc;
 
-public class Settings implements SeekArc.OnSeekArcChangeListener {
+public class Settings {
     private final MainActivity mainActivity;
-    private final AudioManager audioManager;
 
-    private final TextView angle;
-    private final TextView textView;
-    private final SeekArc seekArc;
+    private final TextView angleEffects;
+    private final TextView textViewEffects;
+    private final SeekArc seekArcEffects;
 
-    private final int maxLoud;
+    private final TextView angleMusic;
+    private final TextView textViewMusic;
+    private final SeekArc seekArcMusic;
+
+    private float finalVolumeEffects = 1;
+    private float finalVolumeMusic = 1;
 
     public Settings(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
 
-        audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
-        maxLoud = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int currLoud = (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) * 100) / maxLoud;
+        angleEffects = mainActivity.findViewById(R.id.angleEffects);
+        angleEffects.setText(("Volume: " + 50));
+        angleEffects.setVisibility(TextView.GONE);
 
-        angle = mainActivity.findViewById(R.id.angle);
-        angle.setText(("Volume: " + currLoud));
-        angle.setVisibility(TextView.GONE);
+        textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
+        textViewEffects.setVisibility(TextView.GONE);
 
-        textView = mainActivity.findViewById(R.id.textView);
-        textView.setVisibility(TextView.GONE);
+        seekArcEffects = mainActivity.findViewById(R.id.seekArcEffects);
+        seekArcEffects.setProgress(50);
+        seekArcEffects.setVisibility(SeekArc.GONE);
+        seekArcEffects.setOnSeekArcChangeListener(new SeekArcListener() {
+            @Override
+            public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
+                angleEffects.setText(("Volume: " + newVolume));
+                finalVolumeEffects = (float) newVolume / 100f;
+                AudioPool.newVolumeForSnd(7, finalVolumeEffects);
+            }
+        });
 
-        seekArc = mainActivity.findViewById(R.id.seekArc);
-        seekArc.setOnSeekArcChangeListener(this);
-        seekArc.setProgress(currLoud);
-        seekArc.setVisibility(SeekArc.GONE);
+        angleMusic = mainActivity.findViewById(R.id.angleMusic);
+        angleMusic.setText(("Volume: " + 50));
+        angleMusic.setVisibility(TextView.GONE);
+
+        textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
+        textViewMusic.setVisibility(TextView.GONE);
+
+        seekArcMusic = mainActivity.findViewById(R.id.seekArcMusic);
+        seekArcMusic.setProgress(50);
+        seekArcMusic.setVisibility(SeekArc.GONE);
+        seekArcMusic.setOnSeekArcChangeListener(new SeekArcListener() {
+            @Override
+            public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
+                angleMusic.setText(("Volume: " + newVolume));
+                finalVolumeMusic = (float) newVolume / 100f;
+                AudioHub.menuMusic.setVolume(finalVolumeMusic, finalVolumeMusic);
+            }
+        });
     }
 
     public void showSettings() {
         mainActivity.runOnUiThread(new Thread(() -> {
-            angle.setVisibility(TextView.VISIBLE);
-            textView.setVisibility(TextView.VISIBLE);
-            seekArc.setVisibility(SeekArc.VISIBLE);
+            angleEffects.setVisibility(TextView.VISIBLE);
+            textViewEffects.setVisibility(TextView.VISIBLE);
+            seekArcEffects.setVisibility(SeekArc.VISIBLE);
+
+            angleMusic.setVisibility(TextView.VISIBLE);
+            textViewMusic.setVisibility(TextView.VISIBLE);
+            seekArcMusic.setVisibility(SeekArc.VISIBLE);
             Game.gameStatus = 10;
         }));
     }
 
-    public void hideSettings() {
+    public void confirmSettings() {
         mainActivity.runOnUiThread(new Thread(() -> {
-            angle.setVisibility(TextView.GONE);
-            textView.setVisibility(TextView.GONE);
-            seekArc.setVisibility(SeekArc.GONE);
+            angleEffects.setVisibility(TextView.GONE);
+            textViewEffects.setVisibility(TextView.GONE);
+            seekArcEffects.setVisibility(SeekArc.GONE);
+
+            angleMusic.setVisibility(TextView.GONE);
+            textViewMusic.setVisibility(TextView.GONE);
+            seekArcMusic.setVisibility(SeekArc.GONE);
         }));
-    }
-
-    @Override
-    public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
-        angle.setText(("Volume: " + newVolume));
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (maxLoud * ((float) newVolume / 100f)), 0);
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekArc seekArc) {
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekArc seekArc) {
+        AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
+        AudioPool.newVolumeForPool(finalVolumeEffects);
     }
 }

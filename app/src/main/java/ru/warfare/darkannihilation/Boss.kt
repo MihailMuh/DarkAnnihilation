@@ -32,7 +32,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
                     for (i in 1..3) {
                         Game.allSprites.add(BulletBoss(r, y20, i))
                     }
-                    AudioPlayer.playShoot()
+                    AudioHub.playShoot()
                 }
             }
         }
@@ -40,11 +40,11 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
 
     private fun killAfterFight() {
         createSkullExplosion()
-        AudioPlayer.playMegaBoom()
+        AudioHub.playMegaBoom()
         Game.score += 150
         Game.bosses.remove(this)
         Game.allSprites.remove(this)
-        AudioPlayer.pauseBossMusic()
+        AudioHub.pauseBossMusic()
         if (game.portal == null) {
             game.portal = Portal(game)
         }
@@ -95,8 +95,8 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
             shoot()
         } else {
             if (y == -600) {
-                AudioPlayer.restartBossMusic()
-                AudioPlayer.pauseBackgroundMusic()
+                AudioHub.restartBossMusic()
+                AudioHub.pauseBackgroundMusic()
                 Game.gameStatus = 5
                 ImageHub.loadPortalImages(game.context)
             }

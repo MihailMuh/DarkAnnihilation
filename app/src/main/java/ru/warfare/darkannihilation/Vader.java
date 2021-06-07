@@ -69,7 +69,7 @@ public class Vader extends Sprite {
     @Override
     public void intersection() {
         createLargeExplosion();
-        AudioPlayer.playBoom();
+        AudioHub.playBoom();
         if (Game.gameStatus == 0) {
             Game.score += 1;
         }
@@ -78,9 +78,9 @@ public class Vader extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        AudioPlayer.playMetal();
+        AudioHub.playMetal();
         createSmallExplosion();
-        AudioPlayer.playBoom();
+        AudioHub.playBoom();
         newStatus();
     }
 

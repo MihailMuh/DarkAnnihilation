@@ -41,7 +41,7 @@ class XWing(game: Game) : Sprite(game, ImageHub.XWingImg.width, ImageHub.XWingIm
                     val plY = game.player.centerY()
                     if (getDistance(myX - plX, myY - plY) < radius) {
                         vector.makeVector(myX, myY, plX, plY, 9)
-                        AudioPlayer.playShoot()
+                        AudioHub.playShoot()
                         Game.allSprites.add(BulletEnemy(myX, myY, vector.angle, vector.speedX, vector.speedY))
                     }
                 }
@@ -85,13 +85,13 @@ class XWing(game: Game) : Sprite(game, ImageHub.XWingImg.width, ImageHub.XWingIm
 
     override fun intersection() {
         createLargeTripleExplosion()
-        AudioPlayer.playBoom()
+        AudioHub.playBoom()
         Game.score += 10
         newStatus()
     }
 
     override fun intersectionPlayer() {
-        AudioPlayer.playMetal()
+        AudioHub.playMetal()
         createSmallExplosion()
         newStatus()
     }

@@ -56,7 +56,7 @@ public class Button extends Sprite {
                 lastClick = now;
 
                 new Thread(() -> {
-                    AudioPlayer.playClick();
+                    AudioHub.playClick();
                     img = ImageHub.buttonImagePressed;
                     try {
                         Thread.sleep(90);
@@ -77,12 +77,12 @@ public class Button extends Sprite {
                             game.player.dontmove = true;
                             Game.lastBoss += game.pauseTimer;
                             game.hardThread.workOnResume();
-                            AudioPlayer.pausePauseMusic();
+                            AudioHub.pausePauseMusic();
                             if (Game.bosses.size() == 0) {
-                                AudioPlayer.resumeBackgroundMusic();
+                                AudioHub.resumeBackgroundMusic();
                             }
                             if (PauseButton.oldStatus == 2) {
-                                AudioPlayer.readySnd.start();
+                                AudioHub.readySnd.start();
                             }
                             if (PauseButton.oldStatus != 0) {
                                 Game.gameStatus = PauseButton.oldStatus;
@@ -106,7 +106,7 @@ public class Button extends Sprite {
                             game.loadingScreen.newJob("newGame");
                             break;
                         case "fromSetting":
-                            game.settings.hideSettings();
+                            game.settings.confirmSettings();
                             game.loadingScreen.newJob("menu");
                             break;
                         case "settings":

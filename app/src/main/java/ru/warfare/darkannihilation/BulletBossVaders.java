@@ -22,7 +22,7 @@ public class BulletBossVaders extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        AudioPlayer.playMegaBoom();
+        AudioHub.playMegaBoom();
         Game.allSprites.remove(this);
     }
 

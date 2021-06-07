@@ -32,21 +32,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.darkTheme);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        synchronized(this) {
+            setTheme(R.style.darkTheme);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            game = findViewById(R.id.gameView);
 
-        Service.init(this);
-        ImageHub.init(this);
-        AudioPlayer.init(this);
-        Clerk.init(this);
-        ClientServer.getStatistics();
-        checkOnFirstRun();
+            Service.init(this);
+            ImageHub.init(this);
+            AudioHub.init(this);
+            Clerk.init(this);
+            ClientServer.getStatistics();
+            checkOnFirstRun();
 
-        gif = findViewById(R.id.gifView);
-
-        game = findViewById(R.id.gameView);
-        game.init(new Settings(this));
+            gif = findViewById(R.id.gifView);
+            game.init(this);
+        }
     }
 
     @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         game.onPause();
         game.saveScore();
-        AudioPlayer.releaseAP();
+        AudioHub.releaseAP();
     }
 
     @Override

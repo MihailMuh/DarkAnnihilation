@@ -60,7 +60,7 @@ public class ChangerGuns extends Sprite {
             if (!game.shotgunKit.picked) {
                 image = ImageHub.gunToNone;
             } else {
-                AudioPlayer.playReload();
+                AudioHub.playReload();
                 if (game.player.gun.equals("shotgun")) {
                     game.player.gun = "gun";
                     image = ImageHub.gunToShotgun;

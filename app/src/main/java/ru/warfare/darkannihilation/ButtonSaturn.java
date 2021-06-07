@@ -18,9 +18,9 @@ public class ButtonSaturn extends Sprite {
 
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
-            AudioPlayer.playClick();
+            AudioHub.playClick();
             Game.character = "saturn";
-            AudioPlayer.pauseMenuMusic();
+            AudioHub.pauseMenuMusic();
             game.loadingScreen.newJob("newGame");
         }
     }

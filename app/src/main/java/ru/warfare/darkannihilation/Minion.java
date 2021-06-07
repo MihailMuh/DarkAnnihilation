@@ -33,14 +33,14 @@ public class Minion extends Sprite {
 
     @Override
     public void intersection() {
-        AudioPlayer.playBoom();
+        AudioHub.playBoom();
         Game.allSprites.remove(this);
         createLargeTripleExplosion();
     }
 
     @Override
     public void intersectionPlayer() {
-        AudioPlayer.playMetal();
+        AudioHub.playMetal();
         Game.allSprites.remove(this);
         createSmallTripleExplosion();
     }

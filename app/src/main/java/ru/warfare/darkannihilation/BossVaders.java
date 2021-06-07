@@ -35,7 +35,7 @@ public class BossVaders extends Sprite {
             lastShoot = now;
             vector.makeVector(centerX(), centerY(), game.player.centerX(), game.player.centerY(), 10);
             Game.allSprites.add(new BulletBossVaders(centerX(), centerY(), vector.getSpeedX(), vector.getSpeedY()));
-            AudioPlayer.playBossShoot();
+            AudioHub.playBossShoot();
         }
     }
 
@@ -55,11 +55,11 @@ public class BossVaders extends Sprite {
 
     public void killAfterFight() {
         createSkullExplosion();
-        AudioPlayer.playMegaBoom();
+        AudioHub.playMegaBoom();
         Game.score += 300;
         Game.bosses.remove(this);
         Game.allSprites.remove(this);
-        AudioPlayer.pauseBossMusic();
+        AudioHub.pauseBossMusic();
         if (game.portal == null) {
             game.portal = new Portal(game);
         }
@@ -93,8 +93,8 @@ public class BossVaders extends Sprite {
     public void update() {
         game.pauseTimer += 20;
         if (y == -600) {
-            AudioPlayer.restartBossMusic();
-            AudioPlayer.pauseBackgroundMusic();
+            AudioHub.restartBossMusic();
+            AudioHub.pauseBackgroundMusic();
             Game.gameStatus = 5;
             ImageHub.loadPortalImages(game.context);
 //            ImageHub.loadWinImages(game.context);

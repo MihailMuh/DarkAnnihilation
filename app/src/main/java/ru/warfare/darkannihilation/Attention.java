@@ -18,12 +18,12 @@ public class Attention extends Sprite {
     public void start() {
         y = 10;
         lock = false;
-        AudioPlayer.attentionSnd.start();
+        AudioHub.attentionSnd.start();
     }
 
     @Override
     public void update() {
-        if (!AudioPlayer.attentionSnd.isPlaying()) {
+        if (!AudioHub.attentionSnd.isPlaying()) {
             game.rocket.start(centerX());
             hide();
         }

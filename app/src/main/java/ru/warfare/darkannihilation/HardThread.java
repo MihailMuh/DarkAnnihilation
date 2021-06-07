@@ -29,7 +29,7 @@ public class HardThread implements Runnable {
             {
                 case 1:
                     vector.makeVector(x, y, game.player.centerX(), game.player.centerY(), 13);
-                    AudioPlayer.playShotgun();
+                    AudioHub.playShotgun();
                     Game.allSprites.add(new BulletEnemy(x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                     job = 0;
                     break;
@@ -40,7 +40,7 @@ public class HardThread implements Runnable {
                     job = 0;
                     break;
                 case 3:
-                    AudioPlayer.playDeagle();
+                    AudioHub.playDeagle();
                     Game.allSprites.add(new BulletEnemy(x, y, 0, 0, -10));
                     Game.allSprites.add(new BulletEnemy(x, y, 90, 10, 0));
                     Game.allSprites.add(new BulletEnemy(x, y, 180, 0, 10));
@@ -73,7 +73,7 @@ public class HardThread implements Runnable {
                         Game.bullets.add(bulletSaturn);
                         Game.allSprites.add(bulletSaturn);
                     }
-                    AudioPlayer.playShoot();
+                    AudioHub.playShoot();
                     job = 0;
                     break;
                 default:
@@ -86,7 +86,6 @@ public class HardThread implements Runnable {
         work = false;
         try {
             thread.join();
-            thread = null;
         } catch (Exception e) {
             Service.print("Thread join " + e);
         }

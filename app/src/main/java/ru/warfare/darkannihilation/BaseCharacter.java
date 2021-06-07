@@ -61,7 +61,7 @@ public class BaseCharacter extends Sprite {
             if (health <= 0) {
                 game.generateGameover();
                 createSkullExplosion();
-                AudioPlayer.playMegaBoom();
+                AudioHub.playMegaBoom();
                 ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(1550,30));
             } else {
                 ((Vibrator) game.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(70,30));

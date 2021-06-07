@@ -34,7 +34,7 @@ public class Buffer extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        AudioPlayer.playMegaBoom();
+        AudioHub.playMegaBoom();
         createSkullExplosion();
         hide();
         for (int i = 0; i < Game.allSprites.size(); i++) {
