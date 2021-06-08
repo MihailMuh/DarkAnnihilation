@@ -23,8 +23,8 @@ public class FightBg extends Sprite {
         halfHeight = height / 2;
         halfWidth = width / 2;
 
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
+        x = Game.halfScreenWidth - halfWidth;
+        y = Game.halfScreenHeight - halfHeight;
     }
 
     public void newImg(String character) {
@@ -47,6 +47,6 @@ public class FightBg extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(img, x - halfHeight, y - halfHeight, null);
+        Game.canvas.drawBitmap(img, x, y, null);
     }
 }

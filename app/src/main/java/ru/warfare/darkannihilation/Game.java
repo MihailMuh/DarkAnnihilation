@@ -81,16 +81,22 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final int numberExplosionsALL = 73;
 
     public static int level = 1;
-    public static int gameStatus;
+    public static int gameStatus = 1;
     private int count = 0;
     public static int score = 0;
     public int bestScore = 0;
     private int pointerCount;
     private int moveAll;
-    private boolean playing = false;
+    private boolean playing = true;
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
+    public static volatile boolean vibrate = true;
+
+    private int fpsX;
+    private int fpsY;
+    private int scoreX;
+    private int maxScoreX;
 
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
@@ -106,7 +112,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void init(MainActivity mainActivity) {
         context = mainActivity;
-
         screenWidth = Service.getScreenWidth();
         screenHeight = Service.getScreenHeight();
         halfScreenWidth = screenWidth / 2;
@@ -167,9 +172,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         attention = new Attention(this);
         factory = new Factory();
         demoman = new Demoman();
-        hardThread = new HardThread(this);
         screen = new StarScreen();
         loadingScreen = new LoadingScreen(this);
+        hardThread = new HardThread(this);
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             if (i < numberMediumExplosionsTriple) {
@@ -192,9 +197,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             allSprites.add(allExplosions[i]);
         }
 
+        fpsY = pauseButton.bottom() + 100;
+        fpsX = screenWidth - 250;
+        scoreX = (int) (halfScreenWidth - scorePaint.measureText("Current score: 0") / 2);
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText("Max score: 999") / 2);
+
+        hardThread.workOnResume();
+
+        thread = new Thread(this);
+        thread.start();
+
         AudioHub.menuMusic.start();
 
-        gameStatus = 1;
+        MainActivity.firstTry = false;
     }
 
     private void gameplay() {
@@ -515,31 +530,33 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void onResume() {
-        hardThread.workOnResume();
-        if (gameStatus == 7) {
-            AudioHub.winMusic.start();
-        } else {
-            if (bosses.size() == 0) {
-                switch (gameStatus) {
-                    case 0:
-                    case 2:
-                    case 3:
-                        AudioHub.resumeBackgroundMusic();
-                        break;
-                    case 1:
-                        AudioHub.menuMusic.start();
-                        break;
-                    case 4:
-                        AudioHub.pauseMusic.start();
-                        break;
-                }
+        if (!MainActivity.firstTry) {
+            hardThread.workOnResume();
+            if (gameStatus == 7) {
+                AudioHub.winMusic.start();
             } else {
-                AudioHub.resumeBossMusic();
+                if (bosses.size() == 0) {
+                    switch (gameStatus) {
+                        case 0:
+                        case 2:
+                        case 3:
+                            AudioHub.resumeBackgroundMusic();
+                            break;
+                        case 1:
+                            AudioHub.menuMusic.start();
+                            break;
+                        case 4:
+                            AudioHub.pauseMusic.start();
+                            break;
+                    }
+                } else {
+                    AudioHub.resumeBossMusic();
+                }
             }
+            playing = true;
+            thread = new Thread(this);
+            thread.start();
         }
-        playing = true;
-        thread = new Thread(this);
-        thread.start();
     }
 
     public void generateTopScore() {
@@ -587,7 +604,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generateSettings() {
         buttonPlayer.hide();
         buttonSaturn.hide();
-        buttonMenu.newFunc("Back", (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "fromSetting");
+        buttonMenu.newFunc("Back", halfScreenWidth - 150, (int) (screenHeight - 150 * resizeK), "fromSetting");
         settings.showSettings();
     }
 
@@ -653,6 +670,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.pauseReadySound();
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
+        ImageHub.deleteLayoutImages();
 
         hardThread.workOnPause();
         hardThread.workOnResume();
@@ -1135,7 +1153,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private void renderFPS() {
         if (drawFPS) {
             textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText(textBuilder.toString(), screenWidth - 250, 170, fpsPaint);
+            canvas.drawText(textBuilder.toString(), fpsX, fpsY, fpsPaint);
 
             textBuilder.setLength(0);
         }
@@ -1143,14 +1161,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     private void renderCurrentScore() {
         textBuilder.append("Current score: ").append(score);
-        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+        canvas.drawText(textBuilder.toString(), scoreX, 50, scorePaint);
 
         textBuilder.setLength(0);
     }
 
     private void renderMaxScore() {
         textBuilder.append("Max score: ").append(bestScore);
-        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 50, scorePaint);
+        canvas.drawText(textBuilder.toString(), maxScoreX, 50, scorePaint);
 
         textBuilder.setLength(0);
     }

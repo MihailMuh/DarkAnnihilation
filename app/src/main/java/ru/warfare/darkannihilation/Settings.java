@@ -5,6 +5,8 @@ import android.widget.TextView;
 
 import com.triggertrap.seekarc.SeekArc;
 
+import io.ghyeok.stickyswitch.widget.StickySwitch;
+
 public class Settings {
     private final MainActivity mainActivity;
 
@@ -16,6 +18,9 @@ public class Settings {
     private final TextView textViewMusic;
     private final SeekArc seekArcMusic;
 
+    private final TextView textViewVibration;
+    private final StickySwitch stickySwitch;
+
     private float finalVolumeEffects = 1;
     private float finalVolumeMusic = 1;
 
@@ -25,10 +30,10 @@ public class Settings {
 
         seekArcEffects = mainActivity.findViewById(R.id.seekArcEffects);
         ViewGroup.LayoutParams layoutParams = seekArcEffects.getLayoutParams();
-        layoutParams.width = (int) (210 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (160 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         seekArcEffects.setLayoutParams(layoutParams);
-        seekArcEffects.setProgress(50);
+        seekArcEffects.setProgress(100);
         seekArcEffects.setVisibility(SeekArc.GONE);
         seekArcEffects.setOnSeekArcChangeListener(new SeekArcListener() {
             @Override
@@ -41,10 +46,10 @@ public class Settings {
 
         seekArcMusic = mainActivity.findViewById(R.id.seekArcMusic);
         layoutParams = seekArcMusic.getLayoutParams();
-        layoutParams.width = (int) (210 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (160 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         seekArcMusic.setLayoutParams(layoutParams);
-        seekArcMusic.setProgress(50);
+        seekArcMusic.setProgress(100);
         seekArcMusic.setVisibility(SeekArc.GONE);
         seekArcMusic.setOnSeekArcChangeListener(new SeekArcListener() {
             @Override
@@ -56,18 +61,36 @@ public class Settings {
         });
 
         angleEffects = mainActivity.findViewById(R.id.angleEffects);
-        angleEffects.setText(("Volume: " + 50));
+        angleEffects.setText(("Volume: " + 100));
         angleEffects.setVisibility(TextView.GONE);
-
         textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
         textViewEffects.setVisibility(TextView.GONE);
 
         angleMusic = mainActivity.findViewById(R.id.angleMusic);
-        angleMusic.setText(("Volume: " + 50));
+        angleMusic.setText(("Volume: " + 100));
         angleMusic.setVisibility(TextView.GONE);
-
         textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
         textViewMusic.setVisibility(TextView.GONE);
+
+        textViewVibration = mainActivity.findViewById(R.id.textVibration);
+        textViewVibration.setVisibility(TextView.GONE);
+        stickySwitch = mainActivity.findViewById(R.id.stickySwitch);
+        layoutParams = stickySwitch.getLayoutParams();
+        layoutParams.width = (int) (150 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (90 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        stickySwitch.setLayoutParams(layoutParams);
+        stickySwitch.setVisibility(TextView.GONE);
+        stickySwitch.setRightIcon(ImageHub.onImg);
+        stickySwitch.setLeftIcon(ImageHub.offImg);
+        stickySwitch.setDirection(StickySwitch.Direction.RIGHT);
+        stickySwitch.setOnSelectedChangeListener((direction, text) -> {
+            if (text.equals("Enable")) {
+                Game.vibrate = true;
+                Service.vibrate(50);
+            } else {
+                Game.vibrate = false;
+            }
+        });
     }
 
     public void showSettings() {
@@ -79,6 +102,12 @@ public class Settings {
             angleMusic.setVisibility(TextView.VISIBLE);
             textViewMusic.setVisibility(TextView.VISIBLE);
             seekArcMusic.setVisibility(SeekArc.VISIBLE);
+
+            textViewVibration.setVisibility(TextView.VISIBLE);
+            stickySwitch.setVisibility(SeekArc.VISIBLE);
+            stickySwitch.setRightIcon(ImageHub.onImg);
+            stickySwitch.setLeftIcon(ImageHub.offImg);
+
             Game.gameStatus = 10;
         }));
     }
@@ -92,6 +121,9 @@ public class Settings {
             angleMusic.setVisibility(TextView.GONE);
             textViewMusic.setVisibility(TextView.GONE);
             seekArcMusic.setVisibility(SeekArc.GONE);
+
+            textViewVibration.setVisibility(TextView.GONE);
+            stickySwitch.setVisibility(SeekArc.GONE);
         }));
         AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
         AudioPool.newVolumeForPool(finalVolumeEffects);

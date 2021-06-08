@@ -11,7 +11,7 @@ public class PauseButton extends Sprite {
     }
 
     public void show() {
-        x = Game.screenWidth - (width * 2);
+        x = (int) (Game.screenWidth - (width * 1.5));
     }
 
     public void make() {

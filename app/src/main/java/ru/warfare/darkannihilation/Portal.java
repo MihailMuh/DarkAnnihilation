@@ -42,7 +42,7 @@ public class Portal extends Sprite {
             AudioHub.timeMachineNoneSnd.start();
 
             touch = true;
-            BaseCharacter.god = true;
+            game.player.god = true;
             frameTime = 0;
             game.player.lock = true;
             ImageHub.loadSecondLevelImages(game.context);

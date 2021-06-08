@@ -20,6 +20,9 @@ public class LoadingScreen extends Sprite {
         if (ImageHub.needImagesForFirstLevel()) {
             sooFast = true;
         }
+        if (job.equals("settings")) {
+            ImageHub.loadLayoutImages(game.context);
+        }
     }
 
     @Override

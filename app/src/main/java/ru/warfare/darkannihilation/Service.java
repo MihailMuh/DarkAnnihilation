@@ -2,6 +2,8 @@ package ru.warfare.darkannihilation;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -10,9 +12,18 @@ import static android.content.Context.WINDOW_SERVICE;
 public final class Service {
     public static final String TAG = "D'Ark";
     private static final Point size = new Point();
+    private static MainActivity mainActivity;
 
-    public static void init(Context context) {
-        (((WindowManager) context.getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRealSize(size);
+    public static void init(MainActivity mainActivity) {
+        Service.mainActivity = mainActivity;
+        (((WindowManager) mainActivity.getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRealSize(size);
+    }
+
+    public static void vibrate(int millis) {
+        if (Game.vibrate) {
+            ((Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE))
+                    .vibrate(VibrationEffect.createOneShot(millis, 30));
+        }
     }
 
     public static int getScreenWidth() {

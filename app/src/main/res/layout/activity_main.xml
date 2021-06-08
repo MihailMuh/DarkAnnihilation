@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gifView"
@@ -31,19 +31,18 @@
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArcEffects"
-        android:layout_width="210dp"
-        android:layout_height="160dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_gravity="center"
         android:padding="30dp"
-        app:arcColor="#87CEFA"
+        app:arcColor="@color/white"
         app:arcWidth="7dp"
         app:clockwise="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.003"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.199"
+        app:layout_constraintVertical_bias="0.173"
         app:progressColor="#6A5ACD"
         app:rotation="180"
         app:roundEdges="true"
@@ -73,21 +72,20 @@
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArcMusic"
-        android:layout_width="210dp"
-        android:layout_height="160dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_gravity="center"
         android:padding="30dp"
-        app:arcColor="#87CEFA"
+        app:arcColor="@color/white"
         app:arcWidth="7dp"
-        app:clockwise="true"
+        app:clockwise="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.003"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_bias="0.173"
         app:progressColor="#6A5ACD"
-        app:rotation="0"
+        app:rotation="180"
         app:roundEdges="true"
         app:startAngle="30"
         app:sweepAngle="300"
@@ -99,9 +97,9 @@
         android:layout_height="wrap_content"
         android:text="@string/change_loud_of_sound_music"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/seekArcMusic"
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
-        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
-        app:layout_constraintTop_toBottomOf="@+id/seekArcMusic" />
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic" />
 
     <TextView
         android:id="@+id/angleMusic"
@@ -112,5 +110,49 @@
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
         app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
         app:layout_constraintTop_toTopOf="@+id/seekArcMusic" />
+
+    <TextView
+        android:id="@+id/textVibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/vibration"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/stickySwitch"
+        app:layout_constraintEnd_toStartOf="@+id/angleEffects"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toEndOf="@+id/angleMusic" />
+
+    <io.ghyeok.stickyswitch.widget.StickySwitch
+        android:id="@+id/stickySwitch"
+        android:layout_width="150dp"
+        android:layout_height="90dp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekArcMusic"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.361"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMusic"
+        app:layout_constraintVertical_bias="0.635"
+        app:ss_animationDuration="600"
+        app:ss_animationType="curved"
+        app:ss_iconPadding="14dp"
+        app:ss_iconSize="30dp"
+        app:ss_leftText="Disable"
+        app:ss_rightText="Enable"
+        app:ss_selectedTextSize="15sp"
+        app:ss_sliderBackgroundColor="#87CEFA"
+        app:ss_switchColor="#6A5ACD"
+        app:ss_textSize="12sp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/gameView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gameView"
+        app:layout_constraintVertical_bias="0.155" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

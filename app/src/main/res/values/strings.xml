@@ -5,4 +5,6 @@
     <string name="warning_text">Please, enable the internet connection and re-enter the game to register there!</string>
     <string name="change_loud_of_sound_effects">Change loud of sound effects</string>
     <string name="change_loud_of_sound_music">Change loud of background music</string>
+    <string name="vibration">Vibration</string>
+    <string name="change_load_of_all_sounds">Change load of ALL sounds</string>
 </resources>

@@ -19,24 +19,6 @@ public class MillenniumFalcon extends BaseCharacter {
         lastShoot = System.currentTimeMillis();
     }
 
-//    @Override
-//    public void PLAYER() {
-//        baseSetting();
-//
-//        shootTime = 110;
-//        shotgunTime = 535;
-//        switch (Game.level)
-//        {
-//            case 1:
-//                gun = "gun";
-//                break;
-//            case 2:
-//                shootTime = 55;
-//                shotgunTime = 335;
-//                break;
-//        }
-//    }
-
     @Override
     public void shoot() {
         now = System.currentTimeMillis();
@@ -45,7 +27,7 @@ public class MillenniumFalcon extends BaseCharacter {
                 lastShoot = now;
                 AudioHub.playShotgun();
                 int centerX = centerX();
-                for (int i = -4; i <= 4; i+=2) {
+                for (int i = -4; i <= 4; i += 2) {
                     Buckshot buckshot = new Buckshot(centerX, y, i);
                     Game.bullets.add(buckshot);
                     Game.allSprites.add(buckshot);
@@ -101,7 +83,7 @@ public class MillenniumFalcon extends BaseCharacter {
     }
 
     @Override
-    public void render () {
+    public void render() {
         if (!ai) {
             renderHearts();
         }

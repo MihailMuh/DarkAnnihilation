@@ -5,7 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.widget.TextView;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
 
@@ -31,7 +31,6 @@ public final class ImageHub {
     public static Bitmap[] screenImage = new Bitmap[34];
     public static Bitmap[] vaderImage = new Bitmap[3];
     public static Bitmap[] vaderOldImage = new Bitmap[3];
-    public static Bitmap[] winScreenImg = new Bitmap[100];
     public static final Bitmap[] portalImages = new Bitmap[20];
     public static Bitmap[] thunderScreen = new Bitmap[20];
     public static final Bitmap[] loadingImages = new Bitmap[12];
@@ -76,6 +75,8 @@ public final class ImageHub {
     public static Bitmap bossVadersImg;
     public static Bitmap bulletBossVadersImg;
     public static Bitmap bufferImg;
+    public static Drawable onImg;
+    public static Drawable offImg;
 
     private static final int screenWidth = Service.getScreenWidth();
     private static final int screenHeight = Service.getScreenHeight();
@@ -111,6 +112,7 @@ public final class ImageHub {
         int eX13 = (int) (13 * resizeK);
         int eX207 = (int) (207 * resizeK);
         int eX120 = (int) (120 * resizeK);
+        int pauseBtn = (int) (150 * Service.getResizeCoefficientForLayout());
 
         requestBuilder =
                 GlideApp.with(context)
@@ -118,6 +120,23 @@ public final class ImageHub {
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         loadFirstLevelBitmaps();
+        loadLayoutImages(context);
+
+        requestBuilder.load(R.drawable.pause_button)
+                .override(pauseBtn, pauseBtn)
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  pauseButtonImg = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
 
         requestBuilder.load(R.drawable.bullet)
                 .override((int) (7 * resizeK), (int) (30 * resizeK))
@@ -303,22 +322,6 @@ public final class ImageHub {
                               @Override
                               public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                   imageHeartNon = resource;
-                                  return true;
-                              }
-                          }
-                ).submit();
-
-        requestBuilder.load(R.drawable.pause_button)
-                .override(eX120, eX120)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  pauseButtonImg = resource;
                                   return true;
                               }
                           }
@@ -1068,6 +1071,50 @@ public final class ImageHub {
 
     public static void deleteWinImages() {
         MainActivity.handler.post(() -> MainActivity.gif.setImageDrawable(null));
+    }
+
+    public static void loadLayoutImages(Context context) {
+        GlideApp.with(context)
+                .asDrawable()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.on)
+                .override(eX100, (int) (resizeK * 82))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        onImg = resource;
+                        return false;
+                    }
+
+                }).submit();
+
+        GlideApp.with(context)
+                .asDrawable()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.off)
+                .override(eX100, (int) (resizeK * 96))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        offImg = resource;
+                        return true;
+                    }
+                }).submit();
+    }
+
+    public static void deleteLayoutImages() {
+        onImg = null;
+        offImg = null;
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {

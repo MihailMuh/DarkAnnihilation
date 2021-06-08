@@ -29,27 +29,24 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     public static GifImageView gif;
     public final static Handler handler = new Handler(Looper.getMainLooper());
+    public static boolean firstTry = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        synchronized(this) {
-            setTheme(R.style.darkTheme);
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-            game = findViewById(R.id.gameView);
+        setTheme(R.style.darkTheme);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        game = findViewById(R.id.gameView);
+        gif = findViewById(R.id.gifView);
 
-            Service.init(this);
-            ImageHub.init(this);
-            AudioHub.init(this);
-            Clerk.init(this);
-            ClientServer.getStatistics();
-            checkOnFirstRun();
+        Service.init(this);
+        ImageHub.init(this);
+        AudioHub.init(this);
+        Clerk.init(this);
+        ClientServer.getStatistics();
+        checkOnFirstRun();
 
-            gif = findViewById(R.id.gifView);
-            game.init(this);
-
-            Service.print("" + Game.screenHeight);
-        }
+        game.init(this);
     }
 
     @Override
