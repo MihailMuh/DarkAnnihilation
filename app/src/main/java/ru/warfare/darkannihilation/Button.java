@@ -19,6 +19,7 @@ public class Button extends Sprite {
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
+        paint.setAntiAlias(true);
 
         newFunc(t, X, Y, func);
 

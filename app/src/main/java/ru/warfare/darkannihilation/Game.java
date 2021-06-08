@@ -37,7 +37,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint scorePaint = new Paint();
     public static final Paint topPaint = new Paint();
     public static final Paint topPaintRed = new Paint();
-    public static final Paint blackPaint = new Paint();
     public static final Paint alphaPaint = new Paint();
     public static final Paint winPaint = new Paint();
 
@@ -107,6 +106,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void init(MainActivity mainActivity) {
         context = mainActivity;
+
         screenWidth = Service.getScreenWidth();
         screenHeight = Service.getScreenHeight();
         halfScreenWidth = screenWidth / 2;
@@ -115,20 +115,30 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
+
         startPaint.setColor(Color.WHITE);
         startPaint.setTextSize(300);
+        startPaint.setAntiAlias(true);
+
         gameoverPaint.setColor(Color.WHITE);
         gameoverPaint.setTextSize(50);
+        gameoverPaint.setAntiAlias(true);
+
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(40);
+        scorePaint.setAntiAlias(true);
+
         topPaint.setColor(Color.WHITE);
         topPaint.setTextSize(30);
+        topPaint.setAntiAlias(true);
+
         topPaintRed.setColor(Color.RED);
         topPaintRed.setTextSize(30);
-        blackPaint.setColor(Color.BLACK);
-        blackPaint.setAlpha(0);
+        topPaintRed.setAntiAlias(true);
+
         winPaint.setColor(Color.WHITE);
         winPaint.setTextSize(100);
+        winPaint.setAntiAlias(true);
 
         getMaxScore();
 

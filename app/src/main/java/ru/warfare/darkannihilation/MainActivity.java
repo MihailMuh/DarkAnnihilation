@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
             gif = findViewById(R.id.gifView);
             game.init(this);
+
+            Service.print("" + Game.screenHeight);
         }
     }
 

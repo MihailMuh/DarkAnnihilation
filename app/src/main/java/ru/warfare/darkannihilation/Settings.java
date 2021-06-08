@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation;
 
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.triggertrap.seekarc.SeekArc;
@@ -20,15 +21,13 @@ public class Settings {
 
     public Settings(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-
-        angleEffects = mainActivity.findViewById(R.id.angleEffects);
-        angleEffects.setText(("Volume: " + 50));
-        angleEffects.setVisibility(TextView.GONE);
-
-        textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
-        textViewEffects.setVisibility(TextView.GONE);
+        float density = mainActivity.getResources().getDisplayMetrics().density;
 
         seekArcEffects = mainActivity.findViewById(R.id.seekArcEffects);
+        ViewGroup.LayoutParams layoutParams = seekArcEffects.getLayoutParams();
+        layoutParams.width = (int) (210 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (160 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        seekArcEffects.setLayoutParams(layoutParams);
         seekArcEffects.setProgress(50);
         seekArcEffects.setVisibility(SeekArc.GONE);
         seekArcEffects.setOnSeekArcChangeListener(new SeekArcListener() {
@@ -40,14 +39,11 @@ public class Settings {
             }
         });
 
-        angleMusic = mainActivity.findViewById(R.id.angleMusic);
-        angleMusic.setText(("Volume: " + 50));
-        angleMusic.setVisibility(TextView.GONE);
-
-        textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
-        textViewMusic.setVisibility(TextView.GONE);
-
         seekArcMusic = mainActivity.findViewById(R.id.seekArcMusic);
+        layoutParams = seekArcMusic.getLayoutParams();
+        layoutParams.width = (int) (210 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (160 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        seekArcMusic.setLayoutParams(layoutParams);
         seekArcMusic.setProgress(50);
         seekArcMusic.setVisibility(SeekArc.GONE);
         seekArcMusic.setOnSeekArcChangeListener(new SeekArcListener() {
@@ -58,6 +54,20 @@ public class Settings {
                 AudioHub.menuMusic.setVolume(finalVolumeMusic, finalVolumeMusic);
             }
         });
+
+        angleEffects = mainActivity.findViewById(R.id.angleEffects);
+        angleEffects.setText(("Volume: " + 50));
+        angleEffects.setVisibility(TextView.GONE);
+
+        textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
+        textViewEffects.setVisibility(TextView.GONE);
+
+        angleMusic = mainActivity.findViewById(R.id.angleMusic);
+        angleMusic.setText(("Volume: " + 50));
+        angleMusic.setVisibility(TextView.GONE);
+
+        textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
+        textViewMusic.setVisibility(TextView.GONE);
     }
 
     public void showSettings() {

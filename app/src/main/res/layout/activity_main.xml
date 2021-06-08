@@ -69,10 +69,7 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/seekArcEffects"
         app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="@+id/seekArcEffects" />
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArcMusic"
@@ -85,7 +82,7 @@
         app:clockwise="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8"
@@ -102,12 +99,9 @@
         android:layout_height="wrap_content"
         android:text="@string/change_loud_of_sound_music"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/gameView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekArcMusic"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
+        app:layout_constraintTop_toBottomOf="@+id/seekArcMusic" />
 
     <TextView
         android:id="@+id/angleMusic"

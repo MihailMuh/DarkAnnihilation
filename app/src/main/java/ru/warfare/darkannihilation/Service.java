@@ -24,7 +24,11 @@ public final class Service {
     }
 
     public static double getResizeCoefficient() {
-        return size.x / 1920f;
+        return (double) size.x / 1920f;
+    }
+
+    public static double getResizeCoefficientForLayout() {
+        return (double) size.y / 720f;
     }
 
     public static void print(String text) {
