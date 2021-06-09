@@ -96,4 +96,44 @@ public final class Clerk {
             return 0;
         }
     }
+
+    public static void saveSettings(String string) {
+        try {
+            FileOutputStream writer = context.openFileOutput("SETTINGS.txt", Context.MODE_PRIVATE);
+            OutputStreamWriter writer_str = new OutputStreamWriter(writer);
+
+            writer_str.write(string);
+            writer_str.close();
+        } catch (Exception e) {
+            Service.print("Can't save SETTINGS " + e);
+        }
+    }
+
+    public static String getSettings() {
+        try {
+            InputStreamReader reader_cooler = new InputStreamReader(context.openFileInput("SETTINGS.txt"));
+            BufferedReader reader_buffer = new BufferedReader(reader_cooler);
+
+            String string = reader_buffer.readLine();
+            reader_cooler.close();
+
+            return string;
+
+        } catch (Exception e) {
+            Service.print("Can't recovery SETTINGS: " + e);
+            Service.print("Creating new file...");
+            try {
+                FileOutputStream writer = context.openFileOutput("SETTINGS.txt", Context.MODE_PRIVATE);
+                OutputStreamWriter writer_str = new OutputStreamWriter(writer);
+
+                writer_str.write("");
+                writer_str.close();
+                Service.print("Successful");
+            } catch (Exception e2) {
+                Service.print("Err: " + e2);
+            }
+        }
+        return "1 1 1";
+    }
+
 }

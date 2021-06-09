@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         game.onPause();
         game.saveScore();
+
         AudioHub.releaseAP();
     }
 

@@ -134,7 +134,7 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textViewMusic"
         app:layout_constraintVertical_bias="0.635"
-        app:ss_animationDuration="600"
+        app:ss_animationDuration="450"
         app:ss_animationType="curved"
         app:ss_iconPadding="14dp"
         app:ss_iconSize="30dp"

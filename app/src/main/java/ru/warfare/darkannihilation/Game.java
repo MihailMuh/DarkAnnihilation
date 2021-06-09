@@ -91,7 +91,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
-    public static volatile boolean vibrate = true;
+    public static volatile boolean vibrate;
 
     private int fpsX;
     private int fpsY;
@@ -387,9 +387,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         pauseButton.render();
         changerGuns.render();
-
-        renderFPS();
-        renderCurrentScore();
     }
 
     @Override
@@ -403,27 +400,37 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 switch (gameStatus) {
                     case 0:
                         gameplay();
+                        renderCurrentScore();
                         break;
                     case 1:
                         preview();
+                        renderMaxScore();
                         break;
                     case 2:
                         ready();
+                        renderCurrentScore();
                         break;
                     case 3:
                         gameover();
+                        renderCurrentScore();
                         break;
                     case 4:
                         pause();
+                        renderCurrentScore();
                         break;
                     case 5:
+                        renderSprites();
                         bossIncoming();
+                        renderCurrentScore();
                         break;
                     case 6:
                         portalTime();
+                        renderCurrentScore();
                         break;
                     case 9:
+                        renderSprites();
                         afterPause();
+                        renderCurrentScore();
                         break;
                     case 7:
                         win();
@@ -437,9 +444,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 41:
                         onLoading();
                         break;
-                    case 42:
+                    default:
                         break;
                 }
+                renderFPS();
                 holder.unlockCanvasAndPost(canvas);
             }
         }
@@ -788,11 +796,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 (screenWidth - gameoverPaint.measureText("Tap this screen with four or more fingers to restart")) / 2,
                 (float) (screenHeight * 0.7), gameoverPaint);
 
-        renderFPS();
-        renderCurrentScore();
-
         textBuilder.append("Max score: ").append(bestScore);
-        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
+        canvas.drawText(textBuilder.toString(), maxScoreX, 130, scorePaint);
 
         textBuilder.setLength(0);
 
@@ -803,9 +808,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void bossIncoming() {
-        renderSprites();
-        renderFPS();
-        renderCurrentScore();
         Sprite boss = bosses.get(bosses.size() - 1);
         if (boss.y >= -400 | pointerCount >= 4) {
             if (portal == null) {
@@ -821,10 +823,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void afterPause() {
-        renderSprites();
-        renderFPS();
-        renderCurrentScore();
-
         count += 1;
         if (0 <= count & count < 23) {
             canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
@@ -873,11 +871,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     (float) (screenHeight * 0.7), gameoverPaint);
         }
 
-        renderFPS();
-        renderCurrentScore();
-
         textBuilder.append("Max score: ").append(bestScore);
-        canvas.drawText(textBuilder.toString(), halfScreenWidth - scorePaint.measureText(textBuilder.toString()) / 2, 130, scorePaint);
+        canvas.drawText(textBuilder.toString(), maxScoreX, 130, scorePaint);
 
         textBuilder.setLength(0);
 
@@ -909,9 +904,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.render();
 
         pauseButton.render();
-
-        renderCurrentScore();
-        renderFPS();
 
         count += 1;
         if (0 <= count & count < 70) {
@@ -969,9 +961,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonPlayer.render();
         buttonSaturn.render();
 
-        renderMaxScore();
-        renderFPS();
-
         if (buttonPlayer.x < screenWidth) {
             canvas.drawText("Choose your character",
                     (screenWidth - Game.gameoverPaint.measureText("Choose your character")) / 2,
@@ -995,8 +984,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaint);
                 }
             }
-
-            renderFPS();
         } catch (Exception e) {
             Service.print(e.toString());
         }
@@ -1007,8 +994,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         screen.render();
 
         buttonMenu.render();
-
-        renderFPS();
     }
 
     private void win() {
@@ -1119,9 +1104,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.update();
         player.render();
         changerGuns.render();
-
-        renderFPS();
-        renderCurrentScore();
 
         if (!portal.touch) {
             player.checkIntersections(portal);
