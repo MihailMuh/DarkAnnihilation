@@ -3,7 +3,15 @@ package ru.warfare.darkannihilation;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.skydoves.powerspinner.IconSpinnerAdapter;
+import com.skydoves.powerspinner.IconSpinnerItem;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
 import com.triggertrap.seekarc.SeekArc;
+
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 
@@ -20,6 +28,9 @@ public class Settings {
 
     private final TextView textViewVibration;
     private final StickySwitch stickySwitch;
+
+    private final PowerSpinnerView spinner;
+    private final TextView textSpinner;
 
     private float finalVolumeEffects;
     private float finalVolumeMusic;
@@ -103,6 +114,33 @@ public class Settings {
                 Game.vibrate = false;
             }
         });
+
+        textSpinner = mainActivity.findViewById(R.id.textSpinner);
+        textSpinner.setVisibility(TextView.GONE);
+        ArrayList<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
+        iconSpinnerItems.add(new IconSpinnerItem("English", ImageHub.enImg));
+        iconSpinnerItems.add(new IconSpinnerItem("Russian", ImageHub.ruImg));
+        spinner = mainActivity.findViewById(R.id.spinner);
+        spinner.setVisibility(TextView.GONE);
+        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
+        spinner.setSpinnerAdapter(iconSpinnerAdapter);
+        spinner.setItems(iconSpinnerItems);
+        spinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(int i, @Nullable Object o, int i1, Object t1) {
+                switch (i1)
+                {
+                    case 0:
+                        Game.language = "en";
+                        break;
+                    case 1:
+                        Game.language = "ru";
+                        break;
+                }
+                mainActivity.game.makeLanguage();
+            }
+        });
+        spinner.setLifecycleOwner(mainActivity);
     }
 
     public void showSettings() {
@@ -120,6 +158,18 @@ public class Settings {
             stickySwitch.setRightIcon(ImageHub.onImg);
             stickySwitch.setLeftIcon(ImageHub.offImg);
 
+            spinner.setVisibility(TextView.VISIBLE);
+            switch (Game.language)
+            {
+                case "en":
+                    spinner.selectItemByIndex(0);
+                    break;
+                case "ru":
+                    spinner.selectItemByIndex(1);
+                    break;
+            }
+            textSpinner.setVisibility(TextView.VISIBLE);
+
             Game.gameStatus = 10;
         }));
     }
@@ -136,6 +186,10 @@ public class Settings {
 
             textViewVibration.setVisibility(TextView.GONE);
             stickySwitch.setVisibility(SeekArc.GONE);
+
+            spinner.setVisibility(TextView.GONE);
+            spinner.dismiss();
+            textSpinner.setVisibility(TextView.GONE);
         }));
         AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
         AudioPool.newVolumeForPool(finalVolumeEffects);
@@ -144,19 +198,20 @@ public class Settings {
 
     public void parseSettings() {
         String[] settings = Clerk.getSettings().split(" ");
-        Service.print(settings[0] + " " + settings[1] + " " + settings[2]);
         finalVolumeMusic = Float.parseFloat(settings[0]);
         finalVolumeEffects = Float.parseFloat(settings[1]);
         Game.vibrate = Integer.parseInt(settings[2]) == 1;
+        Game.language = settings[3];
+        mainActivity.game.makeLanguage();
         AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
         AudioPool.newVolumeForPool(finalVolumeEffects);
     }
 
     public void saveSettings() {
         if (Game.vibrate) {
-            Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " 1");
+            Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " 1 " + Game.language);
         } else {
-            Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " 0");
+            Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " 0 " + Game.language);
         }
     }
 }

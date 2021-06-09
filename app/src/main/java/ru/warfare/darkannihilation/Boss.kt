@@ -98,7 +98,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
                 AudioHub.restartBossMusic()
                 AudioHub.pauseBackgroundMusic()
                 Game.gameStatus = 5
-                ImageHub.loadPortalImages(game.context)
+                ImageHub.loadPortalImages()
             }
             y += speedY
         }

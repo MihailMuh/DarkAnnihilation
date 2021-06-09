@@ -2,9 +2,11 @@ package ru.warfare.darkannihilation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
@@ -35,6 +37,7 @@ public final class ImageHub {
     public static Bitmap[] thunderScreen = new Bitmap[20];
     public static final Bitmap[] loadingImages = new Bitmap[12];
 
+    public static Bitmap bitmap;
     public static Bitmap bulletImage;
     public static Bitmap tripleFighterImg;
     public static Bitmap playerImage;
@@ -77,6 +80,8 @@ public final class ImageHub {
     public static Bitmap bufferImg;
     public static Drawable onImg;
     public static Drawable offImg;
+    public static Drawable enImg;
+    public static Drawable ruImg;
 
     private static final int screenWidth = Service.getScreenWidth();
     private static final int screenHeight = Service.getScreenHeight();
@@ -84,7 +89,7 @@ public final class ImageHub {
 
     public static final int eX75 = (int) (75 * resizeK);
     public static final int eX70 = (int) (70 * resizeK);
-    public static final int eX300 = (int) (300 * resizeK);
+    private static final int eX300 = (int) (300 * resizeK);
     private static final int screensSizeX = (int) (screenWidth * 1.4);
     private static final int eX50 = (int) (50 * resizeK);
     private static final int eX60 = (int) (60 * resizeK);
@@ -99,7 +104,9 @@ public final class ImageHub {
     private static final int portalSize = (int) (300 * resizeK);
 
     @SuppressLint("StaticFieldLeak")
-    private static RequestBuilder<Bitmap> requestBuilder;
+    public static RequestBuilder<Bitmap> requestBuilder;
+    private static Resources res;
+    private static String name;
 
     public static void init(Context context) {
         int eX145 = (int) (145 * resizeK);
@@ -113,6 +120,8 @@ public final class ImageHub {
         int eX207 = (int) (207 * resizeK);
         int eX120 = (int) (120 * resizeK);
         int pauseBtn = (int) (150 * Service.getResizeCoefficientForLayout());
+        res = context.getResources();
+        name = context.getPackageName();
 
         requestBuilder =
                 GlideApp.with(context)
@@ -487,14 +496,42 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        buttonImagePressed = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.button_press),
-                eX300, eX70, isFilter);
-        buttonImageNotPressed = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.button_notpress),
-                eX300, eX70, isFilter);
+        requestBuilder.load(R.drawable.button_press)
+                .override(eX300, eX70)
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  buttonImagePressed = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
+
+        requestBuilder.load(R.drawable.button_notpress)
+                .override(eX300, eX70)
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  buttonImageNotPressed = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
+
         for (int i = 0; i < 34; i++) {
             int finalI = i;
             if (i < 3) {
-                requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("vader" + (i + 1), "drawable", name))
                         .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -511,7 +548,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 12) {
-                requestBuilder.load(context.getResources().getIdentifier("loading" + i, "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("loading" + i, "drawable", name))
                         .centerCrop()
                         .override(screenWidth, screenHeight)
                         .listener(new RequestListener<Bitmap>() {
@@ -529,7 +566,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 13) {
-                requestBuilder.load(context.getResources().getIdentifier("explosion_skull_" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("explosion_skull_" + (i + 1), "drawable", name))
                         .override(eX435, eX500)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -546,7 +583,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 23) {
-                requestBuilder.load(context.getResources().getIdentifier("explosion_" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
                         .override(eX145, eX152)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -561,7 +598,7 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(context.getResources().getIdentifier("explosion_" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
                         .override(eX50, eX52)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -578,7 +615,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 28) {
-                requestBuilder.load(context.getResources().getIdentifier("default_explosion_" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
                         .override(eX145, eX145)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -593,7 +630,7 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(context.getResources().getIdentifier("default_explosion_" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
                         .override(eX50, eX50)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -609,7 +646,7 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            requestBuilder.load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
+            requestBuilder.load(res.getIdentifier("_" + i, "drawable", name))
                     .centerCrop()
                     .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
@@ -631,10 +668,10 @@ public final class ImageHub {
         }
     }
 
-    public static void loadPortalImages(Context context) {
+    public static void loadPortalImages() {
         for (int i = 0; i < 20; i++) {
             int finalI = i;
-            requestBuilder.load(context.getResources().getIdentifier("portal0" + i, "drawable", context.getPackageName()))
+            requestBuilder.load(res.getIdentifier("portal0" + i, "drawable", name))
                     .override(portalSize, portalSize)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -756,7 +793,7 @@ public final class ImageHub {
         for (int i = 0; i < 20; i++) {
             int finalI = i;
             if (i < 3) {
-                requestBuilder.load(context.getResources().getIdentifier("vader1" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("vader1" + (i + 1), "drawable", name))
                         .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -772,7 +809,7 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            requestBuilder.load(context.getResources().getIdentifier("thunder" + i, "drawable", context.getPackageName()))
+            requestBuilder.load(res.getIdentifier("thunder" + i, "drawable", name))
                     .centerCrop()
                     .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
@@ -831,7 +868,7 @@ public final class ImageHub {
         for (int i = 0; i < 34; i++) {
             int finalI = i;
             if (i < 3) {
-                requestBuilder.load(context.getResources().getIdentifier("vader" + (i + 1), "drawable", context.getPackageName()))
+                requestBuilder.load(res.getIdentifier("vader" + (i + 1), "drawable", name))
                         .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -847,7 +884,7 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            requestBuilder.load(context.getResources().getIdentifier("_" + i, "drawable", context.getPackageName()))
+            requestBuilder.load(res.getIdentifier("_" + i, "drawable", name))
                     .centerCrop()
                     .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
@@ -1081,7 +1118,7 @@ public final class ImageHub {
                 .override(eX100, (int) (resizeK * 82))
                 .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
@@ -1110,16 +1147,42 @@ public final class ImageHub {
                         return true;
                     }
                 }).submit();
+
+        GlideApp.with(context)
+                .asDrawable()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.en)
+                .override(eX200, eX100)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        enImg = resource;
+                        ruImg = new BitmapDrawable(res, Bitmap.createScaledBitmap(
+                                BitmapFactory.decodeResource(res, R.drawable.ru), eX200, eX100, true));
+                        return true;
+                    }
+                }).submit();
     }
 
     public static void deleteLayoutImages() {
         onImg = null;
         offImg = null;
+        ruImg = null;
+        enImg = null;
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
+    }
+
+    public static Bitmap resizeImage(Bitmap bitmap, int width, int height) {
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 }

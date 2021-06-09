@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 import com.triggertrap.seekarc.SeekArc;
 
-public class SeekListener implements SeekArc.OnSeekArcChangeListener {
+public class SeekArcListener implements SeekArc.OnSeekArcChangeListener {
     @Override
     public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
 
@@ -17,7 +17,4 @@ public class SeekListener implements SeekArc.OnSeekArcChangeListener {
     public void onStopTrackingTouch(SeekArc seekArc) {
 
     }
-}
-
-class SeekArcListener extends SeekListener {
 }

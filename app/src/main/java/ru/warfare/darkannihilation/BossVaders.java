@@ -96,8 +96,7 @@ public class BossVaders extends Sprite {
             AudioHub.restartBossMusic();
             AudioHub.pauseBackgroundMusic();
             Game.gameStatus = 5;
-            ImageHub.loadPortalImages(game.context);
-//            ImageHub.loadWinImages(game.context);
+            ImageHub.loadPortalImages();
         }
         if (y > 0 & !field) {
             field = true;

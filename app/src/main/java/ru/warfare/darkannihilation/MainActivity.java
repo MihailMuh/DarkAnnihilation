@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-    private Game game;
-    private SharedPreferences preferences;
+    public Game game;
+    public SharedPreferences preferences;
     public static GifImageView gif;
     public final static Handler handler = new Handler(Looper.getMainLooper());
     public static boolean firstTry = true;
@@ -53,15 +53,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         game.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        game.onPause();
-        game.saveScore();
-
-        AudioHub.releaseAP();
     }
 
     @Override

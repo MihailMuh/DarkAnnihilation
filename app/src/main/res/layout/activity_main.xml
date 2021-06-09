@@ -130,10 +130,10 @@
         android:layout_height="90dp"
         app:layout_constraintBottom_toBottomOf="@+id/seekArcMusic"
         app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintHorizontal_bias="0.361"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textViewMusic"
-        app:layout_constraintVertical_bias="0.635"
+        app:layout_constraintVertical_bias="0.211"
         app:ss_animationDuration="450"
         app:ss_animationType="curved"
         app:ss_iconPadding="14dp"
@@ -154,5 +154,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gameView"
         app:layout_constraintVertical_bias="0.155" />
+
+    <com.skydoves.powerspinner.PowerSpinnerView
+        android:id="@+id/spinner"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:background="#6A5ACD"
+        android:gravity="center"
+        android:padding="0dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/gameView"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/gameView"
+        app:layout_constraintVertical_bias="0.577"
+        app:spinner_arrow_gravity="end"
+        app:spinner_arrow_show="true"
+        app:spinner_arrow_animate="true"
+        app:spinner_arrow_padding="0dp"
+        app:spinner_divider_show="true"
+        app:spinner_divider_size="0.2dp"
+        app:spinner_item_array="@array/languages"
+        app:spinner_popup_animation="fade"
+        app:spinner_popup_background="#87CEFA"
+        app:spinner_popup_elevation="14dp" />
+
+    <TextView
+        android:id="@+id/textSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:text="@string/choose_your_language"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="@+id/spinner"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="@+id/spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

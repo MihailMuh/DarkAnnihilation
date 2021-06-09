@@ -4,13 +4,20 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+
 public class Button extends Sprite {
     private Bitmap img;
     private static final Paint paint = new Paint();
     private String function;
     private String text;
-    private int textWidth;
-    private int textHeight;
+    private int textX;
+    private int textY;
     private static final int clickTime = 500;
     private long lastClick;
 
@@ -33,10 +40,20 @@ public class Button extends Sprite {
         y = Y;
 
         text = name;
-        textWidth = (int) paint.measureText(text);
-        textHeight = (int) (paint.getTextSize() / 4);
 
+        float len = paint.measureText(text);
+        while (len > width - 40) {
+            width += 2;
+        }
+
+        ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed, width, height);
+        ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed, width, height);;
         img = ImageHub.buttonImageNotPressed;
+
+        halfWidth = width / 2;
+
+        textX = (int) (x + (width - paint.measureText(text)) / 2);
+        textY = (int) (y + (halfHeight + paint.getTextSize() / 4));
     }
 
     public boolean checkCoords(int X, int Y) {
@@ -72,10 +89,13 @@ public class Button extends Sprite {
                             game.buttonSaturn.show();
                             break;
                         case "quit":
+                            game.onPause();
+                            game.saveScore();
+                            game.settings.saveSettings();
+                            AudioHub.releaseAP();
                             System.exit(0);
                             break;
                         case "pause":
-                            game.player.dontmove = true;
                             Game.lastBoss += game.pauseTimer;
                             game.hardThread.workOnResume();
                             AudioHub.pausePauseMusic();
@@ -122,6 +142,6 @@ public class Button extends Sprite {
     @Override
     public void render() {
         Game.canvas.drawBitmap(img, x, y, null);
-        Game.canvas.drawText(text, x + (float) ((width - textWidth) / 2), y + (halfHeight + textHeight), paint);
+        Game.canvas.drawText(text, textX, textY, paint);
     }
 }
