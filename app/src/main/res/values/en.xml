@@ -3,7 +3,7 @@
     <string-array name="en">
         <item>Current score:</item>
         <item>Best score:</item>
-        <item>Top score</item>
+        <item>Top players</item>
         <item>Start</item>
         <item>Quit</item>
         <item>Settings</item>
@@ -17,11 +17,12 @@
         <item>Tap this screen with four or more fingers to restart</item>
         <item>SHOOT!</item>
 
-        <item>Apply</item>
-        <item>Enter your nickname</item>
-        <item>Please, enable the internet connection and re-enter the game to register there!</item>
+        <item>Volume:</item>
         <item>Change loud of sound effects</item>
         <item>Change loud of background music</item>
         <item>Vibration</item>
+        <item>Enable</item>
+        <item>Disable</item>
+        <item>Choose your language</item>
     </string-array>
 </resources>

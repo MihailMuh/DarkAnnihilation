@@ -26,101 +26,99 @@ public final class AudioHub {
     public static MediaPlayer forgottenBossMusic;
 
     public static void init(Context context) {
-        new Thread(() -> {
-            AudioPool.addSound(context, R.raw.reload0, 1f);
-            AudioPool.addSound(context, R.raw.reload1);
-            AudioPool.addSound(context, R.raw.boom, 0.13f);
-            AudioPool.addSound(context, R.raw.laser, 0.17f);
-            AudioPool.addSound(context, R.raw.metal, 0.45f);
-            AudioPool.addSound(context, R.raw.shotgun, 0.25f);
-            AudioPool.addSound(context, R.raw.megaboom, 1f);
-            AudioPool.addSound(context, R.raw.falling_bomb, 0.2f);
-            AudioPool.addSound(context, R.raw.spacebar, 1f);
-            AudioPool.addSound(context, R.raw.deagle, 1f);
-            AudioPool.addSound(context, R.raw.heal, 0.8f);
-            AudioPool.addSound(context, R.raw.boss_shoot, 1f);
+        AudioPool.addSound(context, R.raw.reload0, 1f);
+        AudioPool.addSound(context, R.raw.reload1);
+        AudioPool.addSound(context, R.raw.boom, 0.13f);
+        AudioPool.addSound(context, R.raw.laser, 0.17f);
+        AudioPool.addSound(context, R.raw.metal, 0.45f);
+        AudioPool.addSound(context, R.raw.shotgun, 0.25f);
+        AudioPool.addSound(context, R.raw.megaboom, 1f);
+        AudioPool.addSound(context, R.raw.falling_bomb, 0.2f);
+        AudioPool.addSound(context, R.raw.spacebar, 1f);
+        AudioPool.addSound(context, R.raw.deagle, 1f);
+        AudioPool.addSound(context, R.raw.heal, 0.8f);
+        AudioPool.addSound(context, R.raw.boss_shoot, 1f);
 
-            menuMusic = MediaPlayer.create(context, R.raw.menu);
-            menuMusic.setLooping(true);
-            sounds.add(menuMusic);
-            volumes.add(1f);
+        menuMusic = MediaPlayer.create(context, R.raw.menu);
+        menuMusic.setLooping(true);
+        sounds.add(menuMusic);
+        volumes.add(1f);
 
-            readySnd = MediaPlayer.create(context, R.raw.ready);
-            readySnd.setVolume(1f, 1f);
-            sounds.add(readySnd);
-            volumes.add(1f);
+        readySnd = MediaPlayer.create(context, R.raw.ready);
+        readySnd.setVolume(1f, 1f);
+        sounds.add(readySnd);
+        volumes.add(1f);
 
-            attentionSnd = MediaPlayer.create(context, R.raw.attention);
-            attentionSnd.setVolume(0.6f, 0.6f);
-            sounds.add(attentionSnd);
-            volumes.add(0.6f);
+        attentionSnd = MediaPlayer.create(context, R.raw.attention);
+        attentionSnd.setVolume(0.6f, 0.6f);
+        sounds.add(attentionSnd);
+        volumes.add(0.6f);
 
-            jingleMusic = MediaPlayer.create(context, R.raw.jingle);
-            jingleMusic.setLooping(true);
-            jingleMusic.setVolume(0.5f, 0.5f);
-            sounds.add(jingleMusic);
-            volumes.add(0.5f);
+        jingleMusic = MediaPlayer.create(context, R.raw.jingle);
+        jingleMusic.setLooping(true);
+        jingleMusic.setVolume(0.5f, 0.5f);
+        sounds.add(jingleMusic);
+        volumes.add(0.5f);
 
-            gameoverSnd = MediaPlayer.create(context, R.raw.gameover_phrase);
-            gameoverSnd.setVolume(1f, 1f);
-            sounds.add(gameoverSnd);
-            volumes.add(1f);
+        gameoverSnd = MediaPlayer.create(context, R.raw.gameover_phrase);
+        gameoverSnd.setVolume(1f, 1f);
+        sounds.add(gameoverSnd);
+        volumes.add(1f);
 
-            pauseMusic = MediaPlayer.create(context, R.raw.pause);
-            pauseMusic.setVolume(0.75f, 0.75f);
-            pauseMusic.setLooping(true);
-            sounds.add(pauseMusic);
-            volumes.add(0.75f);
+        pauseMusic = MediaPlayer.create(context, R.raw.pause);
+        pauseMusic.setVolume(0.75f, 0.75f);
+        pauseMusic.setLooping(true);
+        sounds.add(pauseMusic);
+        volumes.add(0.75f);
 
-            bossMusic = MediaPlayer.create(context, R.raw.shadow_boss);
-            bossMusic.setVolume(0.45f, 0.45f);
-            bossMusic.setLooping(true);
-            sounds.add(bossMusic);
-            volumes.add(0.45f);
+        bossMusic = MediaPlayer.create(context, R.raw.shadow_boss);
+        bossMusic.setVolume(0.45f, 0.45f);
+        bossMusic.setLooping(true);
+        sounds.add(bossMusic);
+        volumes.add(0.45f);
 
-            flightSnd = MediaPlayer.create(context, R.raw.fly);
-            flightSnd.setVolume(1f, 1f);
-            sounds.add(flightSnd);
-            volumes.add(1f);
+        flightSnd = MediaPlayer.create(context, R.raw.fly);
+        flightSnd.setVolume(1f, 1f);
+        sounds.add(flightSnd);
+        volumes.add(1f);
 
-            winMusic = MediaPlayer.create(context, R.raw.win);
-            winMusic.setVolume(0.3f, 0.3f);
-            winMusic.setLooping(true);
-            sounds.add(winMusic);
-            volumes.add(0.3f);
+        winMusic = MediaPlayer.create(context, R.raw.win);
+        winMusic.setVolume(0.3f, 0.3f);
+        winMusic.setLooping(true);
+        sounds.add(winMusic);
+        volumes.add(0.3f);
 
-            portalSound = MediaPlayer.create(context, R.raw.portal);
-            portalSound.setVolume(0.5f, 0.5f);
-            sounds.add(portalSound);
-            volumes.add(0.5f);
+        portalSound = MediaPlayer.create(context, R.raw.portal);
+        portalSound.setVolume(0.5f, 0.5f);
+        sounds.add(portalSound);
+        volumes.add(0.5f);
 
-            timeMachineFirstSnd = MediaPlayer.create(context, R.raw.time_machine);
-            timeMachineFirstSnd.setVolume(1f, 1f);
-            sounds.add(timeMachineFirstSnd);
-            volumes.add(1f);
+        timeMachineFirstSnd = MediaPlayer.create(context, R.raw.time_machine);
+        timeMachineFirstSnd.setVolume(1f, 1f);
+        sounds.add(timeMachineFirstSnd);
+        volumes.add(1f);
 
-            timeMachineSecondSnd = MediaPlayer.create(context, R.raw.time_machine1);
-            timeMachineSecondSnd.setVolume(1f, 1f);
-            sounds.add(timeMachineSecondSnd);
-            volumes.add(1f);
+        timeMachineSecondSnd = MediaPlayer.create(context, R.raw.time_machine1);
+        timeMachineSecondSnd.setVolume(1f, 1f);
+        sounds.add(timeMachineSecondSnd);
+        volumes.add(1f);
 
-            timeMachineNoneSnd = MediaPlayer.create(context, R.raw.time_machine_none);
-            timeMachineNoneSnd.setVolume(0f, 0f);
-            sounds.add(timeMachineNoneSnd);
-            volumes.add(0f);
+        timeMachineNoneSnd = MediaPlayer.create(context, R.raw.time_machine_none);
+        timeMachineNoneSnd.setVolume(0f, 0f);
+        sounds.add(timeMachineNoneSnd);
+        volumes.add(0f);
 
-            forgottenMusic = MediaPlayer.create(context, R.raw.forgotten_snd);
-            forgottenMusic.setVolume(1f, 1f);
-            forgottenMusic.setLooping(true);
-            sounds.add(forgottenMusic);
-            volumes.add(1f);
+        forgottenMusic = MediaPlayer.create(context, R.raw.forgotten_snd);
+        forgottenMusic.setVolume(1f, 1f);
+        forgottenMusic.setLooping(true);
+        sounds.add(forgottenMusic);
+        volumes.add(1f);
 
-            forgottenBossMusic = MediaPlayer.create(context, R.raw.forgotten_boss);
-            forgottenBossMusic.setVolume(1f, 1f);
-            forgottenBossMusic.setLooping(true);
-            sounds.add(forgottenBossMusic);
-            volumes.add(1f);
-        }).start();
+        forgottenBossMusic = MediaPlayer.create(context, R.raw.forgotten_boss);
+        forgottenBossMusic.setVolume(1f, 1f);
+        forgottenBossMusic.setLooping(true);
+        sounds.add(forgottenBossMusic);
+        volumes.add(1f);
     }
 
     public static void changeVolumeForAllPlayers(float newVolume) {

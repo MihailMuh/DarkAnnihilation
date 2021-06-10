@@ -11,18 +11,26 @@ public class Button extends Sprite {
     private int textY;
     private static final int clickTime = 500;
     private long lastClick;
-    private boolean isPressed = false;
+    public boolean isPressed = false;
 
-    public Button(Game g, String t, int X, int Y, String func) {
-        super(g, ImageHub.eX300, ImageHub.eX70);
+    public Button(Game game) {
+        super(game, ImageHub.eX300, ImageHub.eX70);
 
         paint.setColor(Color.WHITE);
-        paint.setTextSize(35);
         paint.setAntiAlias(true);
 
-        newFunc(t, X, Y, func);
-
         lastClick = System.currentTimeMillis();
+    }
+
+    public void sizeOfPaint(int size) {
+        paint.setTextSize(size);
+    }
+
+    public void setText(String text) {
+        this.text = text;
+
+        textX = (int) (x + (width - paint.measureText(text)) / 2);
+        textY = (int) (y + (halfHeight + paint.getTextSize() / 4));
     }
 
     public void newFunc(String name, int X, int Y, String func) {
@@ -88,6 +96,10 @@ public class Button extends Sprite {
             }
         }
         return false;
+    }
+
+    public void sweep(int X, int Y) {
+        isPressed = checkCoords(X, Y);
     }
 
     public void setCoords(int X, int Y) {

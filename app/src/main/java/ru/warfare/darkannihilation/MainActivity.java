@@ -37,16 +37,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         game = findViewById(R.id.gameView);
-        gif = findViewById(R.id.gifView);
 
         Service.init(this);
         ImageHub.init(this);
-        AudioHub.init(this);
-        Clerk.init(this);
-        ClientServer.getStatistics();
-        checkOnFirstRun();
+        new Thread(() -> {
+            AudioHub.init(this);
+            ClientServer.getStatistics();
+            gif = findViewById(R.id.gifView);
+        }).start();
 
+        Clerk.init(this);
         game.init(this);
+        checkOnFirstRun();
     }
 
     @Override

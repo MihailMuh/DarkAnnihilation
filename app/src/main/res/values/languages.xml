@@ -2,6 +2,6 @@
 <resources>
     <string-array name="languages">
         <item>English</item>
-        <item>Russian</item>
+        <item>Русский</item>
     </string-array>
 </resources>

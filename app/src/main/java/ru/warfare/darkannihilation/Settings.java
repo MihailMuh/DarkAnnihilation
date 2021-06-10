@@ -15,6 +15,14 @@ import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 
+import static ru.warfare.darkannihilation.Game.string_choose_lang;
+import static ru.warfare.darkannihilation.Game.string_disable;
+import static ru.warfare.darkannihilation.Game.string_enable;
+import static ru.warfare.darkannihilation.Game.string_loud_effects;
+import static ru.warfare.darkannihilation.Game.string_loud_music;
+import static ru.warfare.darkannihilation.Game.string_vibration;
+import static ru.warfare.darkannihilation.Game.string_volume;
+
 public class Settings {
     private final MainActivity mainActivity;
 
@@ -42,7 +50,6 @@ public class Settings {
         int angle = (int) (finalVolumeEffects * 100);
 
         angleEffects = mainActivity.findViewById(R.id.angleEffects);
-        angleEffects.setText(("Volume: " + angle));
         angleEffects.setVisibility(TextView.GONE);
         textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
         textViewEffects.setVisibility(TextView.GONE);
@@ -56,7 +63,7 @@ public class Settings {
         seekArcEffects.setOnSeekArcChangeListener(new SeekArcListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
-                angleEffects.setText(("Volume: " + newVolume));
+                angleEffects.setText((string_volume + " " + newVolume));
                 finalVolumeEffects = (float) newVolume / 100f;
                 AudioPool.newVolumeForSnd(7, finalVolumeEffects);
             }
@@ -64,7 +71,6 @@ public class Settings {
 
         angleMusic = mainActivity.findViewById(R.id.angleMusic);
         angle = (int) (finalVolumeMusic * 100);
-        angleMusic.setText(("Volume: " + angle));
         angleMusic.setVisibility(TextView.GONE);
         textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
         textViewMusic.setVisibility(TextView.GONE);
@@ -78,7 +84,7 @@ public class Settings {
         seekArcMusic.setOnSeekArcChangeListener(new SeekArcListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
-                angleMusic.setText(("Volume: " + newVolume));
+                angleMusic.setText((string_volume + " " + newVolume));
                 finalVolumeMusic = (float) newVolume / 100f;
                 AudioHub.menuMusic.setVolume(finalVolumeMusic, finalVolumeMusic);
             }
@@ -88,8 +94,8 @@ public class Settings {
         textViewVibration.setVisibility(TextView.GONE);
         stickySwitch = mainActivity.findViewById(R.id.stickySwitch);
         layoutParams = stickySwitch.getLayoutParams();
-        layoutParams.width = (int) (150 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (90 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (100 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         stickySwitch.setLayoutParams(layoutParams);
         stickySwitch.setVisibility(TextView.GONE);
         stickySwitch.setRightIcon(ImageHub.onImg);
@@ -100,7 +106,7 @@ public class Settings {
             stickySwitch.setDirection(StickySwitch.Direction.LEFT);
         }
         stickySwitch.setOnSelectedChangeListener((direction, text) -> {
-            if (text.equals("Enable")) {
+            if (text.equals(string_enable)) {
                 new Thread(() -> {
                     try {
                         Thread.sleep(300);
@@ -119,7 +125,7 @@ public class Settings {
         textSpinner.setVisibility(TextView.GONE);
         ArrayList<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
         iconSpinnerItems.add(new IconSpinnerItem("English", ImageHub.enImg));
-        iconSpinnerItems.add(new IconSpinnerItem("Russian", ImageHub.ruImg));
+        iconSpinnerItems.add(new IconSpinnerItem("Русский", ImageHub.ruImg));
         spinner = mainActivity.findViewById(R.id.spinner);
         spinner.setVisibility(TextView.GONE);
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
@@ -137,10 +143,13 @@ public class Settings {
                         Game.language = "ru";
                         break;
                 }
-                mainActivity.game.makeLanguage();
+                mainActivity.game.makeLanguage(true);
+                makeLanguage();
             }
         });
         spinner.setLifecycleOwner(mainActivity);
+
+        makeLanguage();
     }
 
     public void showSettings() {
@@ -174,6 +183,22 @@ public class Settings {
         }));
     }
 
+    private void makeLanguage() {
+        int angle = (int) (finalVolumeEffects * 100);
+        angleEffects.setText((string_volume + " " + angle));
+        textViewEffects.setText(string_loud_effects);
+
+        angle = (int) (finalVolumeMusic * 100);
+        angleMusic.setText((string_volume + " " + angle));
+        textViewMusic.setText(string_loud_music);
+
+        textViewVibration.setText(string_vibration);
+        stickySwitch.setRightText(string_enable);
+        stickySwitch.setLeftText(string_disable);
+
+        textSpinner.setText(string_choose_lang);
+    }
+
     public void confirmSettings() {
         mainActivity.runOnUiThread(new Thread(() -> {
             angleEffects.setVisibility(TextView.GONE);
@@ -202,7 +227,7 @@ public class Settings {
         finalVolumeEffects = Float.parseFloat(settings[1]);
         Game.vibrate = Integer.parseInt(settings[2]) == 1;
         Game.language = settings[3];
-        mainActivity.game.makeLanguage();
+        mainActivity.game.makeLanguage(false);
         AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
         AudioPool.newVolumeForPool(finalVolumeEffects);
     }
