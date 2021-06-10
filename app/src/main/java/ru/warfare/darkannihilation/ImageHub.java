@@ -89,7 +89,7 @@ public final class ImageHub {
 
     public static final int eX75 = (int) (75 * resizeK);
     public static final int eX70 = (int) (70 * resizeK);
-    private static final int eX300 = (int) (300 * resizeK);
+    public static final int eX300 = (int) (300 * resizeK);
     private static final int screensSizeX = (int) (screenWidth * 1.4);
     private static final int eX50 = (int) (50 * resizeK);
     private static final int eX60 = (int) (60 * resizeK);

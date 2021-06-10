@@ -11,7 +11,7 @@ public final class AudioHub {
 
     public static MediaPlayer menuMusic;
     public static MediaPlayer pauseMusic;
-    public static MediaPlayer pirateMusic;
+    public static MediaPlayer jingleMusic;
     public static MediaPlayer gameoverSnd;
     public static MediaPlayer bossMusic;
     public static MediaPlayer flightSnd;
@@ -55,11 +55,11 @@ public final class AudioHub {
             sounds.add(attentionSnd);
             volumes.add(0.6f);
 
-            pirateMusic = MediaPlayer.create(context, R.raw.pirate);
-            pirateMusic.setLooping(true);
-            pirateMusic.setVolume(0.7f, 0.7f);
-            sounds.add(pirateMusic);
-            volumes.add(0.7f);
+            jingleMusic = MediaPlayer.create(context, R.raw.jingle);
+            jingleMusic.setLooping(true);
+            jingleMusic.setVolume(0.5f, 0.5f);
+            sounds.add(jingleMusic);
+            volumes.add(0.5f);
 
             gameoverSnd = MediaPlayer.create(context, R.raw.gameover_phrase);
             gameoverSnd.setVolume(1f, 1f);
@@ -184,7 +184,7 @@ public final class AudioHub {
         switch (Game.level)
         {
             case 1:
-                pirateMusic.start();
+                jingleMusic.start();
                 break;
             case 2:
                 forgottenMusic.start();
@@ -193,8 +193,8 @@ public final class AudioHub {
     }
 
     public static void pauseBackgroundMusic() {
-        if (pirateMusic.isPlaying()) {
-            pirateMusic.pause();
+        if (jingleMusic.isPlaying()) {
+            jingleMusic.pause();
         }
         if (forgottenMusic.isPlaying()) {
             forgottenMusic.pause();
@@ -206,8 +206,8 @@ public final class AudioHub {
         switch (Game.level)
         {
             case 1:
-                pirateMusic.seekTo(0);
-                pirateMusic.start();
+                jingleMusic.seekTo(0);
+                jingleMusic.start();
                 break;
             case 2:
                 AudioHub.forgottenMusic.seekTo(0);

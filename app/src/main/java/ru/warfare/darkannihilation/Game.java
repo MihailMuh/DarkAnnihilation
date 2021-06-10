@@ -81,7 +81,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final int numberExplosionsALL = 73;
 
     public static int level = 1;
-    public static int gameStatus = 1;
+    public static int gameStatus;
     private int count = 0;
     public static int score = 0;
     public int bestScore = 0;
@@ -145,6 +145,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         halfScreenWidth = screenWidth / 2;
         halfScreenHeight = screenHeight / 2;
         resizeK = Service.getResizeCoefficient();
+        int y = screenHeight - ImageHub.eX70;
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -180,19 +181,29 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         settings = new Settings(mainActivity);
 
+        new Thread(() -> {
+            buttonMenu = new Button(this, string_top, halfScreenWidth, y, "top");
+            buttonStart = new Button(this, string_start, buttonMenu.x - buttonMenu.width, y, "start");
+            buttonQuit = new Button(this, string_quit, buttonStart.x - buttonStart.width, y, "quit");
+            buttonRestart = new Button(this, string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
+
+            fightBg = new FightBg();
+
+            while (buttonStart.right() > buttonMenu.x) {
+                buttonMenu.newFunc(string_top, halfScreenWidth, y, "top");
+                buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, y, "start");
+                buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, y, "quit");
+                buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
+            }
+        }).start();
+
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader());
         }
-        int y = screenHeight - ImageHub.eX70;
-        buttonMenu = new Button(this, string_top, halfScreenWidth, y, "top");
-        buttonStart = new Button(this, string_start, halfScreenWidth - buttonMenu.width, y, "start");
-        buttonQuit = new Button(this, string_quit, buttonStart.x - buttonStart.width, y, "quit");
-        buttonRestart = new Button(this, string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
         buttonPlayer = new ButtonPlayer(this);
         buttonSaturn = new ButtonSaturn(this);
         pauseButton = new PauseButton(this);
         player = new MillenniumFalcon(this);
-        fightBg = new FightBg();
         healthKit = new HealthKit(this);
         shotgunKit = new ShotgunKit(this);
         changerGuns = new ChangerGuns(this);
@@ -248,6 +259,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.menuMusic.start();
 
         MainActivity.firstTry = false;
+
+        gameStatus = 1;
     }
 
     private void gameplay() {
@@ -644,20 +657,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
         int X = halfScreenWidth - buttonQuit.halfWidth;
-        int Y = buttonStart.height + 30;
 
         buttonStart.newFunc(string_resume, X, screenHeight / 3 - buttonStart.halfHeight, "pause");
-        buttonRestart.newFunc(string_restart, X, buttonStart.y + Y, "restart");
-        buttonMenu.newFunc(string_to_menu, X, buttonRestart.y + Y, "menu");
-        buttonQuit.newFunc(string_quit, X, buttonMenu.y + Y, "quit");
+        buttonRestart.newFunc(string_restart, X, buttonStart.bottom() + 30, "restart");
+        buttonMenu.newFunc(string_to_menu, X, buttonRestart.bottom() + 30, "menu");
+        buttonQuit.newFunc(string_quit, X, buttonMenu.bottom() + 30, "quit");
         gameStatus = 4;
     }
 
     public void generateSettings() {
         buttonPlayer.hide();
         buttonSaturn.hide();
-        buttonQuit.newFunc(string_quit, halfScreenWidth + 50, screenHeight - 150, "quit");
-        buttonMenu.newFunc(string_back, halfScreenWidth - 50 - buttonQuit.width, screenHeight - 150, "fromSetting");
+        buttonQuit.newFunc(string_quit, halfScreenWidth + 30, screenHeight - 150, "quit");
+        buttonMenu.newFunc(string_to_menu, halfScreenWidth - 30 - buttonQuit.width, screenHeight - 150, "fromSetting");
         settings.showSettings();
     }
 

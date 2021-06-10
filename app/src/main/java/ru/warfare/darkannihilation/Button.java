@@ -1,28 +1,20 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-
 public class Button extends Sprite {
-    private Bitmap img;
     private static final Paint paint = new Paint();
-    private String function;
-    private String text;
+    public String function;
+    private String text = " ";
     private int textX;
     private int textY;
     private static final int clickTime = 500;
     private long lastClick;
+    private boolean isPressed = false;
 
     public Button(Game g, String t, int X, int Y, String func) {
-        super(g, ImageHub.buttonImagePressed.getWidth(), ImageHub.buttonImagePressed.getHeight());
+        super(g, ImageHub.eX300, ImageHub.eX70);
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
@@ -36,20 +28,51 @@ public class Button extends Sprite {
     public void newFunc(String name, int X, int Y, String func) {
         function = func;
 
-        x = X;
         y = Y;
+        x = X;
 
         text = name;
 
         float len = paint.measureText(text);
-        while (len > width - 40) {
-            width += 2;
+        if (len > width - 40) {
+            while (len > width - 40) {
+                width += 5;
+            }
+            ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed, width, height);
+            ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed, width, height);
+            if (game.buttonMenu != null) {
+                if (!func.equals(game.buttonMenu.function)) {
+                    game.buttonMenu.updateFrontEnd();
+                }
+            }
+            if (game.buttonQuit != null) {
+                if (!func.equals(game.buttonQuit.function)) {
+                    game.buttonQuit.updateFrontEnd();
+                }
+            }
+            if (game.buttonRestart != null) {
+                if (!func.equals(game.buttonRestart.function)) {
+                    game.buttonRestart.updateFrontEnd();
+                }
+            }
+            if (game.buttonStart != null) {
+                if (!func.equals(game.buttonStart.function)) {
+                    game.buttonStart.updateFrontEnd();
+                }
+            }
+        } else {
+            width = ImageHub.buttonImageNotPressed.getWidth();
         }
+        halfWidth = width / 2;
 
-        ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed, width, height);
-        ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed, width, height);;
-        img = ImageHub.buttonImageNotPressed;
+        textX = (int) (x + (width - len) / 2);
+        textY = (int) (y + (halfHeight + paint.getTextSize() / 4));
 
+        isPressed = false;
+    }
+
+    public void updateFrontEnd() {
+        width = ImageHub.buttonImageNotPressed.getWidth();
         halfWidth = width / 2;
 
         textX = (int) (x + (width - paint.measureText(text)) / 2);
@@ -75,10 +98,10 @@ public class Button extends Sprite {
 
                 new Thread(() -> {
                     AudioHub.playClick();
-                    img = ImageHub.buttonImagePressed;
+                    isPressed = true;
                     try {
                         Thread.sleep(90);
-                        img = ImageHub.buttonImageNotPressed;
+                        isPressed = false;
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
                         Service.print(e.toString());
@@ -141,7 +164,11 @@ public class Button extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(img, x, y, null);
+        if (isPressed) {
+            Game.canvas.drawBitmap(ImageHub.buttonImagePressed, x, y, null);
+        } else {
+            Game.canvas.drawBitmap(ImageHub.buttonImageNotPressed, x, y, null);
+        }
         Game.canvas.drawText(text, textX, textY, paint);
     }
 }
