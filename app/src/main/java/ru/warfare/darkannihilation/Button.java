@@ -25,6 +25,9 @@ public class Button extends Sprite {
     public void sizeOfPaint(int size) {
         paint.setTextSize(size);
     }
+    public void setAntiAlias(boolean antiAlias) {
+        paint.setAntiAlias(antiAlias);
+    }
 
     public void setText(String text) {
         this.text = text;

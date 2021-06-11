@@ -21,8 +21,10 @@
         <item>Изменить громкость звуковых эффектов</item>
         <item>Изменить громкость фоновой музыки</item>
         <item>Вибрация</item>
-        <item>Включить</item>
-        <item>Выключить</item>
+        <item>Вкл</item>
+        <item>Выкл</item>
         <item>Выберете свой язык</item>
+        <item>Сглаживать текст</item>
+
     </string-array>
 </resources>

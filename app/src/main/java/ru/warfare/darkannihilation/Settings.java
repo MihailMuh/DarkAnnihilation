@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.animsh.animatedcheckbox.AnimatedCheckBox;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -39,6 +40,9 @@ public class Settings {
 
     private final PowerSpinnerView spinner;
     private final TextView textSpinner;
+
+    private final AnimatedCheckBox animatedCheckBox;
+    private final TextView textAntiAlias;
 
     private float finalVolumeEffects;
     private float finalVolumeMusic;
@@ -94,8 +98,8 @@ public class Settings {
         textViewVibration.setVisibility(TextView.GONE);
         stickySwitch = mainActivity.findViewById(R.id.stickySwitch);
         layoutParams = stickySwitch.getLayoutParams();
-        layoutParams.width = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (100 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (150 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (90 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         stickySwitch.setLayoutParams(layoutParams);
         stickySwitch.setVisibility(TextView.GONE);
         stickySwitch.setRightIcon(ImageHub.onImg);
@@ -121,13 +125,16 @@ public class Settings {
             }
         });
 
-        textSpinner = mainActivity.findViewById(R.id.textSpinner);
-        textSpinner.setVisibility(TextView.GONE);
         ArrayList<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
         iconSpinnerItems.add(new IconSpinnerItem("English", ImageHub.enImg));
         iconSpinnerItems.add(new IconSpinnerItem("Русский", ImageHub.ruImg));
+        iconSpinnerItems.add(new IconSpinnerItem("Français", ImageHub.frImg));
         spinner = mainActivity.findViewById(R.id.spinner);
         spinner.setVisibility(TextView.GONE);
+        layoutParams = spinner.getLayoutParams();
+        layoutParams.width = (int) (180 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (50 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        spinner.setLayoutParams(layoutParams);
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
         spinner.setSpinnerAdapter(iconSpinnerAdapter);
         spinner.setItems(iconSpinnerItems);
@@ -142,12 +149,28 @@ public class Settings {
                     case 1:
                         Game.language = "ru";
                         break;
+                    case 2:
+                        Game.language = "fr";
+                        break;
                 }
                 mainActivity.game.makeLanguage(true);
                 makeLanguage();
             }
         });
         spinner.setLifecycleOwner(mainActivity);
+        textSpinner = mainActivity.findViewById(R.id.textSpinner);
+        textSpinner.setVisibility(TextView.GONE);
+
+        animatedCheckBox = mainActivity.findViewById(R.id.animatedCheckBox);
+        animatedCheckBox.setVisibility(TextView.GONE);
+        layoutParams = animatedCheckBox.getLayoutParams();
+        layoutParams.width = (int) (40 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.height = (int) (40 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        animatedCheckBox.setLayoutParams(layoutParams);
+        animatedCheckBox.setOnCheckedChangeListener((checkBox, isChecked) ->
+                mainActivity.game.setAntiAlias(isChecked));
+        textAntiAlias = mainActivity.findViewById(R.id.textAntiAlias);
+        textAntiAlias.setVisibility(TextView.GONE);
 
         makeLanguage();
     }
@@ -176,8 +199,15 @@ public class Settings {
                 case "ru":
                     spinner.selectItemByIndex(1);
                     break;
+                case "fr":
+                    spinner.selectItemByIndex(2);
+                    break;
             }
             textSpinner.setVisibility(TextView.VISIBLE);
+
+            animatedCheckBox.setVisibility(TextView.VISIBLE);
+            animatedCheckBox.setChecked(Game.scorePaint.isAntiAlias(), false);
+            textAntiAlias.setVisibility(TextView.VISIBLE);
 
             Game.gameStatus = 10;
         }));
@@ -215,6 +245,9 @@ public class Settings {
             spinner.setVisibility(TextView.GONE);
             spinner.dismiss();
             textSpinner.setVisibility(TextView.GONE);
+
+            animatedCheckBox.setVisibility(TextView.GONE);
+            textAntiAlias.setVisibility(TextView.GONE);
         }));
         AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
         AudioPool.newVolumeForPool(finalVolumeEffects);
@@ -228,15 +261,25 @@ public class Settings {
         Game.vibrate = Integer.parseInt(settings[2]) == 1;
         Game.language = settings[3];
         mainActivity.game.makeLanguage(false);
+        mainActivity.game.setAntiAlias(Integer.parseInt(settings[4]) == 1);
         AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
         AudioPool.newVolumeForPool(finalVolumeEffects);
     }
 
     public void saveSettings() {
+        String vibr;
+        String a;
         if (Game.vibrate) {
-            Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " 1 " + Game.language);
+            vibr = "1";
         } else {
-            Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " 0 " + Game.language);
+            vibr = "0";
         }
+        if (Game.scorePaint.isAntiAlias()) {
+            a = "1";
+        } else {
+            a = "0";
+        }
+        Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " " + vibr + " " +
+                Game.language + " " + a);
     }
 }

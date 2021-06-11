@@ -12,7 +12,7 @@
         <item>Restart</item>
         <item>To menu</item>
         <item>Choose your character</item>
-        <item>Thanks For Playing!</item>
+        <item>Thanks for playing!</item>
         <item>Tap this screen with four or more fingers to enter start menu</item>
         <item>Tap this screen with four or more fingers to restart</item>
         <item>SHOOT!</item>
@@ -24,5 +24,7 @@
         <item>Enable</item>
         <item>Disable</item>
         <item>Choose your language</item>
+        <item>Smooth text</item>
+
     </string-array>
 </resources>

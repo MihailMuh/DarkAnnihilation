@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fr">
+        <item>Score actuel:</item>
+        <item>Meilleur score:</item>
+        <item>Top joueurs</item>
+        <item>Commencer</item>
+        <item>Quitter</item>
+        <item>Paramètre</item>
+        <item>Retourner</item>
+        <item>Continuer</item>
+        <item>Redémarrer</item>
+        <item>Vers le menu</item>
+        <item>Choisissez votre personnage</item>
+        <item>Merci pour le jeu!</item>
+        <item>Appuyez sur cet écran avec quatre doigts ou plus pour accéder au menu principal</item>
+        <item>Appuyez sur cet écran avec quatre doigts ou plus pour redémarrer</item>
+        <item>TIRE!</item>
+
+        <item>Volume:</item>
+        <item>Modifier le volume des effets sonores</item>
+        <item>Modifier le volume de la musique de fond</item>
+        <item>Vibration</item>
+        <item>Enable</item>
+        <item>Disable</item>
+        <item>Choisissez votre langue</item>
+        <item>Lisser le texte</item>
+
+    </string-array>
+</resources>

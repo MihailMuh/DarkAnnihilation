@@ -82,6 +82,7 @@ public final class ImageHub {
     public static Drawable offImg;
     public static Drawable enImg;
     public static Drawable ruImg;
+    public static Drawable frImg;
 
     private static final int screenWidth = Service.getScreenWidth();
     private static final int screenHeight = Service.getScreenHeight();
@@ -1162,11 +1163,15 @@ public final class ImageHub {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         enImg = resource;
-                        ruImg = new BitmapDrawable(res, Bitmap.createScaledBitmap(
-                                BitmapFactory.decodeResource(res, R.drawable.ru), eX200, eX100, true));
                         return true;
                     }
                 }).submit();
+
+        ruImg = new BitmapDrawable(res, Bitmap.createScaledBitmap(
+                BitmapFactory.decodeResource(res, R.drawable.ru), eX200, eX100, true));
+        frImg = new BitmapDrawable(res, Bitmap.createScaledBitmap(
+                BitmapFactory.decodeResource(res, R.drawable.fr), eX200, eX100, true));
+
     }
 
     public static void deleteLayoutImages() {
@@ -1174,6 +1179,7 @@ public final class ImageHub {
         offImg = null;
         ruImg = null;
         enImg = null;
+        frImg = null;
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {

@@ -160,30 +160,23 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         startPaint.setColor(Color.WHITE);
         startPaint.setTextSize(300);
-        startPaint.setAntiAlias(true);
 
         gameoverPaint.setColor(Color.WHITE);
-        gameoverPaint.setAntiAlias(true);
 
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(40);
-        scorePaint.setAntiAlias(true);
 
         topPaint.setColor(Color.WHITE);
         topPaint.setTextSize(30);
-        topPaint.setAntiAlias(true);
 
         topPaintRed.setColor(Color.RED);
         topPaintRed.setTextSize(30);
-        topPaintRed.setAntiAlias(true);
 
         winPaint.setColor(Color.WHITE);
         winPaint.setTextSize(100);
-        winPaint.setAntiAlias(true);
 
         paint50.setColor(Color.WHITE);
         paint50.setTextSize(50);
-        paint50.setAntiAlias(true);
 
         getMaxScore();
 
@@ -841,7 +834,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 gameStatus = 2;
                 allSprites.add(new TripleFighter());
                 for (int i = 0; i < numberVaders; i++) {
-                    if (random.nextFloat() <= 0.15) {
+                    if (random.nextFloat() <= 0.12) {
                         allSprites.add(new TripleFighter());
                     }
                     allSprites.add(new Vader());
@@ -863,7 +856,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
                 gameStatus = 2;
                 for (int i = 0; i < numberVaders + 3; i++) {
-                    if (random.nextFloat() <= 0.2) {
+                    if (random.nextFloat() <= 0.18) {
                         allSprites.add(new XWing(this));
                     }
                     allSprites.add(new Vader());
@@ -1253,6 +1246,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void makeLanguage(boolean set) {
         String[] strings = new String[0];
+        gameoverPaint.setTextSize(50);
+        buttonMenu.sizeOfPaint(35);
+        buttonRestart.sizeOfPaint(35);
+        buttonQuit.sizeOfPaint(35);
+        buttonStart.sizeOfPaint(35);
         switch (language)
         {
             case "ru":
@@ -1265,13 +1263,15 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 break;
             case "en":
                 strings = context.getResources().getStringArray(R.array.en);
-                gameoverPaint.setTextSize(50);
-                buttonMenu.sizeOfPaint(35);
-                buttonRestart.sizeOfPaint(35);
-                buttonQuit.sizeOfPaint(35);
-                buttonStart.sizeOfPaint(35);
                 break;
-
+            case "fr":
+                strings = context.getResources().getStringArray(R.array.fr);
+                gameoverPaint.setTextSize(47);
+                buttonMenu.sizeOfPaint(34);
+                buttonRestart.sizeOfPaint(34);
+                buttonQuit.sizeOfPaint(34);
+                buttonStart.sizeOfPaint(34);
+                break;
         }
         string_current_score = strings[0] + " ";
         string_max_score = strings[1] + " ";
@@ -1300,6 +1300,20 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             buttonQuit.setText(string_quit);
             buttonMenu.setText(string_to_menu);
         }
+    }
+
+    public void setAntiAlias(boolean antiAlias) {
+        startPaint.setAntiAlias(antiAlias);
+        gameoverPaint.setAntiAlias(antiAlias);
+        scorePaint.setAntiAlias(antiAlias);
+        topPaint.setAntiAlias(antiAlias);
+        topPaintRed.setAntiAlias(antiAlias);
+        winPaint.setAntiAlias(antiAlias);
+        paint50.setAntiAlias(antiAlias);
+        buttonStart.setAntiAlias(antiAlias);
+        buttonQuit.setAntiAlias(antiAlias);
+        buttonRestart.setAntiAlias(antiAlias);
+        buttonMenu.setAntiAlias(antiAlias);
     }
 
     @Override
