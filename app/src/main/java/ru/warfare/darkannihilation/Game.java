@@ -93,7 +93,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
-    public static String language = "en";
+    public static volatile String language = "en";
 
     private int fpsX;
     private int fpsY;
@@ -132,6 +132,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String string_enable;
     public static String string_disable;
     public static String string_choose_lang;
+    public static String string_smooth;
 
     private static final int BOSS_TIME = 100_000;
     public static long lastBoss;
@@ -1256,10 +1257,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             case "ru":
                 strings = context.getResources().getStringArray(R.array.ru);
                 gameoverPaint.setTextSize(40);
-                buttonMenu.sizeOfPaint(32);
-                buttonRestart.sizeOfPaint(32);
-                buttonQuit.sizeOfPaint(32);
-                buttonStart.sizeOfPaint(32);
                 break;
             case "en":
                 strings = context.getResources().getStringArray(R.array.en);
@@ -1271,6 +1268,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 buttonRestart.sizeOfPaint(34);
                 buttonQuit.sizeOfPaint(34);
                 buttonStart.sizeOfPaint(34);
+                break;
+            case "sp":
+                strings = context.getResources().getStringArray(R.array.sp);
+                gameoverPaint.setTextSize(47);
+                buttonMenu.sizeOfPaint(33);
+                buttonRestart.sizeOfPaint(33);
+                buttonQuit.sizeOfPaint(33);
+                buttonStart.sizeOfPaint(33);
                 break;
         }
         string_current_score = strings[0] + " ";
@@ -1295,6 +1300,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         string_enable = strings[19];
         string_disable = strings[20];
         string_choose_lang = strings[21];
+        string_smooth = strings[22];
 
         if (set) {
             buttonQuit.setText(string_quit);

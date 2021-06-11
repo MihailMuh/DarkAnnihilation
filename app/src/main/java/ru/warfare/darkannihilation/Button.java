@@ -30,10 +30,7 @@ public class Button extends Sprite {
     }
 
     public void setText(String text) {
-        this.text = text;
-
-        textX = (int) (x + (width - paint.measureText(text)) / 2);
-        textY = (int) (y + (halfHeight + paint.getTextSize() / 4));
+        newFunc(text, x, y, function);
     }
 
     public void newFunc(String name, int X, int Y, String func) {
@@ -87,7 +84,7 @@ public class Button extends Sprite {
         halfWidth = width / 2;
 
         textX = (int) (x + (width - paint.measureText(text)) / 2);
-        textY = (int) (y + (halfHeight + paint.getTextSize() / 4));
+        textY = (int) (y + (paint.getTextSize() / 4));
     }
 
     public boolean checkCoords(int X, int Y) {

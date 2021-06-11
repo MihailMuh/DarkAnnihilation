@@ -21,6 +21,7 @@ import static ru.warfare.darkannihilation.Game.string_disable;
 import static ru.warfare.darkannihilation.Game.string_enable;
 import static ru.warfare.darkannihilation.Game.string_loud_effects;
 import static ru.warfare.darkannihilation.Game.string_loud_music;
+import static ru.warfare.darkannihilation.Game.string_smooth;
 import static ru.warfare.darkannihilation.Game.string_vibration;
 import static ru.warfare.darkannihilation.Game.string_volume;
 
@@ -129,6 +130,8 @@ public class Settings {
         iconSpinnerItems.add(new IconSpinnerItem("English", ImageHub.enImg));
         iconSpinnerItems.add(new IconSpinnerItem("Русский", ImageHub.ruImg));
         iconSpinnerItems.add(new IconSpinnerItem("Français", ImageHub.frImg));
+        iconSpinnerItems.add(new IconSpinnerItem("Español", ImageHub.spImg));
+
         spinner = mainActivity.findViewById(R.id.spinner);
         spinner.setVisibility(TextView.GONE);
         layoutParams = spinner.getLayoutParams();
@@ -151,6 +154,9 @@ public class Settings {
                         break;
                     case 2:
                         Game.language = "fr";
+                        break;
+                    case 3:
+                        Game.language = "sp";
                         break;
                 }
                 mainActivity.game.makeLanguage(true);
@@ -202,6 +208,9 @@ public class Settings {
                 case "fr":
                     spinner.selectItemByIndex(2);
                     break;
+                case "sp":
+                    spinner.selectItemByIndex(3);
+                    break;
             }
             textSpinner.setVisibility(TextView.VISIBLE);
 
@@ -227,6 +236,8 @@ public class Settings {
         stickySwitch.setLeftText(string_disable);
 
         textSpinner.setText(string_choose_lang);
+
+        textAntiAlias.setText(string_smooth);
     }
 
     public void confirmSettings() {
