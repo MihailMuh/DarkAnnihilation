@@ -1277,6 +1277,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 buttonQuit.sizeOfPaint(33);
                 buttonStart.sizeOfPaint(33);
                 break;
+            case "ge":
+                strings = context.getResources().getStringArray(R.array.ge);
+                break;
         }
         string_current_score = strings[0] + " ";
         string_max_score = strings[1] + " ";
@@ -1303,9 +1306,21 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         string_smooth = strings[22];
 
         if (set) {
-            buttonQuit.setText(string_quit);
             buttonMenu.setText(string_to_menu);
+            buttonQuit.setText(string_quit);
         }
+        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
+        chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
+        chooseChY = (int) (screenHeight * 0.3);
+        thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
+        thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
+        go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
+        go_to_menuY = (int) (Game.screenHeight * 0.65);
+        shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
+        shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
+        go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
+        go_to_restartY = (int) (screenHeight * 0.7);
     }
 
     public void setAntiAlias(boolean antiAlias) {

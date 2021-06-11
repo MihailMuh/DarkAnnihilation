@@ -131,6 +131,7 @@ public class Settings {
         iconSpinnerItems.add(new IconSpinnerItem("Русский", ImageHub.ruImg));
         iconSpinnerItems.add(new IconSpinnerItem("Français", ImageHub.frImg));
         iconSpinnerItems.add(new IconSpinnerItem("Español", ImageHub.spImg));
+        iconSpinnerItems.add(new IconSpinnerItem("Deutsch", ImageHub.geImg));
 
         spinner = mainActivity.findViewById(R.id.spinner);
         spinner.setVisibility(TextView.GONE);
@@ -148,6 +149,8 @@ public class Settings {
                 {
                     case 0:
                         Game.language = "en";
+                        ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed, ImageHub.eX300, ImageHub.eX70);
+                        ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed,ImageHub.eX300, ImageHub.eX70);
                         break;
                     case 1:
                         Game.language = "ru";
@@ -157,6 +160,9 @@ public class Settings {
                         break;
                     case 3:
                         Game.language = "sp";
+                        break;
+                    case 4:
+                        Game.language = "ge";
                         break;
                 }
                 mainActivity.game.makeLanguage(true);
@@ -210,6 +216,9 @@ public class Settings {
                     break;
                 case "sp":
                     spinner.selectItemByIndex(3);
+                    break;
+                case "ge":
+                    spinner.selectItemByIndex(4);
                     break;
             }
             textSpinner.setVisibility(TextView.VISIBLE);

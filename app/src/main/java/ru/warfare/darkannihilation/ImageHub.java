@@ -84,6 +84,7 @@ public final class ImageHub {
     public static Drawable ruImg;
     public static Drawable frImg;
     public static Drawable spImg;
+    public static Drawable geImg;
 
     private static final int screenWidth = Service.getScreenWidth();
     private static final int screenHeight = Service.getScreenHeight();
@@ -1174,7 +1175,8 @@ public final class ImageHub {
                 BitmapFactory.decodeResource(res, R.drawable.fr), eX200, eX100, true));
         spImg = new BitmapDrawable(res, Bitmap.createScaledBitmap(
                 BitmapFactory.decodeResource(res, R.drawable.sp), eX200, eX100, true));
-
+        geImg = new BitmapDrawable(res, Bitmap.createScaledBitmap(
+                BitmapFactory.decodeResource(res, R.drawable.ge), eX200, eX100, true));
     }
 
     public static void deleteLayoutImages() {
@@ -1184,6 +1186,7 @@ public final class ImageHub {
         enImg = null;
         frImg = null;
         spImg = null;
+        geImg = null;
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {
