@@ -131,8 +131,10 @@ public final class ImageHub {
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        loadFirstLevelBitmaps();
-        loadLayoutImages(context);
+        new Thread(() -> {
+            loadFirstLevelBitmaps();
+            loadLayoutImages(context);
+        }).start();
 
         requestBuilder.load(R.drawable.pause_button)
                 .override(pauseBtn, pauseBtn)

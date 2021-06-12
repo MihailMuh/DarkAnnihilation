@@ -4,29 +4,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Button extends Sprite {
-    private static final Paint paint = new Paint();
+//    private static final Paint paint = new Paint();
     public String function;
     private String text = " ";
     private int textX;
     private int textY;
     private static final int clickTime = 500;
-    private long lastClick;
+    private long lastClick = System.currentTimeMillis();
     public boolean isPressed = false;
 
     public Button(Game game) {
         super(game, ImageHub.eX300, ImageHub.eX70);
-
-        paint.setColor(Color.WHITE);
-        paint.setAntiAlias(true);
-
-        lastClick = System.currentTimeMillis();
-    }
-
-    public void sizeOfPaint(int size) {
-        paint.setTextSize(size);
-    }
-    public void setAntiAlias(boolean antiAlias) {
-        paint.setAntiAlias(antiAlias);
     }
 
     public void setText(String text) {
@@ -41,7 +29,7 @@ public class Button extends Sprite {
 
         text = name;
 
-        float len = paint.measureText(text);
+        float len = Game.buttonsPaint.measureText(text);
         if (len > width - 40) {
             while (len > width - 40) {
                 width += 5;
@@ -74,7 +62,7 @@ public class Button extends Sprite {
         halfWidth = width / 2;
 
         textX = (int) (x + (width - len) / 2);
-        textY = (int) (y + (halfHeight + paint.getTextSize() / 4));
+        textY = (int) (y + (halfHeight + Game.buttonsPaint.getTextSize() / 4));
 
         isPressed = false;
     }
@@ -83,8 +71,8 @@ public class Button extends Sprite {
         width = ImageHub.buttonImageNotPressed.getWidth();
         halfWidth = width / 2;
 
-        textX = (int) (x + (width - paint.measureText(text)) / 2);
-        textY = (int) (y + (paint.getTextSize() / 4));
+        textX = (int) (x + (width - Game.buttonsPaint.measureText(text)) / 2);
+        textY = (int) (y + (Game.buttonsPaint.getTextSize() / 4));
     }
 
     public boolean checkCoords(int X, int Y) {
@@ -181,6 +169,6 @@ public class Button extends Sprite {
         } else {
             Game.canvas.drawBitmap(ImageHub.buttonImageNotPressed, x, y, null);
         }
-        Game.canvas.drawText(text, textX, textY, paint);
+        Game.canvas.drawText(text, textX, textY, Game.buttonsPaint);
     }
 }

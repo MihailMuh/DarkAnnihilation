@@ -40,6 +40,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint alphaPaint = new Paint();
     public static final Paint winPaint = new Paint();
     public static final Paint paint50 = new Paint();
+    public static final Paint buttonsPaint = new Paint();
 
     public static final Random random = new Random();
     private static final StringBuilder textBuilder = new StringBuilder();
@@ -161,23 +162,44 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         startPaint.setColor(Color.WHITE);
         startPaint.setTextSize(300);
+        startPaint.setFilterBitmap(true);
+        startPaint.setDither(true);
 
         gameoverPaint.setColor(Color.WHITE);
+        gameoverPaint.setFilterBitmap(true);
+        gameoverPaint.setDither(true);
 
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(40);
+        scorePaint.setFilterBitmap(true);
+        scorePaint.setDither(true);
 
         topPaint.setColor(Color.WHITE);
         topPaint.setTextSize(30);
+        topPaint.setFilterBitmap(true);
+        topPaint.setDither(true);
 
         topPaintRed.setColor(Color.RED);
         topPaintRed.setTextSize(30);
+        topPaintRed.setFilterBitmap(true);
+        topPaintRed.setDither(true);
 
         winPaint.setColor(Color.WHITE);
         winPaint.setTextSize(100);
+        winPaint.setFilterBitmap(true);
+        winPaint.setDither(true);
 
         paint50.setColor(Color.WHITE);
         paint50.setTextSize(50);
+        paint50.setFilterBitmap(true);
+        paint50.setDither(true);
+
+        buttonsPaint.setColor(Color.WHITE);
+        buttonsPaint.setFilterBitmap(true);
+        buttonsPaint.setDither(true);
+
+        alphaPaint.setFilterBitmap(true);
+        alphaPaint.setDither(true);
 
         getMaxScore();
 
@@ -1247,38 +1269,32 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void makeLanguage(boolean set) {
         String[] strings = new String[0];
-        gameoverPaint.setTextSize(50);
-        buttonMenu.sizeOfPaint(35);
-        buttonRestart.sizeOfPaint(35);
-        buttonQuit.sizeOfPaint(35);
-        buttonStart.sizeOfPaint(35);
         switch (language)
         {
             case "ru":
                 strings = context.getResources().getStringArray(R.array.ru);
                 gameoverPaint.setTextSize(40);
+                buttonsPaint.setTextSize(33);
                 break;
             case "en":
                 strings = context.getResources().getStringArray(R.array.en);
+                gameoverPaint.setTextSize(50);
+                buttonsPaint.setTextSize(35);
                 break;
             case "fr":
                 strings = context.getResources().getStringArray(R.array.fr);
                 gameoverPaint.setTextSize(47);
-                buttonMenu.sizeOfPaint(34);
-                buttonRestart.sizeOfPaint(34);
-                buttonQuit.sizeOfPaint(34);
-                buttonStart.sizeOfPaint(34);
+                buttonsPaint.setTextSize(34);
                 break;
             case "sp":
                 strings = context.getResources().getStringArray(R.array.sp);
                 gameoverPaint.setTextSize(47);
-                buttonMenu.sizeOfPaint(33);
-                buttonRestart.sizeOfPaint(33);
-                buttonQuit.sizeOfPaint(33);
-                buttonStart.sizeOfPaint(33);
+                buttonsPaint.setTextSize(33);
                 break;
             case "ge":
                 strings = context.getResources().getStringArray(R.array.ge);
+                gameoverPaint.setTextSize(49);
+                buttonsPaint.setTextSize(34);
                 break;
         }
         string_current_score = strings[0] + " ";
@@ -1306,8 +1322,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         string_smooth = strings[22];
 
         if (set) {
-            buttonMenu.setText(string_to_menu);
             buttonQuit.setText(string_quit);
+            buttonMenu.setText(string_to_menu);
         }
         scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
@@ -1331,10 +1347,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         topPaintRed.setAntiAlias(antiAlias);
         winPaint.setAntiAlias(antiAlias);
         paint50.setAntiAlias(antiAlias);
-        buttonStart.setAntiAlias(antiAlias);
-        buttonQuit.setAntiAlias(antiAlias);
-        buttonRestart.setAntiAlias(antiAlias);
-        buttonMenu.setAntiAlias(antiAlias);
+        buttonsPaint.setAntiAlias(antiAlias);
     }
 
     @Override
