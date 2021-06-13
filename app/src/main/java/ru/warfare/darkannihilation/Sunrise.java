@@ -59,8 +59,8 @@ public class Sunrise extends Sprite {
 
     @Override
     public void stopBuff() {
-        speedX /= 5;
-        speedY /= 5;
+        speedX /= 3;
+        speedY /= 3;
         buff = false;
     }
 

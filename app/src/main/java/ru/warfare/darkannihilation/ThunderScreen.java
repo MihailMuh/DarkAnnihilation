@@ -15,7 +15,7 @@ public class ThunderScreen extends BaseScreen {
         long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;
-            frame += 1;
+            frame++;
             if (frame == screenImageLength) {
                 frame = 0;
             }

@@ -143,10 +143,10 @@ public class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
-        if (left < sprite.right) {
-            if (sprite.left < right) {
-                if (top < sprite.bottom) {
-                    return sprite.top < bottom;
+        if (left <= sprite.right) {
+            if (sprite.left <= right) {
+                if (top <= sprite.bottom) {
+                    return sprite.top <= bottom;
                 }
             }
         }

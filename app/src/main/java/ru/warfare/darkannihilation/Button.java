@@ -1,10 +1,6 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 public class Button extends Sprite {
-//    private static final Paint paint = new Paint();
     public String function;
     private String text = " ";
     private int textX;

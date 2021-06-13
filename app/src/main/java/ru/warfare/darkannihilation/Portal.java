@@ -5,6 +5,7 @@ public class Portal extends Sprite {
     private float frameTime = 100;
     private long lastFrame;
     public boolean touch = false;
+    private static final int len = ImageHub.portalImages.length - 1;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
@@ -45,7 +46,7 @@ public class Portal extends Sprite {
             game.player.god = true;
             frameTime = 0;
             game.player.lock = true;
-            ImageHub.loadSecondLevelImages(game.context);
+            ImageHub.loadSecondLevelImages();
         }
     }
 
@@ -54,8 +55,8 @@ public class Portal extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;
-            if (frame < ImageHub.portalImages.length - 1) {
-                frame += 1;
+            if (frame < len) {
+                frame++;
             } else {
                 frame = 0;
             }

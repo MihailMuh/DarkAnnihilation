@@ -76,6 +76,6 @@ public class Factory extends Sprite {
         Game.canvas.drawBitmap(ImageHub.factoryImg, x, y, null);
 
         Game.canvas.drawRect(centerX() - 250, y + 60, centerX() + 250, y + 75 , Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 248, y + 62, centerX() - 252 + (health / maxHealth) * 500, y + 73, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 248, y + 62, centerX() - 252 + ((health / maxHealth) * 500), y + 73, Game.fpsPaint);
     }
 }

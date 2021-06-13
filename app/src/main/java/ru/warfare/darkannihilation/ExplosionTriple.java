@@ -32,7 +32,7 @@ public class ExplosionTriple extends BaseExplosion {
         if (now - lastShoot > 30) {
             lastShoot = now;
             if (frame != 23) {
-                frame += 1;
+                frame++;
             } else {
                 frame = 0;
                 lock = true;

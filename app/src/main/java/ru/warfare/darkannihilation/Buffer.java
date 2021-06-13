@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 public class Buffer extends Sprite {
     private final float maxHealth;
     private boolean startBuff;
+    private boolean boom = false;
 
     public Buffer() {
         super(ImageHub.bufferImg.getWidth(), ImageHub.bufferImg.getHeight());
@@ -10,6 +11,17 @@ public class Buffer extends Sprite {
         hide();
 
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);
+    }
+
+    private void boom() {
+        if (HardThread.job == 0) {
+            HardThread.job = 6;
+            boom = false;
+            AudioHub.playMegaBoom();
+            createSkullExplosion();
+            hide();
+            Game.score += 100;
+        }
     }
 
     public void hide() {
@@ -28,42 +40,42 @@ public class Buffer extends Sprite {
 
     @Override
     public void intersection() {
-        intersectionPlayer();
-        Game.score += 100;
+        boom = true;
     }
 
     @Override
     public void intersectionPlayer() {
-        AudioHub.playMegaBoom();
-        createSkullExplosion();
-        hide();
-        for (int i = 0; i < Game.allSprites.size(); i++) {
-            Game.allSprites.get(i).stopBuff();
-        }
+        boom = true;
     }
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
             bullet.intersection();
-            if (health <= 0) {
-                intersection();
+            if (!boom) {
+                health -= bullet.damage;
+                if (health <= 0) {
+                    boom = true;
+                }
             }
         }
     }
 
     @Override
     public void update() {
-        if (y < 35) {
-            y += speedY;
-        } else {
-            if (!startBuff) {
-                for (int i = 0; i < Game.allSprites.size(); i++) {
-                    Game.allSprites.get(i).buff();
+        if (!boom) {
+            if (y < 35) {
+                y += speedY;
+            } else {
+                if (!startBuff) {
+                    if (HardThread.job == 0) {
+                        HardThread.job = 7;
+                        startBuff = true;
+                    }
                 }
-                startBuff = true;
             }
+        } else {
+            boom();
         }
     }
 
@@ -71,8 +83,10 @@ public class Buffer extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(ImageHub.bufferImg, x, y, Game.alphaPaint);
 
-        Game.canvas.drawRect(centerX() - 75, y + 50, centerX() + 75, y + 65 , Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 73, y + 52, centerX() - 77 + (health / maxHealth) * 150, y + 63, Game.fpsPaint);
+        if (!boom) {
+            Game.canvas.drawRect(centerX() - 75, y + 50, centerX() + 75, y + 65, Game.scorePaint);
+            Game.canvas.drawRect(centerX() - 73, y + 52, centerX() - 77 + (health / maxHealth) * 150, y + 63, Game.fpsPaint);
+        }
     }
 }
 

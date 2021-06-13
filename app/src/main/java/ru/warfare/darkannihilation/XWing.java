@@ -1,42 +1,45 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Bitmap;
+public class XWing extends Sprite {
+    private static final int shootTripleTime = 200;
+    private long lastShoot;
 
-public class Vader extends Sprite {
-    private Bitmap img;
-
-    public Vader() {
-        super(ImageHub.eX75, ImageHub.eX75);
-        health = 2;
-        damage = 5;
-
-        switch (Game.level)
-        {
-            case 1:
-                img = ImageHub.vaderImage[randInt(0, 2)];
-                break;
-            case 2:
-                img = ImageHub.vaderOldImage[randInt(0, 2)];
-                break;
-        }
+    public XWing() {
+        super(ImageHub.XWingImg.getWidth(), ImageHub.XWingImg.getHeight());
+        health = 5;
+        damage = 10;
 
         x = randInt(0, Game.screenWidth);
-        y = -150;
-        speedX = randInt(-5, 5);
-        speedY = randInt(3, 10);
+        y = -height;
+        speedX = randInt(-3, 3);
+        speedY = randInt(1, 8);
 
-        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
+        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+
+        lastShoot = System.currentTimeMillis();
+    }
+
+    public void shoot() {
+        long now = System.currentTimeMillis();
+        if (now - lastShoot > shootTripleTime) {
+            if (HardThread.job == 0) {
+                HardThread.x = centerX();
+                HardThread.y = centerY();
+                HardThread.job = 9;
+                lastShoot = now;
+            }
+        }
     }
 
     public void newStatus() {
         if (Game.bosses.size() != 0) {
             lock = true;
         }
-        health = 2;
+        health = 5;
         x = randInt(0, Game.screenWidth);
         y = -height;
-        speedX = randInt(-5, 5);
-        speedY = randInt(3, 10);
+        speedX = randInt(-3, 3);
+        speedY = randInt(1, 8);
 
         if (buff) {
             up();
@@ -44,8 +47,8 @@ public class Vader extends Sprite {
     }
 
     private void up() {
-        speedX *= 3;
-        speedY *= 3;
+        speedX *= 2;
+        speedY *= 2;
     }
 
     @Override
@@ -56,8 +59,8 @@ public class Vader extends Sprite {
 
     @Override
     public void stopBuff() {
-        speedX /= 3;
-        speedY /= 3;
+        speedX /= 2;
+        speedY /= 2;
         buff = false;
     }
 
@@ -68,11 +71,9 @@ public class Vader extends Sprite {
 
     @Override
     public void intersection() {
-        createLargeExplosion();
+        createLargeTripleExplosion();
         AudioHub.playBoom();
-        if (Game.gameStatus == 0) {
-            Game.score += 1;
-        }
+        Game.score += 10;
         newStatus();
     }
 
@@ -80,20 +81,15 @@ public class Vader extends Sprite {
     public void intersectionPlayer() {
         AudioHub.playMetal();
         createSmallExplosion();
-        AudioHub.playBoom();
         newStatus();
     }
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
         if (getRect().intersect(bullet.getRect())) {
-            if (bullet.damage < health) {
-                health -= bullet.damage;
-                bullet.intersection();
-                if (health <= 0) {
-                    intersection();
-                }
-            } else {
+            health -= bullet.damage;
+            bullet.intersection();
+            if (health <= 0) {
                 intersection();
             }
         }
@@ -106,6 +102,8 @@ public class Vader extends Sprite {
 
     @Override
     public void update() {
+        shoot();
+
         x += speedX;
         y += speedY;
 
@@ -116,6 +114,6 @@ public class Vader extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(img, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.XWingImg, x, y, Game.alphaPaint);
     }
 }

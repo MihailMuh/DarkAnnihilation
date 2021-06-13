@@ -20,7 +20,7 @@ public class ExplosionSkull extends BaseExplosion {
         if (now - lastShoot > 33) {
             lastShoot = now;
             if (frame != 13) {
-                frame += 1;
+                frame++;
             } else {
                 frame = 0;
                 lock = true;

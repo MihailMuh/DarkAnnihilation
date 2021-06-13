@@ -6,12 +6,11 @@ public class Spider extends Sprite {
 
     private int ammo;
     private boolean reload;
-    private final float maxHealth;
+    private static final float maxHealth = 200;
 
     public Spider() {
         super(ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
         damage = 20;
-        maxHealth = 200;
         hide();
 
         recreateRect(x + 25, y + 5, right() - 5, y + halfHeight + (halfHeight / 2));
@@ -31,16 +30,16 @@ public class Spider extends Sprite {
                     ammo++;
                     reload = false;
                 }
+                if (ammo >= 20) {
+                    reload = true;
+                    shootTripleTime = 200;
+                }
             } else {
                 ammo--;
                 if (ammo == 0) {
                     shootTripleTime = 100;
                     reload = false;
                 }
-            }
-            if (ammo >= 20) {
-                reload = true;
-                shootTripleTime = 200;
             }
         }
     }
@@ -115,6 +114,6 @@ public class Spider extends Sprite {
         Game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
 
         Game.canvas.drawRect(centerX() - 75, y + 10, centerX() + 75, y + 25 , Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + (health / maxHealth) * 150, y + 23, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + ((health / maxHealth) * 150), y + 23, Game.fpsPaint);
     }
 }

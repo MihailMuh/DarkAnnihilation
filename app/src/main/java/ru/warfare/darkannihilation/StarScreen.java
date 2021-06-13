@@ -7,7 +7,7 @@ public class StarScreen extends BaseScreen {
 
     @Override
     public void update() {
-        frame += 1;
+        frame++;
         if (frame == screenImageLength) {
             frame = 0;
         }

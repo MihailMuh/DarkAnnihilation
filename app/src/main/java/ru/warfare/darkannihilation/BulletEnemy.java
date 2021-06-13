@@ -26,6 +26,12 @@ public class BulletEnemy extends Sprite {
     }
 
     @Override
+    public void intersection() {
+        createSmallExplosion();
+        Game.allSprites.remove(this);
+    }
+
+    @Override
     public void intersectionPlayer() {
         createSmallExplosion();
         Game.allSprites.remove(this);

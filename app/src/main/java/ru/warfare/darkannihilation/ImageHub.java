@@ -33,8 +33,9 @@ public final class ImageHub {
     public static Bitmap[] screenImage = new Bitmap[34];
     public static Bitmap[] vaderImage = new Bitmap[3];
     public static Bitmap[] vaderOldImage = new Bitmap[3];
-    public static final Bitmap[] portalImages = new Bitmap[20];
+    public static Bitmap[] portalImages = new Bitmap[20];
     public static Bitmap[] thunderScreen = new Bitmap[20];
+    public static Bitmap[] atomBombImage = new Bitmap[4];
     public static final Bitmap[] loadingImages = new Bitmap[12];
 
     public static Bitmap bitmap;
@@ -131,10 +132,8 @@ public final class ImageHub {
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        new Thread(() -> {
-            loadFirstLevelBitmaps();
-            loadLayoutImages(context);
-        }).start();
+        loadFirstLevelBitmaps();
+        new Thread(() -> loadLayoutImages(context)).start();
 
         requestBuilder.load(R.drawable.pause_button)
                 .override(pauseBtn, pauseBtn)
@@ -699,10 +698,11 @@ public final class ImageHub {
             for (int i = 0; i < 20; i++) {
                 portalImages[i].recycle();
             }
+            portalImages = new Bitmap[20];
         }
     }
 
-    public static void loadSecondLevelImages(Context context) {
+    public static void loadSecondLevelImages() {
         requestBuilder.load(R.drawable.spider)
                 .override((int) (350 * resizeK), eX175)
                 .listener(new RequestListener<Bitmap>() {
@@ -814,6 +814,23 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
+            if (i < 4) {
+                requestBuilder.load(res.getIdentifier("atom" + i, "drawable", name))
+                        .override(eX100, eX300)
+                        .listener(new RequestListener<Bitmap>() {
+                                      @Override
+                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                          return false;
+                                      }
+
+                                      @Override
+                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                          atomBombImage[finalI] = resource;
+                                          return true;
+                                      }
+                                  }
+                        ).submit();
+            }
             requestBuilder.load(res.getIdentifier("thunder" + i, "drawable", name))
                     .centerCrop()
                     .override(screensSizeX, screenHeight)
@@ -840,9 +857,13 @@ public final class ImageHub {
                 if (i < 3) {
                     vaderOldImage[i].recycle();
                 }
+                if (i < 4) {
+                    atomBombImage[i].recycle();
+                }
             }
             thunderScreen = new Bitmap[20];
             vaderOldImage = new Bitmap[3];
+            atomBombImage = new Bitmap[4];
 
             spiderImg.recycle();
             spiderImg = null;
@@ -868,7 +889,7 @@ public final class ImageHub {
         return screenImage[0] == null;
     }
 
-    public static void loadFirstLevelImages(Context context) {
+    public static void loadFirstLevelImages() {
         loadFirstLevelBitmaps();
         for (int i = 0; i < 34; i++) {
             int finalI = i;

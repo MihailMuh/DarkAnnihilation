@@ -66,7 +66,7 @@ public class BossVaders extends Sprite {
         Game.gameStatus = 6;
         for (int i = 0; i < Game.numberVaders; i++) {
             if (Game.random.nextFloat() <= 0.3) {
-                Game.allSprites.add(new XWing(game));
+                Game.allSprites.add(new XWing());
             }
         }
         for (int i = 0; i < Game.allSprites.size(); i++) {
@@ -133,6 +133,6 @@ public class BossVaders extends Sprite {
         Game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
 
         Game.canvas.drawRect(centerX() - 70, y - 10, centerX() + 70, y + 5, Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + (health / maxHealth) * 140, y + 3, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + ((health / maxHealth) * 140), y + 3, Game.fpsPaint);
     }
 }

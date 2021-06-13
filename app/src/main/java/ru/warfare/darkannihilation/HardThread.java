@@ -1,22 +1,27 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Sprite.getDistance;
 import static ru.warfare.darkannihilation.Sprite.randInt;
 
 public class HardThread implements Runnable {
 //    1 - bullets enemy
-//    2 - saturn second gun
-//    3 - sunrise
-//    4 - bomb
-//    5 - saturn first gun
+//    2 - sunrise
+//    3 - bomb
+//    4 - saturn first gun
+//    5 - stop buffer
+//    6 - start buffer
+//    7 - atomic bomb
+//    8 - xwing
 
     private static final Vector vector = new Vector();
     private Thread thread;
     private final Game game;
-    private boolean work = false;
+    private volatile boolean work = false;
 
     public static volatile int job = 0;
     public static volatile int x = 0;
     public static volatile int y = 0;
+    private volatile int r;
 
     public HardThread(Game g) {
         game = g;
@@ -34,12 +39,6 @@ public class HardThread implements Runnable {
                     job = 0;
                     break;
                 case 2:
-                    BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, game.player.centerX(), game.player.y);
-                    Game.bullets.add(buckshotSaturn);
-                    Game.allSprites.add(buckshotSaturn);
-                    job = 0;
-                    break;
-                case 3:
                     AudioHub.playDeagle();
                     Game.allSprites.add(new BulletEnemy(x, y, 0, 0, -10));
                     Game.allSprites.add(new BulletEnemy(x, y, 90, 10, 0));
@@ -63,11 +62,11 @@ public class HardThread implements Runnable {
 
                     job = 0;
                     break;
-                case 4:
+                case 3:
                     Game.allSprites.add(new Bomb(game.demoman.centerX(), game.demoman.centerY()));
                     job = 0;
                     break;
-                case 5:
+                case 4:
                     for (int i = 0; i < randInt(2, 6); i++) {
                         BulletSaturn bulletSaturn = new BulletSaturn(game.player.centerX(), game.player.y);
                         Game.bullets.add(bulletSaturn);
@@ -76,7 +75,50 @@ public class HardThread implements Runnable {
                     AudioHub.playShoot();
                     job = 0;
                     break;
-                default:
+                case 5:
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Sprite sprite = Game.allSprites.get(i);
+                        if (!sprite.lock) {
+                            if ((!sprite.isPassive && !sprite.isBullet)) {
+                                Game.allSprites.get(i).stopBuff();
+                            }
+                        }
+                    }
+                    job = 0;
+                    break;
+                case 6:
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Sprite sprite = Game.allSprites.get(i);
+                        if (!sprite.lock) {
+                            if ((!sprite.isPassive && !sprite.isBullet)) {
+                                Game.allSprites.get(i).buff();
+                            }
+                        }
+                    }
+                    job = 0;
+                    break;
+                case 7:
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Sprite sprite = Game.allSprites.get(i);
+                        if (sprite != game.atomicBomb) {
+                            if (!sprite.lock) {
+                                if ((!sprite.isPassive && !sprite.isBullet) | (sprite.status.equals("bulletEnemy"))) {
+                                    sprite.intersection();
+                                }
+                            }
+                        }
+                    }
+                    job = 0;
+                    break;
+                case 8:
+                    int X = game.player.centerX();
+                    int Y = game.player.centerY();
+                    if (getDistance(x - X, y - Y) < r) {
+                        vector.makeVector(x, y, X, Y, 9);
+                        AudioHub.playShoot();
+                        Game.allSprites.add(new BulletEnemy(x, y, vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
+                    }
+                    job = 0;
                     break;
             }
         }
@@ -92,6 +134,11 @@ public class HardThread implements Runnable {
     }
 
     public void workOnResume() {
+        if (Game.character.equals("saturn")) {
+            r = 600;
+        } else {
+            r = 350;
+        }
         try {
             work = true;
             job = 0;

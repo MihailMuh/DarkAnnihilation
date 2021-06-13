@@ -26,7 +26,7 @@ public class DefaultExplosion extends BaseExplosion {
     @Override
     public void update() {
         if (frame != 28) {
-            frame += 1;
+            frame++;
         } else {
             frame = 0;
             lock = true;

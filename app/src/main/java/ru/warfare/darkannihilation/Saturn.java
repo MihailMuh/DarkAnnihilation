@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 public class Saturn extends BaseCharacter {
+
     public Saturn(Game g) {
         super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight());
         health = 50;
@@ -22,10 +23,10 @@ public class Saturn extends BaseCharacter {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
             if (now - lastShoot > shotgunTime) {
-                if (HardThread.job == 0) {
-                    lastShoot = now;
-                    HardThread.job = 2;
-                }
+                lastShoot = now;
+                BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, centerX(), y);
+                Game.bullets.add(buckshotSaturn);
+                Game.allSprites.add(buckshotSaturn);
             }
         } else {
             if (now - lastShoot > shootTime) {
