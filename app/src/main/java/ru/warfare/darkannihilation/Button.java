@@ -106,6 +106,7 @@ public class Button extends Sprite {
                         case "start":
                             game.buttonPlayer.show();
                             game.buttonSaturn.show();
+                            game.buttonEmerald.show();
                             break;
                         case "quit":
                             game.onPause();

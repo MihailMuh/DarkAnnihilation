@@ -7,10 +7,8 @@ public class MillenniumFalcon extends BaseCharacter {
         speedX = randInt(3, 7);
         speedY = randInt(3, 7);
 
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
-        endX = x;
-        endY = y;
+        x = Game.halfScreenWidth - halfWidth;
+        y = Game.halfScreenHeight - halfHeight;
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 

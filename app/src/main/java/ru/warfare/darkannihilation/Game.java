@@ -20,7 +20,7 @@ import java.util.Random;
 import pl.droidsonroids.gif.GifImageView;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
-    private final SurfaceHolder holder;
+    private final SurfaceHolder holder = getHolder();
     public Context context;
     private Thread thread;
     public static Canvas canvas;
@@ -68,6 +68,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public Portal portal;
     public ButtonPlayer buttonPlayer;
     public ButtonSaturn buttonSaturn;
+    public ButtonEmerald buttonEmerald;
     public BaseCharacter player;
     public LoadingScreen loadingScreen;
     public Spider spider;
@@ -84,7 +85,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final int numberExplosionsALL = 73;
 
     public static int level = 1;
-    public static int gameStatus;
+    public static int gameStatus = 1;
     private int count = 0;
     public static int score = 0;
     public int bestScore = 0;
@@ -93,7 +94,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = true;
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = true;
+    private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -145,150 +146,142 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public Game(Context context, AttributeSet attrs) {
         super(context, attrs);
-        holder = getHolder();
     }
 
     public void init(MainActivity mainActivity) {
-        context = mainActivity;
+        count++;
+        if (count == 1) {
+            context = mainActivity;
 
-        screenWidth = Service.getScreenWidth();
-        screenHeight = Service.getScreenHeight();
-        halfScreenWidth = screenWidth / 2;
-        halfScreenHeight = screenHeight / 2;
-        resizeK = Service.getResizeCoefficient();
-        int y = screenHeight - ImageHub.eX70;
+            screenWidth = Service.getScreenWidth();
+            screenHeight = Service.getScreenHeight();
+            halfScreenWidth = screenWidth / 2;
+            halfScreenHeight = screenHeight / 2;
+            resizeK = Service.getResizeCoefficient();
+            int y = screenHeight - ImageHub.eX70;
 
-        fpsPaint.setColor(Color.RED);
-        fpsPaint.setTextSize(40);
+            fpsPaint.setColor(Color.RED);
+            fpsPaint.setTextSize(40);
 
-        startPaint.setColor(Color.WHITE);
-        startPaint.setTextSize(300);
-        startPaint.setFilterBitmap(true);
-        startPaint.setDither(true);
+            startPaint.setColor(Color.WHITE);
+            startPaint.setTextSize(300);
+            startPaint.setFilterBitmap(true);
+            startPaint.setDither(true);
 
-        gameoverPaint.setColor(Color.WHITE);
-        gameoverPaint.setFilterBitmap(true);
-        gameoverPaint.setDither(true);
+            gameoverPaint.setColor(Color.WHITE);
+            gameoverPaint.setFilterBitmap(true);
+            gameoverPaint.setDither(true);
 
-        scorePaint.setColor(Color.WHITE);
-        scorePaint.setTextSize(40);
-        scorePaint.setFilterBitmap(true);
-        scorePaint.setDither(true);
+            scorePaint.setColor(Color.WHITE);
+            scorePaint.setTextSize(40);
+            scorePaint.setFilterBitmap(true);
+            scorePaint.setDither(true);
 
-        topPaint.setColor(Color.WHITE);
-        topPaint.setTextSize(30);
-        topPaint.setFilterBitmap(true);
-        topPaint.setDither(true);
+            topPaint.setColor(Color.WHITE);
+            topPaint.setTextSize(30);
+            topPaint.setFilterBitmap(true);
+            topPaint.setDither(true);
 
-        topPaintRed.setColor(Color.RED);
-        topPaintRed.setTextSize(30);
-        topPaintRed.setFilterBitmap(true);
-        topPaintRed.setDither(true);
+            topPaintRed.setColor(Color.RED);
+            topPaintRed.setTextSize(30);
+            topPaintRed.setFilterBitmap(true);
+            topPaintRed.setDither(true);
 
-        winPaint.setColor(Color.WHITE);
-        winPaint.setTextSize(100);
-        winPaint.setFilterBitmap(true);
-        winPaint.setDither(true);
+            winPaint.setColor(Color.WHITE);
+            winPaint.setTextSize(100);
+            winPaint.setFilterBitmap(true);
+            winPaint.setDither(true);
 
-        paint50.setColor(Color.WHITE);
-        paint50.setTextSize(50);
-        paint50.setFilterBitmap(true);
-        paint50.setDither(true);
+            paint50.setColor(Color.WHITE);
+            paint50.setTextSize(50);
+            paint50.setFilterBitmap(true);
+            paint50.setDither(true);
 
-        buttonsPaint.setColor(Color.WHITE);
-        buttonsPaint.setFilterBitmap(true);
-        buttonsPaint.setDither(true);
+            buttonsPaint.setColor(Color.WHITE);
+            buttonsPaint.setFilterBitmap(true);
+            buttonsPaint.setDither(true);
 
-        alphaPaint.setFilterBitmap(true);
-        alphaPaint.setDither(true);
+            alphaPaint.setFilterBitmap(true);
+            alphaPaint.setDither(true);
 
-        getMaxScore();
+            getMaxScore();
 
-        while (!endImgInit) {
-        }
-
-        buttonMenu = new Button(this);
-        buttonStart = new Button(this);
-        buttonQuit = new Button(this);
-        buttonRestart = new Button(this);
-
-        settings = new Settings(mainActivity);
-
-        new Thread(() -> {
-            fightBg = new FightBg();
-            buttonPlayer = new ButtonPlayer(this);
-            buttonSaturn = new ButtonSaturn(this);
-            pauseButton = new PauseButton(this);
-            player = new MillenniumFalcon(this);
-            healthKit = new HealthKit(this);
-            shotgunKit = new ShotgunKit(this);
-            changerGuns = new ChangerGuns(this);
-            rocket = new Rocket();
-            attention = new Attention(this);
-            factory = new Factory();
-            demoman = new Demoman();
-            screen = new StarScreen();
-            loadingScreen = new LoadingScreen(this);
-
-            fpsY = pauseButton.bottom() + 100;
-            fpsX = screenWidth - 250;
-            scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
-            maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
-            chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
-            chooseChY = (int) (screenHeight * 0.3);
-            thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
-            thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
-            go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
-            go_to_menuY = (int) (Game.screenHeight * 0.65);
-            shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
-            shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-            go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
-            go_to_restartY = (int) (screenHeight * 0.7);
-
-            while (buttonStart.right() > buttonMenu.x) {
-                buttonMenu.newFunc(string_top, halfScreenWidth, y, "top");
-                buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, y, "start");
-                buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, y, "quit");
-                buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
+            while (!endImgInit) {
             }
-        }).start();
 
-        for (int i = 0; i < numberVaders * 2; i++) {
-            allSprites.add(new Vader());
-        }
-        hardThread = new HardThread(this);
+            buttonMenu = new Button(this);
+            buttonStart = new Button(this);
+            buttonQuit = new Button(this);
+            buttonRestart = new Button(this);
 
-        for (int i = 0; i < numberExplosionsALL; i++) {
-            if (i < numberMediumExplosionsTriple) {
-                allExplosions[i] = new ExplosionTriple("default");
-            } else {
-                if (i < numberSmallExplosionsTriple) {
-                    allExplosions[i] = new ExplosionTriple("small");
+            settings = new Settings(mainActivity);
+
+            new Thread(() -> {
+                fightBg = new FightBg();
+                buttonPlayer = new ButtonPlayer(this);
+                buttonSaturn = new ButtonSaturn(this);
+                buttonEmerald = new ButtonEmerald(this);
+                pauseButton = new PauseButton(this);
+                player = new MillenniumFalcon(this);
+                healthKit = new HealthKit(this);
+                shotgunKit = new ShotgunKit(this);
+                changerGuns = new ChangerGuns(this);
+                rocket = new Rocket();
+                attention = new Attention(this);
+                factory = new Factory();
+                demoman = new Demoman();
+                screen = new StarScreen();
+                loadingScreen = new LoadingScreen(this);
+
+                fpsY = pauseButton.bottom() + 100;
+                fpsX = screenWidth - 250;
+                scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
+                maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
+                chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
+                chooseChY = (int) (screenHeight * 0.3);
+                thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
+                thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
+                go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
+                go_to_menuY = (int) (Game.screenHeight * 0.65);
+                shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
+                shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
+                go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
+                go_to_restartY = (int) (screenHeight * 0.7);
+
+                while (buttonStart.right() > buttonMenu.x) {
+                    buttonMenu.newFunc(string_top, halfScreenWidth, y, "top");
+                    buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, y, "start");
+                    buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, y, "quit");
+                    buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
+                }
+            }).start();
+
+            for (int i = 0; i < numberVaders * 2; i++) {
+                allSprites.add(new Vader());
+            }
+            hardThread = new HardThread(this);
+
+            for (int i = 0; i < numberExplosionsALL; i++) {
+                if (i < numberMediumExplosionsTriple) {
+                    allExplosions[i] = new ExplosionTriple("default");
                 } else {
-                    if (i < numberMediumExplosionsDefault) {
-                        allExplosions[i] = new DefaultExplosion("default");
+                    if (i < numberSmallExplosionsTriple) {
+                        allExplosions[i] = new ExplosionTriple("small");
                     } else {
-                        if (i < numberSmallExplosionsDefault) {
-                            allExplosions[i] = new DefaultExplosion("small");
+                        if (i < numberMediumExplosionsDefault) {
+                            allExplosions[i] = new DefaultExplosion("default");
                         } else {
-                            allExplosions[i] = new ExplosionSkull();
+                            if (i < numberSmallExplosionsDefault) {
+                                allExplosions[i] = new DefaultExplosion("small");
+                            } else {
+                                allExplosions[i] = new ExplosionSkull();
+                            }
                         }
                     }
                 }
+                allSprites.add(allExplosions[i]);
             }
-            allSprites.add(allExplosions[i]);
         }
-
-        hardThread.workOnResume();
-
-        thread = new Thread(this);
-        thread.start();
-
-        AudioHub.menuMusic.start();
-
-        MainActivity.firstTry = false;
-
-        gameStatus = 1;
     }
 
     private void gameplay() {
@@ -315,15 +308,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     anySprite.render();
                     anySprite.update();
                     if (!anySprite.isPassive) {
-//                        if (Sprite.abs(anySprite.x - player.x) < 100) {
-                            player.checkIntersections(anySprite);
-//                        }
+                        player.checkIntersections(anySprite);
                     }
                     if (!anySprite.isBullet) {
                         for (int j = 0; j < bullets.size(); j++) {
-//                            if (Sprite.abs(bullets.get(j).x - anySprite.x) < 100) {
-                                anySprite.check_intersectionBullet(bullets.get(j));
-//                            }
+                            anySprite.check_intersectionBullet(bullets.get(j));
                         }
                     }
                     if (character.equals("saturn")) {
@@ -388,17 +377,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
             bosses.add(boss);
             allSprites.add(boss);
-            if (character.equals("saturn")) {
-                for (int i = 0; i < bullets.size(); i++) {
-                    Sprite bullet = bullets.get(i);
-                    if (bullet.status.equals("saturn")) {
-                        if (bullet.getDistance() >= screenWidth - 100) {
-                            bullets.remove(bullet);
-                            allSprites.remove(bullet);
-                        }
-                    }
-                }
-            }
         }
 
         if (!shotgunKit.picked) {
@@ -556,6 +534,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     case 1:
                         buttonSaturn.setCoords(clickX, clickY);
                         buttonPlayer.setCoords(clickX, clickY);
+                        buttonEmerald.setCoords(clickX, clickY);
                         buttonStart.setCoords(clickX, clickY);
                         buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
@@ -658,39 +637,56 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void onResume() {
-        if (!MainActivity.firstTry) {
-            hardThread.workOnResume();
-            if (gameStatus == 7) {
-                AudioHub.winMusic.start();
-            } else {
-                if (bosses.size() == 0) {
-                    switch (gameStatus) {
-                        case 0:
-                        case 2:
-                        case 3:
-                            AudioHub.resumeBackgroundMusic();
-                            break;
-                        case 1:
-                            AudioHub.menuMusic.start();
-                            break;
-                        case 4:
-                            AudioHub.pauseMusic.start();
-                            break;
-                    }
-                } else {
-                    AudioHub.resumeBossMusic();
+        hardThread.workOnResume();
+        if (gameStatus == 7) {
+            AudioHub.winMusic.start();
+        } else {
+            if (bosses.size() == 0) {
+                switch (gameStatus) {
+                    case 0:
+                    case 2:
+                    case 3:
+                        AudioHub.resumeBackgroundMusic();
+                        break;
+                    case 1:
+                        AudioHub.menuMusic.start();
+                        break;
+                    case 4:
+                        AudioHub.pauseMusic.start();
+                        break;
                 }
+            } else {
+                AudioHub.resumeBossMusic();
             }
-            playing = true;
-            thread = new Thread(this);
-            thread.start();
         }
+        playing = true;
+        thread = new Thread(this);
+        thread.start();
     }
 
     public void generateTopScore() {
         buttonPlayer.hide();
         buttonSaturn.hide();
+        buttonEmerald.hide();
         buttonMenu.newFunc(string_back, (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "menu");
+
+        Table.newTable(buttonMenu.y - buttonMenu.height);
+        for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
+            try {
+                String string = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
+                        " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
+                if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
+                    Table.addMarkedText(string);
+                } else {
+                    Table.addText(string);
+                }
+            } catch (Exception e) {
+                Service.print(e.toString());
+                Table.addText((i + 1) + ") Bad Boy");
+            }
+        }
+        Table.makeTable();
+
         gameStatus = 8;
     }
 
@@ -732,12 +728,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generateSettings() {
         buttonPlayer.hide();
         buttonSaturn.hide();
+        buttonEmerald.hide();
         buttonQuit.newFunc(string_quit, halfScreenWidth + 30, screenHeight - 150, "quit");
         buttonMenu.newFunc(string_to_menu, halfScreenWidth - 30 - buttonQuit.width, screenHeight - 150, "fromSetting");
         settings.showSettings();
     }
 
     public void generateMenu() {
+        getMaxScore();
         alphaPaint.setAlpha(255);
         endImgInit = false;
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
@@ -761,7 +759,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
         }
 
-        getMaxScore();
         count = 0;
         score = 0;
         level = 1;
@@ -799,6 +796,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public void generateNewGame() {
         endImgInit = false;
 
+        AudioHub.pauseMenuMusic();
         AudioHub.pauseReadySound();
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
@@ -812,14 +810,21 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         bullets = new ArrayList<>(0);
         allSprites = new ArrayList<>(0);
 
-        if ("saturn".equals(character)) {
-            player = new Saturn(this);
+        switch (character)
+        {
+            case "saturn":
+                player = new Saturn(this);
+                break;
+            case "emerald":
+                player = new Emerald(this);
+                break;
         }
 
         shotgunKit.hide();
         healthKit.hide();
         buttonPlayer.hide();
         buttonSaturn.hide();
+        buttonEmerald.hide();
         pauseButton.show();
         player.PLAYER();
         if (portal != null) {
@@ -1074,6 +1079,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonRestart.render();
         buttonPlayer.render();
         buttonSaturn.render();
+        buttonEmerald.render();
 
         if (buttonPlayer.x < screenWidth) {
             canvas.drawText(string_choose_your_character, chooseChX, chooseChY, Game.paint50);
@@ -1081,24 +1087,30 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void topScore() {
-        try {
-            screen.update();
-            screen.render();
+//        try {
+//            screen.update();
+//            screen.render();
+//
+//            buttonMenu.render();
+//
+//            for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
+//                String str = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
+//                        " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
+//                if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
+//                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaintRed);
+//                } else {
+//                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaint);
+//                }
+//            }
+//        } catch (Exception e) {
+//            Service.print(e.toString());
+//        }
+        screen.update();
+        screen.render();
 
-            buttonMenu.render();
+        buttonMenu.render();
 
-            for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
-                String str = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
-                        " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
-                if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
-                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaintRed);
-                } else {
-                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaint);
-                }
-            }
-        } catch (Exception e) {
-            Service.print(e.toString());
-        }
+        Table.drawTable();
     }
 
     private void settings() {

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 public final class Clerk {
     @SuppressLint("StaticFieldLeak")
@@ -18,6 +19,26 @@ public final class Clerk {
     }
 
     public static void saveNickname() {
+        String[] str = nickname.split(" ");
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<String> filterNick = new ArrayList<>(0);
+        for (String s : str) {
+            if (!s.equals("")) {
+                filterNick.add(s);
+            }
+        }
+
+        int len = filterNick.size();
+        if (len > 1) {
+            for (int i = 0; i < len; i++) {
+                stringBuilder.append(filterNick.get(i));
+                if (i != len - 1) {
+                    stringBuilder.append(" ");
+                }
+            }
+        } else {
+            stringBuilder.append(filterNick.toString()).deleteCharAt(0).deleteCharAt(stringBuilder.length()-1);
+        }
         try {
             FileOutputStream writer = context.openFileOutput("NICKNAME.txt", Context.MODE_PRIVATE);
             OutputStreamWriter writer_str = new OutputStreamWriter(writer);
@@ -117,6 +138,9 @@ public final class Clerk {
             String string = reader_buffer.readLine();
             reader_cooler.close();
 
+            if (string == null) {
+                return "1 1 1 en 1";
+            }
             return string;
 
         } catch (Exception e) {

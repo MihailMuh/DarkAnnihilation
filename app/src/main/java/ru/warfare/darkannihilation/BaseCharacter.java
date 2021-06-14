@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation;
 
 public class BaseCharacter extends Sprite {
-    public int endX;
-    public int endY;
+    public int endX = 0;
+    public int endY = 0;
     public int shootTime;
     public int shotgunTime;
     public long lastShoot;
@@ -27,8 +27,9 @@ public class BaseCharacter extends Sprite {
         if (Game.level == 1 | !game.shotgunKit.picked) {
             gun = "gun";
         }
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
+        x = Game.halfScreenWidth - halfWidth;
+        y = Game.halfScreenHeight - halfHeight;
+        setCoords(x, y);
         lock = true;
         health = maxHealth;
         int c = 370;

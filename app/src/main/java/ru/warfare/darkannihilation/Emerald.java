@@ -1,11 +1,11 @@
 package ru.warfare.darkannihilation;
 
-public class Saturn extends BaseCharacter {
-    public Saturn(Game g) {
-        super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight());
+public class Emerald extends BaseCharacter {
+    public Emerald(Game g) {
+        super(g, ImageHub.emeraldImg.getWidth(), ImageHub.emeraldImg.getHeight());
         health = 50;
 
-        recreateRect(x + 25, y + 25, right() - 25, bottom() - 17);
+        recreateRect(x + 25, y + 25, right() - 25, bottom() - 25);
 
         shootTime = 130;
         shotgunTime = 65;
@@ -24,10 +24,14 @@ public class Saturn extends BaseCharacter {
             }
         } else {
             if (now - lastShoot > shootTime) {
-                if (HardThread.job == 0) {
-                    lastShoot = now;
-                    HardThread.job = 4;
-                }
+                AudioHub.playShoot();
+                Bullet bullet = new Bullet(centerX() - 6, y);
+                Game.bullets.add(bullet);
+                Game.allSprites.add(bullet);
+
+                bullet = new Bullet(centerX(), y);
+                Game.bullets.add(bullet);
+                Game.allSprites.add(bullet);
             }
         }
     }
@@ -61,6 +65,6 @@ public class Saturn extends BaseCharacter {
     @Override
     public void render () {
         renderHearts();
-        Game.canvas.drawBitmap(ImageHub.saturnImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.emeraldImg, x, y, null);
     }
 }

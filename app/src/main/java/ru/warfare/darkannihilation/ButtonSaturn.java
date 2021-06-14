@@ -13,14 +13,13 @@ public class ButtonSaturn extends Sprite {
     }
 
     public void show() {
-        x = Game.halfScreenWidth + game.buttonPlayer.width;
+        x = Game.halfScreenWidth - (game.buttonPlayer.width * 2) - width;
     }
 
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioHub.playClick();
             Game.character = "saturn";
-            AudioHub.pauseMenuMusic();
             game.loadingScreen.newJob("newGame");
         }
     }

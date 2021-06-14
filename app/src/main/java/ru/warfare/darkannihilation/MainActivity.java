@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public SharedPreferences preferences;
     public static GifImageView gif;
     public final static Handler handler = new Handler(Looper.getMainLooper());
-    public static boolean firstTry = true;
+//    public static boolean firstTry = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +40,16 @@ public class MainActivity extends AppCompatActivity {
         game = findViewById(R.id.gameView);
 
         Service.init(this);
-        ImageHub.init(this);
-        new Thread(() -> {
+        runOnUiThread(new Thread(() -> {
+            ImageHub.init(this);
             AudioHub.init(this);
             ClientServer.getStatistics();
             gif = findViewById(R.id.gifView);
-        }).start();
+        }));
 
         Clerk.init(this);
-        game.init(this);
         checkOnFirstRun();
+        game.init(this);
     }
 
     @Override
@@ -98,9 +99,34 @@ public class MainActivity extends AppCompatActivity {
                                 toast.show();
                             } else {
                                 preferences.edit().putBoolean("firstrun", false).apply();
-                                Clerk.nickname = nick;
-                                Clerk.saveNickname();
-                                ClientServer.postBestScore(nick, 0);
+
+                                new Thread(() -> {
+                                    String[] str = nick.split(" ");
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    ArrayList<String> filterNick = new ArrayList<>(0);
+                                    for (String s : str) {
+                                        if (!s.equals("")) {
+                                            filterNick.add(s);
+                                        }
+                                    }
+
+                                    int len = filterNick.size();
+                                    if (len > 1) {
+                                        for (int i = 0; i < len; i++) {
+                                            stringBuilder.append(filterNick.get(i));
+                                            if (i != len - 1) {
+                                                stringBuilder.append(" ");
+                                            }
+                                        }
+                                    } else {
+                                        stringBuilder.append(filterNick.toString()).deleteCharAt(0).deleteCharAt(stringBuilder.length()-1);
+                                    }
+
+                                    Clerk.nickname = stringBuilder.toString();
+                                    Clerk.saveNickname();
+                                    ClientServer.postBestScore(Clerk.nickname, 0);
+                                }).start();
+
                                 Toast toast = Toast.makeText(this, "Congratulations! You have registered!", Toast.LENGTH_LONG);
                                 toast.show();
                                 dialog.dismiss();
