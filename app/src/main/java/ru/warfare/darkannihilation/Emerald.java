@@ -7,7 +7,7 @@ public class Emerald extends BaseCharacter {
 
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 25);
 
-        shootTime = 130;
+        shootTime = 1_700;
         shotgunTime = 65;
         lastShoot = System.currentTimeMillis();
     }
@@ -24,14 +24,11 @@ public class Emerald extends BaseCharacter {
             }
         } else {
             if (now - lastShoot > shootTime) {
-                AudioHub.playShoot();
-                Bullet bullet = new Bullet(centerX() - 6, y);
-                Game.bullets.add(bullet);
-                Game.allSprites.add(bullet);
-
-                bullet = new Bullet(centerX(), y);
-                Game.bullets.add(bullet);
-                Game.allSprites.add(bullet);
+                lastShoot = now;
+                AudioHub.playDynamite();
+                BulletDynamite bulletDynamite = new BulletDynamite(centerX(), y);
+                Game.bullets.add(bulletDynamite);
+                Game.allSprites.add(bulletDynamite);
             }
         }
     }
@@ -58,8 +55,8 @@ public class Emerald extends BaseCharacter {
         x += speedX;
         y += speedY;
 
-        speedX = (endX - x) / 20;
-        speedY = (endY - y) / 20;
+        speedX = (endX - x) / 12;
+        speedY = (endY - y) / 12;
     }
 
     @Override

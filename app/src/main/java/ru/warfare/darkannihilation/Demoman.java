@@ -36,7 +36,7 @@ public class Demoman extends Sprite {
         if (now - lastShoot > shootTime) {
             if (HardThread.job == 0) {
                 lastShoot = now;
-                HardThread.job = 4;
+                HardThread.job = 3;
             }
         }
     }

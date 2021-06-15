@@ -19,26 +19,6 @@ public final class Clerk {
     }
 
     public static void saveNickname() {
-        String[] str = nickname.split(" ");
-        StringBuilder stringBuilder = new StringBuilder();
-        ArrayList<String> filterNick = new ArrayList<>(0);
-        for (String s : str) {
-            if (!s.equals("")) {
-                filterNick.add(s);
-            }
-        }
-
-        int len = filterNick.size();
-        if (len > 1) {
-            for (int i = 0; i < len; i++) {
-                stringBuilder.append(filterNick.get(i));
-                if (i != len - 1) {
-                    stringBuilder.append(" ");
-                }
-            }
-        } else {
-            stringBuilder.append(filterNick.toString()).deleteCharAt(0).deleteCharAt(stringBuilder.length()-1);
-        }
         try {
             FileOutputStream writer = context.openFileOutput("NICKNAME.txt", Context.MODE_PRIVATE);
             OutputStreamWriter writer_str = new OutputStreamWriter(writer);

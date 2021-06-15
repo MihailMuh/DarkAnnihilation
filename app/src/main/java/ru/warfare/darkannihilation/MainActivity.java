@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     public SharedPreferences preferences;
     public static GifImageView gif;
     public final static Handler handler = new Handler(Looper.getMainLooper());
-//    public static boolean firstTry = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

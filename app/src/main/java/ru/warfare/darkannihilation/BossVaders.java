@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation;
 
 public class BossVaders extends Sprite {
     private final float maxHealth;
-    private static final Vector vector = new Vector();
+    private final Vector vector = new Vector();
     private int shootBossTime = 1200;
     private long lastShoot;
 

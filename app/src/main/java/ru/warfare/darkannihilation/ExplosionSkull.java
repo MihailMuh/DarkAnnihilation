@@ -19,7 +19,7 @@ public class ExplosionSkull extends BaseExplosion {
         long now = System.currentTimeMillis();
         if (now - lastShoot > 33) {
             lastShoot = now;
-            if (frame != 13) {
+            if (frame != 12) {
                 frame++;
             } else {
                 frame = 0;
@@ -30,8 +30,6 @@ public class ExplosionSkull extends BaseExplosion {
 
     @Override
     public void render () {
-        if (frame != 13) {
-            Game.canvas.drawBitmap(img[frame], x, y, null);
-        }
+        Game.canvas.drawBitmap(img[frame], x, y, null);
     }
 }

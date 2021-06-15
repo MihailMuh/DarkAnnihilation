@@ -25,7 +25,7 @@ public class XWing extends Sprite {
             if (HardThread.job == 0) {
                 HardThread.x = centerX();
                 HardThread.y = centerY();
-                HardThread.job = 9;
+                HardThread.job = 8;
                 lastShoot = now;
             }
         }

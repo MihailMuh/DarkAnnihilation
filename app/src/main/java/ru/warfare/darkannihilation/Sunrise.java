@@ -23,7 +23,7 @@ public class Sunrise extends Sprite {
                 lastShoot = now;
                 HardThread.x = centerX();
                 HardThread.y = centerY();
-                HardThread.job = 3;
+                HardThread.job = 2;
             }
         }
     }

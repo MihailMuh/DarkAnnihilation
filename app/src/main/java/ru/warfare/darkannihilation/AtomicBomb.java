@@ -3,8 +3,8 @@ package ru.warfare.darkannihilation;
 public class AtomicBomb extends Sprite {
     private int frame = 0;
     private static final float frameTime = 30;
-    private static final int len = ImageHub.atomBombImage.length - 1;
-    private static final float maxHealth = 20;
+    private final int len = ImageHub.atomBombImage.length - 1;
+    private final float maxHealth = 20;
     private long lastFrame;
     private final int halfwidthM2;
     private final int halfwidthP2;
@@ -25,7 +25,7 @@ public class AtomicBomb extends Sprite {
 
     private void boom() {
         if (HardThread.job == 0) {
-            HardThread.job = 8;
+            HardThread.job = 7;
             boom = false;
             intersection();
         }

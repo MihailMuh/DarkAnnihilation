@@ -15,7 +15,7 @@ public class Buffer extends Sprite {
 
     private void boom() {
         if (HardThread.job == 0) {
-            HardThread.job = 6;
+            HardThread.job = 5;
             boom = false;
             AudioHub.playMegaBoom();
             createSkullExplosion();
@@ -69,7 +69,7 @@ public class Buffer extends Sprite {
             } else {
                 if (!startBuff) {
                     if (HardThread.job == 0) {
-                        HardThread.job = 7;
+                        HardThread.job = 6;
                         startBuff = true;
                     }
                 }

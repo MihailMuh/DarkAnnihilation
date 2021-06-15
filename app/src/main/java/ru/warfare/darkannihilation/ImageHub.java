@@ -83,6 +83,7 @@ public final class ImageHub {
     public static Bitmap bufferImg;
     public static Bitmap buttonEmeraldImg;
     public static Bitmap emeraldImg;
+    public static Bitmap dynamiteImg;
 
     public static Drawable onImg;
     public static Drawable offImg;
@@ -114,6 +115,7 @@ public final class ImageHub {
 
     @SuppressLint("StaticFieldLeak")
     public static RequestBuilder<Bitmap> requestBuilder;
+    private static final Matrix matrix = new Matrix();
     private static Resources res;
     private static String name;
 
@@ -121,14 +123,14 @@ public final class ImageHub {
         int eX145 = (int) (145 * resizeK);
         int eX152 = (int) (152 * resizeK);
         int eX52 = (int) (52 * resizeK);
-        int eX500 = (int) (500 * resizeK);
-        int eX435 = (int) (435 * resizeK);
         int sW150 = (int) ((screenWidth - 150) * resizeK);
         int sW = (int) (screenWidth * resizeK);
         int eX13 = (int) (13 * resizeK);
         int eX207 = (int) (207 * resizeK);
         int eX120 = (int) (120 * resizeK);
         int eX169 = (int) (169 * resizeK);
+        int eX522 = (int) (522 * resizeK);
+        int eX600 = (int) (600 * resizeK);
         int pauseBtn = (int) (150 * Service.getResizeCoefficientForLayout());
         res = context.getResources();
         name = context.getPackageName();
@@ -140,6 +142,22 @@ public final class ImageHub {
 
         loadFirstLevelBitmaps();
         new Thread(() -> loadLayoutImages(context)).start();
+
+        requestBuilder.load(R.drawable.dynamite)
+                .override(eX100, (int) (41.3 * resizeK))
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  dynamiteImg = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
 
         requestBuilder.load(R.drawable.pause_button)
                 .override(pauseBtn, pauseBtn)
@@ -641,7 +659,7 @@ public final class ImageHub {
             }
             if (i < 13) {
                 requestBuilder.load(res.getIdentifier("explosion_skull_" + (i + 1), "drawable", name))
-                        .override(eX435, eX500)
+                        .override(eX522, eX600)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -1283,7 +1301,7 @@ public final class ImageHub {
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {
-        Matrix matrix = new Matrix();
+        matrix.reset();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
     }
