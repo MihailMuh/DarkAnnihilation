@@ -131,7 +131,7 @@ public final class ImageHub {
         int eX169 = (int) (169 * resizeK);
         int eX522 = (int) (522 * resizeK);
         int eX600 = (int) (600 * resizeK);
-        int pauseBtn = (int) (150 * Service.getResizeCoefficientForLayout());
+        int pauseBtn = (int) (100 * Service.getResizeCoefficientForLayout());
         res = context.getResources();
         name = context.getPackageName();
 

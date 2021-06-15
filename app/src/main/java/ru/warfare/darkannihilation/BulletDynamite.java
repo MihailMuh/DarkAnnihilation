@@ -15,7 +15,7 @@ public class BulletDynamite extends Sprite {
         isPassive = true;
         isBullet = true;
 
-        speedY = 7;
+        speedY = 8;
 
         x = X - halfWidth;
         y = Y - height;
@@ -39,6 +39,8 @@ public class BulletDynamite extends Sprite {
             top = y;
             right = x + width;
             bottom = y + height;
+
+            recreateRect(x + 50, y, right() - 50, bottom());
 
             frame = 0;
 

@@ -1,35 +1,28 @@
 package ru.warfare.darkannihilation;
 
 public class BaseCharacter extends Sprite {
-    public int endX = 0;
-    public int endY = 0;
+    public int endX;
+    public int endY;
     public int shootTime;
     public int shotgunTime;
     public long lastShoot;
     public long now;
     public boolean dontmove = false;
     public String gun = "gun";
-    public boolean ai = true;
     public final int maxHealth = 50;
     public final Heart[] hearts = new Heart[5];
     public boolean god = false;
 
     public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
-    }
 
-    public void shoot() {}
-    public void checkIntersections(Sprite sprite) {}
-
-    public void PLAYER() {
-        god = false;
-        ai = false;
         if (Game.level == 1 | !game.shotgunKit.picked) {
             gun = "gun";
         }
-        x = Game.halfScreenWidth - halfWidth;
-        y = Game.halfScreenHeight - halfHeight;
-        setCoords(x, y);
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
+        endX = x;
+        endY = y;
         lock = true;
         health = maxHealth;
         int c = 370;
@@ -38,6 +31,16 @@ public class BaseCharacter extends Sprite {
             c -= 90;
         }
     }
+
+    public BaseCharacter(int w, int h) {
+        super(w, h);
+
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
+    }
+
+    public void shoot() {}
+    public void checkIntersections(Sprite sprite) {}
 
     public void setCoords(int X, int Y) {
         endX = X - halfWidth;
@@ -53,7 +56,7 @@ public class BaseCharacter extends Sprite {
     }
 
     public void damage(int dmg) {
-        if (!ai & dmg != 0 & !god) {
+        if (dmg != 0 & !god) {
             health -= dmg;
             if (health <= 0) {
                 game.generateGameover();

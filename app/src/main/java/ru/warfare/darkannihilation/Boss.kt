@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossImage.height) {
     private var lastShoot: Long
     private val maxHealth = 250f
-    private val shootBossTime = 300
+    private val shootBossTime = 450
     private var now: Long = 0
 
     init {

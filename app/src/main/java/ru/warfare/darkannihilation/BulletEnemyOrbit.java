@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 
 public class BulletEnemyOrbit extends Sprite {
-    private static final Vector vector = new Vector();
+    private final Vector vector = new Vector();
+    private final Matrix matrix = new Matrix();
     private final Bitmap image;
     private float X;
     private float Y;
@@ -87,6 +89,11 @@ public class BulletEnemyOrbit extends Sprite {
 
     @Override
     public void render () {
-        Game.canvas.drawBitmap(ImageHub.rotateImage(image, -getAngle()), X, Y, null);
+        matrix.reset();
+        matrix.postRotate(-getAngle(), halfWidth, halfHeight);
+        matrix.postTranslate(X, Y);
+
+//        Game.canvas.drawBitmap(ImageHub.rotateImage(image, -getAngle()), X, Y, null);
+        Game.canvas.drawBitmap(image, matrix, null);
     }
 }

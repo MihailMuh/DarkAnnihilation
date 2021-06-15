@@ -94,7 +94,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = true;
     public static String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = false;
+    private static final boolean drawFPS = true;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -112,6 +112,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private int go_to_restartY;
     private int shootY;
     private int shootX;
+    private int buttonsY;
 
     private String string_current_score;
     private String string_max_score;
@@ -158,7 +159,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             halfScreenWidth = screenWidth / 2;
             halfScreenHeight = screenHeight / 2;
             resizeK = Service.getResizeCoefficient();
-            int y = screenHeight - ImageHub.eX70;
+            buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
 
             fpsPaint.setColor(Color.RED);
             fpsPaint.setTextSize(40);
@@ -222,7 +223,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 buttonSaturn = new ButtonSaturn(this);
                 buttonEmerald = new ButtonEmerald(this);
                 pauseButton = new PauseButton(this);
-                player = new MillenniumFalcon(this);
+                player = new Bot();
                 healthKit = new HealthKit(this);
                 shotgunKit = new ShotgunKit(this);
                 changerGuns = new ChangerGuns(this);
@@ -249,10 +250,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 go_to_restartY = (int) (screenHeight * 0.7);
 
                 while (buttonStart.right() > buttonMenu.x) {
-                    buttonMenu.newFunc(string_top, halfScreenWidth, y, "top");
-                    buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, y, "start");
-                    buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, y, "quit");
-                    buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
+                    buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
+                    buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, buttonsY, "start");
+                    buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
+                    buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
                 }
             }).start();
 
@@ -668,7 +669,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonPlayer.hide();
         buttonSaturn.hide();
         buttonEmerald.hide();
-        buttonMenu.newFunc(string_back, (int) (halfScreenWidth - 150 * resizeK), (int) (screenHeight - 150 * resizeK), "menu");
+        buttonMenu.newFunc(string_back, (int) (halfScreenWidth - 150 * resizeK), buttonsY, "menu");
 
         Table.newTable(buttonMenu.y - buttonMenu.height);
         for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
@@ -729,8 +730,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonPlayer.hide();
         buttonSaturn.hide();
         buttonEmerald.hide();
-        buttonQuit.newFunc(string_quit, halfScreenWidth + 30, screenHeight - 150, "quit");
-        buttonMenu.newFunc(string_to_menu, halfScreenWidth - 30 - buttonQuit.width, screenHeight - 150, "fromSetting");
+        buttonQuit.newFunc(string_quit, halfScreenWidth + 30, buttonsY, "quit");
+        buttonMenu.newFunc(string_to_menu, halfScreenWidth - 30 - buttonQuit.width, buttonsY, "fromSetting");
         settings.showSettings();
     }
 
@@ -771,19 +772,18 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         sunrise = null;
         buffer = null;
         screen = new StarScreen();
-        player = new MillenniumFalcon(this);
+        player = new Bot();
         shotgunKit.picked = false;
 
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader());
         }
 
-        int y = screenHeight - buttonMenu.height;
         while (buttonStart.right() > buttonMenu.x) {
-            buttonMenu.newFunc(string_top, halfScreenWidth, y, "top");
-            buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, y, "start");
-            buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, y, "quit");
-            buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, y, "settings");
+            buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
+            buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, buttonsY, "start");
+            buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
+            buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
         }
 
         for (int i = 0; i < numberExplosionsALL; i++) {
@@ -815,6 +815,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             case "saturn":
                 player = new Saturn(this);
                 break;
+            case "falcon":
+                player = new MillenniumFalcon(this);
+                break;
             case "emerald":
                 player = new Emerald(this);
                 break;
@@ -826,7 +829,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonSaturn.hide();
         buttonEmerald.hide();
         pauseButton.show();
-        player.PLAYER();
         if (portal != null) {
             portal.kill();
         }
@@ -1087,24 +1089,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void topScore() {
-//        try {
-//            screen.update();
-//            screen.render();
-//
-//            buttonMenu.render();
-//
-//            for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
-//                String str = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
-//                        " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
-//                if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
-//                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaintRed);
-//                } else {
-//                    canvas.drawText(str, halfScreenWidth - topPaint.measureText(str) / 2, (i + 1) * 45, topPaint);
-//                }
-//            }
-//        } catch (Exception e) {
-//            Service.print(e.toString());
-//        }
         screen.update();
         screen.render();
 

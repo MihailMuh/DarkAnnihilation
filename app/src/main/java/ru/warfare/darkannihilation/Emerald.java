@@ -53,10 +53,9 @@ public class Emerald extends BaseCharacter {
         }
 
         x += speedX;
-        y += speedY;
+        y += (endY - y) / 12;
 
         speedX = (endX - x) / 12;
-        speedY = (endY - y) / 12;
     }
 
     @Override

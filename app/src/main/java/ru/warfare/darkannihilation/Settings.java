@@ -99,8 +99,7 @@ public class Settings {
         textViewVibration.setVisibility(TextView.GONE);
         stickySwitch = mainActivity.findViewById(R.id.stickySwitch);
         layoutParams = stickySwitch.getLayoutParams();
-        layoutParams.width = (int) (150 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (90 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (140 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         stickySwitch.setLayoutParams(layoutParams);
         stickySwitch.setVisibility(TextView.GONE);
         stickySwitch.setRightIcon(ImageHub.onImg);

@@ -4,15 +4,10 @@ public class MillenniumFalcon extends BaseCharacter {
     public MillenniumFalcon(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
         health = 50;
-        speedX = randInt(3, 7);
-        speedY = randInt(3, 7);
-
-        x = Game.halfScreenWidth - halfWidth;
-        y = Game.halfScreenHeight - halfHeight;
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 
-        shootTime = 110;
+        shootTime = 100;
         shotgunTime = 535;
         lastShoot = System.currentTimeMillis();
     }
@@ -65,26 +60,14 @@ public class MillenniumFalcon extends BaseCharacter {
             shoot();
         }
         x += speedX;
-        y += speedY;
+        y += (endY - y) / 5;
 
-        if (!ai) {
-            speedX = (endX - x) / 5;
-            speedY = (endY - y) / 5;
-        } else {
-            if (x < 30 | x > screenWidthWidth - 30) {
-                speedX = -speedX;
-            }
-            if (y < 30 | y > screenHeightHeight - 30) {
-                speedY = -speedY;
-            }
-        }
+        speedX = (endX - x) / 5;
     }
 
     @Override
     public void render() {
-        if (!ai) {
-            renderHearts();
-        }
+        renderHearts();
         Game.canvas.drawBitmap(ImageHub.playerImage, x, y, null);
     }
 }
