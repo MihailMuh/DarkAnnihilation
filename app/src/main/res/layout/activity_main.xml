@@ -221,11 +221,11 @@
         android:text="@string/smooth_text"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textVibration"
+        app:layout_constraintBottom_toBottomOf="@+id/stickySwitch"
         app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
-        app:layout_constraintHorizontal_bias="0.366"
+        app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
-        app:layout_constraintTop_toTopOf="@+id/textVibration"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/stickySwitch"
+        app:layout_constraintVertical_bias="0.227" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

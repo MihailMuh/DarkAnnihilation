@@ -37,6 +37,7 @@ public final class ImageHub {
     public static Bitmap[] thunderScreen = new Bitmap[20];
     public static Bitmap[] atomBombImage = new Bitmap[4];
     public static final Bitmap[] loadingImages = new Bitmap[12];
+    public static Bitmap[] thunderImage = new Bitmap[13];
 
     public static Bitmap bitmap;
     public static Bitmap bulletImage;
@@ -131,7 +132,8 @@ public final class ImageHub {
         int eX169 = (int) (169 * resizeK);
         int eX522 = (int) (522 * resizeK);
         int eX600 = (int) (600 * resizeK);
-        int pauseBtn = (int) (100 * Service.getResizeCoefficientForLayout());
+        int eX3545 = (int) (0.3545 * screenHeight);
+        int pauseBtn = (int) (180 * resizeK);
         res = context.getResources();
         name = context.getPackageName();
 
@@ -669,6 +671,22 @@ public final class ImageHub {
                                       @Override
                                       public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                                           explosionLarge[finalI] = resource;
+                                          return true;
+                                      }
+                                  }
+                        ).submit();
+
+                requestBuilder.load(res.getIdentifier("laser" + i, "drawable", name))
+                        .override(eX3545, screenHeight)
+                        .listener(new RequestListener<Bitmap>() {
+                                      @Override
+                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                          return false;
+                                      }
+
+                                      @Override
+                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                          thunderImage[finalI] = resource;
                                           return true;
                                       }
                                   }

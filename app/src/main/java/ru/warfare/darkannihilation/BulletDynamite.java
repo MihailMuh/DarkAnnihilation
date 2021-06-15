@@ -24,8 +24,6 @@ public class BulletDynamite extends Sprite {
     @Override
     public void intersection() {
         if (!BOOM) {
-            BOOM = true;
-
             width = ImageHub.explosionLarge[0].getWidth();
             height = ImageHub.explosionLarge[0].getHeight();
 
@@ -40,11 +38,15 @@ public class BulletDynamite extends Sprite {
             right = x + width;
             bottom = y + height;
 
-            recreateRect(x + 50, y, right() - 50, bottom());
+            recreateRect(x + 40, y, right() - 40, bottom());
 
             frame = 0;
 
             damage = 2;
+
+            BOOM = true;
+
+            AudioHub.playDynamiteBoom();
         }
     }
 

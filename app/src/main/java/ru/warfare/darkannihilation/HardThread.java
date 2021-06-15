@@ -12,6 +12,7 @@ public class HardThread implements Runnable {
 //    6 - start buffer
 //    7 - atomic bomb
 //    8 - xwing
+//    9 - dynamite
 
     private static final Vector vector = new Vector();
     private Thread thread;
@@ -118,6 +119,13 @@ public class HardThread implements Runnable {
                         AudioHub.playShoot();
                         Game.allSprites.add(new BulletEnemy(x, y, vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                     }
+                    job = 0;
+                    break;
+                case 9:
+                    AudioHub.playDynamite();
+                    BulletDynamite bulletDynamite = new BulletDynamite(game.player.centerX(), game.player.y);
+                    Game.bullets.add(bulletDynamite);
+                    Game.allSprites.add(bulletDynamite);
                     job = 0;
                     break;
             }

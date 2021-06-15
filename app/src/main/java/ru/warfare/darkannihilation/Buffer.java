@@ -14,14 +14,22 @@ public class Buffer extends Sprite {
     }
 
     private void boom() {
-        if (HardThread.job == 0) {
-            HardThread.job = 5;
-            boom = false;
-            AudioHub.playMegaBoom();
-            createSkullExplosion();
-            hide();
-            Game.score += 100;
+        if (startBuff) {
+            if (HardThread.job == 0) {
+                HardThread.job = 5;
+                inter();
+            }
+        } else {
+            inter();
         }
+    }
+
+    private void inter() {
+        boom = false;
+        AudioHub.playMegaBoom();
+        createSkullExplosion();
+        hide();
+        Game.score += 100;
     }
 
     public void hide() {
