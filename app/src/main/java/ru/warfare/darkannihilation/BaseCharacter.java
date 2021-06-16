@@ -9,8 +9,8 @@ public class BaseCharacter extends Sprite {
     public long now;
     public boolean dontmove = false;
     public String gun = "gun";
-    public final int maxHealth = 50;
-    public final Heart[] hearts = new Heart[5];
+    public int maxHealth = 50;
+    public Heart[] hearts = new Heart[5];
     public boolean god = false;
 
     public BaseCharacter(Game g, int w, int h) {
@@ -30,6 +30,21 @@ public class BaseCharacter extends Sprite {
             hearts[i] = new Heart(c);
             c -= 90;
         }
+    }
+
+    public BaseCharacter(Game g, int w, int h, int maxHealth) {
+        super(g, w, h);
+
+        if (Game.level == 1 | !game.shotgunKit.picked) {
+            gun = "gun";
+        }
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
+        endX = x;
+        endY = y;
+        lock = true;
+        this.maxHealth = maxHealth;
+        health = maxHealth;
     }
 
     public BaseCharacter(int w, int h) {

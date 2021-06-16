@@ -40,6 +40,7 @@ public final class AudioHub {
         AudioPool.addSound(context, R.raw.boss_shoot, 1f);
         AudioPool.addSound(context, R.raw.dynamite, 1f);
         AudioPool.addSound(context, R.raw.boom, 0.58f);
+        AudioPool.addSound(context, R.raw.thunderstorm, 1f);
 
         menuMusic = MediaPlayer.create(context, R.raw.menu);
         menuMusic.setLooping(true);
@@ -183,6 +184,9 @@ public final class AudioHub {
     }
     public static void playDynamiteBoom() {
         AudioPool.playSnd(12);
+    }
+    public static void playThunderStorm() {
+        AudioPool.playSnd(13);
     }
 
     public static void resumeBackgroundMusic() {

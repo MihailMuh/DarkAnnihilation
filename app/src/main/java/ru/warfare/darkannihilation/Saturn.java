@@ -52,9 +52,10 @@ public class Saturn extends BaseCharacter {
         }
 
         x += speedX;
-        y += (endY - y) / 20;
+        y += speedY;
 
         speedX = (endX - x) / 20;
+        speedY = (endY - y) / 20;
     }
 
     @Override

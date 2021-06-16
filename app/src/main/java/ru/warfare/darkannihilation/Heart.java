@@ -7,6 +7,12 @@ public class Heart extends Sprite {
         y = 10;
     }
 
+    public Heart(int X, int Y) {
+        super(0, 0);
+        x = X;
+        y = Y;
+    }
+
     public void render(String type) {
         switch (type)
         {

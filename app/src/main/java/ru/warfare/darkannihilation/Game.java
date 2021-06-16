@@ -88,6 +88,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static int gameStatus = 1;
     private int count = 0;
     public static int score = 0;
+    public int oldScore;
     public int bestScore = 0;
     private int pointerCount;
     private int moveAll;
@@ -426,20 +427,27 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
 
         } else {
-            if (spider.lock) {
-                if (random.nextFloat() <= 0.001) {
-                    spider.lock = false;
+            int curScore = score - oldScore;
+            if (curScore > 30) {
+                if (spider.lock) {
+                    if (random.nextFloat() <= 0.001) {
+                        spider.lock = false;
+                    }
                 }
             }
             if (bosses.size() == 0) {
-                if (sunrise.lock) {
-                    if (random.nextFloat() <= 0.0009) {
-                        sunrise.lock = false;
+                if (curScore > 100) {
+                    if (sunrise.lock) {
+                        if (random.nextFloat() <= 0.0009) {
+                            sunrise.lock = false;
+                        }
                     }
                 }
-                if (buffer.lock) {
-                    if (random.nextFloat() <= 0.001) {
-                        buffer.lock = false;
+                if (curScore > 50) {
+                    if (buffer.lock) {
+                        if (random.nextFloat() <= 0.001) {
+                            buffer.lock = false;
+                        }
                     }
                 }
                 if (atomicBomb.lock) {
@@ -880,6 +888,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
                 break;
             case 2:
+                oldScore = score;
+
                 attention = null;
                 rocket = null;
                 factory = null;
