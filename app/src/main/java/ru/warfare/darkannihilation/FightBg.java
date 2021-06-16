@@ -41,6 +41,12 @@ public class FightBg extends Sprite {
             case "falcon-vaders":
                 img = Bitmap.createScaledBitmap(ImageHub.playerVsVaders, width, height, ImageHub.isFilter);
                 break;
+            case "emerald":
+                img = Bitmap.createScaledBitmap(ImageHub.emeraldVsBoss, width, height, ImageHub.isFilter);
+                break;
+            case "emerald-vaders":
+                img = Bitmap.createScaledBitmap(ImageHub.emeraldVsVaders, width, height, ImageHub.isFilter);
+                break;
         }
     }
 

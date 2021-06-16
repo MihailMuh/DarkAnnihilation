@@ -143,7 +143,7 @@ public final class ImageHub {
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         loadFirstLevelBitmaps();
-        new Thread(() -> loadLayoutImages(context)).start();
+        new Thread(() -> loadSettingsImages(context)).start();
 
         requestBuilder.load(R.drawable.dynamite)
                 .override(eX100, (int) (41.3 * resizeK))
@@ -1213,8 +1213,8 @@ public final class ImageHub {
         }
     }
 
-    public static void loadWinImages(Context context) {
-        MainActivity.handler.post(() ->
+    public static void loadWinImages(MainActivity context) {
+        context.runOnUiThread(new Thread(() ->
                 GlideApp.with(context)
                         .asGif()
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -1230,19 +1230,15 @@ public final class ImageHub {
                             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                                 MainActivity.gif.setVisibility(GifImageView.VISIBLE);
                                 resource.setLoopCount(1);
-                                Game.lastBoss = System.currentTimeMillis();
+                                AudioHub.restartFlightMusic();
                                 Game.endImgInit = true;
                                 return false;
                             }
                         })
-                        .into(MainActivity.gif));
+                        .into(MainActivity.gif)));
     }
 
-    public static void deleteWinImages() {
-        MainActivity.handler.post(() -> MainActivity.gif.setImageDrawable(null));
-    }
-
-    public static void loadLayoutImages(Context context) {
+    public static void loadSettingsImages(Context context) {
         GlideApp.with(context)
                 .asDrawable()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -1308,7 +1304,7 @@ public final class ImageHub {
                 BitmapFactory.decodeResource(res, R.drawable.ge), eX200, eX100, true));
     }
 
-    public static void deleteLayoutImages() {
+    public static void deleteSettingsImages() {
         onImg = null;
         offImg = null;
         ruImg = null;

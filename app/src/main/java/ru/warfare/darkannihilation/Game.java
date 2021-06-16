@@ -21,7 +21,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder = getHolder();
-    public Context context;
+    public MainActivity context;
     private Thread thread;
     public static Canvas canvas;
 
@@ -761,7 +761,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.pauseBossMusic();
 
         ImageHub.deleteSecondLevelImages();
-        ImageHub.deleteWinImages();
         if (ImageHub.needImagesForFirstLevel()) {
             ImageHub.loadFirstLevelImages();
             while (!endImgInit) {
@@ -808,7 +807,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.pauseReadySound();
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
-        ImageHub.deleteLayoutImages();
+        ImageHub.deleteSettingsImages();
 
         hardThread.workOnPause();
         hardThread.workOnResume();
@@ -857,7 +856,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 atomicBomb = null;
 
                 ImageHub.deleteSecondLevelImages();
-                ImageHub.deleteWinImages();
                 if (ImageHub.needImagesForFirstLevel()) {
                     ImageHub.loadFirstLevelImages();
                     while (!endImgInit) {
@@ -1118,23 +1116,21 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private void win() {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
         if (endImgInit) {
-            long now = System.currentTimeMillis();
-            long x = now - lastBoss;
-            if (x > 50) {
-                if (count < 10000) {
-                    AudioHub.restartFlightMusic();
+            if (count < 10000) {
+                try {
+                    Thread.sleep(4000);
                     count = 10003;
-                }
-                if (x > 3850) {
-                    if (moveAll < 10000) {
-                        MainActivity.handler.post(() -> MainActivity.gif.setVisibility(GifImageView.GONE));
-                        moveAll = 10003;
-                    } else {
-                        canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
-                        canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, Game.gameoverPaint);
-                    }
+                    context.runOnUiThread(new Thread(() -> {
+                        MainActivity.gif.setVisibility(GifImageView.GONE);
+                        MainActivity.gif.setImageDrawable(null);
+                    }));
+                } catch (Exception e) {
+                    Service.print("win " + e.toString());
                 }
             }
+            canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
+            canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, Game.gameoverPaint);
+
             if (pointerCount >= 4) {
                 loadingScreen.newJob("menu");
             }

@@ -21,7 +21,7 @@ public class LoadingScreen extends Sprite {
             sooFast = true;
         }
         if (job.equals("settings")) {
-            ImageHub.loadLayoutImages(game.context);
+            ImageHub.loadSettingsImages(game.context);
         }
     }
 
