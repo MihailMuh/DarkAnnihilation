@@ -2,21 +2,19 @@ package ru.warfare.darkannihilation;
 
 public class Portal extends Sprite {
     private int frame = 0;
-    private float frameTime = 100;
-    private long lastFrame;
+    private float frameTime = 70;
+    private long lastFrame = System.currentTimeMillis();
     public boolean touch = false;
     private static final int len = ImageHub.portalImages.length - 1;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
 
-        x = randInt(0, Game.screenWidth);
+        x = randInt(0, screenWidthWidth);
         y = 100;
         isPassive = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
-
-        lastFrame = System.currentTimeMillis();
 
         AudioHub.portalSound.seekTo(0);
         AudioHub.portalSound.start();
@@ -55,26 +53,28 @@ public class Portal extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastFrame > frameTime) {
             lastFrame = now;
-            if (frame < len) {
+            if (frame != len) {
                 frame++;
             } else {
                 frame = 0;
             }
-            if (!AudioHub.portalSound.isPlaying()) {
-                if (!touch) {
-                    if (Game.gameStatus != 7) {
-                        Game.gameStatus = 0;
-                        game.portal = null;
-                        AudioHub.resumeBackgroundMusic();
-                    }
-                }
-            }
         }
-        if (!AudioHub.timeMachineNoneSnd.isPlaying() & touch) {
-            AudioHub.timeMachineSecondSnd.start();
-            Game.level++;
-            game.loadingScreen.newJob("newGame");
-            kill();
+
+        if (touch) {
+            if (!AudioHub.timeMachineNoneSnd.isPlaying()) {
+                AudioHub.timeMachineSecondSnd.start();
+                Game.level++;
+                game.loadingScreen.newJob("newGame");
+                kill();
+            }
+        } else {
+            game.player.checkIntersections(this);
+
+            if (!AudioHub.portalSound.isPlaying() & Game.gameStatus != 7) {
+                Game.gameStatus = 0;
+                AudioHub.resumeBackgroundMusic();
+                kill();
+            }
         }
     }
 

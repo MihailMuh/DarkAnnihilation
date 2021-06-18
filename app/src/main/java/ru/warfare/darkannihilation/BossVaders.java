@@ -93,10 +93,10 @@ public class BossVaders extends Sprite {
     public void update() {
         game.pauseTimer += 20;
         if (y == -600) {
+            ImageHub.loadPortalImages();
             AudioHub.restartBossMusic();
             AudioHub.pauseBackgroundMusic();
             Game.gameStatus = 5;
-            ImageHub.loadPortalImages();
         }
         if (y > 0 & !field) {
             field = true;

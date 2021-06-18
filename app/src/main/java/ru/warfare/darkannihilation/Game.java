@@ -1115,21 +1115,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     private void win() {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        if (endImgInit) {
-            if (count < 10000) {
-                try {
-                    Thread.sleep(4000);
-                    count = 10003;
-                    context.runOnUiThread(new Thread(() -> {
-                        MainActivity.gif.setVisibility(GifImageView.GONE);
-                        MainActivity.gif.setImageDrawable(null);
-                    }));
-                } catch (Exception e) {
-                    Service.print("win " + e.toString());
-                }
+        if (endImgInit && !ImageHub.isWin()) {
+            if (count < 100_000) {
+                count = 100_101;
+                ImageHub.deleteWinImages(context);
             }
+
             canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
-            canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, Game.gameoverPaint);
+            canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameoverPaint);
 
             if (pointerCount >= 4) {
                 loadingScreen.newJob("menu");
@@ -1216,9 +1209,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.render();
         changerGuns.render();
 
-        if (!portal.touch) {
-            player.checkIntersections(portal);
-        }
         if (portal != null) {
             portal.x -= moveAll;
             portal.render();
@@ -1287,7 +1277,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         {
             case "ru":
                 strings = context.getResources().getStringArray(R.array.ru);
-                gameoverPaint.setTextSize(40);
+                gameoverPaint.setTextSize(39);
                 buttonsPaint.setTextSize(33);
                 break;
             case "en":

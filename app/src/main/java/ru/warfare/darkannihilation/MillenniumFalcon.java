@@ -7,8 +7,8 @@ public class MillenniumFalcon extends BaseCharacter {
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 
-        shootTime = 80;
-        shotgunTime = 505;
+        shootTime = 84;
+        shotgunTime = 515;
         lastShoot = System.currentTimeMillis();
     }
 

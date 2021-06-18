@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public Game game;
     public SharedPreferences preferences;
-    public static GifImageView gif;
+    public GifImageView gif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             ImageHub.init(this);
             AudioHub.init(this);
             ClientServer.getStatistics();
-            gif = findViewById(R.id.gifView);
         }));
 
         Clerk.init(this);
