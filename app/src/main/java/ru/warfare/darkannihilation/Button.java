@@ -96,7 +96,7 @@ public class Button extends Sprite {
                     AudioHub.playClick();
                     isPressed = true;
                     try {
-                        Thread.sleep(90);
+                        Thread.sleep(100);
                         isPressed = false;
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -116,8 +116,7 @@ public class Button extends Sprite {
                             System.exit(0);
                             break;
                         case "pause":
-                            Game.lastBoss += game.pauseTimer;
-                            game.hardThread.workOnResume();
+                            game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
                             AudioHub.pausePauseMusic();
                             if (Game.bosses.size() == 0) {
                                 AudioHub.resumeBackgroundMusic();
@@ -130,7 +129,6 @@ public class Button extends Sprite {
                             } else {
                                 Game.gameStatus = 9;
                             }
-                            game.pauseTimer = 0;
                             break;
                         case "menu":
                             game.saveScore();

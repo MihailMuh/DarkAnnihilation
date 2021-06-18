@@ -178,6 +178,7 @@ public class Settings {
         layoutParams.width = (int) (40 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         layoutParams.height = (int) (40 * Service.getResizeCoefficientForLayout() * density + 0.5f);
         animatedCheckBox.setLayoutParams(layoutParams);
+        animatedCheckBox.setChecked(Game.scorePaint.isAntiAlias(), false);
         animatedCheckBox.setOnCheckedChangeListener((checkBox, isChecked) ->
                 mainActivity.game.setAntiAlias(isChecked));
         textAntiAlias = mainActivity.findViewById(R.id.textAntiAlias);

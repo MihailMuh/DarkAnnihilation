@@ -17,8 +17,6 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Random;
 
-import pl.droidsonroids.gif.GifImageView;
-
 public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder = getHolder();
     public MainActivity context;
@@ -139,8 +137,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static String string_choose_lang;
     public static String string_smooth;
 
-    private static final int BOSS_TIME = 100_000;
-    public static long lastBoss;
+    public int BOSS_TIME;
+    public long lastBoss;
     public long pauseTimer;
 
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
@@ -717,7 +715,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generatePause() {
-        hardThread.workOnPause();
+        pauseTimer = System.currentTimeMillis();
+
         AudioHub.pauseBackgroundMusic();
         if (bosses.size() == 0) {
             AudioHub.restartPauseMusic();
@@ -767,7 +766,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             }
         }
 
-        count = 0;
         score = 0;
         level = 1;
 
@@ -802,6 +800,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateNewGame() {
         endImgInit = false;
+        BOSS_TIME = 100_000;
 
         AudioHub.pauseMenuMusic();
         AudioHub.pauseReadySound();
@@ -1009,21 +1008,18 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         buttonQuit.render();
         buttonMenu.render();
         buttonRestart.render();
-        pauseTimer += 20;
     }
 
     private void ready() {
         moveAll = player.speedX / 3;
 
-        if (screen.x < 0 & screen.x + screen.width > screenWidth) {
+        if (screen.x < 0 & screen.right() > screenWidth) {
             screen.x -= moveAll;
         } else {
             if (screen.x >= 0) {
-                screen.x -= 10;
+                screen.x -= 2;
             } else {
-                if (screen.x + screen.width <= screenWidth) {
-                    screen.x += 10;
-                }
+                screen.x += 2;
             }
         }
         screen.update();

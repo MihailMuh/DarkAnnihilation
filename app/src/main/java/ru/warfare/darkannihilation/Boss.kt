@@ -39,26 +39,28 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
     }
 
     private fun killAfterFight() {
-        createSkullExplosion()
-        AudioHub.playMegaBoom()
-        Game.score += 150
-        Game.bosses.remove(this)
-        Game.allSprites.remove(this)
-        AudioHub.pauseBossMusic()
-        if (game.portal == null) {
-            game.portal = Portal(game)
-        }
-        Game.gameStatus = 6
-        for (i in 0 until Game.numberVaders) {
-            if (Game.random.nextFloat() <= 0.1) {
-                Game.allSprites.add(TripleFighter())
+        Thread {
+            createSkullExplosion()
+            AudioHub.playMegaBoom()
+            Game.score += 150
+            Game.bosses.remove(this)
+            Game.allSprites.remove(this)
+            AudioHub.pauseBossMusic()
+            if (game.portal == null) {
+                game.portal = Portal(game)
             }
-        }
-        for (i in Game.allSprites.indices) {
-            Game.allSprites[i].empireStart()
-        }
-        Game.lastBoss += game.pauseTimer
-        game.pauseTimer = 0
+            Game.gameStatus = 6
+            for (i in 0 until Game.numberVaders) {
+                if (Game.random.nextFloat() <= 0.1) {
+                    Game.allSprites.add(TripleFighter())
+                }
+            }
+            for (i in Game.allSprites.indices) {
+                Game.allSprites[i].empireStart()
+            }
+
+            game.lastBoss = System.currentTimeMillis()
+        }.start()
     }
 
     override fun getRect(): Sprite {
@@ -75,7 +77,6 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
     }
 
     override fun update() {
-        game.pauseTimer += 20
         if (y >= 35) {
             x += speedX
             if (x < -width) {

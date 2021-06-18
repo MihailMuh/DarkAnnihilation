@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
             ClientServer.getStatistics();
         }));
 
+        Service.print(Locale.getDefault().getLanguage());
+
         Clerk.init(this);
         checkOnFirstRun();
         game.init(this);
@@ -51,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         game.onPause();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        fullscreen();
     }
 
     @Override

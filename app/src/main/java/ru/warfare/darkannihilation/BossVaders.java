@@ -54,26 +54,28 @@ public class BossVaders extends Sprite {
     }
 
     public void killAfterFight() {
-        createSkullExplosion();
-        AudioHub.playMegaBoom();
-        Game.score += 300;
-        Game.bosses.remove(this);
-        Game.allSprites.remove(this);
-        AudioHub.pauseBossMusic();
-        if (game.portal == null) {
-            game.portal = new Portal(game);
-        }
-        Game.gameStatus = 6;
-        for (int i = 0; i < Game.numberVaders; i++) {
-            if (Game.random.nextFloat() <= 0.3) {
-                Game.allSprites.add(new XWing());
+        new Thread(() -> {
+            createSkullExplosion();
+            AudioHub.playMegaBoom();
+            Game.score += 300;
+            Game.bosses.remove(this);
+            Game.allSprites.remove(this);
+            AudioHub.pauseBossMusic();
+            if (game.portal == null) {
+                game.portal = new Portal(game);
             }
-        }
-        for (int i = 0; i < Game.allSprites.size(); i++) {
-            Game.allSprites.get(i).empireStart();
-        }
-        Game.lastBoss += game.pauseTimer;
-        game.pauseTimer = 0;
+            Game.gameStatus = 6;
+            for (int i = 0; i < Game.numberVaders; i++) {
+                if (Game.random.nextFloat() <= 0.3) {
+                    Game.allSprites.add(new XWing());
+                }
+            }
+            for (int i = 0; i < Game.allSprites.size(); i++) {
+                Game.allSprites.get(i).empireStart();
+            }
+
+            game.lastBoss = System.currentTimeMillis();
+        }).start();
     }
 
     @Override
@@ -91,7 +93,6 @@ public class BossVaders extends Sprite {
 
     @Override
     public void update() {
-        game.pauseTimer += 20;
         if (y == -600) {
             ImageHub.loadPortalImages();
             AudioHub.restartBossMusic();
