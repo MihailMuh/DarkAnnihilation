@@ -4,18 +4,13 @@ public class AtomicBomb extends Sprite {
     private int frame = 0;
     private static final float frameTime = 30;
     private final int len = ImageHub.atomBombImage.length - 1;
-    private final float maxHealth = 20;
     private long lastFrame;
-    private final int halfwidthM2;
-    private final int halfwidthP2;
     private boolean boom = false;
 
     public AtomicBomb() {
         super(ImageHub.atomBombImage[0].getWidth(), ImageHub.atomBombImage[0].getHeight());
 
         damage = 1000;
-        halfwidthM2 = halfWidth - 2;
-        halfwidthP2 = halfWidth + 2;
         newStatus();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
@@ -35,7 +30,7 @@ public class AtomicBomb extends Sprite {
         lock = true;
         speedX = 0;
         speedY = 1;
-        health = (int) maxHealth;
+        health = 20;
         x = randInt(0, Game.screenWidth);
         y = -height;
 
@@ -118,10 +113,5 @@ public class AtomicBomb extends Sprite {
     @Override
     public void render() {
         Game.canvas.drawBitmap(ImageHub.atomBombImage[frame], x, y, Game.alphaPaint);
-
-        if (!boom) {
-            Game.canvas.drawRect(centerX() - halfWidth, y + 20, centerX() + halfWidth, y + 35, Game.scorePaint);
-            Game.canvas.drawRect(centerX() - halfwidthM2, y + 22, centerX() - halfwidthP2 + ((health / maxHealth) * width), y + 33, Game.fpsPaint);
-        }
     }
 }

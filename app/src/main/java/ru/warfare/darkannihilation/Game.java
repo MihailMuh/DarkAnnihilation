@@ -91,7 +91,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private int pointerCount;
     private int moveAll;
     private boolean playing = true;
-    public static String character = "falcon";
+    public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
@@ -756,9 +756,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         ImageHub.deleteSecondLevelImages();
         if (ImageHub.needImagesForFirstLevel()) {
             ImageHub.loadFirstLevelImages();
-            while (!endImgInit) {
-            }
+            while (!endImgInit) {}
         }
+        ImageHub.loadCharacterImages("falcon");
+        while (!endImgInit) {}
 
         score = 0;
         level = 1;
@@ -771,8 +772,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         sunrise = null;
         buffer = null;
         screen = new StarScreen();
-        player = new Bot();
         shotgunKit.picked = false;
+
+        player = new Bot();
 
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader());
@@ -793,23 +795,33 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateNewGame() {
-        endImgInit = false;
-        BOSS_TIME = 100_000;
-
-        AudioHub.pauseMenuMusic();
+       AudioHub.pauseMenuMusic();
         AudioHub.pauseReadySound();
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
         ImageHub.deleteSettingsImages();
+        ImageHub.loadCharacterImages(character);
 
         hardThread.workOnPause();
         hardThread.workOnResume();
         count = 0;
+        BOSS_TIME = 100_000;
 
         bosses = new ArrayList<>(0);
         bullets = new ArrayList<>(0);
         allSprites = new ArrayList<>(0);
 
+        shotgunKit.hide();
+        healthKit.hide();
+        buttonPlayer.hide();
+        buttonSaturn.hide();
+        buttonEmerald.hide();
+        pauseButton.show();
+        if (portal != null) {
+            portal.kill();
+        }
+
+        while (!endImgInit) {}
         switch (character)
         {
             case "saturn":
@@ -821,16 +833,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             case "emerald":
                 player = new Emerald(this);
                 break;
-        }
-
-        shotgunKit.hide();
-        healthKit.hide();
-        buttonPlayer.hide();
-        buttonSaturn.hide();
-        buttonEmerald.hide();
-        pauseButton.show();
-        if (portal != null) {
-            portal.kill();
         }
 
         allSprites.add(healthKit);
@@ -851,8 +853,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 ImageHub.deleteSecondLevelImages();
                 if (ImageHub.needImagesForFirstLevel()) {
                     ImageHub.loadFirstLevelImages();
-                    while (!endImgInit) {
-                    }
+                    while (!endImgInit) {}
                 }
 
                 shotgunKit.picked = false;
