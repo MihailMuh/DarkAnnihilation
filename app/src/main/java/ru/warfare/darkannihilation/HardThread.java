@@ -79,10 +79,8 @@ public class HardThread implements Runnable {
                 case 5:
                     for (int i = 0; i < Game.allSprites.size(); i++) {
                         Sprite sprite = Game.allSprites.get(i);
-                        if (!sprite.lock) {
-                            if ((!sprite.isPassive && !sprite.isBullet)) {
-                                Game.allSprites.get(i).stopBuff();
-                            }
+                        if ((!sprite.isPassive && !sprite.isBullet)) {
+                            Game.allSprites.get(i).sB();
                         }
                     }
                     job = 0;
@@ -90,10 +88,8 @@ public class HardThread implements Runnable {
                 case 6:
                     for (int i = 0; i < Game.allSprites.size(); i++) {
                         Sprite sprite = Game.allSprites.get(i);
-                        if (!sprite.lock) {
-                            if ((!sprite.isPassive && !sprite.isBullet)) {
-                                Game.allSprites.get(i).buff();
-                            }
+                        if ((!sprite.isPassive && !sprite.isBullet)) {
+                            Game.allSprites.get(i).buff();
                         }
                     }
                     job = 0;

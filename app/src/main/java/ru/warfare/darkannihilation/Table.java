@@ -77,33 +77,5 @@ public class Table {
                 }
             }
         }
-//        float y = 0;
-//        float x;
-//        String string;
-//        for (int i = 0; i < table.size(); i++) {
-//            string = table.get(i);
-//
-//            y = (i + 1) * textHeight;
-//            x = maxLen - (topPaint.measureText(string) / 2f);;
-//            if (y >= tableHeight) {
-//                columns++;
-//            }
-//            for (int j = 0; j <= columns; j++) {
-//                x = (maxLen * j) - (topPaint.measureText(string) / 2f);
-//            }
-//            if (!isHuge) {
-//                if (y >= tableHeight) {
-//                    isHuge = true;
-//                    columns++;
-//                }
-//            } else {
-//                x = maxLen - curLen;
-//            }
-//
-//            if (index == i) {
-//                Game.canvas.drawText(string, x, y, topPaintRed);
-//            } else {
-//                Game.canvas.drawText(string, x, y, topPaint);
-//            }
     }
 }

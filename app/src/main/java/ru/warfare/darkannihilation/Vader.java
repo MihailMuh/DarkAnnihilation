@@ -62,11 +62,6 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public Sprite getRect() {
-        return goTO(x + 15, y + 15);
-    }
-
-    @Override
     public void intersection() {
         createLargeExplosion();
         AudioHub.playBoom();
@@ -86,7 +81,7 @@ public class Vader extends Sprite {
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (goTO(x + 15, y + 15).intersect(bullet.getRect())) {
             if (bullet.damage < health) {
                 health -= bullet.damage;
                 bullet.intersection();

@@ -73,6 +73,11 @@ public class Sprite {
     public void empireStart() {}
     public void buff() {}
     public void stopBuff() {}
+    public void sB() {
+        if (buff) {
+            stopBuff();
+        }
+    }
 
     public void createLargeExplosion() {
         for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
@@ -188,4 +193,10 @@ public class Sprite {
         return new Object[8];
     }
 
+    public static int abs(int x) {
+        if (x < 0) {
+            return -x;
+        }
+        return x;
+    }
 }

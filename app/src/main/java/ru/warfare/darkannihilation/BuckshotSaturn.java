@@ -85,7 +85,7 @@ public class BuckshotSaturn extends Sprite {
                 vector.len += 2;
             }
         } else {
-            deg += (0.035 - fly);
+            deg += 0.035 - fly;
             fly += 0.000007;
         }
     }

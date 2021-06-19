@@ -11,7 +11,7 @@ public class BaseCharacter extends Sprite {
     public String gun = "gun";
     public int maxHealth = 50;
     public Heart[] hearts = new Heart[5];
-    public boolean god = false;
+    public boolean god = true;
 
     public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
