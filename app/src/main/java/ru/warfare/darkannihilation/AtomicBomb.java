@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.ATOMIC_BOMB_FRAME_TIME;
+import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
+
 public class AtomicBomb extends Sprite {
     private int frame = 0;
-    private static final float frameTime = 30;
-    private final int len = ImageHub.atomBombImage.length - 1;
+    private static final int len = NUMBER_ATOMIC_BOMB_IMAGES - 1;
     private long lastFrame;
     private boolean boom = false;
 
@@ -94,7 +96,7 @@ public class AtomicBomb extends Sprite {
             boom();
         } else {
             long now = System.currentTimeMillis();
-            if (now - lastFrame > frameTime) {
+            if (now - lastFrame > ATOMIC_BOMB_FRAME_TIME) {
                 lastFrame = now;
                 if (frame != len) {
                     frame++;

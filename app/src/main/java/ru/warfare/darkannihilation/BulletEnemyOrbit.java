@@ -80,8 +80,8 @@ public class BulletEnemyOrbit extends Sprite {
     public void update() {
         double[] speeds = vector.rotateVector(deg);
 
-        X += (speeds[0] + game.player.speedX);
-        Y += (speeds[1] + game.player.speedY);
+        X += speeds[0] + game.player.speedX;
+        Y += speeds[1] + game.player.speedY;
 
         deg += (0.035 - fly);
         fly += 0.000007;
@@ -93,7 +93,6 @@ public class BulletEnemyOrbit extends Sprite {
         matrix.postRotate(-getAngle(), halfWidth, halfHeight);
         matrix.postTranslate(X, Y);
 
-//        Game.canvas.drawBitmap(ImageHub.rotateImage(image, -getAngle()), X, Y, null);
         Game.canvas.drawBitmap(image, matrix, null);
     }
 }

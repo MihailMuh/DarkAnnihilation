@@ -2,10 +2,11 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 
+import static ru.warfare.darkannihilation.Constants.LIGHTNING_SHOOT_TIME;
+
 public class BulletThunder extends Sprite {
     private int frame;
     private long lastShoot = System.currentTimeMillis();
-    private static final int shootTime = 35;
 
     public BulletThunder(int X, int Y) {
         super(ImageHub.thunderImage[0].getWidth(), ImageHub.thunderImage[0].getHeight());
@@ -20,7 +21,7 @@ public class BulletThunder extends Sprite {
     @Override
     public void update() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shootTime) {
+        if (now - lastShoot > LIGHTNING_SHOOT_TIME) {
             lastShoot = now;
             if (frame != 12) {
                 frame++;

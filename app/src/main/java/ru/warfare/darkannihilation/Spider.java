@@ -1,12 +1,13 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
+
 public class Spider extends Sprite {
     private int shootTripleTime;
-    private long lastShoot;
+    private long lastShoot = System.currentTimeMillis();
 
     private int ammo;
     private boolean reload;
-    private static final float maxHealth = 200;
 
     public Spider() {
         super(ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
@@ -14,8 +15,6 @@ public class Spider extends Sprite {
         hide();
 
         recreateRect(x + 25, y + 5, right() - 5, y + halfHeight + (halfHeight / 2));
-
-        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
@@ -48,7 +47,7 @@ public class Spider extends Sprite {
         lock = true;
         reload = false;
         ammo = 0;
-        health = (int) maxHealth;
+        health = SPIDER_HEALTH;
         x = randInt(width, screenWidthWidth);
         y = -height;
         speedY = randInt(5, 10);
@@ -114,6 +113,6 @@ public class Spider extends Sprite {
         Game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
 
         Game.canvas.drawRect(centerX() - 75, y + 10, centerX() + 75, y + 25 , Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + ((health / maxHealth) * 150), y + 23, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + ((health / (float) SPIDER_HEALTH) * 150), y + 23, Game.fpsPaint);
     }
 }

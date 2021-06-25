@@ -1,11 +1,12 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BUTTON_CLICK_TIME;
+
 public class Button extends Sprite {
     public String function;
     private String text = " ";
     private int textX;
     private int textY;
-    private static final int clickTime = 500;
     private long lastClick = System.currentTimeMillis();
     public boolean isPressed = false;
 
@@ -89,7 +90,7 @@ public class Button extends Sprite {
     public void setCoords(int X, int Y) {
         if (checkCoords(X, Y)) {
             long now = System.currentTimeMillis();
-            if (now - lastClick > clickTime) {
+            if (now - lastClick > BUTTON_CLICK_TIME) {
                 lastClick = now;
 
                 new Thread(() -> {

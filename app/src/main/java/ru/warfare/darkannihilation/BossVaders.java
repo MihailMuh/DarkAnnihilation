@@ -1,9 +1,10 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BOSS_VADERS_HEALTH;
+import static ru.warfare.darkannihilation.Constants.BOSS_VADERS_SHOOT_TIME;
+
 public class BossVaders extends Sprite {
-    private final float maxHealth;
     private final Vector vector = new Vector();
-    private int shootBossTime = 1200;
     private long lastShoot;
 
     private boolean field = false;
@@ -12,8 +13,7 @@ public class BossVaders extends Sprite {
     public BossVaders(Game g) {
         super(g, ImageHub.bossVadersImg.getWidth(), ImageHub.bossVadersImg.getHeight());
 
-        health = 350;
-        maxHealth = health;
+        health = BOSS_VADERS_HEALTH;
         speedY = 1;
         speedX = 5;
         if (randInt(0, 1) == 1) {
@@ -21,7 +21,7 @@ public class BossVaders extends Sprite {
         }
         isPassive = true;
 
-        x = randInt(width, screenWidthWidth - width);
+        x = randInt(width, screenWidthWidth);
         y = -800;
 
         recreateRect(x + 35, y + 20, right() - 35, bottom() - 20);
@@ -31,7 +31,7 @@ public class BossVaders extends Sprite {
 
     public void shoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shootBossTime) {
+        if (now - lastShoot > BOSS_VADERS_SHOOT_TIME) {
             lastShoot = now;
             vector.makeVector(centerX(), centerY(), game.player.centerX(), game.player.centerY(), 10);
             Game.allSprites.add(new BulletBossVaders(centerX(), centerY(), vector.getSpeedX(), vector.getSpeedY()));
@@ -43,14 +43,12 @@ public class BossVaders extends Sprite {
     public void buff() {
         speedX *= 2;
         speedY *= 2;
-        shootBossTime /= 2;
     }
 
     @Override
     public void stopBuff() {
         speedX /= 2;
         speedY /= 2;
-        shootBossTime = 1200;
     }
 
     public void killAfterFight() {
@@ -134,6 +132,6 @@ public class BossVaders extends Sprite {
         Game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
 
         Game.canvas.drawRect(centerX() - 70, y - 10, centerX() + 70, y + 5, Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + ((health / maxHealth) * 140), y + 3, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + ((health / (float) BOSS_VADERS_HEALTH) * 140), y + 3, Game.fpsPaint);
     }
 }

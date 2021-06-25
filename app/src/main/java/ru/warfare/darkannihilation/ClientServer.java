@@ -13,9 +13,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static ru.warfare.darkannihilation.Constants.SERVER_IP;
+
 public final class ClientServer {
     private static final OkHttpClient client = new OkHttpClient();
-    private static final String SERVER_IP = "http://78.29.33.173:49150/";
 
     public static JSONObject info_from_server = new JSONObject();
     public static JSONArray namesPlayers = new JSONArray();

@@ -2,9 +2,10 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
+import static ru.warfare.darkannihilation.Constants.CHANGER_GUNS_CLICK_TIME;
+
 public class ChangerGuns extends Sprite {
     private Bitmap image;
-    private static final int clickTime = 700;
     private long lastClick;
 
     public ChangerGuns(Game g) {
@@ -55,7 +56,7 @@ public class ChangerGuns extends Sprite {
 
     public void make() {
         long now = System.currentTimeMillis();
-        if (now - lastClick > clickTime) {
+        if (now - lastClick > CHANGER_GUNS_CLICK_TIME) {
             lastClick = now;
             if (!game.shotgunKit.picked) {
                 image = ImageHub.gunToNone;

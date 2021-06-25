@@ -1,7 +1,8 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
+
 public class TripleFighter extends Sprite {
-    private static final int shootTripleTime = 1_500;
     private long lastShoot;
 
     public TripleFighter() {
@@ -21,7 +22,7 @@ public class TripleFighter extends Sprite {
 
     public void shoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shootTripleTime) {
+        if (now - lastShoot > TRIPLE_FIGHTER_SHOOT_TIME) {
             if (HardThread.job == 0) {
                 lastShoot = now;
                 HardThread.x = centerX();

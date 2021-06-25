@@ -3,27 +3,26 @@ package ru.warfare.darkannihilation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import ru.warfare.darkannihilation.Constants.BOSS_HEALTH
+import ru.warfare.darkannihilation.Constants.BOSS_SHOOT_TIME
 
 class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossImage.height) {
-    private var lastShoot: Long
-    private val maxHealth = 250f
-    private val shootBossTime = 450
+    private var lastShoot = System.currentTimeMillis()
     private var now: Long = 0
 
     init {
-        health = maxHealth.toInt()
+        health = BOSS_HEALTH.toInt()
         speedY = 1
         speedX = 10
         isPassive = true
-        x = Game.halfScreenWidth - halfWidth
+        x = randInt(0, screenWidthWidth)
         y = -800
         recreateRect(x + 20, y + 20, right() - 20, bottom() - 20)
-        lastShoot = System.currentTimeMillis()
     }
 
     private fun shoot() {
         now = System.currentTimeMillis()
-        if (now - lastShoot > shootBossTime) {
+        if (now - lastShoot > BOSS_SHOOT_TIME) {
             runBlocking {
                 launch(Dispatchers.IO) {
                     lastShoot = now
@@ -50,7 +49,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
                 game.portal = Portal(game)
             }
             Game.gameStatus = 6
-            for (i in 0 until Game.numberVaders) {
+            for (i in 0..Game.numberVaders) {
                 if (Game.random.nextFloat() <= 0.1) {
                     Game.allSprites.add(TripleFighter())
                 }
@@ -120,7 +119,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         Game.canvas.drawRect(
             (centerX() - 68).toFloat(),
             (y - 8).toFloat(),
-            centerX() - 72 + ((health / maxHealth) * 140),
+            (centerX() - 72 + ((health / BOSS_HEALTH.toFloat()) * 140)),
             (y + 3).toFloat(),
             Game.fpsPaint
         )

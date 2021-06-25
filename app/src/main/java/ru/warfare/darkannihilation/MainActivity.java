@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             ClientServer.getStatistics();
         }));
 
-        Service.print(Locale.getDefault().getLanguage());
+//        Service.print(Locale.getDefault().getLanguage());
 
         Clerk.init(this);
         checkOnFirstRun();

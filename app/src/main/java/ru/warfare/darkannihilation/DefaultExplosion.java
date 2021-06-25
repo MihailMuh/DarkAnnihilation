@@ -1,12 +1,8 @@
 package ru.warfare.darkannihilation;
 
-import android.graphics.Bitmap;
-
 public class DefaultExplosion extends BaseExplosion {
     public DefaultExplosion(String size) {
         super(ImageHub.explosionDefaultImageSmall[0].getWidth(), ImageHub.explosionDefaultImageSmall[0].getHeight());
-        lock = true;
-        img = new Bitmap[ImageHub.explosionDefaultImageSmall.length];
 
         switch (size)
         {

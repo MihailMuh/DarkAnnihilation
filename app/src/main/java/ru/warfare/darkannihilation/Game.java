@@ -698,6 +698,12 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.winMusic.seekTo(0);
         AudioHub.winMusic.start();
         saveScore();
+        portal.kill();
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            Service.print("Can't sleep when win " + e);
+        }
     }
 
     public void generateGameover() {
@@ -1106,7 +1112,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     private void win() {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        if (endImgInit && !ImageHub.isWin()) {
+        if (endImgInit & !ImageHub.isWin()) {
             if (count < 100_000) {
                 count = 100_101;
                 ImageHub.deleteWinImages(context);

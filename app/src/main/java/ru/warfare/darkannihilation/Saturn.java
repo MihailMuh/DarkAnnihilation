@@ -1,14 +1,14 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SATURN_SHOOT_TIME;
+import static ru.warfare.darkannihilation.Constants.SATURN_SHOTGUN_TIME;
+
 public class Saturn extends BaseCharacter {
     public Saturn(Game g) {
         super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight());
-        health = 50;
 
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 17);
 
-        shootTime = 130;
-        shotgunTime = 100;
         lastShoot = System.currentTimeMillis();
     }
 
@@ -16,14 +16,14 @@ public class Saturn extends BaseCharacter {
     public void shoot() {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
-            if (now - lastShoot > shotgunTime) {
+            if (now - lastShoot > SATURN_SHOTGUN_TIME) {
                 lastShoot = now;
                 BuckshotSaturn buckshotSaturn = new BuckshotSaturn(game, centerX(), y);
                 Game.bullets.add(buckshotSaturn);
                 Game.allSprites.add(buckshotSaturn);
             }
         } else {
-            if (now - lastShoot > shootTime) {
+            if (now - lastShoot > SATURN_SHOOT_TIME) {
                 if (HardThread.job == 0) {
                     lastShoot = now;
                     HardThread.job = 4;

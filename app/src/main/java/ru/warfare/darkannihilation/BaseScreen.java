@@ -4,24 +4,11 @@ import android.graphics.Bitmap;
 
 public class BaseScreen extends Sprite {
     public int frame = -1;
-    public int screenImageLength;
 
-    public BaseScreen(int w, int h, int len) {
+    public BaseScreen(int w, int h) {
         super(w, h);
 
         x = (int) (Game.screenWidth * -0.2);
-
-        screenImageLength = len;
-
-        switch (Game.level)
-        {
-            case 1:
-                screenImageLength = ImageHub.screenImage.length;
-                break;
-            case 2:
-                screenImageLength = ImageHub.thunderScreen.length;
-                break;
-        }
     }
 
     @Override

@@ -1,8 +1,9 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.LOADING_SCREEN_FRAME_TIME;
+
 public class LoadingScreen extends Sprite {
-    private static final int frameTime = 45;
-    private long lastFrame;
+    private long lastFrame = System.currentTimeMillis();
     private int frame = 0;
     private int c = 0;
     private String jobs = "newGame";
@@ -10,7 +11,6 @@ public class LoadingScreen extends Sprite {
 
     public LoadingScreen(Game g) {
         super(g, ImageHub.loadingImages[0].getWidth(), ImageHub.loadingImages[0].getHeight());
-        lastFrame = System.currentTimeMillis();
     }
 
     public void newJob(String job) {
@@ -32,7 +32,7 @@ public class LoadingScreen extends Sprite {
             sooFast = false;
         }
         long now = System.currentTimeMillis();
-        if (now - lastFrame > frameTime) {
+        if (now - lastFrame > LOADING_SCREEN_FRAME_TIME) {
             lastFrame = now;
             frame++;
             c++;

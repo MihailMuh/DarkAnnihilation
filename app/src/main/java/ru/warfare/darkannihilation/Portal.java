@@ -1,11 +1,14 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.NUMBER_PORTAL_IMAGES;
+import static ru.warfare.darkannihilation.Constants.PORTAL_FRAME;
+
 public class Portal extends Sprite {
     private int frame = 0;
-    private float frameTime = 70;
+    private float frameTime = PORTAL_FRAME;
     private long lastFrame = System.currentTimeMillis();
     public boolean touch = false;
-    private static final int len = ImageHub.portalImages.length - 1;
+    private static final int len = NUMBER_PORTAL_IMAGES - 1;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
@@ -33,9 +36,10 @@ public class Portal extends Sprite {
     @Override
     public void intersectionPlayer() {
         if (Game.level == 2) {
+            touch = true;
+
             ImageHub.loadWinImages(game.context);
             game.generateWin();
-            kill();
         } else {
             AudioHub.timeMachineFirstSnd.start();
             AudioHub.timeMachineNoneSnd.start();
@@ -48,19 +52,22 @@ public class Portal extends Sprite {
         }
     }
 
+    private void film() {
+        if (frame != len) {
+            frame++;
+        } else {
+            frame = 0;
+        }
+    }
+
     @Override
     public void update() {
-        long now = System.currentTimeMillis();
-        if (now - lastFrame > frameTime) {
-            lastFrame = now;
-            if (frame != len) {
-                frame++;
-            } else {
-                frame = 0;
-            }
-        }
-
         if (touch) {
+            long now = System.currentTimeMillis();
+            if (now - lastFrame > frameTime) {
+                lastFrame = now;
+                film();
+            }
             if (!AudioHub.timeMachineNoneSnd.isPlaying()) {
                 AudioHub.timeMachineSecondSnd.start();
                 Game.level++;
@@ -69,6 +76,8 @@ public class Portal extends Sprite {
             }
         } else {
             game.player.checkIntersections(this);
+
+            film();
 
             if (!AudioHub.portalSound.isPlaying() & Game.gameStatus != 7) {
                 Game.gameStatus = 0;

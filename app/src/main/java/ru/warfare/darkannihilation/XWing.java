@@ -1,7 +1,8 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.XWING_SHOOT_TIME;
+
 public class XWing extends Sprite {
-    private static final int shootTripleTime = 200;
     private long lastShoot;
 
     public XWing() {
@@ -21,7 +22,7 @@ public class XWing extends Sprite {
 
     public void shoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shootTripleTime) {
+        if (now - lastShoot > XWING_SHOOT_TIME) {
             if (HardThread.job == 0) {
                 HardThread.x = centerX();
                 HardThread.y = centerY();

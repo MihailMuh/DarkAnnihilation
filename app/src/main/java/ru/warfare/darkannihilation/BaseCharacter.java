@@ -1,15 +1,15 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_HEALTH;
+
 public class BaseCharacter extends Sprite {
     public int endX;
     public int endY;
-    public int shootTime;
-    public int shotgunTime;
     public long lastShoot;
     public long now;
     public boolean dontmove = false;
     public String gun = "gun";
-    public int maxHealth = 50;
+    public int maxHealth = MILLENNIUM_FALCON_HEALTH;
     public Heart[] hearts = new Heart[5];
     public boolean god = false;
 

@@ -1,20 +1,17 @@
 package ru.warfare.darkannihilation;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 
 public final class Clerk {
-    @SuppressLint("StaticFieldLeak")
-    private static Context context;
+    private static MainActivity context;
     public static String nickname = "";
 
-    public static void init(Context context) {
+    public static void init(MainActivity context) {
         Clerk.context = context;
     }
 

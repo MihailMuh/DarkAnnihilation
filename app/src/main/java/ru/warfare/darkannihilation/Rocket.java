@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.ROCKET_SPEED;
+
 public class Rocket extends Sprite{
     public Rocket() {
         super(ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
-        speedY = 35;
+        speedY = ROCKET_SPEED;
         lock = true;
         damage = 100;
         isBullet = true;

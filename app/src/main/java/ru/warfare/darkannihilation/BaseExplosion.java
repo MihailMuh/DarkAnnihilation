@@ -8,6 +8,7 @@ public class BaseExplosion extends Sprite {
 
     public BaseExplosion(int w, int h) {
         super(w, h);
+        lock = true;
         isPassive = true;
         isBullet = true;
     }

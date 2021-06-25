@@ -21,21 +21,29 @@ import com.bumptech.glide.request.target.Target;
 
 import pl.droidsonroids.gif.GifImageView;
 
+import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_DEFAULT_EXPLOSION_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_PORTAL_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_SKULL_EXPLOSION;
+import static ru.warfare.darkannihilation.Constants.NUMBER_STAR_SCREEN_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_THUNDER_SCREEN_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
+
 public final class ImageHub {
     public static final boolean isFilter = true;
 
-    public static final Bitmap[] explosionTripleImageSmall = new Bitmap[23];
-    public static final Bitmap[] explosionTripleImageMedium = new Bitmap[23];
-    public static final Bitmap[] explosionDefaultImageSmall = new Bitmap[28];
-    public static final Bitmap[] explosionDefaultImageMedium = new Bitmap[28];
-    public static final Bitmap[] explosionLarge = new Bitmap[13];
+    public static final Bitmap[] explosionTripleImageSmall = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
+    public static final Bitmap[] explosionTripleImageMedium = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
+    public static final Bitmap[] explosionDefaultImageSmall = new Bitmap[NUMBER_DEFAULT_EXPLOSION_IMAGES];
+    public static final Bitmap[] explosionDefaultImageMedium = new Bitmap[NUMBER_DEFAULT_EXPLOSION_IMAGES];
+    public static final Bitmap[] explosionLarge = new Bitmap[NUMBER_SKULL_EXPLOSION];
 
-    public static Bitmap[] screenImage = new Bitmap[34];
+    public static Bitmap[] screenImage = new Bitmap[NUMBER_STAR_SCREEN_IMAGES];
     public static Bitmap[] vaderImage = new Bitmap[3];
     public static Bitmap[] vaderOldImage = new Bitmap[3];
-    public static Bitmap[] portalImages = new Bitmap[20];
-    public static Bitmap[] thunderScreen = new Bitmap[20];
-    public static Bitmap[] atomBombImage = new Bitmap[4];
+    public static Bitmap[] portalImages = new Bitmap[NUMBER_PORTAL_IMAGES];
+    public static Bitmap[] thunderScreen = new Bitmap[NUMBER_THUNDER_SCREEN_IMAGES];
+    public static Bitmap[] atomBombImage = new Bitmap[NUMBER_ATOMIC_BOMB_IMAGES];
     public static final Bitmap[] loadingImages = new Bitmap[12];
     public static Bitmap[] thunderImage = new Bitmap[13];
 
@@ -878,7 +886,7 @@ public final class ImageHub {
             }
             thunderScreen = new Bitmap[20];
             vaderOldImage = new Bitmap[3];
-            atomBombImage = new Bitmap[4];
+            atomBombImage = new Bitmap[NUMBER_ATOMIC_BOMB_IMAGES];
 
             spiderImg.recycle();
             spiderImg = null;
@@ -1095,7 +1103,7 @@ public final class ImageHub {
                     vaderImage[i].recycle();
                 }
             }
-            screenImage = new Bitmap[34];
+            screenImage = new Bitmap[NUMBER_STAR_SCREEN_IMAGES];
             vaderImage = new Bitmap[3];
 
             factoryImg.recycle();
@@ -1141,8 +1149,8 @@ public final class ImageHub {
 
                         @Override
                         public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                            AudioHub.restartFlightMusic();
                             mainActivity.gif.setVisibility(GifImageView.VISIBLE);
+                            AudioHub.restartFlightMusic();
                             resource.setLoopCount(1);
                             gifDrawable = resource;
                             Game.endImgInit = true;

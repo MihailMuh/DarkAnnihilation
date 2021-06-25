@@ -1,6 +1,11 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BOT_SHOOT_TIME;
+
 public class Bot extends BaseCharacter {
+    private final int finalX;
+    private final int finalY;
+
     public Bot() {
         super(ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
         speedX = randInt(3, 7);
@@ -9,16 +14,18 @@ public class Bot extends BaseCharacter {
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
 
+        finalX = screenWidthWidth - 30;
+        finalY = screenHeightHeight - 30;
+
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 
-        shootTime = 100;
         lastShoot = System.currentTimeMillis();
     }
 
     @Override
     public void shoot() {
         now = System.currentTimeMillis();
-        if (now - lastShoot > shootTime) {
+        if (now - lastShoot > BOT_SHOOT_TIME) {
             lastShoot = now;
             AudioHub.playShoot();
             Bullet bullet = new Bullet(centerX() - 6, y);
@@ -49,10 +56,10 @@ public class Bot extends BaseCharacter {
         x += speedX;
         y += speedY;
 
-        if (x < 30 | x > screenWidthWidth - 30) {
+        if (x < 30 | x > finalX) {
             speedX = -speedX;
         }
-        if (y < 30 | y > screenHeightHeight - 30) {
+        if (y < 30 | y > finalY) {
             speedY = -speedY;
         }
     }

@@ -8,9 +8,9 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import static android.content.Context.WINDOW_SERVICE;
+import static ru.warfare.darkannihilation.Constants.TAG;
 
 public final class Service {
-    public static final String TAG = "D'Ark";
     private static final Point size = new Point();
     private static MainActivity mainActivity;
 

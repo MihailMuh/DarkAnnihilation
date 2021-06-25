@@ -1,12 +1,13 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.EMERALD_HEALTH;
+import static ru.warfare.darkannihilation.Constants.EMERALD_SHOOT_TIME;
+import static ru.warfare.darkannihilation.Constants.EMERALD_SHOTGUN_TIME;
+
 public class Emerald extends BaseCharacter {
     public Emerald(Game g) {
-        super(g, ImageHub.emeraldImg.getWidth(), ImageHub.emeraldImg.getHeight(), 80);
+        super(g, ImageHub.emeraldImg.getWidth(), ImageHub.emeraldImg.getHeight(), EMERALD_HEALTH);
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 25);
-
-        shootTime = 1_650;
-        shotgunTime = 1_400;
 
         int X = 280;
         int Y = 10;
@@ -27,7 +28,7 @@ public class Emerald extends BaseCharacter {
     public void shoot() {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
-            if (now - lastShoot > shotgunTime) {
+            if (now - lastShoot > EMERALD_SHOTGUN_TIME) {
                 lastShoot = now;
                 AudioHub.playThunderStorm();
                 BulletThunder bulletThunder = new BulletThunder(centerX(), y);
@@ -35,7 +36,7 @@ public class Emerald extends BaseCharacter {
                 Game.allSprites.add(bulletThunder);
             }
         } else {
-            if (now - lastShoot > shootTime) {
+            if (now - lastShoot > EMERALD_SHOOT_TIME) {
                 if (HardThread.job == 0) {
                     HardThread.job = 9;
                     lastShoot = now;
@@ -72,8 +73,8 @@ public class Emerald extends BaseCharacter {
 
     @Override
     public void render () {
-        renderHearts();
         Game.canvas.drawBitmap(ImageHub.emeraldImg, x, y, null);
+        renderHearts();
     }
 
     @Override

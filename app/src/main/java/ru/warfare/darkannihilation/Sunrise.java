@@ -1,8 +1,9 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SUNRISE_SHOOT_TIME;
+
 public class Sunrise extends Sprite {
-    private final static int shootTime = 775;
-    private long lastShoot;
+    private long lastShoot = System.currentTimeMillis();
     private boolean field;
     private boolean left = false;
 
@@ -12,13 +13,11 @@ public class Sunrise extends Sprite {
         hide();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
-
-        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shootTime) {
+        if (now - lastShoot > SUNRISE_SHOOT_TIME) {
             if (HardThread.job == 0) {
                 lastShoot = now;
                 HardThread.x = centerX();

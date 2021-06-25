@@ -1,14 +1,14 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
+import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
+
 public class MillenniumFalcon extends BaseCharacter {
     public MillenniumFalcon(Game g) {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
-        health = 50;
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 
-        shootTime = 84;
-        shotgunTime = 515;
         lastShoot = System.currentTimeMillis();
     }
 
@@ -16,7 +16,7 @@ public class MillenniumFalcon extends BaseCharacter {
     public void shoot() {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
-            if (now - lastShoot > shotgunTime) {
+            if (now - lastShoot > MILLENNIUM_FALCON_SHOTGUN_TIME) {
                 lastShoot = now;
                 AudioHub.playShotgun();
                 int centerX = centerX();
@@ -27,7 +27,7 @@ public class MillenniumFalcon extends BaseCharacter {
                 }
             }
         } else {
-            if (now - lastShoot > shootTime) {
+            if (now - lastShoot > MILLENNIUM_FALCON_SHOOT_TIME) {
                 lastShoot = now;
                 AudioHub.playShoot();
                 Bullet bullet = new Bullet(centerX() - 6, y);

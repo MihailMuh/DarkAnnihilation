@@ -1,11 +1,13 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SHOTGUN_KIT_SPEED;
+
 public class ShotgunKit extends Sprite {
     public boolean picked = false;
 
     public ShotgunKit(Game g) {
         super(g, ImageHub.shotgunKitImg.getWidth(), ImageHub.shotgunKitImg.getHeight());
-        speedY = 2;
+        speedY = SHOTGUN_KIT_SPEED;
         lock = true;
         isPassive = true;
         isBullet = true;

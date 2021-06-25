@@ -1,8 +1,9 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.DEMOMAN_SHOOT_TIME;
+
 public class Demoman extends Sprite {
-    private static final int shootTime = 150;
-    private long lastShoot;
+    private long lastShoot = System.currentTimeMillis();
     private int direction = 0;
 
     public Demoman() {
@@ -14,7 +15,6 @@ public class Demoman extends Sprite {
 
         recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
 
-        lastShoot = System.currentTimeMillis();
     }
 
     public void hide() {
@@ -33,7 +33,7 @@ public class Demoman extends Sprite {
 
     public void shoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShoot > shootTime) {
+        if (now - lastShoot > DEMOMAN_SHOOT_TIME) {
             if (HardThread.job == 0) {
                 lastShoot = now;
                 HardThread.job = 3;

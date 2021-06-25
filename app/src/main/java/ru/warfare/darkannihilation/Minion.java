@@ -1,12 +1,14 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.MINION_HEALTH;
+import static ru.warfare.darkannihilation.Constants.MINION_SHOOT_TIME;
+
 public class Minion extends Sprite {
-    private static final int shootMinionTime = 900;
-    private long lastShoot;
+    private long lastShoot = System.currentTimeMillis();
 
     public Minion(int x, int y) {
         super(ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
-        health = 2;
+        health = MINION_HEALTH;
         damage = 5;
 
         this.x = x;
@@ -15,15 +17,12 @@ public class Minion extends Sprite {
         speedY = randInt(2, 5);
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
-
-        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
-        long now = System.currentTimeMillis();
-        if (now - lastShoot > shootMinionTime) {
+        if (System.currentTimeMillis() - lastShoot > MINION_SHOOT_TIME) {
             if (HardThread.job == 0) {
-                lastShoot = now;
+                lastShoot = System.currentTimeMillis();
                 HardThread.x = centerX();
                 HardThread.y = centerY();
                 HardThread.job = 1;

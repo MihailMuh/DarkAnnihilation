@@ -9,8 +9,8 @@ public class FightBg extends Sprite {
         super(ImageHub.playerVsBoss.getWidth(), ImageHub.playerVsBoss.getHeight());
 
         y = Game.halfScreenHeight;
-        int min = 10;
 
+        int min = 10;
         while (bottom() - Game.halfScreenHeight > Game.screenHeight) {
             height = (int) ((Game.screenWidth-150-min) * Game.resizeK);
             min += 10;
