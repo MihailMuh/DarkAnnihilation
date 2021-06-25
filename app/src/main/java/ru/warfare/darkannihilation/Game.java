@@ -842,11 +842,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
 
         allSprites.add(healthKit);
-        for (int i = 0; i < numberExplosionsALL; i++) {
-            allExplosions[i].stop();
-            allSprites.add(allExplosions[i]);
-        }
 
+        int len;
         switch (level) {
             case 1:
                 score = 0;
@@ -871,19 +868,21 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 screen = new StarScreen();
                 alphaPaint.setAlpha(255);
 
-                allSprites.add(demoman);
+                allSprites.add(new TripleFighter());
+                len = numberVaders - 1;
+                for (int i = 0; i < len; i++) {
+                    if (random.nextFloat() <= 0.12) {
+                        allSprites.add(new TripleFighter());
+                    } else {
+                        allSprites.add(new Vader());
+                    }
+                }
+
                 allSprites.add(factory);
+                allSprites.add(demoman);
                 allSprites.add(rocket);
                 allSprites.add(attention);
 
-                gameStatus = 2;
-                allSprites.add(new TripleFighter());
-                for (int i = 0; i < numberVaders; i++) {
-                    if (random.nextFloat() <= 0.12) {
-                        allSprites.add(new TripleFighter());
-                    }
-                    allSprites.add(new Vader());
-                }
                 break;
             case 2:
                 oldScore = score;
@@ -902,12 +901,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 atomicBomb = new AtomicBomb();
                 alphaPaint.setAlpha(165);
 
-                gameStatus = 2;
-                for (int i = 0; i < numberVaders + 3; i++) {
+                len = numberVaders + 3;
+                for (int i = 0; i < len; i++) {
                     if (random.nextFloat() <= 0.18) {
                         allSprites.add(new XWing());
+                    } else {
+                        allSprites.add(new Vader(true));
                     }
-                    allSprites.add(new Vader());
                 }
 
                 allSprites.add(spider);
@@ -917,10 +917,18 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
                 break;
         }
+
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            allExplosions[i].stop();
+            allSprites.add(allExplosions[i]);
+        }
+
         changerGuns.hide();
 
         AudioHub.restartBackgroundMusic();
         AudioHub.restartReadySound();
+
+        gameStatus = 2;
     }
 
     private void gameover() {
@@ -1270,11 +1278,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void makeLanguage(boolean set) {
         String[] strings = new String[0];
+        gameoverPaint.setTextSize(39);
         switch (language)
         {
             case "ru":
                 strings = context.getResources().getStringArray(R.array.ru);
-                gameoverPaint.setTextSize(39);
                 buttonsPaint.setTextSize(33);
                 break;
             case "en":
@@ -1284,17 +1292,14 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 break;
             case "fr":
                 strings = context.getResources().getStringArray(R.array.fr);
-                gameoverPaint.setTextSize(47);
                 buttonsPaint.setTextSize(34);
                 break;
             case "sp":
                 strings = context.getResources().getStringArray(R.array.sp);
-                gameoverPaint.setTextSize(47);
                 buttonsPaint.setTextSize(33);
                 break;
             case "ge":
                 strings = context.getResources().getStringArray(R.array.ge);
-                gameoverPaint.setTextSize(49);
                 buttonsPaint.setTextSize(34);
                 break;
         }

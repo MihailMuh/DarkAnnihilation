@@ -9,7 +9,7 @@ public class Emerald extends BaseCharacter {
         super(g, ImageHub.emeraldImg.getWidth(), ImageHub.emeraldImg.getHeight(), EMERALD_HEALTH);
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 25);
 
-        int X = 280;
+        int X = 315;
         int Y = 10;
         hearts = new Heart[8];
         for (int j = 0; j <= 4; j += 4) {
@@ -17,7 +17,7 @@ public class Emerald extends BaseCharacter {
                 hearts[i + j] = new Heart(X, Y);
                 X -= 90;
             }
-            X = 280;
+            X = 315;
             Y += 10 + ImageHub.imageHeartHalf.getHeight();
         }
 

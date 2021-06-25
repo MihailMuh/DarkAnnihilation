@@ -115,7 +115,7 @@ public class Settings {
                     try {
                         Thread.sleep(300);
                         Game.vibrate = true;
-                        Service.vibrate(50);
+                        Service.vibrate(60);
                     } catch (Exception e) {
                         Service.print(e.toString());
                     }

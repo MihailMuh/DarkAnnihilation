@@ -4,24 +4,19 @@ import android.graphics.Bitmap;
 
 public class BaseScreen extends Sprite {
     public int frame = -1;
+    private final Bitmap[] bitmaps;
 
-    public BaseScreen(int w, int h) {
+    public BaseScreen(int w, int h, Bitmap[] bitmaps) {
         super(w, h);
 
         x = (int) (Game.screenWidth * -0.2);
+
+        this.bitmaps = bitmaps;
     }
 
     @Override
     public void render() {
-        switch (Game.level)
-        {
-            case 1:
-                Game.canvas.drawBitmap(ImageHub.screenImage[frame], x, 0, null);
-                break;
-            case 2:
-                Game.canvas.drawBitmap(ImageHub.thunderScreen[frame], x, 0, null);
-                break;
-        }
+        Game.canvas.drawBitmap(bitmaps[frame], x, 0, null);
     }
 
     public void render(Bitmap img) {

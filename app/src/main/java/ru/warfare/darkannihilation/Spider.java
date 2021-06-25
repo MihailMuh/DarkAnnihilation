@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
+import static ru.warfare.darkannihilation.Constants.SPIDER_SHOOT_TIME;
 
 public class Spider extends Sprite {
     private int shootTripleTime;
@@ -14,10 +15,10 @@ public class Spider extends Sprite {
         damage = 20;
         hide();
 
-        recreateRect(x + 25, y + 5, right() - 5, y + halfHeight + (halfHeight / 2));
+        recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));
     }
 
-    public void shoot() {
+    private void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
@@ -51,7 +52,7 @@ public class Spider extends Sprite {
         x = randInt(width, screenWidthWidth);
         y = -height;
         speedY = randInt(5, 10);
-        shootTripleTime = 100;
+        shootTripleTime = SPIDER_SHOOT_TIME;
 
         if (buff) {
             shootTripleTime /= 2;
@@ -61,12 +62,15 @@ public class Spider extends Sprite {
     @Override
     public void buff() {
         buff = true;
-        shootTripleTime /= 2;
+
+        if (!lock) {
+            shootTripleTime /= 2;
+        }
     }
 
     @Override
     public void stopBuff() {
-        shootTripleTime = 100;
+        shootTripleTime = SPIDER_SHOOT_TIME;
         buff = false;
     }
 

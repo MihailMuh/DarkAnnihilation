@@ -60,6 +60,7 @@ public final class Constants {
     public static final byte SHOTGUN_KIT_SPEED = MINION_HEALTH;
 
     public static final short SPIDER_HEALTH = FACTORY_HEALTH;
+    public static final byte SPIDER_SHOOT_TIME = SATURN_SHOTGUN_TIME;
 
     public static final short SUNRISE_SHOOT_TIME = 775;
 

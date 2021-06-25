@@ -6,7 +6,7 @@ import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
 public class AtomicBomb extends Sprite {
     private int frame = 0;
     private static final int len = NUMBER_ATOMIC_BOMB_IMAGES - 1;
-    private long lastFrame;
+    private long lastFrame = System.currentTimeMillis();
     private boolean boom = false;
 
     public AtomicBomb() {
@@ -16,8 +16,6 @@ public class AtomicBomb extends Sprite {
         newStatus();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
-
-        lastFrame = System.currentTimeMillis();
     }
 
     private void boom() {
@@ -42,20 +40,21 @@ public class AtomicBomb extends Sprite {
     }
 
     private void up() {
-        speedX *= 3;
-        speedY *= 3;
+        speedY = 3;
     }
 
     @Override
     public void buff() {
         buff = true;
-        up();
+
+        if (!lock) {
+            up();
+        }
     }
 
     @Override
     public void stopBuff() {
-        speedX /= 3;
-        speedY /= 3;
+        speedY = 1;
         buff = false;
     }
 

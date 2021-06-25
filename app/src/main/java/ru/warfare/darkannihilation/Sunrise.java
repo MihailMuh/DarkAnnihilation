@@ -53,7 +53,10 @@ public class Sunrise extends Sprite {
     @Override
     public void buff() {
         buff = true;
-        up();
+
+        if (!lock) {
+            up();
+        }
     }
 
     @Override

@@ -25,7 +25,7 @@ public class BaseCharacter extends Sprite {
         endY = y;
         lock = true;
         health = maxHealth;
-        int c = 370;
+        int c = 385;
         for (int i = 0; i < 5; i++) {
             hearts[i] = new Heart(c);
             c -= 90;
@@ -77,9 +77,9 @@ public class BaseCharacter extends Sprite {
                 game.generateGameover();
                 createSkullExplosion();
                 AudioHub.playMegaBoom();
-                Service.vibrate(1450);
+                Service.vibrate(1300);
             } else {
-                Service.vibrate(70);
+                Service.vibrate(60);
             }
         }
     }

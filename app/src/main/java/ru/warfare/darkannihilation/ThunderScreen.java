@@ -7,7 +7,7 @@ public class ThunderScreen extends BaseScreen {
     private long lastFrame = System.currentTimeMillis();
 
     public ThunderScreen() {
-        super(ImageHub.thunderScreen[0].getWidth(), ImageHub.thunderScreen[0].getHeight());
+        super(ImageHub.thunderScreen[0].getWidth(), ImageHub.thunderScreen[0].getHeight(), ImageHub.thunderScreen);
         frame = 0;
     }
 

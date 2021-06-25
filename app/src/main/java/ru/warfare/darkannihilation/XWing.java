@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.XWING_SHOOT_TIME;
 
 public class XWing extends Sprite {
-    private long lastShoot;
+    private long lastShoot = System.currentTimeMillis();
 
     public XWing() {
         super(ImageHub.XWingImg.getWidth(), ImageHub.XWingImg.getHeight());
@@ -16,11 +16,9 @@ public class XWing extends Sprite {
         speedY = randInt(1, 8);
 
         recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
-
-        lastShoot = System.currentTimeMillis();
     }
 
-    public void shoot() {
+    private void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > XWING_SHOOT_TIME) {
             if (HardThread.job == 0) {
@@ -32,7 +30,7 @@ public class XWing extends Sprite {
         }
     }
 
-    public void newStatus() {
+    private void newStatus() {
         if (Game.bosses.size() != 0) {
             lock = true;
         }
@@ -55,7 +53,10 @@ public class XWing extends Sprite {
     @Override
     public void buff() {
         buff = true;
-        up();
+
+        if (!lock) {
+            up();
+        }
     }
 
     @Override

@@ -4,15 +4,13 @@ public class HealthKit extends Sprite {
     public HealthKit(Game g) {
         super(g, ImageHub.healthKitImg.getWidth(), ImageHub.healthKitImg.getHeight());
         speedY = 2;
-        lock = true;
         isBullet = true;
 
-        x = randInt(0, Game.screenWidth);
-        y = -height;
+        hide();
     }
 
     public void hide() {
-        x = randInt(0, Game.screenWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
     }

@@ -8,16 +8,14 @@ public class ShotgunKit extends Sprite {
     public ShotgunKit(Game g) {
         super(g, ImageHub.shotgunKitImg.getWidth(), ImageHub.shotgunKitImg.getHeight());
         speedY = SHOTGUN_KIT_SPEED;
-        lock = true;
         isPassive = true;
         isBullet = true;
 
-        x = randInt(0, Game.screenWidth);
-        y = -height;
+        hide();
     }
 
     public void hide() {
-        x = randInt(0, Game.screenWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
     }

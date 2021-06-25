@@ -52,7 +52,7 @@ public class Table {
                     maxes.set(i, currentLen);
                 }
             }
-            float m = maxes.get(i) + 10;
+            float m = maxes.get(i) + Service.getWidthInterval() + 10;
             maxes.set(i, m);
         }
     }

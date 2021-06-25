@@ -19,7 +19,7 @@ public class Minion extends Sprite {
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
-    public void shoot() {
+    private void shoot() {
         if (System.currentTimeMillis() - lastShoot > MINION_SHOOT_TIME) {
             if (HardThread.job == 0) {
                 lastShoot = System.currentTimeMillis();

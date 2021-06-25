@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
 
 public class TripleFighter extends Sprite {
-    private long lastShoot;
+    private long lastShoot = System.currentTimeMillis();
 
     public TripleFighter() {
         super(ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
@@ -16,8 +16,6 @@ public class TripleFighter extends Sprite {
         speedY = randInt(1, 10);
 
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
-
-        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {
@@ -32,7 +30,7 @@ public class TripleFighter extends Sprite {
         }
     }
 
-    public void newStatus() {
+    private void newStatus() {
         if (Game.bosses.size() != 0) {
             lock = true;
         }

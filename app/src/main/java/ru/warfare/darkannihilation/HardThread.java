@@ -22,7 +22,7 @@ public class HardThread implements Runnable {
     public static volatile int job = 0;
     public static volatile int x = 0;
     public static volatile int y = 0;
-    private volatile int r;
+    private int r;
 
     public HardThread(Game g) {
         game = g;

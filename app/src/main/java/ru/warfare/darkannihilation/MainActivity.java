@@ -22,9 +22,6 @@ import java.util.Objects;
 import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity {
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
     public Game game;
     public SharedPreferences preferences;
     public GifImageView gif;
