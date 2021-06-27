@@ -17,11 +17,12 @@ public class LoadingScreen extends Sprite {
         c = 0;
         jobs = job;
         Game.gameStatus = 41;
-        if (ImageHub.needImagesForFirstLevel()) {
-            sooFast = true;
-        }
         if (job.equals("settings")) {
             ImageHub.loadSettingsImages(game.context);
+        } else {
+            if (ImageHub.needImagesForFirstLevel()) {
+                sooFast = true;
+            }
         }
     }
 

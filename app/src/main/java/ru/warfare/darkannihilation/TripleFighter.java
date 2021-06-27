@@ -49,7 +49,6 @@ public class TripleFighter extends Sprite {
     @Override
     public void intersection() {
         createLargeTripleExplosion();
-        AudioHub.playBoom();
         Game.score += 5;
         newStatus();
     }

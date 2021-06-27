@@ -33,6 +33,18 @@ public class Sprite {
     public int right;
     public int bottom;
 
+    public Sprite() {
+        screenHeightHeight = Game.screenHeight - height;
+        screenWidthWidth = Game.screenWidth - width;
+    }
+
+    public Sprite(Game game) {
+        this.game = game;
+
+        screenHeightHeight = Game.screenHeight - height;
+        screenWidthWidth = Game.screenWidth - width;
+    }
+
     public Sprite(Game g, int w, int h) {
         game = g;
 
@@ -73,13 +85,15 @@ public class Sprite {
     public void empireStart() {}
     public void buff() {}
     public void stopBuff() {}
+
     public void sB() {
-        if (buff) {
+        if (buff && !lock) {
             stopBuff();
         }
     }
 
     public void createLargeExplosion() {
+        AudioHub.playBoom();
         for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
             if (Game.allExplosions[i].lock) {
                 Game.allExplosions[i].start(centerX(), centerY());
@@ -98,6 +112,7 @@ public class Sprite {
     }
 
     public void createLargeTripleExplosion() {
+        AudioHub.playBoom();
         for (int i = 0; i < Game.numberMediumExplosionsTriple; i++) {
             if (Game.allExplosions[i].lock) {
                 Game.allExplosions[i].start(centerX(), centerY());
@@ -116,6 +131,7 @@ public class Sprite {
     }
 
     public void createSkullExplosion() {
+        AudioHub.playMegaBoom();
         for (int i = Game.numberSmallExplosionsDefault; i < Game.numberExplosionsALL; i++) {
             if (Game.allExplosions[i].lock) {
                 Game.allExplosions[i].start(centerX(), centerY());
@@ -188,15 +204,7 @@ public class Sprite {
     public static double getDistance(double a, double b) {
         return Math.sqrt((a * a) + (b * b));
     }
-    public int getDistance() {return 0;}
     public Object[] getBox(int a, int b, Bitmap bitmap) {
-        return new Object[8];
-    }
-
-    public static int abs(int x) {
-        if (x < 0) {
-            return -x;
-        }
-        return x;
+        return new Object[30];
     }
 }

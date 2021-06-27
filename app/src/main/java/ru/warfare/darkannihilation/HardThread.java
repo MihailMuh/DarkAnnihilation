@@ -34,9 +34,9 @@ public class HardThread implements Runnable {
             switch (job)
             {
                 case 1:
-                    vector.makeVector(x, y, game.player.centerX(), game.player.centerY(), 13);
+                    int[] values = vector.vector(x, y, game.player.centerX(), game.player.centerY(), 13);
+                    Game.allSprites.add(new BulletEnemy(x, y, values[2], values[0], values[1]));
                     AudioHub.playShotgun();
-                    Game.allSprites.add(new BulletEnemy(x, y , vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                     job = 0;
                     break;
                 case 2:
@@ -111,9 +111,9 @@ public class HardThread implements Runnable {
                     int X = game.player.centerX();
                     int Y = game.player.centerY();
                     if (getDistance(x - X, y - Y) < r) {
-                        vector.makeVector(x, y, X, Y, 9);
+                        values = vector.vector(x, y, X, Y, 9);
+                        Game.allSprites.add(new BulletEnemy(x, y, values[2], values[0], values[1]));
                         AudioHub.playShoot();
-                        Game.allSprites.add(new BulletEnemy(x, y, vector.getAngle(), vector.getSpeedX(), vector.getSpeedY()));
                     }
                     job = 0;
                     break;
@@ -139,7 +139,7 @@ public class HardThread implements Runnable {
 
     public void workOnResume() {
         if (Game.character.equals("saturn")) {
-            r = 600;
+            r = 530;
         } else {
             r = 350;
         }

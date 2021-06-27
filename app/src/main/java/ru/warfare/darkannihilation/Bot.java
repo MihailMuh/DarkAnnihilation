@@ -22,7 +22,6 @@ public class Bot extends BaseCharacter {
         lastShoot = System.currentTimeMillis();
     }
 
-    @Override
     public void shoot() {
         now = System.currentTimeMillis();
         if (now - lastShoot > BOT_SHOOT_TIME) {

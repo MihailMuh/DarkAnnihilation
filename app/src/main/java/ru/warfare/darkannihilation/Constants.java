@@ -24,6 +24,7 @@ public final class Constants {
 
     public static final String SERVER_IP = "http://78.29.33.173:49150/";
     public static final String TAG = "D'Ark";
+    public static final float HALF_PI = (float) Math.PI / 2f;
 
     public static final byte NUMBER_DEFAULT_EXPLOSION_IMAGES = 28;
 
@@ -72,5 +73,5 @@ public final class Constants {
 
     public static final short TRIPLE_FIGHTER_SHOOT_TIME = 1_500;
 
-    public static final short XWING_SHOOT_TIME = 200;
+    public static final short XWING_SHOOT_TIME = 150;
 }

@@ -72,7 +72,6 @@ public class AtomicBomb extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        AudioHub.playMegaBoom();
         newStatus();
     }
 

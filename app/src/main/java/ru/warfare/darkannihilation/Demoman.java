@@ -55,7 +55,6 @@ public class Demoman extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        AudioHub.playMegaBoom();
         hide();
     }
 

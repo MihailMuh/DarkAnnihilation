@@ -93,7 +93,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = true;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = false;
+    private static final boolean drawFPS = true;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -322,7 +322,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                 if (bulletPlayer.status.equals("saturn")) {
                                     if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
                                         if (random.nextFloat() <= 0.5) {
-                                            Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
+                                            Object[] info = bulletPlayer
+                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
                                                     (Bitmap) anySprite.getBox(0, 0, null)[0]);
                                             if ((boolean) info[3]) {
                                                 BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
@@ -760,6 +761,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.pauseBossMusic();
 
         ImageHub.deleteSecondLevelImages();
+        ImageHub.deleteSettingsImages();
         if (ImageHub.needImagesForFirstLevel()) {
             ImageHub.loadFirstLevelImages();
             while (!endImgInit) {}
@@ -801,11 +803,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateNewGame() {
-       AudioHub.pauseMenuMusic();
+        AudioHub.pauseMenuMusic();
         AudioHub.pauseReadySound();
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
-        ImageHub.deleteSettingsImages();
         ImageHub.loadCharacterImages(character);
 
         hardThread.workOnPause();
@@ -868,8 +869,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 screen = new StarScreen();
                 alphaPaint.setAlpha(255);
 
-                allSprites.add(new TripleFighter());
                 len = numberVaders - 1;
+                allSprites.add(new TripleFighter());
                 for (int i = 0; i < len; i++) {
                     if (random.nextFloat() <= 0.12) {
                         allSprites.add(new TripleFighter());
@@ -932,7 +933,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void gameover() {
-        screen.render(ImageHub.gameoverScreen);
+        canvas.drawBitmap(ImageHub.gameoverScreen, 0, 0, null);
 
         pauseButton.render();
 
@@ -1009,7 +1010,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 }
             }
         } else {
-            screen.render(ImageHub.gameoverScreen);
+            canvas.drawBitmap(ImageHub.gameoverScreen, 0, 0, null);
             canvas.drawText(string_go_to_restart, go_to_restartX, go_to_restartY, gameoverPaint);
         }
 

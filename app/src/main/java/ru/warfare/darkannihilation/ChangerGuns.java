@@ -6,12 +6,11 @@ import static ru.warfare.darkannihilation.Constants.CHANGER_GUNS_CLICK_TIME;
 
 public class ChangerGuns extends Sprite {
     private Bitmap image;
-    private long lastClick;
+    private long lastClick = System.currentTimeMillis();
 
     public ChangerGuns(Game g) {
         super(g, ImageHub.gunToNone.getWidth(), ImageHub.gunToNone.getHeight());
         hide();
-        lastClick = System.currentTimeMillis();
     }
 
     public void hide() {

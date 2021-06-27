@@ -8,7 +8,7 @@ public class BaseCharacter extends Sprite {
     public long lastShoot;
     public long now;
     public boolean dontmove = false;
-    public String gun = "gun";
+    public String gun = "shotgun";
     public int maxHealth = MILLENNIUM_FALCON_HEALTH;
     public Heart[] hearts = new Heart[5];
     public boolean god = false;
@@ -16,15 +16,8 @@ public class BaseCharacter extends Sprite {
     public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
 
-        if (Game.level == 1 | !game.shotgunKit.picked) {
-            gun = "gun";
-        }
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
-        endX = x;
-        endY = y;
-        lock = true;
-        health = maxHealth;
+        init();
+
         int c = 385;
         for (int i = 0; i < 5; i++) {
             hearts[i] = new Heart(c);
@@ -35,16 +28,9 @@ public class BaseCharacter extends Sprite {
     public BaseCharacter(Game g, int w, int h, int maxHealth) {
         super(g, w, h);
 
-        if (Game.level == 1 | !game.shotgunKit.picked) {
-            gun = "gun";
-        }
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
-        endX = x;
-        endY = y;
-        lock = true;
         this.maxHealth = maxHealth;
-        health = maxHealth;
+
+        init();
     }
 
     public BaseCharacter(int w, int h) {
@@ -54,8 +40,24 @@ public class BaseCharacter extends Sprite {
         y = Game.halfScreenHeight;
     }
 
-    public void shoot() {}
-    public void checkIntersections(Sprite sprite) {}
+    private void init() {
+        if (Game.level == 1 | !game.shotgunKit.picked) {
+            gun = "gun";
+        }
+        x = Game.halfScreenWidth;
+        y = Game.halfScreenHeight;
+        endX = x;
+        endY = y;
+        lock = true;
+        health = maxHealth;
+    }
+
+    public void checkIntersections(Sprite sprite) {
+        if (getRect().intersect(sprite.getRect())) {
+            damage(sprite.damage);
+            sprite.intersectionPlayer();
+        }
+    }
 
     public void setCoords(int X, int Y) {
         endX = X - halfWidth;
@@ -70,14 +72,13 @@ public class BaseCharacter extends Sprite {
         }
     }
 
-    public void damage(int dmg) {
+    private void damage(int dmg) {
         if (dmg != 0 & !god) {
             health -= dmg;
             if (health <= 0) {
                 game.generateGameover();
-                createSkullExplosion();
-                AudioHub.playMegaBoom();
                 Service.vibrate(1300);
+                createSkullExplosion();
             } else {
                 Service.vibrate(60);
             }

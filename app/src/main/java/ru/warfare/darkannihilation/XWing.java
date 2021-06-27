@@ -74,7 +74,6 @@ public class XWing extends Sprite {
     @Override
     public void intersection() {
         createLargeTripleExplosion();
-        AudioHub.playBoom();
         Game.score += 10;
         newStatus();
     }

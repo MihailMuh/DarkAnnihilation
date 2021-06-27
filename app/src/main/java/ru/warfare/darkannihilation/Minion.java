@@ -32,7 +32,6 @@ public class Minion extends Sprite {
 
     @Override
     public void intersection() {
-        AudioHub.playBoom();
         Game.allSprites.remove(this);
         createLargeTripleExplosion();
     }

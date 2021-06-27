@@ -12,7 +12,6 @@ public class MillenniumFalcon extends BaseCharacter {
         lastShoot = System.currentTimeMillis();
     }
 
-    @Override
     public void shoot() {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
@@ -44,14 +43,6 @@ public class MillenniumFalcon extends BaseCharacter {
     @Override
     public Sprite getRect() {
         return goTO(x + 20, y + 25);
-    }
-
-    @Override
-    public void checkIntersections(Sprite sprite) {
-        if (getRect().intersect(sprite.getRect())) {
-            damage(sprite.damage);
-            sprite.intersectionPlayer();
-        }
     }
 
     @Override

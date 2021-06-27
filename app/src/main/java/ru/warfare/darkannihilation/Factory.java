@@ -42,7 +42,6 @@ public class Factory extends Sprite {
 
     @Override
     public void intersection() {
-        AudioHub.playMegaBoom();
         Game.score += 75;
         createSkullExplosion();
         hide();

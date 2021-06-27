@@ -18,8 +18,4 @@ public class BaseScreen extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(bitmaps[frame], x, 0, null);
     }
-
-    public void render(Bitmap img) {
-        Game.canvas.drawBitmap(img, 0, 0, null);
-    }
 }

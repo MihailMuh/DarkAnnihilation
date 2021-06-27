@@ -40,23 +40,26 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
     private fun killAfterFight() {
         Thread {
             createSkullExplosion()
-            AudioHub.playMegaBoom()
-            Game.score += 150
+            Game.score += 325
             Game.bosses.remove(this)
             Game.allSprites.remove(this)
             AudioHub.pauseBossMusic()
             if (game.portal == null) {
                 game.portal = Portal(game)
             }
-            Game.gameStatus = 6
-            for (i in 0..Game.numberVaders) {
+            val len = Game.numberVaders / 2;
+            for (i in 0..len) {
                 if (Game.random.nextFloat() <= 0.1) {
                     Game.allSprites.add(TripleFighter())
+                } else {
+                    Game.allSprites.add(Vader())
                 }
             }
             for (i in Game.allSprites.indices) {
                 Game.allSprites[i].empireStart()
             }
+
+            Game.gameStatus = 6
 
             game.lastBoss = System.currentTimeMillis()
         }.start()

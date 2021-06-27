@@ -33,8 +33,8 @@ public class BossVaders extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > BOSS_VADERS_SHOOT_TIME) {
             lastShoot = now;
-            vector.makeVector(centerX(), centerY(), game.player.centerX(), game.player.centerY(), 10);
-            Game.allSprites.add(new BulletBossVaders(centerX(), centerY(), vector.getSpeedX(), vector.getSpeedY()));
+            final int[] values = vector.easyVector(centerX(), centerY(), game.player.centerX(), game.player.centerY(), 10);
+            Game.allSprites.add(new BulletBossVaders(centerX(), centerY(), values[0], values[1]));
             AudioHub.playBossShoot();
         }
     }
@@ -54,23 +54,27 @@ public class BossVaders extends Sprite {
     public void killAfterFight() {
         new Thread(() -> {
             createSkullExplosion();
-            AudioHub.playMegaBoom();
-            Game.score += 300;
+            Game.score += 400;
             Game.bosses.remove(this);
             Game.allSprites.remove(this);
             AudioHub.pauseBossMusic();
             if (game.portal == null) {
                 game.portal = new Portal(game);
             }
-            Game.gameStatus = 6;
-            for (int i = 0; i < Game.numberVaders; i++) {
+            final int len = Game.numberVaders / 2;
+            for (int i = 0; i < len; i++) {
                 if (Game.random.nextFloat() <= 0.3) {
                     Game.allSprites.add(new XWing());
+                } else {
+                    Game.allSprites.add(new Vader(true));
                 }
             }
+
             for (int i = 0; i < Game.allSprites.size(); i++) {
                 Game.allSprites.get(i).empireStart();
             }
+
+            Game.gameStatus = 6;
 
             game.lastBoss = System.currentTimeMillis();
         }).start();

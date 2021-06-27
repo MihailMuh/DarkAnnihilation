@@ -5,7 +5,6 @@ import static ru.warfare.darkannihilation.Constants.PORTAL_FRAME;
 
 public class Portal extends Sprite {
     private int frame = 0;
-    private float frameTime = PORTAL_FRAME;
     private long lastFrame = System.currentTimeMillis();
     public boolean touch = false;
     private static final int len = NUMBER_PORTAL_IMAGES - 1;
@@ -46,7 +45,6 @@ public class Portal extends Sprite {
 
             touch = true;
             game.player.god = true;
-            frameTime = 0;
             game.player.lock = true;
             ImageHub.loadSecondLevelImages();
         }
@@ -63,11 +61,8 @@ public class Portal extends Sprite {
     @Override
     public void update() {
         if (touch) {
-            long now = System.currentTimeMillis();
-            if (now - lastFrame > frameTime) {
-                lastFrame = now;
-                film();
-            }
+            film();
+
             if (!AudioHub.timeMachineNoneSnd.isPlaying()) {
                 AudioHub.timeMachineSecondSnd.start();
                 Game.level++;
@@ -77,7 +72,11 @@ public class Portal extends Sprite {
         } else {
             game.player.checkIntersections(this);
 
-            film();
+            long now = System.currentTimeMillis();
+            if (now - lastFrame > PORTAL_FRAME) {
+                lastFrame = now;
+                film();
+            }
 
             if (!AudioHub.portalSound.isPlaying() & Game.gameStatus != 7) {
                 Game.gameStatus = 0;

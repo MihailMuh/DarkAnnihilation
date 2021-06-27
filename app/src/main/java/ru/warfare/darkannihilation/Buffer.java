@@ -26,7 +26,6 @@ public class Buffer extends Sprite {
 
     private void inter() {
         boom = false;
-        AudioHub.playMegaBoom();
         createSkullExplosion();
         hide();
         Game.score += 100;

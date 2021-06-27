@@ -79,7 +79,6 @@ public class Sunrise extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        AudioHub.playMegaBoom();
         createSkullExplosion();
         hide();
     }

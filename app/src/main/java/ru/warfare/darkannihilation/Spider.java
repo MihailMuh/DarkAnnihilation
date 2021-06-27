@@ -87,7 +87,6 @@ public class Spider extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        AudioHub.playMegaBoom();
         createSkullExplosion();
         hide();
     }

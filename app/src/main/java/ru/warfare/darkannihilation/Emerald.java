@@ -24,7 +24,6 @@ public class Emerald extends BaseCharacter {
         lastShoot = System.currentTimeMillis();
     }
 
-    @Override
     public void shoot() {
         now = System.currentTimeMillis();
         if (gun.equals("shotgun")) {
@@ -48,14 +47,6 @@ public class Emerald extends BaseCharacter {
     @Override
     public Sprite getRect() {
         return goTO(x + 25, y + 25);
-    }
-
-    @Override
-    public void checkIntersections(Sprite sprite) {
-        if (getRect().intersect(sprite.getRect())) {
-            damage(sprite.damage);
-            sprite.intersectionPlayer();
-        }
     }
 
     @Override
