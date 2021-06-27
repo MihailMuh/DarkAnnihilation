@@ -71,7 +71,6 @@ public class Spider extends Sprite {
     @Override
     public void stopBuff() {
         shootTripleTime = SPIDER_SHOOT_TIME;
-        buff = false;
     }
 
     @Override

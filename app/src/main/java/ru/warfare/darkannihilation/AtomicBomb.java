@@ -28,7 +28,6 @@ public class AtomicBomb extends Sprite {
 
     public void newStatus() {
         lock = true;
-        speedX = 0;
         speedY = 1;
         health = 20;
         x = randInt(0, Game.screenWidth);
@@ -46,7 +45,6 @@ public class AtomicBomb extends Sprite {
     @Override
     public void buff() {
         buff = true;
-
         if (!lock) {
             up();
         }
@@ -55,7 +53,6 @@ public class AtomicBomb extends Sprite {
     @Override
     public void stopBuff() {
         speedY = 1;
-        buff = false;
     }
 
     @Override

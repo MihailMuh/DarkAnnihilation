@@ -63,7 +63,6 @@ public class XWing extends Sprite {
     public void stopBuff() {
         speedX /= 2;
         speedY /= 2;
-        buff = false;
     }
 
     @Override

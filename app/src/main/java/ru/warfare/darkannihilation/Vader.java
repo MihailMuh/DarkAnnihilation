@@ -66,7 +66,6 @@ public class Vader extends Sprite {
     public void stopBuff() {
         speedX /= 3;
         speedY /= 3;
-        buff = false;
     }
 
     @Override

@@ -90,6 +90,7 @@ public class Sprite {
         if (buff && !lock) {
             stopBuff();
         }
+        buff = false;
     }
 
     public void createLargeExplosion() {

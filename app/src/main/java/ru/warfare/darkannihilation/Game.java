@@ -93,7 +93,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = true;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = true;
+    private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -310,7 +310,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (!anySprite.isPassive) {
                         player.checkIntersections(anySprite);
                     }
-                    rocket.checkIntersections(anySprite);
+                    if (level == 1) {
+                        rocket.checkIntersections(anySprite);
+                    }
                     if (!anySprite.isBullet) {
                         for (int j = 0; j < bullets.size(); j++) {
                             anySprite.check_intersectionBullet(bullets.get(j));
