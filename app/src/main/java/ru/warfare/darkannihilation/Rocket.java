@@ -24,6 +24,16 @@ public class Rocket extends Sprite{
         lock = false;
     }
 
+    public void checkIntersections(Sprite sprite) {
+        if (sprite != this) {
+            if (getRect().intersect(sprite.getRect())) {
+                if (!sprite.isPassive | sprite.status.equals("saturn")) {
+                    sprite.intersection();
+                }
+            }
+        }
+    }
+
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();

@@ -310,6 +310,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (!anySprite.isPassive) {
                         player.checkIntersections(anySprite);
                     }
+                    rocket.checkIntersections(anySprite);
                     if (!anySprite.isBullet) {
                         for (int j = 0; j < bullets.size(); j++) {
                             anySprite.check_intersectionBullet(bullets.get(j));
@@ -337,17 +338,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                         anySprite.intersectionPlayer();
                                         bulletPlayer.intersection();
                                         break;
-                                    }
-                                }
-                            }
-                        } else {
-                            if (anySprite.status.equals("rocket")) {
-                                for (int j = 0; j < bullets.size(); j++) {
-                                    Sprite bullet = bullets.get(j);
-                                    if (bullet.status.equals("saturn")) {
-                                        if (anySprite.getRect().intersect(bullet.getRect())) {
-                                            bullet.intersection();
-                                        }
                                     }
                                 }
                             }
@@ -708,8 +698,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void generateGameover() {
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
-        saveScore();
+        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);        saveScore();
         getMaxScore();
         AudioHub.gameoverSnd.start();
         gameStatus = 3;
@@ -724,7 +714,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }
         AudioHub.pauseReadySound();
 
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
+        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
         int X = halfScreenWidth - buttonQuit.halfWidth;
 
         buttonStart.newFunc(string_resume, X, screenHeight / 3 - buttonStart.halfHeight, "pause");
@@ -808,6 +799,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
         ImageHub.loadCharacterImages(character);
+
+        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
 
         hardThread.workOnPause();
         hardThread.workOnResume();
