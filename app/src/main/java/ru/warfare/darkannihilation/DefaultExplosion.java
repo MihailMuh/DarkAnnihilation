@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.NUMBER_DEFAULT_EXPLOSION_IMAGES;
+
 public class DefaultExplosion extends BaseExplosion {
     public DefaultExplosion(String size) {
         super(ImageHub.explosionDefaultImageSmall[0].getWidth(), ImageHub.explosionDefaultImageSmall[0].getHeight());
@@ -7,10 +9,10 @@ public class DefaultExplosion extends BaseExplosion {
         switch (size)
         {
             case "small":
-                img = ImageHub.explosionDefaultImageSmall.clone();
+                img = ImageHub.explosionDefaultImageSmall;
                 break;
             case "default":
-                img = ImageHub.explosionDefaultImageMedium.clone();
+                img = ImageHub.explosionDefaultImageMedium;
                 width = img[0].getWidth();
                 halfWidth = width / 2;
                 height = img[0].getHeight();
@@ -21,7 +23,7 @@ public class DefaultExplosion extends BaseExplosion {
 
     @Override
     public void update() {
-        if (frame != 28) {
+        if (frame != NUMBER_DEFAULT_EXPLOSION_IMAGES) {
             frame++;
         } else {
             frame = 0;
@@ -31,7 +33,7 @@ public class DefaultExplosion extends BaseExplosion {
 
     @Override
     public void render () {
-        if (frame != 28) {
+        if (frame != NUMBER_DEFAULT_EXPLOSION_IMAGES) {
             Game.canvas.drawBitmap(img[frame], x, y, null);
         }
     }

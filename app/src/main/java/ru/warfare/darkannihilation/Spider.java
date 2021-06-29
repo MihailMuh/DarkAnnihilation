@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SPIDER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SPIDER_SHOOT_TIME;
 
@@ -12,7 +13,8 @@ public class Spider extends Sprite {
 
     public Spider() {
         super(ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
-        damage = 20;
+        damage = SPIDER_DAMAGE;
+
         hide();
 
         recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));

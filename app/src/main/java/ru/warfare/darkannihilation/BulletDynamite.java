@@ -2,6 +2,8 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Matrix;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_DYNAMITE_DAMAGE;
+
 public class BulletDynamite extends Sprite {
     private final int rotSpeed = randInt(-10, 10);
     private final Matrix matrix = new Matrix();
@@ -11,11 +13,11 @@ public class BulletDynamite extends Sprite {
 
     public BulletDynamite(int X, int Y) {
         super(ImageHub.dynamiteImg.getWidth(), ImageHub.dynamiteImg.getHeight());
-        damage = 1;
+        damage = BULLET_DYNAMITE_DAMAGE;
         isPassive = true;
         isBullet = true;
 
-        speedY = 8;
+        speedY = randInt(6, 9);
 
         x = X - halfWidth;
         y = Y - height;

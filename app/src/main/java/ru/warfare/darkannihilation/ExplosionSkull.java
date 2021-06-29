@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.NUMBER_SKULL_EXPLOSION;
 import static ru.warfare.darkannihilation.Constants.SKULL_EXPLOSION_FRAME_TIME;
 
 public class ExplosionSkull extends BaseExplosion {
     private long lastShoot = System.currentTimeMillis();
+    private static final int len = NUMBER_SKULL_EXPLOSION - 1;
 
     public ExplosionSkull() {
         super(ImageHub.explosionLarge[0].getWidth(), ImageHub.explosionLarge[0].getHeight());
@@ -14,7 +16,7 @@ public class ExplosionSkull extends BaseExplosion {
         long now = System.currentTimeMillis();
         if (now - lastShoot > SKULL_EXPLOSION_FRAME_TIME) {
             lastShoot = now;
-            if (frame != 12) {
+            if (frame != len) {
                 frame++;
             } else {
                 frame = 0;

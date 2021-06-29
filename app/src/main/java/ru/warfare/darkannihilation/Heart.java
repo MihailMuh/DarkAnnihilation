@@ -1,10 +1,12 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.HEART_Y;
+
 public class Heart extends Sprite {
     public Heart(int X) {
         super(0, 0);
         x = X;
-        y = 10;
+        y = HEART_Y;
     }
 
     public Heart(int X, int Y) {

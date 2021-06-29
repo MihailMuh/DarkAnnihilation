@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_VADERS_DAMAGE;
+
 public class BulletBossVaders extends Sprite {
     public BulletBossVaders(int X, int Y, int spdx, int spdy) {
         super(ImageHub.bulletBossVadersImg.getWidth(), ImageHub.bulletBossVadersImg.getHeight());
-        damage = 25;
+        damage = BULLET_BOSS_VADERS_DAMAGE;
 
         speedX = spdx;
         speedY = spdy;

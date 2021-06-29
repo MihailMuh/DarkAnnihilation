@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH;
 import static ru.warfare.darkannihilation.Constants.FACTORY_SPAWN_TIME;
+import static ru.warfare.darkannihilation.Constants.FACTORY_SPEED;
 
 public class Factory extends Sprite {
     private long lastSpawn = System.currentTimeMillis();
@@ -10,7 +11,7 @@ public class Factory extends Sprite {
     public Factory() {
         super(ImageHub.factoryImg.getWidth(), ImageHub.factoryImg.getHeight());
 
-        speedY = 3;
+        speedY = FACTORY_SPEED;
         isPassive = true;
 
         x = Game.halfScreenWidth - halfWidth;

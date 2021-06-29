@@ -2,11 +2,13 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
+import static ru.warfare.darkannihilation.Constants.BOMB_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.BOMB_SPEED;
+
 public class Bomb extends Sprite {
     public Bomb(int X, int Y) {
         super(ImageHub.bombImg.getWidth(), ImageHub.bombImg.getHeight());
-        speedY = 15;
-        damage = 5;
+        damage = BOMB_DAMAGE;
         status = "bulletEnemy";
         isBullet = true;
 
@@ -29,7 +31,7 @@ public class Bomb extends Sprite {
 
     @Override
     public void update() {
-        y += speedY;
+        y += BOMB_SPEED;
 
         if (y > Game.screenHeight) {
             Game.allSprites.remove(this);

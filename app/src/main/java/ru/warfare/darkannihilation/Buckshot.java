@@ -1,17 +1,19 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BUCKSHOT_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.BUCKSHOT_SPEED;
+
 public class Buckshot extends Sprite {
     public Buckshot(int X, int Y, int speed) {
         super(ImageHub.buckshotImg.getWidth(), ImageHub.buckshotImg.getHeight());
 
         x = X - halfWidth;
         y = Y;
-        damage = 3;
+        damage = BUCKSHOT_DAMAGE;
         isPassive = true;
         isBullet = true;
 
         speedX = speed;
-        speedY = 8;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class Buckshot extends Sprite {
 
     @Override
     public void update() {
-        y -= speedY;
+        y -= BUCKSHOT_SPEED;
         x += speedX;
 
         if (y < -height | x < -width | x > Game.screenWidth) {

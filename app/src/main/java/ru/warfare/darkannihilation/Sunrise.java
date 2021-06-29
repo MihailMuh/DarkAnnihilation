@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SUNRISE_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.SUNRISE_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SUNRISE_SHOOT_TIME;
 
 public class Sunrise extends Sprite {
@@ -9,7 +11,8 @@ public class Sunrise extends Sprite {
 
     public Sunrise() {
         super(ImageHub.sunriseImg.getWidth(), ImageHub.sunriseImg.getHeight());
-        damage = 20;
+        damage = SUNRISE_DAMAGE;
+
         hide();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
@@ -30,7 +33,7 @@ public class Sunrise extends Sprite {
     public void hide() {
         field = false;
         lock = true;
-        health = 45;
+        health = SUNRISE_HEALTH;
         x = randInt(width, screenWidthWidth);
         y = -height;
         speedX = randInt(2, 4);

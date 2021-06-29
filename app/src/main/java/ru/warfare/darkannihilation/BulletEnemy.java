@@ -2,12 +2,14 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_ENEMY_DAMAGE;
+
 public class BulletEnemy extends Sprite {
     private final Bitmap image;
 
     public BulletEnemy(int X, int Y, int angle, int spdx, int spdy) {
         super();
-        damage = 5;
+        damage = BULLET_ENEMY_DAMAGE;
         status = "bulletEnemy";
         isBullet = true;
 
@@ -59,89 +61,5 @@ public class BulletEnemy extends Sprite {
     @Override
     public void render () {
         Game.canvas.drawBitmap(image, x, y, null);
-    }
-}
-
-
-class BulletEnemyCut extends Sprite {
-    private final Bitmap image;
-    private final float spdX;
-    private final float spdY;
-    private float X;
-    private float Y;
-
-    public BulletEnemyCut(float X, float Y, float angle, float spdx, float spdy) {
-        super();
-        damage = 5;
-        status = "bulletEnemy";
-        isBullet = true;
-
-        this.spdX = spdx;
-        this.spdY = spdy;
-
-        this.X = X;
-        this.Y = Y;
-
-        image = ImageHub.rotateImage(ImageHub.bulletEnemyImage, angle);
-
-        width = image.getWidth();
-        height = image.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
-
-        left = (int) X;
-        top = (int) Y;
-        right = (int) (X + width);
-        bottom = (int) (Y + height);
-    }
-
-    @Override
-    public int centerX() {
-        return (int) (X + halfWidth);
-    }
-
-    @Override
-    public int centerY() {
-        return (int) (Y + halfHeight);
-    }
-
-    @Override
-    public Sprite getRect() {
-        right += X - left;
-        bottom += Y - top;
-        left = (int) X;
-        top = (int) Y;
-        return this;
-    }
-
-    @Override
-    public Object[] getBox(int a, int b, Bitmap image) {
-        return new Object[] {ImageHub.bulletEnemyImage};
-    }
-
-    @Override
-    public void intersection() {
-        intersectionPlayer();
-    }
-
-    @Override
-    public void intersectionPlayer() {
-        createSmallExplosion();
-        Game.allSprites.remove(this);
-    }
-
-    @Override
-    public void update() {
-        Y += spdY;
-        X += spdX;
-
-        if (X < -width | X > Game.screenWidth | Y > Game.screenHeight | Y < -height) {
-            Game.allSprites.remove(this);
-        }
-    }
-
-    @Override
-    public void render () {
-        Game.canvas.drawBitmap(image, X, Y, null);
     }
 }

@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.ATOMIC_BOMB_FRAME_TIME;
 import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
+import static ru.warfare.darkannihilation.Constants.ROCKET_DAMAGE;
 
 public class AtomicBomb extends Sprite {
     private int frame = 0;
@@ -12,7 +13,7 @@ public class AtomicBomb extends Sprite {
     public AtomicBomb() {
         super(ImageHub.atomBombImage[0].getWidth(), ImageHub.atomBombImage[0].getHeight());
 
-        damage = 1000;
+        damage = ROCKET_DAMAGE;
         newStatus();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);

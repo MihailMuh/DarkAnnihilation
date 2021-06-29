@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_EXPLOSION_FRAME_TIME;
 
 public class ExplosionTriple extends BaseExplosion {
@@ -10,10 +11,10 @@ public class ExplosionTriple extends BaseExplosion {
         switch (size)
         {
             case "small":
-                img = ImageHub.explosionTripleImageSmall.clone();
+                img = ImageHub.explosionTripleImageSmall;
                 break;
             case "default":
-                img = ImageHub.explosionTripleImageMedium.clone();
+                img = ImageHub.explosionTripleImageMedium;
                 width = img[0].getWidth();
                 halfWidth = width / 2;
                 height = img[0].getHeight();
@@ -27,7 +28,7 @@ public class ExplosionTriple extends BaseExplosion {
         long now = System.currentTimeMillis();
         if (now - lastShoot > TRIPLE_EXPLOSION_FRAME_TIME) {
             lastShoot = now;
-            if (frame != 23) {
+            if (frame != NUMBER_TRIPLE_EXPLOSION_IMAGES) {
                 frame++;
             } else {
                 frame = 0;
@@ -38,7 +39,7 @@ public class ExplosionTriple extends BaseExplosion {
 
     @Override
     public void render () {
-        if (frame != 23) {
+        if (frame != NUMBER_TRIPLE_EXPLOSION_IMAGES) {
             Game.canvas.drawBitmap(img[frame], x, y, null);
         }
     }

@@ -1,17 +1,17 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.ROCKET_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.ROCKET_SPEED;
 
 public class Rocket extends Sprite{
     public Rocket() {
         super(ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
         speedY = ROCKET_SPEED;
-        lock = true;
-        damage = 100;
+        damage = ROCKET_DAMAGE;
         isBullet = true;
         status = "rocket";
 
-        y = -height;
+        hide();
     }
 
     public void hide() {

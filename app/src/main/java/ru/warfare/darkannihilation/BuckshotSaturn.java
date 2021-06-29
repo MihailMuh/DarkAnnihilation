@@ -2,6 +2,8 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
+import static ru.warfare.darkannihilation.Constants.BUCKSHOT_SATURN_DAMAGE;
+
 public class BuckshotSaturn extends Sprite {
     private final Vector vector = new Vector();
     private float X;
@@ -12,7 +14,7 @@ public class BuckshotSaturn extends Sprite {
     public BuckshotSaturn(Game game, int X, int Y) {
         super(game, ImageHub.bulletBuckshotSaturnImg.getWidth(), ImageHub.bulletBuckshotSaturnImg.getHeight());
 
-        damage = 1;
+        damage = BUCKSHOT_SATURN_DAMAGE;
         isPassive = true;
         isBullet = true;
 

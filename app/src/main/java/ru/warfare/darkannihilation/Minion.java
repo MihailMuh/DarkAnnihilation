@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.MINION_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.MINION_HEALTH;
 import static ru.warfare.darkannihilation.Constants.MINION_SHOOT_TIME;
 
@@ -9,7 +10,7 @@ public class Minion extends Sprite {
     public Minion(int x, int y) {
         super(ImageHub.minionImg.getWidth(), ImageHub.minionImg.getHeight());
         health = MINION_HEALTH;
-        damage = 5;
+        damage = MINION_DAMAGE;
 
         this.x = x;
         this.y = y;

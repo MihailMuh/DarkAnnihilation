@@ -13,7 +13,7 @@ public class Portal extends Sprite {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
 
         x = randInt(0, screenWidthWidth);
-        y = 100;
+        y = randInt(50, 250);
         isPassive = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);

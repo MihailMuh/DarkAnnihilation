@@ -3,6 +3,8 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
+
 public class BulletEnemyOrbit extends Sprite {
     private final Vector vector = new Vector();
     private final Matrix matrix = new Matrix();
@@ -14,7 +16,7 @@ public class BulletEnemyOrbit extends Sprite {
     public BulletEnemyOrbit(Object[] info) {
         super((Game) info[0]);
 
-        damage = 1;
+        damage = BULLET_ENEMY_ORBIT_DAMAGE;
         isPassive = true;
         isBullet = true;
 

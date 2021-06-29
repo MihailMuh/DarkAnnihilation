@@ -3,13 +3,15 @@ package ru.warfare.darkannihilation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_SPEED;
+
 public class BulletBoss extends Sprite {
     private Bitmap img;
 
     public BulletBoss(int X, int Y, int type) {
         super(ImageHub.laserImage.getWidth(), ImageHub.laserImage.getHeight());
-        speedY = 6;
-        damage = 5;
+        damage = BULLET_BOSS_DAMAGE;
         status = "bulletEnemy";
         isBullet = true;
 
@@ -48,7 +50,7 @@ public class BulletBoss extends Sprite {
 
     @Override
     public void update() {
-        y += speedY;
+        y += BULLET_BOSS_SPEED;
         x -= speedX;
 
         if (y > Game.screenHeight | x < -height | x > Game.screenWidth) {

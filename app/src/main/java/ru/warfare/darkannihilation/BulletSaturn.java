@@ -1,12 +1,14 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_SATURN_DAMAGE;
+
 public class BulletSaturn extends Sprite {
     public BulletSaturn(int X, int Y) {
         super(ImageHub.bulletSaturnImg.getWidth(), ImageHub.bulletSaturnImg.getHeight());
 
         speedY = randInt(6, 13);
         speedX = randInt(-6, 6);
-        damage = 1;
+        damage = BULLET_SATURN_DAMAGE;
         isPassive = true;
         isBullet = true;
 

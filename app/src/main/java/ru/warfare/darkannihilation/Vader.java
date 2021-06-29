@@ -2,6 +2,9 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
+import static ru.warfare.darkannihilation.Constants.VADER_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.VADER_HEALTH;
+
 public class Vader extends Sprite {
     private final Bitmap img;
 
@@ -22,13 +25,9 @@ public class Vader extends Sprite {
     }
 
     private void init() {
-        health = 2;
-        damage = 5;
+        damage = VADER_DAMAGE;
 
-        x = randInt(0, Game.screenWidth);
-        y = -150;
-        speedX = randInt(-5, 5);
-        speedY = randInt(3, 10);
+        newStatus();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
@@ -37,7 +36,7 @@ public class Vader extends Sprite {
         if (Game.bosses.size() != 0) {
             lock = true;
         }
-        health = 2;
+        health = VADER_HEALTH;
         x = randInt(0, Game.screenWidth);
         y = -height;
         speedX = randInt(-5, 5);

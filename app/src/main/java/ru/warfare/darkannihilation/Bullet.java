@@ -1,10 +1,12 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BULLET_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.BULLET_SPEED;
+
 public class Bullet extends Sprite {
     public Bullet(int X, int Y) {
         super(ImageHub.bulletImage.getWidth(), ImageHub.bulletImage.getHeight());
-        speedY = 10;
-        damage = 1;
+        damage = BULLET_DAMAGE;
         isPassive = true;
         isBullet = true;
 
@@ -21,7 +23,7 @@ public class Bullet extends Sprite {
 
     @Override
     public void update() {
-        y -= speedY;
+        y -= BULLET_SPEED;
 
         if (y < -height) {
             Game.bullets.remove(this);

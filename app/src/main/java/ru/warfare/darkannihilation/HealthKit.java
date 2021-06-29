@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.HEALTH_KIT_SPEED;
+
 public class HealthKit extends Sprite {
     public HealthKit(Game g) {
         super(g, ImageHub.healthKitImg.getWidth(), ImageHub.healthKitImg.getHeight());
-        speedY = 2;
+        speedY = HEALTH_KIT_SPEED;
         isBullet = true;
 
         hide();

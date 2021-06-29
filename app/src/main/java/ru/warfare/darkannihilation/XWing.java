@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.XWING_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.XWING_HEALTH;
 import static ru.warfare.darkannihilation.Constants.XWING_SHOOT_TIME;
 
 public class XWing extends Sprite {
@@ -7,13 +9,9 @@ public class XWing extends Sprite {
 
     public XWing() {
         super(ImageHub.XWingImg.getWidth(), ImageHub.XWingImg.getHeight());
-        health = 5;
-        damage = 10;
+        damage = XWING_DAMAGE;
 
-        x = randInt(0, Game.screenWidth);
-        y = -height;
-        speedX = randInt(-3, 3);
-        speedY = randInt(1, 8);
+        newStatus();
 
         recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
     }
@@ -34,7 +32,7 @@ public class XWing extends Sprite {
         if (Game.bosses.size() != 0) {
             lock = true;
         }
-        health = 5;
+        health = XWING_HEALTH;
         x = randInt(0, Game.screenWidth);
         y = -height;
         speedX = randInt(-3, 3);

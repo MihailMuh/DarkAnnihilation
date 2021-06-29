@@ -1,6 +1,7 @@
 package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.LOADING_SCREEN_FRAME_TIME;
+import static ru.warfare.darkannihilation.Constants.NUMBER_LOADING_SCREEN_IMAGES;
 
 public class LoadingScreen extends Sprite {
     private long lastFrame = System.currentTimeMillis();
@@ -37,7 +38,7 @@ public class LoadingScreen extends Sprite {
             lastFrame = now;
             frame++;
             c++;
-            if (frame == 12) {
+            if (frame == NUMBER_LOADING_SCREEN_IMAGES) {
                 frame = 0;
             }
             if (c == 11) {

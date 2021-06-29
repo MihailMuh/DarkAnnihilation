@@ -2,15 +2,18 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
 
+import static ru.warfare.darkannihilation.Constants.LIGHTNING_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.LIGHTNING_SHOOT_TIME;
+import static ru.warfare.darkannihilation.Constants.NUMBER_LIGHTNING_IMAGES;
 
 public class BulletThunder extends Sprite {
     private int frame;
     private long lastShoot = System.currentTimeMillis();
+    private static final int len = NUMBER_LIGHTNING_IMAGES - 1;
 
     public BulletThunder(int X, int Y) {
         super(ImageHub.thunderImage[0].getWidth(), ImageHub.thunderImage[0].getHeight());
-        damage = 1;
+        damage = LIGHTNING_DAMAGE;
         isPassive = true;
         isBullet = true;
 
@@ -23,7 +26,7 @@ public class BulletThunder extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > LIGHTNING_SHOOT_TIME) {
             lastShoot = now;
-            if (frame != 12) {
+            if (frame != len) {
                 frame++;
             } else {
                 Game.bullets.remove(this);

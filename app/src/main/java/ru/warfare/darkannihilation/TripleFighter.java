@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_HEALTH;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
 
 public class TripleFighter extends Sprite {
@@ -7,13 +9,9 @@ public class TripleFighter extends Sprite {
 
     public TripleFighter() {
         super(ImageHub.tripleFighterImg.getWidth(), ImageHub.tripleFighterImg.getHeight());
-        health = 6;
-        damage = 10;
+        damage = TRIPLE_FIGHTER_DAMAGE;
 
-        x = randInt(0, Game.screenWidth);
-        y = -150;
-        speedX = randInt(-3, 3);
-        speedY = randInt(1, 10);
+        newStatus();
 
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
     }
@@ -35,8 +33,8 @@ public class TripleFighter extends Sprite {
             lock = true;
         }
         health = 6;
-        x = randInt(0, Game.screenWidth);
-        y = -150;
+        x = randInt(0, screenWidthWidth);
+        y = -height;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 10);
     }

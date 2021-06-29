@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.DEMOMAN_DAMAGE;
+import static ru.warfare.darkannihilation.Constants.DEMOMAN_HEALTH;
 import static ru.warfare.darkannihilation.Constants.DEMOMAN_SHOOT_TIME;
 
 public class Demoman extends Sprite {
@@ -9,7 +11,7 @@ public class Demoman extends Sprite {
     public Demoman() {
         super(ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
 
-        damage = 40;
+        damage = DEMOMAN_DAMAGE;
 
         hide();
 
@@ -19,7 +21,7 @@ public class Demoman extends Sprite {
 
     public void hide() {
         lock = true;
-        health = 30;
+        health = DEMOMAN_HEALTH;
         y = randInt(0, Game.halfScreenHeight - height);
         direction = randInt(0, 1);
         if (direction == 0) {

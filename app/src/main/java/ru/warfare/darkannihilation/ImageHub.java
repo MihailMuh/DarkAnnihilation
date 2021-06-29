@@ -23,11 +23,14 @@ import pl.droidsonroids.gif.GifImageView;
 
 import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
 import static ru.warfare.darkannihilation.Constants.NUMBER_DEFAULT_EXPLOSION_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_LIGHTNING_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_LOADING_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.Constants.NUMBER_PORTAL_IMAGES;
 import static ru.warfare.darkannihilation.Constants.NUMBER_SKULL_EXPLOSION;
 import static ru.warfare.darkannihilation.Constants.NUMBER_STAR_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.Constants.NUMBER_THUNDER_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
+import static ru.warfare.darkannihilation.Constants.NUMBER_VADER_IMAGES;
 
 public final class ImageHub {
     public static final boolean isFilter = true;
@@ -39,13 +42,13 @@ public final class ImageHub {
     public static final Bitmap[] explosionLarge = new Bitmap[NUMBER_SKULL_EXPLOSION];
 
     public static Bitmap[] screenImage = new Bitmap[NUMBER_STAR_SCREEN_IMAGES];
-    public static Bitmap[] vaderImage = new Bitmap[3];
-    public static Bitmap[] vaderOldImage = new Bitmap[3];
+    public static Bitmap[] vaderImage = new Bitmap[NUMBER_VADER_IMAGES];
+    public static Bitmap[] vaderOldImage = new Bitmap[NUMBER_VADER_IMAGES];
     public static Bitmap[] portalImages = new Bitmap[NUMBER_PORTAL_IMAGES];
     public static Bitmap[] thunderScreen = new Bitmap[NUMBER_THUNDER_SCREEN_IMAGES];
     public static Bitmap[] atomBombImage = new Bitmap[NUMBER_ATOMIC_BOMB_IMAGES];
-    public static final Bitmap[] loadingImages = new Bitmap[12];
-    public static Bitmap[] thunderImage = new Bitmap[13];
+    public static final Bitmap[] loadingImages = new Bitmap[NUMBER_LOADING_SCREEN_IMAGES];
+    public static Bitmap[] thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
 
     public static Bitmap bitmap;
     public static Bitmap bulletImage;
@@ -719,7 +722,7 @@ public final class ImageHub {
             for (int i = 0; i < 20; i++) {
                 portalImages[i].recycle();
             }
-            portalImages = new Bitmap[20];
+            portalImages = new Bitmap[NUMBER_PORTAL_IMAGES];
         }
     }
 
@@ -884,8 +887,8 @@ public final class ImageHub {
                     atomBombImage[i].recycle();
                 }
             }
-            thunderScreen = new Bitmap[20];
-            vaderOldImage = new Bitmap[3];
+            thunderScreen = new Bitmap[NUMBER_THUNDER_SCREEN_IMAGES];
+            vaderOldImage = new Bitmap[NUMBER_VADER_IMAGES];
             atomBombImage = new Bitmap[NUMBER_ATOMIC_BOMB_IMAGES];
 
             spiderImg.recycle();
@@ -1104,7 +1107,7 @@ public final class ImageHub {
                 }
             }
             screenImage = new Bitmap[NUMBER_STAR_SCREEN_IMAGES];
-            vaderImage = new Bitmap[3];
+            vaderImage = new Bitmap[NUMBER_VADER_IMAGES];
 
             factoryImg.recycle();
             factoryImg = null;
@@ -1233,7 +1236,7 @@ public final class ImageHub {
 
                 emeraldImg = null;
                 dynamiteImg = null;
-                thunderImage = new Bitmap[13];
+                thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
                 break;
             case "falcon":
                 requestBuilder.load(R.drawable.ship)
@@ -1288,7 +1291,7 @@ public final class ImageHub {
 
                 emeraldImg = null;
                 dynamiteImg = null;
-                thunderImage = new Bitmap[13];
+                thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
                 break;
             case "emerald":
                 requestBuilder.load(R.drawable.emerald)

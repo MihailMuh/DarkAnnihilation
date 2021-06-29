@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.BUFFER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.BUFFER_HEALTH;
 
 public class Buffer extends Sprite {
@@ -8,6 +9,8 @@ public class Buffer extends Sprite {
 
     public Buffer() {
         super(ImageHub.bufferImg.getWidth(), ImageHub.bufferImg.getHeight());
+        damage = BUFFER_DAMAGE;
+
         hide();
 
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);
