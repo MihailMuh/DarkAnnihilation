@@ -33,7 +33,7 @@ public class Saturn extends BaseCharacter {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 25, y + 25);
+        return newRect(x + 25, y + 25);
     }
 
     @Override

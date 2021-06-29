@@ -86,7 +86,7 @@ public class Vader extends Sprite {
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
-        if (goTO(x + 15, y + 15).intersect(bullet.getRect())) {
+        if (intersect(bullet)) {
             if (bullet.damage < health) {
                 health -= bullet.damage;
                 bullet.intersection();
@@ -116,6 +116,6 @@ public class Vader extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(img, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(img, x, y, Game.alphaEnemy);
     }
 }

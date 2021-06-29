@@ -10,8 +10,12 @@ public class MATH {
     public static int getDistance(int a, int b) {
         return (int) Math.sqrt((a * a) + (b * b));
     }
-    public static double getDistance(double a, double b) {
-        return Math.sqrt((a * a) + (b * b));
+
+    public static int boolToInt(boolean x) {
+        if (x) {
+            return 1;
+        }
+        return 0;
     }
 }
 

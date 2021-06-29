@@ -30,7 +30,7 @@ public class Portal extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 15, y + 15);
+        return newRect(x + 15, y + 15);
     }
 
     @Override

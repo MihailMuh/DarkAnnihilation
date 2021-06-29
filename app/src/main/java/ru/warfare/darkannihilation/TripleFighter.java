@@ -42,7 +42,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 5, y + 5);
+        return newRect(x + 5, y + 5);
     }
 
     @Override
@@ -57,17 +57,6 @@ public class TripleFighter extends Sprite {
         AudioHub.playMetal();
         createSmallExplosion();
         newStatus();
-    }
-
-    @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
-            bullet.intersection();
-            if (health <= 0) {
-                intersection();
-            }
-        }
     }
 
     @Override

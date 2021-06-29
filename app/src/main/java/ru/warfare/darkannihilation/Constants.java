@@ -35,20 +35,24 @@ public final class Constants {
 
     public static final short SPIDER_HEALTH = 200;
     public static final byte SPIDER_SHOOT_TIME = SATURN_SHOTGUN_TIME;
-    public static final short SPIDER_DAMAGE = BUFFER_DAMAGE;
+    public static final byte SPIDER_DAMAGE = BUFFER_DAMAGE;
+    public static final byte SPIDER_SPEED = XWING_HEALTH;
+    public static final short SPIDER_HEALTH_BAR_LEN = 150;
+    public static final short SPIDER_HEALTH_BAR_HEIGHT = 15;
 
 //    first level
     public static final short BOSS_SHOOT_TIME = 450;
     public static final short BOSS_HEALTH = 300;
 
-    public static final short DEMOMAN_SHOOT_TIME = 150;
-    public static final short DEMOMAN_DAMAGE = 40;
-    public static final short DEMOMAN_HEALTH = ATOMIC_BOMB_FRAME_TIME;
+    public static final short DEMOMAN_SHOOT_TIME = SPIDER_HEALTH_BAR_LEN;
+    public static final byte DEMOMAN_DAMAGE = 40;
+    public static final byte DEMOMAN_HEALTH = ATOMIC_BOMB_FRAME_TIME;
 
     public static final short FACTORY_SPAWN_TIME = 1_000;
     public static final short FACTORY_HEALTH = SPIDER_HEALTH;
-    public static final short FACTORY_SPEED = 3;
+    public static final byte FACTORY_SPEED = 3;
     public static final short FACTORY_HEALTH_BAR_LEN = 500;
+    public static final short FACTORY_HEALTH_BAR_HEIGHT = BUFFER_DAMAGE;
 
     public static final byte MINION_HEALTH = 2;
     public static final short MINION_SHOOT_TIME = 900;
@@ -118,7 +122,7 @@ public final class Constants {
     public static final byte BUCKSHOT_SPEED = 8;
 
     public static final byte BOMB_DAMAGE = XWING_HEALTH;
-    public static final byte BOMB_SPEED = 15;
+    public static final byte BOMB_SPEED = SPIDER_HEALTH_BAR_HEIGHT;
 
 //    other
     public static final short BUTTON_CLICK_TIME = FACTORY_HEALTH_BAR_LEN;

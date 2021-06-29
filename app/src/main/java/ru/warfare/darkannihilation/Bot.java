@@ -39,12 +39,12 @@ public class Bot extends BaseCharacter {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 20, y + 25);
+        return newRect(x + 20, y + 25);
     }
 
     @Override
     public void checkIntersections(Sprite sprite) {
-        if (getRect().intersect(sprite.getRect())) {
+        if (intersect(sprite)) {
             sprite.intersectionPlayer();
         }
     }

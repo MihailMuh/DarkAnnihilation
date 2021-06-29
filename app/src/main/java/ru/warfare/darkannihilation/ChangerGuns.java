@@ -1,21 +1,31 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 
 import static ru.warfare.darkannihilation.Constants.CHANGER_GUNS_CLICK_TIME;
 
 public class ChangerGuns extends Sprite {
     private Bitmap image;
+    private static final Paint alphaPaint = new Paint();
+    private boolean isInvisible;
     private long lastClick = System.currentTimeMillis();
 
     public ChangerGuns(Game g) {
         super(g, ImageHub.gunToNone.getWidth(), ImageHub.gunToNone.getHeight());
+        y = Game.screenHeight - height;
+
+        alphaPaint.setFilterBitmap(true);
+        alphaPaint.setDither(true);
+        alphaPaint.setAntiAlias(true);
+
         hide();
     }
 
     public void hide() {
         x = Game.screenWidth;
         lock = true;
+        isInvisible = false;
 
         if (!game.shotgunKit.picked) {
             image = ImageHub.gunToNone;
@@ -32,8 +42,22 @@ public class ChangerGuns extends Sprite {
 
     public void start() {
         x = 0;
-        y = Game.screenHeight - height;
         lock = false;
+    }
+
+    @Override
+    public void intersectionPlayer() {
+        if (!isInvisible) {
+            isInvisible = true;
+            alphaPaint.setAlpha(80);
+        }
+    }
+
+    public void work() {
+        if (isInvisible) {
+            isInvisible = false;
+            alphaPaint.setAlpha(255);
+        }
     }
 
     public void setCoords(int X, int Y) {
@@ -43,10 +67,12 @@ public class ChangerGuns extends Sprite {
     }
 
     public boolean checkCoords(int X, int Y) {
-        if (x < X) {
-            if (X < right()) {
-                if (y < Y) {
-                    return Y < bottom();
+        if (!isInvisible) {
+            if (x < X) {
+                if (X < right()) {
+                    if (y < Y) {
+                        return Y < bottom();
+                    }
                 }
             }
         }
@@ -54,12 +80,9 @@ public class ChangerGuns extends Sprite {
     }
 
     public void make() {
-        long now = System.currentTimeMillis();
-        if (now - lastClick > CHANGER_GUNS_CLICK_TIME) {
-            lastClick = now;
-            if (!game.shotgunKit.picked) {
-                image = ImageHub.gunToNone;
-            } else {
+        if (System.currentTimeMillis() - lastClick > CHANGER_GUNS_CLICK_TIME) {
+            lastClick = System.currentTimeMillis();
+            if (game.shotgunKit.picked) {
                 AudioHub.playReload();
                 if (game.player.gun.equals("shotgun")) {
                     game.player.gun = "gun";
@@ -68,6 +91,10 @@ public class ChangerGuns extends Sprite {
                     game.player.gun = "shotgun";
                     image = ImageHub.shotgunToGun;
                 }
+                width = image.getWidth();
+                height = image.getHeight();
+            } else {
+                image = ImageHub.gunToNone;
             }
         }
     }
@@ -75,7 +102,7 @@ public class ChangerGuns extends Sprite {
     @Override
     public void render() {
         if (!lock) {
-            Game.canvas.drawBitmap(image, x, y, null);
+            Game.canvas.drawBitmap(image, x, y, alphaPaint);
         }
     }
 }

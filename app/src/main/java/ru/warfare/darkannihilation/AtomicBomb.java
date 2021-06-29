@@ -58,7 +58,7 @@ public class AtomicBomb extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 15, y + 15);
+        return newRect(x + 15, y + 15);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class AtomicBomb extends Sprite {
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (intersect(bullet)) {
             bullet.intersection();
             if (!boom) {
                 health -= bullet.damage;
@@ -110,6 +110,6 @@ public class AtomicBomb extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.atomBombImage[frame], x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.atomBombImage[frame], x, y, Game.alphaEnemy);
     }
 }

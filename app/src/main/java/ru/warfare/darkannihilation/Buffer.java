@@ -45,7 +45,7 @@ public class Buffer extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 70, y + 70);
+        return newRect(x + 70, y + 70);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Buffer extends Sprite {
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (intersect(bullet)) {
             bullet.intersection();
             if (!boom) {
                 health -= bullet.damage;
@@ -91,7 +91,7 @@ public class Buffer extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.bufferImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.bufferImg, x, y, Game.alphaEnemy);
 
         if (!boom) {
             Game.canvas.drawRect(centerX() - 75, y + 50, centerX() + 75, y + 65, Game.scorePaint);

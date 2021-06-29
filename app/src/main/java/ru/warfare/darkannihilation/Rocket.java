@@ -26,7 +26,7 @@ public class Rocket extends Sprite {
 
     public void checkIntersections(Sprite sprite) {
         if (!lock) {
-            if (getRect().intersect(sprite.getRect())) {
+            if (intersect(sprite)) {
                 if (!sprite.isPassive | sprite.status.equals("saturn")) {
                     sprite.intersection();
                 }

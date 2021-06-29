@@ -7,7 +7,7 @@ import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Demoman extends Sprite {
     private long lastShoot = System.currentTimeMillis();
-    private int direction = 0;
+    private boolean direction;
 
     public Demoman() {
         super(ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
@@ -23,8 +23,8 @@ public class Demoman extends Sprite {
         health = DEMOMAN_HEALTH;
         y = randInt(0, Game.halfScreenHeight - height);
         speedX = randInt(5, 10);
-        direction = randInt(0, 1);
-        if (direction == 0) {
+        direction = randInt(0, 1) == 0;
+        if (direction) {
             x = -width;
         } else {
             x = Game.screenWidth;
@@ -44,7 +44,7 @@ public class Demoman extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 30, y + 25);
+        return newRect(x + 30, y + 25);
     }
 
     @Override
@@ -60,23 +60,12 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
-            bullet.intersection();
-            if (health <= 0) {
-                intersection();
-            }
-        }
-    }
-
-    @Override
     public void update() {
         shoot();
 
         x += speedX;
 
-        if (direction == 0) {
+        if (direction) {
             if (x > Game.screenWidth) {
                 hide();
             }

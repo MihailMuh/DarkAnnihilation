@@ -2,7 +2,10 @@ package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.SPIDER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
+import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH_BAR_HEIGHT;
+import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH_BAR_LEN;
 import static ru.warfare.darkannihilation.Constants.SPIDER_SHOOT_TIME;
+import static ru.warfare.darkannihilation.Constants.SPIDER_SPEED;
 import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Spider extends Sprite {
@@ -11,14 +14,33 @@ public class Spider extends Sprite {
 
     private int ammo;
     private boolean reload;
+    private boolean isShoot = false;
+    private float hp = 10;
+
+    private static int startBarWhiteY;
+    private static int startBarRedY;
+    private static int endBarWhiteY;
+    private static int endBarRedY;
 
     public Spider() {
         super(ImageHub.spiderImg.getWidth(), ImageHub.spiderImg.getHeight());
-        damage = SPIDER_DAMAGE;
+        new Thread(() -> {
+            damage = SPIDER_DAMAGE;
 
-        hide();
+            hide();
 
-        recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));
+            recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));
+
+            while (y < 35) {
+                y += SPIDER_SPEED;
+            }
+            startBarWhiteY = y + 10;
+            startBarRedY = startBarWhiteY + 2;
+            endBarWhiteY = startBarWhiteY + SPIDER_HEALTH_BAR_HEIGHT;
+            endBarRedY = endBarWhiteY - 2;
+
+            y = -height;
+        }).start();
     }
 
     private void shoot() {
@@ -35,12 +57,12 @@ public class Spider extends Sprite {
                 }
                 if (ammo >= 20) {
                     reload = true;
-                    shootTripleTime = 200;
+                    shootTripleTime = SPIDER_SHOOT_TIME * 2;
                 }
             } else {
                 ammo--;
                 if (ammo == 0) {
-                    shootTripleTime = 100;
+                    shootTripleTime = SPIDER_SHOOT_TIME;
                     reload = false;
                 }
             }
@@ -48,13 +70,14 @@ public class Spider extends Sprite {
     }
 
     public void hide() {
+        hp = 10;
         lock = true;
         reload = false;
+        isShoot = false;
         ammo = 0;
         health = SPIDER_HEALTH;
         x = randInt(0, screenWidthWidth);
         y = -height;
-        speedY = randInt(5, 10);
         shootTripleTime = SPIDER_SHOOT_TIME;
 
         if (buff) {
@@ -78,7 +101,7 @@ public class Spider extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 25, y + 5);
+        return newRect(x + 25, y + 5);
     }
 
     @Override
@@ -94,30 +117,32 @@ public class Spider extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
-            bullet.intersection();
-            if (health <= 0) {
-                intersection();
-            }
-        }
-    }
-
-    @Override
     public void update() {
         if (y < 35) {
-            y += speedY;
+            y += SPIDER_SPEED;
         } else {
+            if (!isShoot) {
+                isShoot = true;
+            }
             shoot();
         }
     }
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.spiderImg, x, y, Game.alphaEnemy);
 
-        Game.canvas.drawRect(centerX() - 75, y + 10, centerX() + 75, y + 25 , Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + ((health / (float) SPIDER_HEALTH) * 150), y + 23, Game.fpsPaint);
+        if (hp > 4) {
+            hp = ((health / (float) SPIDER_HEALTH) * SPIDER_HEALTH_BAR_LEN);
+        } else {
+            hp = 4;
+        }
+        if (!isShoot) {
+            Game.canvas.drawRect(centerX() - 75, y + 10, centerX() + 75, y + 25 , Game.scorePaint);
+            Game.canvas.drawRect(centerX() - 73, y + 12, centerX() - 77 + hp, y + 23, Game.topPaintRed);
+        } else {
+            Game.canvas.drawRect(centerX() - 75, startBarWhiteY, centerX() + 75, endBarWhiteY, Game.scorePaint);
+            Game.canvas.drawRect(centerX() - 73, startBarRedY, centerX() - 77 + hp, endBarRedY, Game.topPaintRed);
+        }
     }
 }

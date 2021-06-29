@@ -287,19 +287,8 @@ public class Settings {
     }
 
     public void saveSettings() {
-        String vibr;
-        String a;
-        if (Game.vibrate) {
-            vibr = "1";
-        } else {
-            vibr = "0";
-        }
-        if (Game.scorePaint.isAntiAlias()) {
-            a = "1";
-        } else {
-            a = "0";
-        }
-        Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " " + vibr + " " +
-                Game.language + " " + a);
+        Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " " +
+                MATH.boolToInt(Game.vibrate) + " " + Game.language + " " +
+                MATH.boolToInt(Game.scorePaint.isAntiAlias()));
     }
 }

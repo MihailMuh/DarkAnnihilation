@@ -42,7 +42,7 @@ public class MillenniumFalcon extends BaseCharacter {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 20, y + 25);
+        return newRect(x + 20, y + 25);
     }
 
     @Override

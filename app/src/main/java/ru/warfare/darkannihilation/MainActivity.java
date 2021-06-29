@@ -9,17 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
+
+import static ru.warfare.darkannihilation.Service.makeToast;
 
 public class MainActivity extends AppCompatActivity {
     public Game game;
@@ -91,12 +90,10 @@ public class MainActivity extends AppCompatActivity {
                     button.setOnClickListener(view -> {
                         String nick = ((EditText) promptsView.findViewById(R.id.input_text)).getText().toString();
                         if (nick.length() == 0) {
-                            Toast toast = Toast.makeText(this, "Nickname must be notnull!", Toast.LENGTH_LONG);
-                            toast.show();
+                            makeToast("Nickname must be notnull!", true);
                         } else {
                             if (ClientServer.info_from_server.has(nick)) {
-                                Toast toast = Toast.makeText(this, "This nickname already exists", Toast.LENGTH_LONG);
-                                toast.show();
+                                makeToast("This nickname already exists", true);
                             } else {
                                 preferences.edit().putBoolean("firstrun", false).apply();
 
@@ -127,8 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                     ClientServer.postBestScore(Clerk.nickname, 0);
                                 }).start();
 
-                                Toast toast = Toast.makeText(this, "Congratulations! You have registered!", Toast.LENGTH_LONG);
-                                toast.show();
+                                makeToast("Congratulations! You have registered!", true);
                                 dialog.dismiss();
                             }
                         }

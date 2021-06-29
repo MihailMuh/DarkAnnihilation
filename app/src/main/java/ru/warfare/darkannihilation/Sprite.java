@@ -77,11 +77,21 @@ public class Sprite {
         screenWidthWidth = Game.screenWidth - width;
     }
 
-    public void check_intersectionBullet(Sprite bullet) {}
     public void update() {}
     public void render() {}
+
     public void intersection() {}
     public void intersectionPlayer() {}
+    public void check_intersectionBullet(Sprite bullet) {
+        if (intersect(bullet)) {
+            health -= bullet.damage;
+            bullet.intersection();
+            if (health <= 0) {
+                intersection();
+            }
+        }
+    }
+
     public void empireStart() {}
     public void buff() {}
     public void stopBuff() {}
@@ -144,15 +154,12 @@ public class Sprite {
     public int centerX() {
         return x + halfWidth;
     }
-
     public int centerY() {
         return y + halfHeight;
     }
-
     public int right() {
         return x + width;
     }
-
     public int bottom() {
         return y + height;
     }
@@ -165,6 +172,9 @@ public class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
+        getRect();
+        sprite = sprite.getRect();
+
         if (left <= sprite.right) {
             if (sprite.left <= right) {
                 if (top <= sprite.bottom) {
@@ -175,7 +185,7 @@ public class Sprite {
         return false;
     }
 
-    public Sprite goTO(int newLeft, int newTop) {
+    public Sprite newRect(int newLeft, int newTop) {
         right += newLeft - left;
         bottom += newTop - top;
         left = newLeft;
@@ -183,16 +193,12 @@ public class Sprite {
         return this;
     }
 
-    public Sprite goTO() {
+    public Sprite getRect() {
         right += x - left;
         bottom += y - top;
         left = x;
         top = y;
         return this;
-    }
-
-    public Sprite getRect() {
-        return goTO();
     }
 
     public Object[] getBox(int a, int b, Bitmap bitmap) {

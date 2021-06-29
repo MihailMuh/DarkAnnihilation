@@ -35,7 +35,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint scorePaint = new Paint();
     public static final Paint topPaint = new Paint();
     public static final Paint topPaintRed = new Paint();
-    public static final Paint alphaPaint = new Paint();
+    public static final Paint alphaEnemy = new Paint();
     public static final Paint winPaint = new Paint();
     public static final Paint paint50 = new Paint();
     public static final Paint buttonsPaint = new Paint();
@@ -201,8 +201,9 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
             buttonsPaint.setFilterBitmap(true);
             buttonsPaint.setDither(true);
 
-            alphaPaint.setFilterBitmap(true);
-            alphaPaint.setDither(true);
+            alphaEnemy.setFilterBitmap(true);
+            alphaEnemy.setDither(true);
+            alphaEnemy.setAntiAlias(true);
 
             getMaxScore();
 
@@ -285,7 +286,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     private void gameplay() {
-        long now = System.currentTimeMillis();
         moveAll = player.speedX / 3;
 
         if (screen.x < 0 & screen.right() > screenWidth) {
@@ -310,6 +310,16 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (!anySprite.isPassive) {
                         player.checkIntersections(anySprite);
                     }
+                    if (player.intersect(changerGuns)) {
+                        changerGuns.intersectionPlayer();
+                    } else {
+                        if (player.intersect(pauseButton)) {
+                            pauseButton.intersectionPlayer();
+                        } else {
+                            changerGuns.work();
+                            pauseButton.work();
+                        }
+                    }
                     if (level == 1) {
                         rocket.checkIntersections(anySprite);
                     }
@@ -323,7 +333,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                             for (int j = 0; j < bullets.size(); j++) {
                                 Sprite bulletPlayer = bullets.get(j);
                                 if (bulletPlayer.status.equals("saturn")) {
-                                    if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
+                                    if (anySprite.intersect(bulletPlayer)) {
                                         if (random.nextFloat() <= 0.5) {
                                             Object[] info = bulletPlayer
                                                     .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
@@ -352,12 +362,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.update();
         player.render();
 
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).render();
-        }
-
-        if (now - lastBoss > BOSS_TIME) {
-            lastBoss = now;
+        if (System.currentTimeMillis() - lastBoss > BOSS_TIME) {
+            lastBoss = System.currentTimeMillis();
             Sprite boss;
             if (level == 1) {
                 boss = new Boss(this);
@@ -440,7 +446,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     }
                 }
                 if (atomicBomb.lock) {
-                    if (random.nextFloat() <= 0.0024) {
+                    if (random.nextFloat() <= 0.0022) {
                         atomicBomb.lock = false;
                     }
                 }
@@ -564,15 +570,13 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     player.dontmove = true;
                     changerGuns.make();
                     break;
-                } else {
-                    if (pb && !cg) {
-                        player.dontmove = true;
-                        pauseButton.make();
-                        break;
-                    } else {
-                        player.dontmove = false;
-                    }
                 }
+                if (pb && !cg) {
+                    player.dontmove = true;
+                    pauseButton.make();
+                    break;
+                }
+                player.dontmove = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 switch (gameStatus) {
@@ -594,6 +598,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         if (!player.dontmove) {
                             player.setCoords(clickX, clickY);
                         }
+
                         if (pointerCount >= 2) {
                             changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
                         }
@@ -742,7 +747,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
     public void generateMenu() {
         getMaxScore();
-        alphaPaint.setAlpha(255);
+        alphaEnemy.setAlpha(255);
         endImgInit = false;
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
 
@@ -867,7 +872,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 factory = new Factory();
                 demoman = new Demoman();
                 screen = new StarScreen();
-                alphaPaint.setAlpha(255);
+                alphaEnemy.setAlpha(255);
 
                 len = numberVaders - 1;
                 allSprites.add(new TripleFighter());
@@ -900,7 +905,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 buffer = new Buffer();
                 screen = new ThunderScreen();
                 atomicBomb = new AtomicBomb();
-                alphaPaint.setAlpha(165);
+                alphaEnemy.setAlpha(165);
 
                 len = numberVaders + 3;
                 for (int i = 0; i < len; i++) {
@@ -1172,7 +1177,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                             for (int j = 0; j < bullets.size(); j++) {
                                 Sprite bullet = bullets.get(j);
                                 if (bullet.status.equals("saturn")) {
-                                    if (anySprite.getRect().intersect(bullet.getRect())) {
+                                    if (anySprite.intersect(bullet)) {
                                         bullet.intersection();
                                     }
                                 }
@@ -1182,7 +1187,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                 for (int j = 0; j < bullets.size(); j++) {
                                     Sprite bulletPlayer = bullets.get(j);
                                     if (bulletPlayer.status.equals("saturn")) {
-                                        if (anySprite.getRect().intersect(bulletPlayer.getRect())) {
+                                        if (anySprite.intersect(bulletPlayer)) {
                                             if (random.nextFloat() <= 0.5) {
                                                 Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
                                                         (Bitmap) anySprite.getBox(0, 0, null)[0]);

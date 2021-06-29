@@ -6,6 +6,7 @@ import static ru.warfare.darkannihilation.Constants.BOSS_VADERS_SHOOT_TIME;
 public class BossVaders extends Sprite {
     private final Vector vector = new Vector();
     private long lastShoot;
+    private float hp = 10;
 
     private boolean field = false;
     private boolean left = false;
@@ -82,15 +83,7 @@ public class BossVaders extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 35, y + 20);
-    }
-
-    @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
-            bullet.intersection();
-        }
+        return newRect(x + 35, y + 20);
     }
 
     @Override
@@ -133,9 +126,15 @@ public class BossVaders extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.bossVadersImg, x, y, Game.alphaEnemy);
+
+        if (hp > 4) {
+            hp = (health / (float) BOSS_VADERS_HEALTH) * 140;
+        } else {
+            hp = 4;
+        }
 
         Game.canvas.drawRect(centerX() - 70, y - 10, centerX() + 70, y + 5, Game.scorePaint);
-        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + ((health / (float) BOSS_VADERS_HEALTH) * 140), y + 3, Game.fpsPaint);
+        Game.canvas.drawRect(centerX() - 68, y - 8, centerX() - 72 + hp, y + 3, Game.topPaintRed);
     }
 }

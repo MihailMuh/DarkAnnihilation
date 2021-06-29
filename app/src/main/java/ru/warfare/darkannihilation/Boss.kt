@@ -9,6 +9,7 @@ import ru.warfare.darkannihilation.Constants.BOSS_SHOOT_TIME
 class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossImage.height) {
     private var lastShoot = System.currentTimeMillis()
     private var now: Long = 0
+    private var hp: Float = 10f
 
     init {
         health = BOSS_HEALTH.toInt()
@@ -66,14 +67,15 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
     }
 
     override fun getRect(): Sprite {
-        return goTO(x + 20, y + 20)
+        return newRect(x + 20, y + 20)
     }
 
-    override fun check_intersectionBullet(bullet: Sprite?) {
-        if (bullet != null) {
-            if (rect.intersect(bullet.rect)) {
-                health -= bullet.damage
-                bullet.intersection()
+    override fun check_intersectionBullet(bullet: Sprite) {
+        if (intersect(bullet)) {
+            health -= bullet.damage
+            bullet.intersection()
+            if (health <= 0) {
+                killAfterFight()
             }
         }
     }
@@ -105,13 +107,16 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
             }
             y += speedY
         }
-        if (health <= 0) {
-            killAfterFight()
-        }
     }
 
     override fun render() {
         Game.canvas.drawBitmap(ImageHub.bossImage, x.toFloat(), y.toFloat(), null)
+
+        hp = if (hp > 4) {
+            ((health / BOSS_HEALTH.toFloat()) * 140)
+        } else {
+            4f
+        }
         Game.canvas.drawRect(
             (centerX() - 70).toFloat(),
             (y - 10).toFloat(),
@@ -122,9 +127,9 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         Game.canvas.drawRect(
             (centerX() - 68).toFloat(),
             (y - 8).toFloat(),
-            (centerX() - 72 + ((health / BOSS_HEALTH.toFloat()) * 140)),
+            (centerX() - 72 + hp),
             (y + 3).toFloat(),
-            Game.fpsPaint
+            Game.topPaintRed
         )
     }
 }

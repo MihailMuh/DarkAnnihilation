@@ -53,7 +53,7 @@ public class BaseCharacter extends Sprite {
     }
 
     public void checkIntersections(Sprite sprite) {
-        if (getRect().intersect(sprite.getRect())) {
+        if (intersect(sprite)) {
             damage(sprite.damage);
             sprite.intersectionPlayer();
         }

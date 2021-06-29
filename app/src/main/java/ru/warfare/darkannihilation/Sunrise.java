@@ -35,7 +35,7 @@ public class Sunrise extends Sprite {
         field = false;
         lock = true;
         health = SUNRISE_HEALTH;
-        x = randInt(width, screenWidthWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
@@ -68,7 +68,7 @@ public class Sunrise extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 15, y + 15);
+        return newRect(x + 15, y + 15);
     }
 
     @Override
@@ -81,17 +81,6 @@ public class Sunrise extends Sprite {
     public void intersectionPlayer() {
         createSkullExplosion();
         hide();
-    }
-
-    @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
-            bullet.intersection();
-            if (health <= 0) {
-                intersection();
-            }
-        }
     }
 
     @Override
@@ -121,6 +110,6 @@ public class Sunrise extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.sunriseImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.sunriseImg, x, y, Game.alphaEnemy);
     }
 }

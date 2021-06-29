@@ -66,7 +66,7 @@ public class XWing extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 15, y + 15);
+        return newRect(x + 15, y + 15);
     }
 
     @Override
@@ -81,17 +81,6 @@ public class XWing extends Sprite {
         AudioHub.playMetal();
         createSmallExplosion();
         newStatus();
-    }
-
-    @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
-            health -= bullet.damage;
-            bullet.intersection();
-            if (health <= 0) {
-                intersection();
-            }
-        }
     }
 
     @Override
@@ -113,6 +102,6 @@ public class XWing extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.XWingImg, x, y, Game.alphaPaint);
+        Game.canvas.drawBitmap(ImageHub.XWingImg, x, y, Game.alphaEnemy);
     }
 }

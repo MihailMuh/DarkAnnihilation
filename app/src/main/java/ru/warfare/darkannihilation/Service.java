@@ -6,18 +6,21 @@ import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import static android.content.Context.WINDOW_SERVICE;
 import static android.os.VibrationEffect.createOneShot;
 import static ru.warfare.darkannihilation.Constants.TAG;
 
 public final class Service {
+    private static MainActivity mainActivity;
     private static final Point size = new Point();
     private static final DisplayMetrics cutSize = new DisplayMetrics();
     private static int interval;
     private static Vibrator vibrator;
 
     public static void init(MainActivity mainActivity) {
+        Service.mainActivity = mainActivity;
 
         (((WindowManager) mainActivity.getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRealSize(size);
 
@@ -31,6 +34,14 @@ public final class Service {
         if (Game.vibrate) {
             vibrator.vibrate(createOneShot(millis, 255));
         }
+    }
+
+    public static void makeToast(String text, boolean longToast) {
+        Toast.makeText(mainActivity, text, MATH.boolToInt(longToast)).show();
+    }
+
+    public static void getSizeAppInRAM() {
+        makeToast(((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576f) + " MB", true);
     }
 
     public static int getWidthInterval() {
@@ -58,6 +69,7 @@ public final class Service {
             Log.e(TAG, text);
         } catch (Exception e) {
             Log.e(TAG, "Nope.");
+            Log.e(TAG, e.toString());
         }
     }
 }

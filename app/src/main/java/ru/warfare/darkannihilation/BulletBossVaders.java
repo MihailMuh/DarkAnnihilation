@@ -18,7 +18,7 @@ public class BulletBossVaders extends Sprite {
 
     @Override
     public Sprite getRect() {
-        return goTO(x + 25, y + 25);
+        return newRect(x + 25, y + 25);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class BulletBossVaders extends Sprite {
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
-        if (getRect().intersect(bullet.getRect())) {
+        if (intersect(bullet)) {
             bullet.intersection();
         }
     }
