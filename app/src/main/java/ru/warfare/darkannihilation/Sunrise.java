@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.SUNRISE_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.SUNRISE_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SUNRISE_SHOOT_TIME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Sunrise extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -39,9 +40,7 @@ public class Sunrise extends Sprite {
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
 
-        if (randInt(0, 1) == 1) {
-            left = true;
-        }
+        left = randInt(0, 1) == 1;
 
         if (buff) {
             up();

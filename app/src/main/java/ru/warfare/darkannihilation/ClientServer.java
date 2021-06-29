@@ -21,6 +21,10 @@ public final class ClientServer {
     public static JSONObject info_from_server = new JSONObject();
     public static JSONArray namesPlayers = new JSONArray();
 
+    static {
+        getStatistics();
+    }
+
     public static void getStatistics() {
         client.newCall(
                 new Request.Builder()

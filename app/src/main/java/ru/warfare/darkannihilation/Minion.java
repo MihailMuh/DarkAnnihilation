@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.MINION_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.MINION_HEALTH;
 import static ru.warfare.darkannihilation.Constants.MINION_SHOOT_TIME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Minion extends Sprite {
     private long lastShoot = System.currentTimeMillis();

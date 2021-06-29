@@ -1,8 +1,21 @@
 package ru.warfare.darkannihilation;
 
-import static ru.warfare.darkannihilation.Constants.HALF_PI;
+public class MATH {
+    public static final float HALF_PI = (float) Math.PI / 2f;
 
-public class Vector {
+    public static int randInt(int min, int max) {
+        return (int) (Math.random() * ((max - min) + 1)) + min;
+    }
+
+    public static int getDistance(int a, int b) {
+        return (int) Math.sqrt((a * a) + (b * b));
+    }
+    public static double getDistance(double a, double b) {
+        return Math.sqrt((a * a) + (b * b));
+    }
+}
+
+class Vector {
     public float len;
     public float rads;
 
@@ -10,7 +23,7 @@ public class Vector {
         rads = (float) Math.atan2(endY - startY, endX - startX);
 //        speedX speedY angle
         return new int[]{(int) (Math.cos(rads) * len), (int) (Math.sin(rads) * len),
-                (int) Math.toDegrees(rads + HALF_PI)};
+                (int) Math.toDegrees(rads + MATH.HALF_PI)};
     }
 
     public int[] easyVector(int startX, int startY, int endX, int endY, int len) {
@@ -30,6 +43,6 @@ public class Vector {
     }
 
     public float getAngle() {
-        return (float) Math.toDegrees(rads + HALF_PI);
+        return (float) Math.toDegrees(rads + MATH.HALF_PI);
     }
 }

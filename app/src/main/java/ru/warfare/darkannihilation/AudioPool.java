@@ -6,8 +6,6 @@ import android.media.SoundPool;
 
 import java.util.ArrayList;
 
-import static ru.warfare.darkannihilation.Sprite.randInt;
-
 public final class AudioPool {
     private static final SoundPool soundPool = new SoundPool
             .Builder()
@@ -33,7 +31,7 @@ public final class AudioPool {
 
     public static void playSnd(int id) {
         if (id == 0) {
-            soundPool.play(sounds.get(randInt(0, 1)), volumes.get(id), volumes.get(id), 1, 0, 1);
+            soundPool.play(sounds.get(MATH.randInt(0, 1)), volumes.get(id), volumes.get(id), 1, 0, 1);
         } else {
             soundPool.play(sounds.get(id + 1), volumes.get(id), volumes.get(id), 1, 0, 1);
         }

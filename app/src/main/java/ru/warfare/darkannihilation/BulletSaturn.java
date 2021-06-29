@@ -6,8 +6,8 @@ public class BulletSaturn extends Sprite {
     public BulletSaturn(int X, int Y) {
         super(ImageHub.bulletSaturnImg.getWidth(), ImageHub.bulletSaturnImg.getHeight());
 
-        speedY = randInt(6, 13);
-        speedX = randInt(-6, 6);
+        speedY = MATH.randInt(6, 13);
+        speedX = MATH.randInt(-6, 6);
         damage = BULLET_SATURN_DAMAGE;
         isPassive = true;
         isBullet = true;

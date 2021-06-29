@@ -352,6 +352,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player.update();
         player.render();
 
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).render();
+        }
+
         if (now - lastBoss > BOSS_TIME) {
             lastBoss = now;
             Sprite boss;

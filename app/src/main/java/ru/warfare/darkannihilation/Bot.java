@@ -8,8 +8,8 @@ public class Bot extends BaseCharacter {
 
     public Bot() {
         super(ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
-        speedX = randInt(3, 7);
-        speedY = randInt(3, 7);
+        speedX = MATH.randInt(3, 7);
+        speedY = MATH.randInt(3, 7);
 
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;

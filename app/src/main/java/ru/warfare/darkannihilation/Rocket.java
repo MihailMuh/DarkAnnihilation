@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.ROCKET_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.ROCKET_SPEED;
 
-public class Rocket extends Sprite{
+public class Rocket extends Sprite {
     public Rocket() {
         super(ImageHub.rocketImg.getWidth(), ImageHub.rocketImg.getHeight());
         speedY = ROCKET_SPEED;
@@ -25,7 +25,7 @@ public class Rocket extends Sprite{
     }
 
     public void checkIntersections(Sprite sprite) {
-        if (sprite != this) {
+        if (!lock) {
             if (getRect().intersect(sprite.getRect())) {
                 if (!sprite.isPassive | sprite.status.equals("saturn")) {
                     sprite.intersection();
@@ -51,7 +51,7 @@ public class Rocket extends Sprite{
     }
 
     @Override
-    public void render () {
+    public void render() {
         Game.canvas.drawBitmap(ImageHub.rocketImg, x, y, null);
     }
 }

@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.SPIDER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SPIDER_SHOOT_TIME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Spider extends Sprite {
     private int shootTripleTime;
@@ -51,7 +52,7 @@ public class Spider extends Sprite {
         reload = false;
         ammo = 0;
         health = SPIDER_HEALTH;
-        x = randInt(width, screenWidthWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         speedY = randInt(5, 10);
         shootTripleTime = SPIDER_SHOOT_TIME;

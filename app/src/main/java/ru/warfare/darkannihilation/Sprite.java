@@ -195,16 +195,6 @@ public class Sprite {
         return goTO();
     }
 
-    public static int randInt(int min, int max) {
-        return (int) (Math.random() * ((max - min) + 1)) + min;
-    }
-
-    public static int getDistance(int a, int b) {
-        return (int) Math.sqrt((a * a) + (b * b));
-    }
-    public static double getDistance(double a, double b) {
-        return Math.sqrt((a * a) + (b * b));
-    }
     public Object[] getBox(int a, int b, Bitmap bitmap) {
         return new Object[30];
     }

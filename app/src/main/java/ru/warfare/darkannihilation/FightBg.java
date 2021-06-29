@@ -8,20 +8,22 @@ public class FightBg extends Sprite {
     public FightBg() {
         super(ImageHub.playerVsBoss.getWidth(), ImageHub.playerVsBoss.getHeight());
 
-        y = Game.halfScreenHeight;
+        new Thread(() -> {
+            y = Game.halfScreenHeight;
 
-        int min = 10;
-        while (bottom() - Game.halfScreenHeight > Game.screenHeight) {
-            height = (int) ((Game.screenWidth-150-min) * Game.resizeK);
-            min += 10;
-        }
+            int min = 10;
+            while (bottom() - Game.halfScreenHeight > Game.screenHeight) {
+                height = (int) ((Game.screenWidth-150-min) * Game.resizeK);
+                min += 10;
+            }
 
-        width = (int) (height * 1.05);
-        halfHeight = height / 2;
-        halfWidth = width / 2;
+            width = (int) (height * 1.05);
+            halfHeight = height / 2;
+            halfWidth = width / 2;
 
-        x = Game.halfScreenWidth - halfWidth;
-        y = Game.halfScreenHeight - halfHeight;
+            x = Game.halfScreenWidth - halfWidth;
+            y = Game.halfScreenHeight - halfHeight;
+        }).start();
     }
 
     public void newImg(String character) {

@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_HEALTH;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class TripleFighter extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -32,7 +33,7 @@ public class TripleFighter extends Sprite {
         if (Game.bosses.size() != 0) {
             lock = true;
         }
-        health = 6;
+        health = TRIPLE_FIGHTER_HEALTH;
         x = randInt(0, screenWidthWidth);
         y = -height;
         speedX = randInt(-3, 3);

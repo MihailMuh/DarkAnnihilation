@@ -16,12 +16,12 @@ public class BossVaders extends Sprite {
         health = BOSS_VADERS_HEALTH;
         speedY = 1;
         speedX = 5;
-        if (randInt(0, 1) == 1) {
+        if (MATH.randInt(0, 1) == 1) {
             left = true;
         }
         isPassive = true;
 
-        x = randInt(width, screenWidthWidth);
+        x = MATH.randInt(width, screenWidthWidth);
         y = -800;
 
         recreateRect(x + 35, y + 20, right() - 35, bottom() - 20);

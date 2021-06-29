@@ -15,7 +15,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         speedY = 1
         speedX = 10
         isPassive = true
-        x = randInt(0, screenWidthWidth)
+        x = MATH.randInt(0, screenWidthWidth)
         y = -800
         recreateRect(x + 20, y + 20, right() - 20, bottom() - 20)
     }
@@ -47,7 +47,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
             if (game.portal == null) {
                 game.portal = Portal(game)
             }
-            val len = Game.numberVaders / 2;
+            val len = Game.numberVaders / 2
             for (i in 0..len) {
                 if (Game.random.nextFloat() <= 0.1) {
                     Game.allSprites.add(TripleFighter())
@@ -82,14 +82,14 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         if (y >= 35) {
             x += speedX
             if (x < -width) {
-                if (randInt(1, 2) == 1) {
+                if (MATH.randInt(1, 2) == 1) {
                     speedX = -speedX
                 } else {
                     x = Game.screenWidth
                 }
             }
             if (x > Game.screenWidth) {
-                if (randInt(1, 2) == 1) {
+                if (MATH.randInt(1, 2) == 1) {
                     speedX = -speedX
                 } else {
                     x = -width

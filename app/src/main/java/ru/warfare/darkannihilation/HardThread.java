@@ -1,8 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import static ru.warfare.darkannihilation.Sprite.getDistance;
-import static ru.warfare.darkannihilation.Sprite.randInt;
-
 public class HardThread implements Runnable {
 //    1 - bullets enemy
 //    2 - sunrise
@@ -68,7 +65,7 @@ public class HardThread implements Runnable {
                     job = 0;
                     break;
                 case 4:
-                    for (int i = 0; i < randInt(2, 6); i++) {
+                    for (int i = 0; i < MATH.randInt(2, 6); i++) {
                         BulletSaturn bulletSaturn = new BulletSaturn(game.player.centerX(), game.player.y);
                         Game.bullets.add(bulletSaturn);
                         Game.allSprites.add(bulletSaturn);
@@ -110,7 +107,7 @@ public class HardThread implements Runnable {
                 case 8:
                     int X = game.player.centerX();
                     int Y = game.player.centerY();
-                    if (getDistance(x - X, y - Y) < r) {
+                    if (MATH.getDistance(x - X, y - Y) < r) {
                         values = vector.vector(x, y, X, Y, 9);
                         Game.allSprites.add(new BulletEnemy(x, y, values[2], values[0], values[1]));
                         AudioHub.playShoot();

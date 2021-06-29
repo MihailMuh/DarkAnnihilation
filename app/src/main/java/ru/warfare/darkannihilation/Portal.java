@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.NUMBER_PORTAL_IMAGES;
 import static ru.warfare.darkannihilation.Constants.PORTAL_FRAME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Portal extends Sprite {
     private int frame = 0;

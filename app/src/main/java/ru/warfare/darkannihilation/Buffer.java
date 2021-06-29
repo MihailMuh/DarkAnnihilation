@@ -38,9 +38,9 @@ public class Buffer extends Sprite {
         startBuff = false;
         lock = true;
         health = BUFFER_HEALTH;
-        x = randInt(width, screenWidthWidth);
+        x = MATH.randInt(0, screenWidthWidth);
         y = -height;
-        speedY = randInt(5, 10);
+        speedY = MATH.randInt(5, 10);
     }
 
     @Override

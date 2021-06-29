@@ -48,6 +48,7 @@ public final class Constants {
     public static final short FACTORY_SPAWN_TIME = 1_000;
     public static final short FACTORY_HEALTH = SPIDER_HEALTH;
     public static final short FACTORY_SPEED = 3;
+    public static final short FACTORY_HEALTH_BAR_LEN = 500;
 
     public static final byte MINION_HEALTH = 2;
     public static final short MINION_SHOOT_TIME = 900;
@@ -120,7 +121,7 @@ public final class Constants {
     public static final byte BOMB_SPEED = 15;
 
 //    other
-    public static final short BUTTON_CLICK_TIME = 500;
+    public static final short BUTTON_CLICK_TIME = FACTORY_HEALTH_BAR_LEN;
 
     public static final short CHANGER_GUNS_CLICK_TIME = 700;
 
@@ -129,5 +130,4 @@ public final class Constants {
 //    constants
     public static final String SERVER_IP = "http://78.29.33.173:49150/";
     public static final String TAG = "D'Ark";
-    public static final float HALF_PI = (float) Math.PI / 2f;
 }

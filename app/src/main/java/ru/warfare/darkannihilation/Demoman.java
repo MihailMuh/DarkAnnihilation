@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.DEMOMAN_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.DEMOMAN_HEALTH;
 import static ru.warfare.darkannihilation.Constants.DEMOMAN_SHOOT_TIME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Demoman extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -10,26 +11,24 @@ public class Demoman extends Sprite {
 
     public Demoman() {
         super(ImageHub.demomanImg.getWidth(), ImageHub.demomanImg.getHeight());
-
         damage = DEMOMAN_DAMAGE;
 
         hide();
 
         recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
-
     }
 
     public void hide() {
         lock = true;
         health = DEMOMAN_HEALTH;
         y = randInt(0, Game.halfScreenHeight - height);
+        speedX = randInt(5, 10);
         direction = randInt(0, 1);
         if (direction == 0) {
             x = -width;
-            speedX = randInt(5, 10);
         } else {
             x = Game.screenWidth;
-            speedX = randInt(-10, -5);
+            speedX = -speedX;
         }
     }
 

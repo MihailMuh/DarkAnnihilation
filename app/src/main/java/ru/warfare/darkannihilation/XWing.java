@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation;
 import static ru.warfare.darkannihilation.Constants.XWING_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.XWING_HEALTH;
 import static ru.warfare.darkannihilation.Constants.XWING_SHOOT_TIME;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class XWing extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -33,7 +34,7 @@ public class XWing extends Sprite {
             lock = true;
         }
         health = XWING_HEALTH;
-        x = randInt(0, Game.screenWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         speedX = randInt(-3, 3);
         speedY = randInt(1, 8);

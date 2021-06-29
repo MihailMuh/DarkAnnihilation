@@ -15,7 +15,7 @@ public class ShotgunKit extends Sprite {
     }
 
     public void hide() {
-        x = randInt(0, screenWidthWidth);
+        x = MATH.randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
     }

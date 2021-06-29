@@ -11,7 +11,7 @@ public class Attention extends Sprite {
 
     public void hide() {
         lock = true;
-        x = randInt(0, screenWidthWidth);
+        x = MATH.randInt(0, screenWidthWidth);
         y = -height;
     }
 

@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Thread(() -> {
             ImageHub.init(this);
             AudioHub.init(this);
-            ClientServer.getStatistics();
         }));
 
 //        Service.print(Locale.getDefault().getLanguage());

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import static ru.warfare.darkannihilation.Constants.VADER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.VADER_HEALTH;
+import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Vader extends Sprite {
     private final Bitmap img;
@@ -37,7 +38,7 @@ public class Vader extends Sprite {
             lock = true;
         }
         health = VADER_HEALTH;
-        x = randInt(0, Game.screenWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);

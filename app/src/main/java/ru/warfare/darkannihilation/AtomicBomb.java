@@ -31,7 +31,7 @@ public class AtomicBomb extends Sprite {
         lock = true;
         speedY = 1;
         health = 20;
-        x = randInt(0, Game.screenWidth);
+        x = MATH.randInt(0, Game.screenWidth);
         y = -height;
 
         if (buff) {
