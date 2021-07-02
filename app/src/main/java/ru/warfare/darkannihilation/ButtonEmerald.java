@@ -26,6 +26,7 @@ public class ButtonEmerald extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.buttonEmeraldImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.buttonEmeraldImg,
+                x, y, Game.nicePaint);
     }
 }

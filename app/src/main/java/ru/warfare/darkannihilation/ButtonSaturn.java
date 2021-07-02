@@ -26,6 +26,7 @@ public class ButtonSaturn extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.buttonSaturnImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.buttonSaturnImg,
+                x, y, Game.nicePaint);
     }
 }

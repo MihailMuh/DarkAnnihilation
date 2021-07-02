@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:isGame="true"
+        android:colorMode="wideColorGamut"
 
         tools:replace="android:icon, android:allowBackup">
         <activity

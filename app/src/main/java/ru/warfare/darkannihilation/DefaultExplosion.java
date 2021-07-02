@@ -34,7 +34,7 @@ public class DefaultExplosion extends BaseExplosion {
     @Override
     public void render () {
         if (frame != NUMBER_DEFAULT_EXPLOSION_IMAGES) {
-            Game.canvas.drawBitmap(img[frame], x, y, null);
+            Game.canvas.drawBitmap(img[frame], x, y, Game.nicePaint);
         }
     }
 }

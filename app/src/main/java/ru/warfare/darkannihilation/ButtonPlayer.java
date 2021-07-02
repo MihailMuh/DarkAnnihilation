@@ -26,6 +26,7 @@ public class ButtonPlayer extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.buttonPlayerImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.buttonPlayerImg,
+                x, y, Game.nicePaint);
     }
 }

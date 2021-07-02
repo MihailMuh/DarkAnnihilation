@@ -40,7 +40,7 @@ public class ExplosionTriple extends BaseExplosion {
     @Override
     public void render () {
         if (frame != NUMBER_TRIPLE_EXPLOSION_IMAGES) {
-            Game.canvas.drawBitmap(img[frame], x, y, null);
+            Game.canvas.drawBitmap(img[frame], x, y, Game.nicePaint);
         }
     }
 }

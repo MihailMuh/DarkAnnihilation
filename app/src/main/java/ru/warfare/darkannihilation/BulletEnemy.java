@@ -60,6 +60,6 @@ public class BulletEnemy extends Sprite {
 
     @Override
     public void render () {
-        Game.canvas.drawBitmap(image, x, y, null);
+        Game.canvas.drawBitmap(image, x, y, Game.nicePaint);
     }
 }

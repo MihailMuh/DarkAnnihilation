@@ -189,6 +189,13 @@ public final class AudioHub {
         AudioPool.playSnd(13);
     }
 
+    public static void pauseAttentionSnd() {
+        if (attentionSnd.isPlaying()) {
+            attentionSnd.pause();
+            attentionSnd.seekTo(0);
+        }
+    }
+
     public static void resumeBackgroundMusic() {
         switch (Game.level)
         {

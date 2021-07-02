@@ -15,7 +15,6 @@ public class PauseButton extends Sprite {
 
         alphaPaint.setFilterBitmap(true);
         alphaPaint.setDither(true);
-        alphaPaint.setAntiAlias(true);
 
         show();
     }
@@ -40,9 +39,7 @@ public class PauseButton extends Sprite {
     }
 
     public void make() {
-        AudioHub.playClick();
-        oldStatus = Game.gameStatus;
-        game.generatePause();
+        HardThread.job = 12;
     }
 
     public boolean checkCoords(int X, int Y) {

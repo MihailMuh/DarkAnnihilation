@@ -10,6 +10,9 @@ public class HardThread implements Runnable {
 //    7 - atomic bomb
 //    8 - xwing
 //    9 - dynamite
+//    10 - boss
+//    11 - boss vaders
+//    12 - pause button
 
     private static final Vector vector = new Vector();
     private Thread thread;
@@ -119,6 +122,63 @@ public class HardThread implements Runnable {
                     BulletDynamite bulletDynamite = new BulletDynamite(game.player.centerX(), game.player.y);
                     Game.bullets.add(bulletDynamite);
                     Game.allSprites.add(bulletDynamite);
+                    job = 0;
+                    break;
+                case 10:
+                    Game.score += 325;
+                    AudioHub.pauseBossMusic();
+                    int len = Game.numberVaders / 4;
+                    for (int i = 0; i < len; i++) {
+                        if (Game.random.nextFloat() <= 0.1) {
+                            Game.allSprites.add(new TripleFighter());
+                        } else {
+                            Game.allSprites.add(new Vader());
+                        }
+                    }
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Game.allSprites.get(i).empireStart();
+                    }
+
+                    if (game.portal == null) {
+                        game.portal = new Portal(game);
+                    }
+
+                    Game.gameStatus = 6;
+
+                    game.lastBoss = System.currentTimeMillis();
+
+                    job = 0;
+                    break;
+                case 11:
+                    Game.score += 400;
+                    AudioHub.pauseBossMusic();
+                    len = Game.numberVaders / 4;
+                    for (int i = 0; i < len; i++) {
+                        if (Game.random.nextFloat() <= 0.3) {
+                            Game.allSprites.add(new XWing());
+                        } else {
+                            Game.allSprites.add(new Vader(true));
+                        }
+                    }
+
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Game.allSprites.get(i).empireStart();
+                    }
+
+                    if (game.portal == null) {
+                        game.portal = new Portal(game);
+                    }
+
+                    Game.gameStatus = 6;
+
+                    game.lastBoss = System.currentTimeMillis();
+
+                    job = 0;
+                    break;
+                case 12:
+                    AudioHub.playClick();
+                    PauseButton.oldStatus = Game.gameStatus;
+                    game.generatePause();
                     job = 0;
                     break;
             }

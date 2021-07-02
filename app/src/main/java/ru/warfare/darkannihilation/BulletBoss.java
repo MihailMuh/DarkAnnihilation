@@ -1,40 +1,43 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 
 import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_SPEED;
 
 public class BulletBoss extends Sprite {
-    private Bitmap img;
+    private Bitmap img = ImageHub.laserImage;
 
     public BulletBoss(int X, int Y, int type) {
-        super(ImageHub.laserImage.getWidth(), ImageHub.laserImage.getHeight());
+        super();
         damage = BULLET_BOSS_DAMAGE;
         status = "bulletEnemy";
         isBullet = true;
 
-        Matrix matrix = new Matrix();
         switch (type)
         {
-            case 1:
-                img = ImageHub.laserImage;
-                break;
             case 2:
                 speedX = 6;
-                matrix.postRotate(45);
-                img = Bitmap.createBitmap(ImageHub.laserImage, 0, 0, width, height, matrix, ImageHub.isFilter);
+                img = ImageHub.rotateImage(ImageHub.laserImage, 45);
                 break;
             case 3:
                 speedX = -6;
-                matrix.postRotate(-45);
-                img = Bitmap.createBitmap(ImageHub.laserImage, 0, 0, width, height, matrix, ImageHub.isFilter);
+                img = ImageHub.rotateImage(ImageHub.laserImage, -45);
                 break;
         }
 
         x = X;
         y = Y;
+
+        width = img.getWidth();
+        height = img.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
+
+        left = x;
+        top = y;
+        right = x + width;
+        bottom = y + height;
     }
 
     @Override

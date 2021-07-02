@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,15 +31,18 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.darkTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+
         game = findViewById(R.id.gameView);
+        game.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         Service.init(this);
         runOnUiThread(new Thread(() -> {
             ImageHub.init(this);
             AudioHub.init(this);
         }));
-
-//        Service.print(Locale.getDefault().getLanguage());
 
         Clerk.init(this);
         checkOnFirstRun();

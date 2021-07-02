@@ -30,22 +30,22 @@ public class FightBg extends Sprite {
         switch (character)
         {
             case "saturn":
-                img = Bitmap.createScaledBitmap(ImageHub.saturnVsBoss, width, height, ImageHub.isFilter);
+                img = Bitmap.createScaledBitmap(ImageHub.saturnVsBoss, width, height, true);
                 break;
             case "falcon":
-                img = Bitmap.createScaledBitmap(ImageHub.playerVsBoss, width, height, ImageHub.isFilter);
+                img = Bitmap.createScaledBitmap(ImageHub.playerVsBoss, width, height, true);
                 break;
             case "saturn-vaders":
-                img = Bitmap.createScaledBitmap(ImageHub.saturnVsVaders, width, height, ImageHub.isFilter);
+                img = Bitmap.createScaledBitmap(ImageHub.saturnVsVaders, width, height, true);
                 break;
             case "falcon-vaders":
-                img = Bitmap.createScaledBitmap(ImageHub.playerVsVaders, width, height, ImageHub.isFilter);
+                img = Bitmap.createScaledBitmap(ImageHub.playerVsVaders, width, height, true);
                 break;
             case "emerald":
-                img = Bitmap.createScaledBitmap(ImageHub.emeraldVsBoss, width, height, ImageHub.isFilter);
+                img = Bitmap.createScaledBitmap(ImageHub.emeraldVsBoss, width, height, true);
                 break;
             case "emerald-vaders":
-                img = Bitmap.createScaledBitmap(ImageHub.emeraldVsVaders, width, height, ImageHub.isFilter);
+                img = Bitmap.createScaledBitmap(ImageHub.emeraldVsVaders, width, height, true);
                 break;
         }
     }

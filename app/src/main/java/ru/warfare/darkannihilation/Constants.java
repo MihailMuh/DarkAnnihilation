@@ -11,7 +11,7 @@ public final class Constants {
     public static final byte EMERALD_HEALTH = MILLENNIUM_FALCON_SHOOT_TIME;
 
     public static final byte SATURN_SHOOT_TIME = 120;
-    public static final byte SATURN_SHOTGUN_TIME = 110;
+    public static final short SATURN_SHOTGUN_TIME = 135;
 
     public static final byte BOT_SHOOT_TIME = 70;
 
@@ -34,11 +34,11 @@ public final class Constants {
     public static final byte SUNRISE_DAMAGE = BUFFER_DAMAGE;
 
     public static final short SPIDER_HEALTH = 200;
-    public static final byte SPIDER_SHOOT_TIME = SATURN_SHOTGUN_TIME;
+    public static final byte SPIDER_SHOOT_TIME = 110;
     public static final byte SPIDER_DAMAGE = BUFFER_DAMAGE;
     public static final byte SPIDER_SPEED = XWING_HEALTH;
     public static final short SPIDER_HEALTH_BAR_LEN = 150;
-    public static final short SPIDER_HEALTH_BAR_HEIGHT = 15;
+    public static final byte SPIDER_HEALTH_BAR_HEIGHT = 15;
 
 //    first level
     public static final short BOSS_SHOOT_TIME = 450;
@@ -52,7 +52,7 @@ public final class Constants {
     public static final short FACTORY_HEALTH = SPIDER_HEALTH;
     public static final byte FACTORY_SPEED = 3;
     public static final short FACTORY_HEALTH_BAR_LEN = 500;
-    public static final short FACTORY_HEALTH_BAR_HEIGHT = BUFFER_DAMAGE;
+    public static final byte FACTORY_HEALTH_BAR_HEIGHT = BUFFER_DAMAGE;
 
     public static final byte MINION_HEALTH = 2;
     public static final short MINION_SHOOT_TIME = 900;
@@ -79,12 +79,12 @@ public final class Constants {
     public static final byte TRIPLE_EXPLOSION_FRAME_TIME = ATOMIC_BOMB_FRAME_TIME;
 
 //    screens
-    public static final byte LOADING_SCREEN_FRAME_TIME = 45;
+    public static final byte LOADING_SCREEN_FRAME_TIME = SUNRISE_HEALTH;
     public static final byte NUMBER_LOADING_SCREEN_IMAGES = 12;
 
     public static final byte NUMBER_STAR_SCREEN_IMAGES = 34;
 
-    public static final short THUNDER_SCREEN_FRAME_TIME = 135;
+    public static final short THUNDER_SCREEN_FRAME_TIME = SATURN_SHOTGUN_TIME;
     public static final byte NUMBER_THUNDER_SCREEN_IMAGES = BUFFER_DAMAGE;
 
 //    sprites on levels

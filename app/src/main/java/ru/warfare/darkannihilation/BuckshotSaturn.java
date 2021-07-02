@@ -75,8 +75,6 @@ public class BuckshotSaturn extends Sprite {
         } else {
             vector.rads -= 0.03 - fly;
             fly += 0.000008;
-//            62.43
-//            0.0003333333;
         }
 
         float[] speeds = vector.rotateVector();

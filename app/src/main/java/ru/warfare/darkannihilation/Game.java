@@ -39,6 +39,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public static final Paint winPaint = new Paint();
     public static final Paint paint50 = new Paint();
     public static final Paint buttonsPaint = new Paint();
+    public static final Paint nicePaint = new Paint();
 
     public static final Random random = new Random();
     private static final StringBuilder textBuilder = new StringBuilder();
@@ -90,10 +91,10 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     public int bestScore = 0;
     private int pointerCount;
     private int moveAll;
-    private boolean playing = true;
+    private boolean playing = false;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = false;
+    private static final boolean drawFPS = true;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -149,139 +150,139 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     }
 
     public void init(MainActivity mainActivity) {
-        count++;
-        if (count == 1) {
-            context = mainActivity;
+        context = mainActivity;
 
-            screenWidth = Service.getScreenWidth();
-            screenHeight = Service.getScreenHeight();
-            halfScreenWidth = screenWidth / 2;
-            halfScreenHeight = screenHeight / 2;
-            resizeK = Service.getResizeCoefficient();
-            buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
+        screenWidth = Service.getScreenWidth();
+        screenHeight = Service.getScreenHeight();
+        halfScreenWidth = screenWidth / 2;
+        halfScreenHeight = screenHeight / 2;
+        resizeK = Service.getResizeCoefficient();
 
-            fpsPaint.setColor(Color.RED);
-            fpsPaint.setTextSize(40);
+        holder.setFixedSize(screenWidth, screenHeight);
 
-            startPaint.setColor(Color.WHITE);
-            startPaint.setTextSize(300);
-            startPaint.setFilterBitmap(true);
-            startPaint.setDither(true);
+        buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
 
-            gameoverPaint.setColor(Color.WHITE);
-            gameoverPaint.setFilterBitmap(true);
-            gameoverPaint.setDither(true);
+        fpsPaint.setColor(Color.RED);
+        fpsPaint.setTextSize(40);
 
-            scorePaint.setColor(Color.WHITE);
-            scorePaint.setTextSize(40);
-            scorePaint.setFilterBitmap(true);
-            scorePaint.setDither(true);
+        startPaint.setColor(Color.WHITE);
+        startPaint.setTextSize(300);
+        startPaint.setFilterBitmap(true);
+        startPaint.setDither(true);
 
-            topPaint.setColor(Color.WHITE);
-            topPaint.setTextSize(30);
-            topPaint.setFilterBitmap(true);
-            topPaint.setDither(true);
+        gameoverPaint.setColor(Color.WHITE);
+        gameoverPaint.setFilterBitmap(true);
+        gameoverPaint.setDither(true);
 
-            topPaintRed.setColor(Color.RED);
-            topPaintRed.setTextSize(30);
-            topPaintRed.setFilterBitmap(true);
-            topPaintRed.setDither(true);
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextSize(40);
+        scorePaint.setFilterBitmap(true);
+        scorePaint.setDither(true);
 
-            winPaint.setColor(Color.WHITE);
-            winPaint.setTextSize(100);
-            winPaint.setFilterBitmap(true);
-            winPaint.setDither(true);
+        topPaint.setColor(Color.WHITE);
+        topPaint.setTextSize(30);
+        topPaint.setFilterBitmap(true);
+        topPaint.setDither(true);
 
-            paint50.setColor(Color.WHITE);
-            paint50.setTextSize(50);
-            paint50.setFilterBitmap(true);
-            paint50.setDither(true);
+        topPaintRed.setColor(Color.RED);
+        topPaintRed.setTextSize(30);
+        topPaintRed.setFilterBitmap(true);
+        topPaintRed.setDither(true);
 
-            buttonsPaint.setColor(Color.WHITE);
-            buttonsPaint.setFilterBitmap(true);
-            buttonsPaint.setDither(true);
+        winPaint.setColor(Color.WHITE);
+        winPaint.setTextSize(100);
+        winPaint.setFilterBitmap(true);
+        winPaint.setDither(true);
 
-            alphaEnemy.setFilterBitmap(true);
-            alphaEnemy.setDither(true);
-            alphaEnemy.setAntiAlias(true);
+        paint50.setColor(Color.WHITE);
+        paint50.setTextSize(50);
+        paint50.setFilterBitmap(true);
+        paint50.setDither(true);
 
-            getMaxScore();
+        buttonsPaint.setColor(Color.WHITE);
+        buttonsPaint.setFilterBitmap(true);
+        buttonsPaint.setDither(true);
 
-            while (!endImgInit) {
+        nicePaint.setFilterBitmap(true);
+        nicePaint.setDither(true);
+        nicePaint.setAntiAlias(true);
+
+        getMaxScore();
+
+        while (!endImgInit) {
+        }
+
+        buttonMenu = new Button(this);
+        buttonStart = new Button(this);
+        buttonQuit = new Button(this);
+        buttonRestart = new Button(this);
+
+        settings = new Settings(mainActivity);
+
+        new Thread(() -> {
+            fightBg = new FightBg();
+            buttonPlayer = new ButtonPlayer(this);
+            buttonSaturn = new ButtonSaturn(this);
+            buttonEmerald = new ButtonEmerald(this);
+            pauseButton = new PauseButton(this);
+            player = new Bot();
+            healthKit = new HealthKit(this);
+            shotgunKit = new ShotgunKit(this);
+            changerGuns = new ChangerGuns(this);
+            rocket = new Rocket();
+            attention = new Attention(this);
+            factory = new Factory();
+            demoman = new Demoman();
+            screen = new StarScreen();
+            loadingScreen = new LoadingScreen(this);
+
+            fpsY = pauseButton.bottom() + 100;
+            fpsX = screenWidth - 250;
+            scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
+            maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
+            chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
+            chooseChY = (int) (screenHeight * 0.3);
+            thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
+            thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
+            go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
+            go_to_menuY = (int) (Game.screenHeight * 0.65);
+            shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
+            shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
+            go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
+            go_to_restartY = (int) (screenHeight * 0.7);
+
+            while (buttonStart.right() > buttonMenu.x) {
+                buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
+                buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, buttonsY, "start");
+                buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
+                buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
             }
+        }).start();
 
-            buttonMenu = new Button(this);
-            buttonStart = new Button(this);
-            buttonQuit = new Button(this);
-            buttonRestart = new Button(this);
+        for (int i = 0; i < numberVaders * 2; i++) {
+            allSprites.add(new Vader());
+        }
+        hardThread = new HardThread(this);
 
-            settings = new Settings(mainActivity);
-
-            new Thread(() -> {
-                fightBg = new FightBg();
-                buttonPlayer = new ButtonPlayer(this);
-                buttonSaturn = new ButtonSaturn(this);
-                buttonEmerald = new ButtonEmerald(this);
-                pauseButton = new PauseButton(this);
-                player = new Bot();
-                healthKit = new HealthKit(this);
-                shotgunKit = new ShotgunKit(this);
-                changerGuns = new ChangerGuns(this);
-                rocket = new Rocket();
-                attention = new Attention(this);
-                factory = new Factory();
-                demoman = new Demoman();
-                screen = new StarScreen();
-                loadingScreen = new LoadingScreen(this);
-
-                fpsY = pauseButton.bottom() + 100;
-                fpsX = screenWidth - 250;
-                scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
-                maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
-                chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
-                chooseChY = (int) (screenHeight * 0.3);
-                thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
-                thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
-                go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
-                go_to_menuY = (int) (Game.screenHeight * 0.65);
-                shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
-                shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-                go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
-                go_to_restartY = (int) (screenHeight * 0.7);
-
-                while (buttonStart.right() > buttonMenu.x) {
-                    buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
-                    buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, buttonsY, "start");
-                    buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
-                    buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
-                }
-            }).start();
-
-            for (int i = 0; i < numberVaders * 2; i++) {
-                allSprites.add(new Vader());
-            }
-            hardThread = new HardThread(this);
-
-            for (int i = 0; i < numberExplosionsALL; i++) {
-                if (i < numberMediumExplosionsTriple) {
-                    allExplosions[i] = new ExplosionTriple("default");
+        for (int i = 0; i < numberExplosionsALL; i++) {
+            if (i < numberMediumExplosionsTriple) {
+                allExplosions[i] = new ExplosionTriple("default");
+            } else {
+                if (i < numberSmallExplosionsTriple) {
+                    allExplosions[i] = new ExplosionTriple("small");
                 } else {
-                    if (i < numberSmallExplosionsTriple) {
-                        allExplosions[i] = new ExplosionTriple("small");
+                    if (i < numberMediumExplosionsDefault) {
+                        allExplosions[i] = new DefaultExplosion("default");
                     } else {
-                        if (i < numberMediumExplosionsDefault) {
-                            allExplosions[i] = new DefaultExplosion("default");
+                        if (i < numberSmallExplosionsDefault) {
+                            allExplosions[i] = new DefaultExplosion("small");
                         } else {
-                            if (i < numberSmallExplosionsDefault) {
-                                allExplosions[i] = new DefaultExplosion("small");
-                            } else {
-                                allExplosions[i] = new ExplosionSkull();
-                            }
+                            allExplosions[i] = new ExplosionSkull();
                         }
                     }
                 }
-                allSprites.add(allExplosions[i]);
             }
+            allSprites.add(allExplosions[i]);
         }
     }
 
@@ -310,16 +311,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (!anySprite.isPassive) {
                         player.checkIntersections(anySprite);
                     }
-                    if (player.intersect(changerGuns)) {
-                        changerGuns.intersectionPlayer();
-                    } else {
-                        if (player.intersect(pauseButton)) {
-                            pauseButton.intersectionPlayer();
-                        } else {
-                            changerGuns.work();
-                            pauseButton.work();
-                        }
-                    }
                     if (level == 1) {
                         rocket.checkIntersections(anySprite);
                     }
@@ -335,9 +326,11 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                                 if (bulletPlayer.status.equals("saturn")) {
                                     if (anySprite.intersect(bulletPlayer)) {
                                         if (random.nextFloat() <= 0.5) {
+
                                             Object[] info = bulletPlayer
                                                     .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
                                                     (Bitmap) anySprite.getBox(0, 0, null)[0]);
+
                                             if ((boolean) info[3]) {
                                                 BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
                                                 allSprites.add(bulletEnemyOrbit);
@@ -361,6 +354,17 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         player.update();
         player.render();
+
+        if (player.intersect(changerGuns)) {
+            changerGuns.intersectionPlayer();
+        } else {
+            if (player.intersect(pauseButton)) {
+                pauseButton.intersectionPlayer();
+            } else {
+                changerGuns.work();
+                pauseButton.work();
+            }
+        }
 
         if (System.currentTimeMillis() - lastBoss > BOSS_TIME) {
             lastBoss = System.currentTimeMillis();
@@ -464,7 +468,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 timeFrame = System.nanoTime();
             }
             if (holder.getSurface().isValid()) {
-                canvas = holder.lockCanvas();
+                canvas = holder.lockHardwareCanvas();
                 switch (gameStatus) {
                     case 0:
                         gameplay();
@@ -530,7 +534,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-
                 boolean pb = false;
                 boolean cg = false;
 
@@ -720,6 +723,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         pauseTimer = System.currentTimeMillis();
 
         AudioHub.pauseBackgroundMusic();
+        AudioHub.pauseAttentionSnd();
         if (bosses.size() == 0) {
             AudioHub.restartPauseMusic();
         }
@@ -924,6 +928,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                 break;
         }
 
+        AudioHub.restartBackgroundMusic();
+
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
             allSprites.add(allExplosions[i]);
@@ -931,7 +937,6 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         changerGuns.hide();
 
-        AudioHub.restartBackgroundMusic();
         AudioHub.restartReadySound();
 
         gameStatus = 2;
@@ -1045,7 +1050,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         pauseButton.render();
 
-        count += 1;
+        count++;
         if (0 <= count & count < 70) {
             canvas.drawText("3", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
         } else {
@@ -1144,8 +1149,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private void portalTime() {
         moveAll = player.speedX / 3;
 
-        int sX = screen.x + screen.width;
-        if (screen.x < 0 & sX > screenWidth) {
+        if (screen.x < 0 & screen.right() > screenWidth) {
             screen.x -= moveAll;
         } else {
             if (screen.x >= 0) {
@@ -1167,46 +1171,36 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (!anySprite.isPassive) {
                         player.checkIntersections(anySprite);
                     }
+                    if (level == 1) {
+                        rocket.checkIntersections(anySprite);
+                    }
                     if (!anySprite.isBullet) {
                         for (int j = 0; j < bullets.size(); j++) {
                             anySprite.check_intersectionBullet(bullets.get(j));
                         }
                     }
                     if (character.equals("saturn")) {
-                        if (anySprite.status.equals("rocket")) {
+                        if (anySprite.status.equals("bulletEnemy")) {
                             for (int j = 0; j < bullets.size(); j++) {
-                                Sprite bullet = bullets.get(j);
-                                if (bullet.status.equals("saturn")) {
-                                    if (anySprite.intersect(bullet)) {
-                                        bullet.intersection();
-                                    }
-                                }
-                            }
-                        } else {
-                            if (anySprite.status.equals("bulletEnemy")) {
-                                for (int j = 0; j < bullets.size(); j++) {
-                                    Sprite bulletPlayer = bullets.get(j);
-                                    if (bulletPlayer.status.equals("saturn")) {
-                                        if (anySprite.intersect(bulletPlayer)) {
-                                            if (random.nextFloat() <= 0.5) {
-                                                Object[] info = bulletPlayer.getBox(anySprite.x, anySprite.y,
-                                                        (Bitmap) anySprite.getBox(0, 0, null)[0]);
-                                                if ((boolean) info[3]) {
-                                                    BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                    allSprites.add(bulletEnemyOrbit);
-                                                    bullets.add(bulletEnemyOrbit);
+                                Sprite bulletPlayer = bullets.get(j);
+                                if (bulletPlayer.status.equals("saturn")) {
+                                    if (anySprite.intersect(bulletPlayer)) {
+                                        if (random.nextFloat() <= 0.5) {
+                                            Object[] info = bulletPlayer
+                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
+                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
+                                            if ((boolean) info[3]) {
+                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                allSprites.add(bulletEnemyOrbit);
+                                                bullets.add(bulletEnemyOrbit);
 
-                                                    allSprites.remove(anySprite);
-                                                } else {
-                                                    anySprite.intersectionPlayer();
-                                                    bulletPlayer.intersection();
-                                                }
-                                            } else {
-                                                anySprite.intersectionPlayer();
-                                                bulletPlayer.intersection();
+                                                allSprites.remove(anySprite);
+                                                break;
                                             }
-                                            break;
                                         }
+                                        anySprite.intersectionPlayer();
+                                        bulletPlayer.intersection();
+                                        break;
                                     }
                                 }
                             }
@@ -1218,7 +1212,19 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         player.update();
         player.render();
+
         changerGuns.render();
+
+        if (player.intersect(changerGuns)) {
+            changerGuns.intersectionPlayer();
+        } else {
+            if (player.intersect(pauseButton)) {
+                pauseButton.intersectionPlayer();
+            } else {
+                changerGuns.work();
+                pauseButton.work();
+            }
+        }
 
         if (portal != null) {
             portal.x -= moveAll;

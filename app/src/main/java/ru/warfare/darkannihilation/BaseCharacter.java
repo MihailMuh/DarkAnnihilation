@@ -41,6 +41,7 @@ public class BaseCharacter extends Sprite {
     }
 
     private void init() {
+        gun = "shotgun";
         if (Game.level == 1 | !game.shotgunKit.picked) {
             gun = "gun";
         }

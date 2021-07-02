@@ -17,7 +17,6 @@ public class ChangerGuns extends Sprite {
 
         alphaPaint.setFilterBitmap(true);
         alphaPaint.setDither(true);
-        alphaPaint.setAntiAlias(true);
 
         hide();
     }
@@ -38,11 +37,17 @@ public class ChangerGuns extends Sprite {
                 image = ImageHub.shotgunToGun;
             }
         }
+
+        width = image.getWidth();
+        height = image.getHeight();
+        halfWidth = width / 2;
+        halfHeight = height / 2;
     }
 
     public void start() {
         x = 0;
         lock = false;
+        isInvisible = false;
     }
 
     @Override

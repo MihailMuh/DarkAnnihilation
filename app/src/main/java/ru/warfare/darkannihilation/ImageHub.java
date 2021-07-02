@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -146,6 +147,8 @@ public final class ImageHub {
         int eX522 = (int) (522 * resizeK);
         int eX600 = (int) (600 * resizeK);
         int pauseBtn = (int) (180 * resizeK);
+        int eX72 = (int) (72 * resizeK);
+        int eX62 = (int) (62 * resizeK);
         res = context.getResources();
         name = context.getPackageName();
 
@@ -317,7 +320,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.full_heart)
-                .override(eX70, eX60)
+                .override(eX72, eX62)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -332,7 +335,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.half_heart)
-                .override(eX70, eX60)
+                .override(eX72, eX62)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -347,7 +350,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.non_heart)
-                .override(eX70, eX60)
+                .override(eX72, eX62)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -1139,6 +1142,7 @@ public final class ImageHub {
         Game.endImgInit = false;
         mainActivity.runOnUiThread(new Thread(() -> {
             mainActivity.gif = mainActivity.findViewById(R.id.gifView);
+            mainActivity.gif.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             GlideApp.with(mainActivity)
                     .asGif()
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -1438,7 +1442,7 @@ public final class ImageHub {
     public static Bitmap rotateImage(Bitmap image, float degree) {
         matrix.reset();
         matrix.postRotate(degree);
-        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, isFilter);
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
     }
 
     public static Bitmap resizeImage(Bitmap bitmap, int width, int height) {

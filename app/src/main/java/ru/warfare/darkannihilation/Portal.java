@@ -9,6 +9,8 @@ public class Portal extends Sprite {
     private long lastFrame = System.currentTimeMillis();
     public boolean touch = false;
     private static final int len = NUMBER_PORTAL_IMAGES - 1;
+    private int cycles;
+    private boolean waited;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
@@ -77,18 +79,26 @@ public class Portal extends Sprite {
             if (now - lastFrame > PORTAL_FRAME) {
                 lastFrame = now;
                 film();
+                if (!waited) {
+                    cycles++;
+                    if (cycles == 90) {
+                        waited = true;
+                    }
+                }
             }
 
-            if (!AudioHub.portalSound.isPlaying() & Game.gameStatus != 7) {
-                Game.gameStatus = 0;
-                AudioHub.resumeBackgroundMusic();
-                kill();
+            if (waited) {
+                if (!AudioHub.portalSound.isPlaying() & Game.gameStatus != 7) {
+                    Game.gameStatus = 0;
+                    AudioHub.resumeBackgroundMusic();
+                    kill();
+                }
             }
         }
     }
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
+        Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, Game.nicePaint);
     }
 }

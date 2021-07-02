@@ -86,7 +86,7 @@ public class BulletDynamite extends Sprite {
             matrix.postRotate(frame, halfWidth, halfHeight);
             matrix.postTranslate(x, y);
 
-            Game.canvas.drawBitmap(ImageHub.dynamiteImg, matrix, Game.scorePaint);
+            Game.canvas.drawBitmap(ImageHub.dynamiteImg, matrix, Game.nicePaint);
         }
     }
 }
