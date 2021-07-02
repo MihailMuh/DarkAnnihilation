@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
+public final class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder = getHolder();
     public MainActivity context;
     private Thread thread;
@@ -94,7 +94,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
     private boolean playing = false;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = true;
+    private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -162,49 +162,38 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
 
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
 
-        startPaint.setColor(Color.WHITE);
+        startPaint.set(paint);
         startPaint.setTextSize(300);
-        startPaint.setFilterBitmap(true);
-        startPaint.setDither(true);
 
-        gameoverPaint.setColor(Color.WHITE);
-        gameoverPaint.setFilterBitmap(true);
-        gameoverPaint.setDither(true);
+        gameoverPaint.set(paint);
 
-        scorePaint.setColor(Color.WHITE);
+        scorePaint.set(paint);
         scorePaint.setTextSize(40);
-        scorePaint.setFilterBitmap(true);
-        scorePaint.setDither(true);
+        scorePaint.setFakeBoldText(true);
 
-        topPaint.setColor(Color.WHITE);
+        topPaint.set(paint);
         topPaint.setTextSize(30);
-        topPaint.setFilterBitmap(true);
-        topPaint.setDither(true);
 
+        topPaintRed.set(topPaint);
         topPaintRed.setColor(Color.RED);
-        topPaintRed.setTextSize(30);
-        topPaintRed.setFilterBitmap(true);
-        topPaintRed.setDither(true);
 
-        winPaint.setColor(Color.WHITE);
+        winPaint.set(paint);
         winPaint.setTextSize(100);
-        winPaint.setFilterBitmap(true);
-        winPaint.setDither(true);
 
-        paint50.setColor(Color.WHITE);
+        paint50.set(paint);
         paint50.setTextSize(50);
-        paint50.setFilterBitmap(true);
-        paint50.setDither(true);
 
-        buttonsPaint.setColor(Color.WHITE);
-        buttonsPaint.setFilterBitmap(true);
-        buttonsPaint.setDither(true);
+        buttonsPaint.set(paint);
 
-        nicePaint.setFilterBitmap(true);
-        nicePaint.setDither(true);
+        nicePaint.set(paint);
         nicePaint.setAntiAlias(true);
 
         getMaxScore();
@@ -260,7 +249,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         }).start();
 
         for (int i = 0; i < numberVaders * 2; i++) {
-            allSprites.add(new Vader());
+            allSprites.add(new Vader(false));
         }
         hardThread = new HardThread(this);
 
@@ -303,7 +292,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         for (int i = 0; i < allSprites.size(); i++) {
             Sprite anySprite = allSprites.get(i);
-            if (anySprite != null) {
+//            if (anySprite != null) {
                 if (!anySprite.lock) {
                     anySprite.x -= moveAll;
                     anySprite.render();
@@ -349,7 +338,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         }
                     }
                 }
-            }
+//            }
         }
 
         player.update();
@@ -791,7 +780,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
         player = new Bot();
 
         for (int i = 0; i < numberVaders * 2; i++) {
-            allSprites.add(new Vader());
+            allSprites.add(new Vader(false));
         }
 
         while (buttonStart.right() > buttonMenu.x) {
@@ -884,7 +873,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                     if (random.nextFloat() <= 0.12) {
                         allSprites.add(new TripleFighter());
                     } else {
-                        allSprites.add(new Vader());
+                        allSprites.add(new Vader(false));
                     }
                 }
 
@@ -1163,7 +1152,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
 
         for (int i = 0; i < allSprites.size(); i++) {
             Sprite anySprite = allSprites.get(i);
-            if (anySprite != null) {
+//            if (anySprite != null) {
                 if (!anySprite.lock) {
                     anySprite.x -= moveAll;
                     anySprite.render();
@@ -1175,7 +1164,8 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         rocket.checkIntersections(anySprite);
                     }
                     if (!anySprite.isBullet) {
-                        for (int j = 0; j < bullets.size(); j++) {
+                        int len = bullets.size() / 2;
+                        for (int j = 0; j < len; j++) {
                             anySprite.check_intersectionBullet(bullets.get(j));
                         }
                     }
@@ -1207,7 +1197,7 @@ public class Game extends SurfaceView implements Runnable, SurfaceHolder.Callbac
                         }
                     }
                 }
-            }
+//            }
         }
 
         player.update();

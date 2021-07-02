@@ -21,7 +21,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 import static ru.warfare.darkannihilation.Service.makeToast;
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
     public Game game;
     public SharedPreferences preferences;
     public GifImageView gif;

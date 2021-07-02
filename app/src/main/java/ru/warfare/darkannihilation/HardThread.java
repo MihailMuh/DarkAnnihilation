@@ -132,7 +132,7 @@ public class HardThread implements Runnable {
                         if (Game.random.nextFloat() <= 0.1) {
                             Game.allSprites.add(new TripleFighter());
                         } else {
-                            Game.allSprites.add(new Vader());
+                            Game.allSprites.add(new Vader(false));
                         }
                     }
                     for (int i = 0; i < Game.allSprites.size(); i++) {

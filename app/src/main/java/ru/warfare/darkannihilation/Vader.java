@@ -9,23 +9,15 @@ import static ru.warfare.darkannihilation.MATH.randInt;
 public class Vader extends Sprite {
     private final Bitmap img;
 
-    public Vader() {
-        super(ImageHub.eX75, ImageHub.eX75);
-
-        img = ImageHub.vaderImage[randInt(0, 2)];
-
-        init();
-    }
-
     public Vader(boolean old) {
         super(ImageHub.eX75, ImageHub.eX75);
 
-        img = ImageHub.vaderOldImage[randInt(0, 2)];
+        if (old) {
+            img = ImageHub.vaderOldImage[randInt(0, 2)];
+        } else {
+            img = ImageHub.vaderImage[randInt(0, 2)];
+        }
 
-        init();
-    }
-
-    private void init() {
         damage = VADER_DAMAGE;
 
         newStatus();

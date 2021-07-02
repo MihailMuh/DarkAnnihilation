@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import static ru.warfare.darkannihilation.Game.topPaint;
 import static ru.warfare.darkannihilation.Game.topPaintRed;
 
-public class Table {
+public final class Table {
     private static ArrayList<ArrayList<String>> table;
     private static ArrayList<Float> maxes;
 

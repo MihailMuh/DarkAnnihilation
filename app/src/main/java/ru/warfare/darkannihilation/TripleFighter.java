@@ -80,6 +80,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.tripleFighterImg, x, y, null);
+        Game.canvas.drawBitmap(ImageHub.tripleFighterImg,
+                x, y, Game.nicePaint);
     }
 }

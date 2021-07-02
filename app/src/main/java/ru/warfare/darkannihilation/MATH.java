@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation;
 
-public class MATH {
+public final class MATH {
     public static final float HALF_PI = (float) Math.PI / 2f;
 
     public static int randInt(int min, int max) {

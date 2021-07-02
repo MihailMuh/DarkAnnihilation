@@ -148,7 +148,7 @@ public final class ImageHub {
         int eX600 = (int) (600 * resizeK);
         int pauseBtn = (int) (180 * resizeK);
         int eX72 = (int) (72 * resizeK);
-        int eX62 = (int) (62 * resizeK);
+        int eX61 = (int) (61 * resizeK);
         res = context.getResources();
         name = context.getPackageName();
 
@@ -320,7 +320,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.full_heart)
-                .override(eX72, eX62)
+                .override(eX72, eX61)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -335,7 +335,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.half_heart)
-                .override(eX72, eX62)
+                .override(eX72, eX61)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -350,7 +350,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.non_heart)
-                .override(eX72, eX62)
+                .override(eX72, eX61)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -1236,7 +1236,6 @@ public final class ImageHub {
 
                 buckshotImg = null;
                 playerImage = null;
-                bulletImage = null;
 
                 emeraldImg = null;
                 dynamiteImg = null;
@@ -1274,21 +1273,7 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(R.drawable.bullet)
-                        .override((int) (7 * resizeK), (int) (30 * resizeK))
-                        .listener(new RequestListener<Bitmap>() {
-                                      @Override
-                                      public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                          return false;
-                                      }
 
-                                      @Override
-                                      public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                          bulletImage = resource;
-                                          return true;
-                                      }
-                                  }
-                        ).submit();
                 bulletBuckshotSaturnImg = null;
                 saturnImg = null;
                 bulletSaturnImg = null;
@@ -1354,7 +1339,6 @@ public final class ImageHub {
 
                 buckshotImg = null;
                 playerImage = null;
-                bulletImage = null;
                 break;
         }
     }

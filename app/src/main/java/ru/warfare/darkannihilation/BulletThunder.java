@@ -46,7 +46,8 @@ public class BulletThunder extends Sprite {
                 Game.canvas.drawColor(Color.parseColor("#444664"));
                 break;
             default:
-                Game.canvas.drawBitmap(ImageHub.thunderImage[frame], x, y, null);
+                Game.canvas.drawBitmap(ImageHub.thunderImage[frame],
+                        x, y, Game.nicePaint);
                 break;
         }
     }
