@@ -18,6 +18,7 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         isPassive = true
         x = MATH.randInt(0, screenWidthWidth)
         y = -800
+        ImageHub.loadPortalImages()
         recreateRect(x + 20, y + 20, right() - 20, bottom() - 20)
     }
 
@@ -79,7 +80,6 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
             shoot()
         } else {
             if (y == -600) {
-                ImageHub.loadPortalImages()
                 AudioHub.pauseAttentionSnd()
                 AudioHub.restartBossMusic()
                 AudioHub.pauseBackgroundMusic()

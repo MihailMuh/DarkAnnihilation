@@ -61,6 +61,8 @@ public final class ImageHub {
     public static Bitmap imageHeartFull;
     public static Bitmap imageHeartHalf;
     public static Bitmap imageHeartNon;
+    public static Bitmap imageBlueHeartHalf;
+    public static Bitmap imageBlueHeartFull;
     public static Bitmap gameoverScreen;
     public static Bitmap pauseButtonImg;
     public static Bitmap bossImage;
@@ -319,6 +321,36 @@ public final class ImageHub {
                           }
                 ).submit();
 
+        requestBuilder.load(R.drawable.full_blue_heart)
+                .override(eX72, eX61)
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  imageBlueHeartFull = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
+        requestBuilder.load(R.drawable.half_blue_heart)
+                .override(eX72, eX61)
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                  imageBlueHeartHalf = resource;
+                                  return true;
+                              }
+                          }
+                ).submit();
         requestBuilder.load(R.drawable.full_heart)
                 .override(eX72, eX61)
                 .listener(new RequestListener<Bitmap>() {

@@ -1,32 +1,41 @@
 package ru.warfare.darkannihilation;
 
-import static ru.warfare.darkannihilation.Constants.HEART_Y;
-
 public class Heart extends Sprite {
-    public Heart(int X) {
-        super(0, 0);
-        x = X;
-        y = HEART_Y;
-    }
+    public final boolean isArmor;
 
-    public Heart(int X, int Y) {
-        super(0, 0);
+    public Heart(Game game, int X, int Y, boolean isArmor) {
+        super(game);
         x = X;
         y = Y;
+        this.isArmor = isArmor;
     }
 
     public void render(String type) {
-        switch (type)
-        {
-            case "full":
-                Game.canvas.drawBitmap(ImageHub.imageHeartFull, x, y, null);
-                break;
-            case "half":
-                Game.canvas.drawBitmap(ImageHub.imageHeartHalf, x, y, null);
-                break;
-            case "non":
-                Game.canvas.drawBitmap(ImageHub.imageHeartNon, x, y, null);
-                break;
+        if (!isArmor) {
+            switch (type) {
+                case "full":
+                    Game.canvas.drawBitmap(ImageHub.imageHeartFull, x, y, null);
+                    break;
+                case "half":
+                    Game.canvas.drawBitmap(ImageHub.imageHeartHalf, x, y, null);
+                    break;
+                case "non":
+                    Game.canvas.drawBitmap(ImageHub.imageHeartNon, x, y, null);
+                    break;
+            }
+        }
+        else {
+            switch (type) {
+                case "full":
+                    Game.canvas.drawBitmap(ImageHub.imageBlueHeartFull, x, y, null);
+                    break;
+                case "half":
+                    Game.canvas.drawBitmap(ImageHub.imageBlueHeartHalf, x, y, null);
+                    break;
+                case "non":
+                    game.player.killArmorHeart(this);
+                    break;
+            }
         }
     }
 }

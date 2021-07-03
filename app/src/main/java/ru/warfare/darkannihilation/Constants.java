@@ -129,8 +129,6 @@ public final class Constants {
 
     public static final short CHANGER_GUNS_CLICK_TIME = 700;
 
-    public static final byte HEART_Y = XWING_DAMAGE;
-
 //    constants
     public static final String SERVER_IP = "http://78.29.33.173:49150/";
     public static final String TAG = "D'Ark";

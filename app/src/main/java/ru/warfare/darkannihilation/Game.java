@@ -292,7 +292,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         for (int i = 0; i < allSprites.size(); i++) {
             Sprite anySprite = allSprites.get(i);
-//            if (anySprite != null) {
+            if (anySprite != null) {
                 if (!anySprite.lock) {
                     anySprite.x -= moveAll;
                     anySprite.render();
@@ -338,11 +338,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         }
                     }
                 }
-//            }
+            }
         }
-
-        player.update();
-        player.render();
 
         if (player.intersect(changerGuns)) {
             changerGuns.intersectionPlayer();
@@ -446,8 +443,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             }
         }
 
-        pauseButton.render();
         changerGuns.render();
+
+        player.update();
+        player.render();
     }
 
     @Override
@@ -461,6 +460,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 switch (gameStatus) {
                     case 0:
                         gameplay();
+                        pauseButton.render();
                         renderCurrentScore();
                         break;
                     case 1:
@@ -487,7 +487,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         renderCurrentScore();
                         break;
                     case 6:
-                        portalTime();
+                        gameplay();
+                        if (portal != null) {
+                            portal.x -= moveAll;
+                            portal.render();
+                            portal.update();
+                        }
                         renderCurrentScore();
                         break;
                     case 7:
@@ -826,20 +831,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             portal.kill();
         }
 
-        while (!endImgInit) {}
-        switch (character)
-        {
-            case "saturn":
-                player = new Saturn(this);
-                break;
-            case "falcon":
-                player = new MillenniumFalcon(this);
-                break;
-            case "emerald":
-                player = new Emerald(this);
-                break;
-        }
-
         allSprites.add(healthKit);
 
         int len;
@@ -853,6 +844,19 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 atomicBomb = null;
 
                 ImageHub.deleteSecondLevelImages();
+                while (!endImgInit) {}
+                switch (character)
+                {
+                    case "saturn":
+                        player = new Saturn(this);
+                        break;
+                    case "falcon":
+                        player = new MillenniumFalcon(this);
+                        break;
+                    case "emerald":
+                        player = new Emerald(this);
+                        break;
+                }
                 if (ImageHub.needImagesForFirstLevel()) {
                     ImageHub.loadFirstLevelImages();
                     while (!endImgInit) {}
@@ -892,6 +896,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 demoman = null;
 
                 ImageHub.deleteFirstLevelImages();
+
+                player.newStatus();
 
                 spider = new Spider();
                 sunrise = new Sunrise();
@@ -1132,94 +1138,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             if (pointerCount >= 4) {
                 loadingScreen.newJob("menu");
             }
-        }
-    }
-
-    private void portalTime() {
-        moveAll = player.speedX / 3;
-
-        if (screen.x < 0 & screen.right() > screenWidth) {
-            screen.x -= moveAll;
-        } else {
-            if (screen.x >= 0) {
-                screen.x -= 2;
-            } else {
-                screen.x += 2;
-            }
-        }
-        screen.update();
-        screen.render();
-
-        for (int i = 0; i < allSprites.size(); i++) {
-            Sprite anySprite = allSprites.get(i);
-//            if (anySprite != null) {
-                if (!anySprite.lock) {
-                    anySprite.x -= moveAll;
-                    anySprite.render();
-                    anySprite.update();
-                    if (!anySprite.isPassive) {
-                        player.checkIntersections(anySprite);
-                    }
-                    if (level == 1) {
-                        rocket.checkIntersections(anySprite);
-                    }
-                    if (!anySprite.isBullet) {
-                        int len = bullets.size() / 2;
-                        for (int j = 0; j < len; j++) {
-                            anySprite.check_intersectionBullet(bullets.get(j));
-                        }
-                    }
-                    if (character.equals("saturn")) {
-                        if (anySprite.status.equals("bulletEnemy")) {
-                            for (int j = 0; j < bullets.size(); j++) {
-                                Sprite bulletPlayer = bullets.get(j);
-                                if (bulletPlayer.status.equals("saturn")) {
-                                    if (anySprite.intersect(bulletPlayer)) {
-                                        if (random.nextFloat() <= 0.5) {
-                                            Object[] info = bulletPlayer
-                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
-                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
-                                            if ((boolean) info[3]) {
-                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                allSprites.add(bulletEnemyOrbit);
-                                                bullets.add(bulletEnemyOrbit);
-
-                                                allSprites.remove(anySprite);
-                                                break;
-                                            }
-                                        }
-                                        anySprite.intersectionPlayer();
-                                        bulletPlayer.intersection();
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-//            }
-        }
-
-        player.update();
-        player.render();
-
-        changerGuns.render();
-
-        if (player.intersect(changerGuns)) {
-            changerGuns.intersectionPlayer();
-        } else {
-            if (player.intersect(pauseButton)) {
-                pauseButton.intersectionPlayer();
-            } else {
-                changerGuns.work();
-                pauseButton.work();
-            }
-        }
-
-        if (portal != null) {
-            portal.x -= moveAll;
-            portal.render();
-            portal.update();
         }
     }
 

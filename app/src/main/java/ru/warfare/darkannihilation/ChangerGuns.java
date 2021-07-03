@@ -25,6 +25,7 @@ public class ChangerGuns extends Sprite {
         x = Game.screenWidth;
         lock = true;
         isInvisible = false;
+        alphaPaint.setAlpha(255);
 
         if (!game.shotgunKit.picked) {
             image = ImageHub.gunToNone;

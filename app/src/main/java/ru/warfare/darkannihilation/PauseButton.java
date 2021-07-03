@@ -4,7 +4,7 @@ import android.graphics.Paint;
 
 public class PauseButton extends Sprite {
     public static int oldStatus;
-    public static final Paint alphaPaint = new Paint();
+    private static final Paint alphaPaint = new Paint();
     private boolean isInvisible;
     private final int myX;
 
@@ -33,8 +33,10 @@ public class PauseButton extends Sprite {
             alphaPaint.setAlpha(255);
         }
     }
+
     public void show() {
         isInvisible = false;
+        alphaPaint.setAlpha(255);
         x = myX;
     }
 
