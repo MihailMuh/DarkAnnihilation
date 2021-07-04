@@ -38,13 +38,14 @@ public class Portal extends Sprite {
     @Override
     public void intersectionPlayer() {
         if (Game.level == 2) {
-            touch = true;
-
-            ImageHub.loadWinImages(game.context);
-            game.generateWin();
+            game.context.runOnUiThread(() -> {
+                touch = true;
+                ImageHub.loadWinImages(game.context);
+            });
         } else {
             AudioHub.timeMachineFirstSnd.start();
             AudioHub.timeMachineNoneSnd.start();
+            AudioHub.portalSound.pause();
 
             touch = true;
             game.player.god = true;

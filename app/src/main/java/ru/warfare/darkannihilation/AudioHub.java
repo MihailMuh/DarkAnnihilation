@@ -1,31 +1,38 @@
 package ru.warfare.darkannihilation;
 
-import android.content.Context;
 import android.media.MediaPlayer;
+
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import java.util.ArrayList;
 
 public final class AudioHub {
+    private static MainActivity mainActivity;
+
     public static ArrayList<MediaPlayer> sounds = new ArrayList<>(0);
     public static ArrayList<Float> volumes = new ArrayList<>(0);
 
-    public static MediaPlayer menuMusic;
+    public static SimpleExoPlayer menuMusic;
     public static MediaPlayer pauseMusic;
-    public static MediaPlayer jingleMusic;
-    public static MediaPlayer gameoverSnd;
-    public static MediaPlayer bossMusic;
+    public static SimpleExoPlayer jingleMusic;
+    public static SimpleExoPlayer gameoverSnd;
+    public static SimpleExoPlayer bossMusic;
     public static MediaPlayer flightSnd;
     public static MediaPlayer winMusic;
     public static MediaPlayer portalSound;
     public static MediaPlayer timeMachineFirstSnd;
     public static MediaPlayer timeMachineSecondSnd;
     public static MediaPlayer timeMachineNoneSnd;
-    public static MediaPlayer attentionSnd;
     public static MediaPlayer readySnd;
     public static MediaPlayer forgottenMusic;
     public static MediaPlayer forgottenBossMusic;
+    public static SimpleExoPlayer attentionSnd;
 
-    public static void init(Context context) {
+    public static void init(MainActivity context) {
+        mainActivity = context;
+
         AudioPool.addSound(context, R.raw.reload0, 1f);
         AudioPool.addSound(context, R.raw.reload1);
         AudioPool.addSound(context, R.raw.boom, 0.13f);
@@ -42,108 +49,164 @@ public final class AudioHub {
         AudioPool.addSound(context, R.raw.boom, 0.58f);
         AudioPool.addSound(context, R.raw.thunderstorm, 1f);
 
-        menuMusic = MediaPlayer.create(context, R.raw.menu);
-        menuMusic.setLooping(true);
-        sounds.add(menuMusic);
-        volumes.add(1f);
+        String path = "android.resource://" + context.getPackageName() + "/";
+
+//        menuMusic = MediaPlayer.create(context, R.raw.menu);
+//        menuMusic.setLooping(true);
+//        sounds.add(menuMusic);
+//        volumes.add(1f);
+
+        menuMusic = new SimpleExoPlayer.Builder(context).build();
+        menuMusic.setMediaItem(MediaItem.fromUri(path + R.raw.menu));
+        menuMusic.prepare();
+        menuMusic.addListener(new Player.Listener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (!isPlaying) {
+                    menuMusic.seekTo(0);
+                }
+            }
+        });
 
         readySnd = MediaPlayer.create(context, R.raw.ready);
-        readySnd.setVolume(1f, 1f);
         sounds.add(readySnd);
         volumes.add(1f);
 
-        attentionSnd = MediaPlayer.create(context, R.raw.attention);
-        attentionSnd.setVolume(0.6f, 0.6f);
-        sounds.add(attentionSnd);
-        volumes.add(0.6f);
+        attentionSnd = new SimpleExoPlayer.Builder(context).build();
+        attentionSnd.setMediaItem(MediaItem.fromUri(path + R.raw.attention));
+        attentionSnd.prepare();
+        attentionSnd.addListener(new Player.Listener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (!isPlaying) {
+                    if (context.game.attention != null) {
+                        context.game.attention.fire();
+                    }
+                    attentionSnd.seekTo(0);
+                    attentionSnd.pause();
+                }
+            }
+        });
 
-        jingleMusic = MediaPlayer.create(context, R.raw.jingle);
-        jingleMusic.setLooping(true);
-        jingleMusic.setVolume(0.5f, 0.5f);
-        sounds.add(jingleMusic);
-        volumes.add(0.5f);
+        jingleMusic = new SimpleExoPlayer.Builder(context).build();
+        jingleMusic.setMediaItem(MediaItem.fromUri(path + R.raw.jingle));
+        jingleMusic.prepare();
+        jingleMusic.addListener(new Player.Listener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (!isPlaying) {
+                    jingleMusic.seekTo(0);
+                }
+            }
+        });
 
-        gameoverSnd = MediaPlayer.create(context, R.raw.gameover_phrase);
-        gameoverSnd.setVolume(1f, 1f);
-        sounds.add(gameoverSnd);
-        volumes.add(1f);
+        gameoverSnd = new SimpleExoPlayer.Builder(context).build();
+        gameoverSnd.setMediaItem(MediaItem.fromUri(path + R.raw.gameover_phrase));
+        gameoverSnd.prepare();
+        gameoverSnd.addListener(new Player.Listener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (!isPlaying) {
+                    gameoverSnd.seekTo(0);
+                    gameoverSnd.pause();
+                }
+            }
+        });
+
+        bossMusic = new SimpleExoPlayer.Builder(context).build();
+        bossMusic.setMediaItem(MediaItem.fromUri(path + R.raw.shadow_boss));
+        bossMusic.prepare();
+        bossMusic.addListener(new Player.Listener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (!isPlaying) {
+                    bossMusic.seekTo(0);
+                }
+            }
+        });
+
+//        jingleMusic = MediaPlayer.create(context, R.raw.jingle);
+//        jingleMusic.setLooping(true);
+//        jingleMusic.setVolume(0.5f, 0.5f);
+//        sounds.add(jingleMusic);
+//        volumes.add(0.5f);
+
+//        gameoverSnd = MediaPlayer.create(context, R.raw.gameover_phrase);
+//        sounds.add(gameoverSnd);
+//        volumes.add(1f);
 
         pauseMusic = MediaPlayer.create(context, R.raw.pause);
-        pauseMusic.setVolume(0.75f, 0.75f);
         pauseMusic.setLooping(true);
         sounds.add(pauseMusic);
         volumes.add(0.75f);
-
-        bossMusic = MediaPlayer.create(context, R.raw.shadow_boss);
-        bossMusic.setVolume(0.45f, 0.45f);
-        bossMusic.setLooping(true);
-        sounds.add(bossMusic);
-        volumes.add(0.45f);
+//
+//        bossMusic = MediaPlayer.create(context, R.raw.shadow_boss);
+//        bossMusic.setLooping(true);
+//        sounds.add(bossMusic);
+//        volumes.add(0.45f);
 
         flightSnd = MediaPlayer.create(context, R.raw.fly);
-        flightSnd.setVolume(1f, 1f);
         sounds.add(flightSnd);
         volumes.add(1f);
 
         winMusic = MediaPlayer.create(context, R.raw.win);
-        winMusic.setVolume(0.3f, 0.3f);
         winMusic.setLooping(true);
         sounds.add(winMusic);
         volumes.add(0.3f);
 
         portalSound = MediaPlayer.create(context, R.raw.portal);
-        portalSound.setVolume(0.5f, 0.5f);
         sounds.add(portalSound);
         volumes.add(0.5f);
 
         timeMachineFirstSnd = MediaPlayer.create(context, R.raw.time_machine);
-        timeMachineFirstSnd.setVolume(1f, 1f);
         sounds.add(timeMachineFirstSnd);
         volumes.add(1f);
 
         timeMachineSecondSnd = MediaPlayer.create(context, R.raw.time_machine1);
-        timeMachineSecondSnd.setVolume(1f, 1f);
         sounds.add(timeMachineSecondSnd);
         volumes.add(1f);
 
         timeMachineNoneSnd = MediaPlayer.create(context, R.raw.time_machine_none);
-        timeMachineNoneSnd.setVolume(0f, 0f);
         sounds.add(timeMachineNoneSnd);
         volumes.add(0f);
 
         forgottenMusic = MediaPlayer.create(context, R.raw.forgotten_snd);
-        forgottenMusic.setVolume(1f, 1f);
         forgottenMusic.setLooping(true);
         sounds.add(forgottenMusic);
         volumes.add(1f);
 
         forgottenBossMusic = MediaPlayer.create(context, R.raw.forgotten_boss);
-        forgottenBossMusic.setVolume(1f, 1f);
         forgottenBossMusic.setLooping(true);
         sounds.add(forgottenBossMusic);
         volumes.add(1f);
     }
 
     public static void changeVolumeForAllPlayers(float newVolume) {
-        try {
+        mainActivity.runOnUiThread(() -> {
             for (int i = 0; i < sounds.size(); i++) {
                 float volume = volumes.get(i) * newVolume;
                 sounds.get(i).setVolume(volume, volume);
             }
-        } catch (Exception e) {
-            Service.print(e.toString());
-        }
+            attentionSnd.setVolume(0.6f * newVolume);
+            jingleMusic.setVolume(0.5f * newVolume);
+            gameoverSnd.setVolume(newVolume);
+            bossMusic.setVolume(0.45f * newVolume);
+            menuMusic.setVolume(newVolume);
+        });
     }
 
     public static void releaseAP() {
-        try {
+        mainActivity.runOnUiThread(() -> {
             for (int i = 0; i < sounds.size(); i++) {
                 sounds.get(i).release();
             }
             AudioPool.release();
-        } catch (Exception e) {
-            Service.print("Can't release AP " + e);
-        }
+            attentionSnd.release();
+            jingleMusic.release();
+            gameoverSnd.release();
+            bossMusic.release();
+            menuMusic.release();
+        });
     }
 
     public static void playBoom() {
@@ -189,18 +252,11 @@ public final class AudioHub {
         AudioPool.playSnd(13);
     }
 
-    public static void pauseAttentionSnd() {
-        if (attentionSnd.isPlaying()) {
-            attentionSnd.pause();
-            attentionSnd.seekTo(0);
-        }
-    }
-
     public static void resumeBackgroundMusic() {
         switch (Game.level)
         {
             case 1:
-                jingleMusic.start();
+                mainActivity.runOnUiThread(() -> jingleMusic.play());
                 break;
             case 2:
                 forgottenMusic.start();
@@ -209,9 +265,10 @@ public final class AudioHub {
     }
 
     public static void pauseBackgroundMusic() {
-        if (jingleMusic.isPlaying()) {
-            jingleMusic.pause();
-        }
+        mainActivity.runOnUiThread(() -> jingleMusic.pause());
+//        if (jingleMusic.isPlaying()) {
+//            jingleMusic.pause();
+//        }
         if (forgottenMusic.isPlaying()) {
             forgottenMusic.pause();
         }
@@ -222,8 +279,10 @@ public final class AudioHub {
         switch (Game.level)
         {
             case 1:
-                jingleMusic.seekTo(0);
-                jingleMusic.start();
+                mainActivity.runOnUiThread(() -> {
+                    jingleMusic.seekTo(0);
+                    jingleMusic.play();
+                });
                 break;
             case 2:
                 AudioHub.forgottenMusic.seekTo(0);
@@ -233,19 +292,16 @@ public final class AudioHub {
     }
 
     public static void restartBossMusic() {
+        pauseBossMusic();
         switch (Game.level)
         {
             case 1:
-                if (bossMusic.isPlaying()) {
-                    bossMusic.pause();
-                }
-                bossMusic.seekTo(0);
-                bossMusic.start();
+                mainActivity.runOnUiThread(() -> {
+                    bossMusic.seekTo(0);
+                    bossMusic.play();
+                });
                 break;
             case 2:
-                if (forgottenBossMusic.isPlaying()) {
-                    forgottenBossMusic.pause();
-                }
                 forgottenBossMusic.seekTo(0);
                 forgottenBossMusic.start();
                 break;
@@ -253,19 +309,21 @@ public final class AudioHub {
     }
 
     public static void pauseBossMusic() {
-        if (bossMusic.isPlaying()) {
-            bossMusic.pause();
-        }
-        if (forgottenBossMusic.isPlaying()) {
-            forgottenBossMusic.pause();
-        }
+        mainActivity.runOnUiThread(() -> {
+            if (bossMusic.isPlaying()) {
+                bossMusic.pause();
+            }
+            if (forgottenBossMusic.isPlaying()) {
+                forgottenBossMusic.pause();
+            }
+        });
     }
 
     public static void resumeBossMusic() {
         switch (Game.level)
         {
             case 1:
-                bossMusic.start();
+                mainActivity.runOnUiThread(() -> bossMusic.play());
                 break;
             case 2:
                 forgottenBossMusic.start();
@@ -286,16 +344,16 @@ public final class AudioHub {
     }
 
     public static void pauseMenuMusic() {
-        if (menuMusic.isPlaying()) {
-            menuMusic.pause();
-        }
+        mainActivity.runOnUiThread(() -> menuMusic.pause());
     }
 
     public static void restartMenuMusic() {
-        if (!menuMusic.isPlaying()) {
-            menuMusic.seekTo(0);
-            menuMusic.start();
-        }
+        mainActivity.runOnUiThread(() -> {
+            if (!menuMusic.isPlaying()) {
+                menuMusic.seekTo(0);
+                menuMusic.play();
+            }
+        });
     }
 
     public static void pauseFlightMusic() {

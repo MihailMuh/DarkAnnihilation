@@ -80,7 +80,6 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
             shoot()
         } else {
             if (y == -600) {
-                AudioHub.pauseAttentionSnd()
                 AudioHub.restartBossMusic()
                 AudioHub.pauseBackgroundMusic()
                 Game.gameStatus = 5

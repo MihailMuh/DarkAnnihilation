@@ -1134,7 +1134,6 @@ public final class ImageHub {
 
     public static void deleteFirstLevelImages() {
         if (screenImage[0] != null) {
-            Service.print("recycle");
             for (int i = 0; i < 34; i++) {
                 screenImage[i].recycle();
                 if (i < 3) {
@@ -1171,7 +1170,6 @@ public final class ImageHub {
     }
 
     public static void loadWinImages(MainActivity mainActivity) {
-        Game.endImgInit = false;
         mainActivity.runOnUiThread(new Thread(() -> {
             mainActivity.gif = mainActivity.findViewById(R.id.gifView);
             mainActivity.gif.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -1189,10 +1187,10 @@ public final class ImageHub {
                         @Override
                         public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                             mainActivity.gif.setVisibility(GifImageView.VISIBLE);
-                            AudioHub.restartFlightMusic();
                             resource.setLoopCount(1);
                             gifDrawable = resource;
-                            Game.endImgInit = true;
+                            mainActivity.game.generateWin();
+                            AudioHub.restartFlightMusic();
                             return false;
                         }
                     })

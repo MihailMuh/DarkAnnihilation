@@ -112,9 +112,11 @@ public class BaseCharacter extends Sprite {
         if (dmg != 0 & !god) {
             health -= dmg;
             if (health <= 0) {
-                game.generateGameover();
-                Service.vibrate(1300);
-                createSkullExplosion();
+                game.context.runOnUiThread(() -> {
+                    game.generateGameover();
+                    Service.vibrate(1300);
+                    createSkullExplosion();
+                });
             } else {
                 Service.vibrate(60);
             }

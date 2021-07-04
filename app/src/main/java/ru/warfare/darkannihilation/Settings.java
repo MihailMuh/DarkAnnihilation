@@ -91,7 +91,7 @@ public class Settings {
             public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
                 angleMusic.setText((string_volume + " " + newVolume));
                 finalVolumeMusic = (float) newVolume / 100f;
-                AudioHub.menuMusic.setVolume(finalVolumeMusic, finalVolumeMusic);
+                AudioHub.menuMusic.setVolume(finalVolumeMusic);
             }
         });
 

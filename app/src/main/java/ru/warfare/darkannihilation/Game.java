@@ -633,7 +633,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         AudioHub.resumeBackgroundMusic();
                         break;
                     case 1:
-                        AudioHub.menuMusic.start();
+                        AudioHub.menuMusic.play();
                         break;
                     case 4:
                         AudioHub.pauseMusic.start();
@@ -691,9 +691,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     public void generateGameover() {
         scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);        saveScore();
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
+        saveScore();
         getMaxScore();
-        AudioHub.gameoverSnd.start();
+        AudioHub.gameoverSnd.play();
         gameStatus = 3;
     }
 
@@ -701,7 +702,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         pauseTimer = System.currentTimeMillis();
 
         AudioHub.pauseBackgroundMusic();
-        AudioHub.pauseAttentionSnd();
+//        AudioHub.pauseAttentionSnd();
         if (bosses.size() == 0) {
             AudioHub.restartPauseMusic();
         }
@@ -1110,7 +1111,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     private void win() {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        if (endImgInit & !ImageHub.isWin()) {
+        if (!ImageHub.isWin()) {
             if (count < 100_000) {
                 count = 100_101;
                 ImageHub.deleteWinImages(context);

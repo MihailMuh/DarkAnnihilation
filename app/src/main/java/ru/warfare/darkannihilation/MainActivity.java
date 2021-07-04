@@ -39,10 +39,10 @@ public final class MainActivity extends AppCompatActivity {
         game.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         Service.init(this);
-        runOnUiThread(new Thread(() -> {
+        runOnUiThread(() -> {
             ImageHub.init(this);
             AudioHub.init(this);
-        }));
+        });
 
         Clerk.init(this);
         checkOnFirstRun();

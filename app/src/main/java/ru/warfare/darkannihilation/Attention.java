@@ -15,18 +15,15 @@ public class Attention extends Sprite {
         y = -height;
     }
 
+    public void fire() {
+        game.rocket.start(centerX());
+        hide();
+    }
+
     public void start() {
         y = 10;
         lock = false;
-        AudioHub.attentionSnd.start();
-    }
-
-    @Override
-    public void update() {
-        if (!AudioHub.attentionSnd.isPlaying()) {
-            game.rocket.start(centerX());
-            hide();
-        }
+        game.context.runOnUiThread(() -> AudioHub.attentionSnd.setPlayWhenReady(true));
     }
 
     @Override
