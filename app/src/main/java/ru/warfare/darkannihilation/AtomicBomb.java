@@ -14,7 +14,7 @@ public class AtomicBomb extends Sprite {
         super(ImageHub.atomBombImage[0].getWidth(), ImageHub.atomBombImage[0].getHeight());
 
         damage = ROCKET_DAMAGE;
-        newStatus();
+        hide();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
@@ -27,16 +27,19 @@ public class AtomicBomb extends Sprite {
         }
     }
 
-    public void newStatus() {
+    public void start() {
+        lock = false;
+        if (buff) {
+            up();
+        }
+    }
+
+    private void hide() {
         lock = true;
         speedY = 1;
         health = 20;
         x = MATH.randInt(0, Game.screenWidth);
         y = -height;
-
-        if (buff) {
-            up();
-        }
     }
 
     private void up() {
@@ -70,7 +73,7 @@ public class AtomicBomb extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        newStatus();
+        hide();
     }
 
     @Override
@@ -103,7 +106,7 @@ public class AtomicBomb extends Sprite {
             y += speedY;
 
             if (y > Game.screenHeight) {
-                newStatus();
+                hide();
             }
         }
     }

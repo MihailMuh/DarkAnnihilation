@@ -31,11 +31,9 @@ public class ChangerGuns extends Sprite {
             image = ImageHub.gunToNone;
         } else {
             if (game.player.gun.equals("shotgun")) {
-                game.player.gun = "gun";
-                image = ImageHub.gunToShotgun;
-            } else {
-                game.player.gun = "shotgun";
                 image = ImageHub.shotgunToGun;
+            } else {
+                image = ImageHub.gunToShotgun;
             }
         }
 

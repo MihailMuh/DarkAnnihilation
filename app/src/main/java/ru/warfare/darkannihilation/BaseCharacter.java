@@ -7,25 +7,23 @@ import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_HEALTH;
 public class BaseCharacter extends Sprite {
     public int endX;
     public int endY;
-    public long lastShoot;
+    public long lastShoot = System.currentTimeMillis();
     public long now;
     public boolean dontmove = false;
-    public String gun = "shotgun";
+    public String gun = "gun";
     public int maxHealth = MILLENNIUM_FALCON_HEALTH;
     public ArrayList<Heart> hearts = new ArrayList<>(0);
     public boolean god = false;
     private int len;
     private int bar;
-    public int heartX;
-    public int heartY;
+    public int heartX = 25;
+    public int heartY = 10;
 
     public BaseCharacter(Game g, int w, int h) {
         super(g, w, h);
 
         init();
 
-        heartX = 25;
-        heartY = 10;
         for (int i = 0; i < 5; i++) {
             hearts.add(new Heart(g, heartX, heartY, false));
             heartX += 90;
@@ -49,6 +47,7 @@ public class BaseCharacter extends Sprite {
     }
 
     public void newStatus() {
+        god = false;
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
         endX = x;
@@ -57,10 +56,6 @@ public class BaseCharacter extends Sprite {
     }
 
     private void init() {
-        gun = "shotgun";
-        if (Game.level == 1 | !game.shotgunKit.picked) {
-            gun = "gun";
-        }
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
         endX = x;
@@ -103,17 +98,13 @@ public class BaseCharacter extends Sprite {
         if (heartX > 385) {
             newLevel();
         }
+        maxHealth = health;
     }
 
     public void heal() {
-        health += 20;
-        int armor = health - maxHealth;
-        if (armor > 0) {
+        health += 10;
+        if (health - maxHealth > 0) {
             addArmorHeart();
-            if (armor > 10) {
-                addArmorHeart();
-            }
-            maxHealth = health;
         }
     }
 
@@ -143,85 +134,5 @@ public class BaseCharacter extends Sprite {
             hearts.get(bar).render("non");
             bar++;
         }
-
-//        switch (health) {
-//            case 50:
-//                hearts[0].render("full");
-//                hearts[1].render("full");
-//                hearts[2].render("full");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 45:
-//                hearts[0].render("half");
-//                hearts[1].render("full");
-//                hearts[2].render("full");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 40:
-//                hearts[0].render("non");
-//                hearts[1].render("full");
-//                hearts[2].render("full");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 35:
-//                hearts[0].render("non");
-//                hearts[1].render("half");
-//                hearts[2].render("full");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 30:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("full");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 25:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("half");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 20:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("non");
-//                hearts[3].render("full");
-//                hearts[4].render("full");
-//                break;
-//            case 15:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("non");
-//                hearts[3].render("half");
-//                hearts[4].render("full");
-//                break;
-//            case 10:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("non");
-//                hearts[3].render("non");
-//                hearts[4].render("full");
-//                break;
-//            case 5:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("non");
-//                hearts[3].render("non");
-//                hearts[4].render("half");
-//                break;
-//            default:
-//                hearts[0].render("non");
-//                hearts[1].render("non");
-//                hearts[2].render("non");
-//                hearts[3].render("non");
-//                hearts[4].render("non");
-//                break;
-//        }
     }
 }

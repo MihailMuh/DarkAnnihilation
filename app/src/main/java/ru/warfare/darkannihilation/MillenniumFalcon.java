@@ -8,8 +8,6 @@ public class MillenniumFalcon extends BaseCharacter {
         super(g, ImageHub.playerImage.getWidth(), ImageHub.playerImage.getHeight());
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
-
-        lastShoot = System.currentTimeMillis();
     }
 
     public void shoot() {

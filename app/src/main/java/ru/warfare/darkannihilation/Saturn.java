@@ -1,15 +1,16 @@
 package ru.warfare.darkannihilation;
 
+import static ru.warfare.darkannihilation.Constants.SATURN_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SATURN_SHOOT_TIME;
 import static ru.warfare.darkannihilation.Constants.SATURN_SHOTGUN_TIME;
 
 public class Saturn extends BaseCharacter {
     public Saturn(Game g) {
-        super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight());
-
+        super(g, ImageHub.saturnImg.getWidth(), ImageHub.saturnImg.getHeight(), SATURN_HEALTH);
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 17);
 
-        lastShoot = System.currentTimeMillis();
+        hearts.add(new Heart(g, heartX, heartY, false));
+        heartX += 90;
     }
 
     public void shoot() {

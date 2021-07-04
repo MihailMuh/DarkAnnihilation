@@ -6,12 +6,13 @@ public final class Constants {
     public static final byte MILLENNIUM_FALCON_SHOOT_TIME = 80;
     public static final short MILLENNIUM_FALCON_SHOTGUN_TIME = 515;
 
-    public static final short EMERALD_SHOOT_TIME = 1_480;
-    public static final short EMERALD_SHOTGUN_TIME = 1_325;
-    public static final byte EMERALD_HEALTH = MILLENNIUM_FALCON_SHOOT_TIME;
+    public static final short EMERALD_SHOOT_TIME = 1_300;
+    public static final short EMERALD_SHOTGUN_TIME = 1_200;
+    public static final byte EMERALD_HEALTH = 100;
 
     public static final byte SATURN_SHOOT_TIME = 120;
-    public static final short SATURN_SHOTGUN_TIME = 135;
+    public static final short SATURN_SHOTGUN_TIME = 150;
+    public static final byte SATURN_HEALTH = 10;
 
     public static final byte BOT_SHOOT_TIME = 70;
 
@@ -20,14 +21,14 @@ public final class Constants {
     public static final byte NUMBER_ATOMIC_BOMB_IMAGES = 4;
 
     public static final short BOSS_VADERS_HEALTH = 350;
-    public static final short BOSS_VADERS_SHOOT_TIME = 1200;
+    public static final short BOSS_VADERS_SHOOT_TIME = EMERALD_SHOTGUN_TIME;
 
     public static final byte BUFFER_HEALTH = 35;
     public static final byte BUFFER_DAMAGE = 20;
 
     public static final short XWING_SHOOT_TIME = 175;
     public static final byte XWING_HEALTH = 5;
-    public static final byte XWING_DAMAGE = 10;
+    public static final byte XWING_DAMAGE = SATURN_HEALTH;
 
     public static final short SUNRISE_SHOOT_TIME = 775;
     public static final byte SUNRISE_HEALTH = 45;
@@ -37,7 +38,7 @@ public final class Constants {
     public static final byte SPIDER_SHOOT_TIME = 110;
     public static final byte SPIDER_DAMAGE = BUFFER_DAMAGE;
     public static final byte SPIDER_SPEED = XWING_HEALTH;
-    public static final short SPIDER_HEALTH_BAR_LEN = 150;
+    public static final short SPIDER_HEALTH_BAR_LEN = SATURN_SHOTGUN_TIME;
     public static final byte SPIDER_HEALTH_BAR_HEIGHT = 15;
 
 //    first level
@@ -84,7 +85,7 @@ public final class Constants {
 
     public static final byte NUMBER_STAR_SCREEN_IMAGES = 34;
 
-    public static final short THUNDER_SCREEN_FRAME_TIME = SATURN_SHOTGUN_TIME;
+    public static final short THUNDER_SCREEN_FRAME_TIME = 135;
     public static final byte NUMBER_THUNDER_SCREEN_IMAGES = BUFFER_DAMAGE;
 
 //    sprites on levels

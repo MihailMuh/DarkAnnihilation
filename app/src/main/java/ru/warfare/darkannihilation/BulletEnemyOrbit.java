@@ -19,6 +19,7 @@ public class BulletEnemyOrbit extends Sprite {
         damage = BULLET_ENEMY_ORBIT_DAMAGE;
         isPassive = true;
         isBullet = true;
+        status = "fakeSaturn";
 
         X = (int) info[1];
         Y = (int) info[2];

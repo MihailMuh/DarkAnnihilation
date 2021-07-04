@@ -69,7 +69,14 @@ public class Spider extends Sprite {
         }
     }
 
-    public void hide() {
+    public void start() {
+        lock = false;
+        if (buff) {
+            shootTripleTime /= 2;
+        }
+    }
+
+    private void hide() {
         hp = 10;
         lock = true;
         reload = false;
@@ -79,16 +86,11 @@ public class Spider extends Sprite {
         x = randInt(0, screenWidthWidth);
         y = -height;
         shootTripleTime = SPIDER_SHOOT_TIME;
-
-        if (buff) {
-            shootTripleTime /= 2;
-        }
     }
 
     @Override
     public void buff() {
         buff = true;
-
         if (!lock) {
             shootTripleTime /= 2;
         }

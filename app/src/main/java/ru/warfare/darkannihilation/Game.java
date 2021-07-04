@@ -161,6 +161,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         holder.setFixedSize(screenWidth, screenHeight);
 
         buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
+        fpsY = 300;
+        fpsX = screenWidth - 250;
 
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -224,21 +226,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             demoman = new Demoman();
             screen = new StarScreen();
             loadingScreen = new LoadingScreen(this);
-
-            fpsY = pauseButton.bottom() + 100;
-            fpsX = screenWidth - 250;
-            scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
-            maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
-            chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
-            chooseChY = (int) (screenHeight * 0.3);
-            thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
-            thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
-            go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
-            go_to_menuY = (int) (Game.screenHeight * 0.65);
-            shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
-            shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-            go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
-            go_to_restartY = (int) (screenHeight * 0.7);
 
             while (buttonStart.right() > buttonMenu.x) {
                 buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
@@ -381,7 +368,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             }
         }
         if (healthKit.lock) {
-            if (random.nextFloat() <= 0.0015) {
+            if (random.nextFloat() <= 0.00125) {
                 healthKit.lock = false;
             }
         }
@@ -399,6 +386,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     if (factory.lock) {
                         if (random.nextFloat() <= 0.0009) {
                             factory.lock = false;
+                            removeSaturnTrash();
                         }
                     }
                 }
@@ -425,6 +413,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     if (sunrise.lock) {
                         if (random.nextFloat() <= 0.0009) {
                             sunrise.lock = false;
+                            removeSaturnTrash();
                         }
                     }
                 }
@@ -444,6 +433,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
 
         changerGuns.render();
+        pauseButton.render();
 
         player.update();
         player.render();
@@ -460,7 +450,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 switch (gameStatus) {
                     case 0:
                         gameplay();
-                        pauseButton.render();
                         renderCurrentScore();
                         break;
                     case 1:
@@ -487,12 +476,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         renderCurrentScore();
                         break;
                     case 6:
-                        gameplay();
-                        if (portal != null) {
-                            portal.x -= moveAll;
-                            portal.render();
-                            portal.update();
-                        }
+                        portalTime();
                         renderCurrentScore();
                         break;
                     case 7:
@@ -1141,6 +1125,179 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
     }
 
+    private void portalTime() {
+        moveAll = player.speedX / 3;
+
+        if (screen.x < 0 & screen.right() > screenWidth) {
+            screen.x -= moveAll;
+        } else {
+            if (screen.x >= 0) {
+                screen.x -= 2;
+            } else {
+                screen.x += 2;
+            }
+        }
+        screen.update();
+        screen.render();
+
+        for (int i = 0; i < allSprites.size(); i++) {
+            Sprite anySprite = allSprites.get(i);
+            if (anySprite != null) {
+                if (!anySprite.lock) {
+                    anySprite.x -= moveAll;
+                    anySprite.render();
+                    anySprite.update();
+                    if (!anySprite.isPassive) {
+                        player.checkIntersections(anySprite);
+                    }
+                    if (level == 1) {
+                        rocket.checkIntersections(anySprite);
+                    }
+                    if (!anySprite.isBullet) {
+                        for (int j = 0; j < bullets.size(); j++) {
+                            anySprite.check_intersectionBullet(bullets.get(j));
+                        }
+                    }
+                    if (character.equals("saturn")) {
+                        if (anySprite.status.equals("bulletEnemy")) {
+                            for (int j = 0; j < bullets.size(); j++) {
+                                Sprite bulletPlayer = bullets.get(j);
+                                if (bulletPlayer.status.equals("saturn")) {
+                                    if (anySprite.intersect(bulletPlayer)) {
+                                        if (random.nextFloat() <= 0.5) {
+
+                                            Object[] info = bulletPlayer
+                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
+                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
+
+                                            if ((boolean) info[3]) {
+                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                allSprites.add(bulletEnemyOrbit);
+                                                bullets.add(bulletEnemyOrbit);
+
+                                                allSprites.remove(anySprite);
+                                                break;
+                                            }
+                                        }
+                                        anySprite.intersectionPlayer();
+                                        bulletPlayer.intersection();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (player.intersect(changerGuns)) {
+            changerGuns.intersectionPlayer();
+        } else {
+            if (player.intersect(pauseButton)) {
+                pauseButton.intersectionPlayer();
+            } else {
+                changerGuns.work();
+                pauseButton.work();
+            }
+        }
+
+        if (!shotgunKit.picked) {
+            if (!shotgunKit.lock) {
+                shotgunKit.x -= moveAll;
+                shotgunKit.update();
+                shotgunKit.render();
+                player.checkIntersections(shotgunKit);
+            } else {
+                if (score >= 50) {
+                    if (random.nextFloat() <= 0.01) {
+                        shotgunKit.lock = false;
+                    }
+                }
+            }
+        }
+
+        if (level == 1) {
+            if (score > 50) {
+                if (attention.lock) {
+                    if (random.nextFloat() <= 0.004) {
+                        attention.start();
+                    }
+                }
+            }
+            if (score > 170) {
+                if (bosses.size() == 0) {
+                    if (factory.lock) {
+                        if (random.nextFloat() <= 0.0009) {
+                            factory.lock = false;
+                            if (character.equals("saturn")) {
+                                new Thread(() -> {
+                                    for (int i = 0; i < bullets.size(); i++) {
+                                        Sprite bullet = bullets.get(i);
+                                        if (bullet.status.equals("saturn") | bullet.status.equals("fakeSaturn")) {
+                                            if (MATH.getDistance(player.centerX() - bullet.centerX(), player.centerY() - bullet.centerY()) >= 550) {
+                                                bullet.intersection();
+                                            }
+                                        }
+                                    }
+                                }).start();
+                            }
+                        }
+                    }
+                }
+            }
+            if (score > 70) {
+                if (demoman.lock) {
+                    if (random.nextFloat() <= 0.0021) {
+                        demoman.lock = false;
+                    }
+                }
+            }
+
+        } else {
+            int curScore = score - oldScore;
+            if (curScore > 30) {
+                if (spider.lock) {
+                    if (random.nextFloat() <= 0.001) {
+                        spider.lock = false;
+                    }
+                }
+            }
+            if (bosses.size() == 0) {
+                if (curScore > 100) {
+                    if (sunrise.lock) {
+                        if (random.nextFloat() <= 0.0009) {
+                            sunrise.lock = false;
+                        }
+                    }
+                }
+                if (curScore > 50) {
+                    if (buffer.lock) {
+                        if (random.nextFloat() <= 0.001) {
+                            buffer.lock = false;
+                        }
+                    }
+                }
+                if (atomicBomb.lock) {
+                    if (random.nextFloat() <= 0.0022) {
+                        atomicBomb.lock = false;
+                    }
+                }
+            }
+        }
+
+        changerGuns.render();
+
+        player.update();
+        player.render();
+
+        if (portal != null) {
+            portal.x -= moveAll;
+            portal.render();
+            portal.update();
+        }
+    }
+
     private void renderSprites() {
         screen.render();
         for (int i = 0; i < allSprites.size(); i++) {
@@ -1194,6 +1351,21 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private void onLoading() {
         loadingScreen.render();
         loadingScreen.update();
+    }
+
+    private void removeSaturnTrash() {
+        if (character.equals("saturn")) {
+            new Thread(() -> {
+                for (int i = 0; i < bullets.size(); i++) {
+                    Sprite bullet = bullets.get(i);
+                    if (bullet.status.equals("saturn") | bullet.status.equals("fakeSaturn")) {
+                        if (MATH.getDistance(player.centerX() - bullet.centerX(), player.centerY() - bullet.centerY()) >= 550) {
+                            bullet.intersection();
+                        }
+                    }
+                }
+            }).start();
+        }
     }
 
     public void makeLanguage(boolean set) {

@@ -22,7 +22,7 @@ public class Vader extends Sprite {
 
         newStatus();
 
-        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
+        recreateRect(x + 10, y + 10, right() - 10, bottom() - 10);
     }
 
     public void newStatus() {

@@ -97,10 +97,10 @@ public class Sprite {
     public void stopBuff() {}
 
     public void sB() {
-        if (buff && !lock) {
+        if (buff & !lock) {
             stopBuff();
+            buff = false;
         }
-        buff = false;
     }
 
     public void createLargeExplosion() {

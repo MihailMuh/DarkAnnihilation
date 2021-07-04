@@ -28,7 +28,8 @@ public class BuckshotSaturn extends Sprite {
         right = X + width;
         bottom = Y + height;
 
-        vector.basisVector(centerX(), centerY(), centerX(), 0, 4);
+        int XX = centerX();
+        vector.basisVector(XX, centerY(), XX, 0, 4);
         vector.rads -= 0.0002;
     }
 

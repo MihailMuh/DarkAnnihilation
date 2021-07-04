@@ -31,20 +31,22 @@ public class Sunrise extends Sprite {
         }
     }
 
-    public void hide() {
+    public void start() {
+        lock = false;
+        if (buff) {
+            up();
+        }
+    }
+
+    private void hide() {
         field = false;
-        lock = true;
         health = SUNRISE_HEALTH;
         x = randInt(0, screenWidthWidth);
         y = -height;
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
-
         left = randInt(0, 1) == 1;
-
-        if (buff) {
-            up();
-        }
+        lock = true;
     }
 
     private void up() {
