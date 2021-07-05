@@ -33,6 +33,15 @@ public class Saturn extends BaseCharacter {
     }
 
     @Override
+    public void heal() {
+        health += 10;
+        if (health - maxHealth > 0) {
+            addArmorHeart();
+            maxHealth = health;
+        }
+    }
+
+    @Override
     public Sprite getRect() {
         return newRect(x + 25, y + 25);
     }

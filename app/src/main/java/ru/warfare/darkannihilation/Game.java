@@ -305,7 +305,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
                                             Object[] info = bulletPlayer
                                                     .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
-                                                    (Bitmap) anySprite.getBox(0, 0, null)[0]);
+                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
 
                                             if ((boolean) info[3]) {
                                                 BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
@@ -675,18 +675,13 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateWin() {
-        gameStatus = 7;
         AudioHub.pauseBossMusic();
         AudioHub.portalSound.pause();
         AudioHub.winMusic.seekTo(0);
         AudioHub.winMusic.start();
         saveScore();
         portal.kill();
-        try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
-            Service.print("Can't sleep when win " + e);
-        }
+        gameStatus = 7;
     }
 
     public void generateGameover() {
@@ -749,10 +744,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         ImageHub.deleteSettingsImages();
         if (ImageHub.needImagesForFirstLevel()) {
             ImageHub.loadFirstLevelImages();
-            while (!endImgInit) {}
+            while (!endImgInit) {
+            }
         }
         ImageHub.loadCharacterImages("falcon");
-        while (!endImgInit) {}
+        while (!endImgInit) {
+        }
 
         score = 0;
         level = 1;
@@ -821,6 +818,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         int len;
         switch (level) {
             case 1:
+                AudioHub.loadFirstLevelSounds();
+
                 score = 0;
 
                 spider = null;
@@ -829,9 +828,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 atomicBomb = null;
 
                 ImageHub.deleteSecondLevelImages();
-                while (!endImgInit) {}
-                switch (character)
-                {
+                while (!endImgInit) {
+                }
+                switch (character) {
                     case "saturn":
                         player = new Saturn(this);
                         break;
@@ -844,7 +843,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 }
                 if (ImageHub.needImagesForFirstLevel()) {
                     ImageHub.loadFirstLevelImages();
-                    while (!endImgInit) {}
+                    while (!endImgInit) {
+                    }
                 }
 
                 shotgunKit.picked = false;
@@ -870,9 +870,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 allSprites.add(demoman);
                 allSprites.add(rocket);
                 allSprites.add(attention);
-
                 break;
             case 2:
+                AudioHub.loadSecondLevelSounds();
+
                 oldScore = score;
 
                 attention = null;
@@ -904,11 +905,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 allSprites.add(sunrise);
                 allSprites.add(buffer);
                 allSprites.add(atomicBomb);
-
                 break;
         }
-
-        AudioHub.restartBackgroundMusic();
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
@@ -993,7 +991,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                             canvas.drawText("1", (screenWidth - startPaint.measureText("1")) / 2, (screenHeight + startPaint.getTextSize()) / 2, startPaint);
                         } else {
                             if (210 <= count & count < 280) {
-                                canvas.drawText(string_shoot, shootX,shootY, startPaint);
+                                canvas.drawText(string_shoot, shootX, shootY, startPaint);
                             }
                         }
                     }
@@ -1372,8 +1370,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public void makeLanguage(boolean set) {
         String[] strings = new String[0];
         gameoverPaint.setTextSize(39);
-        switch (language)
-        {
+        switch (language) {
             case "ru":
                 strings = context.getResources().getStringArray(R.array.ru);
                 buttonsPaint.setTextSize(33);

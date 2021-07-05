@@ -26,17 +26,18 @@ public class Vader extends Sprite {
     }
 
     public void newStatus() {
-        if (Game.bosses.size() != 0) {
-            lock = true;
-        }
-        health = VADER_HEALTH;
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        speedX = randInt(-5, 5);
-        speedY = randInt(3, 10);
+        if (Game.bosses.size() == 0) {
+            health = VADER_HEALTH;
+            x = randInt(0, screenWidthWidth);
+            y = -height;
+            speedX = randInt(-5, 5);
+            speedY = randInt(3, 10);
 
-        if (buff) {
-            up();
+            if (buff) {
+                up();
+            }
+        } else {
+            lock = true;
         }
     }
 

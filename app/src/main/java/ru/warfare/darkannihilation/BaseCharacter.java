@@ -98,13 +98,17 @@ public class BaseCharacter extends Sprite {
         if (heartX > 385) {
             newLevel();
         }
-        maxHealth = health;
     }
 
     public void heal() {
-        health += 10;
-        if (health - maxHealth > 0) {
+        health += 15;
+        int armor = health - maxHealth;
+        if (armor > 0) {
             addArmorHeart();
+            if (armor > 10) {
+                addArmorHeart();
+            }
+            maxHealth = health;
         }
     }
 

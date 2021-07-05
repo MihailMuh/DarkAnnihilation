@@ -21,7 +21,7 @@ public final class Constants {
     public static final byte NUMBER_ATOMIC_BOMB_IMAGES = 4;
 
     public static final short BOSS_VADERS_HEALTH = 350;
-    public static final short BOSS_VADERS_SHOOT_TIME = EMERALD_SHOTGUN_TIME;
+    public static final short BOSS_VADERS_SHOOT_TIME = 1_000;
 
     public static final byte BUFFER_HEALTH = 35;
     public static final byte BUFFER_DAMAGE = 20;
@@ -49,7 +49,7 @@ public final class Constants {
     public static final byte DEMOMAN_DAMAGE = 40;
     public static final byte DEMOMAN_HEALTH = ATOMIC_BOMB_FRAME_TIME;
 
-    public static final short FACTORY_SPAWN_TIME = 1_000;
+    public static final short FACTORY_SPAWN_TIME = BOSS_VADERS_SHOOT_TIME;
     public static final short FACTORY_HEALTH = SPIDER_HEALTH;
     public static final byte FACTORY_SPEED = 3;
     public static final short FACTORY_HEALTH_BAR_LEN = 500;
@@ -107,7 +107,7 @@ public final class Constants {
 
     public static final byte BUCKSHOT_SATURN_DAMAGE = LIGHTNING_DAMAGE;
 
-    public static final byte BULLET_ENEMY_ORBIT_DAMAGE = LIGHTNING_DAMAGE;
+    public static final byte BULLET_ENEMY_ORBIT_DAMAGE = XWING_HEALTH;
 
     public static final byte BULLET_ENEMY_DAMAGE = XWING_HEALTH;
 

@@ -122,7 +122,7 @@ public final class ImageHub {
     private static final int eX152 = (int) (152 * resizeK);
     private static final int eX3545 = (int) (0.3545 * screenHeight);
     private static final int eX169 = (int) (169 * resizeK);
-    private static final int screensSizeX = (int) (screenWidth * 1.4);
+    private static final int screensSizeX = (int) (screenWidth * 1.5);
     private static final int eX50 = (int) (50 * resizeK);
     private static final int eX60 = (int) (60 * resizeK);
     private static final int eX100 = (int) (100 * resizeK);
@@ -133,7 +133,6 @@ public final class ImageHub {
     private static final int eX80 = (int) (80 * resizeK);
     private static final int eX175 = (int) (175 * resizeK);
     private static final int eX400 = (int) (400 * resizeK);
-    private static final int portalSize = (int) (300 * resizeK);
 
     @SuppressLint("StaticFieldLeak")
     public static RequestBuilder<Bitmap> requestBuilder;
@@ -144,13 +143,11 @@ public final class ImageHub {
     public static void init(Context context) {
         int eX145 = (int) (145 * resizeK);
         int eX52 = (int) (52 * resizeK);
-        int sW = (int) (screenWidth * resizeK);
-        int sW150 = (int) (sW * 0.95);
+        int sW150 = (int) (screenWidth * 0.95);
         int eX522 = (int) (522 * resizeK);
         int eX600 = (int) (600 * resizeK);
         int pauseBtn = (int) (180 * resizeK);
         int eX72 = (int) (72 * resizeK);
-        int eX61 = (int) (61 * resizeK);
         res = context.getResources();
         name = context.getPackageName();
 
@@ -290,7 +287,7 @@ public final class ImageHub {
 
         requestBuilder.load(R.drawable.gameover)
                 .centerCrop()
-                .override(screenWidth, screenHeight)
+                .override(ImageHub.screenWidth, screenHeight)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -322,7 +319,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.full_blue_heart)
-                .override(eX72, eX61)
+                .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -337,7 +334,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.half_blue_heart)
-                .override(eX72, eX61)
+                .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -352,7 +349,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.full_heart)
-                .override(eX72, eX61)
+                .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -367,7 +364,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.half_heart)
-                .override(eX72, eX61)
+                .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -382,7 +379,7 @@ public final class ImageHub {
                           }
                 ).submit();
         requestBuilder.load(R.drawable.non_heart)
-                .override(eX72, eX61)
+                .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -398,7 +395,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.player_vs_boss)
-                .override(sW, sW150)
+                .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -414,7 +411,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.player_vs_vader)
-                .override(sW, sW150)
+                .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -430,7 +427,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.saturn_vs_boss)
-                .override(sW, sW150)
+                .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -446,7 +443,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.emerald_vs_boss)
-                .override(sW, sW150)
+                .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -462,7 +459,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.saturn_vs_vader)
-                .override(sW, sW150)
+                .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -478,7 +475,7 @@ public final class ImageHub {
                 ).submit();
 
         requestBuilder.load(R.drawable.emerald_vs_vader)
-                .override(sW, sW150)
+                .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -611,7 +608,7 @@ public final class ImageHub {
             if (i < 12) {
                 requestBuilder.load(res.getIdentifier("loading" + i, "drawable", name))
                         .centerCrop()
-                        .override(screenWidth, screenHeight)
+                        .override(ImageHub.screenWidth, screenHeight)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -734,7 +731,7 @@ public final class ImageHub {
             for (int i = 0; i < 20; i++) {
                 int finalI = i;
                 requestBuilder.load(res.getIdentifier("portal0" + i, "drawable", name))
-                        .override(portalSize, portalSize)
+                        .override(eX300, eX300)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -1170,32 +1167,30 @@ public final class ImageHub {
     }
 
     public static void loadWinImages(MainActivity mainActivity) {
-        mainActivity.runOnUiThread(new Thread(() -> {
-            mainActivity.gif = mainActivity.findViewById(R.id.gifView);
-            mainActivity.gif.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            GlideApp.with(mainActivity)
-                    .asGif()
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .override(screenWidth, screenHeight)
-                    .load(R.drawable.win)
-                    .addListener(new RequestListener<GifDrawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-                            return false;
-                        }
+        mainActivity.gif = mainActivity.findViewById(R.id.gifView);
+        mainActivity.gif.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        GlideApp.with(mainActivity)
+                .asGif()
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .override(screenWidth, screenHeight)
+                .load(R.drawable.win)
+                .addListener(new RequestListener<GifDrawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
-                        @Override
-                        public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                            mainActivity.gif.setVisibility(GifImageView.VISIBLE);
-                            resource.setLoopCount(1);
-                            gifDrawable = resource;
-                            mainActivity.game.generateWin();
-                            AudioHub.restartFlightMusic();
-                            return false;
-                        }
-                    })
-                    .into(mainActivity.gif);
-        }));
+                    @Override
+                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                        mainActivity.gif.setVisibility(GifImageView.VISIBLE);
+                        resource.setLoopCount(1);
+                        gifDrawable = resource;
+                        mainActivity.game.generateWin();
+                        AudioHub.restartFlightMusic();
+                        return false;
+                    }
+                })
+                .into(mainActivity.gif);
     }
 
     public static void deleteWinImages(MainActivity mainActivity) {

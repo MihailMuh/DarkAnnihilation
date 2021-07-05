@@ -70,7 +70,7 @@ public class Settings {
             public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
                 angleEffects.setText((string_volume + " " + newVolume));
                 finalVolumeEffects = (float) newVolume / 100f;
-                AudioPool.newVolumeForSnd(7, finalVolumeEffects);
+                AudioHub.soundOfClick(finalVolumeEffects);
             }
         });
 
@@ -269,8 +269,8 @@ public class Settings {
             animatedCheckBox.setVisibility(TextView.GONE);
             textAntiAlias.setVisibility(TextView.GONE);
         }));
-        AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
-        AudioPool.newVolumeForPool(finalVolumeEffects);
+        AudioHub.newVolumeForBackground(finalVolumeMusic);
+        AudioHub.newVolumeForEffects(finalVolumeEffects);
         saveSettings();
     }
 
@@ -282,8 +282,8 @@ public class Settings {
         Game.language = settings[3];
         mainActivity.game.makeLanguage(false);
         mainActivity.game.setAntiAlias(Integer.parseInt(settings[4]) == 1);
-        AudioHub.changeVolumeForAllPlayers(finalVolumeMusic);
-        AudioPool.newVolumeForPool(finalVolumeEffects);
+        AudioHub.newVolumeForBackground(finalVolumeMusic);
+        AudioHub.newVolumeForEffects(finalVolumeEffects);
     }
 
     public void saveSettings() {

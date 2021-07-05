@@ -196,7 +196,7 @@ public class HardThread implements Runnable {
 
     public void workOnResume() {
         if (Game.character.equals("saturn")) {
-            r = 530;
+            r = 470;
         } else {
             r = 350;
         }
