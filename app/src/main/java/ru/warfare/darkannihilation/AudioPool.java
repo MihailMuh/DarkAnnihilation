@@ -58,7 +58,6 @@ public class AudioPool {
 
     public void newVolume(float newVolume) {
         for (int i = 0; i < volumes.size(); i++) {
-            Service.print(volumes.get(i) + " " + maxes.get(i) * newVolume);
             volumes.set(i, maxes.get(i) * newVolume);
         }
         for (int i = 0; i < sndOfPacks.size(); i++) {

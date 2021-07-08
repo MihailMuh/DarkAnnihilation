@@ -541,6 +541,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     case 0:
                     case 2:
                     case 3:
+                    case 6:
                         pb = pauseButton.checkCoords(clickX, clickY);
                         break;
                 }
@@ -605,13 +606,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     public void onPause() {
         hardThread.workOnPause();
-        if (gameStatus == 7) {
-            AudioHub.winMusic.pause();
-        }
-        AudioHub.pauseMenuMusic();
-        AudioHub.pauseBossMusic();
-        AudioHub.pauseBackgroundMusic();
-        AudioHub.pausePauseMusic();
+        AudioHub.stopAndSavePlaying();
         playing = false;
         try {
             thread.join();
@@ -622,27 +617,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     public void onResume() {
         hardThread.workOnResume();
-        if (gameStatus == 7) {
-            AudioHub.winMusic.start();
-        } else {
-            if (bosses.size() == 0) {
-                switch (gameStatus) {
-                    case 0:
-                    case 2:
-                    case 3:
-                        AudioHub.resumeBackgroundMusic();
-                        break;
-                    case 1:
-                        AudioHub.menuMusic.play();
-                        break;
-                    case 4:
-                        AudioHub.pauseMusic.start();
-                        break;
-                }
-            } else {
-                AudioHub.resumeBossMusic();
-            }
-        }
+        AudioHub.whoIsPlayed();
         playing = true;
         thread = new Thread(this);
         thread.start();
@@ -676,7 +651,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     public void generateWin() {
         AudioHub.pauseBossMusic();
-        AudioHub.portalSound.pause();
         AudioHub.winMusic.seekTo(0);
         AudioHub.winMusic.start();
         saveScore();
@@ -685,23 +659,19 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateGameover() {
+        AudioHub.playGameOverSnd();
         scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
         saveScore();
         getMaxScore();
-        AudioHub.gameoverSnd.play();
         gameStatus = 3;
     }
 
     public void generatePause() {
         pauseTimer = System.currentTimeMillis();
 
-        AudioHub.pauseBackgroundMusic();
-//        AudioHub.pauseAttentionSnd();
-        if (bosses.size() == 0) {
-            AudioHub.restartPauseMusic();
-        }
-        AudioHub.pauseReadySound();
+        AudioHub.restartPauseMusic();
+        AudioHub.stopAndSavePlaying();
 
         scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
@@ -732,10 +702,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         if (AudioHub.winMusic.isPlaying()) {
             AudioHub.winMusic.pause();
         }
-
-        AudioHub.pauseReadySound();
         AudioHub.pauseFlightMusic();
-        AudioHub.restartMenuMusic();
+        AudioHub.loadMenuSnd();
         AudioHub.pausePauseMusic();
         AudioHub.pauseBackgroundMusic();
         AudioHub.pauseBossMusic();
@@ -766,7 +734,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         player = new Bot();
 
-        for (int i = 0; i < numberVaders * 2; i++) {
+        int len = numberVaders * 2;
+        for (int i = 0; i < len; i++) {
             allSprites.add(new Vader(false));
         }
 
@@ -785,8 +754,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateNewGame() {
-        AudioHub.pauseMenuMusic();
-        AudioHub.pauseReadySound();
+        AudioHub.deleteMenuSnd();
         AudioHub.pauseBossMusic();
         AudioHub.pausePauseMusic();
         ImageHub.loadCharacterImages(character);
@@ -908,14 +876,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 break;
         }
 
+        AudioHub.playReadySnd();
+
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
             allSprites.add(allExplosions[i]);
         }
 
         changerGuns.hide();
-
-        AudioHub.restartReadySound();
 
         gameStatus = 2;
     }
@@ -1109,17 +1077,19 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     private void win() {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        if (!ImageHub.isWin()) {
-            if (count < 100_000) {
-                count = 100_101;
-                ImageHub.deleteWinImages(context);
-            }
+        if (System.currentTimeMillis() - lastBoss > 3_000) {
+            if (!ImageHub.isWin()) {
+                if (count < 100_000) {
+                    count = 100_101;
+                    ImageHub.deleteWinImages();
+                }
 
-            canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
-            canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameoverPaint);
+                canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
+                canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameoverPaint);
 
-            if (pointerCount >= 4) {
-                loadingScreen.newJob("menu");
+                if (pointerCount >= 4) {
+                    loadingScreen.newJob("menu");
+                }
             }
         }
     }
@@ -1217,13 +1187,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
 
         if (level == 1) {
-            if (score > 50) {
-                if (attention.lock) {
-                    if (random.nextFloat() <= 0.004) {
-                        attention.start();
-                    }
-                }
-            }
             if (score > 170) {
                 if (bosses.size() == 0) {
                     if (factory.lock) {
@@ -1285,8 +1248,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             }
         }
 
-        changerGuns.render();
-
         player.update();
         player.render();
 
@@ -1295,6 +1256,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             portal.render();
             portal.update();
         }
+
+        pauseButton.render();
+        changerGuns.render();
     }
 
     private void renderSprites() {

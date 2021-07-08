@@ -40,24 +40,26 @@ public class Emerald extends BaseCharacter {
 
     @Override
     public void heal() {
-        if (MATH.randInt(0, 1) == 0) {
-            health += 30;
-        } else {
-            health += 35;
-        }
-        int armor = health - maxHealth;
-        if (armor > 0) {
-            addArmorHeart();
-            if (armor > 10) {
-                addArmorHeart();
+        if (health <= 200) {
+            if (MATH.randInt(0, 1) == 0) {
+                health += 30;
+            } else {
+                health += 35;
             }
-            if (armor > 20) {
+            int armor = health - maxHealth;
+            if (armor > 0) {
                 addArmorHeart();
+                if (armor > 10) {
+                    addArmorHeart();
+                }
+                if (armor > 20) {
+                    addArmorHeart();
+                }
+                if (armor > 30) {
+                    addArmorHeart();
+                }
+                maxHealth = health;
             }
-            if (armor > 30) {
-                addArmorHeart();
-            }
-            maxHealth = health;
         }
     }
 

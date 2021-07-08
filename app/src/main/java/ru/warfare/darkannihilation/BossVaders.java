@@ -52,10 +52,12 @@ public class BossVaders extends Sprite {
     }
 
     public void killAfterFight() {
-        HardThread.job = 11;
-        createSkullExplosion();
-        Game.bosses.remove(this);
-        Game.allSprites.remove(this);
+        if (HardThread.job == 0) {
+            HardThread.job = 11;
+            createSkullExplosion();
+            Game.bosses.remove(this);
+            Game.allSprites.remove(this);
+        }
     }
 
     @Override

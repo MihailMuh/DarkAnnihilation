@@ -48,6 +48,7 @@ public class Factory extends Sprite {
         isSpawn = false;
         lock = true;
         y = -height;
+        x = Game.halfScreenWidth - halfWidth;
         health = FACTORY_HEALTH;
     }
 

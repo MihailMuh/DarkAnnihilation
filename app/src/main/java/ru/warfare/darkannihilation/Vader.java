@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import android.graphics.Bitmap;
 
+import static ru.warfare.darkannihilation.Constants.BUCKSHOT_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.VADER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.VADER_HEALTH;
 import static ru.warfare.darkannihilation.MATH.randInt;
@@ -26,18 +27,17 @@ public class Vader extends Sprite {
     }
 
     public void newStatus() {
-        if (Game.bosses.size() == 0) {
-            health = VADER_HEALTH;
-            x = randInt(0, screenWidthWidth);
-            y = -height;
-            speedX = randInt(-5, 5);
-            speedY = randInt(3, 10);
-
-            if (buff) {
-                up();
-            }
-        } else {
+        if (Game.bosses.size() != 0) {
             lock = true;
+        }
+        health = VADER_HEALTH;
+        x = randInt(0, screenWidthWidth);
+        y = -height;
+        speedX = randInt(-5, 5);
+        speedY = randInt(3, 10);
+
+        if (buff) {
+            up();
         }
     }
 
@@ -80,7 +80,7 @@ public class Vader extends Sprite {
     @Override
     public void check_intersectionBullet(Sprite bullet) {
         if (intersect(bullet)) {
-            if (bullet.damage < health) {
+            if (bullet.damage != BUCKSHOT_DAMAGE) {
                 health -= bullet.damage;
                 bullet.intersection();
                 if (health <= 0) {

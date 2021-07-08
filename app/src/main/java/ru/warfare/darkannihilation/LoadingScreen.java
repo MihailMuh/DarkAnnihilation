@@ -19,7 +19,7 @@ public class LoadingScreen extends Sprite {
         jobs = job;
         Game.gameStatus = 41;
         if (job.equals("settings")) {
-            ImageHub.loadSettingsImages(game.context);
+            ImageHub.loadSettingsImages();
         } else {
             if (ImageHub.needImagesForFirstLevel()) {
                 sooFast = true;
@@ -30,7 +30,7 @@ public class LoadingScreen extends Sprite {
     @Override
     public void update() {
         if (sooFast) {
-            c = 10;
+            c = 8;
             sooFast = false;
         }
         long now = System.currentTimeMillis();
@@ -41,7 +41,7 @@ public class LoadingScreen extends Sprite {
             if (frame == NUMBER_LOADING_SCREEN_IMAGES) {
                 frame = 0;
             }
-            if (c == 11) {
+            if (c == 9) {
                 new Thread(() -> {
                     switch (jobs) {
                         case "newGame":

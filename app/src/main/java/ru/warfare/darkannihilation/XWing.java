@@ -31,17 +31,16 @@ public class XWing extends Sprite {
 
     private void newStatus() {
         if (Game.bosses.size() == 0) {
-            health = XWING_HEALTH;
-            x = randInt(0, screenWidthWidth);
-            y = -height;
-            speedX = randInt(-3, 3);
-            speedY = randInt(1, 8);
-
-            if (buff) {
-                up();
-            }
-        } else {
             lock = true;
+        }
+        health = XWING_HEALTH;
+        x = randInt(0, screenWidthWidth);
+        y = -height;
+        speedX = randInt(-3, 3);
+        speedY = randInt(1, 8);
+
+        if (buff) {
+            up();
         }
     }
 

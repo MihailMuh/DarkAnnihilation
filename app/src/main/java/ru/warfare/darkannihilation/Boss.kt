@@ -40,10 +40,12 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
     }
 
     private fun killAfterFight() {
-        HardThread.job = 10
-        createSkullExplosion()
-        Game.bosses.remove(this)
-        Game.allSprites.remove(this)
+        if (HardThread.job == 0) {
+            HardThread.job = 10
+            createSkullExplosion()
+            Game.bosses.remove(this)
+            Game.allSprites.remove(this)
+        }
     }
 
     override fun getRect(): Sprite {
@@ -54,9 +56,6 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
         if (intersect(bullet)) {
             health -= bullet.damage
             bullet.intersection()
-            if (health <= 0) {
-                killAfterFight()
-            }
         }
     }
 
@@ -78,6 +77,10 @@ class Boss(game: Game) : Sprite(game, ImageHub.bossImage.width, ImageHub.bossIma
                 }
             }
             shoot()
+
+            if (health <= 0) {
+                killAfterFight()
+            }
         } else {
             if (y == -600) {
                 AudioHub.restartBossMusic()

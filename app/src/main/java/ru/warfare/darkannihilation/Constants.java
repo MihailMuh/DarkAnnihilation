@@ -91,6 +91,7 @@ public final class Constants {
 //    sprites on levels
     public static final byte PORTAL_FRAME = BOT_SHOOT_TIME;
     public static final byte NUMBER_PORTAL_IMAGES = BUFFER_DAMAGE;
+    public static final short PORTAL_LIFE_TIME = 7_000;
 
     public static final byte SHOTGUN_KIT_SPEED = MINION_HEALTH;
 

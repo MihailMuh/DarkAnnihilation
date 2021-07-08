@@ -112,13 +112,9 @@ public class Settings {
         stickySwitch.setOnSelectedChangeListener((direction, text) -> {
             if (text.equals(string_enable)) {
                 new Thread(() -> {
-                    try {
-                        Thread.sleep(300);
-                        Game.vibrate = true;
-                        Service.vibrate(60);
-                    } catch (Exception e) {
-                        Service.print(e.toString());
-                    }
+                    Service.sleep(300);
+                    Game.vibrate = true;
+                    Service.vibrate(60);
                 }).start();
             } else {
                 Game.vibrate = false;
@@ -188,7 +184,7 @@ public class Settings {
     }
 
     public void showSettings() {
-        mainActivity.runOnUiThread(new Thread(() -> {
+        Service.runOnUiThread(() -> {
             angleEffects.setVisibility(TextView.VISIBLE);
             textViewEffects.setVisibility(TextView.VISIBLE);
             seekArcEffects.setVisibility(SeekArc.VISIBLE);
@@ -228,7 +224,7 @@ public class Settings {
             textAntiAlias.setVisibility(TextView.VISIBLE);
 
             Game.gameStatus = 10;
-        }));
+        });
     }
 
     private void makeLanguage() {
@@ -250,7 +246,7 @@ public class Settings {
     }
 
     public void confirmSettings() {
-        mainActivity.runOnUiThread(new Thread(() -> {
+        Service.runOnUiThread(() -> {
             angleEffects.setVisibility(TextView.GONE);
             textViewEffects.setVisibility(TextView.GONE);
             seekArcEffects.setVisibility(SeekArc.GONE);
@@ -268,7 +264,7 @@ public class Settings {
 
             animatedCheckBox.setVisibility(TextView.GONE);
             textAntiAlias.setVisibility(TextView.GONE);
-        }));
+        });
         AudioHub.newVolumeForBackground(finalVolumeMusic);
         AudioHub.newVolumeForEffects(finalVolumeEffects);
         saveSettings();

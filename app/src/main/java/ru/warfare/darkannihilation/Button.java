@@ -96,13 +96,9 @@ public class Button extends Sprite {
                 new Thread(() -> {
                     AudioHub.playClick();
                     isPressed = true;
-                    try {
-                        Thread.sleep(100);
-                        isPressed = false;
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        Service.print(e.toString());
-                    }
+                    Service.sleep(100);
+                    isPressed = false;
+                    Service.sleep(50);
                     switch (function) {
                         case "start":
                             game.buttonPlayer.show();
@@ -119,12 +115,7 @@ public class Button extends Sprite {
                         case "pause":
                             game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
                             AudioHub.pausePauseMusic();
-                            if (Game.bosses.size() == 0) {
-                                AudioHub.resumeBackgroundMusic();
-                            }
-                            if (PauseButton.oldStatus == 2) {
-                                AudioHub.readySnd.start();
-                            }
+                            AudioHub.whoIsPlayed();
                             if (PauseButton.oldStatus != 0) {
                                 Game.gameStatus = PauseButton.oldStatus;
                             } else {

@@ -28,6 +28,6 @@ public class ExplosionSkull extends BaseExplosion {
     @Override
     public void render () {
         Game.canvas.drawBitmap(ImageHub.explosionLarge[frame],
-                x, y, Game.nicePaint);
+                x, y, null);
     }
 }

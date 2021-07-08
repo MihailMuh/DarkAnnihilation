@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation;
 
 import static ru.warfare.darkannihilation.Constants.NUMBER_PORTAL_IMAGES;
 import static ru.warfare.darkannihilation.Constants.PORTAL_FRAME;
+import static ru.warfare.darkannihilation.Constants.PORTAL_LIFE_TIME;
 import static ru.warfare.darkannihilation.MATH.randInt;
 
 public class Portal extends Sprite {
@@ -10,12 +11,10 @@ public class Portal extends Sprite {
     private final long lifeTime = System.currentTimeMillis();
     public boolean touch = false;
     private static final int len = NUMBER_PORTAL_IMAGES - 1;
-//    private boolean waited;
-//    private int cycles;
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0].getWidth(), ImageHub.portalImages[0].getHeight());
-        game.context.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             x = randInt(0, screenWidthWidth);
             y = randInt(50, 250);
             isPassive = true;
@@ -38,13 +37,13 @@ public class Portal extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        game.context.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             touch = true;
+            AudioHub.portalSound.pause();
             if (Game.level == 2) {
-                ImageHub.loadWinImages(game.context);
+                ImageHub.loadWinImages();
             } else {
-                AudioHub.timeMachineSnd.play();
-                AudioHub.portalSound.pause();
+                AudioHub.playTimeMachine();
 
                 game.player.god = true;
                 game.player.lock = true;
@@ -65,13 +64,6 @@ public class Portal extends Sprite {
     public void update() {
         if (touch) {
             film();
-
-//            if (!AudioHub.timeMachineNoneSnd.isPlaying() & Game.level == 1) {
-//                AudioHub.timeMachineSecondSnd.play();
-//                Game.level++;
-//                game.loadingScreen.newJob("newGame");
-//                kill();
-//            }
         } else {
             game.player.checkIntersections(this);
 
@@ -79,27 +71,13 @@ public class Portal extends Sprite {
             if (now - lastFrame > PORTAL_FRAME) {
                 lastFrame = now;
                 film();
-//                if (!waited) {
-//                    cycles++;
-//                    if (cycles == 90) {
-//                        waited = true;
-//                    }
-//                }
             }
 
-            if (now - lifeTime > 7_000) {
+            if (now - lifeTime > PORTAL_LIFE_TIME) {
                 Game.gameStatus = 0;
                 AudioHub.resumeBackgroundMusic();
                 kill();
             }
-//
-//            if (waited) {
-//                if (!AudioHub.portalSound.isPlaying()) {
-//                    Game.gameStatus = 0;
-//                    AudioHub.resumeBackgroundMusic();
-//                    kill();
-//                }
-//            }
         }
     }
 

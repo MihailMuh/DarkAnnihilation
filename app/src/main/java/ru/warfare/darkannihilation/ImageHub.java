@@ -1,14 +1,12 @@
 package ru.warfare.darkannihilation;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -34,8 +32,6 @@ import static ru.warfare.darkannihilation.Constants.NUMBER_TRIPLE_EXPLOSION_IMAG
 import static ru.warfare.darkannihilation.Constants.NUMBER_VADER_IMAGES;
 
 public final class ImageHub {
-    public static final boolean isFilter = true;
-
     public static final Bitmap[] explosionTripleImageSmall = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
     public static final Bitmap[] explosionTripleImageMedium = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
     public static final Bitmap[] explosionDefaultImageSmall = new Bitmap[NUMBER_DEFAULT_EXPLOSION_IMAGES];
@@ -122,7 +118,7 @@ public final class ImageHub {
     private static final int eX152 = (int) (152 * resizeK);
     private static final int eX3545 = (int) (0.3545 * screenHeight);
     private static final int eX169 = (int) (169 * resizeK);
-    private static final int screensSizeX = (int) (screenWidth * 1.5);
+    private static final int screensSizeX = (int) (screenWidth * 1.35);
     private static final int eX50 = (int) (50 * resizeK);
     private static final int eX60 = (int) (60 * resizeK);
     private static final int eX100 = (int) (100 * resizeK);
@@ -139,8 +135,9 @@ public final class ImageHub {
     private static final Matrix matrix = new Matrix();
     private static Resources res;
     private static String name;
+    private static MainActivity mainActivity;
 
-    public static void init(Context context) {
+    public static void init(MainActivity context) {
         int eX145 = (int) (145 * resizeK);
         int eX52 = (int) (52 * resizeK);
         int sW150 = (int) (screenWidth * 0.95);
@@ -150,6 +147,7 @@ public final class ImageHub {
         int eX72 = (int) (72 * resizeK);
         res = context.getResources();
         name = context.getPackageName();
+        mainActivity = context;
 
         requestBuilder =
                 GlideApp.with(context)
@@ -157,9 +155,12 @@ public final class ImageHub {
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         loadFirstLevelBitmaps();
-        new Thread(() -> loadSettingsImages(context)).start();
+        loadSettingsImages();
 
-        requestBuilder.load(R.drawable.cannon_ball)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.cannon_ball)
                 .override(eX15, eX15)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -175,7 +176,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.pause_button)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.pause_button)
                 .override(pauseBtn, pauseBtn)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -191,7 +195,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.bullet)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.bullet)
                 .override((int) (7 * resizeK), (int) (30 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -207,7 +214,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.health)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.health)
                 .override(eX75, eX75)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -223,7 +233,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.buckshot)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.buckshot)
                 .override((int) (97 * resizeK), (int) (120 * resizeK))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -239,7 +252,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.gun_to_shotgun)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.gun_to_shotgun)
                 .override(eX400, eX400)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -254,7 +270,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.gun_to_none)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.gun_to_none)
                 .override(eX400, eX400)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -269,7 +288,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.shotgun_to_gun)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.shotgun_to_gun)
                 .override(eX400, eX400)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -285,7 +307,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.gameover)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.gameover)
                 .centerCrop()
                 .override(ImageHub.screenWidth, screenHeight)
                 .listener(new RequestListener<Bitmap>() {
@@ -302,7 +327,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.bullet_enemy)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.bullet_enemy)
                 .override((int) (17 * resizeK), eX50)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -318,7 +346,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.full_blue_heart)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.full_blue_heart)
                 .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -333,7 +364,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.half_blue_heart)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.half_blue_heart)
                 .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -348,7 +382,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.full_heart)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.full_heart)
                 .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -363,7 +400,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.half_heart)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.half_heart)
                 .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -378,7 +418,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.non_heart)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.non_heart)
                 .override(eX72, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -394,7 +437,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.player_vs_boss)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.player_vs_boss)
                 .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -410,7 +456,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.player_vs_vader)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.player_vs_vader)
                 .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -426,7 +475,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.saturn_vs_boss)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.saturn_vs_boss)
                 .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -442,7 +494,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.emerald_vs_boss)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.emerald_vs_boss)
                 .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -458,7 +513,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.saturn_vs_vader)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.saturn_vs_vader)
                 .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -474,7 +532,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.emerald_vs_vader)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.emerald_vs_vader)
                 .override(screenWidth, sW150)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -490,7 +551,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.ship_button)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.ship_button)
                 .override(eX100, eX120)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -506,7 +570,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.ship)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.ship)
                 .override(eX100, eX120)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -522,7 +589,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.saturn_btn)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.saturn_btn)
                 .override(eX100, eX207)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -538,7 +608,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.emerald_btn)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.emerald_btn)
                 .override(eX152, eX169)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -554,7 +627,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.button_press)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.button_press)
                 .override(eX300, eX70)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -570,7 +646,10 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        requestBuilder.load(R.drawable.button_notpress)
+        GlideApp.with(context)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.button_notpress)
                 .override(eX300, eX70)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -589,7 +668,10 @@ public final class ImageHub {
         for (int i = 0; i < 34; i++) {
             int finalI = i;
             if (i < 3) {
-                requestBuilder.load(res.getIdentifier("vader" + (i + 1), "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("vader" + (i + 1), "drawable", name))
                         .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -606,9 +688,12 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 12) {
-                requestBuilder.load(res.getIdentifier("loading" + i, "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("loading" + i, "drawable", name))
                         .centerCrop()
-                        .override(ImageHub.screenWidth, screenHeight)
+                        .override(screenWidth, screenHeight)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -624,7 +709,10 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 13) {
-                requestBuilder.load(res.getIdentifier("explosion_skull_" + (i + 1), "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("explosion_skull_" + (i + 1), "drawable", name))
                         .override(eX522, eX600)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -641,7 +729,10 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 23) {
-                requestBuilder.load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
                         .override(eX145, eX152)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -656,7 +747,10 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
                         .override(eX50, eX52)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -673,7 +767,10 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 28) {
-                requestBuilder.load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
                         .override(eX145, eX145)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -688,7 +785,10 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
+                GlideApp.with(context)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
                         .override(eX50, eX50)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -704,8 +804,10 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            requestBuilder.load(res.getIdentifier("_" + i, "drawable", name))
-                    .centerCrop()
+            GlideApp.with(context)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(res.getIdentifier("_" + i, "drawable", name))
                     .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -730,7 +832,10 @@ public final class ImageHub {
         if (portalImages[0] == null) {
             for (int i = 0; i < 20; i++) {
                 int finalI = i;
-                requestBuilder.load(res.getIdentifier("portal0" + i, "drawable", name))
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("portal0" + i, "drawable", name))
                         .override(eX300, eX300)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -751,16 +856,16 @@ public final class ImageHub {
 
     public static void deletePortalImages() {
         if (portalImages[0] != null) {
-            for (int i = 0; i < 20; i++) {
-                portalImages[i].recycle();
-            }
             portalImages = new Bitmap[NUMBER_PORTAL_IMAGES];
         }
     }
 
     public static void loadSecondLevelImages() {
         if (spiderImg == null) {
-            requestBuilder.load(R.drawable.spider)
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(R.drawable.spider)
                     .override((int) (350 * resizeK), eX175)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -776,7 +881,10 @@ public final class ImageHub {
                               }
                     ).submit();
 
-            requestBuilder.load(R.drawable.x_wing)
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(R.drawable.x_wing)
                     .override(eX200, (int) (146 * resizeK))
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -792,7 +900,10 @@ public final class ImageHub {
                               }
                     ).submit();
 
-            requestBuilder.load(R.drawable.area)
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(R.drawable.area)
                     .override((int) (450 * resizeK), (int) (279 * resizeK))
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -807,7 +918,10 @@ public final class ImageHub {
                                   }
                               }
                     ).submit();
-            requestBuilder.load(R.drawable.boss_vaders)
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(R.drawable.boss_vaders)
                     .override((int) (350 * resizeK), (int) (255 * resizeK))
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -822,7 +936,10 @@ public final class ImageHub {
                                   }
                               }
                     ).submit();
-            requestBuilder.load(R.drawable.bull_boss_vader)
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(R.drawable.bull_boss_vader)
                     .override((int) (140 * resizeK), (int) (135 * resizeK))
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -837,7 +954,10 @@ public final class ImageHub {
                                   }
                               }
                     ).submit();
-            requestBuilder.load(R.drawable.buffer)
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(R.drawable.buffer)
                     .override(eX400, (int) (resizeK * 353))
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -855,7 +975,10 @@ public final class ImageHub {
             for (int i = 0; i < 20; i++) {
                 int finalI = i;
                 if (i < 3) {
-                    requestBuilder.load(res.getIdentifier("vader1" + (i + 1), "drawable", name))
+                    GlideApp.with(mainActivity)
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .load(res.getIdentifier("vader1" + (i + 1), "drawable", name))
                             .override(eX75, eX75)
                             .listener(new RequestListener<Bitmap>() {
                                           @Override
@@ -872,7 +995,10 @@ public final class ImageHub {
                             ).submit();
                 }
                 if (i < 4) {
-                    requestBuilder.load(res.getIdentifier("atom" + i, "drawable", name))
+                    GlideApp.with(mainActivity)
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .load(res.getIdentifier("atom" + i, "drawable", name))
                             .override(eX100, eX300)
                             .listener(new RequestListener<Bitmap>() {
                                           @Override
@@ -888,9 +1014,12 @@ public final class ImageHub {
                                       }
                             ).submit();
                 }
-                requestBuilder.load(res.getIdentifier("thunder" + i, "drawable", name))
-                        .centerCrop()
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("thunder" + i, "drawable", name))
                         .override(screensSizeX, screenHeight)
+                        .centerCrop()
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
                                       public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
@@ -953,7 +1082,10 @@ public final class ImageHub {
         for (int i = 0; i < 34; i++) {
             int finalI = i;
             if (i < 3) {
-                requestBuilder.load(res.getIdentifier("vader" + (i + 1), "drawable", name))
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(res.getIdentifier("vader" + (i + 1), "drawable", name))
                         .override(eX75, eX75)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -969,8 +1101,10 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            requestBuilder.load(res.getIdentifier("_" + i, "drawable", name))
-                    .centerCrop()
+            GlideApp.with(mainActivity)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(res.getIdentifier("_" + i, "drawable", name))
                     .override(screensSizeX, screenHeight)
                     .listener(new RequestListener<Bitmap>() {
                                   @Override
@@ -992,7 +1126,10 @@ public final class ImageHub {
     }
 
     private static void loadFirstLevelBitmaps() {
-        requestBuilder.load(R.drawable.triple_fighter)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.triple_fighter)
                 .override(eX105, eX105)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1007,7 +1144,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.boss)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.boss)
                 .override(eX400, eX400)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1022,7 +1162,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.minion)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.minion)
                 .override(eX80, eX50)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1037,7 +1180,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.demoman)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.demoman)
                 .override((int) (290 * resizeK), eX175)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1052,7 +1198,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.laser)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.laser)
                 .override(eX15, eX60)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1067,7 +1216,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.rocket)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.rocket)
                 .override(eX50, eX100)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1082,7 +1234,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.attention)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.attention)
                 .override(eX70, eX70)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1097,7 +1252,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.factory)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.factory)
                 .override(fact, (int) (fact * 0.3))
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1112,7 +1270,10 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        requestBuilder.load(R.drawable.bomb)
+        GlideApp.with(mainActivity)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(R.drawable.bomb)
                 .override((int) (30 * resizeK), eX70)
                 .listener(new RequestListener<Bitmap>() {
                               @Override
@@ -1166,9 +1327,8 @@ public final class ImageHub {
         }
     }
 
-    public static void loadWinImages(MainActivity mainActivity) {
+    public static void loadWinImages() {
         mainActivity.gif = mainActivity.findViewById(R.id.gifView);
-        mainActivity.gif.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         GlideApp.with(mainActivity)
                 .asGif()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -1185,20 +1345,21 @@ public final class ImageHub {
                         mainActivity.gif.setVisibility(GifImageView.VISIBLE);
                         resource.setLoopCount(1);
                         gifDrawable = resource;
-                        mainActivity.game.generateWin();
                         AudioHub.restartFlightMusic();
+                        mainActivity.game.generateWin();
+                        mainActivity.game.lastBoss = System.currentTimeMillis();
                         return false;
                     }
                 })
                 .into(mainActivity.gif);
     }
 
-    public static void deleteWinImages(MainActivity mainActivity) {
-        mainActivity.runOnUiThread(new Thread(() -> {
+    public static void deleteWinImages() {
+        Service.runOnUiThread(() -> {
             mainActivity.gif.setVisibility(GifImageView.GONE);
             mainActivity.gif.setImageDrawable(null);
             mainActivity.gif = null;
-        }));
+        });
     }
 
     public static boolean isWin() {
@@ -1212,7 +1373,10 @@ public final class ImageHub {
         Game.endImgInit = false;
         switch (character) {
             case "saturn":
-                requestBuilder.load(R.drawable.saturn)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.saturn)
                         .override(eX100, eX207)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1228,7 +1392,10 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(R.drawable.saturn_bullet)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.saturn_bullet)
                         .override(eX13, eX13)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1243,7 +1410,10 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(R.drawable.buckshot_saturn)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.buckshot_saturn)
                         .override(eX15, eX15)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1267,7 +1437,10 @@ public final class ImageHub {
                 thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
                 break;
             case "falcon":
-                requestBuilder.load(R.drawable.ship)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.ship)
                         .override(eX100, eX120)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1283,7 +1456,10 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(R.drawable.cannon_ball)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.cannon_ball)
                         .override(eX15, eX15)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1308,7 +1484,10 @@ public final class ImageHub {
                 thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
                 break;
             case "emerald":
-                requestBuilder.load(R.drawable.emerald)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.emerald)
                         .override(eX152, eX169)
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1324,7 +1503,10 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                requestBuilder.load(R.drawable.dynamite)
+                GlideApp.with(mainActivity)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(R.drawable.dynamite)
                         .override(eX100, (int) (41.3 * resizeK))
                         .listener(new RequestListener<Bitmap>() {
                                       @Override
@@ -1341,7 +1523,10 @@ public final class ImageHub {
                         ).submit();
                 for (int i = 0; i < 13; i++) {
                     int finalI = i;
-                    requestBuilder.load(res.getIdentifier("laser" + i, "drawable", name))
+                    GlideApp.with(mainActivity)
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .load(res.getIdentifier("laser" + i, "drawable", name))
                             .override(eX3545, screenHeight)
                             .listener(new RequestListener<Bitmap>() {
                                           @Override
@@ -1368,9 +1553,9 @@ public final class ImageHub {
         }
     }
 
-    public static void loadSettingsImages(Context context) {
+    public static void loadSettingsImages() {
         if (onImg == null) {
-            GlideApp.with(context)
+            GlideApp.with(mainActivity)
                     .asDrawable()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .load(R.drawable.on)
@@ -1389,7 +1574,7 @@ public final class ImageHub {
 
                     }).submit();
 
-            GlideApp.with(context)
+            GlideApp.with(mainActivity)
                     .asDrawable()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .load(R.drawable.off)
@@ -1407,7 +1592,7 @@ public final class ImageHub {
                         }
                     }).submit();
 
-            GlideApp.with(context)
+            GlideApp.with(mainActivity)
                     .asDrawable()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .load(R.drawable.en)

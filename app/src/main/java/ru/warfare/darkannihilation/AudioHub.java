@@ -7,16 +7,18 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class AudioHub {
     private static MainActivity mainActivity;
     private static String path;
-    private static float volume;
+    private static volatile float volume;
 
     public static final AudioPool audioPool = new AudioPool();
 
     public static ArrayList<MediaPlayer> sounds = new ArrayList<>(0);
     public static ArrayList<Float> volumes = new ArrayList<>(0);
+    private static final boolean[] playing = new boolean[12];
 
     public static SimpleExoPlayer menuMusic;
     public static MediaPlayer pauseMusic;
@@ -26,10 +28,10 @@ public final class AudioHub {
     public static MediaPlayer flightSnd;
     public static MediaPlayer winMusic;
     public static SimpleExoPlayer portalSound;
-    public static SimpleExoPlayer timeMachineSnd;
-    public static SimpleExoPlayer timeMachineSecondSnd;
-    //    public static SimpleExoPlayer timeMachineNoneSnd;
-    public static MediaPlayer readySnd;
+    private static SimpleExoPlayer timeMachineSnd;
+    private static SimpleExoPlayer timeMachineSecondSnd;
+    private static SimpleExoPlayer timeMachineNoneSnd;
+    public static SimpleExoPlayer readySnd;
     public static SimpleExoPlayer forgottenMusic;
     public static SimpleExoPlayer forgottenBossMusic;
     public static SimpleExoPlayer attentionSnd;
@@ -52,6 +54,7 @@ public final class AudioHub {
     public static void init(MainActivity context) {
         mainActivity = context;
         path = "android.resource://" + context.getPackageName() + "/";
+        playing[3] = true;
 
         reloadSnd = audioPool.addSoundsToPack(context, new float[][]{{R.raw.reload0, 1f}, {R.raw.reload1, 1f}});
         boomSnd = audioPool.addSound(context, R.raw.boom, 0.13f);
@@ -68,24 +71,20 @@ public final class AudioHub {
         dynamiteBoomSnd = audioPool.addSound(context, R.raw.boom, 0.58f);
         thunderstormSnd = audioPool.addSound(context, R.raw.thunderstorm, 1f);
 
-        menuMusic = new SimpleExoPlayer.Builder(context).build();
-        menuMusic.setMediaItem(MediaItem.fromUri(path + R.raw.menu));
-        menuMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
-        menuMusic.prepare();
+        jingleMusic = new SimpleExoPlayer.Builder(mainActivity).build();
+        jingleMusic.setMediaItem(MediaItem.fromUri(path + R.raw.jingle));
+        jingleMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+        jingleMusic.prepare();
 
-        readySnd = MediaPlayer.create(context, R.raw.ready);
-        sounds.add(readySnd);
-        volumes.add(1f);
-
-        gameoverSnd = new SimpleExoPlayer.Builder(context).build();
-        gameoverSnd.setMediaItem(MediaItem.fromUri(path + R.raw.gameover_phrase));
-        gameoverSnd.prepare();
-        gameoverSnd.addListener(new Player.Listener() {
+        readySnd = new SimpleExoPlayer.Builder(mainActivity).build();
+        readySnd.setMediaItem(MediaItem.fromUri(path + R.raw.ready));
+        readySnd.prepare();
+        readySnd.addListener(new Player.Listener() {
             @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                if (!isPlaying) {
-                    gameoverSnd.seekTo(0);
-                    gameoverSnd.pause();
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_ENDED) {
+                    readySnd.release();
+                    readySnd = null;
                 }
             }
         });
@@ -103,16 +102,20 @@ public final class AudioHub {
         winMusic.setLooping(true);
         sounds.add(winMusic);
         volumes.add(0.3f);
+
+        menuMusic = new SimpleExoPlayer.Builder(context).build();
+        menuMusic.setMediaItem(MediaItem.fromUri(path + R.raw.menu));
+        menuMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+        menuMusic.prepare();
     }
 
     public static void newVolumeForBackground(float newVolume) {
-        mainActivity.runOnUiThread(() -> {
-            volume = newVolume;
+        volume = newVolume;
+        Service.runOnUiThread(() -> {
             for (int i = 0; i < sounds.size(); i++) {
                 float volume = volumes.get(i) * newVolume;
                 sounds.get(i).setVolume(volume, volume);
             }
-            gameoverSnd.setVolume(newVolume);
             menuMusic.setVolume(newVolume);
         });
     }
@@ -122,7 +125,7 @@ public final class AudioHub {
     }
 
     public static void releaseAP() {
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             for (int i = 0; i < sounds.size(); i++) {
                 sounds.get(i).release();
             }
@@ -202,52 +205,57 @@ public final class AudioHub {
     }
 
     public static void loadFirstLevelSounds() {
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             if (forgottenMusic != null) {
                 forgottenMusic.release();
+                forgottenMusic = null;
                 forgottenBossMusic.release();
+                forgottenBossMusic = null;
             }
 
-            if (attentionSnd == null) {
+            if (jingleMusic == null) {
                 jingleMusic = new SimpleExoPlayer.Builder(mainActivity).build();
                 jingleMusic.setMediaItem(MediaItem.fromUri(path + R.raw.jingle));
                 jingleMusic.setVolume(0.5f * volume);
                 jingleMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
                 jingleMusic.prepare();
                 jingleMusic.play();
-
-                attentionSnd = new SimpleExoPlayer.Builder(mainActivity).build();
-                attentionSnd.setMediaItem(MediaItem.fromUri(path + R.raw.attention));
-                attentionSnd.setVolume(0.6f * volume);
-                attentionSnd.prepare();
-                attentionSnd.addListener(new Player.Listener() {
-                    @Override
-                    public void onIsPlayingChanged(boolean isPlaying) {
-                        if (!isPlaying) {
-                            mainActivity.game.attention.fire();
-                            attentionSnd.seekTo(0);
-                            attentionSnd.pause();
-                        }
-                    }
-                });
-
-                bossMusic = new SimpleExoPlayer.Builder(mainActivity).build();
-                bossMusic.setMediaItem(MediaItem.fromUri(path + R.raw.shadow_boss));
-                bossMusic.setVolume(0.45f * volume);
-                bossMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
-                bossMusic.prepare();
             } else {
-                restartBackgroundMusic();
+                update(jingleMusic);
             }
+
+            attentionSnd = new SimpleExoPlayer.Builder(mainActivity).build();
+            attentionSnd.setMediaItem(MediaItem.fromUri(path + R.raw.attention));
+            attentionSnd.setVolume(0.6f * volume);
+            attentionSnd.prepare();
+            attentionSnd.addListener(new Player.Listener() {
+                @Override
+                public void onPlaybackStateChanged(int state) {
+                    if (state == Player.STATE_ENDED) {
+                        mainActivity.game.attention.fire();
+                        attentionSnd.seekTo(0);
+                        attentionSnd.pause();
+                    }
+                }
+            });
+
+            bossMusic = new SimpleExoPlayer.Builder(mainActivity).build();
+            bossMusic.setMediaItem(MediaItem.fromUri(path + R.raw.shadow_boss));
+            bossMusic.setVolume(0.45f * volume);
+            bossMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+            bossMusic.prepare();
         });
     }
 
     public static void loadSecondLevelSounds() {
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             if (attentionSnd != null) {
                 attentionSnd.release();
+                attentionSnd = null;
                 jingleMusic.release();
+                jingleMusic = null;
                 bossMusic.release();
+                bossMusic = null;
             }
 
             if (forgottenMusic == null) {
@@ -263,6 +271,8 @@ public final class AudioHub {
                 forgottenBossMusic.setVolume(volume);
                 forgottenBossMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
                 forgottenBossMusic.prepare();
+            } else {
+                update(forgottenMusic);
             }
         });
     }
@@ -275,8 +285,8 @@ public final class AudioHub {
         portalSound.play();
         portalSound.addListener(new Player.Listener() {
             @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                if (!isPlaying) {
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_ENDED) {
                     portalSound.release();
                 }
             }
@@ -288,8 +298,8 @@ public final class AudioHub {
         timeMachineSecondSnd.prepare();
         timeMachineSecondSnd.addListener(new Player.Listener() {
             @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                if (!isPlaying) {
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_ENDED) {
                     timeMachineSecondSnd.release();
                 }
             }
@@ -301,10 +311,23 @@ public final class AudioHub {
         timeMachineSnd.prepare();
         timeMachineSnd.addListener(new Player.Listener() {
             @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                if (!isPlaying) {
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_ENDED) {
                     timeMachineSnd.release();
+                }
+            }
+        });
+
+        timeMachineNoneSnd = new SimpleExoPlayer.Builder(mainActivity).build();
+        timeMachineNoneSnd.setMediaItem(MediaItem.fromUri(path + R.raw.time_machine_none));
+        timeMachineNoneSnd.setVolume(0);
+        timeMachineNoneSnd.prepare();
+        timeMachineNoneSnd.addListener(new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_ENDED) {
                     timeMachineSecondSnd.play();
+                    timeMachineNoneSnd.release();
                     Game.level++;
                     mainActivity.game.loadingScreen.newJob("newGame");
                     mainActivity.game.portal.kill();
@@ -313,8 +336,116 @@ public final class AudioHub {
         });
     }
 
+    public static void playTimeMachine() {
+        Service.runOnUiThread(() -> {
+            timeMachineNoneSnd.play();
+            timeMachineSnd.play();
+        });
+    }
+
+    public static void loadMenuSnd() {
+        Service.runOnUiThread(() -> {
+            if (menuMusic == null) {
+                menuMusic = new SimpleExoPlayer.Builder(mainActivity).build();
+                menuMusic.setMediaItem(MediaItem.fromUri(path + R.raw.menu));
+                menuMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+                menuMusic.setVolume(volume);
+                menuMusic.prepare();
+                menuMusic.play();
+            }
+        });
+    }
+
+    public static void deleteMenuSnd() {
+        Service.runOnUiThread(() -> {
+            if (menuMusic != null) {
+                menuMusic.release();
+                menuMusic = null;
+            }
+        });
+    }
+
+    public static void playReadySnd() {
+        Service.runOnUiThread(() -> {
+            if (readySnd == null) {
+                readySnd = new SimpleExoPlayer.Builder(mainActivity).build();
+                readySnd.setMediaItem(MediaItem.fromUri(path + R.raw.ready));
+                readySnd.setVolume(volume);
+                readySnd.prepare();
+                readySnd.play();
+                readySnd.addListener(new Player.Listener() {
+                    @Override
+                    public void onPlaybackStateChanged(int state) {
+                        if (state == Player.STATE_ENDED) {
+                            readySnd.release();
+                            readySnd = null;
+                        }
+                    }
+                });
+            } else {
+                update(readySnd);
+            }
+        });
+    }
+
+    public static void playGameOverSnd() {
+        if (gameoverSnd == null) {
+            gameoverSnd = new SimpleExoPlayer.Builder(mainActivity).build();
+            gameoverSnd.setMediaItem(MediaItem.fromUri(path + R.raw.gameover_phrase));
+            gameoverSnd.setVolume(volume);
+            gameoverSnd.prepare();
+            gameoverSnd.play();
+            gameoverSnd.addListener(new Player.Listener() {
+                @Override
+                public void onPlaybackStateChanged(int state) {
+                    if (state == Player.STATE_ENDED) {
+                        gameoverSnd.release();
+                        gameoverSnd = null;
+                    }
+                }
+            });
+        } else {
+            update(gameoverSnd);
+        }
+    }
+
+    public static void stopAndSavePlaying() {
+        Service.runOnUiThread(() -> {
+            Arrays.fill(playing, false);
+            playing[0] = stopIfPlaying(attentionSnd);
+            playing[1] = stopIfPlaying(jingleMusic);
+            playing[2] = stopIfPlaying(readySnd);
+            playing[3] = stopIfPlaying(menuMusic);
+            playing[4] = stopIfPlaying(gameoverSnd);
+            playing[5] = stopIfPlaying(bossMusic);
+            playing[6] = stopIfPlaying(portalSound);
+            playing[7] = stopIfPlaying(timeMachineSnd);
+            playing[8] = stopIfPlaying(timeMachineSecondSnd);
+            playing[9] = stopIfPlaying(timeMachineNoneSnd);
+            playing[10] = stopIfPlaying(forgottenMusic);
+            playing[11] = stopIfPlaying(forgottenBossMusic);
+        });
+    }
+
+    public static void whoIsPlayed() {
+        Service.runOnUiThread(() -> {
+            setPlaying(attentionSnd, playing[0]);
+            setPlaying(jingleMusic, playing[1]);
+            setPlaying(readySnd, playing[2]);
+            setPlaying(menuMusic, playing[3]);
+            setPlaying(gameoverSnd, playing[4]);
+            setPlaying(bossMusic, playing[5]);
+            setPlaying(portalSound, playing[6]);
+            setPlaying(timeMachineSnd, playing[7]);
+            setPlaying(timeMachineSecondSnd, playing[8]);
+            setPlaying(timeMachineNoneSnd, playing[9]);
+            setPlaying(forgottenMusic, playing[10]);
+            setPlaying(forgottenBossMusic, playing[11]);
+        });
+    }
+
     public static void resumeBackgroundMusic() {
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             switch (Game.level) {
                 case 1:
                     jingleMusic.play();
@@ -327,7 +458,7 @@ public final class AudioHub {
     }
 
     public static void pauseBackgroundMusic() {
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             if (jingleMusic != null) {
                 if (jingleMusic.isPlaying()) {
                     jingleMusic.pause();
@@ -341,25 +472,9 @@ public final class AudioHub {
         });
     }
 
-    public static void restartBackgroundMusic() {
-        pauseBackgroundMusic();
-        mainActivity.runOnUiThread(() -> {
-            switch (Game.level) {
-                case 1:
-                    jingleMusic.seekTo(0);
-                    jingleMusic.play();
-                    break;
-                case 2:
-                    forgottenMusic.seekTo(0);
-                    forgottenMusic.play();
-                    break;
-            }
-        });
-    }
-
     public static void restartBossMusic() {
         pauseBossMusic();
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             switch (Game.level) {
                 case 1:
                     bossMusic.seekTo(0);
@@ -374,7 +489,7 @@ public final class AudioHub {
     }
 
     public static void pauseBossMusic() {
-        mainActivity.runOnUiThread(() -> {
+        Service.runOnUiThread(() -> {
             if (bossMusic != null) {
                 if (bossMusic.isPlaying()) {
                     bossMusic.pause();
@@ -384,19 +499,6 @@ public final class AudioHub {
                 if (forgottenBossMusic.isPlaying()) {
                     forgottenBossMusic.pause();
                 }
-            }
-        });
-    }
-
-    public static void resumeBossMusic() {
-        mainActivity.runOnUiThread(() -> {
-            switch (Game.level) {
-                case 1:
-                    bossMusic.play();
-                    break;
-                case 2:
-                    forgottenBossMusic.play();
-                    break;
             }
         });
     }
@@ -413,19 +515,6 @@ public final class AudioHub {
         pauseMusic.start();
     }
 
-    public static void pauseMenuMusic() {
-        mainActivity.runOnUiThread(() -> menuMusic.pause());
-    }
-
-    public static void restartMenuMusic() {
-        mainActivity.runOnUiThread(() -> {
-            if (!menuMusic.isPlaying()) {
-                menuMusic.seekTo(0);
-                menuMusic.play();
-            }
-        });
-    }
-
     public static void pauseFlightMusic() {
         if (flightSnd.isPlaying()) {
             flightSnd.pause();
@@ -438,15 +527,27 @@ public final class AudioHub {
         flightSnd.start();
     }
 
-    public static void pauseReadySound() {
-        if (readySnd.isPlaying()) {
-            readySnd.pause();
+    public static void setPlaying(SimpleExoPlayer exoPlayer, boolean isPlaying) {
+        if (exoPlayer != null) {
+            exoPlayer.setPlayWhenReady(isPlaying);
         }
     }
 
-    public static void restartReadySound() {
-        pauseReadySound();
-        readySnd.seekTo(0);
-        readySnd.start();
+    public static boolean stopIfPlaying(SimpleExoPlayer exoPlayer) {
+        if (exoPlayer != null) {
+            if (exoPlayer.isPlaying()) {
+                exoPlayer.pause();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void update(SimpleExoPlayer exoPlayer) {
+        exoPlayer.setVolume(volume);
+        exoPlayer.seekTo(0);
+        if (!exoPlayer.isPlaying()) {
+            exoPlayer.play();
+        }
     }
 }

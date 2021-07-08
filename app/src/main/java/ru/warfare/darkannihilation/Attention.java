@@ -23,7 +23,7 @@ public class Attention extends Sprite {
     public void start() {
         y = 10;
         lock = false;
-        game.context.runOnUiThread(() -> AudioHub.attentionSnd.setPlayWhenReady(true));
+        Service.runOnUiThread(() -> AudioHub.attentionSnd.play());
     }
 
     @Override

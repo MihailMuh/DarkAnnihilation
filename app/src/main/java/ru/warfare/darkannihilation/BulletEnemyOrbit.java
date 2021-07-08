@@ -83,6 +83,6 @@ public class BulletEnemyOrbit extends Sprite {
         matrix.postRotate(vector.getAngle(), halfWidth, halfHeight);
         matrix.postTranslate(X, Y);
 
-        Game.canvas.drawBitmap(image, matrix, Game.nicePaint);
+        Game.canvas.drawBitmap(image, matrix, null);
     }
 }

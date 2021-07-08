@@ -36,12 +36,24 @@ public final class Service {
         }
     }
 
+    public static void runOnUiThread(Runnable runnable) {
+        new Thread(() -> mainActivity.runOnUiThread(runnable)).start();
+    }
+
     public static void makeToast(String text, boolean longToast) {
-        Toast.makeText(mainActivity, text, MATH.boolToInt(longToast)).show();
+        runOnUiThread(() -> Toast.makeText(mainActivity, text, MATH.boolToInt(longToast)).show());
     }
 
     public static void getSizeAppInRAM() {
         makeToast(((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576f) + " MB", true);
+    }
+
+    public static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            print(e.toString());
+        }
     }
 
     public static int getWidthInterval() {
