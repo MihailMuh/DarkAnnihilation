@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -94,7 +95,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private boolean playing = false;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = false;
+    private static final boolean drawFPS = true;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -197,6 +198,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         nicePaint.set(paint);
         nicePaint.setAntiAlias(true);
+
+        setLayerType(View.LAYER_TYPE_HARDWARE, nicePaint);
 
         getMaxScore();
 
@@ -752,6 +755,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
         gameStatus = 1;
     }
+
+
 
     public void generateNewGame() {
         AudioHub.deleteMenuSnd();

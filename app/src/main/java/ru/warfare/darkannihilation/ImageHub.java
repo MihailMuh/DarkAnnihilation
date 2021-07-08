@@ -130,8 +130,6 @@ public final class ImageHub {
     private static final int eX175 = (int) (175 * resizeK);
     private static final int eX400 = (int) (400 * resizeK);
 
-    @SuppressLint("StaticFieldLeak")
-    public static RequestBuilder<Bitmap> requestBuilder;
     private static final Matrix matrix = new Matrix();
     private static Resources res;
     private static String name;
@@ -148,11 +146,6 @@ public final class ImageHub {
         res = context.getResources();
         name = context.getPackageName();
         mainActivity = context;
-
-        requestBuilder =
-                GlideApp.with(context)
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         loadFirstLevelBitmaps();
         loadSettingsImages();
