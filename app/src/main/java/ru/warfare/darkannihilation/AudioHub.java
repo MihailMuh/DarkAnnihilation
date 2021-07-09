@@ -71,24 +71,6 @@ public final class AudioHub {
         dynamiteBoomSnd = audioPool.addSound(context, R.raw.boom, 0.58f);
         thunderstormSnd = audioPool.addSound(context, R.raw.thunderstorm, 1f);
 
-        jingleMusic = new SimpleExoPlayer.Builder(mainActivity).build();
-        jingleMusic.setMediaItem(MediaItem.fromUri(path + R.raw.jingle));
-        jingleMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
-        jingleMusic.prepare();
-
-        readySnd = new SimpleExoPlayer.Builder(mainActivity).build();
-        readySnd.setMediaItem(MediaItem.fromUri(path + R.raw.ready));
-        readySnd.prepare();
-        readySnd.addListener(new Player.Listener() {
-            @Override
-            public void onPlaybackStateChanged(int state) {
-                if (state == Player.STATE_ENDED) {
-                    readySnd.release();
-                    readySnd = null;
-                }
-            }
-        });
-
         pauseMusic = MediaPlayer.create(context, R.raw.pause);
         pauseMusic.setLooping(true);
         sounds.add(pauseMusic);
@@ -220,30 +202,40 @@ public final class AudioHub {
                 jingleMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
                 jingleMusic.prepare();
                 jingleMusic.play();
+                jingleMusic.addListener(new Player.Listener() {
+                    @Override
+                    public void onPlaybackStateChanged(int state) {
+                        if (state == Player.STATE_READY) {
+                            if (Game.gameStatus == 4) {
+                                jingleMusic.pause();
+                                playing[1] = true;
+                            }
+                        }
+                    }
+                });
+                attentionSnd = new SimpleExoPlayer.Builder(mainActivity).build();
+                attentionSnd.setMediaItem(MediaItem.fromUri(path + R.raw.attention));
+                attentionSnd.setVolume(0.6f * volume);
+                attentionSnd.prepare();
+                attentionSnd.addListener(new Player.Listener() {
+                    @Override
+                    public void onPlaybackStateChanged(int state) {
+                        if (state == Player.STATE_ENDED) {
+                            mainActivity.game.attention.fire();
+                            attentionSnd.pause();
+                            attentionSnd.seekTo(0);
+                        }
+                    }
+                });
+
+                bossMusic = new SimpleExoPlayer.Builder(mainActivity).build();
+                bossMusic.setMediaItem(MediaItem.fromUri(path + R.raw.shadow_boss));
+                bossMusic.setVolume(0.45f * volume);
+                bossMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+                bossMusic.prepare();
             } else {
                 update(jingleMusic);
             }
-
-            attentionSnd = new SimpleExoPlayer.Builder(mainActivity).build();
-            attentionSnd.setMediaItem(MediaItem.fromUri(path + R.raw.attention));
-            attentionSnd.setVolume(0.6f * volume);
-            attentionSnd.prepare();
-            attentionSnd.addListener(new Player.Listener() {
-                @Override
-                public void onPlaybackStateChanged(int state) {
-                    if (state == Player.STATE_ENDED) {
-                        mainActivity.game.attention.fire();
-                        attentionSnd.seekTo(0);
-                        attentionSnd.pause();
-                    }
-                }
-            });
-
-            bossMusic = new SimpleExoPlayer.Builder(mainActivity).build();
-            bossMusic.setMediaItem(MediaItem.fromUri(path + R.raw.shadow_boss));
-            bossMusic.setVolume(0.45f * volume);
-            bossMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
-            bossMusic.prepare();
         });
     }
 
@@ -379,6 +371,13 @@ public final class AudioHub {
                         if (state == Player.STATE_ENDED) {
                             readySnd.release();
                             readySnd = null;
+                        } else {
+                            if (state == Player.STATE_READY) {
+                                if (Game.gameStatus == 4) {
+                                    readySnd.pause();
+                                    playing[2] = true;
+                                }
+                            }
                         }
                     }
                 });

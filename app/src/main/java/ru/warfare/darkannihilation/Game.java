@@ -95,7 +95,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private boolean playing = false;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = true;
+    private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -756,8 +756,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         gameStatus = 1;
     }
 
-
-
     public void generateNewGame() {
         AudioHub.deleteMenuSnd();
         AudioHub.pauseBossMusic();
@@ -881,14 +879,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 break;
         }
 
-        AudioHub.playReadySnd();
-
         for (int i = 0; i < numberExplosionsALL; i++) {
             allExplosions[i].stop();
             allSprites.add(allExplosions[i]);
         }
 
         changerGuns.hide();
+
+        AudioHub.playReadySnd();
 
         gameStatus = 2;
     }

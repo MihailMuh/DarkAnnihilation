@@ -42,7 +42,7 @@ public class LoadingScreen extends Sprite {
                 frame = 0;
             }
             if (c == 9) {
-                new Thread(() -> {
+                Service.runOnUiThread(() -> {
                     switch (jobs) {
                         case "newGame":
                             game.generateNewGame();
@@ -57,7 +57,7 @@ public class LoadingScreen extends Sprite {
                             game.generateSettings();
                             break;
                     }
-                }).start();
+                });
             }
         }
     }

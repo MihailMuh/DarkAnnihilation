@@ -21,9 +21,9 @@ public class Attention extends Sprite {
     }
 
     public void start() {
+        Service.runOnUiThread(() -> AudioHub.attentionSnd.play());
         y = 10;
         lock = false;
-        Service.runOnUiThread(() -> AudioHub.attentionSnd.play());
     }
 
     @Override
