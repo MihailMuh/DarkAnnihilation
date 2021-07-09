@@ -1,5 +1,21 @@
 package ru.warfare.darkannihilation;
 
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.Bomb;
+import ru.warfare.darkannihilation.bullet.BulletDynamite;
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.bullet.BulletSaturn;
+import ru.warfare.darkannihilation.button.PauseButton;
+import ru.warfare.darkannihilation.enemy.Portal;
+import ru.warfare.darkannihilation.enemy.TripleFighter;
+import ru.warfare.darkannihilation.enemy.Vader;
+import ru.warfare.darkannihilation.enemy.XWing;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.math.Vector;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.systemd.Service;
+
 public class HardThread implements Runnable {
 //    1 - bullets enemy
 //    2 - sunrise
@@ -68,7 +84,7 @@ public class HardThread implements Runnable {
                     job = 0;
                     break;
                 case 4:
-                    for (int i = 0; i < MATH.randInt(2, 6); i++) {
+                    for (int i = 0; i < Math.randInt(2, 6); i++) {
                         BulletSaturn bulletSaturn = new BulletSaturn(game.player.centerX(), game.player.y);
                         Game.bullets.add(bulletSaturn);
                         Game.allSprites.add(bulletSaturn);
@@ -110,7 +126,7 @@ public class HardThread implements Runnable {
                 case 8:
                     int X = game.player.centerX();
                     int Y = game.player.centerY();
-                    if (MATH.getDistance(x - X, y - Y) < r) {
+                    if (Math.getDistance(x - X, y - Y) < r) {
                         values = vector.vector(x, y, X, Y, 9);
                         Game.allSprites.add(new BulletEnemy(x, y, values[2], values[0], values[1]));
                         AudioHub.playShoot();

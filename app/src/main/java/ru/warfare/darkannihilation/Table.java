@@ -2,8 +2,11 @@ package ru.warfare.darkannihilation;
 
 import java.util.ArrayList;
 
-import static ru.warfare.darkannihilation.Game.topPaint;
-import static ru.warfare.darkannihilation.Game.topPaintRed;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.systemd.Service;
+
+import static ru.warfare.darkannihilation.systemd.Game.topPaint;
+import static ru.warfare.darkannihilation.systemd.Game.topPaintRed;
 
 public final class Table {
     private static ArrayList<ArrayList<String>> table;

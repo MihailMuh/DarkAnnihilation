@@ -25,7 +25,7 @@
             android:screenOrientation="landscape"
             android:immersive="true"
             android:hardwareAccelerated="true"
-            android:name=".MainActivity"
+            android:name=".systemd.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

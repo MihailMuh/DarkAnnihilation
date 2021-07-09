@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import ru.warfare.darkannihilation.systemd.MainActivity;
+import ru.warfare.darkannihilation.systemd.Service;
+
 public final class Clerk {
     private static MainActivity context;
     public static String nickname = "";
