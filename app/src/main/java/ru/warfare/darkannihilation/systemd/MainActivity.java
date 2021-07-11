@@ -24,6 +24,7 @@ import java.util.Objects;
 import pl.droidsonroids.gif.GifImageView;
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.hub.AudioHub;
 import ru.warfare.darkannihilation.hub.ImageHub;
@@ -49,19 +50,13 @@ public final class MainActivity extends AppCompatActivity {
 
         Service.init(this);
         runOnUiThread(() -> {
-            ImageHub.init(this);
-            AudioHub.init(this);
+            ImageHub.init();
+            AudioHub.init();
         });
 
-        Clerk.init(this);
+        Clerk.init();
+        game.init();
         checkOnFirstRun();
-        game.init(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        game.onPause();
     }
 
     @Override
@@ -75,6 +70,17 @@ public final class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_main);
         fullscreen();
+    }
+
+    @Override
+    public void onBackPressed() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        game.onPause();
     }
 
     @Override
@@ -117,7 +123,7 @@ public final class MainActivity extends AppCompatActivity {
                             } else {
                                 preferences.edit().putBoolean("firstrun", false).apply();
 
-                                new Thread(() -> {
+                                HardThread.newJob(() -> {
                                     String[] str = nick.split(" ");
                                     StringBuilder stringBuilder = new StringBuilder();
                                     ArrayList<String> filterNick = new ArrayList<>(0);
@@ -142,7 +148,7 @@ public final class MainActivity extends AppCompatActivity {
                                     Clerk.nickname = stringBuilder.toString();
                                     Clerk.saveNickname();
                                     ClientServer.postBestScore(Clerk.nickname, 0);
-                                }).start();
+                                });
 
                                 makeToast("Congratulations! You have registered!", true);
                                 dialog.dismiss();

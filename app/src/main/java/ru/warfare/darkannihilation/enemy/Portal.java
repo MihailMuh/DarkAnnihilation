@@ -20,15 +20,13 @@ public class Portal extends Sprite {
 
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0]);
-        Service.runOnUiThread(() -> {
-            x = randInt(0, screenWidthWidth);
-            y = randInt(50, 250);
-            isPassive = true;
+        AudioHub.loadPortalSounds();
 
-            recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
+        x = randInt(0, screenWidthWidth);
+        y = randInt(50, 250);
+        isPassive = true;
 
-            AudioHub.loadPortalSounds();
-        });
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
     public void kill() {

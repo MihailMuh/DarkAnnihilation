@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.screen;
 
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -8,7 +9,7 @@ public class FightScreen extends Sprite {
     public FightScreen() {
         super(ImageHub.playerVsBoss);
 
-        new Thread(() -> {
+        HardThread.newJob(() -> {
             y = Game.halfScreenHeight;
 
             int min = 10;
@@ -23,7 +24,7 @@ public class FightScreen extends Sprite {
 
             x = Game.halfScreenWidth - halfWidth;
             y = Game.halfScreenHeight - halfHeight;
-        }).start();
+        });
     }
 
     public void newImg(String character) {

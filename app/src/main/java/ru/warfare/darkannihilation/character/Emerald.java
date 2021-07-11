@@ -1,13 +1,13 @@
 package ru.warfare.darkannihilation.character;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.base.BaseCharacter;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.BulletDynamite;
 import ru.warfare.darkannihilation.bullet.BulletThunder;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.EMERALD_HEALTH;
 import static ru.warfare.darkannihilation.Constants.EMERALD_SHOOT_TIME;
@@ -41,10 +41,11 @@ public class Emerald extends BaseCharacter {
             }
         } else {
             if (now - lastShoot > EMERALD_SHOOT_TIME) {
-                if (HardThread.job == 0) {
-                    HardThread.job = 9;
-                    lastShoot = now;
-                }
+                AudioHub.playDynamite();
+                BulletDynamite bulletDynamite = new BulletDynamite(centerX(), y);
+                Game.bullets.add(bulletDynamite);
+                Game.allSprites.add(bulletDynamite);
+                lastShoot = now;
             }
         }
     }

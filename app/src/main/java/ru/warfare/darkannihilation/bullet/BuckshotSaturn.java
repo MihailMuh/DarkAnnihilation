@@ -10,11 +10,11 @@ import ru.warfare.darkannihilation.math.Vector;
 import static ru.warfare.darkannihilation.Constants.BUCKSHOT_SATURN_DAMAGE;
 
 public class BuckshotSaturn extends Sprite {
-    private final Vector vector = new Vector();
     private float X;
     private float Y;
     private boolean orbit = false;
     private float fly = 0;
+    private final Vector vector = new Vector();
 
     public BuckshotSaturn(Game game, int X, int Y) {
         super(game);

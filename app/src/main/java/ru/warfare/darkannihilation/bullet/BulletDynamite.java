@@ -84,7 +84,7 @@ public class BulletDynamite extends Sprite {
     }
 
     @Override
-    public void render () {
+    public void render() {
         if (BOOM) {
             Game.canvas.drawBitmap(ImageHub.explosionLarge[frame], x, y, null);
         } else {

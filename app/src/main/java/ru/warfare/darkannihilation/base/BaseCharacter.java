@@ -4,9 +4,10 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.character.Heart;
 import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.Service;
 
 import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_HEALTH;
@@ -55,8 +56,7 @@ public class BaseCharacter extends Sprite {
         y = Game.halfScreenHeight;
     }
 
-    public void newStatus() {
-        god = false;
+    private void base() {
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
         endX = x;
@@ -64,12 +64,13 @@ public class BaseCharacter extends Sprite {
         lock = true;
     }
 
+    public void newStatus() {
+        god = false;
+        base();
+    }
+
     private void init() {
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
-        endX = x;
-        endY = y;
-        lock = true;
+        base();
         health = maxHealth;
     }
 
@@ -133,7 +134,7 @@ public class BaseCharacter extends Sprite {
             health -= dmg;
             changeHearts();
             if (health <= 0) {
-                Service.runOnUiThread(() -> {
+                HardThread.newJob(() -> {
                     game.generateGameover();
                     Service.vibrate(1300);
                     createSkullExplosion();

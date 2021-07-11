@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Executors;
 
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
@@ -139,7 +140,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public int bestScore = 0;
     private int pointerCount;
     private int moveAll;
-    private boolean playing = false;
+    private volatile boolean playing = false;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
     private static final boolean drawFPS = false;
@@ -197,9 +198,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         super(context, attrs);
     }
 
-    public void init(MainActivity mainActivity) {
-        context = mainActivity;
-
+    public void init() {
+        context = Service.getContext();
         screenWidth = Service.getScreenWidth();
         screenHeight = Service.getScreenHeight();
         halfScreenWidth = screenWidth / 2;
@@ -250,6 +250,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         getMaxScore();
 
+        hardThread = new HardThread();
+
         while (!endImgInit) {
         }
 
@@ -258,9 +260,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonQuit = new Button(this);
         buttonRestart = new Button(this);
 
-        settings = new Settings(mainActivity);
+        settings = new Settings();
 
-        new Thread(() -> {
+        HardThread.newJob(() -> {
             fightScreen = new FightScreen();
             buttonPlayer = new ButtonPlayer(this);
             buttonSaturn = new ButtonSaturn(this);
@@ -272,7 +274,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             changerGuns = new ChangerGuns(this);
             rocket = new Rocket();
             attention = new Attention(this);
-            factory = new Factory();
+            factory = new Factory(this);
             demoman = new Demoman();
             screen = new StarScreen();
             loadingScreen = new LoadingScreen(this);
@@ -283,12 +285,11 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
                 buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
             }
-        }).start();
+        });
 
         for (int i = 0; i < numberVaders * 2; i++) {
             allSprites.add(new Vader(false));
         }
-        hardThread = new HardThread(this);
 
         for (int i = 0; i < numberExplosionsALL; i++) {
             if (i < numberMediumExplosionsTriple) {
@@ -390,17 +391,19 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
 
         if (System.currentTimeMillis() - lastBoss > BOSS_TIME) {
-            lastBoss = System.currentTimeMillis();
-            Sprite boss;
-            if (level == 1) {
-                boss = new DeathStar(this);
-                fightScreen.newImg(character);
-            } else {
-                boss = new BossVaders(this);
-                fightScreen.newImg(character + "-vaders");
-            }
-            bosses.add(boss);
-            allSprites.add(boss);
+            HardThread.newJob(() -> {
+                lastBoss = System.currentTimeMillis();
+                Sprite boss;
+                if (level == 1) {
+                    boss = new DeathStar(this);
+                    fightScreen.newImg(character);
+                } else {
+                    boss = new BossVaders(this);
+                    fightScreen.newImg(character + "-vaders");
+                }
+                bosses.add(boss);
+                allSprites.add(boss);
+            });
         }
 
         if (!shotgunKit.picked) {
@@ -655,7 +658,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void onPause() {
-        hardThread.workOnPause();
         AudioHub.stopAndSavePlaying();
         playing = false;
         try {
@@ -663,11 +665,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         } catch (Exception e) {
             Service.print("Thread join " + e);
         }
+        hardThread.stopJob();
     }
 
     public void onResume() {
-        hardThread.workOnResume();
         AudioHub.whoIsPlayed();
+        hardThread.startJob();
         playing = true;
         thread = new Thread(this);
         thread.start();
@@ -700,7 +703,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateWin() {
-        AudioHub.pauseBossMusic();
         AudioHub.winMusic.seekTo(0);
         AudioHub.winMusic.start();
         saveScore();
@@ -812,8 +814,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
 
-        hardThread.workOnPause();
-        hardThread.workOnResume();
         count = 0;
         BOSS_TIME = 100_000;
 
@@ -869,16 +869,16 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
                 rocket = new Rocket();
                 attention = new Attention(this);
-                factory = new Factory();
+                factory = new Factory(this);
                 demoman = new Demoman();
                 screen = new StarScreen();
                 alphaEnemy.setAlpha(255);
 
                 len = numberVaders - 1;
-                allSprites.add(new TripleFighter());
+                allSprites.add(new TripleFighter(this));
                 for (int i = 0; i < len; i++) {
                     if (random.nextFloat() <= 0.12) {
-                        allSprites.add(new TripleFighter());
+                        allSprites.add(new TripleFighter(this));
                     } else {
                         allSprites.add(new Vader(false));
                     }
@@ -903,17 +903,17 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
                 player.newStatus();
 
-                spider = new Spider();
+                spider = new Spider(this);
                 sunrise = new Sunrise();
                 buffer = new Buffer();
                 screen = new ThunderScreen();
                 atomicBomb = new AtomicBomb();
                 alphaEnemy.setAlpha(165);
 
-                len = numberVaders + 3;
+                len = numberVaders + 5;
                 for (int i = 0; i < len; i++) {
                     if (random.nextFloat() <= 0.18) {
-                        allSprites.add(new XWing());
+                        allSprites.add(new XWing(this));
                     } else {
                         allSprites.add(new Vader(true));
                     }
@@ -1242,18 +1242,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     if (factory.lock) {
                         if (random.nextFloat() <= 0.0009) {
                             factory.lock = false;
-                            if (character.equals("saturn")) {
-                                new Thread(() -> {
-                                    for (int i = 0; i < bullets.size(); i++) {
-                                        Sprite bullet = bullets.get(i);
-                                        if (bullet.status.equals("saturn") | bullet.status.equals("fakeSaturn")) {
-                                            if (Math.getDistance(player.centerX() - bullet.centerX(), player.centerY() - bullet.centerY()) >= 550) {
-                                                bullet.intersection();
-                                            }
-                                        }
-                                    }
-                                }).start();
-                            }
+                            removeSaturnTrash();
                         }
                     }
                 }
@@ -1368,7 +1357,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     private void removeSaturnTrash() {
         if (character.equals("saturn")) {
-            new Thread(() -> {
+            HardThread.newJob(() -> {
                 for (int i = 0; i < bullets.size(); i++) {
                     Sprite bullet = bullets.get(i);
                     if (bullet.status.equals("saturn") | bullet.status.equals("fakeSaturn")) {
@@ -1377,7 +1366,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         }
                     }
                 }
-            }).start();
+            });
         }
     }
 

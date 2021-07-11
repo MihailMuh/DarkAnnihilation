@@ -1,17 +1,17 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.BUFFER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.BUFFER_HEALTH;
 
 public class Buffer extends Sprite {
     private boolean startBuff;
-    private boolean boom = false;
+    private boolean BOOM;
 
     public Buffer() {
         super(ImageHub.bufferImg);
@@ -23,24 +23,30 @@ public class Buffer extends Sprite {
     }
 
     private void boom() {
-        if (startBuff) {
-            if (HardThread.job == 0) {
-                HardThread.job = 5;
+        if (!BOOM) {
+            BOOM = true;
+            HardThread.newJob(() -> {
+                if (startBuff) {
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Sprite sprite = Game.allSprites.get(i);
+                        if (!sprite.isPassive && !sprite.isBullet) {
+                            sprite.sB();
+                        }
+                    }
+                }
                 inter();
-            }
-        } else {
-            inter();
+            });
         }
     }
 
     private void inter() {
-        boom = false;
         createSkullExplosion();
         hide();
         Game.score += 100;
     }
 
     public void hide() {
+        BOOM = false;
         startBuff = false;
         lock = true;
         health = BUFFER_HEALTH;
@@ -56,41 +62,41 @@ public class Buffer extends Sprite {
 
     @Override
     public void intersection() {
-        boom = true;
+        health = 0;
     }
 
     @Override
     public void intersectionPlayer() {
-        boom = true;
+        health = 0;
     }
 
     @Override
     public void check_intersectionBullet(Sprite bullet) {
         if (intersect(bullet)) {
             bullet.intersection();
-            if (!boom) {
-                health -= bullet.damage;
-                if (health <= 0) {
-                    boom = true;
-                }
-            }
+            health -= bullet.damage;
         }
     }
 
     @Override
     public void update() {
-        if (!boom) {
-            if (y < 35) {
-                y += speedY;
-            } else {
-                if (!startBuff) {
-                    if (HardThread.job == 0) {
-                        HardThread.job = 6;
-                        startBuff = true;
-                    }
-                }
-            }
+        if (y < 35) {
+            y += speedY;
         } else {
+            if (!startBuff) {
+                startBuff = true;
+                HardThread.newJob(() -> {
+                    for (int i = 0; i < Game.allSprites.size(); i++) {
+                        Sprite sprite = Game.allSprites.get(i);
+                        if ((!sprite.isPassive && !sprite.isBullet)) {
+                            sprite.buff();
+                        }
+                    }
+                });
+            }
+        }
+
+        if (health <= 0) {
             boom();
         }
     }
@@ -99,10 +105,8 @@ public class Buffer extends Sprite {
     public void render() {
         Game.canvas.drawBitmap(image, x, y, Game.alphaEnemy);
 
-        if (!boom) {
-            Game.canvas.drawRect(centerX() - 75, y + 50, centerX() + 75, y + 65, Game.scorePaint);
-            Game.canvas.drawRect(centerX() - 73, y + 52, centerX() - 77 + (health / (float) BUFFER_HEALTH) * 150, y + 63, Game.fpsPaint);
-        }
+        Game.canvas.drawRect(centerX() - 75, y + 50, centerX() + 75, y + 65, Game.scorePaint);
+        Game.canvas.drawRect(centerX() - 73, y + 52, centerX() - 77 + (health / (float) BUFFER_HEALTH) * 150, y + 63, Game.fpsPaint);
     }
 }
 

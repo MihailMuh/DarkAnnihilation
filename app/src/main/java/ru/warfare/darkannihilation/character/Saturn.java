@@ -1,15 +1,18 @@
 package ru.warfare.darkannihilation.character;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BuckshotSaturn;
+import ru.warfare.darkannihilation.bullet.BulletSaturn;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.SATURN_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SATURN_SHOOT_TIME;
 import static ru.warfare.darkannihilation.Constants.SATURN_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Saturn extends BaseCharacter {
     public Saturn(Game g) {
@@ -33,10 +36,16 @@ public class Saturn extends BaseCharacter {
             }
         } else {
             if (now - lastShoot > SATURN_SHOOT_TIME) {
-                if (HardThread.job == 0) {
+                HardThread.newJob(() -> {
+                    int X = centerX();
+                    for (int i = 0; i < randInt(3, 6); i++) {
+                        BulletSaturn bulletSaturn = new BulletSaturn(X, game.player.y);
+                        Game.bullets.add(bulletSaturn);
+                        Game.allSprites.add(bulletSaturn);
+                    }
+                    AudioHub.playShoot();
                     lastShoot = now;
-                    HardThread.job = 4;
-                }
+                });
             }
         }
     }

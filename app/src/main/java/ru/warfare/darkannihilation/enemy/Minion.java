@@ -1,6 +1,8 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.hub.ImageHub;
@@ -13,9 +15,10 @@ import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Minion extends Sprite {
     private long lastShoot = System.currentTimeMillis();
+    private final Vector vector = new Vector();
 
-    public Minion(int x, int y) {
-        super(ImageHub.minionImg);
+    public Minion(Game game, int x, int y) {
+        super(game, ImageHub.minionImg);
         health = MINION_HEALTH;
         damage = MINION_DAMAGE;
 
@@ -29,12 +32,14 @@ public class Minion extends Sprite {
 
     private void shoot() {
         if (System.currentTimeMillis() - lastShoot > MINION_SHOOT_TIME) {
-            if (HardThread.job == 0) {
-                lastShoot = System.currentTimeMillis();
-                HardThread.x = centerX();
-                HardThread.y = centerY();
-                HardThread.job = 1;
-            }
+            lastShoot = System.currentTimeMillis();
+            HardThread.newJob(() -> {
+                int X = centerX();
+                int Y = centerY();
+                int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
+                Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                AudioHub.playShotgun();
+            });
         }
     }
 

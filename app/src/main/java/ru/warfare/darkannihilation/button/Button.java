@@ -1,12 +1,13 @@
 package ru.warfare.darkannihilation.button;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
-import ru.warfare.darkannihilation.systemd.Service;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.systemd.Service;
 
 import static ru.warfare.darkannihilation.Constants.BUTTON_CLICK_TIME;
 
@@ -100,8 +101,7 @@ public class Button extends Sprite {
             long now = System.currentTimeMillis();
             if (now - lastClick > BUTTON_CLICK_TIME) {
                 lastClick = now;
-
-                new Thread(() -> {
+                HardThread.newJob(() -> {
                     AudioHub.playClick();
                     isPressed = true;
                     Service.sleep(100);
@@ -114,11 +114,11 @@ public class Button extends Sprite {
                             game.buttonEmerald.show();
                             break;
                         case "quit":
-                            game.onPause();
-                            game.saveScore();
-                            game.settings.saveSettings();
+                            lastClick = now * 10;
                             AudioHub.releaseAP();
-                            System.exit(0);
+                            game.settings.saveSettings();
+                            game.saveScore();
+                            Service.systemExit();
                             break;
                         case "pause":
                             game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
@@ -152,7 +152,7 @@ public class Button extends Sprite {
                             game.loadingScreen.newJob(function);
                             break;
                     }
-                }).start();
+                });
             }
         }
     }

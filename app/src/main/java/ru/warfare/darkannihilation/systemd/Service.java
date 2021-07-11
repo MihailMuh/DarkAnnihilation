@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.systemd;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Vibrator;
@@ -32,6 +33,13 @@ public final class Service {
         vibrator = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
+    public static void systemExit() {
+        ActivityManager activityManager = (ActivityManager) mainActivity.getSystemService(Context.ACTIVITY_SERVICE);
+        activityManager.killBackgroundProcesses(mainActivity.getApplication().getPackageName());
+        mainActivity.finishAndRemoveTask();
+        System.exit(0);
+    }
+
     public static void vibrate(int millis) {
         if (Game.vibrate) {
             vibrator.vibrate(createOneShot(millis, 255));
@@ -39,7 +47,7 @@ public final class Service {
     }
 
     public static void runOnUiThread(Runnable runnable) {
-        new Thread(() -> mainActivity.runOnUiThread(runnable)).start();
+        mainActivity.runOnUiThread(runnable);
     }
 
     public static void makeToast(String text, boolean longToast) {
@@ -48,6 +56,10 @@ public final class Service {
 
     public static double getSizeAppInRAM() {
         return ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576f);
+    }
+
+    public static MainActivity getContext() {
+        return mainActivity;
     }
 
     public static void sleep(int millis) {

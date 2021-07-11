@@ -1,10 +1,12 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.math.Vector;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_HEALTH;
@@ -13,9 +15,10 @@ import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class TripleFighter extends Sprite {
     private long lastShoot = System.currentTimeMillis();
+    private final Vector vector = new Vector();
 
-    public TripleFighter() {
-        super(ImageHub.tripleFighterImg);
+    public TripleFighter(Game game) {
+        super(game, ImageHub.tripleFighterImg);
         damage = TRIPLE_FIGHTER_DAMAGE;
 
         newStatus();
@@ -23,15 +26,16 @@ public class TripleFighter extends Sprite {
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
     }
 
-    public void shoot() {
-        long now = System.currentTimeMillis();
-        if (now - lastShoot > TRIPLE_FIGHTER_SHOOT_TIME) {
-            if (HardThread.job == 0) {
-                lastShoot = now;
-                HardThread.x = centerX();
-                HardThread.y = centerY();
-                HardThread.job = 1;
-            }
+    private void shoot() {
+        if (System.currentTimeMillis() - lastShoot > TRIPLE_FIGHTER_SHOOT_TIME) {
+            HardThread.newJob(() -> {
+                int X = centerX();
+                int Y = centerY();
+                int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
+                Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                AudioHub.playShotgun();
+            });
+            lastShoot = System.currentTimeMillis();
         }
     }
 

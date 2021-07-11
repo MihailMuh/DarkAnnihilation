@@ -1,12 +1,11 @@
 package ru.warfare.darkannihilation.button;
 
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.CHANGER_GUNS_CLICK_TIME;
 

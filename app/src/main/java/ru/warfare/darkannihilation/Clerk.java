@@ -14,8 +14,8 @@ public final class Clerk {
     private static MainActivity context;
     public static String nickname = "";
 
-    public static void init(MainActivity context) {
-        Clerk.context = context;
+    public static void init() {
+        Clerk.context = Service.getContext();
     }
 
     public static void saveNickname() {

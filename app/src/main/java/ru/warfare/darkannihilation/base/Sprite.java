@@ -62,10 +62,10 @@ public class Sprite {
         halfWidth = width / 2;
         halfHeight = height / 2;
 
-        left = 0;
-        top = 0;
-        right = width;
-        bottom = height;
+        left = x;
+        top = y;
+        right = x + width;
+        bottom = y + height;
 
         screenHeightHeight = Game.screenHeight - height;
         screenWidthWidth = Game.screenWidth - width;
@@ -182,13 +182,15 @@ public class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
-        getRect();
-        sprite = sprite.getRect();
+        if (sprite != null) {
+            getRect();
+            sprite = sprite.getRect();
 
-        if (left <= sprite.right) {
-            if (sprite.left <= right) {
-                if (top <= sprite.bottom) {
-                    return sprite.top <= bottom;
+            if (left <= sprite.right) {
+                if (sprite.left <= right) {
+                    if (top <= sprite.bottom) {
+                        return sprite.top <= bottom;
+                    }
                 }
             }
         }

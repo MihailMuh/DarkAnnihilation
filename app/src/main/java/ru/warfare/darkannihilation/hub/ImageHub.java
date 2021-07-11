@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import pl.droidsonroids.gif.GifImageView;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.GlideApp;
 import ru.warfare.darkannihilation.systemd.MainActivity;
@@ -133,12 +134,11 @@ public final class ImageHub {
     private static final int eX175 = (int) (175 * resizeK);
     private static final int eX400 = (int) (400 * resizeK);
 
-    private static final Matrix matrix = new Matrix();
     private static Resources res;
     private static String name;
     private static MainActivity mainActivity;
 
-    public static void init(MainActivity context) {
+    public static void init() {
         int eX145 = (int) (145 * resizeK);
         int eX52 = (int) (52 * resizeK);
         int sW150 = (int) (screenWidth * 0.95);
@@ -146,14 +146,15 @@ public final class ImageHub {
         int eX600 = (int) (600 * resizeK);
         int pauseBtn = (int) (180 * resizeK);
         int eX72 = (int) (72 * resizeK);
-        res = context.getResources();
-        name = context.getPackageName();
-        mainActivity = context;
+
+        ImageHub.mainActivity = Service.getContext();
+        res = mainActivity.getResources();
+        name = mainActivity.getPackageName();
 
         loadFirstLevelBitmaps();
         loadSettingsImages();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.cannon_ball)
@@ -172,7 +173,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.pause_button)
@@ -191,7 +192,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.bullet)
@@ -210,7 +211,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.health)
@@ -229,7 +230,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.buckshot)
@@ -248,7 +249,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.gun_to_shotgun)
@@ -266,7 +267,7 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.gun_to_none)
@@ -284,7 +285,7 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.shotgun_to_gun)
@@ -303,7 +304,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.gameover)
@@ -323,7 +324,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.bullet_enemy)
@@ -342,7 +343,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.full_blue_heart)
@@ -360,7 +361,7 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.half_blue_heart)
@@ -378,7 +379,7 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.full_heart)
@@ -396,7 +397,7 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.half_heart)
@@ -414,7 +415,7 @@ public final class ImageHub {
                               }
                           }
                 ).submit();
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.non_heart)
@@ -433,7 +434,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.player_vs_boss)
@@ -452,7 +453,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.player_vs_vader)
@@ -471,7 +472,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.saturn_vs_boss)
@@ -490,7 +491,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.emerald_vs_boss)
@@ -509,7 +510,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.saturn_vs_vader)
@@ -528,7 +529,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.emerald_vs_vader)
@@ -547,7 +548,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.ship_button)
@@ -566,7 +567,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.ship)
@@ -585,7 +586,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.saturn_btn)
@@ -604,7 +605,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.emerald_btn)
@@ -623,7 +624,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.button_press)
@@ -642,7 +643,7 @@ public final class ImageHub {
                           }
                 ).submit();
 
-        GlideApp.with(context)
+        GlideApp.with(mainActivity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(R.drawable.button_notpress)
@@ -664,7 +665,7 @@ public final class ImageHub {
         for (int i = 0; i < 34; i++) {
             int finalI = i;
             if (i < 3) {
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("vader" + (i + 1), "drawable", name))
@@ -684,7 +685,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 12) {
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("loading" + i, "drawable", name))
@@ -705,7 +706,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 13) {
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("explosion_skull_" + (i + 1), "drawable", name))
@@ -725,7 +726,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 23) {
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
@@ -743,7 +744,7 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("explosion_" + (i + 1), "drawable", name))
@@ -763,7 +764,7 @@ public final class ImageHub {
                         ).submit();
             }
             if (i < 28) {
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
@@ -781,7 +782,7 @@ public final class ImageHub {
                                       }
                                   }
                         ).submit();
-                GlideApp.with(context)
+                GlideApp.with(mainActivity)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .load(res.getIdentifier("default_explosion_" + (i + 1), "drawable", name))
@@ -800,7 +801,7 @@ public final class ImageHub {
                                   }
                         ).submit();
             }
-            GlideApp.with(context)
+            GlideApp.with(mainActivity)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .load(res.getIdentifier("_" + i, "drawable", name))
@@ -1631,7 +1632,7 @@ public final class ImageHub {
     }
 
     public static Bitmap rotateImage(Bitmap image, float degree) {
-        matrix.reset();
+        Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
     }

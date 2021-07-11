@@ -1,12 +1,12 @@
 package ru.warfare.darkannihilation.character;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.base.BaseCharacter;
+import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.Bullet;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.BOT_SHOOT_TIME;
 
@@ -31,15 +31,18 @@ public class Bot extends BaseCharacter {
     public void shoot() {
         now = System.currentTimeMillis();
         if (now - lastShoot > BOT_SHOOT_TIME) {
-            lastShoot = now;
-            AudioHub.playShoot();
-            Bullet bullet = new Bullet(centerX() - 6, y);
+            int X = centerX();
+
+            Bullet bullet = new Bullet(X - 6, y);
             Game.bullets.add(bullet);
             Game.allSprites.add(bullet);
 
-            bullet = new Bullet(centerX(), y);
+            bullet = new Bullet(X, y);
             Game.bullets.add(bullet);
             Game.allSprites.add(bullet);
+
+            lastShoot = now;
+            AudioHub.playShoot();
         }
     }
 

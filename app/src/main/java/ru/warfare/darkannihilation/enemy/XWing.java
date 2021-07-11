@@ -1,6 +1,8 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.hub.ImageHub;
@@ -9,29 +11,44 @@ import ru.warfare.darkannihilation.base.Sprite;
 import static ru.warfare.darkannihilation.Constants.XWING_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.XWING_HEALTH;
 import static ru.warfare.darkannihilation.Constants.XWING_SHOOT_TIME;
+import static ru.warfare.darkannihilation.math.Math.getDistance;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class XWing extends Sprite {
     private long lastShoot = System.currentTimeMillis();
+    private final int R;
+    private final Vector vector = new Vector();
 
-    public XWing() {
-        super(ImageHub.XWingImg);
+    public XWing(Game game) {
+        super(game, ImageHub.XWingImg);
         damage = XWING_DAMAGE;
 
         newStatus();
 
-        recreateRect(x + 15, y + 15, x + width - 15, y + height - 15);
+        if (Game.character.equals("saturn")) {
+            R = 470;
+        } else {
+            R = 350;
+        }
+
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
     private void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > XWING_SHOOT_TIME) {
-            if (HardThread.job == 0) {
-                HardThread.x = centerX();
-                HardThread.y = centerY();
-                HardThread.job = 8;
-                lastShoot = now;
-            }
+            HardThread.newJob(() -> {
+                int P_X = game.player.centerX();
+                int P_Y = game.player.centerY();
+                int X = centerX();
+                int Y = centerY();
+                if (getDistance(X - P_X, Y - P_Y) < R) {
+                    int[] values = vector.vector(X, Y, P_X, P_Y, 9);
+                    Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                    AudioHub.playShoot();
+                }
+            });
+            lastShoot = now;
         }
     }
 

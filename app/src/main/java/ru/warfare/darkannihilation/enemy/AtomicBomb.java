@@ -1,10 +1,10 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
-import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.ATOMIC_BOMB_FRAME_TIME;
 import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
@@ -14,7 +14,7 @@ public class AtomicBomb extends Sprite {
     private int frame = 0;
     private static final int len = NUMBER_ATOMIC_BOMB_IMAGES - 1;
     private long lastFrame = System.currentTimeMillis();
-    private boolean boom = false;
+    private boolean BOOM;
 
     public AtomicBomb() {
         super(ImageHub.atomBombImage[0]);
@@ -26,10 +26,18 @@ public class AtomicBomb extends Sprite {
     }
 
     private void boom() {
-        if (HardThread.job == 0) {
-            HardThread.job = 7;
-            boom = false;
-            intersection();
+        if (!BOOM) {
+            BOOM = true;
+            HardThread.newJob(() -> {
+                for (int i = 0; i < Game.allSprites.size(); i++) {
+                    Sprite sprite = Game.allSprites.get(i);
+                    if (!sprite.lock) {
+                        if ((!sprite.isPassive && !sprite.isBullet) | (sprite.status.equals("bulletEnemy"))) {
+                            sprite.intersection();
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -41,10 +49,11 @@ public class AtomicBomb extends Sprite {
     }
 
     private void hide() {
+        BOOM = false;
         lock = true;
         speedY = 1;
         health = 20;
-        x = Math.randInt(0, Game.screenWidth);
+        x = Math.randInt(0, screenWidthWidth);
         y = -height;
     }
 
@@ -86,34 +95,29 @@ public class AtomicBomb extends Sprite {
     public void check_intersectionBullet(Sprite bullet) {
         if (intersect(bullet)) {
             bullet.intersection();
-            if (!boom) {
-                health -= bullet.damage;
-                if (health <= 0) {
-                    boom = true;
-                }
-            }
+            health -= bullet.damage;
         }
     }
 
     @Override
     public void update() {
-        if (boom) {
-            boom();
-        } else {
-            long now = System.currentTimeMillis();
-            if (now - lastFrame > ATOMIC_BOMB_FRAME_TIME) {
-                lastFrame = now;
-                if (frame != len) {
-                    frame++;
-                } else {
-                    frame = 0;
-                }
+        y += speedY;
+        long now = System.currentTimeMillis();
+        if (now - lastFrame > ATOMIC_BOMB_FRAME_TIME) {
+            lastFrame = now;
+            if (frame != len) {
+                frame++;
+            } else {
+                frame = 0;
             }
-            y += speedY;
+        }
 
-            if (y > Game.screenHeight) {
-                hide();
-            }
+        if (y > Game.screenHeight) {
+            hide();
+        }
+
+        if (health <= 0) {
+            boom();
         }
     }
 

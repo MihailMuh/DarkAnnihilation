@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation.button;
 
 import android.graphics.Paint;
 
+import ru.warfare.darkannihilation.hub.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.hub.ImageHub;
@@ -46,7 +47,11 @@ public class PauseButton extends Sprite {
     }
 
     public void make() {
-        HardThread.job = 12;
+        oldStatus = Game.gameStatus;
+        HardThread.newJob(() -> {
+            AudioHub.playClick();
+            game.generatePause();
+        });
     }
 
     public boolean checkCoords(int X, int Y) {

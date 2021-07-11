@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 import ru.warfare.darkannihilation.Clerk;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.SeekArcListener;
 import ru.warfare.darkannihilation.hub.AudioHub;
@@ -54,8 +55,8 @@ public class Settings {
     private float finalVolumeEffects;
     private float finalVolumeMusic;
 
-    public Settings(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public Settings() {
+        this.mainActivity = Service.getContext();
         parseSettings();
         float density = mainActivity.getResources().getDisplayMetrics().density;
         int angle = (int) (finalVolumeEffects * 100);
@@ -117,11 +118,11 @@ public class Settings {
         }
         stickySwitch.setOnSelectedChangeListener((direction, text) -> {
             if (text.equals(string_enable)) {
-                new Thread(() -> {
+                HardThread.newJob(() -> {
                     Service.sleep(300);
                     Game.vibrate = true;
                     Service.vibrate(60);
-                }).start();
+                });
             } else {
                 Game.vibrate = false;
             }
@@ -189,46 +190,44 @@ public class Settings {
     }
 
     public void showSettings() {
-        Service.runOnUiThread(() -> {
-            angleEffects.setVisibility(TextView.VISIBLE);
-            textViewEffects.setVisibility(TextView.VISIBLE);
-            seekArcEffects.setVisibility(SeekArc.VISIBLE);
+        angleEffects.setVisibility(TextView.VISIBLE);
+        textViewEffects.setVisibility(TextView.VISIBLE);
+        seekArcEffects.setVisibility(SeekArc.VISIBLE);
 
-            angleMusic.setVisibility(TextView.VISIBLE);
-            textViewMusic.setVisibility(TextView.VISIBLE);
-            seekArcMusic.setVisibility(SeekArc.VISIBLE);
+        angleMusic.setVisibility(TextView.VISIBLE);
+        textViewMusic.setVisibility(TextView.VISIBLE);
+        seekArcMusic.setVisibility(SeekArc.VISIBLE);
 
-            textViewVibration.setVisibility(TextView.VISIBLE);
-            stickySwitch.setVisibility(SeekArc.VISIBLE);
-            stickySwitch.setRightIcon(ImageHub.onImg);
-            stickySwitch.setLeftIcon(ImageHub.offImg);
+        textViewVibration.setVisibility(TextView.VISIBLE);
+        stickySwitch.setVisibility(SeekArc.VISIBLE);
+        stickySwitch.setRightIcon(ImageHub.onImg);
+        stickySwitch.setLeftIcon(ImageHub.offImg);
 
-            spinner.setVisibility(TextView.VISIBLE);
-            switch (Game.language) {
-                case "en":
-                    spinner.selectItemByIndex(0);
-                    break;
-                case "ru":
-                    spinner.selectItemByIndex(1);
-                    break;
-                case "fr":
-                    spinner.selectItemByIndex(2);
-                    break;
-                case "sp":
-                    spinner.selectItemByIndex(3);
-                    break;
-                case "ge":
-                    spinner.selectItemByIndex(4);
-                    break;
-            }
-            textSpinner.setVisibility(TextView.VISIBLE);
+        spinner.setVisibility(TextView.VISIBLE);
+        switch (Game.language) {
+            case "en":
+                spinner.selectItemByIndex(0);
+                break;
+            case "ru":
+                spinner.selectItemByIndex(1);
+                break;
+            case "fr":
+                spinner.selectItemByIndex(2);
+                break;
+            case "sp":
+                spinner.selectItemByIndex(3);
+                break;
+            case "ge":
+                spinner.selectItemByIndex(4);
+                break;
+        }
+        textSpinner.setVisibility(TextView.VISIBLE);
 
-            animatedCheckBox.setVisibility(TextView.VISIBLE);
-            animatedCheckBox.setChecked(Game.scorePaint.isAntiAlias(), false);
-            textAntiAlias.setVisibility(TextView.VISIBLE);
+        animatedCheckBox.setVisibility(TextView.VISIBLE);
+        animatedCheckBox.setChecked(Game.scorePaint.isAntiAlias(), false);
+        textAntiAlias.setVisibility(TextView.VISIBLE);
 
-            Game.gameStatus = 10;
-        });
+        Game.gameStatus = 10;
     }
 
     private void makeLanguage() {
@@ -268,10 +267,10 @@ public class Settings {
 
             animatedCheckBox.setVisibility(TextView.GONE);
             textAntiAlias.setVisibility(TextView.GONE);
+            AudioHub.newVolumeForBackground(finalVolumeMusic);
+            AudioHub.newVolumeForEffects(finalVolumeEffects);
+            saveSettings();
         });
-        AudioHub.newVolumeForBackground(finalVolumeMusic);
-        AudioHub.newVolumeForEffects(finalVolumeEffects);
-        saveSettings();
     }
 
     public void parseSettings() {

@@ -44,6 +44,7 @@ public final class Constants {
 //    first level
     public static final short BOSS_SHOOT_TIME = 450;
     public static final short BOSS_HEALTH = 300;
+    public static final short BOSS_HEALTH_BAR_LEN = 140;
 
     public static final short DEMOMAN_SHOOT_TIME = SPIDER_HEALTH_BAR_LEN;
     public static final byte DEMOMAN_DAMAGE = 40;

@@ -1,9 +1,10 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.Bomb;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.DEMOMAN_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.DEMOMAN_HEALTH;
@@ -25,25 +26,25 @@ public class Demoman extends Sprite {
 
     public void hide() {
         lock = true;
-        health = DEMOMAN_HEALTH;
-        y = randInt(0, Game.halfScreenHeight - height);
-        speedX = randInt(5, 10);
-        direction = randInt(0, 1) == 0;
-        if (direction) {
-            x = -width;
-        } else {
-            x = Game.screenWidth;
-            speedX = -speedX;
-        }
+        HardThread.newJob(() -> {
+            health = DEMOMAN_HEALTH;
+            y = randInt(0, Game.halfScreenHeight - height);
+            speedX = randInt(5, 10);
+            direction = randInt(0, 1) == 0;
+            if (direction) {
+                x = -width;
+            } else {
+                x = Game.screenWidth;
+                speedX = -speedX;
+            }
+        });
     }
 
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > DEMOMAN_SHOOT_TIME) {
-            if (HardThread.job == 0) {
-                lastShoot = now;
-                HardThread.job = 3;
-            }
+            HardThread.newJob(() -> Game.allSprites.add(new Bomb(centerX(), centerY())));
+            lastShoot = now;
         }
     }
 

@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH;
 import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH_BAR_HEIGHT;
@@ -13,8 +13,8 @@ import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Factory extends Sprite {
     private long lastSpawn = System.currentTimeMillis();
-    private boolean isSpawn = false;
-    private float hp = 10;
+    private boolean isSpawn;
+    private float hp;
 
     private static final int minionY = ImageHub.factoryImg.getHeight() - 100;
 
@@ -23,32 +23,30 @@ public class Factory extends Sprite {
     private static int endBarWhiteY;
     private static int endBarRedY;
 
-    public Factory() {
-        super(ImageHub.factoryImg);
+    public Factory(Game game) {
+        super(game, ImageHub.factoryImg);
 
-        new Thread(() -> {
-            isPassive = true;
+        isPassive = true;
 
-            x = Game.halfScreenWidth - halfWidth;
+        x = Game.halfScreenWidth - halfWidth;
 
-            hide();
+        hide();
 
-            recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
+        recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
 
-            while (y < 0) {
-                y += FACTORY_SPEED;
-            }
-            startBarWhiteY = y + 60;
-            startBarRedY = startBarWhiteY + 3;
-            endBarWhiteY = startBarWhiteY + FACTORY_HEALTH_BAR_HEIGHT;
-            endBarRedY = endBarWhiteY - 3;
+        while (y < 0) {
+            y += FACTORY_SPEED;
+        }
+        startBarWhiteY = y + 60;
+        startBarRedY = startBarWhiteY + 3;
+        endBarWhiteY = startBarWhiteY + FACTORY_HEALTH_BAR_HEIGHT;
+        endBarRedY = endBarWhiteY - 3;
 
-            y = -height;
-        }).start();
+        y = -height;
     }
 
     public void hide() {
-        hp = 10;
+        hp = FACTORY_HEALTH_BAR_LEN;
         isSpawn = false;
         lock = true;
         y = -height;
@@ -60,8 +58,24 @@ public class Factory extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastSpawn > FACTORY_SPAWN_TIME) {
             lastSpawn = now;
-            Game.allSprites.add(new Minion(randInt(x, right), minionY));
-            Game.allSprites.add(new Minion(randInt(x, right), minionY));
+            Game.allSprites.add(new Minion(game, randInt(x, right), minionY));
+            Game.allSprites.add(new Minion(game, randInt(x, right), minionY));
+        }
+    }
+
+    @Override
+    public void check_intersectionBullet(Sprite bullet) {
+        if (intersect(bullet)) {
+            health -= bullet.damage;
+            bullet.intersection();
+            if (hp > 6) {
+                hp = ((health / (float) FACTORY_HEALTH) * FACTORY_HEALTH_BAR_LEN);
+            } else {
+                hp = 6;
+            }
+            if (health <= 0) {
+                intersection();
+            }
         }
     }
 
@@ -91,13 +105,8 @@ public class Factory extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(image, x, y, null);
+        super.render();
 
-        if (hp > 6) {
-            hp = ((health / (float) FACTORY_HEALTH) * FACTORY_HEALTH_BAR_LEN);
-        } else {
-            hp = 6;
-        }
         if (!isSpawn) {
             Game.canvas.drawRect(centerX() - 250, y + 60, centerX() + 250, y + 75, Game.scorePaint);
             Game.canvas.drawRect(centerX() - 247, y + 62, centerX() - 253 + hp, y + 73, Game.topPaintRed);

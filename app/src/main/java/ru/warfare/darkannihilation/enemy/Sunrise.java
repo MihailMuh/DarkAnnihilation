@@ -1,9 +1,11 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.SUNRISE_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.SUNRISE_HEALTH;
@@ -27,12 +29,33 @@ public class Sunrise extends Sprite {
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > SUNRISE_SHOOT_TIME) {
-            if (HardThread.job == 0) {
-                lastShoot = now;
-                HardThread.x = centerX();
-                HardThread.y = centerY();
-                HardThread.job = 2;
-            }
+            lastShoot = now;
+            HardThread.newJob(() -> {
+                int X = centerX();
+                int Y = centerY();
+
+                Game.allSprites.add(new BulletEnemy(X, Y, 0, 0, -10));
+                Game.allSprites.add(new BulletEnemy(X, Y, 90, 10, 0));
+                Game.allSprites.add(new BulletEnemy(X, Y, 180, 0, 10));
+                Game.allSprites.add(new BulletEnemy(X, Y, -90, -10, 0));
+
+                Game.allSprites.add(new BulletEnemy(X, Y, 45, 7, -7));
+                Game.allSprites.add(new BulletEnemy(X, Y, 135, 7, 7));
+                Game.allSprites.add(new BulletEnemy(X, Y, -45, -7, -7));
+                Game.allSprites.add(new BulletEnemy(X, Y, -135, -7, 7));
+
+                Game.allSprites.add(new BulletEnemy(X, Y, 67, 10, -4));
+                Game.allSprites.add(new BulletEnemy(X, Y, 22, 4, -10));
+                Game.allSprites.add(new BulletEnemy(X, Y, -67, -10, -4));
+                Game.allSprites.add(new BulletEnemy(X, Y, -22, -4, -10));
+
+                Game.allSprites.add(new BulletEnemy(X, Y, 157, 4, 10));
+                Game.allSprites.add(new BulletEnemy(X, Y, 113, 10, 4));
+                Game.allSprites.add(new BulletEnemy(X, Y, -157, -4, 10));
+                Game.allSprites.add(new BulletEnemy(X, Y, -113, -10, 4));
+
+                AudioHub.playDeagle();
+            });
         }
     }
 

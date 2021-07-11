@@ -47,9 +47,4 @@ public class BulletEnemy extends Sprite {
             Game.allSprites.remove(this);
         }
     }
-
-    @Override
-    public void render () {
-        Game.canvas.drawBitmap(image, x, y, null);
-    }
 }

@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.screen;
 
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.systemd.Service;
@@ -47,7 +48,7 @@ public class LoadingScreen extends Sprite {
                 frame = 0;
             }
             if (c == 9) {
-                Service.runOnUiThread(() -> {
+                HardThread.newJob(() -> Service.runOnUiThread(() -> {
                     switch (jobs) {
                         case "newGame":
                             game.generateNewGame();
@@ -62,7 +63,7 @@ public class LoadingScreen extends Sprite {
                             game.generateSettings();
                             break;
                     }
-                });
+                }));
             }
         }
     }

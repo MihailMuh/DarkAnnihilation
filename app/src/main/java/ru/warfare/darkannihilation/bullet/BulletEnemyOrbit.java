@@ -12,7 +12,6 @@ import static ru.warfare.darkannihilation.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
 public class BulletEnemyOrbit extends Sprite {
     private final Vector vector = new Vector();
     private final Matrix matrix = new Matrix();
-    private final Bitmap image;
     private float X;
     private float Y;
     private float fly;
