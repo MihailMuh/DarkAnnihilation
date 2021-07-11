@@ -36,7 +36,7 @@ public class XWing extends Sprite {
     }
 
     private void newStatus() {
-        if (Game.bosses.size() == 0) {
+        if (Game.bosses.size() != 0) {
             lock = true;
         }
         health = XWING_HEALTH;

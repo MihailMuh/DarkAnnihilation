@@ -96,7 +96,7 @@ public class HardThread implements Runnable {
                     for (int i = 0; i < Game.allSprites.size(); i++) {
                         Sprite sprite = Game.allSprites.get(i);
                         if ((!sprite.isPassive && !sprite.isBullet)) {
-                            Game.allSprites.get(i).sB();
+                            sprite.sB();
                         }
                     }
                     job = 0;
@@ -105,7 +105,7 @@ public class HardThread implements Runnable {
                     for (int i = 0; i < Game.allSprites.size(); i++) {
                         Sprite sprite = Game.allSprites.get(i);
                         if ((!sprite.isPassive && !sprite.isBullet)) {
-                            Game.allSprites.get(i).buff();
+                            sprite.buff();
                         }
                     }
                     job = 0;
@@ -113,11 +113,9 @@ public class HardThread implements Runnable {
                 case 7:
                     for (int i = 0; i < Game.allSprites.size(); i++) {
                         Sprite sprite = Game.allSprites.get(i);
-                        if (sprite != game.atomicBomb) {
-                            if (!sprite.lock) {
-                                if ((!sprite.isPassive && !sprite.isBullet) | (sprite.status.equals("bulletEnemy"))) {
-                                    sprite.intersection();
-                                }
+                        if (!sprite.lock) {
+                            if ((!sprite.isPassive && !sprite.isBullet) | (sprite.status.equals("bulletEnemy"))) {
+                                sprite.intersection();
                             }
                         }
                     }
