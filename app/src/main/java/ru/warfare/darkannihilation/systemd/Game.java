@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Executors;
 
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
@@ -162,6 +161,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private int shootY;
     private int shootX;
     private int buttonsY;
+    private static int tableY;
 
     private String string_current_score;
     private String string_max_score;
@@ -211,6 +211,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
         fpsY = 300;
         fpsX = screenWidth - 250;
+        tableY = buttonsY - ImageHub.eX70;
 
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -682,22 +683,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonEmerald.hide();
         buttonMenu.newFunc(string_back, (int) (halfScreenWidth - 150 * resizeK), buttonsY, "menu");
 
-        Table.newTable(buttonMenu.y - buttonMenu.height);
-        for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
-            try {
-                String string = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
-                        " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
-                if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
-                    Table.addMarkedText(string);
-                } else {
-                    Table.addText(string);
-                }
-            } catch (Exception e) {
-                Service.print(e.toString());
-                Table.addText((i + 1) + ") Bad Boy");
-            }
-        }
-        Table.makeTable();
+        makeTopPlayersTable();
 
         gameStatus = 8;
     }
@@ -712,8 +698,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     public void generateGameover() {
         AudioHub.playGameOverSnd();
-        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
+        makeScoresParams();
         saveScore();
         getMaxScore();
         gameStatus = 3;
@@ -725,8 +710,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         AudioHub.restartPauseMusic();
         AudioHub.stopAndSavePlaying();
 
-        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
+        makeScoresParams();
         int X = halfScreenWidth - buttonQuit.halfWidth;
 
         buttonStart.newFunc(string_resume, X, screenHeight / 3 - buttonStart.halfHeight, "pause");
@@ -749,7 +733,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         getMaxScore();
         alphaEnemy.setAlpha(255);
         endImgInit = false;
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
+        makeScoresParams();
 
         if (AudioHub.winMusic.isPlaying()) {
             AudioHub.winMusic.pause();
@@ -811,8 +795,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         AudioHub.pausePauseMusic();
         ImageHub.loadCharacterImages(character);
 
-        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
+        makeScoresParams();
 
         count = 0;
         BOSS_TIME = 100_000;
@@ -1300,16 +1283,23 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         changerGuns.render();
     }
 
+    private void onLoading() {
+        loadingScreen.render();
+        loadingScreen.update();
+    }
+
     private void renderSprites() {
         screen.render();
         for (int i = 0; i < allSprites.size(); i++) {
-            if (allSprites.get(i) != null) {
-                if (!allSprites.get(i).lock) {
-                    allSprites.get(i).render();
+            Sprite sprite = allSprites.get(i);
+            if (sprite != null) {
+                if (!sprite.lock) {
+                    sprite.render();
                 }
             }
         }
         shotgunKit.render();
+        healthKit.render();
         player.render();
         changerGuns.render();
         if (portal != null) {
@@ -1343,16 +1333,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public void saveScore() {
         if (score > bestScore) {
             Clerk.saveBestScore(score);
+            ClientServer.postAndGetBestScore(Clerk.nickname, score);
         }
     }
 
     public void getMaxScore() {
         bestScore = Clerk.getMaxScore();
-    }
-
-    private void onLoading() {
-        loadingScreen.render();
-        loadingScreen.update();
     }
 
     private void removeSaturnTrash() {
@@ -1424,18 +1410,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             buttonQuit.setText(string_quit);
             buttonMenu.setText(string_to_menu);
         }
-        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + "88") / 2);
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + "" + bestScore) / 2);
-        chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
-        chooseChY = (int) (screenHeight * 0.3);
-        thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
-        thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
-        go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
-        go_to_menuY = (int) (Game.screenHeight * 0.65);
-        shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
-        shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-        go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
-        go_to_restartY = (int) (screenHeight * 0.7);
+
+        makeParams();
     }
 
     public void setAntiAlias(boolean antiAlias) {
@@ -1447,6 +1423,48 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         winPaint.setAntiAlias(antiAlias);
         paint50.setAntiAlias(antiAlias);
         buttonsPaint.setAntiAlias(antiAlias);
+    }
+
+    public static void makeTopPlayersTable() {
+        HardThread.newJob(() -> {
+            Table.newTable(tableY);
+            for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
+                try {
+                    String string = (i + 1) + ") " + ClientServer.namesPlayers.get(i) +
+                            " - " + ClientServer.info_from_server.get(ClientServer.namesPlayers.get(i).toString());
+                    if (Clerk.nickname.equals(ClientServer.namesPlayers.get(i))) {
+                        Table.addMarkedText(string);
+                    } else {
+                        Table.addText(string);
+                    }
+                } catch (Exception e) {
+                    Service.print(e.toString());
+                    Table.addText((i + 1) + ") Bad Boy");
+                }
+            }
+            Table.makeTable();
+        });
+    }
+
+    public void makeParams() {
+        HardThread.newJob(() -> {
+            makeScoresParams();
+            chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
+            chooseChY = (int) (screenHeight * 0.3);
+            thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
+            thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
+            go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
+            go_to_menuY = (int) (Game.screenHeight * 0.65);
+            shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
+            shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
+            go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
+            go_to_restartY = (int) (screenHeight * 0.7);
+        });
+    }
+
+    public void makeScoresParams() {
+        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
+        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
     }
 
     @Override

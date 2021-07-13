@@ -61,24 +61,28 @@ public final class Table {
     }
 
     public static void drawTable() {
-        for (int i = 0; i < table.size(); i++) {
-            int c;
-            if (i == 0) {
-                c = 1;
-            } else {
-                c = 4 * i;
-            }
-            for (int j = 0; j < table.get(i).size(); j++) {
-                String string = table.get(i).get(j);
-                float x = (maxes.get(i) * c) - (topPaint.measureText(string) / 2f);
-                float y = (j + 1) * textHeight;
-
-                if (i == index[0] & j == index[1]) {
-                    Game.canvas.drawText(string, x, y, topPaintRed);
+        try {
+            for (int i = 0; i < table.size(); i++) {
+                int c;
+                if (i == 0) {
+                    c = 1;
                 } else {
-                    Game.canvas.drawText(string, x, y, topPaint);
+                    c = 4 * i;
+                }
+                for (int j = 0; j < table.get(i).size(); j++) {
+                    String string = table.get(i).get(j);
+                    float x = (maxes.get(i) * c) - (topPaint.measureText(string) / 2f);
+                    float y = (j + 1) * textHeight;
+
+                    if (i == index[0] & j == index[1]) {
+                        Game.canvas.drawText(string, x, y, topPaintRed);
+                    } else {
+                        Game.canvas.drawText(string, x, y, topPaint);
+                    }
                 }
             }
+        } catch (Exception e) {
+            Service.print("Draw Table " + e.toString());
         }
     }
 }

@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -26,23 +27,25 @@ public class Factory extends Sprite {
     public Factory(Game game) {
         super(game, ImageHub.factoryImg);
 
-        isPassive = true;
+        HardThread.newJob(() -> {
+            isPassive = true;
 
-        x = Game.halfScreenWidth - halfWidth;
+            x = Game.halfScreenWidth - halfWidth;
 
-        hide();
+            hide();
 
-        recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
+            recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
 
-        while (y < 0) {
-            y += FACTORY_SPEED;
-        }
-        startBarWhiteY = y + 60;
-        startBarRedY = startBarWhiteY + 3;
-        endBarWhiteY = startBarWhiteY + FACTORY_HEALTH_BAR_HEIGHT;
-        endBarRedY = endBarWhiteY - 3;
+            while (y < 0) {
+                y += FACTORY_SPEED;
+            }
+            startBarWhiteY = y + 60;
+            startBarRedY = startBarWhiteY + 3;
+            endBarWhiteY = startBarWhiteY + FACTORY_HEALTH_BAR_HEIGHT;
+            endBarRedY = endBarWhiteY - 3;
 
-        y = -height;
+            y = -height;
+        });
     }
 
     public void hide() {
@@ -55,9 +58,8 @@ public class Factory extends Sprite {
     }
 
     public void spawn() {
-        long now = System.currentTimeMillis();
-        if (now - lastSpawn > FACTORY_SPAWN_TIME) {
-            lastSpawn = now;
+        if (System.currentTimeMillis() - lastSpawn > FACTORY_SPAWN_TIME) {
+            lastSpawn = System.currentTimeMillis();
             Game.allSprites.add(new Minion(game, randInt(x, right), minionY));
             Game.allSprites.add(new Minion(game, randInt(x, right), minionY));
         }

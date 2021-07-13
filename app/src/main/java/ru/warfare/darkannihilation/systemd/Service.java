@@ -9,6 +9,10 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import ru.warfare.darkannihilation.math.Math;
 
 import static android.content.Context.WINDOW_SERVICE;
@@ -68,6 +72,39 @@ public final class Service {
         } catch (InterruptedException e) {
             print(e.toString());
         }
+    }
+
+    public static void writeToFile(String fileName, String content) {
+        try {
+            OutputStreamWriter writer_str = new OutputStreamWriter(
+                    mainActivity.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE));
+
+            writer_str.write(content);
+            writer_str.close();
+        } catch (Exception e) {
+            print("Can't save " + fileName + " " + e);
+        }
+    }
+
+    public static String readFromFile(String fileName) {
+        String string = "null";
+        try {
+            InputStreamReader reader_cooler = new InputStreamReader(mainActivity.openFileInput(fileName + ".txt"));
+
+            string = new BufferedReader(reader_cooler).readLine();
+
+            reader_cooler.close();
+        } catch (Exception e) {
+            print("Can't recovery " + fileName + " " + e);
+            print("Creating new file...");
+            try {
+                writeToFile(fileName, "");
+                print("Successful");
+            } catch (Exception e2) {
+                print("Err: " + e2);
+            }
+        }
+        return string;
     }
 
     public static int getWidthInterval() {

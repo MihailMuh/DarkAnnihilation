@@ -54,7 +54,6 @@ public final class MainActivity extends AppCompatActivity {
             AudioHub.init();
         });
 
-        Clerk.init();
         game.init();
         checkOnFirstRun();
     }

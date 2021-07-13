@@ -12,6 +12,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.Service;
 
 import static ru.warfare.darkannihilation.Constants.SERVER_IP;
@@ -23,10 +24,10 @@ public final class ClientServer {
     public static JSONArray namesPlayers = new JSONArray();
 
     static {
-        getStatistics();
+        getStatistics(false);
     }
 
-    public static void getStatistics() {
+    public static void getStatistics(boolean needATable) {
         client.newCall(
                 new Request.Builder()
                         .url(SERVER_IP + "get")
@@ -43,6 +44,9 @@ public final class ClientServer {
                     if (response.body() != null) {
                         info_from_server = new JSONObject(response.body().string());
                         namesPlayers = info_from_server.names();
+                        if (needATable) {
+                            Game.makeTopPlayersTable();
+                        }
                     }
                 } catch (Exception e) {
                     Service.print(e.toString());
@@ -92,7 +96,7 @@ public final class ClientServer {
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) {
-                        getStatistics();
+                        getStatistics(true);
                     }
                 });
     }
