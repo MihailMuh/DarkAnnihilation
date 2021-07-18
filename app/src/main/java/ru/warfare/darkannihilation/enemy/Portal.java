@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.hub.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.hub.ImageHub;
@@ -23,7 +24,7 @@ public class Portal extends Sprite {
         AudioHub.loadPortalSounds();
 
         x = randInt(0, screenWidthWidth);
-        y = randInt(50, 250);
+        y = randInt(20, height);
         isPassive = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
@@ -41,9 +42,9 @@ public class Portal extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        Service.runOnUiThread(() -> {
+        HardThread.newJob(() -> Service.runOnUiThread(() -> {
             touch = true;
-            AudioHub.portalSound.pause();
+            AudioHub.deletePortalSnd();
             if (Game.level == 2) {
                 ImageHub.loadWinImages();
             } else {
@@ -53,7 +54,7 @@ public class Portal extends Sprite {
                 game.player.lock = true;
                 ImageHub.loadSecondLevelImages();
             }
-        });
+        }));
     }
 
     private void film() {

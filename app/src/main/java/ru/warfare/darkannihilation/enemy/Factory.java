@@ -27,25 +27,23 @@ public class Factory extends Sprite {
     public Factory(Game game) {
         super(game, ImageHub.factoryImg);
 
-        HardThread.newJob(() -> {
-            isPassive = true;
+        isPassive = true;
 
-            x = Game.halfScreenWidth - halfWidth;
+        x = Game.halfScreenWidth - halfWidth;
 
-            hide();
+        hide();
 
-            recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
+        recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
 
-            while (y < 0) {
-                y += FACTORY_SPEED;
-            }
-            startBarWhiteY = y + 60;
-            startBarRedY = startBarWhiteY + 3;
-            endBarWhiteY = startBarWhiteY + FACTORY_HEALTH_BAR_HEIGHT;
-            endBarRedY = endBarWhiteY - 3;
+        while (y < 0) {
+            y += FACTORY_SPEED;
+        }
+        startBarWhiteY = y + 60;
+        startBarRedY = startBarWhiteY + 3;
+        endBarWhiteY = startBarWhiteY + FACTORY_HEALTH_BAR_HEIGHT;
+        endBarRedY = endBarWhiteY - 3;
 
-            y = -height;
-        });
+        y = -height;
     }
 
     public void hide() {

@@ -8,9 +8,9 @@ import ru.warfare.darkannihilation.systemd.Service;
 public class HardThread implements Runnable {
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     private Thread thread;
-    private static volatile boolean work;
     private static Function function;
     private static volatile boolean playing = false;
+    private static volatile boolean work = true;
 
     public HardThread() {
         startJob();
@@ -26,23 +26,22 @@ public class HardThread implements Runnable {
     }
 
     public void stopJob() {
-        while (playing) {
+        playing = false;
+        work = true;
+        while (!thread.isInterrupted()) {
             try {
-                thread.join();
-                playing = false;
-                work = false;
+                thread.interrupt();
             } catch (Exception e) {
-                Service.print("Thread join " + e.toString());
+                Service.print("HardThread " + e.toString());
             }
         }
     }
 
     public void startJob() {
-        if (!playing) {
-            playing = true;
-            thread = new Thread(this);
-            thread.start();
-        }
+        work = false;
+        playing = true;
+        thread = new Thread(this);
+        thread.start();
     }
 
     @Override

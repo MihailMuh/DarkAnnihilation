@@ -134,11 +134,9 @@ public class BaseCharacter extends Sprite {
             health -= dmg;
             changeHearts();
             if (health <= 0) {
-                HardThread.newJob(() -> {
-                    game.generateGameover();
-                    Service.vibrate(1300);
-                    createSkullExplosion();
-                });
+                game.generateGameover();
+                Service.vibrate(1300);
+                createSkullExplosion();
             } else {
                 Service.vibrate(60);
             }

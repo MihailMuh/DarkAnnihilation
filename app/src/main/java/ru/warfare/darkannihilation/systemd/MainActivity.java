@@ -16,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -47,12 +45,10 @@ public final class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
         game = findViewById(R.id.gameView);
-
+        
         Service.init(this);
-        runOnUiThread(() -> {
-            ImageHub.init();
-            AudioHub.init();
-        });
+        ImageHub.init();
+        AudioHub.init();
 
         game.init();
         checkOnFirstRun();
@@ -65,7 +61,7 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull @NotNull Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_main);
         fullscreen();

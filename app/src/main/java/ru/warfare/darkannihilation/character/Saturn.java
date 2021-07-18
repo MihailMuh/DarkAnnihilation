@@ -44,8 +44,8 @@ public class Saturn extends BaseCharacter {
                         Game.allSprites.add(bulletSaturn);
                     }
                     AudioHub.playShoot();
-                    lastShoot = now;
                 });
+                lastShoot = now;
             }
         }
     }

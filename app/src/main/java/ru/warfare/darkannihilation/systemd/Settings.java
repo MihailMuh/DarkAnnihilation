@@ -121,7 +121,7 @@ public class Settings {
                 HardThread.newJob(() -> {
                     Service.sleep(300);
                     Game.vibrate = true;
-                    Service.vibrate(60);
+                    Service.vibrateNOW(60);
                 });
             } else {
                 Game.vibrate = false;

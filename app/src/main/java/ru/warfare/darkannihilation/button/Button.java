@@ -122,7 +122,7 @@ public class Button extends Sprite {
                             break;
                         case "pause":
                             game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
-                            AudioHub.pausePauseMusic();
+                            AudioHub.deletePauseMusic();
                             AudioHub.whoIsPlayed();
                             if (PauseButton.oldStatus != 0) {
                                 Game.gameStatus = PauseButton.oldStatus;

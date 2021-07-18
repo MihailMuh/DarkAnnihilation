@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.math.Math;
 
 import static android.content.Context.WINDOW_SERVICE;
@@ -46,6 +47,12 @@ public final class Service {
 
     public static void vibrate(int millis) {
         if (Game.vibrate) {
+            HardThread.newJob(() -> vibrator.vibrate(createOneShot(millis, 255)));
+        }
+    }
+
+    public static void vibrateNOW(int millis) {
+        if (Game.vibrate) {
             vibrator.vibrate(createOneShot(millis, 255));
         }
     }
@@ -70,7 +77,7 @@ public final class Service {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            print(e.toString());
+            print("Sleep" + e.toString());
         }
     }
 

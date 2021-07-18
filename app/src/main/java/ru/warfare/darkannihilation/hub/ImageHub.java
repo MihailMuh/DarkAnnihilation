@@ -12,16 +12,16 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.GlideApp;
-import ru.warfare.darkannihilation.systemd.MainActivity;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.systemd.MainActivity;
 import ru.warfare.darkannihilation.systemd.Service;
 
 import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
@@ -1325,30 +1325,29 @@ public final class ImageHub {
     }
 
     public static void loadWinImages() {
+        Game.endImgInit = false;
         mainActivity.gif = mainActivity.findViewById(R.id.gifView);
-        GlideApp.with(mainActivity)
-                .asGif()
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .override(screenWidth, screenHeight)
-                .load(R.drawable.win)
-                .addListener(new RequestListener<GifDrawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                        mainActivity.gif.setVisibility(GifImageView.VISIBLE);
-                        resource.setLoopCount(1);
-                        gifDrawable = resource;
-                        AudioHub.restartFlightMusic();
-                        mainActivity.game.generateWin();
-                        mainActivity.game.lastBoss = System.currentTimeMillis();
-                        return false;
-                    }
-                })
-                .into(mainActivity.gif);
+        try {
+            gifDrawable = new GifDrawable(res, R.drawable.win);
+            gifDrawable.setLoopCount(1);
+            gifDrawable.setSpeed(0.5f);
+            mainActivity.gif.setImageDrawable(gifDrawable);
+            mainActivity.gif.setVisibility(GifImageView.VISIBLE);
+            gifDrawable.start();
+        } catch (Exception e) {
+            Service.print(e.toString());
+        }
+        mainActivity.game.generateWin();
+        AudioHub.playFlightSnd();
+        HardThread.newJob(() -> {
+            Service.sleep(3000);
+            while (!Game.endImgInit) {
+                if (!gifDrawable.isRunning()) {
+                    deleteWinImages();
+                    Game.endImgInit = true;
+                }
+            }
+        });
     }
 
     public static void deleteWinImages() {
@@ -1356,14 +1355,9 @@ public final class ImageHub {
             mainActivity.gif.setVisibility(GifImageView.GONE);
             mainActivity.gif.setImageDrawable(null);
             mainActivity.gif = null;
+            gifDrawable.recycle();
+            gifDrawable = null;
         });
-    }
-
-    public static boolean isWin() {
-        if (gifDrawable != null) {
-            return gifDrawable.isRunning();
-        }
-        return true;
     }
 
     public static void loadCharacterImages(String character) {

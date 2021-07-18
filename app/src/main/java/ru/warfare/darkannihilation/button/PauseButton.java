@@ -9,7 +9,7 @@ import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 public class PauseButton extends Sprite {
-    public static int oldStatus;
+    public static volatile int oldStatus;
     private static final Paint alphaPaint = new Paint();
     private boolean isInvisible;
     private final int myX;

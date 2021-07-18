@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -65,6 +64,8 @@ import ru.warfare.darkannihilation.screen.ThunderScreen;
 import ru.warfare.darkannihilation.support.HealthKit;
 import ru.warfare.darkannihilation.support.ShotgunKit;
 
+import static ru.warfare.darkannihilation.Constants.DRAW_FPS;
+
 public final class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder = getHolder();
     public MainActivity context;
@@ -97,7 +98,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public static ArrayList<Sprite> bosses = new ArrayList<>(0);
     public static ArrayList<Sprite> allSprites = new ArrayList<>(0);
 
-    public HardThread hardThread;
+    public HardThread hardThread = new HardThread();
     public BaseScreen screen;
     public Button buttonStart;
     public Button buttonQuit;
@@ -131,18 +132,18 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public static final int numberSmallExplosionsDefault = numberMediumExplosionsDefault + 15;
     public static final int numberExplosionsALL = 73;
 
-    public static int level = 1;
-    public static int gameStatus = 1;
+    public static volatile int level = 1;
+    public static volatile int gameStatus = 1;
     private int count = 0;
     public static int score = 0;
     public int oldScore;
     public int bestScore = 0;
     private int pointerCount;
     private int moveAll;
-    private volatile boolean playing = false;
+    private volatile boolean isFirstRun = true;
+    public volatile boolean playing = false;
     public static volatile String character = "falcon";
     public static volatile boolean endImgInit = false;
-    private static final boolean drawFPS = false;
     public static volatile boolean vibrate;
     public static volatile String language = "en";
 
@@ -250,8 +251,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         setLayerType(View.LAYER_TYPE_HARDWARE, nicePaint);
 
         getMaxScore();
-
-        hardThread = new HardThread();
 
         while (!endImgInit) {
         }
@@ -496,10 +495,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     @Override
     public void run() {
         while (playing) {
-            if (drawFPS) {
+            if (DRAW_FPS) {
                 timeFrame = System.nanoTime();
             }
-            if (holder.getSurface().isValid()) {
+            try {
                 canvas = holder.lockHardwareCanvas();
                 switch (gameStatus) {
                     case 0:
@@ -553,6 +552,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 }
                 renderFPS();
                 holder.unlockCanvasAndPost(canvas);
+            } catch (Exception e) {
+                Service.print(e.toString());
             }
         }
     }
@@ -661,17 +662,24 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public void onPause() {
         AudioHub.stopAndSavePlaying();
         playing = false;
-        try {
-            thread.join();
-        } catch (Exception e) {
-            Service.print("Thread join " + e);
+        while (!thread.isInterrupted()) {
+            try {
+                thread.interrupt();
+            } catch (Exception e) {
+                Service.print("Game thread " + e.toString());
+            }
         }
         hardThread.stopJob();
     }
 
     public void onResume() {
-        AudioHub.whoIsPlayed();
-        hardThread.startJob();
+        if (isFirstRun) {
+            isFirstRun = false;
+            AudioHub.loadMenuSnd();
+        } else {
+            hardThread.startJob();
+            AudioHub.whoIsPlayed();
+        }
         playing = true;
         thread = new Thread(this);
         thread.start();
@@ -707,8 +715,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public void generatePause() {
         pauseTimer = System.currentTimeMillis();
 
-        AudioHub.restartPauseMusic();
         AudioHub.stopAndSavePlaying();
+        AudioHub.playPauseMusic();
 
         makeScoresParams();
         int X = halfScreenWidth - buttonQuit.halfWidth;
@@ -717,6 +725,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonRestart.newFunc(string_restart, X, buttonStart.bottom() + 30, "restart");
         buttonMenu.newFunc(string_to_menu, X, buttonRestart.bottom() + 30, "menu");
         buttonQuit.newFunc(string_quit, X, buttonMenu.bottom() + 30, "quit");
+
         gameStatus = 4;
     }
 
@@ -730,6 +739,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateMenu() {
+        AudioHub.clearStatus();
+
         getMaxScore();
         alphaEnemy.setAlpha(255);
         endImgInit = false;
@@ -738,9 +749,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         if (AudioHub.winMusic.isPlaying()) {
             AudioHub.winMusic.pause();
         }
-        AudioHub.pauseFlightMusic();
         AudioHub.loadMenuSnd();
-        AudioHub.pausePauseMusic();
+        AudioHub.deletePauseMusic();
         AudioHub.pauseBackgroundMusic();
         AudioHub.pauseBossMusic();
 
@@ -790,9 +800,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateNewGame() {
+        AudioHub.clearStatus();
         AudioHub.deleteMenuSnd();
         AudioHub.pauseBossMusic();
-        AudioHub.pausePauseMusic();
+        AudioHub.deletePauseMusic();
         ImageHub.loadCharacterImages(character);
 
         makeScoresParams();
@@ -1109,20 +1120,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void win() {
-        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        if (System.currentTimeMillis() - lastBoss > 3_000) {
-            if (!ImageHub.isWin()) {
-                if (count < 100_000) {
-                    count = 100_101;
-                    ImageHub.deleteWinImages();
-                }
+        if (endImgInit) {
+            canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
+            canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameoverPaint);
 
-                canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
-                canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameoverPaint);
-
-                if (pointerCount >= 4) {
-                    loadingScreen.newJob("menu");
-                }
+            if (pointerCount >= 4) {
+                loadingScreen.newJob("menu");
             }
         }
     }
@@ -1308,7 +1311,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void renderFPS() {
-        if (drawFPS) {
+        if (DRAW_FPS) {
             textBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
             canvas.drawText(textBuilder.toString(), fpsX, fpsY, fpsPaint);
 
@@ -1411,7 +1414,17 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             buttonMenu.setText(string_to_menu);
         }
 
-        makeParams();
+        makeScoresParams();
+        chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
+        chooseChY = (int) (screenHeight * 0.3);
+        thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
+        thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
+        go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
+        go_to_menuY = (int) (Game.screenHeight * 0.65);
+        shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
+        shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
+        go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
+        go_to_restartY = (int) (screenHeight * 0.7);
     }
 
     public void setAntiAlias(boolean antiAlias) {
@@ -1443,22 +1456,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 }
             }
             Table.makeTable();
-        });
-    }
-
-    public void makeParams() {
-        HardThread.newJob(() -> {
-            makeScoresParams();
-            chooseChX = (int) ((screenWidth - Game.paint50.measureText(string_choose_your_character)) / 2);
-            chooseChY = (int) (screenHeight * 0.3);
-            thanksX = (int) ((Game.screenWidth - winPaint.measureText(string_thanks)) / 2);
-            thanksY = (int) ((Game.screenHeight + winPaint.getTextSize()) / 2.7);
-            go_to_menuX = (int) ((Game.screenWidth - Game.gameoverPaint.measureText(string_go_to_menu)) / 2);
-            go_to_menuY = (int) (Game.screenHeight * 0.65);
-            shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
-            shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-            go_to_restartX = (int) ((screenWidth - gameoverPaint.measureText(string_go_to_restart)) / 2);
-            go_to_restartY = (int) (screenHeight * 0.7);
         });
     }
 

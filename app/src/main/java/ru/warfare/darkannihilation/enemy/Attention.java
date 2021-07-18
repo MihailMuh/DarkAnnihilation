@@ -1,11 +1,10 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.hub.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
-import ru.warfare.darkannihilation.systemd.Service;
-import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.systemd.Game;
 
 public class Attention extends Sprite {
     public Attention(Game game) {
@@ -28,7 +27,7 @@ public class Attention extends Sprite {
     }
 
     public void start() {
-        Service.runOnUiThread(() -> AudioHub.attentionSnd.play());
+        AudioHub.playAttentionSnd();
         y = 10;
         lock = false;
     }

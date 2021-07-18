@@ -18,6 +18,7 @@ import static ru.warfare.darkannihilation.math.Math.randInt;
 public class DeathStar extends Sprite {
     private long lastShoot = System.currentTimeMillis();
     private float hp = BOSS_HEALTH_BAR_LEN;
+    private boolean BOOM = false;
 
     public DeathStar(Game g) {
         super(g, ImageHub.bossImage);
@@ -51,34 +52,40 @@ public class DeathStar extends Sprite {
     }
 
     public void killAfterFight() {
-        HardThread.newJob(() -> {
-            Game.score += 325;
-            AudioHub.pauseBossMusic();
-            int len = Game.numberVaders / 4;
-            for (int i = 0; i < len; i++) {
-                if (Game.random.nextFloat() <= 0.1) {
-                    Game.allSprites.add(new TripleFighter(game));
-                } else {
-                    Game.allSprites.add(new Vader(false));
+        if (!BOOM) {
+            BOOM = true;
+            HardThread.newJob(() -> {
+                Game.score += 325;
+                AudioHub.pauseBossMusic();
+                int len = Game.numberVaders / 4;
+                for (int i = 0; i < len; i++) {
+                    if (Game.random.nextFloat() <= 0.1) {
+                        Game.allSprites.add(new TripleFighter(game));
+                    } else {
+                        Game.allSprites.add(new Vader(false));
+                    }
                 }
-            }
 
-            for (int i = 0; i < Game.allSprites.size(); i++) {
-                Game.allSprites.get(i).empireStart();
-            }
+                for (int i = 0; i < Game.allSprites.size(); i++) {
+                    Sprite sprite = Game.allSprites.get(i);
+                    if (sprite != null) {
+                        sprite.empireStart();
+                    }
+                }
 
-            if (game.portal == null) {
-                game.portal = new Portal(game);
-            }
+                if (game.portal == null) {
+                    game.portal = new Portal(game);
+                }
 
-            createSkullExplosion();
-            Game.bosses.remove(this);
-            Game.allSprites.remove(this);
+                createSkullExplosion();
+                Game.bosses.remove(this);
+                Game.allSprites.remove(this);
 
-            game.lastBoss = System.currentTimeMillis();
+                game.lastBoss = System.currentTimeMillis();
 
-            Game.gameStatus = 6;
-        });
+                Game.gameStatus = 6;
+            });
+        }
     }
 
     @Override
@@ -90,9 +97,6 @@ public class DeathStar extends Sprite {
                 hp = (health / (float) BOSS_HEALTH) * BOSS_HEALTH_BAR_LEN;
             } else {
                 hp = 4;
-            }
-            if (health <= 0) {
-                killAfterFight();
             }
         }
     }
@@ -129,6 +133,10 @@ public class DeathStar extends Sprite {
                 Game.gameStatus = 5;
             }
             y += speedY;
+        }
+
+        if (health <= 0) {
+            killAfterFight();
         }
     }
 
