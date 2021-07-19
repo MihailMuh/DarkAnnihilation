@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation.button;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 public class ButtonEmerald extends Sprite {

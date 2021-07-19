@@ -1,8 +1,7 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH;

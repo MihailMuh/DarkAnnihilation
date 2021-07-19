@@ -19,8 +19,9 @@ import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.SeekArcListener;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioExoPlayer;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 
 import static ru.warfare.darkannihilation.systemd.Game.string_choose_lang;
@@ -267,7 +268,7 @@ public class Settings {
 
             animatedCheckBox.setVisibility(TextView.GONE);
             textAntiAlias.setVisibility(TextView.GONE);
-            AudioHub.newVolumeForBackground(finalVolumeMusic);
+            AudioExoPlayer.newVolumeForBackground(finalVolumeMusic);
             AudioHub.newVolumeForEffects(finalVolumeEffects);
             saveSettings();
         });
@@ -281,7 +282,7 @@ public class Settings {
         Game.language = settings[3];
         mainActivity.game.makeLanguage(false);
         mainActivity.game.setAntiAlias(Integer.parseInt(settings[4]) == 1);
-        AudioHub.newVolumeForBackground(finalVolumeMusic);
+        AudioExoPlayer.newVolumeForBackground(finalVolumeMusic);
         AudioHub.newVolumeForEffects(finalVolumeEffects);
     }
 

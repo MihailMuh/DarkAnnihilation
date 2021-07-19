@@ -1,4 +1,4 @@
-package ru.warfare.darkannihilation.hub;
+package ru.warfare.darkannihilation;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,9 +17,7 @@ import com.bumptech.glide.request.target.Target;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import ru.warfare.darkannihilation.GlideApp;
-import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.MainActivity;
 import ru.warfare.darkannihilation.systemd.Service;
@@ -1326,6 +1324,7 @@ public final class ImageHub {
 
     public static void loadWinImages() {
         Game.endImgInit = false;
+        mainActivity.game.generateWin();
         mainActivity.gif = mainActivity.findViewById(R.id.gifView);
         try {
             gifDrawable = new GifDrawable(res, R.drawable.win);
@@ -1337,7 +1336,6 @@ public final class ImageHub {
         } catch (Exception e) {
             Service.print(e.toString());
         }
-        mainActivity.game.generateWin();
         AudioHub.playFlightSnd();
         HardThread.newJob(() -> {
             Service.sleep(3000);

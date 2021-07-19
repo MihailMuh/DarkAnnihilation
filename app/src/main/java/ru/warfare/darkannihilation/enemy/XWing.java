@@ -1,11 +1,11 @@
 package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
-import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.Constants.XWING_DAMAGE;
@@ -26,7 +26,7 @@ public class XWing extends Sprite {
         newStatus();
 
         if (Game.character.equals("saturn")) {
-            R = 470;
+            R = 400;
         } else {
             R = 350;
         }

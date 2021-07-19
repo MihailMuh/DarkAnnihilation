@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.base;
 
 import android.graphics.Bitmap;
 
-import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class Sprite {

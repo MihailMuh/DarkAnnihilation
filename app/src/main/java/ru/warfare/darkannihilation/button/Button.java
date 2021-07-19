@@ -4,8 +4,8 @@ import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.Service;
 

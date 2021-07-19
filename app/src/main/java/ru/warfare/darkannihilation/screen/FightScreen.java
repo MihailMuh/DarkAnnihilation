@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.screen;
 
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class FightScreen extends Sprite {

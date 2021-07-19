@@ -6,8 +6,8 @@ import ru.warfare.darkannihilation.bullet.BulletBossVaders;
 import ru.warfare.darkannihilation.enemy.Portal;
 import ru.warfare.darkannihilation.enemy.Vader;
 import ru.warfare.darkannihilation.enemy.XWing;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 

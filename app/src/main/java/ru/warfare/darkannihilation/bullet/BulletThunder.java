@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation.bullet;
 import android.graphics.Color;
 
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.Constants.LIGHTNING_DAMAGE;

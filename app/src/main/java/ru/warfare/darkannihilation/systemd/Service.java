@@ -26,6 +26,7 @@ public final class Service {
     private static final DisplayMetrics cutSize = new DisplayMetrics();
     private static int interval;
     private static Vibrator vibrator;
+    private static String path;
 
     public static void init(MainActivity mainActivity) {
         Service.mainActivity = mainActivity;
@@ -36,6 +37,8 @@ public final class Service {
         interval = (size.x - cutSize.widthPixels) / 2;
 
         vibrator = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
+
+        path = "android.resource://" + mainActivity.getPackageName() + "/";
     }
 
     public static void systemExit() {
@@ -71,6 +74,10 @@ public final class Service {
 
     public static MainActivity getContext() {
         return mainActivity;
+    }
+
+    public static String getResPath() {
+        return path;
     }
 
     public static void sleep(int millis) {

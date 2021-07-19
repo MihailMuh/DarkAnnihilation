@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.screen;
 
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Service;
 import ru.warfare.darkannihilation.base.Sprite;
 

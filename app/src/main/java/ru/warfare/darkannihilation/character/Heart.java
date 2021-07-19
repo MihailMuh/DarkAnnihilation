@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.character;
 
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 public class Heart extends Sprite {

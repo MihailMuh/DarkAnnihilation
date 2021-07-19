@@ -6,8 +6,8 @@ import ru.warfare.darkannihilation.bullet.BulletBoss;
 import ru.warfare.darkannihilation.enemy.Portal;
 import ru.warfare.darkannihilation.enemy.TripleFighter;
 import ru.warfare.darkannihilation.enemy.Vader;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.BOSS_HEALTH;

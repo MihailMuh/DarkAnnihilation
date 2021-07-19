@@ -4,9 +4,8 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.character.Heart;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.Service;
 
@@ -65,7 +64,7 @@ public class BaseCharacter extends Sprite {
     }
 
     public void newStatus() {
-        god = false;
+        god = true;
         base();
     }
 

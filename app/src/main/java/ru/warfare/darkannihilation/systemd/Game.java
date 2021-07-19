@@ -22,6 +22,7 @@ import ru.warfare.darkannihilation.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
+import ru.warfare.darkannihilation.audio.GameOver;
 import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.base.BaseExplosion;
 import ru.warfare.darkannihilation.base.BaseScreen;
@@ -54,8 +55,8 @@ import ru.warfare.darkannihilation.enemy.boss.DeathStar;
 import ru.warfare.darkannihilation.explosion.DefaultExplosion;
 import ru.warfare.darkannihilation.explosion.ExplosionSkull;
 import ru.warfare.darkannihilation.explosion.ExplosionTriple;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.screen.FightScreen;
 import ru.warfare.darkannihilation.screen.LoadingScreen;
@@ -697,15 +698,16 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateWin() {
-        AudioHub.winMusic.seekTo(0);
-        AudioHub.winMusic.start();
+        AudioHub.playWinMusic();
+        AudioHub.pauseBossMusic();
+        AudioHub.pauseBackgroundMusic();
         saveScore();
         portal.kill();
         gameStatus = 7;
     }
 
     public void generateGameover() {
-        AudioHub.playGameOverSnd();
+        GameOver.play();
         makeScoresParams();
         saveScore();
         getMaxScore();
@@ -746,9 +748,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         endImgInit = false;
         makeScoresParams();
 
-        if (AudioHub.winMusic.isPlaying()) {
-            AudioHub.winMusic.pause();
-        }
+        GameOver.pause();
+        AudioHub.deleteWinMusic();
         AudioHub.loadMenuSnd();
         AudioHub.deletePauseMusic();
         AudioHub.pauseBackgroundMusic();
@@ -800,6 +801,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateNewGame() {
+        GameOver.pause();
         AudioHub.clearStatus();
         AudioHub.deleteMenuSnd();
         AudioHub.pauseBossMusic();
@@ -809,7 +811,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         makeScoresParams();
 
         count = 0;
-        BOSS_TIME = 100_000;
+        BOSS_TIME = 10_000;
 
         bosses = new ArrayList<>(0);
         bullets = new ArrayList<>(0);

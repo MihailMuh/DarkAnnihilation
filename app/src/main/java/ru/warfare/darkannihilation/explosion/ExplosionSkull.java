@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.explosion;
 
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.BaseExplosion;
 
 import static ru.warfare.darkannihilation.Constants.NUMBER_SKULL_EXPLOSION;

@@ -3,8 +3,8 @@ package ru.warfare.darkannihilation.button;
 import android.graphics.Paint;
 
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.CHANGER_GUNS_CLICK_TIME;

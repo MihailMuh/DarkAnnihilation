@@ -1,4 +1,4 @@
-package ru.warfare.darkannihilation;
+package ru.warfare.darkannihilation.audio;
 
 import android.content.Context;
 import android.media.AudioAttributes;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.math.Math;
 
-public class AudioPool {
+public final class AudioPool {
     private static final SoundPool soundPool = new SoundPool
             .Builder()
             .setAudioAttributes(new AudioAttributes.Builder()

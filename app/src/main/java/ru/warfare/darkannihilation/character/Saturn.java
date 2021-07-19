@@ -5,8 +5,8 @@ import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BuckshotSaturn;
 import ru.warfare.darkannihilation.bullet.BulletSaturn;
-import ru.warfare.darkannihilation.hub.AudioHub;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.Constants.SATURN_HEALTH;

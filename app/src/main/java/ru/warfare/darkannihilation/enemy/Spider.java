@@ -1,15 +1,13 @@
 package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
-import ru.warfare.darkannihilation.hub.AudioHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.hub.ImageHub;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH;
-import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH_BAR_LEN;
 import static ru.warfare.darkannihilation.Constants.SPIDER_DAMAGE;
 import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
 import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH_BAR_HEIGHT;
