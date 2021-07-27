@@ -54,10 +54,8 @@ public class Bot extends BaseCharacter {
     }
 
     @Override
-    public void checkIntersections(Sprite sprite) {
-        if (intersect(sprite)) {
-            sprite.intersectionPlayer();
-        }
+    public void doIntersections(Sprite sprite) {
+        checkIntersections(sprite);
     }
 
     @Override

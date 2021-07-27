@@ -14,6 +14,7 @@ public class HealthKit extends Sprite {
         speedY = HEALTH_KIT_SPEED;
         isBullet = true;
 
+        calculateBarriers();
         hide();
     }
 

@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.MainActivity;
 import ru.warfare.darkannihilation.systemd.Service;
@@ -34,7 +35,8 @@ public final class AudioHub extends AudioExoPlayer {
     private static SimpleExoPlayer winMusic;
     public static SimpleExoPlayer menuMusic;
 
-    private static int reloadSnd;
+    private static int reloadSnd1;
+    private static int reloadSnd2;
     private static int boomSnd;
     private static int laserSnd;
     private static int metalSnd;
@@ -53,7 +55,8 @@ public final class AudioHub extends AudioExoPlayer {
         mainActivity = app;
         HardThread.doInBackGround(() -> {
             Arrays.fill(playing, false);
-            reloadSnd = audioPool.addSoundsToPack(mainActivity, new float[][]{{R.raw.reload0, 1f}, {R.raw.reload1, 1f}});
+            reloadSnd1 = audioPool.addSound(mainActivity, R.raw.reload0, 1f);
+            reloadSnd2 = audioPool.addSound(mainActivity, R.raw.reload1, 1f);
             boomSnd = audioPool.addSound(mainActivity, R.raw.boom, 0.13f);
             laserSnd = audioPool.addSound(mainActivity, R.raw.laser, 0.17f);
             metalSnd = audioPool.addSound(mainActivity, R.raw.metal, 0.45f);
@@ -69,7 +72,6 @@ public final class AudioHub extends AudioExoPlayer {
             thunderstormSnd = audioPool.addSound(mainActivity, R.raw.thunderstorm, 1f);
         });
     }
-
 
     public static void newVolumeForEffects(float newVolume) {
         audioPool.newVolume(newVolume);
@@ -115,7 +117,11 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playReload() {
-        audioPool.playFromPack(reloadSnd);
+        if (Math.randInt(0, 1) == 0) {
+            audioPool.play(reloadSnd1);
+        } else {
+            audioPool.play(reloadSnd2);
+        }
     }
 
     public static void playFallingBomb() {
@@ -155,13 +161,7 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playAttentionSnd() {
-        HardThread.doInUI(() -> {
-            if (attentionSnd != null) {
-                if (!attentionSnd.isPlaying()) {
-                    attentionSnd.play();
-                }
-            }
-        });
+        HardThread.doInUI(() -> attentionSnd.play());
     }
 
     public static void loadFirstLevelSounds() {
@@ -198,8 +198,8 @@ public final class AudioHub extends AudioExoPlayer {
                 @Override
                 public void onPlaybackStateChanged(int state) {
                     if (state == Player.STATE_ENDED) {
-                        mainActivity.game.attention.fire();
                         attentionSnd.pause();
+                        mainActivity.game.attention.fire();
                         attentionSnd.seekTo(0);
                     }
                 }

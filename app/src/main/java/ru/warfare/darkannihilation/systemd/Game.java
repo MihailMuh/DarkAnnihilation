@@ -303,6 +303,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             }
             allSprites.add(allExplosions[i]);
         }
+
+        newVolume();
     }
 
     private void gameplay() {
@@ -1026,7 +1028,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 sprite.render();
                 sprite.update();
                 if (!sprite.isPassive) {
-                    player.checkIntersections(sprite);
+                    player.doIntersections(sprite);
                 }
                 if (!sprite.isBullet) {
                     for (int j = 0; j < bullets.size(); j++) {
@@ -1220,7 +1222,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     anySprite.render();
                     anySprite.update();
                     if (!anySprite.isPassive) {
-                        player.checkIntersections(anySprite);
+                        player.doIntersections(anySprite);
                     }
                     if (level == 1) {
                         rocket.checkIntersections(anySprite);
@@ -1381,10 +1383,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         go_to_restartY = (int) (screenHeight * 0.7);
     }
 
-    private void recoverySettings() {
+    private void newVolume() {
         String[] settings = Clerk.getSettings().split(" ");
         AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
         AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
+    }
+
+    private void recoverySettings() {
+        String[] settings = Clerk.getSettings().split(" ");
         vibrate = Integer.parseInt(settings[2]) == 1;
         language = settings[3];
 

@@ -66,6 +66,12 @@ public class BaseCharacter extends Sprite {
 
     public void checkIntersections(Sprite sprite) {
         if (intersect(sprite)) {
+            sprite.intersectionPlayer();
+        }
+    }
+
+    public void doIntersections(Sprite sprite) {
+        if (intersect(sprite)) {
             damage(sprite.damage);
             sprite.intersectionPlayer();
         }
@@ -101,8 +107,10 @@ public class BaseCharacter extends Sprite {
     }
 
     public void heal() {
-        if (health < 200) {
-            baseHeal();
+        baseHeal();
+        while (health > 200) {
+            health -= 5;
+            changeHearts();
         }
         changeHearts();
     }
@@ -120,7 +128,7 @@ public class BaseCharacter extends Sprite {
     }
 
     private void damage(int dmg) {
-        if (dmg != 0 & !god) {
+        if (!god) {
             health -= dmg;
             changeHearts();
             if (health <= 0) {

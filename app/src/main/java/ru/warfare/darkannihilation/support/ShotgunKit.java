@@ -16,6 +16,7 @@ public class ShotgunKit extends Sprite {
         isPassive = true;
         isBullet = true;
 
+        calculateBarriers();
         hide();
     }
 

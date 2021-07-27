@@ -54,9 +54,10 @@ public class BulletDynamite extends Sprite {
 
                 damage = 2;
                 frame = 0;
-                ready = true;
 
                 AudioHub.playDynamiteBoom();
+
+                ready = true;
             });
         }
     }
@@ -69,15 +70,15 @@ public class BulletDynamite extends Sprite {
 
     @Override
     public void update() {
-        if (!ready) {
+        if (!BOOM) {
             y -= speedY;
-
             frame += rotSpeed;
 
             if (y < -height) {
                 kill();
             }
-        } else {
+        }
+        if (ready) {
             long now = System.currentTimeMillis();
             if (now - lastShoot > 33) {
                 lastShoot = now;
@@ -92,13 +93,14 @@ public class BulletDynamite extends Sprite {
 
     @Override
     public void render() {
-        if (!ready) {
+        if (!BOOM) {
             matrix.reset();
             matrix.postRotate(frame, halfWidth, halfHeight);
             matrix.postTranslate(x, y);
 
             Game.canvas.drawBitmap(ImageHub.dynamiteImg, matrix, null);
-        } else {
+        }
+        if (ready) {
             Game.canvas.drawBitmap(ImageHub.explosionLarge[frame], x, y, null);
         }
     }

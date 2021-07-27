@@ -44,7 +44,6 @@ public class Rocket extends Sprite {
         hide();
     }
 
-
     @Override
     public void update() {
         y += speedY;

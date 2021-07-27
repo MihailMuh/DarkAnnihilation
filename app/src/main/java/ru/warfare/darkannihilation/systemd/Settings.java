@@ -234,16 +234,15 @@ public class Settings {
         textSpinner.setVisibility(TextView.GONE);
 
         saveSettings();
+
+        AudioHub.newVolumeForBackground(finalVolumeMusic);
+        AudioHub.newVolumeForEffects(finalVolumeEffects);
     }
 
     private void parseSettings() {
         String[] settings = Clerk.getSettings().split(" ");
         finalVolumeMusic = Float.parseFloat(settings[0]);
         finalVolumeEffects = Float.parseFloat(settings[1]);
-//        mainActivity.game.makeLanguage(false);
-//        mainActivity.game.setAntiAlias(Integer.parseInt(settings[4]) == 1);
-//        AudioHub.newVolumeForBackground(finalVolumeMusic);
-//        AudioHub.newVolumeForEffects(finalVolumeEffects);
     }
 
     public void saveSettings() {
