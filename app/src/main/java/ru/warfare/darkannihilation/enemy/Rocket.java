@@ -4,16 +4,16 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.ROCKET_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.ROCKET_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.ROCKET_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.ROCKET_SPEED;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
 
 public class Rocket extends Sprite {
-    public Rocket() {
-        super(ImageHub.rocketImg);
+    public Rocket(Game game) {
+        super(game, ImageHub.rocketImg);
         speedY = ROCKET_SPEED;
         damage = ROCKET_DAMAGE;
         isBullet = true;
-        status = "rocket";
 
         hide();
     }
@@ -31,7 +31,7 @@ public class Rocket extends Sprite {
     public void checkIntersections(Sprite sprite) {
         if (!lock) {
             if (intersect(sprite)) {
-                if (!sprite.isPassive | sprite.status.equals("saturn")) {
+                if (!sprite.isPassive | sprite.name == BULLET_SATURN) {
                     sprite.intersection();
                 }
             }

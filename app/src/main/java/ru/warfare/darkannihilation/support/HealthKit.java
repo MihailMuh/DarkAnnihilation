@@ -6,7 +6,7 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Math;
 
-import static ru.warfare.darkannihilation.Constants.HEALTH_KIT_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.HEALTH_KIT_SPEED;
 
 public class HealthKit extends Sprite {
     public HealthKit(Game g) {

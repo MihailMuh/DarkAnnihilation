@@ -7,7 +7,8 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Vector;
 
-import static ru.warfare.darkannihilation.Constants.BUCKSHOT_SATURN_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_SATURN_DAMAGE;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
 
 public class BuckshotSaturn extends Sprite {
     private float X;
@@ -25,7 +26,7 @@ public class BuckshotSaturn extends Sprite {
 
         image = ImageHub.bulletBuckshotSaturnImg;
 
-        status = "saturn";
+        name = BULLET_SATURN;
 
         this.X = X - halfWidth;
         this.Y = Y;
@@ -65,10 +66,15 @@ public class BuckshotSaturn extends Sprite {
     }
 
     @Override
+    public void kill() {
+        game.bullets.remove(this);
+        game.allSprites.remove(this);
+    }
+
+    @Override
     public void intersection() {
         createSmallExplosion();
-        Game.bullets.remove(this);
-        Game.allSprites.remove(this);
+        kill();
     }
 
     @Override

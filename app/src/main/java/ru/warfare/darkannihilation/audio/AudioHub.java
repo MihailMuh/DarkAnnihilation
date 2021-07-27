@@ -49,11 +49,10 @@ public final class AudioHub extends AudioExoPlayer {
     private static int dynamiteBoomSnd;
     private static int thunderstormSnd;
 
-    public static void init() {
-        mainActivity = Service.getContext();
-        Arrays.fill(playing, false);
-
-        HardThread.newJob(() -> {
+    public static void init(MainActivity app) {
+        mainActivity = app;
+        HardThread.doInBackGround(() -> {
+            Arrays.fill(playing, false);
             reloadSnd = audioPool.addSoundsToPack(mainActivity, new float[][]{{R.raw.reload0, 1f}, {R.raw.reload1, 1f}});
             boomSnd = audioPool.addSound(mainActivity, R.raw.boom, 0.13f);
             laserSnd = audioPool.addSound(mainActivity, R.raw.laser, 0.17f);
@@ -156,7 +155,7 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playAttentionSnd() {
-        Service.runOnUiThread(() -> {
+        HardThread.doInUI(() -> {
             if (attentionSnd != null) {
                 if (!attentionSnd.isPlaying()) {
                     attentionSnd.play();
@@ -312,9 +311,11 @@ public final class AudioHub extends AudioExoPlayer {
                     if (state == Player.STATE_ENDED) {
                         timeMachineSecondSnd.play();
                         timeMachineNoneSnd.release();
-                        Game.level++;
-                        mainActivity.game.loadingScreen.newJob("newGame");
-                        mainActivity.game.portal.kill();
+                        mainActivity.game.onLoading(() -> {
+                            Game.level++;
+                            mainActivity.game.portal.kill();
+                            mainActivity.game.generateNewGame();
+                        });
                     }
                 }
             });
@@ -380,7 +381,7 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playPauseMusic() {
-        Service.runOnUiThread(() -> {
+        HardThread.doInUI(() -> {
             if (pauseMusic == null) {
                 pauseMusic = new SimpleExoPlayer.Builder(mainActivity).build();
                 pauseMusic.setMediaItem(getItem(R.raw.pause));
@@ -423,23 +424,19 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playWinMusic() {
-        Service.runOnUiThread(() -> {
-            winMusic = new SimpleExoPlayer.Builder(mainActivity).build();
-            winMusic.setMediaItem(getItem(R.raw.win));
-            winMusic.setVolume(0.3f * volume);
-            winMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
-            winMusic.prepare();
-            winMusic.play();
-        });
+        winMusic = new SimpleExoPlayer.Builder(mainActivity).build();
+        winMusic.setMediaItem(getItem(R.raw.win));
+        winMusic.setVolume(0.3f * volume);
+        winMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+        winMusic.prepare();
+        winMusic.play();
     }
 
     public static void deleteWinMusic() {
-        Service.runOnUiThread(() -> {
-            if (winMusic != null) {
-                winMusic.release();
-                winMusic = null;
-            }
-        });
+        if (winMusic != null) {
+            winMusic.release();
+            winMusic = null;
+        }
     }
 
     public static void stopAndSavePlaying() {

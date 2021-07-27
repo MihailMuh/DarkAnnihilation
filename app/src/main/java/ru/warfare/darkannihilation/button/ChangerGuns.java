@@ -7,7 +7,9 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.CHANGER_GUNS_CLICK_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.CHANGER_GUNS_CLICK_TIME;
+import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
+import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
 public class ChangerGuns extends Sprite {
     private static final Paint alphaPaint = new Paint();
@@ -33,7 +35,7 @@ public class ChangerGuns extends Sprite {
         if (!game.shotgunKit.picked) {
             image = ImageHub.gunToNone;
         } else {
-            if (game.player.gun.equals("shotgun")) {
+            if (game.player.gun == SHOTGUN) {
                 image = ImageHub.shotgunToGun;
             } else {
                 image = ImageHub.gunToShotgun;
@@ -91,11 +93,11 @@ public class ChangerGuns extends Sprite {
             lastClick = System.currentTimeMillis();
             if (game.shotgunKit.picked) {
                 AudioHub.playReload();
-                if (game.player.gun.equals("shotgun")) {
-                    game.player.gun = "gun";
+                if (game.player.gun == SHOTGUN) {
+                    game.player.gun = GUN;
                     image = ImageHub.gunToShotgun;
                 } else {
-                    game.player.gun = "shotgun";
+                    game.player.gun = SHOTGUN;
                     image = ImageHub.shotgunToGun;
                 }
                 width = image.getWidth();

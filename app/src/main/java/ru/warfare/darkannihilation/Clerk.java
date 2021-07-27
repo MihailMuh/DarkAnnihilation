@@ -31,7 +31,7 @@ public final class Clerk {
 
     public static String getSettings() {
         String string = Service.readFromFile("SETTINGS");
-        if (string.equals("null")) {
+        if (string == null) {
             return "1 1 1 en 1";
         }
         return string;

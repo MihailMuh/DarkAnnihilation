@@ -5,14 +5,14 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.BUCKSHOT_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.VADER_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.VADER_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.VADER_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.VADER_HEALTH;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Vader extends Sprite {
-    public Vader(boolean old) {
-        super();
+    public Vader(Game game, boolean old) {
+        super(game);
 
         if (old) {
             image = ImageHub.vaderOldImage[randInt(0, 2)];
@@ -23,13 +23,14 @@ public class Vader extends Sprite {
         damage = VADER_DAMAGE;
 
         makeParams();
+        calculateBarriers();
         newStatus();
 
         recreateRect(x + 10, y + 10, right() - 10, bottom() - 10);
     }
 
     public void newStatus() {
-        if (Game.bosses.size() != 0) {
+        if (game.bosses.size() != 0) {
             lock = true;
         }
         health = VADER_HEALTH;

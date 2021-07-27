@@ -33,7 +33,8 @@
         app:roundEdges="true"
         app:startAngle="30"
         app:sweepAngle="300"
-        app:touchInside="true" />
+        app:touchInside="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/angleEffects"
@@ -43,7 +44,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/seekArcEffects"
         app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
         app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
-        app:layout_constraintTop_toTopOf="@+id/seekArcEffects" />
+        app:layout_constraintTop_toTopOf="@+id/seekArcEffects"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textViewEffects"
@@ -53,7 +55,8 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/seekArcEffects"
         app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
-        app:layout_constraintStart_toStartOf="@+id/seekArcEffects" />
+        app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
+        android:visibility="gone" />
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArcMusic"
@@ -75,7 +78,8 @@
         app:roundEdges="true"
         app:startAngle="30"
         app:sweepAngle="300"
-        app:touchInside="true" />
+        app:touchInside="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textViewMusic"
@@ -85,7 +89,8 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/seekArcMusic"
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
-        app:layout_constraintStart_toStartOf="@+id/seekArcMusic" />
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/angleMusic"
@@ -95,7 +100,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/seekArcMusic"
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
         app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
-        app:layout_constraintTop_toTopOf="@+id/seekArcMusic" />
+        app:layout_constraintTop_toTopOf="@+id/seekArcMusic"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textVibration"
@@ -107,7 +113,8 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/stickySwitch"
         app:layout_constraintEnd_toEndOf="@+id/stickySwitch"
-        app:layout_constraintStart_toStartOf="@+id/stickySwitch" />
+        app:layout_constraintStart_toStartOf="@+id/stickySwitch"
+        android:visibility="gone" />
 
     <io.ghyeok.stickyswitch.widget.StickySwitch
         android:id="@+id/stickySwitch"
@@ -128,7 +135,8 @@
         app:ss_selectedTextSize="15sp"
         app:ss_sliderBackgroundColor="#87CEFA"
         app:ss_switchColor="#6A5ACD"
-        app:ss_textSize="12sp" />
+        app:ss_textSize="12sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView"
@@ -138,7 +146,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gameView"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintVertical_bias="0.155"
+        android:visibility="gone" />
 
     <com.skydoves.powerspinner.PowerSpinnerView
         android:id="@+id/spinner"
@@ -167,7 +176,8 @@
         app:spinner_item_array="@array/languages"
         app:spinner_popup_animation="fade"
         app:spinner_popup_background="#87CEFA"
-        app:spinner_popup_elevation="14dp" />
+        app:spinner_popup_elevation="14dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textSpinner"
@@ -179,38 +189,8 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@+id/spinner" />
-
-    <com.animsh.animatedcheckbox.AnimatedCheckBox
-        android:id="@+id/animatedCheckBox"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_margin="4dp"
-        app:border_stroke_width="4dp"
-        app:color_checked="#6A5ACD"
-        app:color_tick="@color/white"
-        app:color_unchecked="@color/white"
-        app:color_unchecked_stroke="#6A5ACD"
-        app:layout_constraintBottom_toBottomOf="@+id/textAntiAlias"
-        app:layout_constraintStart_toEndOf="@+id/textAntiAlias"
-        app:layout_constraintTop_toTopOf="@+id/textAntiAlias"
-        app:small_tick="true"
-        app:tick_stroke_width="4dp" />
-
-    <TextView
-        android:id="@+id/textAntiAlias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/smooth_text"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/stickySwitch"
-        app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
-        app:layout_constraintHorizontal_bias="0.418"
-        app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
-        app:layout_constraintTop_toTopOf="@+id/stickySwitch"
-        app:layout_constraintVertical_bias="0.227" />
+        app:layout_constraintStart_toStartOf="@+id/spinner"
+        android:visibility="gone" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gifView"

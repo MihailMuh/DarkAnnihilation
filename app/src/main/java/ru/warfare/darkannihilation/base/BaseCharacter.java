@@ -4,12 +4,14 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.character.Heart;
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.Vibrator;
+import ru.warfare.darkannihilation.character.Heart;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.Service;
 
-import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_HEALTH;
+import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 
 public class BaseCharacter extends Sprite {
     public int endX;
@@ -17,11 +19,11 @@ public class BaseCharacter extends Sprite {
     public long lastShoot = System.currentTimeMillis();
     public long now;
     public boolean dontmove = false;
-    public String gun = "gun";
+    public byte gun = GUN;
     public int maxHealth = MILLENNIUM_FALCON_HEALTH;
     public ArrayList<Heart> hearts = new ArrayList<>(0);
     public int[] types;
-    public boolean god = false;
+    public boolean god;
     private int bar;
     public int heartX = 25;
     public int heartY = 10;
@@ -48,28 +50,17 @@ public class BaseCharacter extends Sprite {
         init();
     }
 
-    public BaseCharacter(Bitmap bitmap) {
-        super(bitmap);
-
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
-    }
-
-    private void base() {
+    public void newStatus() {
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
         endX = x;
         endY = y;
         lock = true;
-    }
-
-    public void newStatus() {
-        god = true;
-        base();
+        god = false;
     }
 
     private void init() {
-        base();
+        newStatus();
         health = maxHealth;
     }
 
@@ -133,11 +124,13 @@ public class BaseCharacter extends Sprite {
             health -= dmg;
             changeHearts();
             if (health <= 0) {
-                game.generateGameover();
-                Service.vibrate(1300);
-                createSkullExplosion();
+                HardThread.doInBackGround(() -> {
+                    game.generateGameover();
+                    Vibrator.vibrate(1300);
+                    createSkullExplosion();
+                });
             } else {
-                Service.vibrate(60);
+                Vibrator.vibrateInBackGround(60);
             }
         }
     }

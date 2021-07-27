@@ -3,13 +3,16 @@ package ru.warfare.darkannihilation.button;
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.Time;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.Service;
 
-import static ru.warfare.darkannihilation.Constants.BUTTON_CLICK_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.BUTTON_CLICK_TIME;
+import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.GAME;
 
 public class Button extends Sprite {
     public String function;
@@ -101,12 +104,12 @@ public class Button extends Sprite {
             long now = System.currentTimeMillis();
             if (now - lastClick > BUTTON_CLICK_TIME) {
                 lastClick = now;
-                HardThread.newJob(() -> {
+                HardThread.doInBackGround(() -> {
                     AudioHub.playClick();
                     isPressed = true;
-                    Service.sleep(100);
+                    Time.sleep(100);
                     isPressed = false;
-                    Service.sleep(50);
+                    Time.sleep(50);
                     switch (function) {
                         case "start":
                             game.buttonPlayer.show();
@@ -116,40 +119,44 @@ public class Button extends Sprite {
                         case "quit":
                             lastClick = now * 10;
                             AudioHub.releaseAP();
-                            game.settings.saveSettings();
-                            game.saveScore();
+                            game.saveSettings();
                             Service.systemExit();
                             break;
                         case "pause":
                             game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
                             AudioHub.deletePauseMusic();
                             AudioHub.whoIsPlayed();
-                            if (PauseButton.oldStatus != 0) {
+                            if (PauseButton.oldStatus != GAME) {
                                 Game.gameStatus = PauseButton.oldStatus;
                             } else {
-                                Game.gameStatus = 9;
+                                Game.gameStatus = AFTER_PAUSE;
                             }
                             break;
                         case "menu":
-                            game.saveScore();
-                            game.loadingScreen.newJob(function);
+                            game.onLoading(() -> {
+                                game.saveScore();
+                                game.generateMenu();
+                            });
                             break;
                         case "top":
                             ClientServer.postAndGetBestScore(Clerk.nickname, game.bestScore);
-                            game.loadingScreen.newJob(function);
+                            game.onLoading(() -> game.generateTopScore());
                             break;
                         case "restart":
-                            game.saveScore();
-                            game.getMaxScore();
-                            Game.level = 1;
-                            game.loadingScreen.newJob("newGame");
+                            game.onLoading(() -> {
+                                game.saveScore();
+                                game.getMaxScore();
+                                Game.level = 1;
+                                game.generateNewGame();
+                            });
                             break;
                         case "fromSetting":
-                            game.settings.confirmSettings();
-                            game.loadingScreen.newJob("menu");
+                            game.hideSettings();
+                            game.onLoading(() -> game.generateMenu());
                             break;
                         case "settings":
-                            game.loadingScreen.newJob(function);
+                            ImageHub.loadSettingsImages();
+                            game.onLoading(() -> game.generateSettings());
                             break;
                     }
                 });

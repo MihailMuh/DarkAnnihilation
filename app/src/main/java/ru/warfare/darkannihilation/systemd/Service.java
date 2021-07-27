@@ -2,41 +2,22 @@ package ru.warfare.darkannihilation.systemd;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.graphics.Point;
-import android.os.Vibrator;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.math.Math;
 
-import static android.content.Context.WINDOW_SERVICE;
-import static android.os.VibrationEffect.createOneShot;
-import static ru.warfare.darkannihilation.Constants.TAG;
+import static ru.warfare.darkannihilation.Py.print;
 
 public final class Service {
     private static MainActivity mainActivity;
-    private static final Point size = new Point();
-    private static final DisplayMetrics cutSize = new DisplayMetrics();
-    private static int interval;
-    private static Vibrator vibrator;
     private static String path;
 
     public static void init(MainActivity mainActivity) {
         Service.mainActivity = mainActivity;
-
-        (((WindowManager) mainActivity.getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRealSize(size);
-
-        mainActivity.getWindowManager().getDefaultDisplay().getMetrics(cutSize);
-        interval = (size.x - cutSize.widthPixels) / 2;
-
-        vibrator = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
 
         path = "android.resource://" + mainActivity.getPackageName() + "/";
     }
@@ -48,18 +29,6 @@ public final class Service {
         System.exit(0);
     }
 
-    public static void vibrate(int millis) {
-        if (Game.vibrate) {
-            HardThread.newJob(() -> vibrator.vibrate(createOneShot(millis, 255)));
-        }
-    }
-
-    public static void vibrateNOW(int millis) {
-        if (Game.vibrate) {
-            vibrator.vibrate(createOneShot(millis, 255));
-        }
-    }
-
     public static void runOnUiThread(Runnable runnable) {
         mainActivity.runOnUiThread(runnable);
     }
@@ -68,24 +37,12 @@ public final class Service {
         runOnUiThread(() -> Toast.makeText(mainActivity, text, Math.boolToInt(longToast)).show());
     }
 
-    public static double getSizeAppInRAM() {
-        return ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576f);
-    }
-
     public static MainActivity getContext() {
         return mainActivity;
     }
 
     public static String getResPath() {
         return path;
-    }
-
-    public static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            print("Sleep" + e.toString());
-        }
     }
 
     public static void writeToFile(String fileName, String content) {
@@ -101,52 +58,20 @@ public final class Service {
     }
 
     public static String readFromFile(String fileName) {
-        String string = "null";
         try {
             InputStreamReader reader_cooler = new InputStreamReader(mainActivity.openFileInput(fileName + ".txt"));
 
-            string = new BufferedReader(reader_cooler).readLine();
+            String string = new BufferedReader(reader_cooler).readLine();
 
             reader_cooler.close();
+
+            return string;
         } catch (Exception e) {
             print("Can't recovery " + fileName + " " + e);
             print("Creating new file...");
-            try {
-                writeToFile(fileName, "");
-                print("Successful");
-            } catch (Exception e2) {
-                print("Err: " + e2);
-            }
-        }
-        return string;
-    }
-
-    public static int getWidthInterval() {
-        return interval;
-    }
-
-    public static int getScreenWidth() {
-        return size.x;
-    }
-
-    public static int getScreenHeight() {
-        return size.y;
-    }
-
-    public static double getResizeCoefficient() {
-        return (double) size.x / 1920f;
-    }
-
-    public static double getResizeCoefficientForLayout() {
-        return (double) size.y / 720f;
-    }
-
-    public static void print(String text) {
-        try {
-            Log.e(TAG, text);
-        } catch (Exception e) {
-            Log.e(TAG, "Nope.");
-            Log.e(TAG, e.toString());
+            writeToFile(fileName, "");
+            print("Successful");
+            return null;
         }
     }
 }

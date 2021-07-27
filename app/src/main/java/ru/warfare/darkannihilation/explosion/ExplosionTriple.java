@@ -4,8 +4,8 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.BaseExplosion;
 
-import static ru.warfare.darkannihilation.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
-import static ru.warfare.darkannihilation.Constants.TRIPLE_EXPLOSION_FRAME_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
+import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_EXPLOSION_FRAME_TIME;
 
 public class ExplosionTriple extends BaseExplosion {
     private long lastShoot = System.currentTimeMillis();

@@ -30,15 +30,12 @@ public class Sprite {
     public boolean isPassive = false;
     public boolean isBullet = false;
 
-    public String status = "";
+    public byte name = 0;
 
     public int left;
     public int top;
     public int right;
     public int bottom;
-
-    public Sprite() {
-    }
 
     public Sprite(Game game) {
         this.game = game;
@@ -48,11 +45,6 @@ public class Sprite {
         game = g;
         image = bitmap;
 
-        makeParams();
-    }
-
-    public Sprite(Bitmap bitmap) {
-        image = bitmap;
         makeParams();
     }
 
@@ -66,7 +58,9 @@ public class Sprite {
         top = y;
         right = x + width;
         bottom = y + height;
+    }
 
+    public void calculateBarriers() {
         screenHeightHeight = Game.screenHeight - height;
         screenWidthWidth = Game.screenWidth - width;
     }
@@ -110,11 +104,15 @@ public class Sprite {
         }
     }
 
+    public void kill() {
+        game.allSprites.remove(this);
+    }
+
     public void createLargeExplosion() {
         AudioHub.playBoom();
         for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
-            if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(centerX(), centerY());
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -122,8 +120,8 @@ public class Sprite {
 
     public void createSmallExplosion() {
         for (int i = Game.numberMediumExplosionsDefault; i < Game.numberSmallExplosionsDefault; i++) {
-            if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(centerX(), centerY());
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -132,8 +130,8 @@ public class Sprite {
     public void createLargeTripleExplosion() {
         AudioHub.playBoom();
         for (int i = 0; i < Game.numberMediumExplosionsTriple; i++) {
-            if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(centerX(), centerY());
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -141,8 +139,8 @@ public class Sprite {
 
     public void createSmallTripleExplosion() {
         for (int i = Game.numberMediumExplosionsTriple; i < Game.numberSmallExplosionsTriple; i++) {
-            if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(centerX(), centerY());
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -151,8 +149,8 @@ public class Sprite {
     public void createSkullExplosion() {
         AudioHub.playMegaBoom();
         for (int i = Game.numberSmallExplosionsDefault; i < Game.numberExplosionsALL; i++) {
-            if (Game.allExplosions[i].lock) {
-                Game.allExplosions[i].start(centerX(), centerY());
+            if (game.allExplosions[i].lock) {
+                game.allExplosions[i].start(centerX(), centerY());
                 break;
             }
         }

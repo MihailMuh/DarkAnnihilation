@@ -4,12 +4,11 @@ import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.systemd.Service;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.NUMBER_PORTAL_IMAGES;
-import static ru.warfare.darkannihilation.Constants.PORTAL_FRAME;
-import static ru.warfare.darkannihilation.Constants.PORTAL_LIFE_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_PORTAL_IMAGES;
+import static ru.warfare.darkannihilation.constant.Constants.PORTAL_FRAME;
+import static ru.warfare.darkannihilation.constant.Constants.PORTAL_LIFE_TIME;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Portal extends Sprite {
@@ -22,6 +21,8 @@ public class Portal extends Sprite {
     public Portal(Game game) {
         super(game, ImageHub.portalImages[0]);
         AudioHub.loadPortalSounds();
+
+        calculateBarriers();
 
         x = randInt(0, screenWidthWidth);
         y = randInt(20, height);
@@ -42,11 +43,11 @@ public class Portal extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        HardThread.newJob(() -> Service.runOnUiThread(() -> {
+        HardThread.doInUI(() -> {
             touch = true;
             AudioHub.deletePortalSnd();
             if (Game.level == 2) {
-                ImageHub.loadWinImages();
+                ImageHub.loadWinImages(game.mainActivity);
             } else {
                 AudioHub.playTimeMachine();
 
@@ -54,7 +55,7 @@ public class Portal extends Sprite {
                 game.player.lock = true;
                 ImageHub.loadSecondLevelImages();
             }
-        }));
+        });
     }
 
     private void film() {
@@ -88,6 +89,6 @@ public class Portal extends Sprite {
 
     @Override
     public void render() {
-        Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, Game.nicePaint);
+        Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
     }
 }

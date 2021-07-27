@@ -10,9 +10,10 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.BOSS_HEALTH;
-import static ru.warfare.darkannihilation.Constants.BOSS_HEALTH_BAR_LEN;
-import static ru.warfare.darkannihilation.Constants.BOSS_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH_BAR_LEN;
+import static ru.warfare.darkannihilation.constant.Constants.BOSS_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Modes.BOSS_PREVIEW;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class DeathStar extends Sprite {
@@ -28,6 +29,8 @@ public class DeathStar extends Sprite {
         speedX = 10;
         isPassive = true;
 
+        calculateBarriers();
+
         x = randInt(0, screenWidthWidth);
         y = -800;
 
@@ -40,11 +43,11 @@ public class DeathStar extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > BOSS_SHOOT_TIME) {
             lastShoot = now;
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 int ri = right() - 115;
                 int y40 = y + 40;
                 for (int i = 1; i < 4; i++) {
-                    Game.allSprites.add(new BulletBoss(ri, y40, i));
+                    game.allSprites.add(new BulletBoss(game, ri, y40, i));
                 }
                 AudioHub.playShoot();
             });
@@ -54,20 +57,20 @@ public class DeathStar extends Sprite {
     public void killAfterFight() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 Game.score += 325;
                 AudioHub.pauseBossMusic();
                 int len = Game.numberVaders / 4;
                 for (int i = 0; i < len; i++) {
                     if (Game.random.nextFloat() <= 0.1) {
-                        Game.allSprites.add(new TripleFighter(game));
+                        game.allSprites.add(new TripleFighter(game));
                     } else {
-                        Game.allSprites.add(new Vader(false));
+                        game.allSprites.add(new Vader(game, false));
                     }
                 }
 
-                for (int i = 0; i < Game.allSprites.size(); i++) {
-                    Sprite sprite = Game.allSprites.get(i);
+                for (int i = 0; i < game.allSprites.size(); i++) {
+                    Sprite sprite = game.allSprites.get(i);
                     if (sprite != null) {
                         sprite.empireStart();
                     }
@@ -78,8 +81,8 @@ public class DeathStar extends Sprite {
                 }
 
                 createSkullExplosion();
-                Game.bosses.remove(this);
-                Game.allSprites.remove(this);
+                game.bosses.remove(this);
+                game.allSprites.remove(this);
 
                 game.lastBoss = System.currentTimeMillis();
 
@@ -130,7 +133,7 @@ public class DeathStar extends Sprite {
             if (y == -600) {
                 AudioHub.restartBossMusic();
                 AudioHub.pauseBackgroundMusic();
-                Game.gameStatus = 5;
+                Game.gameStatus = BOSS_PREVIEW;
             }
             y += speedY;
         }

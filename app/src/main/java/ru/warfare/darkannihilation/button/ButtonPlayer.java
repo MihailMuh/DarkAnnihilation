@@ -5,6 +5,8 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
+import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
+
 public class ButtonPlayer extends Sprite {
     public ButtonPlayer(Game game) {
         super(game, ImageHub.buttonPlayerImg);
@@ -24,8 +26,10 @@ public class ButtonPlayer extends Sprite {
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioHub.playClick();
-            Game.character = "falcon";
-            game.loadingScreen.newJob("newGame");
+            game.onLoading(() -> {
+                Game.character = MILLENNIUM_FALCON;
+                game.generateNewGame();
+            });
         }
     }
 }

@@ -6,23 +6,29 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.LIGHTNING_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.LIGHTNING_SHOOT_TIME;
-import static ru.warfare.darkannihilation.Constants.NUMBER_LIGHTNING_IMAGES;
+import static ru.warfare.darkannihilation.constant.Constants.LIGHTNING_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.LIGHTNING_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LIGHTNING_IMAGES;
 
 public class BulletThunder extends Sprite {
     private int frame;
     private long lastShoot = System.currentTimeMillis();
     private static final int len = NUMBER_LIGHTNING_IMAGES - 1;
 
-    public BulletThunder(int X, int Y) {
-        super(ImageHub.thunderImage[0]);
+    public BulletThunder(Game game, int X, int Y) {
+        super(game, ImageHub.thunderImage[0]);
         damage = LIGHTNING_DAMAGE;
         isPassive = true;
         isBullet = true;
 
         x = X - halfWidth;
         y = Y - height;
+    }
+
+    @Override
+    public void kill() {
+        super.kill();
+        game.bullets.remove(this);
     }
 
     @Override
@@ -33,8 +39,7 @@ public class BulletThunder extends Sprite {
             if (frame != len) {
                 frame++;
             } else {
-                Game.bullets.remove(this);
-                Game.allSprites.remove(this);
+                kill();
             }
         }
     }
@@ -51,7 +56,7 @@ public class BulletThunder extends Sprite {
                 break;
             default:
                 Game.canvas.drawBitmap(ImageHub.thunderImage[frame],
-                        x, y, Game.nicePaint);
+                        x, y, null);
                 break;
         }
     }

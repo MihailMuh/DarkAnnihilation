@@ -19,21 +19,18 @@ import java.util.Random;
 
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
+import ru.warfare.darkannihilation.interfaces.Function;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
+import ru.warfare.darkannihilation.Windows;
 import ru.warfare.darkannihilation.audio.GameOver;
 import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.base.BaseExplosion;
 import ru.warfare.darkannihilation.base.BaseScreen;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemyOrbit;
-import ru.warfare.darkannihilation.button.Button;
-import ru.warfare.darkannihilation.button.ButtonEmerald;
-import ru.warfare.darkannihilation.button.ButtonPlayer;
-import ru.warfare.darkannihilation.button.ButtonSaturn;
-import ru.warfare.darkannihilation.button.ChangerGuns;
-import ru.warfare.darkannihilation.button.PauseButton;
+import ru.warfare.darkannihilation.button.*;
 import ru.warfare.darkannihilation.character.Bot;
 import ru.warfare.darkannihilation.character.Emerald;
 import ru.warfare.darkannihilation.character.MillenniumFalcon;
@@ -52,24 +49,28 @@ import ru.warfare.darkannihilation.enemy.Vader;
 import ru.warfare.darkannihilation.enemy.XWing;
 import ru.warfare.darkannihilation.enemy.boss.BossVaders;
 import ru.warfare.darkannihilation.enemy.boss.DeathStar;
-import ru.warfare.darkannihilation.explosion.DefaultExplosion;
-import ru.warfare.darkannihilation.explosion.ExplosionSkull;
-import ru.warfare.darkannihilation.explosion.ExplosionTriple;
+import ru.warfare.darkannihilation.explosion.*;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
-import ru.warfare.darkannihilation.screen.FightScreen;
-import ru.warfare.darkannihilation.screen.LoadingScreen;
-import ru.warfare.darkannihilation.screen.StarScreen;
-import ru.warfare.darkannihilation.screen.ThunderScreen;
-import ru.warfare.darkannihilation.support.HealthKit;
-import ru.warfare.darkannihilation.support.ShotgunKit;
+import ru.warfare.darkannihilation.screen.*;
+import ru.warfare.darkannihilation.support.*;
 
-import static ru.warfare.darkannihilation.Constants.DRAW_FPS;
+import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
+import static ru.warfare.darkannihilation.constant.Modes.*;
+import static ru.warfare.darkannihilation.Py.print;
+import static ru.warfare.darkannihilation.constant.NamesConst.BOSS_VADERS;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
+import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
+import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
+import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
+import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 
 public final class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder = getHolder();
-    public MainActivity context;
+    public MainActivity mainActivity;
     private Thread thread;
     public static Canvas canvas;
 
@@ -77,7 +78,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public static int screenHeight;
     public static int halfScreenWidth;
     public static int halfScreenHeight;
-    public static double resizeK;
+    public static float resizeK;
 
     public static final Paint fpsPaint = new Paint();
     public static final Paint startPaint = new Paint();
@@ -89,15 +90,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public static final Paint winPaint = new Paint();
     public static final Paint paint50 = new Paint();
     public static final Paint buttonsPaint = new Paint();
-    public static final Paint nicePaint = new Paint();
 
     public static final Random random = new Random();
     private static final StringBuilder textBuilder = new StringBuilder();
 
-    public static final BaseExplosion[] allExplosions = new BaseExplosion[73];
-    public static ArrayList<Sprite> bullets = new ArrayList<>(0);
-    public static ArrayList<Sprite> bosses = new ArrayList<>(0);
-    public static ArrayList<Sprite> allSprites = new ArrayList<>(0);
+    public final BaseExplosion[] allExplosions = new BaseExplosion[73];
+    public ArrayList<Sprite> bullets = new ArrayList<>(0);
+    public ArrayList<Sprite> bosses = new ArrayList<>(0);
+    public ArrayList<Sprite> allSprites = new ArrayList<>(0);
 
     public HardThread hardThread = new HardThread();
     public BaseScreen screen;
@@ -123,8 +123,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public Spider spider;
     public Sunrise sunrise;
     public Buffer buffer;
-    public Settings settings;
     public AtomicBomb atomicBomb;
+    private Settings settings;
 
     public static final int numberVaders = 10;
     public static final int numberMediumExplosionsTriple = 20;
@@ -133,8 +133,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public static final int numberSmallExplosionsDefault = numberMediumExplosionsDefault + 15;
     public static final int numberExplosionsALL = 73;
 
-    public static volatile int level = 1;
-    public static volatile int gameStatus = 1;
+    public static volatile byte level = 1;
+    public static volatile byte gameStatus = MENU;
     private int count = 0;
     public static int score = 0;
     public int oldScore;
@@ -143,10 +143,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private int moveAll;
     private volatile boolean isFirstRun = true;
     public volatile boolean playing = false;
-    public static volatile String character = "falcon";
+    public static volatile byte character = MILLENNIUM_FALCON;
     public static volatile boolean endImgInit = false;
     public static volatile boolean vibrate;
-    public static volatile String language = "en";
+    public String language = "en";
 
     private int fpsX;
     private int fpsY;
@@ -196,29 +196,30 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private static final int MILLIS_IN_SECOND = 1_000_000_000;
     private long timeFrame;
 
-    public Game(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public Game(Context mainActivity, AttributeSet attrs) {
+        super(mainActivity, attrs);
     }
 
     public void init() {
-        context = Service.getContext();
-        screenWidth = Service.getScreenWidth();
-        screenHeight = Service.getScreenHeight();
+        mainActivity = Service.getContext();
+        screenWidth = Windows.screenWidth();
+        screenHeight = Windows.screenHeight();
         halfScreenWidth = screenWidth / 2;
         halfScreenHeight = screenHeight / 2;
-        resizeK = Service.getResizeCoefficient();
+        resizeK = Windows.resizeK();
 
         holder.setFixedSize(screenWidth, screenHeight);
 
-        buttonsY = (int) (screenHeight - (ImageHub.eX70 * 1.5));
+        buttonsY = (int) (screenHeight - (ImageHub._70 * 1.5));
         fpsY = 300;
         fpsX = screenWidth - 250;
-        tableY = buttonsY - ImageHub.eX70;
+        tableY = buttonsY - ImageHub._70;
 
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setFilterBitmap(true);
         paint.setDither(true);
+        paint.setAntiAlias(true);
 
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
@@ -246,12 +247,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         buttonsPaint.set(paint);
 
-        nicePaint.set(paint);
-        nicePaint.setAntiAlias(true);
+        setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
-        setLayerType(View.LAYER_TYPE_HARDWARE, nicePaint);
-
-        getMaxScore();
+        recoverySettings();
 
         while (!endImgInit) {
         }
@@ -261,22 +259,15 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonQuit = new Button(this);
         buttonRestart = new Button(this);
 
-        settings = new Settings();
-
-        HardThread.newJob(() -> {
-            fightScreen = new FightScreen();
+        HardThread.doInBackGround(() -> {
             buttonPlayer = new ButtonPlayer(this);
             buttonSaturn = new ButtonSaturn(this);
             buttonEmerald = new ButtonEmerald(this);
             pauseButton = new PauseButton(this);
-            player = new Bot();
+            player = new Bot(this);
             healthKit = new HealthKit(this);
             shotgunKit = new ShotgunKit(this);
             changerGuns = new ChangerGuns(this);
-            rocket = new Rocket();
-            attention = new Attention(this);
-            factory = new Factory(this);
-            demoman = new Demoman();
             screen = new StarScreen();
             loadingScreen = new LoadingScreen(this);
 
@@ -289,7 +280,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         });
 
         for (int i = 0; i < numberVaders * 2; i++) {
-            allSprites.add(new Vader(false));
+            allSprites.add(new Vader(this, false));
         }
 
         for (int i = 0; i < numberExplosionsALL; i++) {
@@ -329,56 +320,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         screen.update();
         screen.render();
 
-        for (int i = 0; i < allSprites.size(); i++) {
-            Sprite anySprite = allSprites.get(i);
-            if (anySprite != null) {
-                if (!anySprite.lock) {
-                    anySprite.x -= moveAll;
-                    anySprite.render();
-                    anySprite.update();
-                    if (!anySprite.isPassive) {
-                        player.checkIntersections(anySprite);
-                    }
-                    if (level == 1) {
-                        rocket.checkIntersections(anySprite);
-                    }
-                    if (!anySprite.isBullet) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            anySprite.check_intersectionBullet(bullets.get(j));
-                        }
-                    }
-                    if (character.equals("saturn")) {
-                        if (anySprite.status.equals("bulletEnemy")) {
-                            for (int j = 0; j < bullets.size(); j++) {
-                                Sprite bulletPlayer = bullets.get(j);
-                                if (bulletPlayer.status.equals("saturn")) {
-                                    if (anySprite.intersect(bulletPlayer)) {
-                                        if (random.nextFloat() <= 0.5) {
-
-                                            Object[] info = bulletPlayer
-                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
-                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
-
-                                            if ((boolean) info[3]) {
-                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                allSprites.add(bulletEnemyOrbit);
-                                                bullets.add(bulletEnemyOrbit);
-
-                                                allSprites.remove(anySprite);
-                                                break;
-                                            }
-                                        }
-                                        anySprite.intersectionPlayer();
-                                        bulletPlayer.intersection();
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        workWithSprites();
 
         if (player.intersect(changerGuns)) {
             changerGuns.intersectionPlayer();
@@ -392,18 +334,21 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
 
         if (System.currentTimeMillis() - lastBoss > BOSS_TIME) {
-            HardThread.newJob(() -> {
-                lastBoss = System.currentTimeMillis();
-                Sprite boss;
-                if (level == 1) {
-                    boss = new DeathStar(this);
-                    fightScreen.newImg(character);
-                } else {
-                    boss = new BossVaders(this);
-                    fightScreen.newImg(character + "-vaders");
+            lastBoss = System.currentTimeMillis();
+            HardThread.doInBackGround(() -> {
+                if (bosses.size() == 0) {
+                    Sprite boss;
+                    byte bossType = DEATH_STAR;
+                    if (level == 1) {
+                        boss = new DeathStar(this);
+                    } else {
+                        bossType = BOSS_VADERS;
+                        boss = new BossVaders(this);
+                    }
+                    fightScreen = new FightScreen(character, bossType);
+                    bosses.add(boss);
+                    allSprites.add(boss);
                 }
-                bosses.add(boss);
-                allSprites.add(boss);
             });
         }
 
@@ -499,62 +444,60 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             if (DRAW_FPS) {
                 timeFrame = System.nanoTime();
             }
-            try {
+            if (holder.getSurface().isValid()) {
                 canvas = holder.lockHardwareCanvas();
                 switch (gameStatus) {
-                    case 0:
+                    case GAME:
                         gameplay();
                         renderCurrentScore();
                         break;
-                    case 1:
+                    case MENU:
                         preview();
                         renderMaxScore(50);
                         break;
-                    case 2:
+                    case READY:
                         ready();
                         renderCurrentScore();
                         break;
-                    case 3:
+                    case GAME_OVER:
                         gameover();
                         renderCurrentScore();
                         renderMaxScore(130);
                         break;
-                    case 4:
+                    case PAUSE:
                         pause();
                         renderCurrentScore();
                         renderMaxScore(130);
                         break;
-                    case 5:
+                    case BOSS_PREVIEW:
                         renderSprites();
                         bossIncoming();
                         renderCurrentScore();
                         break;
-                    case 6:
+                    case PORTAL:
                         portalTime();
                         renderCurrentScore();
                         break;
-                    case 7:
+                    case WIN:
                         win();
                         break;
-                    case 8:
+                    case TOP:
                         topScore();
                         break;
-                    case 9:
+                    case AFTER_PAUSE:
                         renderSprites();
                         afterPause();
                         renderCurrentScore();
                         break;
-                    case 10:
+                    case SETTINGS:
                         settings();
                         break;
-                    case 41:
-                        onLoading();
+                    case LOADING:
+                        loading();
                         break;
                 }
                 renderFPS();
                 holder.unlockCanvasAndPost(canvas);
-            } catch (Exception e) {
-                Service.print(e.toString());
             }
         }
     }
@@ -572,7 +515,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 boolean cg = false;
 
                 switch (gameStatus) {
-                    case 1:
+                    case MENU:
                         buttonSaturn.setCoords(clickX, clickY);
                         buttonPlayer.setCoords(clickX, clickY);
                         buttonEmerald.setCoords(clickX, clickY);
@@ -581,27 +524,27 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         buttonMenu.setCoords(clickX, clickY);
                         buttonRestart.setCoords(clickX, clickY);
                         break;
-                    case 4:
+                    case PAUSE:
                         buttonRestart.setCoords(clickX, clickY);
                         buttonStart.setCoords(clickX, clickY);
                         buttonQuit.setCoords(clickX, clickY);
                         buttonMenu.setCoords(clickX, clickY);
                         break;
-                    case 10:
+                    case SETTINGS:
                         buttonMenu.setCoords(clickX, clickY);
                         buttonQuit.setCoords(clickX, clickY);
                         break;
-                    case 8:
+                    case TOP:
                         buttonMenu.setCoords(clickX, clickY);
                         break;
-                    case 0:
-                    case 2:
-                    case 3:
-                    case 6:
+                    case GAME:
+                    case READY:
+                    case GAME_OVER:
+                    case PORTAL:
                         pb = pauseButton.checkCoords(clickX, clickY);
                         break;
                 }
-                if (gameStatus == 6 | gameStatus == 0) {
+                if (gameStatus == PORTAL | gameStatus == GAME) {
                     cg = changerGuns.checkCoords(clickX, clickY);
                 }
                 if (!pb && cg) {
@@ -618,21 +561,21 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 break;
             case MotionEvent.ACTION_MOVE:
                 switch (gameStatus) {
-                    case 1:
+                    case MENU:
                         buttonStart.sweep(clickX, clickY);
                         buttonQuit.sweep(clickX, clickY);
                         buttonMenu.sweep(clickX, clickY);
                         buttonRestart.sweep(clickX, clickY);
                         break;
-                    case 4:
+                    case PAUSE:
                         buttonRestart.sweep(clickX, clickY);
                         buttonStart.sweep(clickX, clickY);
                         buttonQuit.sweep(clickX, clickY);
                         buttonMenu.sweep(clickX, clickY);
                         break;
-                    case 0:
-                    case 2:
-                    case 6:
+                    case GAME:
+                    case READY:
+                    case PORTAL:
                         if (!player.dontmove) {
                             player.setCoords(clickX, clickY);
                         }
@@ -641,11 +584,11 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                             changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
                         }
                         break;
-                    case 10:
+                    case SETTINGS:
                         buttonMenu.sweep(clickX, clickY);
                         buttonQuit.sweep(clickX, clickY);
                         break;
-                    case 8:
+                    case TOP:
                         buttonMenu.sweep(clickX, clickY);
                         break;
                 }
@@ -667,7 +610,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             try {
                 thread.interrupt();
             } catch (Exception e) {
-                Service.print("Game thread " + e.toString());
+                print("Game thread " + e.toString());
             }
         }
         hardThread.stopJob();
@@ -681,9 +624,11 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             hardThread.startJob();
             AudioHub.whoIsPlayed();
         }
-        playing = true;
-        thread = new Thread(this);
-        thread.start();
+        HardThread.doInBackGround(() -> {
+            playing = true;
+            thread = new Thread(this);
+            thread.start();
+        });
     }
 
     public void generateTopScore() {
@@ -694,7 +639,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         makeTopPlayersTable();
 
-        gameStatus = 8;
+        gameStatus = TOP;
     }
 
     public void generateWin() {
@@ -703,7 +648,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         AudioHub.pauseBackgroundMusic();
         saveScore();
         portal.kill();
-        gameStatus = 7;
+        gameStatus = WIN;
     }
 
     public void generateGameover() {
@@ -711,7 +656,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         makeScoresParams();
         saveScore();
         getMaxScore();
-        gameStatus = 3;
+        gameStatus = GAME_OVER;
     }
 
     public void generatePause() {
@@ -728,7 +673,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonMenu.newFunc(string_to_menu, X, buttonRestart.bottom() + 30, "menu");
         buttonQuit.newFunc(string_quit, X, buttonMenu.bottom() + 30, "quit");
 
-        gameStatus = 4;
+        gameStatus = PAUSE;
     }
 
     public void generateSettings() {
@@ -737,7 +682,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonEmerald.hide();
         buttonQuit.newFunc(string_quit, halfScreenWidth + 30, buttonsY, "quit");
         buttonMenu.newFunc(string_to_menu, halfScreenWidth - 30 - buttonQuit.width, buttonsY, "fromSetting");
-        settings.showSettings();
+        settings = new Settings(this);
+        gameStatus = SETTINGS;
     }
 
     public void generateMenu() {
@@ -762,7 +708,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             while (!endImgInit) {
             }
         }
-        ImageHub.loadCharacterImages("falcon");
+        ImageHub.loadCharacterImages(MILLENNIUM_FALCON);
         while (!endImgInit) {
         }
 
@@ -776,14 +722,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         spider = null;
         sunrise = null;
         buffer = null;
-        screen = new StarScreen();
         shotgunKit.picked = false;
 
-        player = new Bot();
+        screen = new StarScreen();
+        player = new Bot(this);
 
         int len = numberVaders * 2;
         for (int i = 0; i < len; i++) {
-            allSprites.add(new Vader(false));
+            allSprites.add(new Vader(this, false));
         }
 
         while (buttonStart.right() > buttonMenu.x) {
@@ -797,7 +743,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             allExplosions[i].stop();
             allSprites.add(allExplosions[i]);
         }
-        gameStatus = 1;
+        gameStatus = MENU;
     }
 
     public void generateNewGame() {
@@ -811,7 +757,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         makeScoresParams();
 
         count = 0;
-        BOSS_TIME = 10_000;
+        BOSS_TIME = 100_000;
 
         bosses = new ArrayList<>(0);
         bullets = new ArrayList<>(0);
@@ -832,7 +778,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         int len;
         switch (level) {
             case 1:
-                AudioHub.loadFirstLevelSounds();
+                HardThread.doInUI(AudioHub::loadFirstLevelSounds);
 
                 score = 0;
 
@@ -845,13 +791,13 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 while (!endImgInit) {
                 }
                 switch (character) {
-                    case "saturn":
+                    case SATURN:
                         player = new Saturn(this);
                         break;
-                    case "falcon":
+                    case MILLENNIUM_FALCON:
                         player = new MillenniumFalcon(this);
                         break;
-                    case "emerald":
+                    case EMERALD:
                         player = new Emerald(this);
                         break;
                 }
@@ -863,10 +809,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
                 shotgunKit.picked = false;
 
-                rocket = new Rocket();
+                rocket = new Rocket(this);
                 attention = new Attention(this);
                 factory = new Factory(this);
-                demoman = new Demoman();
+                demoman = new Demoman(this);
                 screen = new StarScreen();
                 alphaEnemy.setAlpha(255);
 
@@ -876,7 +822,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     if (random.nextFloat() <= 0.12) {
                         allSprites.add(new TripleFighter(this));
                     } else {
-                        allSprites.add(new Vader(false));
+                        allSprites.add(new Vader(this, false));
                     }
                 }
 
@@ -886,7 +832,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 allSprites.add(attention);
                 break;
             case 2:
-                AudioHub.loadSecondLevelSounds();
+                HardThread.doInUI(AudioHub::loadSecondLevelSounds);
 
                 oldScore = score;
 
@@ -900,10 +846,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 player.newStatus();
 
                 spider = new Spider(this);
-                sunrise = new Sunrise();
-                buffer = new Buffer();
+                sunrise = new Sunrise(this);
+                buffer = new Buffer(this);
                 screen = new ThunderScreen();
-                atomicBomb = new AtomicBomb();
+                atomicBomb = new AtomicBomb(this);
                 alphaEnemy.setAlpha(165);
 
                 len = numberVaders + 5;
@@ -911,7 +857,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     if (random.nextFloat() <= 0.18) {
                         allSprites.add(new XWing(this));
                     } else {
-                        allSprites.add(new Vader(true));
+                        allSprites.add(new Vader(this, true));
                     }
                 }
 
@@ -931,7 +877,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         AudioHub.playReadySnd();
 
-        gameStatus = 2;
+        gameStatus = READY;
     }
 
     private void gameover() {
@@ -950,23 +896,25 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         if (pointerCount >= 4) {
             level = 1;
-            loadingScreen.newJob("newGame");
+            onLoading(this::generateNewGame);
         }
     }
 
     private void bossIncoming() {
         Sprite boss = bosses.get(bosses.size() - 1);
+        boss.update();
+        fightScreen.render();
         if (boss.y >= -400 | pointerCount >= 4) {
             if (portal == null) {
-                gameStatus = 0;
+                gameStatus = GAME;
             } else {
-                gameStatus = 6;
+                gameStatus = PORTAL;
             }
             boss.y = -boss.height;
             boss.speedY = 3;
+            ImageHub.deleteFightScreen();
+            fightScreen = null;
         }
-        boss.update();
-        fightScreen.render();
     }
 
     private void afterPause() {
@@ -982,7 +930,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 } else {
                     if (count >= 70) {
                         pauseButton.show();
-                        gameStatus = 0;
+                        gameStatus = GAME;
                         count = 0;
                     }
                 }
@@ -1059,7 +1007,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                             player.lock = false;
                             changerGuns.start();
                             count = 0;
-                            gameStatus = 0;
+                            gameStatus = GAME;
                             lastBoss = System.currentTimeMillis();
                         }
                     }
@@ -1127,7 +1075,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameoverPaint);
 
             if (pointerCount >= 4) {
-                loadingScreen.newJob("menu");
+                onLoading(this::generateMenu);
             }
         }
     }
@@ -1147,56 +1095,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         screen.update();
         screen.render();
 
-        for (int i = 0; i < allSprites.size(); i++) {
-            Sprite anySprite = allSprites.get(i);
-            if (anySprite != null) {
-                if (!anySprite.lock) {
-                    anySprite.x -= moveAll;
-                    anySprite.render();
-                    anySprite.update();
-                    if (!anySprite.isPassive) {
-                        player.checkIntersections(anySprite);
-                    }
-                    if (level == 1) {
-                        rocket.checkIntersections(anySprite);
-                    }
-                    if (!anySprite.isBullet) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            anySprite.check_intersectionBullet(bullets.get(j));
-                        }
-                    }
-                    if (character.equals("saturn")) {
-                        if (anySprite.status.equals("bulletEnemy")) {
-                            for (int j = 0; j < bullets.size(); j++) {
-                                Sprite bulletPlayer = bullets.get(j);
-                                if (bulletPlayer.status.equals("saturn")) {
-                                    if (anySprite.intersect(bulletPlayer)) {
-                                        if (random.nextFloat() <= 0.5) {
-
-                                            Object[] info = bulletPlayer
-                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
-                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
-
-                                            if ((boolean) info[3]) {
-                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                allSprites.add(bulletEnemyOrbit);
-                                                bullets.add(bulletEnemyOrbit);
-
-                                                allSprites.remove(anySprite);
-                                                break;
-                                            }
-                                        }
-                                        anySprite.intersectionPlayer();
-                                        bulletPlayer.intersection();
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        workWithSprites();
 
         if (player.intersect(changerGuns)) {
             changerGuns.intersectionPlayer();
@@ -1288,7 +1187,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         changerGuns.render();
     }
 
-    private void onLoading() {
+    private void loading() {
         loadingScreen.render();
         loadingScreen.update();
     }
@@ -1309,6 +1208,59 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         changerGuns.render();
         if (portal != null) {
             portal.render();
+        }
+    }
+
+    private void workWithSprites() {
+        for (int i = 0; i < allSprites.size(); i++) {
+            Sprite anySprite = allSprites.get(i);
+            if (anySprite != null) {
+                if (!anySprite.lock) {
+                    anySprite.x -= moveAll;
+                    anySprite.render();
+                    anySprite.update();
+                    if (!anySprite.isPassive) {
+                        player.checkIntersections(anySprite);
+                    }
+                    if (level == 1) {
+                        rocket.checkIntersections(anySprite);
+                    }
+                    if (!anySprite.isBullet) {
+                        for (int j = 0; j < bullets.size(); j++) {
+                            anySprite.check_intersectionBullet(bullets.get(j));
+                        }
+                    }
+                    if (character == SATURN) {
+                        if (anySprite.name == BULLET_ENEMY) {
+                            for (int j = 0; j < bullets.size(); j++) {
+                                Sprite bulletPlayer = bullets.get(j);
+                                if (bulletPlayer.name == BULLET_SATURN) {
+                                    if (anySprite.intersect(bulletPlayer)) {
+                                        if (random.nextFloat() <= 0.5) {
+
+                                            Object[] info = bulletPlayer
+                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
+                                                            (Bitmap) anySprite.getBox(0, 0, null)[0]);
+
+                                            if ((boolean) info[3]) {
+                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                allSprites.add(bulletEnemyOrbit);
+                                                bullets.add(bulletEnemyOrbit);
+
+                                                allSprites.remove(anySprite);
+                                                break;
+                                            }
+                                        }
+                                        anySprite.intersectionPlayer();
+                                        bulletPlayer.intersection();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1347,11 +1299,11 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void removeSaturnTrash() {
-        if (character.equals("saturn")) {
-            HardThread.newJob(() -> {
+        if (character == SATURN) {
+            HardThread.doInBackGround(() -> {
                 for (int i = 0; i < bullets.size(); i++) {
                     Sprite bullet = bullets.get(i);
-                    if (bullet.status.equals("saturn") | bullet.status.equals("fakeSaturn")) {
+                    if (bullet.name == BULLET_SATURN | bullet.name == BULLET_ORBIT) {
                         if (Math.getDistance(player.centerX() - bullet.centerX(), player.centerY() - bullet.centerY()) >= 550) {
                             bullet.intersection();
                         }
@@ -1361,29 +1313,29 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
     }
 
-    public void makeLanguage(boolean set) {
+    public void confirmLanguage(boolean set) {
         String[] strings = new String[0];
         gameoverPaint.setTextSize(39);
         switch (language) {
             case "ru":
-                strings = context.getResources().getStringArray(R.array.ru);
+                strings = mainActivity.getResources().getStringArray(R.array.ru);
                 buttonsPaint.setTextSize(33);
                 break;
             case "en":
-                strings = context.getResources().getStringArray(R.array.en);
+                strings = mainActivity.getResources().getStringArray(R.array.en);
                 gameoverPaint.setTextSize(50);
                 buttonsPaint.setTextSize(35);
                 break;
             case "fr":
-                strings = context.getResources().getStringArray(R.array.fr);
+                strings = mainActivity.getResources().getStringArray(R.array.fr);
                 buttonsPaint.setTextSize(34);
                 break;
             case "sp":
-                strings = context.getResources().getStringArray(R.array.sp);
+                strings = mainActivity.getResources().getStringArray(R.array.sp);
                 buttonsPaint.setTextSize(33);
                 break;
             case "ge":
-                strings = context.getResources().getStringArray(R.array.ge);
+                strings = mainActivity.getResources().getStringArray(R.array.ge);
                 buttonsPaint.setTextSize(34);
                 break;
         }
@@ -1429,19 +1381,27 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         go_to_restartY = (int) (screenHeight * 0.7);
     }
 
-    public void setAntiAlias(boolean antiAlias) {
-        startPaint.setAntiAlias(antiAlias);
-        gameoverPaint.setAntiAlias(antiAlias);
-        scorePaint.setAntiAlias(antiAlias);
-        topPaint.setAntiAlias(antiAlias);
-        topPaintRed.setAntiAlias(antiAlias);
-        winPaint.setAntiAlias(antiAlias);
-        paint50.setAntiAlias(antiAlias);
-        buttonsPaint.setAntiAlias(antiAlias);
+    private void recoverySettings() {
+        String[] settings = Clerk.getSettings().split(" ");
+        AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
+        AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
+        vibrate = Integer.parseInt(settings[2]) == 1;
+        language = settings[3];
+
+        getMaxScore();
+        confirmLanguage(false);
+    }
+
+    public void saveSettings() {
+        saveScore();
+
+        if (settings != null) {
+            settings.saveSettings();
+        }
     }
 
     public static void makeTopPlayersTable() {
-        HardThread.newJob(() -> {
+        HardThread.doInBackGround(() -> {
             Table.newTable(tableY);
             for (int i = 0; i < ClientServer.info_from_server.length(); i++) {
                 try {
@@ -1453,7 +1413,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         Table.addText(string);
                     }
                 } catch (Exception e) {
-                    Service.print(e.toString());
+                    print(e.toString());
                     Table.addText((i + 1) + ") Bad Boy");
                 }
             }
@@ -1464,6 +1424,18 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public void makeScoresParams() {
         scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
         maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
+    }
+
+
+    public void hideSettings() {
+        Service.runOnUiThread(() -> {
+            settings.confirmSettings();
+            settings = null;
+        });
+    }
+
+    public void onLoading(Function function) {
+        loadingScreen.launch(function, ImageHub.needImagesForFirstLevel());
     }
 
     @Override

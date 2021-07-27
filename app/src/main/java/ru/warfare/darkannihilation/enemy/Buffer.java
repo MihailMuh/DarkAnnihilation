@@ -6,17 +6,18 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.BUFFER_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.BUFFER_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.BUFFER_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.BUFFER_HEALTH;
 
 public class Buffer extends Sprite {
-    private boolean startBuff;
+    private boolean startBuff = false;
     private boolean BOOM;
 
-    public Buffer() {
-        super(ImageHub.bufferImg);
+    public Buffer(Game game) {
+        super(game, ImageHub.bufferImg);
         damage = BUFFER_DAMAGE;
 
+        calculateBarriers();
         hide();
 
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);
@@ -25,16 +26,17 @@ public class Buffer extends Sprite {
     private void boom() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
+                inter();
                 if (startBuff) {
-                    for (int i = 0; i < Game.allSprites.size(); i++) {
-                        Sprite sprite = Game.allSprites.get(i);
+                    startBuff = false;
+                    for (int i = 0; i < game.allSprites.size(); i++) {
+                        Sprite sprite = game.allSprites.get(i);
                         if (!sprite.isPassive && !sprite.isBullet) {
                             sprite.sB();
                         }
                     }
                 }
-                inter();
             });
         }
     }
@@ -47,7 +49,6 @@ public class Buffer extends Sprite {
 
     public void hide() {
         BOOM = false;
-        startBuff = false;
         lock = true;
         health = BUFFER_HEALTH;
         x = Math.randInt(0, screenWidthWidth);
@@ -85,9 +86,9 @@ public class Buffer extends Sprite {
         } else {
             if (!startBuff) {
                 startBuff = true;
-                HardThread.newJob(() -> {
-                    for (int i = 0; i < Game.allSprites.size(); i++) {
-                        Sprite sprite = Game.allSprites.get(i);
+                HardThread.doInBackGround(() -> {
+                    for (int i = 0; i < game.allSprites.size(); i++) {
+                        Sprite sprite = game.allSprites.get(i);
                         if ((!sprite.isPassive && !sprite.isBullet)) {
                             sprite.buff();
                         }

@@ -7,7 +7,7 @@ public class BaseExplosion extends Sprite {
     public int frame = 0;
 
     public BaseExplosion(Bitmap bitmap) {
-        super(bitmap);
+        super(null, bitmap);
         lock = true;
         isPassive = true;
         isBullet = true;

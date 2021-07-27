@@ -9,7 +9,7 @@ public class BaseScreen extends Sprite {
     private final Bitmap[] bitmaps;
 
     public BaseScreen(Bitmap[] bitmaps) {
-        super(bitmaps[0]);
+        super(null, bitmaps[0]);
 
         x = (int) (Game.screenWidth * -0.175);
 

@@ -5,7 +5,7 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Math;
 
-import static ru.warfare.darkannihilation.Constants.SHOTGUN_KIT_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.SHOTGUN_KIT_SPEED;
 
 public class ShotgunKit extends Sprite {
     public boolean picked = false;

@@ -1,4 +1,4 @@
-package ru.warfare.darkannihilation;
+package ru.warfare.darkannihilation.constant;
 
 public final class Constants {
 //    characters
@@ -10,8 +10,8 @@ public final class Constants {
     public static final short EMERALD_SHOTGUN_TIME = 1_200;
     public static final byte EMERALD_HEALTH = 100;
 
-    public static final byte SATURN_SHOOT_TIME = 120;
-    public static final short SATURN_SHOTGUN_TIME = 150;
+    public static final byte SATURN_SHOOT_TIME = 105;
+    public static final short SATURN_SHOTGUN_TIME = 130;
     public static final byte SATURN_HEALTH = 10;
 
     public static final byte BOT_SHOOT_TIME = 70;
@@ -38,7 +38,7 @@ public final class Constants {
     public static final byte SPIDER_SHOOT_TIME = 110;
     public static final byte SPIDER_DAMAGE = BUFFER_DAMAGE;
     public static final byte SPIDER_SPEED = XWING_HEALTH;
-    public static final short SPIDER_HEALTH_BAR_LEN = SATURN_SHOTGUN_TIME;
+    public static final short SPIDER_HEALTH_BAR_LEN = 150;
     public static final byte SPIDER_HEALTH_BAR_HEIGHT = 15;
 
 //    first level

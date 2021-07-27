@@ -1,14 +1,18 @@
 package ru.warfare.darkannihilation.screen;
 
-import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.Py;
+import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class FightScreen extends Sprite {
-    public FightScreen() {
-        super(ImageHub.playerVsBoss);
+    public FightScreen(byte character, byte boss) {
+        super(null);
+
+        ImageHub.loadFightScreen(character, boss);
 
         y = Game.halfScreenHeight;
+        height = ImageHub._095;
 
         int min = 10;
         while (bottom() - Game.halfScreenHeight > Game.screenHeight) {
@@ -22,29 +26,9 @@ public class FightScreen extends Sprite {
 
         x = Game.halfScreenWidth - halfWidth;
         y = Game.halfScreenHeight - halfHeight;
-    }
 
-    public void newImg(String character) {
-        switch (character)
-        {
-            case "saturn":
-                image = ImageHub.resizeImage(ImageHub.saturnVsBoss, width, height);
-                break;
-            case "falcon":
-                image = ImageHub.resizeImage(ImageHub.playerVsBoss, width, height);
-                break;
-            case "saturn-vaders":
-                image = ImageHub.resizeImage(ImageHub.saturnVsVaders, width, height);
-                break;
-            case "falcon-vaders":
-                image = ImageHub.resizeImage(ImageHub.playerVsVaders, width, height);
-                break;
-            case "emerald":
-                image = ImageHub.resizeImage(ImageHub.emeraldVsBoss, width, height);
-                break;
-            case "emerald-vaders":
-                image = ImageHub.resizeImage(ImageHub.emeraldVsVaders, width, height);
-                break;
+        while (!Game.endImgInit) {
         }
+        image = ImageHub.resizeImage(ImageHub.fightScreen, width, height);
     }
 }

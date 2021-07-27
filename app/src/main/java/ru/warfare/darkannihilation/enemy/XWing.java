@@ -8,9 +8,10 @@ import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.XWING_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.XWING_HEALTH;
-import static ru.warfare.darkannihilation.Constants.XWING_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.XWING_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.XWING_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.XWING_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 import static ru.warfare.darkannihilation.math.Math.getDistance;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
@@ -23,9 +24,10 @@ public class XWing extends Sprite {
         super(game, ImageHub.XWingImg);
         damage = XWING_DAMAGE;
 
+        calculateBarriers();
         newStatus();
 
-        if (Game.character.equals("saturn")) {
+        if (Game.character == SATURN) {
             R = 400;
         } else {
             R = 350;
@@ -37,14 +39,14 @@ public class XWing extends Sprite {
     private void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > XWING_SHOOT_TIME) {
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 int P_X = game.player.centerX();
                 int P_Y = game.player.centerY();
                 int X = centerX();
                 int Y = centerY();
                 if (getDistance(X - P_X, Y - P_Y) < R) {
                     int[] values = vector.vector(X, Y, P_X, P_Y, 9);
-                    Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                    game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                     AudioHub.playShoot();
                 }
             });
@@ -53,7 +55,7 @@ public class XWing extends Sprite {
     }
 
     private void newStatus() {
-        if (Game.bosses.size() != 0) {
+        if (game.bosses.size() != 0) {
             lock = true;
         }
         health = XWING_HEALTH;

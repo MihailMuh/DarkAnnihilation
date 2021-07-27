@@ -1,21 +1,16 @@
 package ru.warfare.darkannihilation.bullet;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.BUCKSHOT_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.BUCKSHOT_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_SPEED;
 
-public class Buckshot extends Sprite {
-    public Buckshot(int X, int Y, int speed) {
-        super(ImageHub.buckshotImg);
-
-        x = X - halfWidth;
-        y = Y;
-        damage = BUCKSHOT_DAMAGE;
+public class Buckshot extends BaseBullet {
+    public Buckshot(Game game, int X, int Y, int speed) {
+        super(game, ImageHub.buckshotImg, X, Y, BUCKSHOT_DAMAGE);
         isPassive = true;
-        isBullet = true;
 
         speedX = speed;
     }
@@ -23,8 +18,7 @@ public class Buckshot extends Sprite {
     @Override
     public void intersection() {
         createSmallTripleExplosion();
-        Game.bullets.remove(this);
-        Game.allSprites.remove(this);
+        kill();
     }
 
     @Override
@@ -33,8 +27,7 @@ public class Buckshot extends Sprite {
         x += speedX;
 
         if (y < -height | x < -width | x > Game.screenWidth) {
-            Game.bullets.remove(this);
-            Game.allSprites.remove(this);
+            kill();
         }
     }
 }

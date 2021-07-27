@@ -4,11 +4,11 @@ import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH;
-import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH_BAR_HEIGHT;
-import static ru.warfare.darkannihilation.Constants.FACTORY_HEALTH_BAR_LEN;
-import static ru.warfare.darkannihilation.Constants.FACTORY_SPAWN_TIME;
-import static ru.warfare.darkannihilation.Constants.FACTORY_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH_BAR_HEIGHT;
+import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH_BAR_LEN;
+import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPAWN_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPEED;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Factory extends Sprite {
@@ -57,8 +57,8 @@ public class Factory extends Sprite {
     public void spawn() {
         if (System.currentTimeMillis() - lastSpawn > FACTORY_SPAWN_TIME) {
             lastSpawn = System.currentTimeMillis();
-            Game.allSprites.add(new Minion(game, randInt(x, right), minionY));
-            Game.allSprites.add(new Minion(game, randInt(x, right), minionY));
+            game.allSprites.add(new Minion(game, randInt(x, right), minionY));
+            game.allSprites.add(new Minion(game, randInt(x, right), minionY));
         }
     }
 

@@ -11,9 +11,9 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.BOSS_HEALTH_BAR_LEN;
-import static ru.warfare.darkannihilation.Constants.BOSS_VADERS_HEALTH;
-import static ru.warfare.darkannihilation.Constants.BOSS_VADERS_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH_BAR_LEN;
+import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class BossVaders extends Sprite {
@@ -36,6 +36,8 @@ public class BossVaders extends Sprite {
         }
         isPassive = true;
 
+        calculateBarriers();
+
         x = randInt(0, screenWidthWidth);
         y = -800;
 
@@ -45,12 +47,12 @@ public class BossVaders extends Sprite {
     public void shoot() {
         if (System.currentTimeMillis() - lastShoot > BOSS_VADERS_SHOOT_TIME) {
             lastShoot = System.currentTimeMillis();
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 int X = centerX();
                 int Y = centerY();
                 int[] values = vector.easyVector(X, Y, game.player.centerX(),
                         game.player.centerY(), 10);
-                Game.allSprites.add(new BulletBossVaders(X, Y, values[0], values[1]));
+                game.allSprites.add(new BulletBossVaders(game, X, Y, values[0], values[1]));
                 AudioHub.playBossShoot();
             });
         }
@@ -71,20 +73,20 @@ public class BossVaders extends Sprite {
     public void killAfterFight() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 Game.score += 400;
                 AudioHub.pauseBossMusic();
                 int len = Game.numberVaders / 4;
                 for (int i = 0; i < len; i++) {
                     if (Game.random.nextFloat() <= 0.3) {
-                        Game.allSprites.add(new XWing(game));
+                        game.allSprites.add(new XWing(game));
                     } else {
-                        Game.allSprites.add(new Vader(true));
+                        game.allSprites.add(new Vader(game, true));
                     }
                 }
 
-                for (int i = 0; i < Game.allSprites.size(); i++) {
-                    Game.allSprites.get(i).empireStart();
+                for (int i = 0; i < game.allSprites.size(); i++) {
+                    game.allSprites.get(i).empireStart();
                 }
 
                 if (game.portal == null) {
@@ -92,8 +94,8 @@ public class BossVaders extends Sprite {
                 }
 
                 createSkullExplosion();
-                Game.bosses.remove(this);
-                Game.allSprites.remove(this);
+                game.bosses.remove(this);
+                game.allSprites.remove(this);
 
                 game.lastBoss = System.currentTimeMillis();
 

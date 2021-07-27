@@ -12,6 +12,7 @@ public class Attention extends Sprite {
         isPassive = true;
         isBullet = true;
 
+        calculateBarriers();
         hide();
     }
 

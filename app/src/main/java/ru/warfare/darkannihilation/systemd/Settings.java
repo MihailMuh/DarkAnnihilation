@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation.systemd;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.animsh.animatedcheckbox.AnimatedCheckBox;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -17,11 +16,13 @@ import java.util.ArrayList;
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.SeekArcListener;
-import ru.warfare.darkannihilation.audio.AudioExoPlayer;
+import ru.warfare.darkannihilation.Time;
+import ru.warfare.darkannihilation.Vibrator;
+import ru.warfare.darkannihilation.Windows;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 
 import static ru.warfare.darkannihilation.systemd.Game.string_choose_lang;
@@ -29,12 +30,11 @@ import static ru.warfare.darkannihilation.systemd.Game.string_disable;
 import static ru.warfare.darkannihilation.systemd.Game.string_enable;
 import static ru.warfare.darkannihilation.systemd.Game.string_loud_effects;
 import static ru.warfare.darkannihilation.systemd.Game.string_loud_music;
-import static ru.warfare.darkannihilation.systemd.Game.string_smooth;
 import static ru.warfare.darkannihilation.systemd.Game.string_vibration;
 import static ru.warfare.darkannihilation.systemd.Game.string_volume;
 
 public class Settings {
-    private final MainActivity mainActivity;
+    private final Game game;
 
     private final TextView angleEffects;
     private final TextView textViewEffects;
@@ -50,66 +50,68 @@ public class Settings {
     private final PowerSpinnerView spinner;
     private final TextView textSpinner;
 
-    private final AnimatedCheckBox animatedCheckBox;
-    private final TextView textAntiAlias;
-
     private float finalVolumeEffects;
     private float finalVolumeMusic;
 
-    public Settings() {
-        this.mainActivity = Service.getContext();
+    public Settings(Game game) {
+        this.game = game;
+        MainActivity mainActivity = game.mainActivity;
+
         parseSettings();
-        float density = mainActivity.getResources().getDisplayMetrics().density;
+
+        float density = Windows.resizeLayout();
         int angle = (int) (finalVolumeEffects * 100);
+        int _200 = (int) (200 * density + 0.5f);
+        ViewGroup.LayoutParams layoutParams;
 
         angleEffects = mainActivity.findViewById(R.id.angleEffects);
-        angleEffects.setVisibility(TextView.GONE);
+        angleEffects.setVisibility(TextView.VISIBLE);
         textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
-        textViewEffects.setVisibility(TextView.GONE);
+        textViewEffects.setVisibility(TextView.VISIBLE);
         seekArcEffects = mainActivity.findViewById(R.id.seekArcEffects);
-        ViewGroup.LayoutParams layoutParams = seekArcEffects.getLayoutParams();
-        layoutParams.width = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams = seekArcEffects.getLayoutParams();
+        layoutParams.width = _200;
+        layoutParams.height = _200;
         seekArcEffects.setLayoutParams(layoutParams);
         seekArcEffects.setProgress(angle);
-        seekArcEffects.setVisibility(SeekArc.GONE);
+        seekArcEffects.setVisibility(SeekArc.VISIBLE);
         seekArcEffects.setOnSeekArcChangeListener(new SeekArcListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
                 angleEffects.setText((string_volume + " " + newVolume));
-                finalVolumeEffects = (float) newVolume / 100f;
+                finalVolumeEffects = newVolume / 100f;
                 AudioHub.soundOfClick(finalVolumeEffects);
             }
         });
 
         angleMusic = mainActivity.findViewById(R.id.angleMusic);
         angle = (int) (finalVolumeMusic * 100);
-        angleMusic.setVisibility(TextView.GONE);
+        angleMusic.setVisibility(TextView.VISIBLE);
         textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
-        textViewMusic.setVisibility(TextView.GONE);
+        textViewMusic.setVisibility(TextView.VISIBLE);
         seekArcMusic = mainActivity.findViewById(R.id.seekArcMusic);
         layoutParams = seekArcMusic.getLayoutParams();
-        layoutParams.width = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (200 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = _200;
+        layoutParams.height = _200;
         seekArcMusic.setLayoutParams(layoutParams);
         seekArcMusic.setProgress(angle);
-        seekArcMusic.setVisibility(SeekArc.GONE);
+        seekArcMusic.setVisibility(SeekArc.VISIBLE);
         seekArcMusic.setOnSeekArcChangeListener(new SeekArcListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
                 angleMusic.setText((string_volume + " " + newVolume));
-                finalVolumeMusic = (float) newVolume / 100f;
+                finalVolumeMusic = newVolume / 100f;
                 AudioHub.menuMusic.setVolume(finalVolumeMusic);
             }
         });
 
         textViewVibration = mainActivity.findViewById(R.id.textVibration);
-        textViewVibration.setVisibility(TextView.GONE);
+        textViewVibration.setVisibility(TextView.VISIBLE);
         stickySwitch = mainActivity.findViewById(R.id.stickySwitch);
         layoutParams = stickySwitch.getLayoutParams();
-        layoutParams.width = (int) (140 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (140 * density + 0.5f);
         stickySwitch.setLayoutParams(layoutParams);
-        stickySwitch.setVisibility(TextView.GONE);
+        stickySwitch.setVisibility(TextView.VISIBLE);
         stickySwitch.setRightIcon(ImageHub.onImg);
         stickySwitch.setLeftIcon(ImageHub.offImg);
         if (Game.vibrate) {
@@ -119,10 +121,10 @@ public class Settings {
         }
         stickySwitch.setOnSelectedChangeListener((direction, text) -> {
             if (text.equals(string_enable)) {
-                HardThread.newJob(() -> {
-                    Service.sleep(300);
+                HardThread.doInBackGround(() -> {
+                    Time.sleep(300);
                     Game.vibrate = true;
-                    Service.vibrateNOW(60);
+                    Vibrator.vibrate(60);
                 });
             } else {
                 Game.vibrate = false;
@@ -137,10 +139,10 @@ public class Settings {
         iconSpinnerItems.add(new IconSpinnerItem("Deutsch", ImageHub.geImg));
 
         spinner = mainActivity.findViewById(R.id.spinner);
-        spinner.setVisibility(TextView.GONE);
+        spinner.setVisibility(TextView.VISIBLE);
         layoutParams = spinner.getLayoutParams();
-        layoutParams.width = (int) (180 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (50 * Service.getResizeCoefficientForLayout() * density + 0.5f);
+        layoutParams.width = (int) (180 * density + 0.5f);
+        layoutParams.height = (int) (50 * density + 0.5f);
         spinner.setLayoutParams(layoutParams);
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
         spinner.setSpinnerAdapter(iconSpinnerAdapter);
@@ -150,62 +152,37 @@ public class Settings {
             public void onItemSelected(int i, @Nullable Object o, int i1, Object t1) {
                 switch (i1) {
                     case 0:
-                        Game.language = "en";
-                        ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed, ImageHub.eX300, ImageHub.eX70);
-                        ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed, ImageHub.eX300, ImageHub.eX70);
+                        game.language = "en";
+                        ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed,
+                                ImageHub._300, ImageHub._70);
+                        ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed,
+                                ImageHub._300, ImageHub._70);
                         break;
                     case 1:
-                        Game.language = "ru";
+                        game.language = "ru";
                         break;
                     case 2:
-                        Game.language = "fr";
+                        game.language = "fr";
                         break;
                     case 3:
-                        Game.language = "sp";
+                        game.language = "sp";
                         break;
                     case 4:
-                        Game.language = "ge";
+                        game.language = "ge";
                         break;
                 }
-                mainActivity.game.makeLanguage(true);
+                game.confirmLanguage(true);
                 makeLanguage();
             }
         });
         spinner.setLifecycleOwner(mainActivity);
         textSpinner = mainActivity.findViewById(R.id.textSpinner);
-        textSpinner.setVisibility(TextView.GONE);
+        textSpinner.setVisibility(TextView.VISIBLE);
 
-        animatedCheckBox = mainActivity.findViewById(R.id.animatedCheckBox);
-        animatedCheckBox.setVisibility(TextView.GONE);
-        layoutParams = animatedCheckBox.getLayoutParams();
-        layoutParams.width = (int) (40 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        layoutParams.height = (int) (40 * Service.getResizeCoefficientForLayout() * density + 0.5f);
-        animatedCheckBox.setLayoutParams(layoutParams);
-        animatedCheckBox.setChecked(Game.scorePaint.isAntiAlias(), false);
-        animatedCheckBox.setOnCheckedChangeListener((checkBox, isChecked) ->
-                mainActivity.game.setAntiAlias(isChecked));
-        textAntiAlias = mainActivity.findViewById(R.id.textAntiAlias);
-        textAntiAlias.setVisibility(TextView.GONE);
-
-        makeLanguage();
-    }
-
-    public void showSettings() {
-        angleEffects.setVisibility(TextView.VISIBLE);
-        textViewEffects.setVisibility(TextView.VISIBLE);
-        seekArcEffects.setVisibility(SeekArc.VISIBLE);
-
-        angleMusic.setVisibility(TextView.VISIBLE);
-        textViewMusic.setVisibility(TextView.VISIBLE);
-        seekArcMusic.setVisibility(SeekArc.VISIBLE);
-
-        textViewVibration.setVisibility(TextView.VISIBLE);
-        stickySwitch.setVisibility(SeekArc.VISIBLE);
         stickySwitch.setRightIcon(ImageHub.onImg);
         stickySwitch.setLeftIcon(ImageHub.offImg);
 
-        spinner.setVisibility(TextView.VISIBLE);
-        switch (Game.language) {
+        switch (game.language) {
             case "en":
                 spinner.selectItemByIndex(0);
                 break;
@@ -222,13 +199,6 @@ public class Settings {
                 spinner.selectItemByIndex(4);
                 break;
         }
-        textSpinner.setVisibility(TextView.VISIBLE);
-
-        animatedCheckBox.setVisibility(TextView.VISIBLE);
-        animatedCheckBox.setChecked(Game.scorePaint.isAntiAlias(), false);
-        textAntiAlias.setVisibility(TextView.VISIBLE);
-
-        Game.gameStatus = 10;
     }
 
     private void makeLanguage() {
@@ -245,50 +215,39 @@ public class Settings {
         stickySwitch.setLeftText(string_disable);
 
         textSpinner.setText(string_choose_lang);
-
-        textAntiAlias.setText(string_smooth);
     }
 
     public void confirmSettings() {
-        Service.runOnUiThread(() -> {
-            angleEffects.setVisibility(TextView.GONE);
-            textViewEffects.setVisibility(TextView.GONE);
-            seekArcEffects.setVisibility(SeekArc.GONE);
+        angleEffects.setVisibility(TextView.GONE);
+        textViewEffects.setVisibility(TextView.GONE);
+        seekArcEffects.setVisibility(SeekArc.GONE);
 
-            angleMusic.setVisibility(TextView.GONE);
-            textViewMusic.setVisibility(TextView.GONE);
-            seekArcMusic.setVisibility(SeekArc.GONE);
+        angleMusic.setVisibility(TextView.GONE);
+        textViewMusic.setVisibility(TextView.GONE);
+        seekArcMusic.setVisibility(SeekArc.GONE);
 
-            textViewVibration.setVisibility(TextView.GONE);
-            stickySwitch.setVisibility(SeekArc.GONE);
+        textViewVibration.setVisibility(TextView.GONE);
+        stickySwitch.setVisibility(SeekArc.GONE);
 
-            spinner.setVisibility(TextView.GONE);
-            spinner.dismiss();
-            textSpinner.setVisibility(TextView.GONE);
+        spinner.setVisibility(TextView.GONE);
+        spinner.dismiss();
+        textSpinner.setVisibility(TextView.GONE);
 
-            animatedCheckBox.setVisibility(TextView.GONE);
-            textAntiAlias.setVisibility(TextView.GONE);
-            AudioExoPlayer.newVolumeForBackground(finalVolumeMusic);
-            AudioHub.newVolumeForEffects(finalVolumeEffects);
-            saveSettings();
-        });
+        saveSettings();
     }
 
-    public void parseSettings() {
+    private void parseSettings() {
         String[] settings = Clerk.getSettings().split(" ");
         finalVolumeMusic = Float.parseFloat(settings[0]);
         finalVolumeEffects = Float.parseFloat(settings[1]);
-        Game.vibrate = Integer.parseInt(settings[2]) == 1;
-        Game.language = settings[3];
-        mainActivity.game.makeLanguage(false);
-        mainActivity.game.setAntiAlias(Integer.parseInt(settings[4]) == 1);
-        AudioExoPlayer.newVolumeForBackground(finalVolumeMusic);
-        AudioHub.newVolumeForEffects(finalVolumeEffects);
+//        mainActivity.game.makeLanguage(false);
+//        mainActivity.game.setAntiAlias(Integer.parseInt(settings[4]) == 1);
+//        AudioHub.newVolumeForBackground(finalVolumeMusic);
+//        AudioHub.newVolumeForEffects(finalVolumeEffects);
     }
 
     public void saveSettings() {
         Clerk.saveSettings(finalVolumeMusic + " " + finalVolumeEffects + " " +
-                Math.boolToInt(Game.vibrate) + " " + Game.language + " " +
-                Math.boolToInt(Game.scorePaint.isAntiAlias()));
+                Math.boolToInt(Game.vibrate) + " " + game.language);
     }
 }

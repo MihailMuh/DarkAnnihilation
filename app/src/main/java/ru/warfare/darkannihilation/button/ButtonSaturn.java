@@ -5,6 +5,8 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
+import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
+
 public class ButtonSaturn extends Sprite {
     public ButtonSaturn(Game g) {
         super(g, ImageHub.buttonSaturnImg);
@@ -24,8 +26,10 @@ public class ButtonSaturn extends Sprite {
     public void setCoords(int X, int Y) {
         if (x < X & X < x + width & y < Y & Y < y + height) {
             AudioHub.playClick();
-            Game.character = "saturn";
-            game.loadingScreen.newJob("newGame");
+            game.onLoading(() -> {
+                Game.character = SATURN;
+                game.generateNewGame();
+            });
         }
     }
 }

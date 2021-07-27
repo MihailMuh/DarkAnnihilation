@@ -8,8 +8,9 @@ import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.bullet.Buckshot;
 import ru.warfare.darkannihilation.bullet.Bullet;
 
-import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
-import static ru.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
 public class MillenniumFalcon extends BaseCharacter {
     public MillenniumFalcon(Game g) {
@@ -20,28 +21,30 @@ public class MillenniumFalcon extends BaseCharacter {
 
     public void shoot() {
         now = System.currentTimeMillis();
-        if (gun.equals("shotgun")) {
+        if (gun == SHOTGUN) {
             if (now - lastShoot > MILLENNIUM_FALCON_SHOTGUN_TIME) {
                 lastShoot = now;
                 AudioHub.playShotgun();
                 int centerX = centerX();
                 for (int i = -4; i <= 4; i += 2) {
-                    Buckshot buckshot = new Buckshot(centerX, y, i);
-                    Game.bullets.add(buckshot);
-                    Game.allSprites.add(buckshot);
+                    Buckshot buckshot = new Buckshot(game, centerX, y, i);
+                    game.bullets.add(buckshot);
+                    game.allSprites.add(buckshot);
                 }
             }
         } else {
             if (now - lastShoot > MILLENNIUM_FALCON_SHOOT_TIME) {
                 lastShoot = now;
                 AudioHub.playShoot();
-                Bullet bullet = new Bullet(centerX() - 6, y);
-                Game.bullets.add(bullet);
-                Game.allSprites.add(bullet);
+                int X = centerX();
 
-                bullet = new Bullet(centerX(), y);
-                Game.bullets.add(bullet);
-                Game.allSprites.add(bullet);
+                Bullet bullet = new Bullet(game, X + 3, y);
+                game.bullets.add(bullet);
+                game.allSprites.add(bullet);
+
+                bullet = new Bullet(game, X - 3, y);
+                game.bullets.add(bullet);
+                game.allSprites.add(bullet);
             }
         }
     }

@@ -4,11 +4,11 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_VADERS_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_VADERS_DAMAGE;
 
 public class BulletBossVaders extends Sprite {
-    public BulletBossVaders(int X, int Y, int spdx, int spdy) {
-        super(ImageHub.bulletBossVadersImg);
+    public BulletBossVaders(Game game, int X, int Y, int spdx, int spdy) {
+        super(game, ImageHub.bulletBossVadersImg);
         damage = BULLET_BOSS_VADERS_DAMAGE;
 
         speedX = spdx;
@@ -28,7 +28,7 @@ public class BulletBossVaders extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        Game.allSprites.remove(this);
+        kill();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class BulletBossVaders extends Sprite {
         x += speedX;
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
-            Game.allSprites.remove(this);
+            kill();
         }
     }
 }

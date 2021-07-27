@@ -8,19 +8,21 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.BOT_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.BOT_SHOOT_TIME;
 
 public class Bot extends BaseCharacter {
     private final int finalX;
     private final int finalY;
 
-    public Bot() {
-        super(ImageHub.playerImage);
+    public Bot(Game game) {
+        super(game, ImageHub.playerImage, 0);
         speedX = Math.randInt(3, 7);
         speedY = Math.randInt(3, 7);
 
         x = Game.halfScreenWidth;
         y = Game.halfScreenHeight;
+
+        calculateBarriers();
 
         finalX = screenWidthWidth - 30;
         finalY = screenHeightHeight - 30;
@@ -33,13 +35,13 @@ public class Bot extends BaseCharacter {
         if (now - lastShoot > BOT_SHOOT_TIME) {
             int X = centerX();
 
-            Bullet bullet = new Bullet(X - 6, y);
-            Game.bullets.add(bullet);
-            Game.allSprites.add(bullet);
+            Bullet bullet = new Bullet(game, X + 3, y);
+            game.bullets.add(bullet);
+            game.allSprites.add(bullet);
 
-            bullet = new Bullet(X, y);
-            Game.bullets.add(bullet);
-            Game.allSprites.add(bullet);
+            bullet = new Bullet(game, X - 3, y);
+            game.bullets.add(bullet);
+            game.allSprites.add(bullet);
 
             lastShoot = now;
             AudioHub.playShoot();
@@ -70,10 +72,5 @@ public class Bot extends BaseCharacter {
         if (y < 30 | y > finalY) {
             speedY = -speedY;
         }
-    }
-
-    @Override
-    public void render() {
-        Game.canvas.drawBitmap(image, x, y, null);
     }
 }

@@ -19,11 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.Vibrator;
+import ru.warfare.darkannihilation.Windows;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 
@@ -32,7 +35,7 @@ import static ru.warfare.darkannihilation.systemd.Service.makeToast;
 public final class MainActivity extends AppCompatActivity {
     public Game game;
     public SharedPreferences preferences;
-    public GifImageView gif;
+    private GifImageView gif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +48,29 @@ public final class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
         game = findViewById(R.id.gameView);
-        
+
+        Windows.init(getApplicationContext());
+        ImageHub.init(getApplicationContext());
+        AudioHub.init(this);
+
         Service.init(this);
-        ImageHub.init();
-        AudioHub.init();
+        Vibrator.init(getApplicationContext());
 
         game.init();
         checkOnFirstRun();
+    }
+
+    public void newWinGif(GifDrawable gifDrawable) {
+        gif = findViewById(R.id.gifView);
+        gif.setImageDrawable(gifDrawable);
+        gif.setVisibility(GifImageView.VISIBLE);
+        gifDrawable.start();
+    }
+
+    public void deleteWinGif() {
+        gif.setVisibility(GifImageView.GONE);
+        gif.setImageDrawable(null);
+        gif = null;
     }
 
     @Override
@@ -118,7 +137,7 @@ public final class MainActivity extends AppCompatActivity {
                             } else {
                                 preferences.edit().putBoolean("firstrun", false).apply();
 
-                                HardThread.newJob(() -> {
+                                HardThread.doInBackGround(() -> {
                                     String[] str = nick.split(" ");
                                     StringBuilder stringBuilder = new StringBuilder();
                                     ArrayList<String> filterNick = new ArrayList<>(0);

@@ -8,12 +8,12 @@ import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.SPIDER_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH;
-import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH_BAR_HEIGHT;
-import static ru.warfare.darkannihilation.Constants.SPIDER_HEALTH_BAR_LEN;
-import static ru.warfare.darkannihilation.Constants.SPIDER_SHOOT_TIME;
-import static ru.warfare.darkannihilation.Constants.SPIDER_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.SPIDER_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.SPIDER_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.SPIDER_HEALTH_BAR_HEIGHT;
+import static ru.warfare.darkannihilation.constant.Constants.SPIDER_HEALTH_BAR_LEN;
+import static ru.warfare.darkannihilation.constant.Constants.SPIDER_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.SPIDER_SPEED;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Spider extends Sprite {
@@ -36,6 +36,7 @@ public class Spider extends Sprite {
         super(game, ImageHub.spiderImg);
         damage = SPIDER_DAMAGE;
 
+        calculateBarriers();
         hide();
 
         recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));
@@ -55,12 +56,12 @@ public class Spider extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 if (!reload) {
                     int X = centerX();
                     int Y = centerY();
                     int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                    Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                    game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                     AudioHub.playShotgun();
                     ammo++;
                     reload = false;

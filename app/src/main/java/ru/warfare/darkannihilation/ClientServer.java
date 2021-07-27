@@ -2,7 +2,6 @@ package ru.warfare.darkannihilation;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -13,9 +12,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.Service;
 
-import static ru.warfare.darkannihilation.Constants.SERVER_IP;
+import static ru.warfare.darkannihilation.constant.Constants.SERVER_IP;
+import static ru.warfare.darkannihilation.Py.print;
 
 public final class ClientServer {
     private static final OkHttpClient client = new OkHttpClient();
@@ -35,7 +34,7 @@ public final class ClientServer {
                 .enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Service.print(e.toString());
+                print(e);
             }
 
             @Override
@@ -49,7 +48,7 @@ public final class ClientServer {
                         }
                     }
                 } catch (Exception e) {
-                    Service.print(e.toString());
+                    print(e);
                 }
             }
         });
@@ -59,8 +58,8 @@ public final class ClientServer {
         JSONObject jsonScore = new JSONObject();
         try {
             jsonScore.put(nickname, bestScore);
-        } catch (JSONException e) {
-            Service.print(e.toString());
+        } catch (Exception e) {
+            print(e);
         }
         client.newCall(
                 new Request.Builder()
@@ -69,7 +68,7 @@ public final class ClientServer {
                 .enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Service.print(e.toString());
+                print(e);
             }
 
             @Override
@@ -81,8 +80,8 @@ public final class ClientServer {
         JSONObject jsonScore = new JSONObject();
         try {
             jsonScore.put(nickname, bestScore);
-        } catch (JSONException e) {
-            Service.print(e.toString());
+        } catch (Exception e) {
+            print(e);
         }
         client.newCall(
                 new Request.Builder()
@@ -91,7 +90,7 @@ public final class ClientServer {
                 .enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Service.print(e.toString());
+                        print(e);
                     }
 
                     @Override

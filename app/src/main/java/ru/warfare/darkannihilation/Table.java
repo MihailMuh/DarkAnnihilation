@@ -3,8 +3,8 @@ package ru.warfare.darkannihilation;
 import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.Service;
 
+import static ru.warfare.darkannihilation.Py.print;
 import static ru.warfare.darkannihilation.systemd.Game.topPaint;
 import static ru.warfare.darkannihilation.systemd.Game.topPaintRed;
 
@@ -55,7 +55,7 @@ public final class Table {
                     maxes.set(i, currentLen);
                 }
             }
-            float m = maxes.get(i) + Service.getWidthInterval() + 10;
+            float m = maxes.get(i) + 60;
             maxes.set(i, m);
         }
     }
@@ -82,7 +82,7 @@ public final class Table {
                 }
             }
         } catch (Exception e) {
-            Service.print("Draw Table " + e.toString());
+            print("Draw Table " + e.toString());
         }
     }
 }

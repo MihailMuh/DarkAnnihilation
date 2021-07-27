@@ -8,9 +8,9 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_HEALTH;
-import static ru.warfare.darkannihilation.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class TripleFighter extends Sprite {
@@ -21,6 +21,7 @@ public class TripleFighter extends Sprite {
         super(game, ImageHub.tripleFighterImg);
         damage = TRIPLE_FIGHTER_DAMAGE;
 
+        calculateBarriers();
         newStatus();
 
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
@@ -28,11 +29,11 @@ public class TripleFighter extends Sprite {
 
     private void shoot() {
         if (System.currentTimeMillis() - lastShoot > TRIPLE_FIGHTER_SHOOT_TIME) {
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 int X = centerX();
                 int Y = centerY();
                 int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                 AudioHub.playShotgun();
             });
             lastShoot = System.currentTimeMillis();
@@ -40,7 +41,7 @@ public class TripleFighter extends Sprite {
     }
 
     private void newStatus() {
-        if (Game.bosses.size() != 0) {
+        if (game.bosses.size() != 0) {
             lock = true;
         }
         health = TRIPLE_FIGHTER_HEALTH;

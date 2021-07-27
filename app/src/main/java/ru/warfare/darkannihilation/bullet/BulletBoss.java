@@ -6,14 +6,15 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.BULLET_BOSS_SPEED;
+import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_SPEED;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
 
 public class BulletBoss extends Sprite {
-    public BulletBoss(int X, int Y, int type) {
-        super();
+    public BulletBoss(Game game, int X, int Y, int type) {
+        super(game);
         damage = BULLET_BOSS_DAMAGE;
-        status = "bulletEnemy";
+        name = BULLET_ENEMY;
         isBullet = true;
 
         switch (type)
@@ -45,7 +46,7 @@ public class BulletBoss extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSmallTripleExplosion();
-        Game.allSprites.remove(this);
+        kill();
     }
 
     @Override
@@ -54,7 +55,7 @@ public class BulletBoss extends Sprite {
         x -= speedX;
 
         if (y > Game.screenHeight | x < -height | x > Game.screenWidth) {
-            Game.allSprites.remove(this);
+            kill();
         }
     }
 }

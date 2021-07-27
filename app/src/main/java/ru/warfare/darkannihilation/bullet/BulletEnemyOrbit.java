@@ -7,7 +7,8 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Vector;
 
-import static ru.warfare.darkannihilation.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
 
 public class BulletEnemyOrbit extends Sprite {
     private final Vector vector = new Vector();
@@ -22,7 +23,7 @@ public class BulletEnemyOrbit extends Sprite {
         damage = BULLET_ENEMY_ORBIT_DAMAGE;
         isPassive = true;
         isBullet = true;
-        status = "fakeSaturn";
+        name = BULLET_ORBIT;
 
         X = (int) info[1];
         Y = (int) info[2];
@@ -63,10 +64,15 @@ public class BulletEnemyOrbit extends Sprite {
     }
 
     @Override
+    public void kill() {
+        super.kill();
+        game.bullets.remove(this);
+    }
+
+    @Override
     public void intersection() {
         createSmallExplosion();
-        Game.bullets.remove(this);
-        Game.allSprites.remove(this);
+        kill();
     }
 
     @Override

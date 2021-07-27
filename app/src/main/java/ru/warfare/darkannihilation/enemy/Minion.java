@@ -8,9 +8,9 @@ import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.Constants.MINION_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.MINION_HEALTH;
-import static ru.warfare.darkannihilation.Constants.MINION_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.MINION_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.MINION_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.MINION_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Minion extends Sprite {
@@ -33,11 +33,11 @@ public class Minion extends Sprite {
     private void shoot() {
         if (System.currentTimeMillis() - lastShoot > MINION_SHOOT_TIME) {
             lastShoot = System.currentTimeMillis();
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 int X = centerX();
                 int Y = centerY();
                 int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                Game.allSprites.add(new BulletEnemy(X, Y, values[2], values[0], values[1]));
+                game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                 AudioHub.playShotgun();
             });
         }
@@ -45,14 +45,14 @@ public class Minion extends Sprite {
 
     @Override
     public void intersection() {
-        Game.allSprites.remove(this);
+        kill();
         createLargeTripleExplosion();
     }
 
     @Override
     public void intersectionPlayer() {
         AudioHub.playMetal();
-        Game.allSprites.remove(this);
+        kill();
         createSmallTripleExplosion();
     }
 
@@ -77,7 +77,7 @@ public class Minion extends Sprite {
         shoot();
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
-            Game.allSprites.remove(this);
+            kill();
         }
     }
 }

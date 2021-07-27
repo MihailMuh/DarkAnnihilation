@@ -7,9 +7,9 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.SUNRISE_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.SUNRISE_HEALTH;
-import static ru.warfare.darkannihilation.Constants.SUNRISE_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Sunrise extends Sprite {
@@ -17,10 +17,11 @@ public class Sunrise extends Sprite {
     private boolean field;
     private boolean left = false;
 
-    public Sunrise() {
-        super(ImageHub.sunriseImg);
+    public Sunrise(Game game) {
+        super(game, ImageHub.sunriseImg);
         damage = SUNRISE_DAMAGE;
 
+        calculateBarriers();
         hide();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
@@ -30,29 +31,29 @@ public class Sunrise extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastShoot > SUNRISE_SHOOT_TIME) {
             lastShoot = now;
-            HardThread.newJob(() -> {
+            HardThread.doInBackGround(() -> {
                 int X = centerX();
                 int Y = centerY();
 
-                Game.allSprites.add(new BulletEnemy(X, Y, 0, 0, -10));
-                Game.allSprites.add(new BulletEnemy(X, Y, 90, 10, 0));
-                Game.allSprites.add(new BulletEnemy(X, Y, 180, 0, 10));
-                Game.allSprites.add(new BulletEnemy(X, Y, -90, -10, 0));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 0, 0, -10));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 90, 10, 0));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 180, 0, 10));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -90, -10, 0));
 
-                Game.allSprites.add(new BulletEnemy(X, Y, 45, 7, -7));
-                Game.allSprites.add(new BulletEnemy(X, Y, 135, 7, 7));
-                Game.allSprites.add(new BulletEnemy(X, Y, -45, -7, -7));
-                Game.allSprites.add(new BulletEnemy(X, Y, -135, -7, 7));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 45, 7, -7));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 135, 7, 7));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -45, -7, -7));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -135, -7, 7));
 
-                Game.allSprites.add(new BulletEnemy(X, Y, 67, 10, -4));
-                Game.allSprites.add(new BulletEnemy(X, Y, 22, 4, -10));
-                Game.allSprites.add(new BulletEnemy(X, Y, -67, -10, -4));
-                Game.allSprites.add(new BulletEnemy(X, Y, -22, -4, -10));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 67, 10, -4));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 22, 4, -10));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -67, -10, -4));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -22, -4, -10));
 
-                Game.allSprites.add(new BulletEnemy(X, Y, 157, 4, 10));
-                Game.allSprites.add(new BulletEnemy(X, Y, 113, 10, 4));
-                Game.allSprites.add(new BulletEnemy(X, Y, -157, -4, 10));
-                Game.allSprites.add(new BulletEnemy(X, Y, -113, -10, 4));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 157, 4, 10));
+                game.allSprites.add(new BulletEnemy(game, X, Y, 113, 10, 4));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -157, -4, 10));
+                game.allSprites.add(new BulletEnemy(game, X, Y, -113, -10, 4));
 
                 AudioHub.playDeagle();
             });

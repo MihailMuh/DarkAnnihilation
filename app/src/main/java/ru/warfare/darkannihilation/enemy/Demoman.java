@@ -6,17 +6,17 @@ import ru.warfare.darkannihilation.bullet.Bomb;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.DEMOMAN_DAMAGE;
-import static ru.warfare.darkannihilation.Constants.DEMOMAN_HEALTH;
-import static ru.warfare.darkannihilation.Constants.DEMOMAN_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Math.randInt;
 
 public class Demoman extends Sprite {
     private long lastShoot = System.currentTimeMillis();
     private boolean direction;
 
-    public Demoman() {
-        super(ImageHub.demomanImg);
+    public Demoman(Game game) {
+        super(game, ImageHub.demomanImg);
         damage = DEMOMAN_DAMAGE;
 
         hide();
@@ -26,7 +26,7 @@ public class Demoman extends Sprite {
 
     public void hide() {
         lock = true;
-        HardThread.newJob(() -> {
+        HardThread.doInBackGround(() -> {
             health = DEMOMAN_HEALTH;
             y = randInt(0, Game.halfScreenHeight - height);
             speedX = randInt(5, 10);
@@ -43,7 +43,7 @@ public class Demoman extends Sprite {
     public void shoot() {
         long now = System.currentTimeMillis();
         if (now - lastShoot > DEMOMAN_SHOOT_TIME) {
-            HardThread.newJob(() -> Game.allSprites.add(new Bomb(centerX(), centerY())));
+            HardThread.doInBackGround(() -> game.allSprites.add(new Bomb(game, centerX(), centerY())));
             lastShoot = now;
         }
     }

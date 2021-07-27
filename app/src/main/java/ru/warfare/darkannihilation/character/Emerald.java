@@ -9,9 +9,10 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.EMERALD_HEALTH;
-import static ru.warfare.darkannihilation.Constants.EMERALD_SHOOT_TIME;
-import static ru.warfare.darkannihilation.Constants.EMERALD_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.EMERALD_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.EMERALD_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.EMERALD_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
 public class Emerald extends BaseCharacter {
     public Emerald(Game g) {
@@ -31,20 +32,20 @@ public class Emerald extends BaseCharacter {
 
     public void shoot() {
         now = System.currentTimeMillis();
-        if (gun.equals("shotgun")) {
+        if (gun == SHOTGUN) {
             if (now - lastShoot > EMERALD_SHOTGUN_TIME) {
                 lastShoot = now;
                 AudioHub.playThunderStorm();
-                BulletThunder bulletThunder = new BulletThunder(centerX(), y);
-                Game.bullets.add(bulletThunder);
-                Game.allSprites.add(bulletThunder);
+                BulletThunder bulletThunder = new BulletThunder(game, centerX(), y);
+                game.bullets.add(bulletThunder);
+                game.allSprites.add(bulletThunder);
             }
         } else {
             if (now - lastShoot > EMERALD_SHOOT_TIME) {
                 AudioHub.playDynamite();
-                BulletDynamite bulletDynamite = new BulletDynamite(centerX(), y);
-                Game.bullets.add(bulletDynamite);
-                Game.allSprites.add(bulletDynamite);
+                BulletDynamite bulletDynamite = new BulletDynamite(game, centerX(), y);
+                game.bullets.add(bulletDynamite);
+                game.allSprites.add(bulletDynamite);
                 lastShoot = now;
             }
         }

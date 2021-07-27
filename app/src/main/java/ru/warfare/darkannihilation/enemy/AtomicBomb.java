@@ -6,9 +6,10 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.Constants.ATOMIC_BOMB_FRAME_TIME;
-import static ru.warfare.darkannihilation.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
-import static ru.warfare.darkannihilation.Constants.ROCKET_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.ATOMIC_BOMB_FRAME_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
+import static ru.warfare.darkannihilation.constant.Constants.ROCKET_DAMAGE;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
 
 public class AtomicBomb extends Sprite {
     private int frame = 0;
@@ -16,10 +17,11 @@ public class AtomicBomb extends Sprite {
     private long lastFrame = System.currentTimeMillis();
     private boolean BOOM;
 
-    public AtomicBomb() {
-        super(ImageHub.atomBombImage[0]);
+    public AtomicBomb(Game game) {
+        super(game, ImageHub.atomBombImage[0]);
 
         damage = ROCKET_DAMAGE;
+        calculateBarriers();
         hide();
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
@@ -28,11 +30,11 @@ public class AtomicBomb extends Sprite {
     private void boom() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.newJob(() -> {
-                for (int i = 0; i < Game.allSprites.size(); i++) {
-                    Sprite sprite = Game.allSprites.get(i);
+            HardThread.doInBackGround(() -> {
+                for (int i = 0; i < game.allSprites.size(); i++) {
+                    Sprite sprite = game.allSprites.get(i);
                     if (!sprite.lock) {
-                        if ((!sprite.isPassive && !sprite.isBullet) | (sprite.status.equals("bulletEnemy"))) {
+                        if ((!sprite.isPassive && !sprite.isBullet) | (sprite.name == BULLET_ENEMY)) {
                             sprite.intersection();
                         }
                     }

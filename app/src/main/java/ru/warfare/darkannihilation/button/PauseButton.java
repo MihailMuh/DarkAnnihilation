@@ -9,7 +9,7 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 public class PauseButton extends Sprite {
-    public static volatile int oldStatus;
+    public static volatile byte oldStatus;
     private static final Paint alphaPaint = new Paint();
     private boolean isInvisible;
     private final int myX;
@@ -48,7 +48,7 @@ public class PauseButton extends Sprite {
 
     public void make() {
         oldStatus = Game.gameStatus;
-        HardThread.newJob(() -> {
+        HardThread.doInBackGround(() -> {
             AudioHub.playClick();
             game.generatePause();
         });
