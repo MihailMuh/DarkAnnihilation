@@ -6,6 +6,8 @@ import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 
+import static ru.warfare.darkannihilation.constant.Colors.THUNDER_FIRST;
+import static ru.warfare.darkannihilation.constant.Colors.THUNDER_SECOND;
 import static ru.warfare.darkannihilation.constant.Constants.LIGHTNING_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.LIGHTNING_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LIGHTNING_IMAGES;
@@ -42,10 +44,10 @@ public class BulletThunder extends BaseBullet {
     public void render() {
         switch (frame) {
             case 2:
-                Game.canvas.drawColor(Color.parseColor("#494d54"));
+                Game.canvas.drawColor(THUNDER_FIRST);
                 break;
             case 3:
-                Game.canvas.drawColor(Color.parseColor("#444664"));
+                Game.canvas.drawColor(THUNDER_SECOND);
                 break;
             default:
                 Game.canvas.drawBitmap(ImageHub.thunderImage[frame], x, y, null);

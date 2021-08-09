@@ -62,7 +62,7 @@ public class Emerald extends BaseCharacter {
 
     @Override
     public Sprite getRect() {
-        return newRect(x + 25, y + 25);
+        return newRect(x + 30, y + 25);
     }
 
     @Override

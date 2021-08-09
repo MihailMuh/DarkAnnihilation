@@ -29,7 +29,7 @@ public class FightScreen extends Sprite {
 
         Time.waitImg();
 
-        image = ImageHub.resizeImage(ImageHub.fightScreen, width, height);
+        image = ImageHub.resizeBitmap(ImageHub.fightScreen, width, height);
     }
 
     @Override

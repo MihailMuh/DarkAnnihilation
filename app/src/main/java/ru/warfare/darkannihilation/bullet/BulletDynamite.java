@@ -27,7 +27,6 @@ public class BulletDynamite extends BaseBullet {
         speedY = randInt(6, 9);
 
         y = Y - height;
-        power = SUPER;
     }
 
     @Override

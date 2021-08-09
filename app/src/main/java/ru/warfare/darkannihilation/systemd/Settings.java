@@ -153,9 +153,9 @@ public class Settings {
                 switch (i1) {
                     case 0:
                         game.language = "en";
-                        ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed,
+                        ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed,
                                 ImageHub._300, ImageHub._70);
-                        ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed,
+                        ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed,
                                 ImageHub._300, ImageHub._70);
                         break;
                     case 1:

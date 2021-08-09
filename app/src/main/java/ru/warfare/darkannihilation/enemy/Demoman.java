@@ -14,7 +14,7 @@ import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Demoman extends Sprite {
     private long lastShoot = System.currentTimeMillis();
-    private boolean direction;
+    private boolean goLeft = false;
     private final int endY;
 
     public Demoman(Game game) {
@@ -22,29 +22,17 @@ public class Demoman extends Sprite {
         damage = DEMOMAN_DAMAGE;
 
         endY = Game.halfScreenHeight - height;
+        speedX = -3;
 
         lock = true;
-        baseSettings();
 
         recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
     }
 
-    private void baseSettings() {
-        health = DEMOMAN_HEALTH;
-        y = randInt(0, endY);
-        speedX = randInt(5, 10);
-        direction = randBoolean();
-        if (direction) {
-            x = -width;
-        } else {
-            x = Game.screenWidth;
-            speedX = -speedX;
-        }
-    }
-
     private void shoot() {
         if (System.currentTimeMillis() - lastShoot > DEMOMAN_SHOOT_TIME) {
-            HardThread.doInBackGround(() -> game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())));
+            HardThread.doInBackGround(() ->
+                    game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())));
             lastShoot = System.currentTimeMillis();
         }
     }
@@ -55,15 +43,29 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void hide() {
-        lock = true;
-        HardThread.doInBackGround(this::baseSettings);
+    public void start() {
+        HardThread.doInBackGround(() -> {
+            health = DEMOMAN_HEALTH;
+            y = randInt(0, endY);
+            speedX = randInt(5, 10);
+            goLeft = randBoolean();
+
+            if (goLeft) {
+                image = ImageHub.mirrorImage(ImageHub.demomanImg, true);
+                x = -width;
+            } else {
+                image = ImageHub.demomanImg;
+                x = Game.screenWidth;
+                speedX = -speedX;
+            }
+            lock = false;
+        });
     }
 
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        hide();
+        lock = true;
     }
 
     @Override
@@ -78,13 +80,13 @@ public class Demoman extends Sprite {
 
         x += speedX;
 
-        if (direction) {
+        if (goLeft) {
             if (x > Game.screenWidth) {
-                hide();
+                lock = true;
             }
         } else {
             if (x < -width) {
-                hide();
+                lock = true;
             }
         }
     }

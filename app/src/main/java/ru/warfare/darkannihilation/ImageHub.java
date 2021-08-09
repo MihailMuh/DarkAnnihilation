@@ -30,6 +30,8 @@ import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 
+import androidx.annotation.NonNull;
+
 public final class ImageHub {
     public static final Bitmap[] explosionTripleImageSmall = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
     public static final Bitmap[] explosionTripleImageMedium = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
@@ -604,13 +606,26 @@ public final class ImageHub {
         return res.getIdentifier(stringBuilder.toString(), "drawable", name);
     }
 
-    public static Bitmap rotateImage(Bitmap image, float degree) {
+    public static Bitmap rotateBitmap(Bitmap image, float degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
     }
 
-    public static Bitmap resizeImage(Bitmap bitmap, int width, int height) {
+    public static Bitmap mirrorImage(@NonNull Bitmap image, boolean horizontal) {
+        Matrix matrix = new Matrix();
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        if (horizontal) {
+            matrix.postScale(-1, 1, width / 2f, height / 2f);
+        } else {
+            matrix.postScale(1, -1, width / 2f, height / 2f);
+        }
+        return Bitmap.createBitmap(image, 0, 0, width,height, matrix, true);
+    }
+
+    public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 }

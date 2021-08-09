@@ -116,6 +116,7 @@ public class XWing extends Sprite {
 
     @Override
     public void empireStart() {
+        start();
         lock = false;
     }
 

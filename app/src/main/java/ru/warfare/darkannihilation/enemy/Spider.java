@@ -32,7 +32,6 @@ public class Spider extends Sprite {
         damage = SPIDER_DAMAGE;
 
         calculateBarriers();
-        hide();
         lock = true;
 
         recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));

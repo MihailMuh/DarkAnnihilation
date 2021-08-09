@@ -70,6 +70,7 @@ import ru.warfare.darkannihilation.support.HealthKit;
 import ru.warfare.darkannihilation.support.ShotgunKit;
 
 import static ru.warfare.darkannihilation.Py.print;
+import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
 import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
@@ -418,7 +419,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             if (score > 70) {
                 if (demoman.lock) {
                     if (Randomize.randFloat() <= 0.0021) {
-                        demoman.lock = false;
+                        demoman.start();
                     }
                 }
             }
@@ -511,7 +512,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         settings();
                         break;
                     case LOADING:
-                        loading();
+                        loadingScreen.turn();
                         break;
                 }
                 renderFPS();
@@ -1068,17 +1069,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void win() {
+        canvas.drawColor(WIN_COLOR);
+
         canvas.drawText(string_thanks, thanksX, thanksY, winPaint);
         canvas.drawText(string_go_to_menu, go_to_menuX, go_to_menuY, gameOverPaint);
 
         if (pointerCount >= 4) {
             onLoading(this::generateMenu);
         }
-    }
-
-    private void loading() {
-        loadingScreen.render();
-        loadingScreen.update();
     }
 
     private void renderSprites() {

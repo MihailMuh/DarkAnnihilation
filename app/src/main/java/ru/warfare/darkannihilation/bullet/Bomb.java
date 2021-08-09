@@ -21,7 +21,7 @@ public class Bomb extends BaseBullet {
 
     @Override
     public Object[] getBox(int a, int b, Bitmap bitmap) {
-        return new Object[] {ImageHub.rotateImage(image, 180)};
+        return new Object[] {ImageHub.rotateBitmap(image, 180)};
     }
 
     @Override

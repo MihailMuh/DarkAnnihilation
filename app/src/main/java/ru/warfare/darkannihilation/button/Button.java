@@ -43,8 +43,8 @@ public class Button extends BaseButton {
             while (len > width - 40) {
                 width += 5;
             }
-            ImageHub.buttonImagePressed = ImageHub.resizeImage(ImageHub.buttonImagePressed, width, height);
-            ImageHub.buttonImageNotPressed = ImageHub.resizeImage(ImageHub.buttonImageNotPressed, width, height);
+            ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed, width, height);
+            ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed, width, height);
             if (game.buttonMenu != null) {
                 if (!func.equals(game.buttonMenu.function)) {
                     game.buttonMenu.updateFrontEnd();

@@ -23,7 +23,6 @@ public class Sunrise extends Sprite {
         damage = SUNRISE_DAMAGE;
 
         calculateBarriers();
-        hide();
         lock = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);

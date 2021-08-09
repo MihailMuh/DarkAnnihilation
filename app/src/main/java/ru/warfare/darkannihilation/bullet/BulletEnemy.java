@@ -11,7 +11,7 @@ import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
 
 public class BulletEnemy extends BaseBullet {
     public BulletEnemy(Game game, int X, int Y, int angle, int spdx, int spdy) {
-        super(game, ImageHub.rotateImage(ImageHub.bulletEnemyImage, angle), X, Y, BULLET_ENEMY_DAMAGE);
+        super(game, ImageHub.rotateBitmap(ImageHub.bulletEnemyImage, angle), X, Y, BULLET_ENEMY_DAMAGE);
         name = BULLET_ENEMY;
 
         speedX = spdx;

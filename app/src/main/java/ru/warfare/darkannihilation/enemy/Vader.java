@@ -107,6 +107,7 @@ public class Vader extends Sprite {
 
     @Override
     public void empireStart() {
+        start();
         lock = false;
     }
 

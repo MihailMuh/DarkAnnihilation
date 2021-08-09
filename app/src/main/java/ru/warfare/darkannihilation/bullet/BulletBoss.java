@@ -19,11 +19,11 @@ public class BulletBoss extends BaseBullet {
         {
             case 2:
                 speedX = 6;
-                image = ImageHub.rotateImage(ImageHub.laserImage, 45);
+                image = ImageHub.rotateBitmap(ImageHub.laserImage, 45);
                 break;
             case 3:
                 speedX = -6;
-                image = ImageHub.rotateImage(ImageHub.laserImage, -45);
+                image = ImageHub.rotateBitmap(ImageHub.laserImage, -45);
                 break;
         }
 
