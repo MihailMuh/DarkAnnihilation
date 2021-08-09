@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation.audio;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
@@ -28,11 +30,16 @@ public class AudioExoPlayer {
         return false;
     }
 
-    static void update(SimpleExoPlayer exoPlayer) {
+    static void update(@NonNull SimpleExoPlayer exoPlayer, float vol) {
         exoPlayer.seekTo(0);
-        if (!exoPlayer.isPlaying()) {
-            exoPlayer.play();
-        }
+        exoPlayer.setVolume(vol * volume);
+        exoPlayer.pause();
+    }
+
+    static void update(@NonNull SimpleExoPlayer exoPlayer) {
+        exoPlayer.seekTo(0);
+        exoPlayer.setVolume(volume);
+        exoPlayer.pause();
     }
 
     static void release(SimpleExoPlayer simpleExoPlayer) {
@@ -41,6 +48,7 @@ public class AudioExoPlayer {
         }
     }
 
+    @NonNull
     static MediaItem getItem(int id) {
         return MediaItem.fromUri(Service.getResPath() + id);
     }

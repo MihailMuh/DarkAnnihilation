@@ -26,5 +26,8 @@
         <item>Choisissez votre langue</item>
         <item>Lisser le texte</item>
 
+        <item>There is not internet connection</item>
+        <item>Сервер временно не доступен</item>
+
     </string-array>
 </resources>

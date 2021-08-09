@@ -1,44 +1,29 @@
 package ru.warfare.darkannihilation.explosion;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.BaseExplosion;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_EXPLOSION_IMAGES;
+import static ru.warfare.darkannihilation.constant.NamesConst.SMALL_EXPLOSION;
 
 public class DefaultExplosion extends BaseExplosion {
-    public DefaultExplosion(String size) {
-        super(ImageHub.explosionDefaultImageSmall[0]);
+    public DefaultExplosion(Game game, byte size) {
+        super(game, ImageHub.explosionDefaultImageMedium);
 
-        switch (size)
-        {
-            case "small":
-                img = ImageHub.explosionDefaultImageSmall;
-                break;
-            case "default":
-                img = ImageHub.explosionDefaultImageMedium;
-                width = img[0].getWidth();
-                halfWidth = width / 2;
-                height = img[0].getHeight();
-                halfHeight = height / 2;
-                break;
+        if (size == SMALL_EXPLOSION) {
+            img = ImageHub.explosionDefaultImageSmall;
+            image = img[0];
+
+            makeParams();
         }
     }
 
     @Override
     public void update() {
-        if (frame != NUMBER_DEFAULT_EXPLOSION_IMAGES) {
-            frame++;
-        } else {
-            frame = 0;
+        frame++;
+        if (frame == NUMBER_DEFAULT_EXPLOSION_IMAGES) {
             lock = true;
-        }
-    }
-
-    @Override
-    public void render () {
-        if (frame != NUMBER_DEFAULT_EXPLOSION_IMAGES) {
-            Game.canvas.drawBitmap(img[frame], x, y, null);
         }
     }
 }

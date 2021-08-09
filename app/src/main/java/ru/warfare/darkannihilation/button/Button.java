@@ -4,7 +4,7 @@ import ru.warfare.darkannihilation.Clerk;
 import ru.warfare.darkannihilation.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.Time;
-import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -14,7 +14,7 @@ import static ru.warfare.darkannihilation.constant.Constants.BUTTON_CLICK_TIME;
 import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
 
-public class Button extends Sprite {
+public class Button extends BaseButton {
     public String function;
     private String text = " ";
     private int textX;
@@ -84,21 +84,11 @@ public class Button extends Sprite {
         textY = (int) (y + (Game.buttonsPaint.getTextSize() / 4));
     }
 
-    public boolean checkCoords(int X, int Y) {
-        if (x < X) {
-            if (X < right()) {
-                if (y < Y) {
-                    return Y < bottom();
-                }
-            }
-        }
-        return false;
-    }
-
     public void sweep(int X, int Y) {
         isPressed = checkCoords(X, Y);
     }
 
+    @Override
     public void setCoords(int X, int Y) {
         if (checkCoords(X, Y)) {
             long now = System.currentTimeMillis();
@@ -139,8 +129,11 @@ public class Button extends Sprite {
                             });
                             break;
                         case "top":
-                            ClientServer.postAndGetBestScore(Clerk.nickname, game.bestScore);
-                            game.onLoading(() -> game.generateTopScore());
+                            game.onLoading(game::generateTopScore);
+
+                            ClientServer.postBestScore(Clerk.nickname, game.bestScore);
+                            ClientServer.getStatistics();
+                            game.generateTable();
                             break;
                         case "restart":
                             game.onLoading(() -> {
@@ -152,11 +145,11 @@ public class Button extends Sprite {
                             break;
                         case "fromSetting":
                             game.hideSettings();
-                            game.onLoading(() -> game.generateMenu());
+                            game.onLoading(game::generateMenu);
                             break;
                         case "settings":
                             ImageHub.loadSettingsImages();
-                            game.onLoading(() -> game.generateSettings());
+                            game.onLoading(game::generateSettings);
                             break;
                     }
                 });

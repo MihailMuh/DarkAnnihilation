@@ -1,35 +1,18 @@
 package ru.warfare.darkannihilation.button;
 
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.base.BaseCharacterButton;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 
-public class ButtonEmerald extends Sprite {
+public class ButtonEmerald extends BaseCharacterButton {
     public ButtonEmerald(Game game) {
-        super(game, ImageHub.buttonEmeraldImg);
-
-        y = Game.halfScreenHeight - halfHeight;
-        hide();
+        super(game, ImageHub.buttonEmeraldImg, EMERALD);
     }
 
-    public void hide() {
-        x = Game.screenWidth;
-    }
-
+    @Override
     public void show() {
         x = Game.halfScreenWidth + (game.buttonPlayer.width * 2);
-    }
-
-    public void setCoords(int X, int Y) {
-        if (x < X & X < x + width & y < Y & Y < y + height) {
-            AudioHub.playClick();
-            game.onLoading(() -> {
-                Game.character = EMERALD;
-                game.generateNewGame();
-            });
-        }
     }
 }

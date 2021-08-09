@@ -10,7 +10,8 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_SHOOT_TIME;
-import static ru.warfare.darkannihilation.math.Math.randInt;
+import static ru.warfare.darkannihilation.math.Randomize.randBoolean;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Sunrise extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -23,6 +24,7 @@ public class Sunrise extends Sprite {
 
         calculateBarriers();
         hide();
+        lock = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
@@ -35,25 +37,25 @@ public class Sunrise extends Sprite {
                 int X = centerX();
                 int Y = centerY();
 
-                game.allSprites.add(new BulletEnemy(game, X, Y, 0, 0, -10));
-                game.allSprites.add(new BulletEnemy(game, X, Y, 90, 10, 0));
-                game.allSprites.add(new BulletEnemy(game, X, Y, 180, 0, 10));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -90, -10, 0));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 0, 0, -10));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 90, 10, 0));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 180, 0, 10));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -90, -10, 0));
 
-                game.allSprites.add(new BulletEnemy(game, X, Y, 45, 7, -7));
-                game.allSprites.add(new BulletEnemy(game, X, Y, 135, 7, 7));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -45, -7, -7));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -135, -7, 7));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 45, 7, -7));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 135, 7, 7));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -45, -7, -7));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -135, -7, 7));
 
-                game.allSprites.add(new BulletEnemy(game, X, Y, 67, 10, -4));
-                game.allSprites.add(new BulletEnemy(game, X, Y, 22, 4, -10));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -67, -10, -4));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -22, -4, -10));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 67, 10, -4));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 22, 4, -10));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -67, -10, -4));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -22, -4, -10));
 
-                game.allSprites.add(new BulletEnemy(game, X, Y, 157, 4, 10));
-                game.allSprites.add(new BulletEnemy(game, X, Y, 113, 10, 4));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -157, -4, 10));
-                game.allSprites.add(new BulletEnemy(game, X, Y, -113, -10, 4));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 157, 4, 10));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 113, 10, 4));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -157, -4, 10));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -113, -10, 4));
 
                 AudioHub.playDeagle();
             });
@@ -62,37 +64,30 @@ public class Sunrise extends Sprite {
 
     public void start() {
         lock = false;
-        if (buff) {
-            up();
-        }
+        hide();
+
+        super.start();
     }
 
-    private void hide() {
+    @Override
+    public void hide() {
         field = false;
         health = SUNRISE_HEALTH;
         x = randInt(0, screenWidthWidth);
         y = -height;
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
-        left = randInt(0, 1) == 1;
-        lock = true;
+        left = randBoolean();
     }
 
-    private void up() {
+    @Override
+    public void onBuff() {
         speedX *= 3;
         speedY *= 3;
     }
 
     @Override
-    public void buff() {
-        buff = true;
-        if (!lock) {
-            up();
-        }
-    }
-
-    @Override
-    public void stopBuff() {
+    public void onStopBuff() {
         speedX /= 3;
         speedY /= 3;
     }
@@ -103,15 +98,15 @@ public class Sunrise extends Sprite {
     }
 
     @Override
-    public void intersection() {
-        intersectionPlayer();
-        Game.score += 100;
+    public void intersectionPlayer() {
+        createSkullExplosion();
+        lock = true;
     }
 
     @Override
-    public void intersectionPlayer() {
-        createSkullExplosion();
-        hide();
+    public void kill() {
+        intersectionPlayer();
+        Game.score += 100;
     }
 
     @Override

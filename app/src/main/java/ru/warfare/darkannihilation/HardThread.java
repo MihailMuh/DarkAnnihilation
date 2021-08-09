@@ -4,7 +4,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ru.warfare.darkannihilation.interfaces.Function;
-import ru.warfare.darkannihilation.systemd.Service;
 
 import static ru.warfare.darkannihilation.Py.print;
 
@@ -12,7 +11,7 @@ public class HardThread implements Runnable {
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     private Thread thread;
     private static Function function;
-    private static volatile boolean playing;
+    private volatile boolean playing;
     private static volatile boolean work;
 
     public HardThread() {
@@ -26,10 +25,6 @@ public class HardThread implements Runnable {
         } else {
             threadPool.execute(func::run);
         }
-    }
-
-    public static void doInUI(Function func) {
-        doInBackGround(() -> Service.runOnUiThread(func::run));
     }
 
     public void stopJob() {

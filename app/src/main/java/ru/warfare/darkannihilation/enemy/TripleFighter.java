@@ -11,7 +11,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
-import static ru.warfare.darkannihilation.math.Math.randInt;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class TripleFighter extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -22,7 +22,7 @@ public class TripleFighter extends Sprite {
         damage = TRIPLE_FIGHTER_DAMAGE;
 
         calculateBarriers();
-        newStatus();
+        hide();
 
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
     }
@@ -33,15 +33,16 @@ public class TripleFighter extends Sprite {
                 int X = centerX();
                 int Y = centerY();
                 int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                 AudioHub.playShotgun();
             });
             lastShoot = System.currentTimeMillis();
         }
     }
 
-    private void newStatus() {
-        if (game.bosses.size() != 0) {
+    @Override
+    public void hide() {
+        if (game.boss != null) {
             lock = true;
         }
         health = TRIPLE_FIGHTER_HEALTH;
@@ -57,17 +58,17 @@ public class TripleFighter extends Sprite {
     }
 
     @Override
-    public void intersection() {
-        createLargeTripleExplosion();
-        Game.score += 5;
-        newStatus();
-    }
-
-    @Override
     public void intersectionPlayer() {
         AudioHub.playMetal();
         createSmallExplosion();
-        newStatus();
+        hide();
+    }
+
+    @Override
+    public void kill() {
+        createLargeTripleExplosion();
+        Game.score += 5;
+        hide();
     }
 
     @Override
@@ -85,7 +86,7 @@ public class TripleFighter extends Sprite {
         y += speedY;
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
-            newStatus();
+            hide();
         }
     }
 }

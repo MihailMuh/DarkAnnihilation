@@ -11,7 +11,6 @@ public class ThunderScreen extends BaseScreen {
 
     public ThunderScreen() {
         super(ImageHub.thunderScreen);
-        frame = 0;
     }
 
     @Override

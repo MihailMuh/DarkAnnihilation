@@ -173,7 +173,6 @@
         app:spinner_arrow_show="true"
         app:spinner_divider_show="true"
         app:spinner_divider_size="0.2dp"
-        app:spinner_item_array="@array/languages"
         app:spinner_popup_animation="fade"
         app:spinner_popup_background="#87CEFA"
         app:spinner_popup_elevation="14dp"

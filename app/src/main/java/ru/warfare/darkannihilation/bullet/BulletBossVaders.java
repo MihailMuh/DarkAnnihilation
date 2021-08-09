@@ -1,20 +1,19 @@
 package ru.warfare.darkannihilation.bullet;
 
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_VADERS_DAMAGE;
 
-public class BulletBossVaders extends Sprite {
+public class BulletBossVaders extends BaseBullet {
     public BulletBossVaders(Game game, int X, int Y, int spdx, int spdy) {
-        super(game, ImageHub.bulletBossVadersImg);
-        damage = BULLET_BOSS_VADERS_DAMAGE;
+        super(game, ImageHub.bulletBossVadersImg, X, Y, BULLET_BOSS_VADERS_DAMAGE);
 
         speedX = spdx;
         speedY = spdy;
 
-        x = X - halfWidth;
         y = Y - halfWidth;
 
         recreateRect(x + 25, y + 25, x + width - 25, y + height - 25);
@@ -27,15 +26,25 @@ public class BulletBossVaders extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        createSkullExplosion();
         kill();
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
+    public void check_intersectionBullet(BaseBullet bullet) {
         if (intersect(bullet)) {
-            bullet.intersection();
+            bullet.kill();
         }
+    }
+
+    @Override
+    public void kill() {
+        createSkullExplosion();
+        hide();
+    }
+
+    @Override
+    public void hide() {
+        game.enemies.remove(this);
     }
 
     @Override
@@ -44,7 +53,7 @@ public class BulletBossVaders extends Sprite {
         x += speedX;
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
-            kill();
+            hide();
         }
     }
 }

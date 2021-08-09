@@ -3,12 +3,12 @@ package ru.warfare.darkannihilation.button;
 import android.graphics.Paint;
 
 import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
 
-public class PauseButton extends Sprite {
+public class PauseButton extends BaseButton {
     public static volatile byte oldStatus;
     private static final Paint alphaPaint = new Paint();
     private boolean isInvisible;
@@ -52,6 +52,10 @@ public class PauseButton extends Sprite {
             AudioHub.playClick();
             game.generatePause();
         });
+    }
+
+    @Override
+    public void setCoords(int X, int Y) {
     }
 
     public boolean checkCoords(int X, int Y) {

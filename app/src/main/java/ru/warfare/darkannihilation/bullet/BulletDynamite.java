@@ -3,16 +3,18 @@ package ru.warfare.darkannihilation.bullet;
 import android.graphics.Matrix;
 
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_DYNAMITE_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
+import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
-public class BulletDynamite extends Sprite {
-    private final int rotSpeed = Math.randInt(-10, 10);
+public class BulletDynamite extends BaseBullet {
+    private final int rotSpeed = randInt(-10, 10);
     private final Matrix matrix = new Matrix();
     private boolean BOOM = false;
     private boolean ready = false;
@@ -20,19 +22,16 @@ public class BulletDynamite extends Sprite {
     private long lastShoot = System.currentTimeMillis();
 
     public BulletDynamite(Game game, int X, int Y) {
-        super(game, ImageHub.dynamiteImg);
-        damage = BULLET_DYNAMITE_DAMAGE;
-        isPassive = true;
-        isBullet = true;
+        super(game, ImageHub.dynamiteImg, X, Y, BULLET_DYNAMITE_DAMAGE);
 
-        speedY = Math.randInt(6, 9);
+        speedY = randInt(6, 9);
 
-        x = X - halfWidth;
         y = Y - height;
+        power = SUPER;
     }
 
     @Override
-    public void intersection() {
+    public void kill() {
         if (!BOOM) {
             BOOM = true;
             HardThread.doInBackGround(() -> {
@@ -63,8 +62,7 @@ public class BulletDynamite extends Sprite {
     }
 
     @Override
-    public void kill() {
-        super.kill();
+    public void hide() {
         game.bullets.remove(this);
     }
 
@@ -75,17 +73,16 @@ public class BulletDynamite extends Sprite {
             frame += rotSpeed;
 
             if (y < -height) {
-                kill();
+                hide();
             }
         }
         if (ready) {
             long now = System.currentTimeMillis();
             if (now - lastShoot > 33) {
                 lastShoot = now;
-                if (frame != 12) {
-                    frame++;
-                } else {
-                    kill();
+                frame++;
+                if (frame == NUMBER_SKULL_EXPLOSION_IMAGES) {
+                    hide();
                 }
             }
         }

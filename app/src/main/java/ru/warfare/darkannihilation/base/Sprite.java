@@ -2,10 +2,17 @@ package ru.warfare.darkannihilation.base;
 
 import android.graphics.Bitmap;
 
+import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
-public class Sprite {
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSIONS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
+
+public abstract class Sprite {
     public Game game;
     public Bitmap image;
 
@@ -19,36 +26,33 @@ public class Sprite {
     public int halfWidth;
     public int halfHeight;
 
-    public int screenHeightHeight;
-    public int screenWidthWidth;
+    protected int screenHeightHeight;
+    protected int screenWidthWidth;
 
     public int health = 0;
     public int damage = 0;
-
-    public boolean buff = false;
-    public boolean lock = false;
-    public boolean isPassive = false;
-    public boolean isBullet = false;
-
     public byte name = 0;
+
+    protected boolean buff = false;
+    public boolean lock = false;
 
     public int left;
     public int top;
     public int right;
     public int bottom;
 
-    public Sprite(Game game) {
+    protected Sprite(Game game) {
         this.game = game;
     }
 
-    public Sprite(Game g, Bitmap bitmap) {
+    protected Sprite(Game g, Bitmap bitmap) {
         game = g;
         image = bitmap;
 
         makeParams();
     }
 
-    public void makeParams() {
+    protected void makeParams() {
         width = image.getWidth();
         height = image.getHeight();
         halfWidth = width / 2;
@@ -60,97 +64,122 @@ public class Sprite {
         bottom = y + height;
     }
 
-    public void calculateBarriers() {
+    protected void calculateBarriers() {
         screenHeightHeight = Game.screenHeight - height;
         screenWidthWidth = Game.screenWidth - width;
     }
 
-    public void update() {
-    }
+    public abstract void update();
 
     public void render() {
         Game.canvas.drawBitmap(image, x, y, null);
     }
 
-    public void intersection() {
+    public void turn() {
+        render();
+        update();
     }
 
     public void intersectionPlayer() {
     }
 
-    public void check_intersectionBullet(Sprite bullet) {
+    public void check_intersectionBullet(BaseBullet bullet) {
         if (intersect(bullet)) {
             health -= bullet.damage;
-            bullet.intersection();
+            bullet.kill();
             if (health <= 0) {
-                intersection();
+                kill();
             }
+        }
+    }
+
+    public abstract void kill();
+
+    public void killInBack() {
+        kill();
+    }
+
+    public void hide() {
+    }
+
+    public void start() {
+        if (buff) {
+            onBuff();
         }
     }
 
     public void empireStart() {
     }
 
+    protected void onStopBuff() {
+    }
+
+    protected void onBuff() {
+    }
+
     public void buff() {
+        buff = true;
+        onBuff();
     }
 
     public void stopBuff() {
-    }
-
-    public void sB() {
-        if (buff & !lock) {
-            stopBuff();
+        if (buff) {
+            onStopBuff();
             buff = false;
         }
     }
 
-    public void kill() {
-        game.allSprites.remove(this);
+    protected void createLargeExplosion() {
+        int X = centerX();
+        int Y = centerY();
+        HardThread.doInBackGround(() -> {
+            AudioHub.playBoom();
+            for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
+                if (game.defaultLargeExplosion[i].lock) {
+                    game.defaultLargeExplosion[i].start(X, Y);
+                    break;
+                }
+            }
+        });
     }
 
-    public void createLargeExplosion() {
-        AudioHub.playBoom();
-        for (int i = Game.numberSmallExplosionsTriple; i < Game.numberMediumExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(centerX(), centerY());
+    protected void createSmallExplosion() {
+        for (int i = 0; i < NUMBER_DEFAULT_SMALL_EXPLOSION; i++) {
+            if (game.defaultSmallExplosion[i].lock) {
+                game.defaultSmallExplosion[i].start(centerX(), centerY());
                 break;
             }
         }
     }
 
-    public void createSmallExplosion() {
-        for (int i = Game.numberMediumExplosionsDefault; i < Game.numberSmallExplosionsDefault; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(centerX(), centerY());
+    protected void createLargeTripleExplosion() {
+        int X = centerX();
+        int Y = centerY();
+        HardThread.doInBackGround(() -> {
+            AudioHub.playBoom();
+            for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
+                if (game.tripleLargeExplosion[i].lock) {
+                    game.tripleLargeExplosion[i].start(X, Y);
+                    break;
+                }
+            }
+        });
+    }
+
+    protected void createSmallTripleExplosion() {
+        for (int i = 0; i < NUMBER_TRIPLE_SMALL_EXPLOSION; i++) {
+            if (game.tripleSmallExplosion[i].lock) {
+                game.tripleSmallExplosion[i].start(centerX(), centerY());
                 break;
             }
         }
     }
 
-    public void createLargeTripleExplosion() {
-        AudioHub.playBoom();
-        for (int i = 0; i < Game.numberMediumExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(centerX(), centerY());
-                break;
-            }
-        }
-    }
-
-    public void createSmallTripleExplosion() {
-        for (int i = Game.numberMediumExplosionsTriple; i < Game.numberSmallExplosionsTriple; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(centerX(), centerY());
-                break;
-            }
-        }
-    }
-
-    public void createSkullExplosion() {
+    protected void createSkullExplosion() {
         AudioHub.playMegaBoom();
-        for (int i = Game.numberSmallExplosionsDefault; i < Game.numberExplosionsALL; i++) {
-            if (game.allExplosions[i].lock) {
-                game.allExplosions[i].start(centerX(), centerY());
+        for (int i = 0; i < NUMBER_SKULL_EXPLOSIONS; i++) {
+            if (game.skullExplosion[i].lock) {
+                game.skullExplosion[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -180,15 +209,13 @@ public class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
-        if (sprite != null) {
-            getRect();
-            sprite = sprite.getRect();
+        getRect();
+        sprite = sprite.getRect();
 
-            if (left <= sprite.right) {
-                if (sprite.left <= right) {
-                    if (top <= sprite.bottom) {
-                        return sprite.top <= bottom;
-                    }
+        if (left <= sprite.right) {
+            if (sprite.left <= right) {
+                if (top <= sprite.bottom) {
+                    return sprite.top <= bottom;
                 }
             }
         }

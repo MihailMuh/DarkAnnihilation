@@ -8,14 +8,14 @@ import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.bullet.Buckshot;
 import ru.warfare.darkannihilation.bullet.Bullet;
 
+import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
 import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
 public class MillenniumFalcon extends BaseCharacter {
     public MillenniumFalcon(Game g) {
-        super(g, ImageHub.playerImage);
-
+        super(g, ImageHub.playerImage, MILLENNIUM_FALCON_HEALTH);
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
     }
 
@@ -29,7 +29,6 @@ public class MillenniumFalcon extends BaseCharacter {
                 for (int i = -4; i <= 4; i += 2) {
                     Buckshot buckshot = new Buckshot(game, centerX, y, i);
                     game.bullets.add(buckshot);
-                    game.allSprites.add(buckshot);
                 }
             }
         } else {
@@ -40,11 +39,9 @@ public class MillenniumFalcon extends BaseCharacter {
 
                 Bullet bullet = new Bullet(game, X + 3, y);
                 game.bullets.add(bullet);
-                game.allSprites.add(bullet);
 
                 bullet = new Bullet(game, X - 3, y);
                 game.bullets.add(bullet);
-                game.allSprites.add(bullet);
             }
         }
     }

@@ -8,16 +8,17 @@ import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 import static ru.warfare.darkannihilation.math.Math.getDistance;
-import static ru.warfare.darkannihilation.math.Math.randInt;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class XWing extends Sprite {
     private long lastShoot = System.currentTimeMillis();
-    private final int R;
+    private static int R;
     private final Vector vector = new Vector();
 
     public XWing(Game game) {
@@ -25,7 +26,7 @@ public class XWing extends Sprite {
         damage = XWING_DAMAGE;
 
         calculateBarriers();
-        newStatus();
+        start();
 
         if (Game.character == SATURN) {
             R = 400;
@@ -46,7 +47,7 @@ public class XWing extends Sprite {
                 int Y = centerY();
                 if (getDistance(X - P_X, Y - P_Y) < R) {
                     int[] values = vector.vector(X, Y, P_X, P_Y, 9);
-                    game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+                    game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                     AudioHub.playShoot();
                 }
             });
@@ -54,8 +55,9 @@ public class XWing extends Sprite {
         }
     }
 
-    private void newStatus() {
-        if (game.bosses.size() != 0) {
+    @Override
+    public void start() {
+        if (game.boss != null) {
             lock = true;
         }
         health = XWING_HEALTH;
@@ -64,27 +66,17 @@ public class XWing extends Sprite {
         speedX = randInt(-3, 3);
         speedY = randInt(1, 8);
 
-        if (buff) {
-            up();
-        }
+        super.start();
     }
 
-    private void up() {
+    @Override
+    public void onBuff() {
         speedX *= 2;
         speedY *= 2;
     }
 
     @Override
-    public void buff() {
-        buff = true;
-
-        if (!lock) {
-            up();
-        }
-    }
-
-    @Override
-    public void stopBuff() {
+    public void onStopBuff() {
         speedX /= 2;
         speedY /= 2;
     }
@@ -95,17 +87,31 @@ public class XWing extends Sprite {
     }
 
     @Override
-    public void intersection() {
-        createLargeTripleExplosion();
-        Game.score += 10;
-        newStatus();
-    }
-
-    @Override
     public void intersectionPlayer() {
         AudioHub.playMetal();
         createSmallExplosion();
-        newStatus();
+        start();
+    }
+
+    @Override
+    public void kill() {
+        createLargeTripleExplosion();
+        Game.score += 10;
+        start();
+    }
+
+    @Override
+    public void killInBack() {
+        AudioHub.playBoom();
+        for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
+            if (game.tripleLargeExplosion[i].lock) {
+                game.tripleLargeExplosion[i].start(centerX(), centerY());
+                break;
+            }
+        }
+
+        Game.score += 10;
+        start();
     }
 
     @Override
@@ -121,7 +127,7 @@ public class XWing extends Sprite {
         y += speedY;
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
-            newStatus();
+            start();
         }
     }
 

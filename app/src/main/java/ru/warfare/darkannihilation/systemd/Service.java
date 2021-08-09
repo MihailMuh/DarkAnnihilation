@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation.systemd;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -15,9 +16,11 @@ import static ru.warfare.darkannihilation.Py.print;
 public final class Service {
     private static MainActivity mainActivity;
     private static String path;
+    private static Resources res;
 
     public static void init(MainActivity mainActivity) {
         Service.mainActivity = mainActivity;
+        res = mainActivity.getResources();
 
         path = "android.resource://" + mainActivity.getPackageName() + "/";
     }
@@ -35,6 +38,10 @@ public final class Service {
 
     public static void makeToast(String text, boolean longToast) {
         runOnUiThread(() -> Toast.makeText(mainActivity, text, Math.boolToInt(longToast)).show());
+    }
+
+    public static Resources res() {
+        return res;
     }
 
     public static MainActivity getContext() {

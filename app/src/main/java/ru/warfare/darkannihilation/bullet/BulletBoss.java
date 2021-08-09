@@ -2,26 +2,21 @@ package ru.warfare.darkannihilation.bullet;
 
 import android.graphics.Bitmap;
 
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_SPEED;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
 
-public class BulletBoss extends Sprite {
+public class BulletBoss extends BaseBullet {
     public BulletBoss(Game game, int X, int Y, int type) {
-        super(game);
-        damage = BULLET_BOSS_DAMAGE;
+        super(game, ImageHub.laserImage, X, Y, BULLET_BOSS_DAMAGE);
         name = BULLET_ENEMY;
-        isBullet = true;
 
         switch (type)
         {
-            case 1:
-                image = ImageHub.laserImage;
-                break;
             case 2:
                 speedX = 6;
                 image = ImageHub.rotateImage(ImageHub.laserImage, 45);
@@ -31,9 +26,6 @@ public class BulletBoss extends Sprite {
                 image = ImageHub.rotateImage(ImageHub.laserImage, -45);
                 break;
         }
-
-        x = X;
-        y = Y;
 
         makeParams();
     }
@@ -45,8 +37,18 @@ public class BulletBoss extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        createSmallTripleExplosion();
         kill();
+    }
+
+    @Override
+    public void kill() {
+        createSmallTripleExplosion();
+        hide();
+    }
+
+    @Override
+    public void hide() {
+        game.intersectOnlyPlayer.remove(this);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class BulletBoss extends Sprite {
         x -= speedX;
 
         if (y > Game.screenHeight | x < -height | x > Game.screenWidth) {
-            kill();
+            hide();
         }
     }
 }

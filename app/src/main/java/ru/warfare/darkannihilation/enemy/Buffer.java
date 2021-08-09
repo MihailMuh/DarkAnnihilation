@@ -3,15 +3,14 @@ package ru.warfare.darkannihilation.enemy;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BUFFER_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.BUFFER_HEALTH;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Buffer extends Sprite {
     private boolean startBuff = false;
-    private boolean BOOM;
 
     public Buffer(Game game) {
         super(game, ImageHub.bufferImg);
@@ -23,37 +22,13 @@ public class Buffer extends Sprite {
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);
     }
 
-    private void boom() {
-        if (!BOOM) {
-            BOOM = true;
-            HardThread.doInBackGround(() -> {
-                inter();
-                if (startBuff) {
-                    startBuff = false;
-                    for (int i = 0; i < game.allSprites.size(); i++) {
-                        Sprite sprite = game.allSprites.get(i);
-                        if (!sprite.isPassive && !sprite.isBullet) {
-                            sprite.sB();
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void inter() {
-        createSkullExplosion();
-        hide();
-        Game.score += 100;
-    }
-
+    @Override
     public void hide() {
-        BOOM = false;
         lock = true;
         health = BUFFER_HEALTH;
-        x = Math.randInt(0, screenWidthWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
-        speedY = Math.randInt(5, 10);
+        speedY = randInt(5, 10);
     }
 
     @Override
@@ -61,22 +36,37 @@ public class Buffer extends Sprite {
         return newRect(x + 70, y + 70);
     }
 
-    @Override
-    public void intersection() {
-        health = 0;
+    private void stopBFF() {
+        if (startBuff) {
+            startBuff = false;
+            for (int i = 0; i < game.enemies.size(); i++) {
+                game.enemies.get(i).stopBuff();
+            }
+        }
     }
 
     @Override
     public void intersectionPlayer() {
-        health = 0;
+        createSkullExplosion();
+        hide();
+
+        HardThread.doInBackGround(this::stopBFF);
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
-        if (intersect(bullet)) {
-            bullet.intersection();
-            health -= bullet.damage;
-        }
+    public void kill() {
+        Game.score += 100;
+        intersectionPlayer();
+    }
+
+    @Override
+    public void killInBack() {
+        Game.score += 100;
+
+        createSkullExplosion();
+        hide();
+
+        stopBFF();
     }
 
     @Override
@@ -87,18 +77,11 @@ public class Buffer extends Sprite {
             if (!startBuff) {
                 startBuff = true;
                 HardThread.doInBackGround(() -> {
-                    for (int i = 0; i < game.allSprites.size(); i++) {
-                        Sprite sprite = game.allSprites.get(i);
-                        if ((!sprite.isPassive && !sprite.isBullet)) {
-                            sprite.buff();
-                        }
+                    for (int i = 0; i < game.enemies.size(); i++) {
+                        game.enemies.get(i).buff();
                     }
                 });
             }
-        }
-
-        if (health <= 0) {
-            boom();
         }
     }
 

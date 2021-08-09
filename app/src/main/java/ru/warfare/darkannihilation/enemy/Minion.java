@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
@@ -11,7 +12,7 @@ import ru.warfare.darkannihilation.base.Sprite;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_SHOOT_TIME;
-import static ru.warfare.darkannihilation.math.Math.randInt;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Minion extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -37,16 +38,10 @@ public class Minion extends Sprite {
                 int X = centerX();
                 int Y = centerY();
                 int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                game.allSprites.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                 AudioHub.playShotgun();
             });
         }
-    }
-
-    @Override
-    public void intersection() {
-        kill();
-        createLargeTripleExplosion();
     }
 
     @Override
@@ -62,11 +57,17 @@ public class Minion extends Sprite {
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
+    public void check_intersectionBullet(BaseBullet bullet) {
         if (intersect(bullet)) {
-            bullet.intersection();
-            intersection();
+            bullet.kill();
+            kill();
+            createLargeTripleExplosion();
         }
+    }
+
+    @Override
+    public void kill() {
+        game.enemies.remove(this);
     }
 
     @Override

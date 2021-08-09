@@ -1,14 +1,17 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.systemd.Game;
-
-import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_DAMAGE;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.VADER_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.VADER_HEALTH;
-import static ru.warfare.darkannihilation.math.Math.randInt;
+import static ru.warfare.darkannihilation.constant.Modes.GAME;
+import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
+
+import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.systemd.Game;
 
 public class Vader extends Sprite {
     public Vader(Game game, boolean old) {
@@ -24,13 +27,14 @@ public class Vader extends Sprite {
 
         makeParams();
         calculateBarriers();
-        newStatus();
+        start();
 
         recreateRect(x + 10, y + 10, right() - 10, bottom() - 10);
     }
 
-    public void newStatus() {
-        if (game.bosses.size() != 0) {
+    @Override
+    public void start() {
+        if (game.boss != null) {
             lock = true;
         }
         health = VADER_HEALTH;
@@ -39,58 +43,64 @@ public class Vader extends Sprite {
         speedX = randInt(-5, 5);
         speedY = randInt(3, 10);
 
-        if (buff) {
-            up();
-        }
+        super.start();
     }
 
-    private void up() {
+    @Override
+    public void onBuff() {
         speedX *= 3;
         speedY *= 3;
     }
 
     @Override
-    public void buff() {
-        buff = true;
-
-        if (!lock) {
-            up();
-        }
-    }
-
-    @Override
-    public void stopBuff() {
+    public void onStopBuff() {
         speedX /= 3;
         speedY /= 3;
-    }
-
-    @Override
-    public void intersection() {
-        createLargeExplosion();
-        if (Game.gameStatus == 0) {
-            Game.score += 1;
-        }
-        newStatus();
     }
 
     @Override
     public void intersectionPlayer() {
         AudioHub.playMetal();
         createSmallExplosion();
-        newStatus();
+        start();
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
+    public void kill() {
+        createLargeExplosion();
+        if (Game.gameStatus == GAME) {
+            Game.score++;
+        }
+        start();
+    }
+
+    @Override
+    public void killInBack() {
+        AudioHub.playBoom();
+        for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
+            if (game.defaultLargeExplosion[i].lock) {
+                game.defaultLargeExplosion[i].start(centerX(), centerY());
+                break;
+            }
+        }
+
+        if (Game.gameStatus == GAME) {
+            Game.score++;
+        }
+        start();
+    }
+
+    @Override
+    public void check_intersectionBullet(BaseBullet bullet) {
         if (intersect(bullet)) {
-            if (bullet.damage != BUCKSHOT_DAMAGE) {
+            if (bullet.power != SUPER) {
                 health -= bullet.damage;
-                bullet.intersection();
+                bullet.kill();
                 if (health <= 0) {
-                    intersection();
+                    kill();
                 }
             } else {
-                intersection();
+                kill();
             }
         }
     }
@@ -106,7 +116,7 @@ public class Vader extends Sprite {
         y += speedY;
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
-            newStatus();
+            start();
         }
     }
 

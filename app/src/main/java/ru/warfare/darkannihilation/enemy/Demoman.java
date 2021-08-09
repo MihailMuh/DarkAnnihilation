@@ -9,42 +9,43 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_SHOOT_TIME;
-import static ru.warfare.darkannihilation.math.Math.randInt;
+import static ru.warfare.darkannihilation.math.Randomize.randBoolean;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Demoman extends Sprite {
     private long lastShoot = System.currentTimeMillis();
     private boolean direction;
+    private final int endY;
 
     public Demoman(Game game) {
         super(game, ImageHub.demomanImg);
         damage = DEMOMAN_DAMAGE;
 
-        hide();
+        endY = Game.halfScreenHeight - height;
+
+        lock = true;
+        baseSettings();
 
         recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
     }
 
-    public void hide() {
-        lock = true;
-        HardThread.doInBackGround(() -> {
-            health = DEMOMAN_HEALTH;
-            y = randInt(0, Game.halfScreenHeight - height);
-            speedX = randInt(5, 10);
-            direction = randInt(0, 1) == 0;
-            if (direction) {
-                x = -width;
-            } else {
-                x = Game.screenWidth;
-                speedX = -speedX;
-            }
-        });
+    private void baseSettings() {
+        health = DEMOMAN_HEALTH;
+        y = randInt(0, endY);
+        speedX = randInt(5, 10);
+        direction = randBoolean();
+        if (direction) {
+            x = -width;
+        } else {
+            x = Game.screenWidth;
+            speedX = -speedX;
+        }
     }
 
-    public void shoot() {
-        long now = System.currentTimeMillis();
-        if (now - lastShoot > DEMOMAN_SHOOT_TIME) {
-            HardThread.doInBackGround(() -> game.allSprites.add(new Bomb(game, centerX(), centerY())));
-            lastShoot = now;
+    private void shoot() {
+        if (System.currentTimeMillis() - lastShoot > DEMOMAN_SHOOT_TIME) {
+            HardThread.doInBackGround(() -> game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())));
+            lastShoot = System.currentTimeMillis();
         }
     }
 
@@ -54,15 +55,21 @@ public class Demoman extends Sprite {
     }
 
     @Override
-    public void intersection() {
-        intersectionPlayer();
-        Game.score += 35;
+    public void hide() {
+        lock = true;
+        HardThread.doInBackGround(this::baseSettings);
     }
 
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
         hide();
+    }
+
+    @Override
+    public void kill() {
+        intersectionPlayer();
+        Game.score += 35;
     }
 
     @Override

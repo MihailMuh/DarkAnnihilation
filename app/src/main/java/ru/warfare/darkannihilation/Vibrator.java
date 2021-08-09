@@ -19,8 +19,4 @@ public class Vibrator {
             vibrator.vibrate(createOneShot(millis, 255));
         }
     }
-
-    public static void vibrateInBackGround(int millis) {
-        Service.runOnUiThread(() -> vibrate(millis));
-    }
 }

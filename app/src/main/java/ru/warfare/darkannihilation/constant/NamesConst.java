@@ -15,4 +15,8 @@ public class NamesConst {
     public static final byte GUN = 7;
     public static final byte SHOTGUN = 8;
 
+    public static final byte SMALL_EXPLOSION = 9;
+    public static final byte LARGE_EXPLOSION = 10;
+
+    public static final byte SUPER = 11;
 }

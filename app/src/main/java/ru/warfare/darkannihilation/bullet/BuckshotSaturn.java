@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation.bullet;
 
 import android.graphics.Bitmap;
 
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
@@ -10,7 +11,7 @@ import ru.warfare.darkannihilation.math.Vector;
 import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_SATURN_DAMAGE;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
 
-public class BuckshotSaturn extends Sprite {
+public class BuckshotSaturn extends BaseBullet {
     private float X;
     private float Y;
     private boolean orbit = false;
@@ -18,13 +19,7 @@ public class BuckshotSaturn extends Sprite {
     private final Vector vector = new Vector();
 
     public BuckshotSaturn(Game game, int X, int Y) {
-        super(game);
-
-        damage = BUCKSHOT_SATURN_DAMAGE;
-        isPassive = true;
-        isBullet = true;
-
-        image = ImageHub.bulletBuckshotSaturnImg;
+        super(game, ImageHub.bulletBuckshotSaturnImg, X, Y, BUCKSHOT_SATURN_DAMAGE);
 
         name = BULLET_SATURN;
 
@@ -67,14 +62,8 @@ public class BuckshotSaturn extends Sprite {
 
     @Override
     public void kill() {
+        super.kill();
         game.bullets.remove(this);
-        game.allSprites.remove(this);
-    }
-
-    @Override
-    public void intersection() {
-        createSmallExplosion();
-        kill();
     }
 
     @Override

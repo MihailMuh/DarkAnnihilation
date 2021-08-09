@@ -11,6 +11,13 @@ public class Vector {
                 (int) java.lang.Math.toDegrees(rads + Math.HALF_PI)};
     }
 
+    public int[] dirtyVector(int startX, int startY, int endX, int endY, float len, int errAngle) {
+        rads = (float) (java.lang.Math.atan2(endY - startY, endX - startX) + java.lang.Math.toRadians(errAngle));
+//        speedX speedY angle
+        return new int[]{(int) (java.lang.Math.cos(rads) * len), (int) (java.lang.Math.sin(rads) * len),
+                (int) java.lang.Math.toDegrees(rads + Math.HALF_PI)};
+    }
+
     public int[] easyVector(int startX, int startY, int endX, int endY, int len) {
         rads = (float) java.lang.Math.atan2(endY - startY, endX - startX);
 //        speedX speedY

@@ -8,4 +8,10 @@ public class Time {
             Py.print("Sleep" + e.toString());
         }
     }
+
+    public static void waitImg() {
+        while (!ImageHub.endImgInit) {
+            sleep(250);
+        }
+    }
 }

@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.button;
 
 import android.graphics.Paint;
 
-import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -11,7 +11,7 @@ import static ru.warfare.darkannihilation.constant.Constants.CHANGER_GUNS_CLICK_
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
-public class ChangerGuns extends Sprite {
+public class ChangerGuns extends BaseButton {
     private static final Paint alphaPaint = new Paint();
     private boolean isInvisible;
     private long lastClick = System.currentTimeMillis();
@@ -26,9 +26,9 @@ public class ChangerGuns extends Sprite {
         hide();
     }
 
+    @Override
     public void hide() {
         x = Game.screenWidth;
-        lock = true;
         isInvisible = false;
         alphaPaint.setAlpha(255);
 
@@ -48,9 +48,9 @@ public class ChangerGuns extends Sprite {
         halfHeight = height / 2;
     }
 
+    @Override
     public void start() {
         x = 0;
-        lock = false;
         isInvisible = false;
     }
 
@@ -69,12 +69,14 @@ public class ChangerGuns extends Sprite {
         }
     }
 
+    @Override
     public void setCoords(int X, int Y) {
         if ((Game.gameStatus == 0 | Game.gameStatus == 6) & checkCoords(X, Y)) {
             make();
         }
     }
 
+    @Override
     public boolean checkCoords(int X, int Y) {
         if (!isInvisible) {
             if (x < X) {
@@ -110,8 +112,6 @@ public class ChangerGuns extends Sprite {
 
     @Override
     public void render() {
-        if (!lock) {
-            Game.canvas.drawBitmap(image, x, y, alphaPaint);
-        }
+        Game.canvas.drawBitmap(image, x, y, alphaPaint);
     }
 }

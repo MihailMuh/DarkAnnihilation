@@ -10,7 +10,6 @@ import static ru.warfare.darkannihilation.constant.Constants.BULLET_SPEED;
 public class Bullet extends BaseBullet {
     public Bullet(Game game, int X, int Y) {
         super(game, ImageHub.bulletImage, X, Y, BULLET_DAMAGE);
-        isPassive = true;
     }
 
     @Override
@@ -18,7 +17,18 @@ public class Bullet extends BaseBullet {
         y -= BULLET_SPEED;
 
         if (y < -height) {
-            kill();
+            hide();
         }
+    }
+
+    @Override
+    public void hide() {
+        game.bullets.remove(this);
+    }
+
+    @Override
+    public void kill() {
+        super.kill();
+        hide();
     }
 }

@@ -25,11 +25,27 @@ public class Bomb extends BaseBullet {
     }
 
     @Override
+    public void hide() {
+        game.intersectOnlyPlayer.remove(this);
+    }
+
+    @Override
+    public void kill() {
+        super.kill();
+        hide();
+    }
+
+    @Override
+    public void intersectionPlayer() {
+        kill();
+    }
+
+    @Override
     public void update() {
         y += BOMB_SPEED;
 
         if (y > Game.screenHeight) {
-            kill();
+            hide();
         }
     }
 }

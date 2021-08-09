@@ -10,17 +10,17 @@ import ru.warfare.darkannihilation.Vibrator;
 import ru.warfare.darkannihilation.character.Heart;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_HEALTH;
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 
-public class BaseCharacter extends Sprite {
+public abstract class BaseCharacter extends Sprite {
+    public boolean lock;
     public int endX;
     public int endY;
     public long lastShoot = System.currentTimeMillis();
     public long now;
     public boolean dontmove = false;
     public byte gun = GUN;
-    public int maxHealth = MILLENNIUM_FALCON_HEALTH;
+    public int maxHealth;
     public ArrayList<Heart> hearts = new ArrayList<>(0);
     public int[] types;
     public boolean god;
@@ -28,31 +28,31 @@ public class BaseCharacter extends Sprite {
     public int heartX = 25;
     public int heartY = 10;
 
-    public BaseCharacter(Game g, Bitmap bitmap) {
-        super(g, bitmap);
-
-        init();
-
-        for (int i = 0; i < 5; i++) {
-            hearts.add(new Heart(g, heartX, heartY, false));
-            heartX += 90;
-        }
-        newLevel();
-
-        changeHearts();
-    }
-
     public BaseCharacter(Game g, Bitmap bitmap, int maxHealth) {
         super(g, bitmap);
 
         this.maxHealth = maxHealth;
 
+        int len = maxHealth / 10;
+        int lvl = 0;
+        for (int i = 0; i < len; i++) {
+            hearts.add(new Heart(g, heartX, heartY, false));
+            heartX += 90;
+            lvl++;
+
+            if (lvl == 5) {
+                newLevel();
+                lvl = 0;
+            }
+        }
+
         init();
+        changeHearts();
     }
 
     public void newStatus() {
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
+        x = Game.halfScreenWidth - halfWidth;
+        y = Game.halfScreenHeight - halfHeight;
         endX = x;
         endY = y;
         lock = true;
@@ -66,12 +66,6 @@ public class BaseCharacter extends Sprite {
 
     public void checkIntersections(Sprite sprite) {
         if (intersect(sprite)) {
-            sprite.intersectionPlayer();
-        }
-    }
-
-    public void doIntersections(Sprite sprite) {
-        if (intersect(sprite)) {
             damage(sprite.damage);
             sprite.intersectionPlayer();
         }
@@ -82,7 +76,7 @@ public class BaseCharacter extends Sprite {
         endY = Y - halfHeight;
     }
 
-    public void newLevel() {
+    protected void newLevel() {
         heartX = 25;
         heartY += 10 + ImageHub.imageHeartHalf.getHeight();
     }
@@ -98,7 +92,7 @@ public class BaseCharacter extends Sprite {
         hearts.remove(heart);
     }
 
-    public void addArmorHeart() {
+    protected void addArmorHeart() {
         hearts.add(new Heart(game, heartX, heartY, true));
         heartX += 90;
         if (heartX > 385) {
@@ -115,7 +109,7 @@ public class BaseCharacter extends Sprite {
         changeHearts();
     }
 
-    public void baseHeal() {
+    protected void baseHeal() {
         health += 15;
         int armor = health - maxHealth;
         if (armor > 0) {
@@ -128,22 +122,20 @@ public class BaseCharacter extends Sprite {
     }
 
     private void damage(int dmg) {
-        if (!god) {
+        if (!god && dmg != 0) {
             health -= dmg;
             changeHearts();
-            if (health <= 0) {
-                HardThread.doInBackGround(() -> {
-                    game.generateGameover();
-                    Vibrator.vibrate(1300);
-                    createSkullExplosion();
-                });
-            } else {
-                Vibrator.vibrateInBackGround(60);
-            }
+            HardThread.doInBackGround(() -> {
+                if (health <= 0) {
+                    kill();
+                } else {
+                    Vibrator.vibrate(60);
+                }
+            });
         }
     }
 
-    public void changeHearts() {
+    protected void changeHearts() {
         types = new int[hearts.size()];
         int len = health / 10;
 
@@ -160,7 +152,7 @@ public class BaseCharacter extends Sprite {
         }
     }
 
-    public void renderHearts() {
+    private void renderHearts() {
         for (bar = 0; bar < hearts.size(); bar++) {
             hearts.get(bar).render(types[bar]);
         }
@@ -170,5 +162,28 @@ public class BaseCharacter extends Sprite {
     public void render() {
         super.render();
         renderHearts();
+    }
+
+    @Override
+    public void buff() {
+    }
+
+    @Override
+    public void onStopBuff() {
+    }
+
+    @Override
+    public void check_intersectionBullet(BaseBullet bullet) {
+    }
+
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void kill() {
+        game.generateGameOver();
+        Vibrator.vibrate(1300);
+        createSkullExplosion();
     }
 }

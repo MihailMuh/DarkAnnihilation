@@ -25,12 +25,12 @@
         <activity
             android:screenOrientation="landscape"
             android:immersive="true"
+            android:exported="true"
             android:hardwareAccelerated="true"
             android:name=".systemd.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

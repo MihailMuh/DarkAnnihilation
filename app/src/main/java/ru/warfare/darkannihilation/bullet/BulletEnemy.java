@@ -25,7 +25,18 @@ public class BulletEnemy extends BaseBullet {
 
     @Override
     public void intersectionPlayer() {
-        intersection();
+        kill();
+    }
+
+    @Override
+    public void kill() {
+        super.kill();
+        hide();
+    }
+
+    @Override
+    public void hide() {
+        game.intersectOnlyPlayer.remove(this);
     }
 
     @Override
@@ -34,7 +45,7 @@ public class BulletEnemy extends BaseBullet {
         x += speedX;
 
         if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
-            kill();
+            hide();
         }
     }
 }

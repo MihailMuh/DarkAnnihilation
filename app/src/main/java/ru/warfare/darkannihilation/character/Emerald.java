@@ -6,7 +6,7 @@ import ru.warfare.darkannihilation.bullet.BulletDynamite;
 import ru.warfare.darkannihilation.bullet.BulletThunder;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.EMERALD_HEALTH;
@@ -17,17 +17,7 @@ import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 public class Emerald extends BaseCharacter {
     public Emerald(Game g) {
         super(g, ImageHub.emeraldImg, EMERALD_HEALTH);
-        recreateRect(x + 25, y + 25, right() - 25, bottom() - 25);
-
-        for (int j = 0; j < 2; j++) {
-            for (int i = 0; i < 5; i++) {
-                hearts.add(new Heart(g, heartX, heartY, false));
-                heartX += 90;
-            }
-            newLevel();
-        }
-
-        changeHearts();
+        recreateRect(x + 30, y + 25, right() - 30, bottom() - 25);
     }
 
     public void shoot() {
@@ -36,16 +26,12 @@ public class Emerald extends BaseCharacter {
             if (now - lastShoot > EMERALD_SHOTGUN_TIME) {
                 lastShoot = now;
                 AudioHub.playThunderStorm();
-                BulletThunder bulletThunder = new BulletThunder(game, centerX(), y);
-                game.bullets.add(bulletThunder);
-                game.allSprites.add(bulletThunder);
+                game.bullets.add(new BulletThunder(game, centerX(), y));
             }
         } else {
             if (now - lastShoot > EMERALD_SHOOT_TIME) {
                 AudioHub.playDynamite();
-                BulletDynamite bulletDynamite = new BulletDynamite(game, centerX(), y);
-                game.bullets.add(bulletDynamite);
-                game.allSprites.add(bulletDynamite);
+                game.bullets.add(new BulletDynamite(game, centerX(), y));
                 lastShoot = now;
             }
         }
@@ -53,7 +39,7 @@ public class Emerald extends BaseCharacter {
 
     @Override
     public void baseHeal() {
-        if (Math.randInt(0, 1) == 0) {
+        if (Randomize.randBoolean()) {
             health += 30;
         } else {
             health += 35;

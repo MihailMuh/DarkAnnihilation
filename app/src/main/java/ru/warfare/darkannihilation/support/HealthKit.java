@@ -1,42 +1,47 @@
 package ru.warfare.darkannihilation.support;
 
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.HEALTH_KIT_SPEED;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class HealthKit extends Sprite {
     public HealthKit(Game g) {
         super(g, ImageHub.healthKitImg);
-        speedY = HEALTH_KIT_SPEED;
-        isBullet = true;
 
         calculateBarriers();
         hide();
     }
 
+    @Override
     public void hide() {
-        x = Math.randInt(0, screenWidthWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
     }
 
     @Override
     public void intersectionPlayer() {
-        hide();
+        kill();
         AudioHub.playHealSnd();
         game.player.heal();
     }
 
     @Override
+    public void kill() {
+        hide();
+        game.intersectOnlyPlayer.remove(this);
+    }
+
+    @Override
     public void update() {
-        y += speedY;
+        y += HEALTH_KIT_SPEED;
 
         if (y > Game.screenHeight) {
-            hide();
+            kill();
         }
     }
 }

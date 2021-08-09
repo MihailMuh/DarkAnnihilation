@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.screen;
 
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.Py;
+import ru.warfare.darkannihilation.Time;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
 
@@ -27,8 +27,16 @@ public class FightScreen extends Sprite {
         x = Game.halfScreenWidth - halfWidth;
         y = Game.halfScreenHeight - halfHeight;
 
-        while (!Game.endImgInit) {
-        }
+        Time.waitImg();
+
         image = ImageHub.resizeImage(ImageHub.fightScreen, width, height);
+    }
+
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public void kill() {
     }
 }

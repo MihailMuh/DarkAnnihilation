@@ -1,18 +1,17 @@
 package ru.warfare.darkannihilation.explosion;
 
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.BaseExplosion;
+import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.SKULL_EXPLOSION_FRAME_TIME;
 
 public class ExplosionSkull extends BaseExplosion {
     private long lastShoot = System.currentTimeMillis();
-    private static final int len = NUMBER_SKULL_EXPLOSION - 1;
-
-    public ExplosionSkull() {
-        super(ImageHub.explosionLarge[0]);
+    
+    public ExplosionSkull(Game game) {
+        super(game, ImageHub.explosionLarge);
     }
 
     @Override
@@ -20,18 +19,10 @@ public class ExplosionSkull extends BaseExplosion {
         long now = System.currentTimeMillis();
         if (now - lastShoot > SKULL_EXPLOSION_FRAME_TIME) {
             lastShoot = now;
-            if (frame != len) {
-                frame++;
-            } else {
-                frame = 0;
+            frame++;
+            if (frame == NUMBER_SKULL_EXPLOSION_IMAGES) {
                 lock = true;
             }
         }
-    }
-
-    @Override
-    public void render () {
-        Game.canvas.drawBitmap(ImageHub.explosionLarge[frame],
-                x, y, null);
     }
 }

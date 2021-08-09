@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation.bullet;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Vector;
@@ -10,7 +11,7 @@ import ru.warfare.darkannihilation.math.Vector;
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
 
-public class BulletEnemyOrbit extends Sprite {
+public class BulletEnemyOrbit extends BaseBullet {
     private final Vector vector = new Vector();
     private final Matrix matrix = new Matrix();
     private float X;
@@ -18,22 +19,13 @@ public class BulletEnemyOrbit extends Sprite {
     private float fly;
 
     public BulletEnemyOrbit(Object[] info) {
-        super((Game) info[0]);
+        super((Game) info[0], (Bitmap) info[7], 0, 0, BULLET_ENEMY_ORBIT_DAMAGE);
 
-        damage = BULLET_ENEMY_ORBIT_DAMAGE;
-        isPassive = true;
-        isBullet = true;
         name = BULLET_ORBIT;
 
         X = (int) info[1];
         Y = (int) info[2];
         fly = (float) info[5];
-        image = (Bitmap) info[7];
-
-        width = image.getWidth();
-        height = image.getHeight();
-        halfWidth = width / 2;
-        halfHeight = height / 2;
 
         left = (int) X;
         top = (int) Y;
@@ -67,12 +59,6 @@ public class BulletEnemyOrbit extends Sprite {
     public void kill() {
         super.kill();
         game.bullets.remove(this);
-    }
-
-    @Override
-    public void intersection() {
-        createSmallExplosion();
-        kill();
     }
 
     @Override

@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation;
 import ru.warfare.darkannihilation.systemd.Service;
 
 public final class Clerk {
-    public static String nickname = "";
+    public static String nickname = null;
 
     public static void saveNickname() {
         Service.writeToFile("NICKNAME", nickname);

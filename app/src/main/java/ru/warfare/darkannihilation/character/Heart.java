@@ -42,4 +42,24 @@ public class Heart extends Sprite {
             }
         }
     }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void buff() {
+
+    }
+
+    @Override
+    public void onStopBuff() {
+
+    }
+
+    @Override
+    public void kill() {
+
+    }
 }

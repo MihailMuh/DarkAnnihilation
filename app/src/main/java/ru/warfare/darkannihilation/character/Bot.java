@@ -5,10 +5,10 @@ import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.Bullet;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BOT_SHOOT_TIME;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Bot extends BaseCharacter {
     private final int finalX;
@@ -16,16 +16,13 @@ public class Bot extends BaseCharacter {
 
     public Bot(Game game) {
         super(game, ImageHub.playerImage, 0);
-        speedX = Math.randInt(3, 7);
-        speedY = Math.randInt(3, 7);
-
-        x = Game.halfScreenWidth;
-        y = Game.halfScreenHeight;
-
         calculateBarriers();
-
+        
+        speedX = randInt(3, 7);
+        speedY = randInt(3, 7);
         finalX = screenWidthWidth - 30;
         finalY = screenHeightHeight - 30;
+        lock = false;
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
     }
@@ -37,11 +34,9 @@ public class Bot extends BaseCharacter {
 
             Bullet bullet = new Bullet(game, X + 3, y);
             game.bullets.add(bullet);
-            game.allSprites.add(bullet);
 
             bullet = new Bullet(game, X - 3, y);
             game.bullets.add(bullet);
-            game.allSprites.add(bullet);
 
             lastShoot = now;
             AudioHub.playShoot();
@@ -54,8 +49,10 @@ public class Bot extends BaseCharacter {
     }
 
     @Override
-    public void doIntersections(Sprite sprite) {
-        checkIntersections(sprite);
+    public void checkIntersections(Sprite sprite) {
+        if (intersect(sprite)) {
+            sprite.intersectionPlayer();
+        }
     }
 
     @Override

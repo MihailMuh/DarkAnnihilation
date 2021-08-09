@@ -3,42 +3,44 @@ package ru.warfare.darkannihilation.support;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.math.Math;
 
 import static ru.warfare.darkannihilation.constant.Constants.SHOTGUN_KIT_SPEED;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class ShotgunKit extends Sprite {
     public boolean picked = false;
 
     public ShotgunKit(Game g) {
         super(g, ImageHub.shotgunKitImg);
-        speedY = SHOTGUN_KIT_SPEED;
-        isPassive = true;
-        isBullet = true;
 
         calculateBarriers();
         hide();
     }
 
     public void hide() {
-        x = Math.randInt(0, screenWidthWidth);
+        x = randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
     }
 
     @Override
     public void intersectionPlayer() {
-        hide();
+        kill();
         picked = true;
         game.changerGuns.make();
     }
 
+    @Override
+    public void kill() {
+        hide();
+        game.intersectOnlyPlayer.remove(this);
+    }
 
     @Override
     public void update() {
-        y += speedY;
+        y += SHOTGUN_KIT_SPEED;
         if (y > Game.screenHeight) {
-            hide();
+            kill();
         }
     }
 }

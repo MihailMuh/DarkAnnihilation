@@ -104,7 +104,7 @@ public final class MainActivity extends AppCompatActivity {
         game.onResume();
     }
 
-    private boolean isOnline() {
+    public boolean isOnline() {
         return ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
@@ -164,7 +164,7 @@ public final class MainActivity extends AppCompatActivity {
                                     ClientServer.postBestScore(Clerk.nickname, 0);
                                 });
 
-                                makeToast("Congratulations! You have registered!", true);
+                                makeToast("Congratulations! You have got registered!", true);
                                 dialog.dismiss();
                             }
                         }

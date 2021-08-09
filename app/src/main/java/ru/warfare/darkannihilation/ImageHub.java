@@ -19,11 +19,12 @@ import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_EXPL
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LIGHTNING_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LOADING_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_PORTAL_IMAGES;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_STAR_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_THUNDER_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER_IMAGES;
+import static ru.warfare.darkannihilation.constant.Modes.WIN;
 import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
@@ -34,7 +35,7 @@ public final class ImageHub {
     public static final Bitmap[] explosionTripleImageMedium = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
     public static final Bitmap[] explosionDefaultImageSmall = new Bitmap[NUMBER_DEFAULT_EXPLOSION_IMAGES];
     public static final Bitmap[] explosionDefaultImageMedium = new Bitmap[NUMBER_DEFAULT_EXPLOSION_IMAGES];
-    public static final Bitmap[] explosionLarge = new Bitmap[NUMBER_SKULL_EXPLOSION];
+    public static final Bitmap[] explosionLarge = new Bitmap[NUMBER_SKULL_EXPLOSION_IMAGES];
 
     public static Bitmap[] screenImage = new Bitmap[NUMBER_STAR_SCREEN_IMAGES];
     public static Bitmap[] vaderImage = new Bitmap[NUMBER_VADER_IMAGES];
@@ -130,6 +131,8 @@ public final class ImageHub {
     private static GlideManager glideManager;
     private static final StringBuilder stringBuilder = new StringBuilder();
 
+    public static volatile boolean endImgInit = false;
+
     public static void init(Context context) {
         resizeK = Windows.resizeK();
         screenWidth = Windows.screenWidth();
@@ -200,25 +203,25 @@ public final class ImageHub {
                 stringBuilder.append("vader").append(i1);
                 glideManager.run(getId(), _75, object -> vaderImage[finalI] = object);
             }
-            if (i < 12) {
+            if (i < NUMBER_LOADING_SCREEN_IMAGES) {
                 stringBuilder.setLength(0);
                 stringBuilder.append("loading").append(i);
                 glideManager.runCrop(getId(), screenWidth, screenHeight, object -> loadingImages[finalI] = object);
             }
-            if (i < 13) {
+            if (i < NUMBER_SKULL_EXPLOSION_IMAGES) {
                 stringBuilder.setLength(0);
-                stringBuilder.append("explosion_skull_").append(i1);
+                stringBuilder.append("explosion_skull_").append(i);
                 glideManager.run(getId(), _522, _600, object -> explosionLarge[finalI] = object);
             }
-            if (i < 23) {
+            if (i < NUMBER_TRIPLE_EXPLOSION_IMAGES) {
                 stringBuilder.setLength(0);
-                stringBuilder.append("explosion_").append(i1);
+                stringBuilder.append("explosion_").append(i);
                 glideManager.run(getId(), _150, _144, object -> explosionTripleImageMedium[finalI] = object);
                 glideManager.run(getId(), _50, object -> explosionTripleImageSmall[finalI] = object);
             }
-            if (i < 28) {
+            if (i < NUMBER_DEFAULT_EXPLOSION_IMAGES) {
                 stringBuilder.setLength(0);
-                stringBuilder.append("default_explosion_").append(i1);
+                stringBuilder.append("default_explosion_").append(i);
                 glideManager.run(getId(), _150, _154, object -> explosionDefaultImageMedium[finalI] = object);
                 glideManager.run(getId(), _50, object -> explosionDefaultImageSmall[finalI] = object);
             }
@@ -228,7 +231,7 @@ public final class ImageHub {
             glideManager.run(getId(), screenWidth_135, screenHeight, object -> {
                 screenImage[finalI] = object;
                 if (finalI > 31) {
-                    Game.endImgInit = true;
+                    endImgInit = true;
                 }
             });
         }
@@ -253,33 +256,40 @@ public final class ImageHub {
     }
 
     public static void loadSecondLevelImages() {
-        if (spiderImg == null) {
-            glideManager.run(R.drawable.spider, _350, _175, object -> spiderImg = object);
-            glideManager.run(R.drawable.x_wing, _200, _150, object -> XWingImg = object);
-            glideManager.run(R.drawable.area, (int) (450 * resizeK), (int) (269 * resizeK), object -> sunriseImg = object);
-            glideManager.run(R.drawable.boss_vaders, _350, (int) (255 * resizeK), object -> bossVadersImg = object);
-            glideManager.run(R.drawable.bull_boss_vader, _150, object -> bulletBossVadersImg = object);
-            glideManager.run(R.drawable.buffer, _400, _350, object -> bufferImg = object);
+        endImgInit = false;
 
-            for (int i = 0; i < 20; i++) {
-                final int finalI = i;
-                final int i1 = i + 1;
+        glideManager.run(R.drawable.spider, _350, _175, object -> spiderImg = object);
+        glideManager.run(R.drawable.x_wing, _200, _150, object -> XWingImg = object);
+        glideManager.run(R.drawable.area, (int) (450 * resizeK), (int) (269 * resizeK), object -> sunriseImg = object);
+        glideManager.run(R.drawable.boss_vaders, _350, (int) (255 * resizeK), object -> bossVadersImg = object);
+        glideManager.run(R.drawable.bull_boss_vader, _150, object -> bulletBossVadersImg = object);
+        glideManager.run(R.drawable.buffer, _400, _350, object -> bufferImg = object);
 
-                if (i < 3) {
-                    stringBuilder.setLength(0);
-                    stringBuilder.append("vader1").append(i1);
-                    glideManager.run(getId(), _75, object -> vaderOldImage[finalI] = object);
-                }
-                if (i < 4) {
-                    stringBuilder.setLength(0);
-                    stringBuilder.append("atom").append(i);
-                    glideManager.run(getId(), _100, _300, object -> atomBombImage[finalI] = object);
-                }
+        for (int i = 0; i < 20; i++) {
+            final int finalI = i;
+            final int i1 = i + 1;
+
+            if (i < 3) {
                 stringBuilder.setLength(0);
-                stringBuilder.append("thunder").append(i);
-                glideManager.runCrop(getId(), screenWidth_135, screenHeight, object -> thunderScreen[finalI] = object);
+                stringBuilder.append("vader1").append(i1);
+                glideManager.run(getId(), _75, object -> vaderOldImage[finalI] = object);
             }
+            if (i < 4) {
+                stringBuilder.setLength(0);
+                stringBuilder.append("atom").append(i);
+                glideManager.run(getId(), _100, _300, object -> atomBombImage[finalI] = object);
+            }
+            stringBuilder.setLength(0);
+            stringBuilder.append("thunder").append(i);
+            glideManager.runCrop(getId(), screenWidth_135, screenHeight, object -> {
+                thunderScreen[finalI] = object;
+                if (finalI == 18) {
+                    endImgInit = true;
+                }
+            });
         }
+
+        Time.waitImg();
     }
 
     public static void deleteSecondLevelImages() {
@@ -321,27 +331,36 @@ public final class ImageHub {
         return screenImage[0] == null;
     }
 
-    public static void loadFirstLevelImages() {
-        Game.endImgInit = false;
-        loadFirstLevelBitmaps();
-        for (int i = 0; i < 34; i++) {
-            final int finalI = i;
-            final int i1 = i + 1;
+    public static void loadFirstLevelAndCharacterImages(byte character) {
+        endImgInit = false;
 
-            if (i < 3) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("vader").append(i1);
-                glideManager.run(getId(), _75, object -> vaderImage[finalI] = object);
-            }
-            stringBuilder.setLength(0);
-            stringBuilder.append("_").append(i);
-            glideManager.run(getId(), screenWidth_135, screenHeight, object -> {
-                screenImage[finalI] = object;
-                if (finalI == 33) {
-                    Game.endImgInit = true;
+        if (needImagesForFirstLevel()) {
+            loadFirstLevelBitmaps();
+            loadCharacterImages(character, false);
+
+            for (int i = 0; i < 34; i++) {
+                final int finalI = i;
+                final int i1 = i + 1;
+
+                if (i < 3) {
+                    stringBuilder.setLength(0);
+                    stringBuilder.append("vader").append(i1);
+                    glideManager.run(getId(), _75, object -> vaderImage[finalI] = object);
                 }
-            });
+                stringBuilder.setLength(0);
+                stringBuilder.append("_").append(i);
+                glideManager.run(getId(), screenWidth_135, screenHeight, object -> {
+                    screenImage[finalI] = object;
+                    if (finalI == 33) {
+                        endImgInit = true;
+                    }
+                });
+            }
+        } else {
+            loadCharacterImages(character, true);
         }
+
+        Time.waitImg();
     }
 
     private static void loadFirstLevelBitmaps() {
@@ -394,101 +413,133 @@ public final class ImageHub {
     }
 
     public static void loadWinImages(MainActivity mainActivity) {
-        Game.endImgInit = false;
         try {
             gifDrawable = new GifDrawable(res, R.drawable.win);
             gifDrawable.setLoopCount(1);
             gifDrawable.setSpeed(0.5f);
             mainActivity.newWinGif(gifDrawable);
         } catch (Exception e) {
-            print(e.toString());
+            print(e);
         }
         mainActivity.game.generateWin();
         AudioHub.playFlightSnd();
         HardThread.doInBackGround(() -> {
-            Time.sleep(3000);
-            while (!Game.endImgInit) {
-                if (!gifDrawable.isRunning()) {
-                    Service.runOnUiThread(mainActivity::deleteWinGif);
-                    gifDrawable.recycle();
-                    gifDrawable = null;
-                    Game.endImgInit = true;
-                }
+            Time.sleep(4000);
+            while (gifDrawable.isRunning()) {
+                Time.sleep(250);
             }
+
+            Service.runOnUiThread(mainActivity::deleteWinGif);
+            gifDrawable = null;
+            Game.gameStatus = WIN;
         });
     }
 
-    public static void loadCharacterImages(int character) {
-        Game.endImgInit = false;
+    public static void loadCharacterImages(int character, boolean needWait) {
         switch (character) {
             case SATURN:
-                glideManager.run(R.drawable.saturn, _100, _200, object -> {
-                    saturnImg = object;
-                    Game.endImgInit = true;
-                });
-                glideManager.run(R.drawable.saturn_bullet, _15, object -> bulletSaturnImg = object);
-                glideManager.run(R.drawable.buckshot_saturn, _15, object -> bulletBuckshotSaturnImg = object);
-
-                buckshotImg = null;
-                playerImage = null;
-
-                emeraldImg = null;
-                dynamiteImg = null;
-                thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
+                loadSaturn(needWait);
                 break;
             case MILLENNIUM_FALCON:
-                glideManager.run(R.drawable.ship, _100, _120, object -> {
-                    playerImage = object;
-                    Game.endImgInit = true;
-                });
-                glideManager.run(R.drawable.cannon_ball, _15, object -> buckshotImg = object);
-
-                bulletBuckshotSaturnImg = null;
-                saturnImg = null;
-                bulletSaturnImg = null;
-
-                emeraldImg = null;
-                dynamiteImg = null;
-                thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
+                loadMillennium(needWait);
                 break;
             case EMERALD:
-                glideManager.run(R.drawable.emerald, _150, _166, object -> {
-                    emeraldImg = object;
-                    Game.endImgInit = true;
-                });
-                glideManager.run(R.drawable.dynamite, _100, (int) (41.3 * resizeK), object -> dynamiteImg = object);
-
-                for (int i = 0; i < 13; i++) {
-                    int finalI = i;
-                    stringBuilder.setLength(0);
-                    stringBuilder.append("laser").append(i);
-                    glideManager.run(getId(), _03545, screenHeight, object -> thunderImage[finalI] = object);
-                }
-
-                bulletBuckshotSaturnImg = null;
-                saturnImg = null;
-                bulletSaturnImg = null;
-
-                buckshotImg = null;
-                playerImage = null;
+                loadEmerald(needWait);
                 break;
         }
     }
 
+    private static void loadSaturn(boolean needWait) {
+        glideManager.run(R.drawable.saturn, _100, _200, object -> {
+            saturnImg = object;
+            if (needWait) {
+                endImgInit = true;
+            }
+        });
+        glideManager.run(R.drawable.saturn_bullet, _15, object -> bulletSaturnImg = object);
+        glideManager.run(R.drawable.buckshot_saturn, _15, object -> bulletBuckshotSaturnImg = object);
+
+        deleteMillennium();
+        deleteEmerald();
+    }
+
+    private static void deleteSaturn() {
+        if (saturnImg != null) {
+            saturnImg = null;
+            bulletBuckshotSaturnImg = null;
+            bulletSaturnImg = null;
+        }
+    }
+
+    private static void loadMillennium(boolean needWait) {
+        if (playerImage == null) {
+            glideManager.run(R.drawable.ship, _100, _120, object -> {
+                playerImage = object;
+                if (needWait) {
+                    endImgInit = true;
+                }
+            });
+            glideManager.run(R.drawable.cannon_ball, _15, object -> buckshotImg = object);
+            glideManager.run(R.drawable.bullet, (int) (7 * resizeK), _30, object -> bulletImage = object);
+
+            deleteSaturn();
+            deleteEmerald();
+        } else {
+            if (needWait) {
+                endImgInit = true;
+            }
+        }
+    }
+
+    private static void deleteMillennium() {
+        if (playerImage != null) {
+            playerImage = null;
+            buckshotImg = null;
+            bulletImage = null;
+        }
+    }
+
+    private static void loadEmerald(boolean needWait) {
+        glideManager.run(R.drawable.emerald, _150, _166, object -> {
+            emeraldImg = object;
+            if (needWait) {
+                endImgInit = true;
+            }
+        });
+        glideManager.run(R.drawable.dynamite, _100, (int) (41.3 * resizeK), object -> dynamiteImg = object);
+
+        for (int i = 0; i < NUMBER_LIGHTNING_IMAGES; i++) {
+            int finalI = i;
+            stringBuilder.setLength(0);
+            stringBuilder.append("laser").append(i);
+            glideManager.run(getId(), _03545, screenHeight, object -> thunderImage[finalI] = object);
+        }
+
+        deleteSaturn();
+        deleteMillennium();
+    }
+
+    private static void deleteEmerald() {
+        if (emeraldImg != null) {
+            emeraldImg = null;
+            dynamiteImg = null;
+            thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
+        }
+    }   
+
     public static void loadFightScreen(byte character, byte boss) {
-        Game.endImgInit = false;
-        switch (character)
-        {
+        endImgInit = false;
+        switch (character) {
             case SATURN:
                 if (boss == DEATH_STAR) {
                     glideManager.run(R.drawable.saturn_vs_boss, screenWidth, _095, object -> {
                         fightScreen = object;
-                        Game.endImgInit = true;
+                        endImgInit = true;
                     });
                 } else {
                     glideManager.run(R.drawable.saturn_vs_vader, screenWidth, _095, object -> {
                         fightScreen = object;
-                        Game.endImgInit = true;
+                        endImgInit = true;
                     });
                 }
                 break;
@@ -496,12 +547,12 @@ public final class ImageHub {
                 if (boss == DEATH_STAR) {
                     glideManager.run(R.drawable.player_vs_boss, screenWidth, _095, object -> {
                         fightScreen = object;
-                        Game.endImgInit = true;
+                        endImgInit = true;
                     });
                 } else {
                     glideManager.run(R.drawable.player_vs_vader, screenWidth, _095, object -> {
                         fightScreen = object;
-                        Game.endImgInit = true;
+                        endImgInit = true;
                     });
                 }
                 break;
@@ -509,12 +560,12 @@ public final class ImageHub {
                 if (boss == DEATH_STAR) {
                     glideManager.run(R.drawable.emerald_vs_boss, screenWidth, _095, object -> {
                         fightScreen = object;
-                        Game.endImgInit = true;
+                        endImgInit = true;
                     });
                 } else {
                     glideManager.run(R.drawable.emerald_vs_vader, screenWidth, _095, object -> {
                         fightScreen = object;
-                        Game.endImgInit = true;
+                        endImgInit = true;
                     });
                 }
                 break;

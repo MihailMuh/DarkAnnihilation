@@ -1,9 +1,10 @@
 package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.ATOMIC_BOMB_FRAME_TIME;
@@ -12,8 +13,7 @@ import static ru.warfare.darkannihilation.constant.Constants.ROCKET_DAMAGE;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
 
 public class AtomicBomb extends Sprite {
-    private int frame = 0;
-    private static final int len = NUMBER_ATOMIC_BOMB_IMAGES - 1;
+    private int frame = -1;
     private long lastFrame = System.currentTimeMillis();
     private boolean BOOM;
 
@@ -23,6 +23,7 @@ public class AtomicBomb extends Sprite {
         damage = ROCKET_DAMAGE;
         calculateBarriers();
         hide();
+        lock = true;
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
@@ -31,49 +32,53 @@ public class AtomicBomb extends Sprite {
         if (!BOOM) {
             BOOM = true;
             HardThread.doInBackGround(() -> {
-                for (int i = 0; i < game.allSprites.size(); i++) {
-                    Sprite sprite = game.allSprites.get(i);
+                for (int i = 0; i < game.enemies.size(); i++) {
+                    Sprite sprite = game.enemies.get(i);
                     if (!sprite.lock) {
-                        if ((!sprite.isPassive && !sprite.isBullet) | (sprite.name == BULLET_ENEMY)) {
-                            sprite.intersection();
-                        }
+                        sprite.killInBack();
+                    }
+                }
+
+                for (int i = 0; i < game.intersectOnlyPlayer.size(); i++) {
+                    Sprite bullet = game.intersectOnlyPlayer.get(i);
+                    if (bullet.name == BULLET_ENEMY) {
+                        bullet.killInBack();
                     }
                 }
             });
         }
     }
 
+    @Override
     public void start() {
         lock = false;
-        if (buff) {
-            up();
-        }
+        hide();
+        super.start();
     }
 
-    private void hide() {
-        BOOM = false;
-        lock = true;
-        speedY = 1;
-        health = 20;
-        x = Math.randInt(0, screenWidthWidth);
-        y = -height;
-    }
-
-    private void up() {
+    @Override
+    public void onBuff() {
         speedY = 3;
     }
 
     @Override
-    public void buff() {
-        buff = true;
-        if (!lock) {
-            up();
-        }
+    public void onStopBuff() {
+        speedY = 1;
     }
 
     @Override
-    public void stopBuff() {
+    public void kill() {
+        intersectionPlayer();
+        Game.score += 50;
+    }
+
+    @Override
+    public void hide() {
+        BOOM = false;
         speedY = 1;
+        health = 20;
+        x = Randomize.randInt(0, screenWidthWidth);
+        y = -height;
     }
 
     @Override
@@ -82,22 +87,19 @@ public class AtomicBomb extends Sprite {
     }
 
     @Override
-    public void intersection() {
-        intersectionPlayer();
-        Game.score += 50;
-    }
-
-    @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        hide();
+        lock = true;
     }
 
     @Override
-    public void check_intersectionBullet(Sprite bullet) {
+    public void check_intersectionBullet(BaseBullet bullet) {
         if (intersect(bullet)) {
-            bullet.intersection();
+            bullet.kill();
             health -= bullet.damage;
+            if (health <= 0) {
+                boom();
+            }
         }
     }
 
@@ -107,9 +109,8 @@ public class AtomicBomb extends Sprite {
         long now = System.currentTimeMillis();
         if (now - lastFrame > ATOMIC_BOMB_FRAME_TIME) {
             lastFrame = now;
-            if (frame != len) {
-                frame++;
-            } else {
+            frame++;
+            if (frame == NUMBER_ATOMIC_BOMB_IMAGES) {
                 frame = 0;
             }
         }
@@ -117,14 +118,16 @@ public class AtomicBomb extends Sprite {
         if (y > Game.screenHeight) {
             hide();
         }
-
-        if (health <= 0) {
-            boom();
-        }
     }
 
     @Override
     public void render() {
         Game.canvas.drawBitmap(ImageHub.atomBombImage[frame], x, y, Game.alphaEnemy);
+    }
+
+    @Override
+    public void turn() {
+        update();
+        render();
     }
 }

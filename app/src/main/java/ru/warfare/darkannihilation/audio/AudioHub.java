@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation.audio;
 
+import static ru.warfare.darkannihilation.constant.Modes.PAUSE;
+
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
@@ -7,7 +9,7 @@ import java.util.Arrays;
 
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.R;
-import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.MainActivity;
 import ru.warfare.darkannihilation.systemd.Service;
@@ -117,7 +119,7 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playReload() {
-        if (Math.randInt(0, 1) == 0) {
+        if (Randomize.randBoolean()) {
             audioPool.play(reloadSnd1);
         } else {
             audioPool.play(reloadSnd2);
@@ -161,7 +163,7 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playAttentionSnd() {
-        HardThread.doInUI(() -> attentionSnd.play());
+        Service.runOnUiThread(() -> attentionSnd.play());
     }
 
     public static void loadFirstLevelSounds() {
@@ -175,15 +177,14 @@ public final class AudioHub extends AudioExoPlayer {
         if (jingleMusic == null) {
             jingleMusic = new SimpleExoPlayer.Builder(mainActivity).build();
             jingleMusic.setMediaItem(getItem(R.raw.jingle));
-            jingleMusic.setVolume(0.5f * volume);
             jingleMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
+            jingleMusic.setVolume(0.5f * volume);
             jingleMusic.prepare();
-            jingleMusic.play();
             jingleMusic.addListener(new Player.Listener() {
                 @Override
                 public void onPlaybackStateChanged(int state) {
                     if (state == Player.STATE_READY) {
-                        if (Game.gameStatus == 4 | !mainActivity.game.playing) {
+                        if (Game.gameStatus == PAUSE || !mainActivity.game.playing) {
                             jingleMusic.pause();
                             playing[1] = true;
                         }
@@ -211,12 +212,11 @@ public final class AudioHub extends AudioExoPlayer {
             bossMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
             bossMusic.prepare();
         } else {
-            update(jingleMusic);
-            attentionSnd.seekTo(0);
-            attentionSnd.pause();
-            bossMusic.seekTo(0);
-            bossMusic.pause();
+            update(jingleMusic, 0.5f);
+            update(attentionSnd, 0.6f);
+            update(bossMusic, 0.45f);
         }
+        jingleMusic.play();
     }
 
     public static void loadSecondLevelSounds() {
@@ -235,7 +235,6 @@ public final class AudioHub extends AudioExoPlayer {
             forgottenMusic.setVolume(volume);
             forgottenMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
             forgottenMusic.prepare();
-            forgottenMusic.play();
 
             forgottenBossMusic = new SimpleExoPlayer.Builder(mainActivity).build();
             forgottenBossMusic.setMediaItem(getItem(R.raw.forgotten_boss));
@@ -254,9 +253,9 @@ public final class AudioHub extends AudioExoPlayer {
             });
         } else {
             update(forgottenMusic);
-            forgottenBossMusic.seekTo(0);
-            forgottenBossMusic.pause();
+            update(forgottenBossMusic);
         }
+        forgottenMusic.play();
     }
 
     public static void loadPortalSounds() {
@@ -358,7 +357,6 @@ public final class AudioHub extends AudioExoPlayer {
             readySnd.setMediaItem(getItem(R.raw.ready));
             readySnd.setVolume(volume);
             readySnd.prepare();
-            readySnd.play();
             readySnd.addListener(new Player.Listener() {
                 @Override
                 public void onPlaybackStateChanged(int state) {
@@ -378,20 +376,21 @@ public final class AudioHub extends AudioExoPlayer {
         } else {
             update(readySnd);
         }
+        readySnd.play();
     }
 
     public static void playPauseMusic() {
-        HardThread.doInUI(() -> {
+        Service.runOnUiThread(() -> {
             if (pauseMusic == null) {
                 pauseMusic = new SimpleExoPlayer.Builder(mainActivity).build();
                 pauseMusic.setMediaItem(getItem(R.raw.pause));
                 pauseMusic.setVolume(0.75f * volume);
                 pauseMusic.setRepeatMode(Player.REPEAT_MODE_ONE);
                 pauseMusic.prepare();
-                pauseMusic.play();
             } else {
-                update(pauseMusic);
+                update(pauseMusic, 0.75f);
             }
+            pauseMusic.play();
         });
     }
 

@@ -2,25 +2,33 @@ package ru.warfare.darkannihilation.base;
 
 import android.graphics.Bitmap;
 
-public class BaseExplosion extends Sprite {
-    public Bitmap[] img;
-    public int frame = 0;
+import androidx.annotation.NonNull;
 
-    public BaseExplosion(Bitmap bitmap) {
-        super(null, bitmap);
+import ru.warfare.darkannihilation.systemd.Game;
+
+public abstract class BaseExplosion extends Sprite {
+    public Bitmap[] img;
+    public int frame;
+
+    public BaseExplosion(Game game, @NonNull Bitmap[] bitmap) {
+        super(game, bitmap[0]);
+        img = bitmap;
         lock = true;
-        isPassive = true;
-        isBullet = true;
     }
 
     public void start(int X, int Y) {
         x = X - halfWidth;
         y = Y - halfHeight;
+        frame = 0;
         lock = false;
     }
 
-    public void stop() {
-        lock = true;
-        frame = 0;
+    @Override
+    public void kill() {
+    }
+
+    @Override
+    public void render() {
+        Game.canvas.drawBitmap(img[frame], x, y, null);
     }
 }
