@@ -8,7 +8,7 @@ import ru.warfare.darkannihilation.interfaces.Function;
 import static ru.warfare.darkannihilation.Py.print;
 
 public class HardThread implements Runnable {
-    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private static final ExecutorService threadPool = Executors.newWorkStealingPool();
     private Thread thread;
     private static Function function;
     private volatile boolean playing;
