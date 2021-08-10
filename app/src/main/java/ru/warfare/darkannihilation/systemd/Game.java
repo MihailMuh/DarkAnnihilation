@@ -1122,32 +1122,34 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         if (character == SATURN) {
             for (int i = 0; i < intersectOnlyPlayer.size(); i++) {
                 Sprite sprite = intersectOnlyPlayer.get(i);
-                if (!sprite.lock) {
-                    sprite.x -= moveAll;
-                    sprite.turn();
-                    player.checkIntersections(sprite);
-                    if (sprite.name == BULLET_ENEMY) {
-                        for (int j = 0; j < bullets.size(); j++) {
-                            Sprite bulletPlayer = bullets.get(j);
-                            if (bulletPlayer != null) {
-                                if (bulletPlayer.name == BULLET_SATURN) {
-                                    if (sprite.intersect(bulletPlayer)) {
-                                        if (Randomize.randBoolean()) {
-                                            Object[] info = bulletPlayer
-                                                    .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
-                                                            (Bitmap) sprite.getBox(0, 0, null)[0]);
+                if (sprite != null) {
+                    if (!sprite.lock) {
+                        sprite.x -= moveAll;
+                        sprite.turn();
+                        player.checkIntersections(sprite);
+                        if (sprite.name == BULLET_ENEMY) {
+                            for (int j = 0; j < bullets.size(); j++) {
+                                Sprite bulletPlayer = bullets.get(j);
+                                if (bulletPlayer != null) {
+                                    if (bulletPlayer.name == BULLET_SATURN) {
+                                        if (sprite.intersect(bulletPlayer)) {
+                                            if (Randomize.randBoolean()) {
+                                                Object[] info = bulletPlayer
+                                                        .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
+                                                                (Bitmap) sprite.getBox(0, 0, null)[0]);
 
-                                            if ((boolean) info[3]) {
-                                                BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                bullets.add(bulletEnemyOrbit);
+                                                if ((boolean) info[3]) {
+                                                    BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
+                                                    bullets.add(bulletEnemyOrbit);
 
-                                                intersectOnlyPlayer.remove(sprite);
-                                                break;
+                                                    intersectOnlyPlayer.remove(sprite);
+                                                    break;
+                                                }
                                             }
+                                            sprite.intersectionPlayer();
+                                            bulletPlayer.kill();
+                                            break;
                                         }
-                                        sprite.intersectionPlayer();
-                                        bulletPlayer.kill();
-                                        break;
                                     }
                                 }
                             }
@@ -1158,10 +1160,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         } else {
             for (int i = 0; i < intersectOnlyPlayer.size(); i++) {
                 Sprite sprite = intersectOnlyPlayer.get(i);
-                if (!sprite.lock) {
-                    sprite.x -= moveAll;
-                    sprite.turn();
-                    player.checkIntersections(sprite);
+                if (sprite != null) {
+                    if (!sprite.lock) {
+                        sprite.x -= moveAll;
+                        sprite.turn();
+                        player.checkIntersections(sprite);
+                    }
                 }
             }
         }

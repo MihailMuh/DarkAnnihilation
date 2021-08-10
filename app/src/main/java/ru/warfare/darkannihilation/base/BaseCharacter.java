@@ -13,6 +13,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 
 public abstract class BaseCharacter extends Sprite {
+    private boolean boom = false;
     public boolean lock;
     public int endX;
     public int endY;
@@ -127,7 +128,10 @@ public abstract class BaseCharacter extends Sprite {
             changeHearts();
             HardThread.doInBackGround(() -> {
                 if (health <= 0) {
-                    kill();
+                    if (!boom) {
+                        boom = true;
+                        kill();
+                    }
                 } else {
                     Vibrator.vibrate(60);
                 }
