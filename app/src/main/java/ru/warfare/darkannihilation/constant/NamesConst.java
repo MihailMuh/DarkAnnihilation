@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.constant;
 
-public class NamesConst {
+public final class NamesConst {
     public static final byte BULLET_ENEMY = -1;
     public static final byte BULLET_SATURN = 1;
     public static final byte BULLET_ORBIT = -2;

@@ -140,7 +140,8 @@ public final class Constants {
 
     public static final short CHANGER_GUNS_CLICK_TIME = 700;
 
-    public static final boolean DRAW_FPS = false;
+    public static final boolean DRAW_FPS = true;
+    public static final int NANOS_IN_SECOND = 1_000_000_000;
 
 //    constants
     public static final String SERVER_IP = "http://78.29.33.173:49150/";

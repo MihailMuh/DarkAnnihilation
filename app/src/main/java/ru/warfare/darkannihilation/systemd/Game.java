@@ -72,6 +72,7 @@ import ru.warfare.darkannihilation.support.ShotgunKit;
 import static ru.warfare.darkannihilation.Py.print;
 import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
 import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
+import static ru.warfare.darkannihilation.constant.Constants.NANOS_IN_SECOND;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
@@ -229,8 +230,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public long lastBoss;
     public long pauseTimer;
 
-    private static final int MILLIS_IN_SECOND = 1_000_000_000;
-    private long timeFrame;
+    private long timeFrame = System.nanoTime();
 
     public Game(Context mainActivity, AttributeSet attrs) {
         super(mainActivity, attrs);
@@ -464,9 +464,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     @Override
     public void run() {
         while (playing) {
-            if (DRAW_FPS) {
-                timeFrame = System.nanoTime();
-            }
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockHardwareCanvas();
                 switch (gameStatus) {
@@ -515,7 +512,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         loadingScreen.turn();
                         break;
                 }
-                renderFPS();
+
+                if (DRAW_FPS) {
+                    renderFPS();
+                }
                 holder.unlockCanvasAndPost(canvas);
             }
         }
@@ -1249,12 +1249,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void renderFPS() {
-        if (DRAW_FPS) {
-            stringBuilder.append("FPS: ").append(MILLIS_IN_SECOND / (System.nanoTime() - timeFrame));
-            canvas.drawText(stringBuilder.toString(), fpsX, fpsY, fpsPaint);
+        stringBuilder.append("FPS: ").append(NANOS_IN_SECOND / (System.nanoTime() - timeFrame));
+        timeFrame = System.nanoTime();
 
-            stringBuilder.setLength(0);
-        }
+        canvas.drawText(stringBuilder.toString(), fpsX, fpsY, fpsPaint);
+
+        stringBuilder.setLength(0);
     }
 
     private void renderCurrentScore() {

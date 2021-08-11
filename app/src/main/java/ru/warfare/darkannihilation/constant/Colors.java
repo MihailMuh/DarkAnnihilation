@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.constant;
 
 import android.graphics.Color;
 
-public class Colors {
+public final class Colors {
     public static final int THUNDER_FIRST = Color.parseColor("#494d54");
     public static final int THUNDER_SECOND = Color.parseColor("#444664");
 
