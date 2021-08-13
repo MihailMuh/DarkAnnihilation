@@ -47,6 +47,7 @@ public final class ImageHub {
     public static Bitmap[] atomBombImage = new Bitmap[NUMBER_ATOMIC_BOMB_IMAGES];
     public static final Bitmap[] loadingImages = new Bitmap[NUMBER_LOADING_SCREEN_IMAGES];
     public static Bitmap[] thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
+    public static Bitmap[] gunsImage = new Bitmap[NUMBER_VADER_IMAGES];
 
     public static Bitmap bitmap;
     public static Bitmap bulletImage;
@@ -67,9 +68,6 @@ public final class ImageHub {
     public static Bitmap fightScreen;
     public static Bitmap healthKitImg;
     public static Bitmap shotgunKitImg;
-    public static Bitmap shotgunToGun;
-    public static Bitmap gunToShotgun;
-    public static Bitmap gunToNone;
     public static Bitmap buckshotImg;
     public static Bitmap rocketImg;
     public static Bitmap attentionImg;
@@ -123,6 +121,7 @@ public final class ImageHub {
     private static int _400;
     private static int _150;
     private static int _30;
+    private static int _314;
 
     private static int screenHeight;
     private static int screenWidth;
@@ -135,7 +134,7 @@ public final class ImageHub {
 
     public static volatile boolean endImgInit = false;
 
-    public static void init(Context context) {
+    public static void init(@NonNull Context context) {
         resizeK = Windows.resizeK();
         screenWidth = Windows.screenWidth();
         screenHeight = Windows.screenHeight();
@@ -156,6 +155,7 @@ public final class ImageHub {
         _70 = (int) (70 * resizeK);
         _166 = (int) (166 * resizeK);
         _175 = (int) (175 * resizeK);
+        _314 = (int) (314 * resizeK);
         _03545 = (int) (0.3545 * screenHeight);
         fact = (int) ((screenWidth / 1.3) * resizeK);
         fact03 = (int) (fact * 0.3);
@@ -172,9 +172,6 @@ public final class ImageHub {
         glideManager.run(R.drawable.bullet, (int) (7 * resizeK), _30, object -> bulletImage = object);
         glideManager.run(R.drawable.health, _80, object -> healthKitImg = object);
         glideManager.run(R.drawable.buckshot, _100, (int) (123.7 * resizeK), object -> shotgunKitImg = object);
-        glideManager.run(R.drawable.gun_to_shotgun, _400, object -> gunToShotgun = object);
-        glideManager.run(R.drawable.gun_to_none, _400, object -> gunToNone = object);
-        glideManager.run(R.drawable.shotgun_to_gun, _400, object -> shotgunToGun = object);
         glideManager.runCrop(R.drawable.gameover, screenWidth, screenHeight, object -> gameoverScreen = object);
         glideManager.run(R.drawable.bullet_enemy, _15, _50, object -> bulletEnemyImage = object);
         glideManager.run(R.drawable.full_blue_heart, _70, _60, object -> imageBlueHeartFull = object);
@@ -481,6 +478,7 @@ public final class ImageHub {
                     endImgInit = true;
                 }
             });
+
             glideManager.run(R.drawable.cannon_ball, _15, object -> buckshotImg = object);
             glideManager.run(R.drawable.bullet, (int) (7 * resizeK), _30, object -> bulletImage = object);
 
@@ -527,7 +525,29 @@ public final class ImageHub {
             dynamiteImg = null;
             thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
         }
-    }   
+    }
+
+    public static void loadGunsImages(byte character) {
+        String str = "";
+        switch (character) {
+            case SATURN:
+                str = "saturn";
+                break;
+            case MILLENNIUM_FALCON:
+                str = "millennium";
+                break;
+            case EMERALD:
+                str = "emerald";
+                break;
+        }
+
+        for (int i = 0; i < NUMBER_VADER_IMAGES; i++) {
+            int finalI = i;
+            stringBuilder.setLength(0);
+            stringBuilder.append(str).append("_guns").append(i);
+            glideManager.run(getId(), _400, _314, object -> gunsImage[finalI] = object);
+        }
+    }
 
     public static void loadFightScreen(byte character, byte boss) {
         endImgInit = false;

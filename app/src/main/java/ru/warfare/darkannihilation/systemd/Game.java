@@ -298,9 +298,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             player = new Bot(this);
             healthKit = new HealthKit(this);
             shotgunKit = new ShotgunKit(this);
-            changerGuns = new ChangerGuns(this);
             screen = new StarScreen();
             loadingScreen = new LoadingScreen(this);
+            changerGuns = new ChangerGuns();
 
             while (buttonStart.right() > buttonMenu.x) {
                 buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
@@ -590,13 +590,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         buttonMenu.sweep(clickX, clickY);
                         break;
                     case GAME:
+                        if (pointerCount >= 2) {
+                            changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
+                        }
                     case READY:
                         if (!player.dontmove) {
                             player.setCoords(clickX, clickY);
-                        }
-
-                        if (pointerCount >= 2) {
-                            changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
                         }
                         break;
                     case SETTINGS:
@@ -739,6 +738,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             rocket = null;
             factory = null;
             demoman = null;
+            changerGuns = null;
             shotgunKit.picked = false;
 
             while (buttonStart.right() > buttonMenu.x) {
@@ -769,17 +769,18 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         AudioHub.pauseBossMusic();
         AudioHub.deletePauseMusic();
 
-        enemies = new ArrayList<>(0);
-        ghosts = new ArrayList<>(0);
-        intersectOnlyPlayer = new ArrayList<>(0);
-
         HardThread.doInBackGround(() -> {
             bullets = new ArrayList<>(0);
+            enemies = new ArrayList<>(0);
+            ghosts = new ArrayList<>(0);
+            intersectOnlyPlayer = new ArrayList<>(0);
+
             stopExplosions();
 
             makeScoresParams();
 
             BOSS_TIME = 100_000;
+            count = 0;
 
             shotgunKit.hide();
             healthKit.hide();
@@ -797,9 +798,13 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             intersectOnlyPlayer.add(shotgunKit);
         });
 
+        changerGuns = new ChangerGuns();
+
         switch (level) {
             case 1:
                 HardThread.doInBackGround(() -> {
+                    ImageHub.loadGunsImages(character);
+
                     score = 0;
 
                     spider = null;
@@ -827,25 +832,32 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         player = new Emerald(this);
                         break;
                 }
-                rocket = new Rocket(this);
-                attention = new Attention(this);
-                factory = new Factory(this);
-                demoman = new Demoman(this);
+
                 screen = new StarScreen();
 
-                count = NUMBER_VADER - 1;
-                enemies.add(new TripleFighter(this));
-                for (int i = 0; i < count; i++) {
-                    if (Randomize.randFloat() <= 0.12) {
-                        enemies.add(new TripleFighter(this));
-                    } else {
-                        enemies.add(new Vader(this, false));
-                    }
-                }
+                HardThread.doInBackGround(() -> {
+                    rocket = new Rocket(this);
+                    attention = new Attention(this);
+                    factory = new Factory(this);
+                    demoman = new Demoman(this);
 
-                intersectOnlyPlayer.add(attention);
-                ghosts.add(factory);
-                enemies.add(demoman);
+                    int len = NUMBER_VADER - 1;
+                    enemies.add(new TripleFighter(this));
+                    for (int i = 0; i < len; i++) {
+                        if (Randomize.randFloat() <= 0.12) {
+                            enemies.add(new TripleFighter(this));
+                        } else {
+                            enemies.add(new Vader(this, false));
+                        }
+                    }
+
+                    intersectOnlyPlayer.add(attention);
+                    ghosts.add(factory);
+                    enemies.add(demoman);
+
+                    Time.sleep(1500);
+                    changerGuns = new ChangerGuns(this);
+                });
                 break;
             case 2:
                 HardThread.doInBackGround(() -> {
@@ -866,31 +878,31 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 AudioHub.loadSecondLevelSounds();
                 ImageHub.loadSecondLevelImages();
 
-                spider = new Spider(this);
-                sunrise = new Sunrise(this);
-                buffer = new Buffer(this);
                 screen = new ThunderScreen();
-                atomicBomb = new AtomicBomb(this);
 
-                count = NUMBER_VADER + 5;
-                for (int i = 0; i < count; i++) {
-                    if (Randomize.randFloat() <= 0.18) {
-                        enemies.add(new XWing(this));
-                    } else {
-                        enemies.add(new Vader(this, true));
+                HardThread.doInBackGround(() -> {
+                    spider = new Spider(this);
+                    sunrise = new Sunrise(this);
+                    buffer = new Buffer(this);
+                    atomicBomb = new AtomicBomb(this);
+                    changerGuns = new ChangerGuns(this);
+
+                    int len = NUMBER_VADER + 5;
+                    for (int i = 0; i < len; i++) {
+                        if (Randomize.randFloat() <= 0.18) {
+                            enemies.add(new XWing(this));
+                        } else {
+                            enemies.add(new Vader(this, true));
+                        }
                     }
-                }
 
-                enemies.add(spider);
-                enemies.add(sunrise);
-                enemies.add(buffer);
-                enemies.add(atomicBomb);
+                    enemies.add(spider);
+                    enemies.add(sunrise);
+                    enemies.add(buffer);
+                    enemies.add(atomicBomb);
+                });
                 break;
         }
-
-        changerGuns.hide();
-
-        count = 0;
 
         AudioHub.playReadySnd();
 
@@ -983,11 +995,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         if (screen.x < 0 & screen.right() > screenWidth) {
             screen.x -= moveAll;
         }
-        screen.update();
-        screen.render();
+        screen.turn();
 
-        player.update();
-        player.render();
+        player.turn();
 
         pauseButton.render();
 
@@ -1006,8 +1016,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     } else {
                         if (count >= 280) {
                             player.lock = false;
-                            changerGuns.start();
                             count = 0;
+                            changerGuns.x = 0;
                             gameStatus = GAME;
                             lastBoss = System.currentTimeMillis();
                         }
@@ -1018,8 +1028,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void preview() {
-        screen.update();
-        screen.render();
+        screen.turn();
 
         for (int i = 0; i < enemies.size(); i++) {
             Sprite sprite = enemies.get(i);
@@ -1033,8 +1042,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         turnBullets();
         turnExplosions();
 
-        player.update();
-        player.render();
+        player.turn();
 
         buttonStart.render();
         buttonQuit.render();
@@ -1050,8 +1058,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void topScore() {
-        screen.update();
-        screen.render();
+        screen.turn();
 
         buttonMenu.render();
 
@@ -1061,8 +1068,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     private void settings() {
-        screen.update();
-        screen.render();
+        screen.turn();
 
         buttonMenu.render();
         buttonQuit.render();
