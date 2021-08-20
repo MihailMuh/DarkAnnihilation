@@ -1,7 +1,5 @@
 package ru.warfare.darkannihilation.bullet;
 
-import android.graphics.Color;
-
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;

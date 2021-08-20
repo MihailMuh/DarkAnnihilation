@@ -6,6 +6,8 @@ import static ru.warfare.darkannihilation.constant.Constants.VADER_HEALTH;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -116,7 +118,7 @@ public class Vader extends Sprite {
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
+        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
             start();
         }
     }

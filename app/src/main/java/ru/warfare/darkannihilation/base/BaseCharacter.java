@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.Vibrator;
+import ru.warfare.darkannihilation.systemd.service.Vibrator;
 import ru.warfare.darkannihilation.character.Heart;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 public abstract class BaseCharacter extends Sprite {
     private boolean boom = false;
@@ -52,8 +54,8 @@ public abstract class BaseCharacter extends Sprite {
     }
 
     public void newStatus() {
-        x = Game.halfScreenWidth - halfWidth;
-        y = Game.halfScreenHeight - halfHeight;
+        x = HALF_SCREEN_WIDTH - halfWidth;
+        y = HALF_SCREEN_HEIGHT - halfHeight;
         endX = x;
         endY = y;
         lock = true;

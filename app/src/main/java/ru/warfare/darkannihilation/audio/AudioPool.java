@@ -1,10 +1,11 @@
 package ru.warfare.darkannihilation.audio;
 
-import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 
 import java.util.ArrayList;
+
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 
 public final class AudioPool {
     private static final SoundPool soundPool = new SoundPool
@@ -13,19 +14,20 @@ public final class AudioPool {
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build())
-            .setMaxStreams(1000)
+            .setMaxStreams(32)
             .build();
     private final ArrayList<Float> volumes = new ArrayList<>(0);
     private final ArrayList<Float> maxes = new ArrayList<>(0);
     private final ArrayList<Integer> sounds = new ArrayList<>(0);
 
-    public int addSound(Context context, int id, float volume) {
-        int i = soundPool.load(context, id, 1);
+    public int addSound(int id, float volume) {
+        int i = soundPool.load(activity, id, 1);
         sounds.add(i);
         volumes.add(volume);
         maxes.add(volume);
         return sounds.indexOf(i);
     }
+
     public void play(int id) {
         play(sounds.get(id), volumes.get(id));
     }

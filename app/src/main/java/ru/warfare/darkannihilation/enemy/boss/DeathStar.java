@@ -14,6 +14,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class DeathStar extends BaseBoss {
     public DeathStar(Game g) {
@@ -65,10 +66,10 @@ public class DeathStar extends BaseBoss {
                 if (Randomize.randBoolean()) {
                     speedX = -speedX;
                 } else {
-                    x = Game.screenWidth;
+                    x = SCREEN_WIDTH;
                 }
             }
-            if (x > Game.screenWidth) {
+            if (x > SCREEN_WIDTH) {
                 if (Randomize.randBoolean()) {
                     speedX = -speedX;
                 } else {

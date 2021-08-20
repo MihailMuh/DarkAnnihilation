@@ -6,10 +6,10 @@ import android.graphics.Paint;
 import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.Service;
 
-import static ru.warfare.darkannihilation.systemd.Game.screenHeight;
-import static ru.warfare.darkannihilation.systemd.Game.screenWidth;
+import static ru.warfare.darkannihilation.systemd.service.Service.resources;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Table {
     private final Paint topPaint = new Paint();
@@ -65,24 +65,24 @@ public class Table {
         }
         switch (lang) {
             case "ru":
-                string_error = Service.res().getStringArray(R.array.ru)[i];
+                string_error = resources.getStringArray(R.array.ru)[i];
                 break;
             case "en":
-                string_error = Service.res().getStringArray(R.array.en)[i];
+                string_error = resources.getStringArray(R.array.en)[i];
                 break;
             case "fr":
-                string_error = Service.res().getStringArray(R.array.fr)[i];
+                string_error = resources.getStringArray(R.array.fr)[i];
                 break;
             case "sp":
-                string_error = Service.res().getStringArray(R.array.sp)[i];
+                string_error = resources.getStringArray(R.array.sp)[i];
                 break;
             case "ge":
-                string_error = Service.res().getStringArray(R.array.ge)[i];
+                string_error = resources.getStringArray(R.array.ge)[i];
                 break;
         }
 
-        errX = (int) ((screenWidth - topPaintRed.measureText(string_error)) / 2);
-        errY = (int) ((screenHeight + topPaintRed.getTextSize()) / 2);
+        errX = (int) ((SCREEN_WIDTH - topPaintRed.measureText(string_error)) / 2);
+        errY = (int) ((SCREEN_HEIGHT + topPaintRed.getTextSize()) / 2);
     }
 
     public void addText(String text) {

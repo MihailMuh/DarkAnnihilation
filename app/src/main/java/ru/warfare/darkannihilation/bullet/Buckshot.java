@@ -7,6 +7,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.BUCKSHOT_SPEED;
 import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Buckshot extends BaseBullet {
     public Buckshot(Game game, int X, int Y, int speed) {
@@ -32,7 +33,7 @@ public class Buckshot extends BaseBullet {
         y -= BUCKSHOT_SPEED;
         x += speedX;
 
-        if (y < -height | x < -width | x > Game.screenWidth) {
+        if (y < -height | x < -width | x > SCREEN_WIDTH) {
             hide();
         }
     }

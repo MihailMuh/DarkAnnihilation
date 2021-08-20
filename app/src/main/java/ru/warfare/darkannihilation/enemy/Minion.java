@@ -13,6 +13,8 @@ import static ru.warfare.darkannihilation.constant.Constants.MINION_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Minion extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -77,7 +79,7 @@ public class Minion extends Sprite {
 
         shoot();
 
-        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
+        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
             kill();
         }
     }

@@ -5,10 +5,10 @@ import java.util.concurrent.Executors;
 
 import ru.warfare.darkannihilation.interfaces.Function;
 
-import static ru.warfare.darkannihilation.Py.print;
+import static ru.warfare.darkannihilation.systemd.service.Py.print;
 
 public class HardThread implements Runnable {
-    private static final ExecutorService threadPool = Executors.newWorkStealingPool();
+    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     private Thread thread;
     private static Function function;
     private volatile boolean playing;

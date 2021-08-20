@@ -10,6 +10,7 @@ import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH_BAR_
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPAWN_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPEED;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 public class Factory extends Sprite {
     private long lastSpawn = System.currentTimeMillis();
@@ -68,7 +69,7 @@ public class Factory extends Sprite {
         hp = FACTORY_HEALTH_BAR_LEN;
         isSpawn = false;
         y = -height;
-        x = Game.halfScreenWidth - halfWidth;
+        x = HALF_SCREEN_WIDTH - halfWidth;
         health = FACTORY_HEALTH;
     }
 

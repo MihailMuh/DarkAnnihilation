@@ -11,6 +11,8 @@ import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randBoolean;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Demoman extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -21,7 +23,7 @@ public class Demoman extends Sprite {
         super(game, ImageHub.demomanImg);
         damage = DEMOMAN_DAMAGE;
 
-        endY = Game.halfScreenHeight - height;
+        endY = HALF_SCREEN_HEIGHT - height;
         speedX = -3;
 
         lock = true;
@@ -55,7 +57,7 @@ public class Demoman extends Sprite {
                 x = -width;
             } else {
                 image = ImageHub.demomanImg;
-                x = Game.screenWidth;
+                x = SCREEN_WIDTH;
                 speedX = -speedX;
             }
             lock = false;
@@ -81,7 +83,7 @@ public class Demoman extends Sprite {
         x += speedX;
 
         if (goLeft) {
-            if (x > Game.screenWidth) {
+            if (x > SCREEN_WIDTH) {
                 lock = true;
             }
         } else {

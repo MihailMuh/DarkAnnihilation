@@ -12,5 +12,9 @@ public final class Modes {
     public static final byte AFTER_PAUSE = 8;
     public static final byte SETTINGS = 9;
     public static final byte LOADING = 10;
+    public static final byte QUIT = 11;
+    public static final byte RESTART = 12;
+    public static final byte AFTER_SETTINGS = 13;
+
     public static final byte PASS = 100;
 }

@@ -1,6 +1,5 @@
 package ru.warfare.darkannihilation.glide;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
@@ -15,15 +14,11 @@ import com.bumptech.glide.request.target.Target;
 import ru.warfare.darkannihilation.interfaces.BoxBitmap;
 import ru.warfare.darkannihilation.interfaces.BoxDrawable;
 
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+
 public class GlideManager {
-    private final Context context;
-
-    public GlideManager(Context context) {
-        this.context = context;
-    }
-
     public void run(int id, int width, int height, BoxBitmap boxBitmap) {
-        GlideApp.with(context)
+        GlideApp.with(activity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(id)
@@ -48,7 +43,7 @@ public class GlideManager {
     }
 
     public void runCrop(int id, int width, int height, BoxBitmap boxBitmap) {
-        GlideApp.with(context)
+        GlideApp.with(activity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(id)
@@ -70,7 +65,7 @@ public class GlideManager {
     }
 
     public void runDrawable(int id, int width, int height, BoxDrawable boxDrawable) {
-        GlideApp.with(context)
+        GlideApp.with(activity)
                 .asDrawable()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(id)

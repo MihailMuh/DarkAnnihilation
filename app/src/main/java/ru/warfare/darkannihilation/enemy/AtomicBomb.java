@@ -11,6 +11,7 @@ import static ru.warfare.darkannihilation.constant.Constants.ATOMIC_BOMB_FRAME_T
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.ROCKET_DAMAGE;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class AtomicBomb extends Sprite {
     private int frame = -1;
@@ -114,7 +115,7 @@ public class AtomicBomb extends Sprite {
             }
         }
 
-        if (y > Game.screenHeight) {
+        if (y > SCREEN_HEIGHT) {
             hide();
         }
     }

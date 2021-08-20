@@ -1,5 +1,8 @@
 package ru.warfare.darkannihilation.base;
 
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+
 import android.graphics.Bitmap;
 
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -11,14 +14,14 @@ public abstract class BaseCharacterButton extends BaseButton {
     public BaseCharacterButton(Game game, Bitmap bitmap, byte name) {
         super(game, bitmap);
 
-        y = Game.halfScreenHeight - halfHeight;
+        y = HALF_SCREEN_HEIGHT - halfHeight;
         this.name = name;
 
         hide();
     }
 
     public void hide() {
-        x = Game.screenWidth;
+        x = SCREEN_WIDTH;
     }
 
     public abstract void show();

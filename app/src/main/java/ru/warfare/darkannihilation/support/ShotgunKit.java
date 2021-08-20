@@ -6,6 +6,7 @@ import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.SHOTGUN_KIT_SPEED;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class ShotgunKit extends Sprite {
     public boolean picked = false;
@@ -39,7 +40,7 @@ public class ShotgunKit extends Sprite {
     @Override
     public void update() {
         y += SHOTGUN_KIT_SPEED;
-        if (y > Game.screenHeight) {
+        if (y > SCREEN_HEIGHT) {
             kill();
         }
     }

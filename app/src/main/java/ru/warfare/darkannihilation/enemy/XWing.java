@@ -15,6 +15,8 @@ import static ru.warfare.darkannihilation.constant.Constants.XWING_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 import static ru.warfare.darkannihilation.math.Math.getDistance;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class XWing extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -127,7 +129,7 @@ public class XWing extends Sprite {
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
+        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
             start();
         }
     }

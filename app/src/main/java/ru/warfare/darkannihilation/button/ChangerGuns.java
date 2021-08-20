@@ -4,6 +4,8 @@ import static ru.warfare.darkannihilation.constant.Constants.CHANGER_GUNS_CLICK_
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import android.graphics.Paint;
 
@@ -19,8 +21,8 @@ public class ChangerGuns extends BaseButton {
 
     public ChangerGuns(Game g) {
         super(g, ImageHub.gunsImage[0]);
-        y = Game.screenHeight - height;
-        x = Game.screenWidth;
+        y = SCREEN_HEIGHT - height;
+        x = SCREEN_WIDTH;
 
         alphaPaint.setFilterBitmap(true);
         alphaPaint.setDither(true);
@@ -38,7 +40,7 @@ public class ChangerGuns extends BaseButton {
     public ChangerGuns() {
         super(null, ImageHub.attentionImg);
 
-        x = Game.screenWidth;
+        x = SCREEN_WIDTH;
     }
 
     @Override

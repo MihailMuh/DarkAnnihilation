@@ -11,6 +11,8 @@ import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMAL
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSIONS;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public abstract class Sprite {
     public Game game;
@@ -65,8 +67,8 @@ public abstract class Sprite {
     }
 
     protected void calculateBarriers() {
-        screenHeightHeight = Game.screenHeight - height;
-        screenWidthWidth = Game.screenWidth - width;
+        screenHeightHeight = SCREEN_HEIGHT - height;
+        screenWidthWidth = SCREEN_WIDTH - width;
     }
 
     public abstract void update();

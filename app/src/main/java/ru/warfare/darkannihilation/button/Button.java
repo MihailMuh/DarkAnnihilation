@@ -1,36 +1,44 @@
 package ru.warfare.darkannihilation.button;
 
-import ru.warfare.darkannihilation.Clerk;
-import ru.warfare.darkannihilation.ClientServer;
+import ru.warfare.darkannihilation.systemd.service.Clerk;
+import ru.warfare.darkannihilation.systemd.service.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.Time;
+import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.Service;
+import ru.warfare.darkannihilation.systemd.service.Service;
 
 import static ru.warfare.darkannihilation.constant.Constants.BUTTON_CLICK_TIME;
 import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.AFTER_SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
+import static ru.warfare.darkannihilation.constant.Modes.MENU;
+import static ru.warfare.darkannihilation.constant.Modes.PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.QUIT;
+import static ru.warfare.darkannihilation.constant.Modes.RESTART;
+import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
+import static ru.warfare.darkannihilation.constant.Modes.TOP;
 
 public class Button extends BaseButton {
-    public String function;
+    public byte function;
     private String text = " ";
-    private int textX;
-    private int textY;
+    private float textX;
+    private float textY;
     private long lastClick = System.currentTimeMillis();
     public boolean isPressed = false;
 
     public Button(Game game) {
         super(game, ImageHub.buttonImagePressed);
+        x = 500;
     }
 
     public void setText(String text) {
         newFunc(text, x, y, function);
     }
 
-    public void newFunc(String name, int X, int Y, String func) {
+    public void newFunc(String name, int X, int Y, byte func) {
         function = func;
 
         y = Y;
@@ -45,43 +53,29 @@ public class Button extends BaseButton {
             }
             ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed, width, height);
             ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed, width, height);
-            if (game.buttonMenu != null) {
-                if (!func.equals(game.buttonMenu.function)) {
-                    game.buttonMenu.updateFrontEnd();
-                }
+            if (func != game.buttonMenu.function) {
+                game.buttonMenu.updateFrontEnd();
             }
-            if (game.buttonQuit != null) {
-                if (!func.equals(game.buttonQuit.function)) {
-                    game.buttonQuit.updateFrontEnd();
-                }
+            if (func != game.buttonQuit.function) {
+                game.buttonQuit.updateFrontEnd();
             }
-            if (game.buttonRestart != null) {
-                if (!func.equals(game.buttonRestart.function)) {
-                    game.buttonRestart.updateFrontEnd();
-                }
+            if (func != game.buttonRestart.function) {
+                game.buttonRestart.updateFrontEnd();
             }
-            if (game.buttonStart != null) {
-                if (!func.equals(game.buttonStart.function)) {
-                    game.buttonStart.updateFrontEnd();
-                }
+            if (func != game.buttonStart.function) {
+                game.buttonStart.updateFrontEnd();
             }
-        } else {
-            width = ImageHub.buttonImageNotPressed.getWidth();
         }
-        halfWidth = width / 2;
 
-        textX = (int) (x + (width - len) / 2);
-        textY = (int) (y + (halfHeight + Game.buttonsPaint.getTextSize() / 4));
-
-        isPressed = false;
+        updateFrontEnd();
     }
 
     public void updateFrontEnd() {
         width = ImageHub.buttonImageNotPressed.getWidth();
         halfWidth = width / 2;
 
-        textX = (int) (x + (width - Game.buttonsPaint.measureText(text)) / 2);
-        textY = (int) (y + (Game.buttonsPaint.getTextSize() / 4));
+        textX = centerX() - Game.buttonsPaint.measureText(text) / 2f;
+        textY = centerY() + Game.buttonsPaint.getTextSize() / 4f;
     }
 
     public void sweep(int X, int Y) {
@@ -94,65 +88,62 @@ public class Button extends BaseButton {
             long now = System.currentTimeMillis();
             if (now - lastClick > BUTTON_CLICK_TIME) {
                 lastClick = now;
-                HardThread.doInBackGround(() -> {
-                    AudioHub.playClick();
-                    isPressed = true;
-                    Time.sleep(100);
-                    isPressed = false;
-                    Time.sleep(50);
-                    switch (function) {
-                        case "start":
-                            game.buttonPlayer.show();
-                            game.buttonSaturn.show();
-                            game.buttonEmerald.show();
-                            break;
-                        case "quit":
-                            lastClick = now * 10;
-                            AudioHub.releaseAP();
-                            game.saveSettings();
-                            Service.systemExit();
-                            break;
-                        case "pause":
-                            game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
-                            AudioHub.deletePauseMusic();
-                            AudioHub.whoIsPlayed();
-                            if (PauseButton.oldStatus != GAME) {
-                                Game.gameStatus = PauseButton.oldStatus;
-                            } else {
-                                Game.gameStatus = AFTER_PAUSE;
-                            }
-                            break;
-                        case "menu":
-                            game.onLoading(() -> {
-                                game.saveScore();
-                                game.generateMenu();
-                            });
-                            break;
-                        case "top":
-                            game.onLoading(game::generateTopScore);
+                AudioHub.playClick();
+                isPressed = false;
+                Time.sleep(160);
+                switch (function) {
+                    case GAME:
+                        game.buttonPlayer.show();
+                        game.buttonSaturn.show();
+                        game.buttonEmerald.show();
+                        break;
+                    case QUIT:
+                        AudioHub.releaseAP();
+                        game.saveSettings();
+                        Service.systemExit();
+                        break;
+                    case PAUSE:
+                        game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
+                        AudioHub.deletePauseMusic();
+                        AudioHub.whoIsPlayed();
+                        if (PauseButton.oldStatus != GAME) {
+                            Game.gameStatus = PauseButton.oldStatus;
+                        } else {
+                            Game.gameStatus = AFTER_PAUSE;
+                        }
+                        break;
+                    case MENU:
+                        game.onLoading(() -> {
+                            game.saveScore();
+                            game.generateMenu();
+                        });
+                        break;
+                    case TOP:
+                        game.onLoading(game::generateTopScore);
 
+                        HardThread.doInBackGround(() -> {
                             ClientServer.postBestScore(Clerk.nickname, game.bestScore);
                             ClientServer.getStatistics();
                             game.generateTable();
-                            break;
-                        case "restart":
-                            game.onLoading(() -> {
-                                game.saveScore();
-                                game.getMaxScore();
-                                Game.level = 1;
-                                game.generateNewGame();
-                            });
-                            break;
-                        case "fromSetting":
-                            game.hideSettings();
-                            game.onLoading(game::generateMenu);
-                            break;
-                        case "settings":
-                            ImageHub.loadSettingsImages();
-                            game.onLoading(game::generateSettings);
-                            break;
-                    }
-                });
+                        });
+                        break;
+                    case RESTART:
+                        game.onLoading(() -> {
+                            game.saveScore();
+                            game.getMaxScore();
+                            Game.level = 1;
+                            game.generateNewGame();
+                        });
+                        break;
+                    case AFTER_SETTINGS:
+                        game.hideSettings();
+                        game.onLoading(game::generateMenu);
+                        break;
+                    case SETTINGS:
+                        ImageHub.loadSettingsImages();
+                        game.onLoading(game::generateSettings);
+                        break;
+                }
             }
         }
     }

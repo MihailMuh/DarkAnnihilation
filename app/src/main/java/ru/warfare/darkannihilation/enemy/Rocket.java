@@ -1,13 +1,12 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.Py;
-import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.ROCKET_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.ROCKET_SPEED;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class Rocket extends Sprite {
     public Rocket(Game game) {
@@ -44,7 +43,7 @@ public class Rocket extends Sprite {
     public void update() {
         y += ROCKET_SPEED;
 
-        if (y > Game.screenHeight) {
+        if (y > SCREEN_HEIGHT) {
             kill();
         }
     }

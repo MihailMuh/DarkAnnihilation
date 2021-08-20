@@ -1,9 +1,14 @@
 package ru.warfare.darkannihilation.screen;
 
+import static ru.warfare.darkannihilation.systemd.service.Windows.DENSITY;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+
 import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.Time;
+import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.systemd.Game;
 
 public class FightScreen extends Sprite {
     public FightScreen(byte character, byte boss) {
@@ -11,12 +16,12 @@ public class FightScreen extends Sprite {
 
         ImageHub.loadFightScreen(character, boss);
 
-        y = Game.halfScreenHeight;
         height = ImageHub._095;
 
         int min = 10;
-        while (bottom() - Game.halfScreenHeight > Game.screenHeight) {
-            height = (int) ((Game.screenWidth-150-min) * Game.resizeK);
+        int screenWidth_150 = SCREEN_WIDTH - 150;
+        while (height > SCREEN_HEIGHT) {
+            height = (int) ((screenWidth_150 - min) * DENSITY);
             min += 10;
         }
 
@@ -24,8 +29,8 @@ public class FightScreen extends Sprite {
         halfHeight = height / 2;
         halfWidth = width / 2;
 
-        x = Game.halfScreenWidth - halfWidth;
-        y = Game.halfScreenHeight - halfHeight;
+        x = HALF_SCREEN_WIDTH - halfWidth;
+        y = HALF_SCREEN_HEIGHT - halfHeight;
 
         Time.waitImg();
 

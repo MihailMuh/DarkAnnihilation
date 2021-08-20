@@ -10,20 +10,18 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.Clerk;
-import ru.warfare.darkannihilation.ClientServer;
+import ru.warfare.darkannihilation.systemd.service.Clerk;
+import ru.warfare.darkannihilation.systemd.service.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
-import ru.warfare.darkannihilation.Time;
-import ru.warfare.darkannihilation.Windows;
+import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.audio.GameOver;
 import ru.warfare.darkannihilation.base.BaseBoss;
@@ -68,8 +66,9 @@ import ru.warfare.darkannihilation.screen.StarScreen;
 import ru.warfare.darkannihilation.screen.ThunderScreen;
 import ru.warfare.darkannihilation.support.HealthKit;
 import ru.warfare.darkannihilation.support.ShotgunKit;
+import ru.warfare.darkannihilation.systemd.service.Service;
 
-import static ru.warfare.darkannihilation.Py.print;
+import static ru.warfare.darkannihilation.systemd.service.Py.print;
 import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
 import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
 import static ru.warfare.darkannihilation.constant.Constants.NANOS_IN_SECOND;
@@ -81,6 +80,7 @@ import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
 import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.AFTER_SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.BOSS_PREVIEW;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.constant.Modes.GAME_OVER;
@@ -88,7 +88,9 @@ import static ru.warfare.darkannihilation.constant.Modes.LOADING;
 import static ru.warfare.darkannihilation.constant.Modes.MENU;
 import static ru.warfare.darkannihilation.constant.Modes.PASS;
 import static ru.warfare.darkannihilation.constant.Modes.PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.QUIT;
 import static ru.warfare.darkannihilation.constant.Modes.READY;
+import static ru.warfare.darkannihilation.constant.Modes.RESTART;
 import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.TOP;
 import static ru.warfare.darkannihilation.constant.Modes.WIN;
@@ -102,18 +104,16 @@ import static ru.warfare.darkannihilation.constant.NamesConst.LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.systemd.service.Service.resources;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 
 public final class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private final SurfaceHolder holder = getHolder();
-    public MainActivity mainActivity;
     private Thread thread;
     public static Canvas canvas;
-
-    public static int screenWidth;
-    public static int screenHeight;
-    public static int halfScreenWidth;
-    public static int halfScreenHeight;
-    public static float resizeK;
 
     public static final Paint fpsPaint = new Paint();
     public static final Paint startPaint = new Paint();
@@ -168,13 +168,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public BaseBoss boss;
 
     public static volatile byte level = 1;
-    public static volatile byte gameStatus = MENU;
+    public static volatile byte gameStatus = PASS;
     private int count = 0;
     public static int score = 0;
     public int oldScore;
     public int bestScore = 0;
     private int pointerCount;
     private int moveAll;
+    private volatile boolean isPause = false;
     private volatile boolean isFirstRun = true;
     public volatile boolean playing = false;
     public static volatile byte character = MILLENNIUM_FALCON;
@@ -182,7 +183,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     public String language = "en";
 
     private int fpsX;
-    private int fpsY;
     private int scoreX;
     private int maxScoreX;
     private int chooseChX;
@@ -237,15 +237,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void init() {
-        mainActivity = Service.getContext();
-        screenWidth = Windows.screenWidth();
-        screenHeight = Windows.screenHeight();
-        halfScreenWidth = screenWidth / 2;
-        halfScreenHeight = screenHeight / 2;
-        resizeK = Windows.resizeK();
-
-        holder.setFixedSize(screenWidth, screenHeight);
-
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setFilterBitmap(true);
@@ -272,17 +263,14 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         buttonsPaint.set(paint);
 
-        setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
         recoverySettings();
 
-        _3 = (int) ((screenWidth - startPaint.measureText("3")) / 2);
-        _2 = (int) ((screenWidth - startPaint.measureText("2")) / 2);
-        _1 = (int) ((screenWidth - startPaint.measureText("1")) / 2);
-        _321Y = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-        buttonsY = (int) (screenHeight - (ImageHub._70 * 1.5));
-        fpsY = 300;
-        fpsX = screenWidth - 250;
+        _3 = (int) ((SCREEN_WIDTH - startPaint.measureText("3")) / 2);
+        _2 = (int) ((SCREEN_WIDTH - startPaint.measureText("2")) / 2);
+        _1 = (int) ((SCREEN_WIDTH - startPaint.measureText("1")) / 2);
+        _321Y = (int) ((SCREEN_HEIGHT + startPaint.getTextSize()) / 2);
+        buttonsY = (int) (SCREEN_HEIGHT - (ImageHub._70 * 1.5));
+        fpsX = SCREEN_WIDTH - 250;
         tableY = buttonsY - ImageHub._70;
 
         Time.waitImg();
@@ -292,8 +280,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonQuit = new Button(this);
         buttonRestart = new Button(this);
 
-        HardThread.doInBackGround(() -> {
-            newCharacterButtons();
+        Service.runOnUiThread(() -> {
             pauseButton = new PauseButton(this);
             player = new Bot(this);
             healthKit = new HealthKit(this);
@@ -302,12 +289,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             loadingScreen = new LoadingScreen(this);
             changerGuns = new ChangerGuns();
 
-            while (buttonStart.right() > buttonMenu.x) {
-                buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
-                buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, buttonsY, "start");
-                buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
-                buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
-            }
+            newCharacterButtons();
+            updateMenuButtons();
+
+            holder.setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         });
 
         count = NUMBER_VADER * 2;
@@ -340,13 +325,15 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             allExplosion[i + count] = tripleSmallExplosion[i];
         }
 
-        newVolume();
+        if (!isPause) {
+            startGame();
+        }
     }
 
     private void gameplay() {
         moveAll = player.speedX / 3;
 
-        if (screen.x < 0 & screen.right() > screenWidth) {
+        if (screen.x < 0 & screen.right() > SCREEN_WIDTH) {
             screen.x -= moveAll;
         } else {
             moveAll = 0;
@@ -392,7 +379,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         if (portal == null) {
             if (healthKit.lock) {
-                if (Randomize.randFloat() <= 0.00125) {
+                if (Randomize.randFloat() <= 0.0015) {
                     healthKit.lock = false;
                 }
             }
@@ -534,61 +521,29 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                 boolean cg = false;
 
                 switch (gameStatus) {
-                    case MENU:
-                        buttonSaturn.setCoords(clickX, clickY);
-                        buttonPlayer.setCoords(clickX, clickY);
-                        buttonEmerald.setCoords(clickX, clickY);
-                        buttonStart.setCoords(clickX, clickY);
-                        buttonQuit.setCoords(clickX, clickY);
-                        buttonMenu.setCoords(clickX, clickY);
-                        buttonRestart.setCoords(clickX, clickY);
-                        break;
-                    case PAUSE:
-                        buttonRestart.setCoords(clickX, clickY);
-                        buttonStart.setCoords(clickX, clickY);
-                        buttonQuit.setCoords(clickX, clickY);
-                        buttonMenu.setCoords(clickX, clickY);
-                        break;
-                    case SETTINGS:
-                        buttonMenu.setCoords(clickX, clickY);
-                        buttonQuit.setCoords(clickX, clickY);
-                        break;
-                    case TOP:
-                        buttonMenu.setCoords(clickX, clickY);
-                        break;
                     case GAME:
                         cg = changerGuns.checkCoords(clickX, clickY);
                     case READY:
                     case GAME_OVER:
                         pb = pauseButton.checkCoords(clickX, clickY);
+
+                        if (!pb && cg) {
+                            player.dontmove = true;
+                            changerGuns.make();
+                            break;
+                        }
+                        if (pb && !cg) {
+                            player.dontmove = true;
+                            pauseButton.make();
+                            break;
+                        }
+
+                        player.dontmove = false;
                         break;
                 }
-                if (!pb && cg) {
-                    player.dontmove = true;
-                    changerGuns.make();
-                    break;
-                }
-                if (pb && !cg) {
-                    player.dontmove = true;
-                    pauseButton.make();
-                    break;
-                }
-                player.dontmove = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 switch (gameStatus) {
-                    case MENU:
-                        buttonStart.sweep(clickX, clickY);
-                        buttonQuit.sweep(clickX, clickY);
-                        buttonMenu.sweep(clickX, clickY);
-                        buttonRestart.sweep(clickX, clickY);
-                        break;
-                    case PAUSE:
-                        buttonRestart.sweep(clickX, clickY);
-                        buttonStart.sweep(clickX, clickY);
-                        buttonQuit.sweep(clickX, clickY);
-                        buttonMenu.sweep(clickX, clickY);
-                        break;
                     case GAME:
                         if (pointerCount >= 2) {
                             changerGuns.setCoords((int) event.getX(1), (int) event.getY(1));
@@ -598,56 +553,74 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                             player.setCoords(clickX, clickY);
                         }
                         break;
+                    case MENU:
+                    case PAUSE:
+                        buttonRestart.sweep(clickX, clickY);
+                        buttonStart.sweep(clickX, clickY);
                     case SETTINGS:
-                        buttonMenu.sweep(clickX, clickY);
                         buttonQuit.sweep(clickX, clickY);
-                        break;
                     case TOP:
                         buttonMenu.sweep(clickX, clickY);
                         break;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                buttonStart.isPressed = false;
-                buttonQuit.isPressed = false;
-                buttonMenu.isPressed = false;
-                buttonRestart.isPressed = false;
+                switch (gameStatus) {
+                    case MENU:
+                        buttonSaturn.setCoords(clickX, clickY);
+                        buttonPlayer.setCoords(clickX, clickY);
+                        buttonEmerald.setCoords(clickX, clickY);
+                    case PAUSE:
+                        buttonRestart.setCoords(clickX, clickY);
+                        buttonStart.setCoords(clickX, clickY);
+                    case SETTINGS:
+                        buttonQuit.setCoords(clickX, clickY);
+                    case TOP:
+                        buttonMenu.setCoords(clickX, clickY);
+                        break;
+                }
                 break;
         }
         return true;
     }
 
     public void onPause() {
-        AudioHub.stopAndSavePlaying();
         playing = false;
-        while (!thread.isInterrupted()) {
-            try {
-                thread.interrupt();
-            } catch (Exception e) {
-                print("Game thread " + e.toString());
+
+        if (!isFirstRun) {
+            AudioHub.stopAndSavePlaying();
+            while (!thread.isInterrupted()) {
+                try {
+                    thread.interrupt();
+                } catch (Exception e) {
+                    print("Game thread " + e.toString());
+                }
             }
+            hardThread.stopJob();
+        } else {
+            isPause = true;
         }
-        hardThread.stopJob();
     }
 
     public void onResume() {
-        if (isFirstRun) {
-            isFirstRun = false;
-            AudioHub.loadMenuSnd();
-        } else {
+        if (!isFirstRun) {
             hardThread.startJob();
             AudioHub.whoIsPlayed();
+            playing = true;
+            thread = new Thread(this);
+            thread.start();
+        } else {
+            if (isPause) {
+                startGame();
+            }
         }
-        playing = true;
-        thread = new Thread(this);
-        thread.start();
     }
 
     public void generateTopScore() {
         buttonPlayer.hide();
         buttonSaturn.hide();
         buttonEmerald.hide();
-        buttonMenu.newFunc(string_back, (int) (halfScreenWidth - 150 * resizeK), buttonsY, "menu");
+        buttonMenu.newFunc(string_back, HALF_SCREEN_WIDTH - ImageHub._150, buttonsY, MENU);
 
         gameStatus = TOP;
     }
@@ -679,12 +652,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         AudioHub.playPauseMusic();
 
         makeScoresParams();
-        int X = halfScreenWidth - buttonQuit.halfWidth;
+        int X = HALF_SCREEN_WIDTH - buttonQuit.halfWidth;
 
-        buttonStart.newFunc(string_resume, X, screenHeight / 3 - buttonStart.halfHeight, "pause");
-        buttonRestart.newFunc(string_restart, X, buttonStart.bottom() + 30, "restart");
-        buttonMenu.newFunc(string_to_menu, X, buttonRestart.bottom() + 30, "menu");
-        buttonQuit.newFunc(string_quit, X, buttonMenu.bottom() + 30, "quit");
+        buttonStart.newFunc(string_resume, X, SCREEN_HEIGHT / 3 - buttonStart.halfHeight, PAUSE);
+        buttonRestart.newFunc(string_restart, X, buttonStart.bottom() + 30, RESTART);
+        buttonMenu.newFunc(string_to_menu, X, buttonRestart.bottom() + 30, MENU);
+        buttonQuit.newFunc(string_quit, X, buttonMenu.bottom() + 30, QUIT);
 
         gameStatus = PAUSE;
     }
@@ -693,9 +666,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonPlayer.hide();
         buttonSaturn.hide();
         buttonEmerald.hide();
-        buttonQuit.newFunc(string_quit, halfScreenWidth + 30, buttonsY, "quit");
-        buttonMenu.newFunc(string_to_menu, halfScreenWidth - 30 - buttonQuit.width, buttonsY, "fromSetting");
+
+        buttonQuit.newFunc(string_quit, HALF_SCREEN_WIDTH + 30, buttonsY, QUIT);
+        buttonMenu.newFunc(string_to_menu, HALF_SCREEN_WIDTH - 30 - buttonQuit.width, buttonsY, AFTER_SETTINGS);
+
         settings = new Settings(this);
+
         gameStatus = SETTINGS;
     }
 
@@ -741,12 +717,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             changerGuns = null;
             shotgunKit.picked = false;
 
-            while (buttonStart.right() > buttonMenu.x) {
-                buttonMenu.newFunc(string_top, halfScreenWidth, buttonsY, "top");
-                buttonStart.newFunc(string_start, halfScreenWidth - buttonMenu.width, buttonsY, "start");
-                buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, "quit");
-                buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, "settings");
-            }
+            updateMenuButtons();
         });
 
         ImageHub.loadFirstLevelAndCharacterImages(MILLENNIUM_FALCON);
@@ -769,11 +740,12 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         AudioHub.pauseBossMusic();
         AudioHub.deletePauseMusic();
 
+        enemies = new ArrayList<>(0);
+        ghosts = new ArrayList<>(0);
+        intersectOnlyPlayer = new ArrayList<>(0);
+
         HardThread.doInBackGround(() -> {
             bullets = new ArrayList<>(0);
-            enemies = new ArrayList<>(0);
-            ghosts = new ArrayList<>(0);
-            intersectOnlyPlayer = new ArrayList<>(0);
 
             stopExplosions();
 
@@ -786,7 +758,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             healthKit.hide();
             pauseButton.show();
             if (portal != null) {
-                portal.hide();
+                portal.kill();
             }
 
             boss = null;
@@ -992,7 +964,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     private void ready() {
         moveAll = player.speedX / 3;
 
-        if (screen.x < 0 & screen.right() > screenWidth) {
+        if (screen.x < 0 & screen.right() > SCREEN_WIDTH) {
             screen.x -= moveAll;
         }
         screen.turn();
@@ -1052,7 +1024,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonSaturn.render();
         buttonEmerald.render();
 
-        if (buttonPlayer.x < screenWidth) {
+        if (buttonPlayer.x < SCREEN_WIDTH) {
             canvas.drawText(string_choose_your_character, chooseChX, chooseChY, paint50);
         }
     }
@@ -1211,7 +1183,10 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         sprite.check_intersectionBullet(bullets.get(j));
                     }
                     player.checkIntersections(sprite);
-                    rocket.checkIntersections(sprite);
+
+                    if (!rocket.lock) {
+                        rocket.checkIntersections(sprite);
+                    }
                 }
             }
 
@@ -1254,11 +1229,20 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         buttonEmerald = new ButtonEmerald(this);
     }
 
+    private void updateMenuButtons() {
+        while (buttonStart.right() > buttonMenu.x) {
+            buttonMenu.newFunc(string_top, HALF_SCREEN_WIDTH, buttonsY, TOP);
+            buttonStart.newFunc(string_start, HALF_SCREEN_WIDTH - buttonMenu.width, buttonsY, GAME);
+            buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, QUIT);
+            buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, SETTINGS);
+        }
+    }
+
     private void renderFPS() {
         stringBuilder.append("FPS: ").append(NANOS_IN_SECOND / (System.nanoTime() - timeFrame));
         timeFrame = System.nanoTime();
 
-        canvas.drawText(stringBuilder.toString(), fpsX, fpsY, fpsPaint);
+        canvas.drawText(stringBuilder.toString(), fpsX, 300, fpsPaint);
 
         stringBuilder.setLength(0);
     }
@@ -1322,6 +1306,25 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
     }
 
+    private void startGame() {
+        Service.runOnUiThread(() -> {
+            String[] settings = Clerk.getSettings().split(" ");
+            AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
+            AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
+
+            AudioHub.loadMenuSnd();
+            activity.deleteWinGif();
+        });
+
+        playing = true;
+        gameStatus = MENU;
+
+        thread = new Thread(this);
+        thread.start();
+
+        isFirstRun = false;
+    }
+
     public void newPortal() {
         if (portal == null) {
             portal = new Portal(this);
@@ -1346,24 +1349,24 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         gameOverPaint.setTextSize(39);
         switch (language) {
             case "ru":
-                strings = Service.res().getStringArray(R.array.ru);
+                strings = resources.getStringArray(R.array.ru);
                 buttonsPaint.setTextSize(33);
                 break;
             case "en":
-                strings = Service.res().getStringArray(R.array.en);
+                strings = resources.getStringArray(R.array.en);
                 gameOverPaint.setTextSize(50);
                 buttonsPaint.setTextSize(35);
                 break;
             case "fr":
-                strings = Service.res().getStringArray(R.array.fr);
+                strings = resources.getStringArray(R.array.fr);
                 buttonsPaint.setTextSize(34);
                 break;
             case "sp":
-                strings = Service.res().getStringArray(R.array.sp);
+                strings = resources.getStringArray(R.array.sp);
                 buttonsPaint.setTextSize(33);
                 break;
             case "ge":
-                strings = Service.res().getStringArray(R.array.ge);
+                strings = resources.getStringArray(R.array.ge);
                 buttonsPaint.setTextSize(34);
                 break;
         }
@@ -1397,22 +1400,16 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
 
         makeScoresParams();
-        chooseChX = (int) ((screenWidth - paint50.measureText(string_choose_your_character)) / 2);
-        chooseChY = (int) (screenHeight * 0.3);
-        thanksX = (int) ((screenWidth - winPaint.measureText(string_thanks)) / 2);
-        thanksY = (int) ((screenHeight + winPaint.getTextSize()) / 2.7);
-        go_to_menuX = (int) ((screenWidth - gameOverPaint.measureText(string_go_to_menu)) / 2);
-        go_to_menuY = (int) (screenHeight * 0.65);
-        shootX = (int) ((screenWidth - startPaint.measureText(string_shoot)) / 2);
-        shootY = (int) ((screenHeight + startPaint.getTextSize()) / 2);
-        go_to_restartX = (int) ((screenWidth - gameOverPaint.measureText(string_go_to_restart)) / 2);
-        go_to_restartY = (int) (screenHeight * 0.7);
-    }
-
-    private void newVolume() {
-        String[] settings = Clerk.getSettings().split(" ");
-        AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
-        AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
+        chooseChX = (int) ((SCREEN_WIDTH - paint50.measureText(string_choose_your_character)) / 2);
+        chooseChY = (int) (SCREEN_HEIGHT * 0.3);
+        thanksX = (int) ((SCREEN_WIDTH - winPaint.measureText(string_thanks)) / 2);
+        thanksY = (int) ((SCREEN_HEIGHT + winPaint.getTextSize()) / 2.7);
+        go_to_menuX = (int) ((SCREEN_WIDTH - gameOverPaint.measureText(string_go_to_menu)) / 2);
+        go_to_menuY = (int) (SCREEN_HEIGHT * 0.65);
+        shootX = (int) ((SCREEN_WIDTH - startPaint.measureText(string_shoot)) / 2);
+        shootY = (int) ((SCREEN_HEIGHT + startPaint.getTextSize()) / 2);
+        go_to_restartX = (int) ((SCREEN_WIDTH - gameOverPaint.measureText(string_go_to_restart)) / 2);
+        go_to_restartY = (int) (SCREEN_HEIGHT * 0.7);
     }
 
     private void recoverySettings() {
@@ -1433,7 +1430,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void generateTable() {
-        if (mainActivity.isOnline()) {
+        if (activity.isOnline()) {
             table = new Table(tableY);
 
             count = ClientServer.info_from_server.length();
@@ -1441,7 +1438,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             if (count != 0) {
                 for (int i = 0; i < count; i++) {
                     try {
-                        String nicks = ClientServer.namesPlayers.get(i).toString();
+                        String nicks = ClientServer.nicksPlayers.get(i).toString();
                         stringBuilder.append(i + 1).append(") ").append(nicks).append(" - ")
                                 .append(ClientServer.info_from_server.get(nicks));
 
@@ -1468,16 +1465,13 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
     }
 
     public void makeScoresParams() {
-        scoreX = (int) (halfScreenWidth - scorePaint.measureText(string_current_score + score) / 2);
-        maxScoreX = (int) (halfScreenWidth - scorePaint.measureText(string_max_score + bestScore) / 2);
+        scoreX = (int) (HALF_SCREEN_WIDTH - scorePaint.measureText(string_current_score + score) / 2);
+        maxScoreX = (int) (HALF_SCREEN_WIDTH - scorePaint.measureText(string_max_score + bestScore) / 2);
     }
 
-
     public void hideSettings() {
-        Service.runOnUiThread(() -> {
-            settings.confirmSettings();
-            settings = null;
-        });
+        settings.confirmSettings();
+        settings = null;
     }
 
     public void onLoading(Runnable function) {

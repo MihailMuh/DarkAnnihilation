@@ -6,6 +6,8 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_VADERS_DAMAGE;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class BulletBossVaders extends BaseBullet {
     public BulletBossVaders(Game game, int X, int Y, int spdx, int spdy) {
@@ -52,7 +54,7 @@ public class BulletBossVaders extends BaseBullet {
         y += speedY;
         x += speedX;
 
-        if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
+        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT | y < -height) {
             hide();
         }
     }

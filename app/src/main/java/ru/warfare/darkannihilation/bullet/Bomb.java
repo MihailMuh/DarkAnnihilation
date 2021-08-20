@@ -10,6 +10,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BOMB_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.BOMB_SPEED;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class Bomb extends BaseBullet {
     public Bomb(Game game, int X, int Y) {
@@ -44,7 +45,7 @@ public class Bomb extends BaseBullet {
     public void update() {
         y += BOMB_SPEED;
 
-        if (y > Game.screenHeight) {
+        if (y > SCREEN_HEIGHT) {
             hide();
         }
     }

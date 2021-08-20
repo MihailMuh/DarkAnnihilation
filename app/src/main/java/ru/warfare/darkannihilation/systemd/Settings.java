@@ -14,14 +14,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
-import ru.warfare.darkannihilation.Clerk;
+import ru.warfare.darkannihilation.systemd.service.Clerk;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
-import ru.warfare.darkannihilation.SeekArcListener;
-import ru.warfare.darkannihilation.Time;
-import ru.warfare.darkannihilation.Vibrator;
-import ru.warfare.darkannihilation.Windows;
+import ru.warfare.darkannihilation.interfaces.SeekArcListener;
+import ru.warfare.darkannihilation.systemd.service.Time;
+import ru.warfare.darkannihilation.systemd.service.Vibrator;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Math;
 
@@ -32,6 +31,9 @@ import static ru.warfare.darkannihilation.systemd.Game.string_loud_effects;
 import static ru.warfare.darkannihilation.systemd.Game.string_loud_music;
 import static ru.warfare.darkannihilation.systemd.Game.string_vibration;
 import static ru.warfare.darkannihilation.systemd.Game.string_volume;
+
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+import static ru.warfare.darkannihilation.systemd.service.Windows.LAYOUT_DENSITY;
 
 public class Settings {
     private final Game game;
@@ -55,20 +57,18 @@ public class Settings {
 
     public Settings(Game game) {
         this.game = game;
-        MainActivity mainActivity = game.mainActivity;
 
         parseSettings();
 
-        float density = Windows.resizeLayout();
         int angle = (int) (finalVolumeEffects * 100);
-        int _200 = (int) (200 * density + 0.5f);
+        int _200 = (int) (200 * LAYOUT_DENSITY + 0.5f);
         ViewGroup.LayoutParams layoutParams;
 
-        angleEffects = mainActivity.findViewById(R.id.angleEffects);
+        angleEffects = activity.findViewById(R.id.angleEffects);
         angleEffects.setVisibility(TextView.VISIBLE);
-        textViewEffects = mainActivity.findViewById(R.id.textViewEffects);
+        textViewEffects = activity.findViewById(R.id.textViewEffects);
         textViewEffects.setVisibility(TextView.VISIBLE);
-        seekArcEffects = mainActivity.findViewById(R.id.seekArcEffects);
+        seekArcEffects = activity.findViewById(R.id.seekArcEffects);
         layoutParams = seekArcEffects.getLayoutParams();
         layoutParams.width = _200;
         layoutParams.height = _200;
@@ -84,12 +84,12 @@ public class Settings {
             }
         });
 
-        angleMusic = mainActivity.findViewById(R.id.angleMusic);
+        angleMusic = activity.findViewById(R.id.angleMusic);
         angle = (int) (finalVolumeMusic * 100);
         angleMusic.setVisibility(TextView.VISIBLE);
-        textViewMusic = mainActivity.findViewById(R.id.textViewMusic);
+        textViewMusic = activity.findViewById(R.id.textViewMusic);
         textViewMusic.setVisibility(TextView.VISIBLE);
-        seekArcMusic = mainActivity.findViewById(R.id.seekArcMusic);
+        seekArcMusic = activity.findViewById(R.id.seekArcMusic);
         layoutParams = seekArcMusic.getLayoutParams();
         layoutParams.width = _200;
         layoutParams.height = _200;
@@ -105,11 +105,11 @@ public class Settings {
             }
         });
 
-        textViewVibration = mainActivity.findViewById(R.id.textVibration);
+        textViewVibration = activity.findViewById(R.id.textVibration);
         textViewVibration.setVisibility(TextView.VISIBLE);
-        stickySwitch = mainActivity.findViewById(R.id.stickySwitch);
+        stickySwitch = activity.findViewById(R.id.stickySwitch);
         layoutParams = stickySwitch.getLayoutParams();
-        layoutParams.width = (int) (140 * density + 0.5f);
+        layoutParams.width = (int) (140 * LAYOUT_DENSITY + 0.5f);
         stickySwitch.setLayoutParams(layoutParams);
         stickySwitch.setVisibility(TextView.VISIBLE);
         stickySwitch.setRightIcon(ImageHub.onImg);
@@ -138,11 +138,11 @@ public class Settings {
         iconSpinnerItems.add(new IconSpinnerItem("Español", ImageHub.spImg));
         iconSpinnerItems.add(new IconSpinnerItem("Deutsch", ImageHub.geImg));
 
-        spinner = mainActivity.findViewById(R.id.spinner);
+        spinner = activity.findViewById(R.id.spinner);
         spinner.setVisibility(TextView.VISIBLE);
         layoutParams = spinner.getLayoutParams();
-        layoutParams.width = (int) (180 * density + 0.5f);
-        layoutParams.height = (int) (50 * density + 0.5f);
+        layoutParams.width = (int) (180 * LAYOUT_DENSITY + 0.5f);
+        layoutParams.height = (int) (50 * LAYOUT_DENSITY + 0.5f);
         spinner.setLayoutParams(layoutParams);
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
         spinner.setSpinnerAdapter(iconSpinnerAdapter);
@@ -175,8 +175,8 @@ public class Settings {
                 makeLanguage();
             }
         });
-        spinner.setLifecycleOwner(mainActivity);
-        textSpinner = mainActivity.findViewById(R.id.textSpinner);
+        spinner.setLifecycleOwner(activity);
+        textSpinner = activity.findViewById(R.id.textSpinner);
         textSpinner.setVisibility(TextView.VISIBLE);
 
         stickySwitch.setRightIcon(ImageHub.onImg);

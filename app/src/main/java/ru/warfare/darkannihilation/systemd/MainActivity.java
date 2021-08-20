@@ -1,94 +1,69 @@
 package ru.warfare.darkannihilation.systemd;
 
+import static ru.warfare.darkannihilation.systemd.service.Service.makeToast;
+
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import ru.warfare.darkannihilation.Clerk;
-import ru.warfare.darkannihilation.ClientServer;
 import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.R;
-import ru.warfare.darkannihilation.Vibrator;
-import ru.warfare.darkannihilation.Windows;
-import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseActivity;
+import ru.warfare.darkannihilation.systemd.service.Clerk;
+import ru.warfare.darkannihilation.systemd.service.ClientServer;
+import ru.warfare.darkannihilation.systemd.service.Service;
+import ru.warfare.darkannihilation.systemd.service.Vibrator;
+import ru.warfare.darkannihilation.systemd.service.Windows;
 
-import static ru.warfare.darkannihilation.systemd.Service.makeToast;
-
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends BaseActivity {
     public Game game;
-    public SharedPreferences preferences;
     private GifImageView gif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.darkTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+        gif = findViewById(R.id.gifView);
+        gif.setBackgroundResource(R.drawable.background);
+
+        HardThread.doInBackGround(ClientServer::getStatistics);
 
         game = findViewById(R.id.gameView);
 
-        Windows.init(getApplicationContext());
-        ImageHub.init(getApplicationContext());
-        AudioHub.init(this);
+        HardThread.doInBackGround(() -> {
+            Service.init(this);
 
-        Service.init(this);
-        Vibrator.init(getApplicationContext());
+            Windows.init();
+            ImageHub.init();
+            AudioHub.init();
+            Vibrator.init();
+            game.init();
 
-        game.init();
-        checkOnFirstRun();
+            runOnUiThread(this::checkOnFirstRun);
+        });
     }
 
     public void newWinGif(GifDrawable gifDrawable) {
         gif = findViewById(R.id.gifView);
         gif.setImageDrawable(gifDrawable);
         gif.setVisibility(GifImageView.VISIBLE);
-        gifDrawable.start();
     }
 
     public void deleteWinGif() {
         gif.setVisibility(GifImageView.GONE);
         gif.setImageDrawable(null);
         gif = null;
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        fullscreen();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.activity_main);
-        fullscreen();
-    }
-
-    @Override
-    public void onBackPressed() {
-        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     @Override
@@ -102,10 +77,6 @@ public final class MainActivity extends AppCompatActivity {
         super.onResume();
         fullscreen();
         game.onResume();
-    }
-
-    public boolean isOnline() {
-        return ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
     @SuppressLint("InflateParams")
@@ -126,8 +97,7 @@ public final class MainActivity extends AppCompatActivity {
                         .create();
 
                 alertDialog.setOnShowListener(dialog -> {
-                    Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    button.setOnClickListener(view -> {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
                         String nick = ((EditText) promptsView.findViewById(R.id.input_text)).getText().toString();
                         if (nick.length() == 0) {
                             makeToast("Nickname must be notnull!", true);
@@ -148,15 +118,16 @@ public final class MainActivity extends AppCompatActivity {
                                     }
 
                                     int len = filterNick.size();
+                                    int len_1 = len - 1;
                                     if (len > 1) {
                                         for (int i = 0; i < len; i++) {
                                             stringBuilder.append(filterNick.get(i));
-                                            if (i != len - 1) {
+                                            if (i != len_1) {
                                                 stringBuilder.append(" ");
                                             }
                                         }
                                     } else {
-                                        stringBuilder.append(filterNick.toString()).deleteCharAt(0).deleteCharAt(stringBuilder.length()-1);
+                                        stringBuilder.append(filterNick.toString()).deleteCharAt(0).deleteCharAt(stringBuilder.length() - 1);
                                     }
 
                                     Clerk.nickname = stringBuilder.toString();
@@ -208,18 +179,5 @@ public final class MainActivity extends AppCompatActivity {
                 checkOnFirstRun();
             }
         }
-    }
-
-    private void fullscreen() {
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LOW_PROFILE
-        );
     }
 }

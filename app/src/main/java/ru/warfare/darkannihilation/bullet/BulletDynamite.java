@@ -10,7 +10,6 @@ import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_DYNAMITE_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
-import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class BulletDynamite extends BaseBullet {

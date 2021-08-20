@@ -12,6 +12,8 @@ import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_DAMA
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class TripleFighter extends Sprite {
     private long lastShoot = System.currentTimeMillis();
@@ -85,7 +87,7 @@ public class TripleFighter extends Sprite {
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > Game.screenWidth | y > Game.screenHeight) {
+        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
             hide();
         }
     }

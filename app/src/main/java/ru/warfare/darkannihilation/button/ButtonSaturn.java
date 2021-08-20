@@ -5,6 +5,7 @@ import ru.warfare.darkannihilation.base.BaseCharacterButton;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 public class ButtonSaturn extends BaseCharacterButton {
     public ButtonSaturn(Game g) {
@@ -13,6 +14,6 @@ public class ButtonSaturn extends BaseCharacterButton {
 
     @Override
     public void show() {
-        x = Game.halfScreenWidth - (game.buttonPlayer.width * 2) - width;
+        x = HALF_SCREEN_WIDTH - (game.buttonPlayer.width * 2) - width;
     }
 }

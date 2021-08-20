@@ -7,6 +7,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.HEALTH_KIT_SPEED;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class HealthKit extends Sprite {
     public HealthKit(Game g) {
@@ -40,7 +41,7 @@ public class HealthKit extends Sprite {
     public void update() {
         y += HEALTH_KIT_SPEED;
 
-        if (y > Game.screenHeight) {
+        if (y > SCREEN_HEIGHT) {
             kill();
         }
     }

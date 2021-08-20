@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
-import ru.warfare.darkannihilation.systemd.Service;
+import ru.warfare.darkannihilation.systemd.service.Service;
 
 public class AudioExoPlayer {
     public static volatile float volume = 1f;
@@ -50,6 +50,6 @@ public class AudioExoPlayer {
 
     @NonNull
     static MediaItem getItem(int id) {
-        return MediaItem.fromUri(Service.getResPath() + id);
+        return MediaItem.fromUri(Service.path + id);
     }
 }

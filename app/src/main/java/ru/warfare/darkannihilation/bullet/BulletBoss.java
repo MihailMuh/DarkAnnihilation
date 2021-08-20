@@ -9,6 +9,8 @@ import ru.warfare.darkannihilation.ImageHub;
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_SPEED;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class BulletBoss extends BaseBullet {
     public BulletBoss(Game game, int X, int Y, int type) {
@@ -56,7 +58,7 @@ public class BulletBoss extends BaseBullet {
         y += BULLET_BOSS_SPEED;
         x -= speedX;
 
-        if (y > Game.screenHeight | x < -height | x > Game.screenWidth) {
+        if (y > SCREEN_HEIGHT | x < -height | x > SCREEN_WIDTH) {
             hide();
         }
     }

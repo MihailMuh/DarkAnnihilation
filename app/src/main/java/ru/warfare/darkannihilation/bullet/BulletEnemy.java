@@ -8,6 +8,8 @@ import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_ENEMY_DAMAGE;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class BulletEnemy extends BaseBullet {
     public BulletEnemy(Game game, int X, int Y, int angle, int spdx, int spdy) {
@@ -44,7 +46,7 @@ public class BulletEnemy extends BaseBullet {
         y += speedY;
         x += speedX;
 
-        if (x < -width | x > Game.screenWidth | y > Game.screenHeight | y < -height) {
+        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT | y < -height) {
             hide();
         }
     }

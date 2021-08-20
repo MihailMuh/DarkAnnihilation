@@ -1,19 +1,5 @@
 package ru.warfare.darkannihilation;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
-
-import pl.droidsonroids.gif.GifDrawable;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.glide.GlideManager;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.MainActivity;
-import ru.warfare.darkannihilation.systemd.Service;
-
-import static ru.warfare.darkannihilation.Py.print;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LIGHTNING_IMAGES;
@@ -29,8 +15,26 @@ import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
+import static ru.warfare.darkannihilation.systemd.service.Py.print;
+import static ru.warfare.darkannihilation.systemd.service.Service.packageName;
+import static ru.warfare.darkannihilation.systemd.service.Service.resources;
+import static ru.warfare.darkannihilation.systemd.service.Windows.DENSITY;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
+
+import pl.droidsonroids.gif.GifDrawable;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.glide.GlideManager;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.systemd.MainActivity;
+import ru.warfare.darkannihilation.systemd.service.Service;
+import ru.warfare.darkannihilation.systemd.service.Time;
 
 public final class ImageHub {
     public static final Bitmap[] explosionTripleImageSmall = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
@@ -99,12 +103,12 @@ public final class ImageHub {
     public static Drawable geImg;
     public static GifDrawable gifDrawable;
 
-    private static float resizeK;
-
     public static int _75;
     public static int _70;
     public static int _300;
     public static int _350;
+    public static int _095;
+    public static int _150;
     private static int _120;
     private static int _03545;
     private static int _166;
@@ -119,28 +123,17 @@ public final class ImageHub {
     private static int _80;
     private static int _175;
     private static int _400;
-    private static int _150;
     private static int _30;
     private static int _314;
 
-    private static int screenHeight;
-    private static int screenWidth;
-    public static int _095;
-
-    private static Resources res;
-    private static String name;
-    private static GlideManager glideManager;
+    private static final GlideManager glideManager = new GlideManager();
     private static final StringBuilder stringBuilder = new StringBuilder();
 
     public static volatile boolean endImgInit = false;
 
-    public static void init(@NonNull Context context) {
-        resizeK = Windows.resizeK();
-        screenWidth = Windows.screenWidth();
-        screenHeight = Windows.screenHeight();
-
-        _50 = (int) (50 * resizeK);
-        _15 = (int) (15 * resizeK);
+    public static void init() {
+        _50 = (int) (50 * DENSITY);
+        _15 = (int) (15 * DENSITY);
         _30 = _15 * 2;
         _150 = _50 * 3;
         _100 = _50 * 2;
@@ -151,28 +144,23 @@ public final class ImageHub {
         _75 = _15 * 5;
         _120 = _60 * 2;
         _400 = _200 * 2;
-        _80 = (int) (80 * resizeK);
-        _70 = (int) (70 * resizeK);
-        _166 = (int) (166 * resizeK);
-        _175 = (int) (175 * resizeK);
-        _314 = (int) (314 * resizeK);
-        _03545 = (int) (0.3545 * screenHeight);
-        fact = (int) ((screenWidth / 1.3) * resizeK);
+        _80 = (int) (80 * DENSITY);
+        _70 = (int) (70 * DENSITY);
+        _166 = (int) (166 * DENSITY);
+        _175 = (int) (175 * DENSITY);
+        _314 = (int) (314 * DENSITY);
+        _03545 = (int) (0.3545 * SCREEN_HEIGHT);
+        fact = (int) ((SCREEN_WIDTH / 1.3) * DENSITY);
         fact03 = (int) (fact * 0.3);
-        screenWidth_135 = (int) (screenWidth * 1.35);
-        _095 = (int) (screenWidth * 0.95);
-
-        res = context.getResources();
-        name = context.getPackageName();
-
-        glideManager = new GlideManager(context);
+        screenWidth_135 = (int) (SCREEN_WIDTH * 1.35);
+        _095 = (int) (SCREEN_WIDTH * 0.95);
 
         glideManager.run(R.drawable.cannon_ball, _15, object -> buckshotImg = object);
-        glideManager.run(R.drawable.pause_button, (int) (180 * resizeK), object -> pauseButtonImg = object);
-        glideManager.run(R.drawable.bullet, (int) (7 * resizeK), _30, object -> bulletImage = object);
+        glideManager.run(R.drawable.pause_button, (int) (180 * DENSITY), object -> pauseButtonImg = object);
+        glideManager.run(R.drawable.bullet, (int) (7 * DENSITY), _30, object -> bulletImage = object);
         glideManager.run(R.drawable.health, _80, object -> healthKitImg = object);
-        glideManager.run(R.drawable.buckshot, _100, (int) (123.7 * resizeK), object -> shotgunKitImg = object);
-        glideManager.runCrop(R.drawable.gameover, screenWidth, screenHeight, object -> gameoverScreen = object);
+        glideManager.run(R.drawable.buckshot, _100, (int) (123.7 * DENSITY), object -> shotgunKitImg = object);
+        glideManager.runCrop(R.drawable.gameover, SCREEN_WIDTH, SCREEN_HEIGHT, object -> gameoverScreen = object);
         glideManager.run(R.drawable.bullet_enemy, _15, _50, object -> bulletEnemyImage = object);
         glideManager.run(R.drawable.full_blue_heart, _70, _60, object -> imageBlueHeartFull = object);
         glideManager.run(R.drawable.half_blue_heart, _70, _60, object -> imageBlueHeartHalf = object);
@@ -189,10 +177,10 @@ public final class ImageHub {
         loadFirstLevelBitmaps();
         loadSettingsImages();
 
-        int _522 = (int) (522 * resizeK);
-        int _600 = (int) (600 * resizeK);
-        int _144 = (int) (144 * resizeK);
-        int _154 = (int) (154 * resizeK);
+        int _522 = (int) (522 * DENSITY);
+        int _600 = (int) (600 * DENSITY);
+        int _144 = (int) (144 * DENSITY);
+        int _154 = (int) (154 * DENSITY);
         for (int i = 0; i < 34; i++) {
             final int finalI = i;
             final int i1 = i + 1;
@@ -205,7 +193,7 @@ public final class ImageHub {
             if (i < NUMBER_LOADING_SCREEN_IMAGES) {
                 stringBuilder.setLength(0);
                 stringBuilder.append("loading").append(i);
-                glideManager.runCrop(getId(), screenWidth, screenHeight, object -> loadingImages[finalI] = object);
+                glideManager.runCrop(getId(), SCREEN_WIDTH, SCREEN_HEIGHT, object -> loadingImages[finalI] = object);
             }
             if (i < NUMBER_SKULL_EXPLOSION_IMAGES) {
                 stringBuilder.setLength(0);
@@ -227,7 +215,7 @@ public final class ImageHub {
 
             stringBuilder.setLength(0);
             stringBuilder.append("_").append(i);
-            glideManager.run(getId(), screenWidth_135, screenHeight, object -> {
+            glideManager.run(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
                 screenImage[finalI] = object;
                 if (finalI > 31) {
                     endImgInit = true;
@@ -259,8 +247,8 @@ public final class ImageHub {
 
         glideManager.run(R.drawable.spider, _350, _175, object -> spiderImg = object);
         glideManager.run(R.drawable.x_wing, _200, _150, object -> XWingImg = object);
-        glideManager.run(R.drawable.area, (int) (450 * resizeK), (int) (269 * resizeK), object -> sunriseImg = object);
-        glideManager.run(R.drawable.boss_vaders, _350, (int) (255 * resizeK), object -> bossVadersImg = object);
+        glideManager.run(R.drawable.area, (int) (450 * DENSITY), (int) (269 * DENSITY), object -> sunriseImg = object);
+        glideManager.run(R.drawable.boss_vaders, _350, (int) (255 * DENSITY), object -> bossVadersImg = object);
         glideManager.run(R.drawable.bull_boss_vader, _150, object -> bulletBossVadersImg = object);
         glideManager.run(R.drawable.buffer, _400, _350, object -> bufferImg = object);
 
@@ -280,7 +268,7 @@ public final class ImageHub {
             }
             stringBuilder.setLength(0);
             stringBuilder.append("thunder").append(i);
-            glideManager.runCrop(getId(), screenWidth_135, screenHeight, object -> {
+            glideManager.runCrop(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
                 thunderScreen[finalI] = object;
                 if (finalI == 18) {
                     endImgInit = true;
@@ -348,7 +336,7 @@ public final class ImageHub {
                 }
                 stringBuilder.setLength(0);
                 stringBuilder.append("_").append(i);
-                glideManager.run(getId(), screenWidth_135, screenHeight, object -> {
+                glideManager.run(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
                     screenImage[finalI] = object;
                     if (finalI == 33) {
                         endImgInit = true;
@@ -413,10 +401,11 @@ public final class ImageHub {
 
     public static void loadWinImages(MainActivity mainActivity) {
         try {
-            gifDrawable = new GifDrawable(res, R.drawable.win);
+            gifDrawable = new GifDrawable(resources, R.drawable.win);
             gifDrawable.setLoopCount(1);
             gifDrawable.setSpeed(0.5f);
             mainActivity.newWinGif(gifDrawable);
+            gifDrawable.start();
         } catch (Exception e) {
             print(e);
         }
@@ -480,7 +469,7 @@ public final class ImageHub {
             });
 
             glideManager.run(R.drawable.cannon_ball, _15, object -> buckshotImg = object);
-            glideManager.run(R.drawable.bullet, (int) (7 * resizeK), _30, object -> bulletImage = object);
+            glideManager.run(R.drawable.bullet, (int) (7 * DENSITY), _30, object -> bulletImage = object);
 
             deleteSaturn();
             deleteEmerald();
@@ -506,13 +495,13 @@ public final class ImageHub {
                 endImgInit = true;
             }
         });
-        glideManager.run(R.drawable.dynamite, _100, (int) (41.3 * resizeK), object -> dynamiteImg = object);
+        glideManager.run(R.drawable.dynamite, _100, (int) (41.3 * DENSITY), object -> dynamiteImg = object);
 
         for (int i = 0; i < NUMBER_LIGHTNING_IMAGES; i++) {
             int finalI = i;
             stringBuilder.setLength(0);
             stringBuilder.append("laser").append(i);
-            glideManager.run(getId(), _03545, screenHeight, object -> thunderImage[finalI] = object);
+            glideManager.run(getId(), _03545, SCREEN_HEIGHT, object -> thunderImage[finalI] = object);
         }
 
         deleteSaturn();
@@ -554,12 +543,12 @@ public final class ImageHub {
         switch (character) {
             case SATURN:
                 if (boss == DEATH_STAR) {
-                    glideManager.run(R.drawable.saturn_vs_boss, screenWidth, _095, object -> {
+                    glideManager.run(R.drawable.saturn_vs_boss, SCREEN_WIDTH, _095, object -> {
                         fightScreen = object;
                         endImgInit = true;
                     });
                 } else {
-                    glideManager.run(R.drawable.saturn_vs_vader, screenWidth, _095, object -> {
+                    glideManager.run(R.drawable.saturn_vs_vader, SCREEN_WIDTH, _095, object -> {
                         fightScreen = object;
                         endImgInit = true;
                     });
@@ -567,12 +556,12 @@ public final class ImageHub {
                 break;
             case MILLENNIUM_FALCON:
                 if (boss == DEATH_STAR) {
-                    glideManager.run(R.drawable.player_vs_boss, screenWidth, _095, object -> {
+                    glideManager.run(R.drawable.player_vs_boss, SCREEN_WIDTH, _095, object -> {
                         fightScreen = object;
                         endImgInit = true;
                     });
                 } else {
-                    glideManager.run(R.drawable.player_vs_vader, screenWidth, _095, object -> {
+                    glideManager.run(R.drawable.player_vs_vader, SCREEN_WIDTH, _095, object -> {
                         fightScreen = object;
                         endImgInit = true;
                     });
@@ -580,12 +569,12 @@ public final class ImageHub {
                 break;
             case EMERALD:
                 if (boss == DEATH_STAR) {
-                    glideManager.run(R.drawable.emerald_vs_boss, screenWidth, _095, object -> {
+                    glideManager.run(R.drawable.emerald_vs_boss, SCREEN_WIDTH, _095, object -> {
                         fightScreen = object;
                         endImgInit = true;
                     });
                 } else {
-                    glideManager.run(R.drawable.emerald_vs_vader, screenWidth, _095, object -> {
+                    glideManager.run(R.drawable.emerald_vs_vader, SCREEN_WIDTH, _095, object -> {
                         fightScreen = object;
                         endImgInit = true;
                     });
@@ -623,7 +612,7 @@ public final class ImageHub {
     }
 
     private static int getId() {
-        return res.getIdentifier(stringBuilder.toString(), "drawable", name);
+        return resources.getIdentifier(stringBuilder.toString(), "drawable", packageName);
     }
 
     public static Bitmap rotateBitmap(Bitmap image, float degree) {

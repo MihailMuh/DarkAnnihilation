@@ -2,9 +2,10 @@ package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.systemd.Service;
+import ru.warfare.darkannihilation.systemd.service.Service;
 
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_PORTAL_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.PORTAL_FRAME;
@@ -31,13 +32,6 @@ public class Portal extends Sprite {
     }
 
     @Override
-    public void hide() {
-        game.intersectOnlyPlayer.remove(this);
-        ImageHub.deletePortalImages();
-        game.portal = null;
-    }
-
-    @Override
     public Sprite getRect() {
         return newRect(x + 15, y + 15);
     }
@@ -50,7 +44,7 @@ public class Portal extends Sprite {
         Service.runOnUiThread(() -> {
             AudioHub.deletePortalSnd();
             if (Game.level == 2) {
-                ImageHub.loadWinImages(game.mainActivity);
+                ImageHub.loadWinImages(Service.activity);
             } else {
                 AudioHub.playTimeMachine();
 
@@ -62,6 +56,9 @@ public class Portal extends Sprite {
 
     @Override
     public void kill() {
+        game.intersectOnlyPlayer.remove(this);
+        ImageHub.deletePortalImages();
+        game.portal = null;
     }
 
     private void film() {
@@ -85,7 +82,7 @@ public class Portal extends Sprite {
             if (now - lifeTime > PORTAL_LIFE_TIME) {
                 Game.gameStatus = GAME;
                 AudioHub.resumeBackgroundMusic();
-                hide();
+                kill();
             }
         }
     }
@@ -93,5 +90,10 @@ public class Portal extends Sprite {
     @Override
     public void render() {
         Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
+    }
+
+    @Override
+    public void check_intersectionBullet(BaseBullet bullet) {
+
     }
 }
