@@ -15,7 +15,6 @@ import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
-import static ru.warfare.darkannihilation.systemd.service.Py.print;
 import static ru.warfare.darkannihilation.systemd.service.Service.packageName;
 import static ru.warfare.darkannihilation.systemd.service.Service.resources;
 import static ru.warfare.darkannihilation.systemd.service.Windows.DENSITY;
@@ -28,7 +27,8 @@ import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 
-import pl.droidsonroids.gif.GifDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.glide.GlideManager;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -101,7 +101,6 @@ public final class ImageHub {
     public static Drawable frImg;
     public static Drawable spImg;
     public static Drawable geImg;
-    public static GifDrawable gifDrawable;
 
     public static int _75;
     public static int _70;
@@ -400,27 +399,24 @@ public final class ImageHub {
     }
 
     public static void loadWinImages(MainActivity mainActivity) {
-        try {
-            gifDrawable = new GifDrawable(resources, R.drawable.win);
-            gifDrawable.setLoopCount(1);
-            gifDrawable.setSpeed(0.5f);
-            mainActivity.newWinGif(gifDrawable);
-            gifDrawable.start();
-        } catch (Exception e) {
-            print(e);
-        }
-        mainActivity.game.generateWin();
-        AudioHub.playFlightSnd();
-        HardThread.doInBackGround(() -> {
-            Time.sleep(4000);
-            while (gifDrawable.isRunning()) {
-                Time.sleep(250);
-            }
+        glideManager.runGif(R.drawable.win, SCREEN_WIDTH, SCREEN_HEIGHT, drawable -> {
+            GifDrawable gif = (GifDrawable) drawable;
+            gif.setLoopCount(1);
+            mainActivity.game.setBackground(gif);
+            mainActivity.game.generateWin();
+            AudioHub.playFlightSnd();
+            gif.start();
 
-            Service.runOnUiThread(mainActivity::deleteWinGif);
-            gifDrawable = null;
-            Game.gameStatus = WIN;
-        });
+            HardThread.doInBackGround(() -> {
+                Time.sleep(4000);
+                while (gif.isRunning()) {
+                    Time.sleep(250);
+                }
+
+                Service.runOnUiThread(() -> mainActivity.game.setBackground(null));
+                Game.gameStatus = WIN;
+            });
+        }, true);
     }
 
     public static void loadCharacterImages(int character, boolean needWait) {

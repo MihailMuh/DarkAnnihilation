@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
@@ -19,6 +20,10 @@ public class Rocket extends Sprite {
     public void start(int X) {
         x = X - halfWidth;
         lock = false;
+    }
+
+    @Override
+    public void check_intersectionBullet(BaseBullet bullet) {
     }
 
     public void checkIntersections(Sprite sprite) {

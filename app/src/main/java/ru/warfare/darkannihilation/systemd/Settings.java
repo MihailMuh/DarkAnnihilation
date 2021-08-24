@@ -1,29 +1,5 @@
 package ru.warfare.darkannihilation.systemd;
 
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.skydoves.powerspinner.IconSpinnerAdapter;
-import com.skydoves.powerspinner.IconSpinnerItem;
-import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.PowerSpinnerView;
-import com.triggertrap.seekarc.SeekArc;
-
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-
-import io.ghyeok.stickyswitch.widget.StickySwitch;
-import ru.warfare.darkannihilation.systemd.service.Clerk;
-import ru.warfare.darkannihilation.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
-import ru.warfare.darkannihilation.R;
-import ru.warfare.darkannihilation.interfaces.SeekArcListener;
-import ru.warfare.darkannihilation.systemd.service.Time;
-import ru.warfare.darkannihilation.systemd.service.Vibrator;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.math.Math;
-
 import static ru.warfare.darkannihilation.systemd.Game.string_choose_lang;
 import static ru.warfare.darkannihilation.systemd.Game.string_disable;
 import static ru.warfare.darkannihilation.systemd.Game.string_enable;
@@ -31,9 +7,30 @@ import static ru.warfare.darkannihilation.systemd.Game.string_loud_effects;
 import static ru.warfare.darkannihilation.systemd.Game.string_loud_music;
 import static ru.warfare.darkannihilation.systemd.Game.string_vibration;
 import static ru.warfare.darkannihilation.systemd.Game.string_volume;
-
 import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 import static ru.warfare.darkannihilation.systemd.service.Windows.LAYOUT_DENSITY;
+
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.skydoves.powerspinner.IconSpinnerAdapter;
+import com.skydoves.powerspinner.IconSpinnerItem;
+import com.skydoves.powerspinner.PowerSpinnerView;
+import com.triggertrap.seekarc.SeekArc;
+
+import java.util.ArrayList;
+
+import io.ghyeok.stickyswitch.widget.StickySwitch;
+import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.interfaces.SeekArcListener;
+import ru.warfare.darkannihilation.interfaces.SpinnerListener;
+import ru.warfare.darkannihilation.math.Math;
+import ru.warfare.darkannihilation.systemd.service.Clerk;
+import ru.warfare.darkannihilation.systemd.service.Time;
+import ru.warfare.darkannihilation.systemd.service.Vibrator;
 
 public class Settings {
     private final Game game;
@@ -75,13 +72,10 @@ public class Settings {
         seekArcEffects.setLayoutParams(layoutParams);
         seekArcEffects.setProgress(angle);
         seekArcEffects.setVisibility(SeekArc.VISIBLE);
-        seekArcEffects.setOnSeekArcChangeListener(new SeekArcListener() {
-            @Override
-            public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
-                angleEffects.setText((string_volume + " " + newVolume));
-                finalVolumeEffects = newVolume / 100f;
-                AudioHub.soundOfClick(finalVolumeEffects);
-            }
+        seekArcEffects.setOnSeekArcChangeListener((SeekArcListener) newVolume -> {
+            angleEffects.setText((string_volume + " " + newVolume));
+            finalVolumeEffects = newVolume / 100f;
+            AudioHub.soundOfClick(finalVolumeEffects);
         });
 
         angleMusic = activity.findViewById(R.id.angleMusic);
@@ -96,13 +90,10 @@ public class Settings {
         seekArcMusic.setLayoutParams(layoutParams);
         seekArcMusic.setProgress(angle);
         seekArcMusic.setVisibility(SeekArc.VISIBLE);
-        seekArcMusic.setOnSeekArcChangeListener(new SeekArcListener() {
-            @Override
-            public void onProgressChanged(SeekArc seekArc, int newVolume, boolean b) {
-                angleMusic.setText((string_volume + " " + newVolume));
-                finalVolumeMusic = newVolume / 100f;
-                AudioHub.menuMusic.setVolume(finalVolumeMusic);
-            }
+        seekArcMusic.setOnSeekArcChangeListener((SeekArcListener) newVolume -> {
+            angleMusic.setText((string_volume + " " + newVolume));
+            finalVolumeMusic = newVolume / 100f;
+            AudioHub.menuMusic.setVolume(finalVolumeMusic);
         });
 
         textViewVibration = activity.findViewById(R.id.textVibration);
@@ -147,33 +138,30 @@ public class Settings {
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
         spinner.setSpinnerAdapter(iconSpinnerAdapter);
         spinner.setItems(iconSpinnerItems);
-        spinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
-            @Override
-            public void onItemSelected(int i, @Nullable Object o, int i1, Object t1) {
-                switch (i1) {
-                    case 0:
-                        game.language = "en";
-                        ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed,
-                                ImageHub._300, ImageHub._70);
-                        ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed,
-                                ImageHub._300, ImageHub._70);
-                        break;
-                    case 1:
-                        game.language = "ru";
-                        break;
-                    case 2:
-                        game.language = "fr";
-                        break;
-                    case 3:
-                        game.language = "sp";
-                        break;
-                    case 4:
-                        game.language = "ge";
-                        break;
-                }
-                game.confirmLanguage(true);
-                makeLanguage();
+        spinner.setOnSpinnerItemSelectedListener((SpinnerListener) id -> {
+            switch (id) {
+                case 0:
+                    game.language = "en";
+                    ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed,
+                            ImageHub._300, ImageHub._70);
+                    ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed,
+                            ImageHub._300, ImageHub._70);
+                    break;
+                case 1:
+                    game.language = "ru";
+                    break;
+                case 2:
+                    game.language = "fr";
+                    break;
+                case 3:
+                    game.language = "sp";
+                    break;
+                case 4:
+                    game.language = "ge";
+                    break;
             }
+            game.confirmLanguage(true);
+            makeLanguage();
         });
         spinner.setLifecycleOwner(activity);
         textSpinner = activity.findViewById(R.id.textSpinner);

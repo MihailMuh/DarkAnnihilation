@@ -59,12 +59,12 @@ public final class Constants {
     public static final byte MINION_DAMAGE = XWING_HEALTH;
 
     public static final byte ROCKET_SPEED = BUFFER_HEALTH;
-    public static final short ROCKET_DAMAGE = FACTORY_SPAWN_TIME;
+    public static final short ROCKET_DAMAGE = 175;
 
     public static final byte VADER_HEALTH = MINION_HEALTH;
     public static final byte VADER_DAMAGE = XWING_HEALTH;
     public static final byte NUMBER_VADER_IMAGES = FACTORY_SPEED;
-    public static final byte NUMBER_VADER = XWING_DAMAGE;
+    public static final byte NUMBER_VADER = 9;
 
     public static final short TRIPLE_FIGHTER_SHOOT_TIME = 1_500;
     public static final byte TRIPLE_FIGHTER_HEALTH = 6;

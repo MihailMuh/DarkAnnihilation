@@ -33,8 +33,7 @@ public class Demoman extends Sprite {
 
     private void shoot() {
         if (System.currentTimeMillis() - lastShoot > DEMOMAN_SHOOT_TIME) {
-            HardThread.doInBackGround(() ->
-                    game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())));
+            HardThread.doInBackGround(() -> game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())));
             lastShoot = System.currentTimeMillis();
         }
     }

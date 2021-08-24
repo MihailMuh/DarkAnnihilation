@@ -40,6 +40,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fullscreen();
+    }
+
     public void fullscreen() {
         Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().getDecorView().setSystemUiVisibility(

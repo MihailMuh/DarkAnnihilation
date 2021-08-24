@@ -19,7 +19,7 @@ public class Table {
     private final ArrayList<Float> maxes = new ArrayList<>(0);
 
     private float textHeight;
-    private static final int[] index = new int[2];
+    private final int[] index = new int[2];
     private float curHeight = 0;
     private int tableHeight;
     private int columns = 0;
@@ -40,11 +40,11 @@ public class Table {
         paint.setFilterBitmap(true);
         paint.setDither(true);
         paint.setAntiAlias(true);
+        paint.setTextSize(30);
 
         topPaint.set(paint);
-        topPaint.setTextSize(30);
 
-        topPaintRed.set(topPaint);
+        topPaintRed.set(paint);
         topPaintRed.setColor(Color.RED);
 
         textHeight = topPaint.getTextSize() * 1.45f;
@@ -86,7 +86,7 @@ public class Table {
     }
 
     public void addText(String text) {
-        if (curHeight <= tableHeight) {
+        if (curHeight < tableHeight) {
             table.get(columns).add(text);
             curHeight += textHeight;
         } else {
@@ -105,15 +105,17 @@ public class Table {
 
     public void makeTable() {
         for (int i = 0; i < table.size(); i++) {
-            maxes.add(0f);
+            maxes.add(-100f);
+
             for (int j = 0; j < table.get(i).size(); j++) {
-                float currentLen = topPaint.measureText(table.get(i).get(j)) / 2f;
+                float currentLen = topPaint.measureText(table.get(i).get(j));
+                if (i == 0) currentLen /= 2f;
+
                 if (currentLen > maxes.get(i)) {
                     maxes.set(i, currentLen);
                 }
             }
-            float m = maxes.get(i) + 60;
-            maxes.set(i, m);
+            maxes.set(i, maxes.get(i) + 50);
         }
 
         finish = true;
@@ -122,19 +124,15 @@ public class Table {
     public void drawTable() {
         if (!offline) {
             if (finish) {
+                float xForCurColumn = 0;
                 for (int i = 0; i < table.size(); i++) {
-                    int c;
-                    if (i == 0) {
-                        c = 1;
-                    } else {
-                        c = 3 * i;
-                    }
+                    xForCurColumn += maxes.get(i);
                     for (int j = 0; j < table.get(i).size(); j++) {
                         String string = table.get(i).get(j);
-                        float x = (maxes.get(i) * c) - (topPaint.measureText(string) / 2f);
+                        float x = xForCurColumn - (topPaint.measureText(string) / 2f);
                         float y = (j + 1) * textHeight;
 
-                        if (i == index[0] & j == index[1]) {
+                        if (i == index[0] && j == index[1]) {
                             Game.canvas.drawText(string, x, y, topPaintRed);
                         } else {
                             Game.canvas.drawText(string, x, y, topPaint);

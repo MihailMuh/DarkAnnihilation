@@ -15,26 +15,22 @@ public class ShotgunKit extends Sprite {
         super(g, ImageHub.shotgunKitImg);
 
         calculateBarriers();
-        hide();
-    }
-
-    public void hide() {
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        lock = true;
+        kill();
     }
 
     @Override
     public void intersectionPlayer() {
         kill();
+        game.intersectOnlyPlayer.remove(this);
         picked = true;
         game.changerGuns.make();
     }
 
     @Override
     public void kill() {
-        hide();
-        game.intersectOnlyPlayer.remove(this);
+        x = randInt(0, screenWidthWidth);
+        y = -height;
+        lock = true;
     }
 
     @Override

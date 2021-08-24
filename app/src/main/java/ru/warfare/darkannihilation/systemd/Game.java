@@ -110,7 +110,7 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 
-public final class Game extends SurfaceView implements Runnable, SurfaceHolder.Callback {
+public final class Game extends SurfaceView implements Runnable {
     private final SurfaceHolder holder = getHolder();
     private Thread thread;
     public static Canvas canvas;
@@ -377,11 +377,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             }
         }
 
-        if (portal == null) {
-            if (healthKit.lock) {
-                if (Randomize.randFloat() <= 0.0015) {
-                    healthKit.lock = false;
-                }
+        if (healthKit.lock) {
+            if (Randomize.randFloat() <= 0.001) {
+                healthKit.lock = false;
             }
         }
 
@@ -425,7 +423,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     if (sunrise.lock) {
                         if (Randomize.randFloat() <= 0.0009) {
                             sunrise.start();
-                            removeSaturnTrash();
                         }
                     }
                 }
@@ -467,7 +464,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         renderCurrentScore();
                         break;
                     case GAME_OVER:
-                        gameover();
+                        gameOver();
                         renderCurrentScore();
                         renderMaxScore(130);
                         break;
@@ -498,6 +495,9 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     case LOADING:
                         loadingScreen.turn();
                         break;
+                    case PASS:
+                        Time.sleep(50);
+                        break;
                 }
 
                 if (DRAW_FPS) {
@@ -517,7 +517,6 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                boolean pb = false;
                 boolean cg = false;
 
                 switch (gameStatus) {
@@ -525,7 +524,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         cg = changerGuns.checkCoords(clickX, clickY);
                     case READY:
                     case GAME_OVER:
-                        pb = pauseButton.checkCoords(clickX, clickY);
+                        boolean pb = pauseButton.checkCoords(clickX, clickY);
 
                         if (!pb && cg) {
                             player.dontmove = true;
@@ -754,8 +753,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             BOSS_TIME = 100_000;
             count = 0;
 
-            shotgunKit.hide();
-            healthKit.hide();
+            shotgunKit.kill();
+            healthKit.kill();
             pauseButton.show();
             if (portal != null) {
                 portal.kill();
@@ -813,9 +812,8 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     factory = new Factory(this);
                     demoman = new Demoman(this);
 
-                    int len = NUMBER_VADER - 1;
                     enemies.add(new TripleFighter(this));
-                    for (int i = 0; i < len; i++) {
+                    for (int i = 0; i < NUMBER_VADER; i++) {
                         if (Randomize.randFloat() <= 0.12) {
                             enemies.add(new TripleFighter(this));
                         } else {
@@ -859,7 +857,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                     atomicBomb = new AtomicBomb(this);
                     changerGuns = new ChangerGuns(this);
 
-                    int len = NUMBER_VADER + 5;
+                    int len = NUMBER_VADER + 6;
                     for (int i = 0; i < len; i++) {
                         if (Randomize.randFloat() <= 0.18) {
                             enemies.add(new XWing(this));
@@ -881,7 +879,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         gameStatus = READY;
     }
 
-    private void gameover() {
+    private void gameOver() {
         canvas.drawBitmap(ImageHub.gameoverScreen, 0, 0, null);
 
         pauseButton.render();
@@ -1308,12 +1306,13 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     private void startGame() {
         Service.runOnUiThread(() -> {
+            setBackground(null);
+
             String[] settings = Clerk.getSettings().split(" ");
             AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
             AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
 
             AudioHub.loadMenuSnd();
-            activity.deleteWinGif();
         });
 
         playing = true;
@@ -1419,6 +1418,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
         getMaxScore();
         confirmLanguage(false);
+        Clerk.getNickname();
     }
 
     public void saveSettings() {
@@ -1438,11 +1438,11 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
             if (count != 0) {
                 for (int i = 0; i < count; i++) {
                     try {
-                        String nicks = ClientServer.nicksPlayers.get(i).toString();
-                        stringBuilder.append(i + 1).append(") ").append(nicks).append(" - ")
-                                .append(ClientServer.info_from_server.get(nicks));
+                        String curNickName = ClientServer.nicksPlayers.get(i).toString();
+                        stringBuilder.append(i + 1).append(") ").append(curNickName).append(" - ")
+                                .append(ClientServer.info_from_server.get(curNickName));
 
-                        if (!Clerk.nickname.equals(nicks)) {
+                        if (!Clerk.nickname.equals(curNickName)) {
                             table.addText(stringBuilder.toString());
                         } else {
                             table.addMarkedText(stringBuilder.toString());
@@ -1450,7 +1450,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
                         stringBuilder.setLength(0);
                     } catch (Exception e) {
                         print(e);
-                        table.addText((i + 1) + ") ERR");
+                        table.addText((i + 1) + ") ERR - ERR");
                     }
                 }
                 count = 0;
@@ -1464,7 +1464,7 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
         }
     }
 
-    public void makeScoresParams() {
+    private void makeScoresParams() {
         scoreX = (int) (HALF_SCREEN_WIDTH - scorePaint.measureText(string_current_score + score) / 2);
         maxScoreX = (int) (HALF_SCREEN_WIDTH - scorePaint.measureText(string_max_score + bestScore) / 2);
     }
@@ -1476,17 +1476,5 @@ public final class Game extends SurfaceView implements Runnable, SurfaceHolder.C
 
     public void onLoading(Runnable function) {
         loadingScreen.launch(function, ImageHub.needImagesForFirstLevel());
-    }
-
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
     }
 }

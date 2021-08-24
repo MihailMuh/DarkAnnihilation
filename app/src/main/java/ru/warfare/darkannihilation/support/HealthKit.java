@@ -14,14 +14,7 @@ public class HealthKit extends Sprite {
         super(g, ImageHub.healthKitImg);
 
         calculateBarriers();
-        hide();
-    }
-
-    @Override
-    public void hide() {
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        lock = true;
+        kill();
     }
 
     @Override
@@ -33,8 +26,9 @@ public class HealthKit extends Sprite {
 
     @Override
     public void kill() {
-        hide();
-        game.intersectOnlyPlayer.remove(this);
+        x = randInt(0, screenWidthWidth);
+        y = -height;
+        lock = true;
     }
 
     @Override

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/activity_main.xml" value="0.2324074074074074" />
+        <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/dialog.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/warning.xml" value="0.25416666666666665" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="15" project-jdk-type="JavaSDK" />
 </project>

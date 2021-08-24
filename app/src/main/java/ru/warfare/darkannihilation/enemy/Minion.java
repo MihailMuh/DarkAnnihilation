@@ -49,7 +49,7 @@ public class Minion extends Sprite {
     @Override
     public void intersectionPlayer() {
         AudioHub.playMetal();
-        kill();
+        hide();
         createSmallTripleExplosion();
     }
 
@@ -63,13 +63,18 @@ public class Minion extends Sprite {
         if (intersect(bullet)) {
             bullet.kill();
             kill();
-            createLargeTripleExplosion();
         }
     }
 
     @Override
-    public void kill() {
+    public void hide() {
         game.enemies.remove(this);
+    }
+
+    @Override
+    public void kill() {
+        hide();
+        createLargeTripleExplosion();
     }
 
     @Override

@@ -1,20 +1,18 @@
 package ru.warfare.darkannihilation.glide;
 
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+import static ru.warfare.darkannihilation.systemd.service.Service.runOnUiThread;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 
 import ru.warfare.darkannihilation.interfaces.BoxBitmap;
 import ru.warfare.darkannihilation.interfaces.BoxDrawable;
-
-import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+import ru.warfare.darkannihilation.interfaces.GlideCallback;
 
 public class GlideManager {
     public void run(int id, int width, int height, BoxBitmap boxBitmap) {
@@ -23,19 +21,8 @@ public class GlideManager {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(id)
                 .override(width, height)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  boxBitmap.unPack(resource);
-                                  return true;
-                              }
-                          }
-                ).submit();
+                .listener((GlideCallback<Bitmap>) boxBitmap::unPack)
+                .submit();
     }
 
     public void run(int id, int len, BoxBitmap boxBitmap) {
@@ -49,19 +36,8 @@ public class GlideManager {
                 .load(id)
                 .centerCrop()
                 .override(width, height)
-                .listener(new RequestListener<Bitmap>() {
-                              @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                  return false;
-                              }
-
-                              @Override
-                              public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                  boxBitmap.unPack(resource);
-                                  return true;
-                              }
-                          }
-                ).submit();
+                .listener((GlideCallback<Bitmap>) boxBitmap::unPack)
+                .submit();
     }
 
     public void runDrawable(int id, int width, int height, BoxDrawable boxDrawable) {
@@ -70,18 +46,23 @@ public class GlideManager {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .load(id)
                 .override(width, height)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
+                .listener((GlideCallback<Drawable>) boxDrawable::unPack)
+                .submit();
+    }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        boxDrawable.unPack(resource);
-                        return false;
-                    }
-
-                }).submit();
+    public void runGif(int id, int width, int height, BoxDrawable boxDrawable, boolean crop) {
+        RequestBuilder<GifDrawable> requestBuilder =
+                GlideApp.with(activity)
+                        .asGif()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .override(width, height)
+                        .load(id)
+                        .addListener((GlideCallback<GifDrawable>) resource -> runOnUiThread(() -> boxDrawable.unPack(resource)));
+        
+        if (crop) {
+            requestBuilder.centerCrop().submit();
+        } else {
+            requestBuilder.submit();
+        }
     }
 }

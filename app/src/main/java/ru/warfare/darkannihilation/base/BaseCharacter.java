@@ -35,6 +35,7 @@ public abstract class BaseCharacter extends Sprite {
         super(g, bitmap);
 
         this.maxHealth = maxHealth;
+        health = maxHealth;
 
         int len = maxHealth / 10;
         int lvl = 0;
@@ -49,7 +50,7 @@ public abstract class BaseCharacter extends Sprite {
             }
         }
 
-        init();
+        newStatus();
         changeHearts();
     }
 
@@ -60,11 +61,6 @@ public abstract class BaseCharacter extends Sprite {
         endY = y;
         lock = true;
         god = false;
-    }
-
-    private void init() {
-        newStatus();
-        health = maxHealth;
     }
 
     public void checkIntersections(Sprite sprite) {

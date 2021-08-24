@@ -17,18 +17,24 @@ public class Buffer extends Sprite {
         damage = BUFFER_DAMAGE;
 
         calculateBarriers();
-        hide();
+        lock = true;
 
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);
     }
 
     @Override
     public void hide() {
-        lock = true;
         health = BUFFER_HEALTH;
         x = randInt(0, screenWidthWidth);
         y = -height;
         speedY = randInt(5, 10);
+    }
+
+    @Override
+    public void start() {
+        lock = false;
+        hide();
+        super.start();
     }
 
     @Override
@@ -48,7 +54,7 @@ public class Buffer extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        hide();
+        lock = true;
 
         HardThread.doInBackGround(this::stopBFF);
     }
@@ -64,7 +70,7 @@ public class Buffer extends Sprite {
         Game.score += 100;
 
         createSkullExplosion();
-        hide();
+        lock = true;
 
         stopBFF();
     }

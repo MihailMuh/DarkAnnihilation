@@ -11,6 +11,9 @@
         android:id="@+id/input_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_your_nickname" />
+        android:autofillHints=""
+        android:hint="@string/enter_your_nickname"
+        android:inputType=""
+        android:minHeight="48dp" />
 
 </LinearLayout>

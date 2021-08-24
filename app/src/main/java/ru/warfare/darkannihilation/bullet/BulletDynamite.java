@@ -47,7 +47,7 @@ public class BulletDynamite extends BaseBullet {
                 right = x + width;
                 bottom = y + height;
 
-                recreateRect(x + 40, y, right() - 40, bottom());
+                recreateRect(x + 10, y, right() - 10, bottom());
 
                 damage = 2;
                 frame = 0;

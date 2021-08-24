@@ -42,7 +42,7 @@ public class AtomicBomb extends Sprite {
                 for (int i = 0; i < game.intersectOnlyPlayer.size(); i++) {
                     Sprite bullet = game.intersectOnlyPlayer.get(i);
                     if (bullet.name == BULLET_ENEMY) {
-                        bullet.killInBack();
+                        bullet.kill();
                     }
                 }
             });
