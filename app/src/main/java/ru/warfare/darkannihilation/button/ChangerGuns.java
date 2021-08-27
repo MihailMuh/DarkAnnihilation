@@ -15,7 +15,7 @@ import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class ChangerGuns extends BaseButton {
-    private static final Paint alphaPaint = new Paint();
+    private final Paint alphaPaint = new Paint();
     private boolean isInvisible;
     private long lastClick = System.currentTimeMillis();
 
@@ -38,7 +38,7 @@ public class ChangerGuns extends BaseButton {
     }
 
     public ChangerGuns() {
-        super(null, ImageHub.attentionImg);
+        super(null, ImageHub.pauseButtonImg);
 
         x = SCREEN_WIDTH;
     }

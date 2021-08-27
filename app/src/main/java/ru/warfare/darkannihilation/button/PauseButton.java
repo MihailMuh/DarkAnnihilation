@@ -11,7 +11,7 @@ import ru.warfare.darkannihilation.ImageHub;
 
 public class PauseButton extends BaseButton {
     public static volatile byte oldStatus;
-    private static final Paint alphaPaint = new Paint();
+    private final Paint alphaPaint = new Paint();
     private boolean isInvisible;
     private final int myX;
 

@@ -27,7 +27,7 @@ public class Button extends BaseButton {
     private float textX;
     private float textY;
     private long lastClick = System.currentTimeMillis();
-    public boolean isPressed = false;
+    private boolean isPressed = false;
 
     public Button(Game game) {
         super(game, ImageHub.buttonImagePressed);
@@ -121,7 +121,7 @@ public class Button extends BaseButton {
                     case TOP:
                         game.onLoading(game::generateTopScore);
 
-                        HardThread.doInBackGround(() -> {
+                        HardThread.doInPool(() -> {
                             ClientServer.postBestScore(Clerk.nickname, game.bestScore);
                             ClientServer.getStatistics();
                             game.generateTable();

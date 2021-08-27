@@ -13,8 +13,10 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 
 public abstract class BaseCharacter extends Sprite {
+    private static final short cup = 250;
     private boolean boom = false;
     public boolean lock;
     public int endX;
@@ -28,8 +30,13 @@ public abstract class BaseCharacter extends Sprite {
     public int[] types;
     public boolean god;
     private int bar;
-    public int heartX = 25;
-    public int heartY = 10;
+    private static final int _25 = calculate(25);
+    private static final int _10 = calculate(10);
+    private static final int _90 = calculate(90);
+    private static final int _385 = calculate(385);
+
+    public int heartX = _25;
+    public int heartY = _10;
 
     public BaseCharacter(Game g, Bitmap bitmap, int maxHealth) {
         super(g, bitmap);
@@ -41,7 +48,7 @@ public abstract class BaseCharacter extends Sprite {
         int lvl = 0;
         for (int i = 0; i < len; i++) {
             hearts.add(new Heart(g, heartX, heartY, false));
-            heartX += 90;
+            heartX += _90;
             lvl++;
 
             if (lvl == 5) {
@@ -76,16 +83,16 @@ public abstract class BaseCharacter extends Sprite {
     }
 
     protected void newLevel() {
-        heartX = 25;
-        heartY += 10 + ImageHub.imageHeartHalf.getHeight();
+        heartX = _25;
+        heartY += _10 + ImageHub.imageHeartHalf.getHeight();
     }
 
     public void killArmorHeart(Heart heart) {
-        if (heartX != 25) {
-            heartX -= 90;
+        if (heartX != _25) {
+            heartX -= _90;
         } else {
-            heartX = 385;
-            heartY -= 10 + ImageHub.imageHeartHalf.getHeight();
+            heartX = _385;
+            heartY -= _10 + ImageHub.imageHeartHalf.getHeight();
         }
         maxHealth = health;
         hearts.remove(heart);
@@ -93,15 +100,15 @@ public abstract class BaseCharacter extends Sprite {
 
     protected void addArmorHeart() {
         hearts.add(new Heart(game, heartX, heartY, true));
-        heartX += 90;
-        if (heartX > 385) {
+        heartX += _90;
+        if (heartX > _385) {
             newLevel();
         }
     }
 
     public void heal() {
         baseHeal();
-        while (health > 200) {
+        while (health > cup) {
             health -= 5;
             changeHearts();
         }
@@ -138,8 +145,9 @@ public abstract class BaseCharacter extends Sprite {
     }
 
     protected void changeHearts() {
-        types = new int[hearts.size()];
         int len = health / 10;
+        int countHearts = hearts.size();
+        types = new int[countHearts];
 
         for (bar = 0; bar < len; bar++) {
             types[bar] = 2;
@@ -148,7 +156,7 @@ public abstract class BaseCharacter extends Sprite {
             types[bar] = 1;
             bar++;
         }
-        while (bar < hearts.size()) {
+        while (bar < countHearts) {
             types[bar] = 0;
             bar++;
         }

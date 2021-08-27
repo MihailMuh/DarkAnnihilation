@@ -57,7 +57,6 @@ public class Settings {
 
         parseSettings();
 
-        int angle = (int) (finalVolumeEffects * 100);
         int _200 = (int) (200 * LAYOUT_DENSITY + 0.5f);
         ViewGroup.LayoutParams layoutParams;
 
@@ -70,7 +69,7 @@ public class Settings {
         layoutParams.width = _200;
         layoutParams.height = _200;
         seekArcEffects.setLayoutParams(layoutParams);
-        seekArcEffects.setProgress(angle);
+        seekArcEffects.setProgress((int) (finalVolumeEffects * 100));
         seekArcEffects.setVisibility(SeekArc.VISIBLE);
         seekArcEffects.setOnSeekArcChangeListener((SeekArcListener) newVolume -> {
             angleEffects.setText((string_volume + " " + newVolume));
@@ -79,7 +78,6 @@ public class Settings {
         });
 
         angleMusic = activity.findViewById(R.id.angleMusic);
-        angle = (int) (finalVolumeMusic * 100);
         angleMusic.setVisibility(TextView.VISIBLE);
         textViewMusic = activity.findViewById(R.id.textViewMusic);
         textViewMusic.setVisibility(TextView.VISIBLE);
@@ -88,7 +86,7 @@ public class Settings {
         layoutParams.width = _200;
         layoutParams.height = _200;
         seekArcMusic.setLayoutParams(layoutParams);
-        seekArcMusic.setProgress(angle);
+        seekArcMusic.setProgress((int) (finalVolumeMusic * 100));
         seekArcMusic.setVisibility(SeekArc.VISIBLE);
         seekArcMusic.setOnSeekArcChangeListener((SeekArcListener) newVolume -> {
             angleMusic.setText((string_volume + " " + newVolume));
@@ -99,9 +97,6 @@ public class Settings {
         textViewVibration = activity.findViewById(R.id.textVibration);
         textViewVibration.setVisibility(TextView.VISIBLE);
         stickySwitch = activity.findViewById(R.id.stickySwitch);
-        layoutParams = stickySwitch.getLayoutParams();
-        layoutParams.width = (int) (140 * LAYOUT_DENSITY + 0.5f);
-        stickySwitch.setLayoutParams(layoutParams);
         stickySwitch.setVisibility(TextView.VISIBLE);
         stickySwitch.setRightIcon(ImageHub.onImg);
         stickySwitch.setLeftIcon(ImageHub.offImg);

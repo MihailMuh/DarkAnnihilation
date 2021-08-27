@@ -196,7 +196,7 @@ public final class Game extends SurfaceView implements Runnable {
     private int shootY;
     private int shootX;
     private int buttonsY;
-    private static int tableY;
+    private int tableY;
     private int _3;
     private int _2;
     private int _1;
@@ -297,7 +297,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         count = NUMBER_VADER * 2;
         for (int i = 0; i < count; i++) {
-            enemies.add(new Vader(this, false));
+            generateVader();
         }
 
         for (int i = 0; i < NUMBER_SKULL_EXPLOSIONS; i++) {
@@ -356,8 +356,6 @@ public final class Game extends SurfaceView implements Runnable {
         turnIntersectOnlyPlayer();
         turnExplosions();
 
-        checkTimeForBoss();
-
         if (player.intersect(changerGuns)) {
             changerGuns.intersectionPlayer();
         } else {
@@ -368,6 +366,8 @@ public final class Game extends SurfaceView implements Runnable {
                 pauseButton.work();
             }
         }
+
+        checkTimeForBoss();
 
         if (score >= 50) {
             if (shotgunKit.lock && !shotgunKit.picked) {
@@ -512,8 +512,8 @@ public final class Game extends SurfaceView implements Runnable {
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         pointerCount = event.getPointerCount();
-        int clickX = (int) event.getX(0);
-        int clickY = (int) event.getY(0);
+        int clickX = (int) event.getX();
+        int clickY = (int) event.getY();
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
@@ -686,7 +686,7 @@ public final class Game extends SurfaceView implements Runnable {
         level = 1;
         enemies = new ArrayList<>(0);
 
-        HardThread.doInBackGround(() -> {
+        HardThread.doInPool(() -> {
             bullets = new ArrayList<>(0);
             ghosts = new ArrayList<>(0);
             intersectOnlyPlayer = new ArrayList<>(0);
@@ -723,7 +723,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         count = NUMBER_VADER * 2;
         for (int i = 0; i < count; i++) {
-            enemies.add(new Vader(this, false));
+            generateVader();
         }
 
         screen = new StarScreen();
@@ -773,22 +773,6 @@ public final class Game extends SurfaceView implements Runnable {
 
         switch (level) {
             case 1:
-                HardThread.doInBackGround(() -> {
-                    ImageHub.loadGunsImages(character);
-
-                    score = 0;
-
-                    spider = null;
-                    sunrise = null;
-                    buffer = null;
-                    atomicBomb = null;
-
-                    ImageHub.deleteSecondLevelImages();
-
-                    alphaEnemy.setAlpha(255);
-                    shotgunKit.picked = false;
-                });
-
                 AudioHub.loadFirstLevelSounds();
                 ImageHub.loadFirstLevelAndCharacterImages(character);
 
@@ -806,7 +790,9 @@ public final class Game extends SurfaceView implements Runnable {
 
                 screen = new StarScreen();
 
-                HardThread.doInBackGround(() -> {
+                HardThread.doInPool(() -> {
+                    ImageHub.loadGunsImages(character);
+
                     rocket = new Rocket(this);
                     attention = new Attention(this);
                     factory = new Factory(this);
@@ -817,7 +803,7 @@ public final class Game extends SurfaceView implements Runnable {
                         if (Randomize.randFloat() <= 0.12) {
                             enemies.add(new TripleFighter(this));
                         } else {
-                            enemies.add(new Vader(this, false));
+                            generateVader();
                         }
                     }
 
@@ -825,32 +811,32 @@ public final class Game extends SurfaceView implements Runnable {
                     ghosts.add(factory);
                     enemies.add(demoman);
 
-                    Time.sleep(1500);
+                    score = 0;
+
+                    spider = null;
+                    sunrise = null;
+                    buffer = null;
+                    atomicBomb = null;
+
+                    ImageHub.deleteSecondLevelImages();
+
+                    alphaEnemy.setAlpha(255);
+                    shotgunKit.picked = false;
+
+                    Time.waitImg();
+
                     changerGuns = new ChangerGuns(this);
                 });
                 break;
             case 2:
-                HardThread.doInBackGround(() -> {
-                    oldScore = score;
-
-                    attention = null;
-                    rocket = null;
-                    factory = null;
-                    demoman = null;
-
-                    ImageHub.deleteFirstLevelImages();
-
-                    player.newStatus();
-
-                    alphaEnemy.setAlpha(165);
-                });
-
                 AudioHub.loadSecondLevelSounds();
                 ImageHub.loadSecondLevelImages();
 
                 screen = new ThunderScreen();
 
-                HardThread.doInBackGround(() -> {
+                HardThread.doInPool(() -> {
+                    player.newStatus();
+
                     spider = new Spider(this);
                     sunrise = new Sunrise(this);
                     buffer = new Buffer(this);
@@ -862,7 +848,7 @@ public final class Game extends SurfaceView implements Runnable {
                         if (Randomize.randFloat() <= 0.18) {
                             enemies.add(new XWing(this));
                         } else {
-                            enemies.add(new Vader(this, true));
+                            generateVader();
                         }
                     }
 
@@ -870,6 +856,17 @@ public final class Game extends SurfaceView implements Runnable {
                     enemies.add(sunrise);
                     enemies.add(buffer);
                     enemies.add(atomicBomb);
+
+                    oldScore = score;
+
+                    attention = null;
+                    rocket = null;
+                    factory = null;
+                    demoman = null;
+
+                    ImageHub.deleteFirstLevelImages();
+
+                    alphaEnemy.setAlpha(165);
                 });
                 break;
         }
@@ -921,6 +918,7 @@ public final class Game extends SurfaceView implements Runnable {
                         pauseButton.show();
                         gameStatus = GAME;
                         count = 0;
+                        player.dontmove = false;
                     }
                 }
             }
@@ -1262,7 +1260,7 @@ public final class Game extends SurfaceView implements Runnable {
     public void saveScore() {
         if (score > bestScore) {
             Clerk.saveBestScore(score);
-            HardThread.doInBackGround(() -> ClientServer.postBestScore(Clerk.nickname, score));
+            HardThread.doInPool(() -> ClientServer.postBestScore(Clerk.nickname, score));
         }
     }
 
@@ -1272,7 +1270,7 @@ public final class Game extends SurfaceView implements Runnable {
 
     private void removeSaturnTrash() {
         if (character == SATURN) {
-            HardThread.doInBackGround(() -> {
+            HardThread.doInPool(() -> {
                 for (int i = 0; i < bullets.size(); i++) {
                     Sprite bullet = bullets.get(i);
                     if (bullet.name == BULLET_SATURN | bullet.name == BULLET_ORBIT) {
@@ -1288,7 +1286,7 @@ public final class Game extends SurfaceView implements Runnable {
     private void checkTimeForBoss() {
         if (System.currentTimeMillis() - lastBoss > BOSS_TIME) {
             lastBoss = System.currentTimeMillis();
-            HardThread.doInBackGround(() -> {
+            HardThread.doInPool(() -> {
                 if (boss == null && portal == null) {
                     byte bossType = DEATH_STAR;
                     if (level == 1) {
@@ -1297,7 +1295,10 @@ public final class Game extends SurfaceView implements Runnable {
                         bossType = BOSS_VADERS;
                         boss = new BossVaders(this);
                     }
-                    fightScreen = new FightScreen(character, bossType);
+
+                    ImageHub.loadFightScreen(character, bossType);
+
+                    fightScreen = new FightScreen();
                     ghosts.add(boss);
                 }
             });
@@ -1335,6 +1336,10 @@ public final class Game extends SurfaceView implements Runnable {
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).empireStart();
         }
+    }
+
+    public void generateVader() {
+        enemies.add(new Vader(this));
     }
 
     public void killBoss() {

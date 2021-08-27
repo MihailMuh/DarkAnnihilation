@@ -44,7 +44,7 @@ public class Portal extends Sprite {
         Service.runOnUiThread(() -> {
             AudioHub.deletePortalSnd();
             if (Game.level == 2) {
-                ImageHub.loadWinImages(Service.activity);
+                ImageHub.loadWinImages(game);
             } else {
                 AudioHub.playTimeMachine();
 
@@ -94,6 +94,5 @@ public class Portal extends Sprite {
 
     @Override
     public void check_intersectionBullet(BaseBullet bullet) {
-
     }
 }

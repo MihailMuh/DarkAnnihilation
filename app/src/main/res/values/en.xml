@@ -26,8 +26,8 @@
         <item>Choose your language</item>
         <item>Smooth text</item>
 
-        <item>There is not internet connection</item>
-        <item>Сервер временно не доступен</item>
+        <item>There is no internet connection</item>
+        <item>The server is temporarily unavailable</item>
 
     </string-array>
 </resources>

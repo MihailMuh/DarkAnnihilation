@@ -13,7 +13,7 @@ public final class Windows {
     public static int HALF_SCREEN_WIDTH;
     public static int HALF_SCREEN_HEIGHT;
 
-    public static float DENSITY;
+    private static float DENSITY;
     public static float LAYOUT_DENSITY;
 
     public static void init() {
@@ -26,7 +26,15 @@ public final class Windows {
         HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2;
         HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
 
-        DENSITY = size.x / 1920f;
+        DENSITY = size.y / 1080f;
         LAYOUT_DENSITY = (size.y / 720f) * resources.getDisplayMetrics().density;
+    }
+
+    public static int calculate(int oldInt) {
+        return (int) (oldInt * DENSITY);
+    }
+
+    public static int calculate(double oldInt) {
+        return (int) (oldInt * DENSITY);
     }
 }

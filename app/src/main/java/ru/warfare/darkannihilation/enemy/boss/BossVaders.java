@@ -6,7 +6,6 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletBossVaders;
-import ru.warfare.darkannihilation.enemy.Vader;
 import ru.warfare.darkannihilation.enemy.XWing;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.math.Vector;
@@ -64,7 +63,7 @@ public class BossVaders extends BaseBoss {
             if (Randomize.randFloat() <= 0.3) {
                 game.enemies.add(new XWing(game));
             } else {
-                game.enemies.add(new Vader(game, true));
+                game.generateVader();
             }
         }
     }

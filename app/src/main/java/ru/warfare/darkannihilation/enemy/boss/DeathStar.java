@@ -7,7 +7,6 @@ import ru.warfare.darkannihilation.base.BaseBoss;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletBoss;
 import ru.warfare.darkannihilation.enemy.TripleFighter;
-import ru.warfare.darkannihilation.enemy.Vader;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 
@@ -48,7 +47,7 @@ public class DeathStar extends BaseBoss {
             if (Randomize.randFloat() <= 0.1) {
                 game.enemies.add(new TripleFighter(game));
             } else {
-                game.enemies.add(new Vader(game, false));
+                game.generateVader();
             }
         }
     }

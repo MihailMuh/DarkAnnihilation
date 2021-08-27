@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 
-public final class AudioPool {
+final class AudioPool {
     private static final SoundPool soundPool = new SoundPool
             .Builder()
             .setAudioAttributes(new AudioAttributes.Builder()

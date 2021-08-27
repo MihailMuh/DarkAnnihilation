@@ -16,22 +16,14 @@ import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class Vader extends Sprite {
-    public Vader(Game game, boolean old) {
-        super(game);
-
-        if (old) {
-            image = ImageHub.vaderOldImage[randInt(0, 2)];
-        } else {
-            image = ImageHub.vaderImage[randInt(0, 2)];
-        }
+    public Vader(Game game) {
+        super(game, ImageHub.vaderImages[randInt(0, 2)]);
 
         damage = VADER_DAMAGE;
 
         makeParams();
         calculateBarriers();
         start();
-
-        recreateRect(x + 10, y + 10, right() - 10, bottom() - 10);
     }
 
     @Override

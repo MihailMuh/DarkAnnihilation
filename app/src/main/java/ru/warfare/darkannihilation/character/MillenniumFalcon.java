@@ -37,11 +37,10 @@ public class MillenniumFalcon extends BaseCharacter {
                 AudioHub.playShoot();
                 int X = centerX();
 
-                Bullet bullet = new Bullet(game, X + 3, y);
-                game.bullets.add(bullet);
-
-                bullet = new Bullet(game, X - 3, y);
-                game.bullets.add(bullet);
+                for (int i = -6; i <= 6; i += 6) {
+                    Bullet bullet = new Bullet(game, X + i, y);
+                    game.bullets.add(bullet);
+                }
             }
         }
     }

@@ -27,6 +27,10 @@ public class HardThread implements Runnable {
         }
     }
 
+    public static void doInPool(Runnable runnable) {
+        threadPool.execute(runnable);
+    }
+
     public void stopJob() {
         playing = false;
         work = true;
@@ -34,7 +38,7 @@ public class HardThread implements Runnable {
             try {
                 thread.interrupt();
             } catch (Exception e) {
-                print("HardThread " + e.toString());
+                print("HardThread " + e);
             }
         }
     }

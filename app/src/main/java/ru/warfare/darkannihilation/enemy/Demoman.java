@@ -45,7 +45,7 @@ public class Demoman extends Sprite {
 
     @Override
     public void start() {
-        HardThread.doInBackGround(() -> {
+        HardThread.doInPool(() -> {
             health = DEMOMAN_HEALTH;
             y = randInt(0, endY);
             speedX = randInt(5, 10);

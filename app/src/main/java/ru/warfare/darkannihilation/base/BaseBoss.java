@@ -40,7 +40,7 @@ public abstract class BaseBoss extends Sprite {
         if (!BOOM) {
             BOOM = true;
 
-            HardThread.doInBackGround(() -> {
+            HardThread.doInPool(() -> {
                 AudioHub.pauseBossMusic();
 
                 createSkullExplosion();

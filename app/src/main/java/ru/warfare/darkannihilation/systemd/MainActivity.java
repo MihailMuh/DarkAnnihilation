@@ -64,7 +64,7 @@ public final class MainActivity extends BaseActivity {
             LayoutInflater li = LayoutInflater.from(this);
 
             if (isOnline()) {
-                HardThread.doInBackGround(ClientServer::getStatistics);
+                HardThread.doInPool(ClientServer::getStatistics);
 
                 View view = li.inflate(R.layout.dialog, null);
 
@@ -96,7 +96,7 @@ public final class MainActivity extends BaseActivity {
                                     if (ClientServer.info_from_server.has(Clerk.nickname)) {
                                         makeToast("This nickname already exists", true);
                                     } else {
-                                        HardThread.doInBackGround(() -> {
+                                        HardThread.doInPool(() -> {
                                             Clerk.saveNickname();
                                             ClientServer.postBestScore(Clerk.nickname, 0);
                                         });

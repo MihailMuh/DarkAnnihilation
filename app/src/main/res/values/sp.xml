@@ -26,8 +26,8 @@
         <item>Elige tu idioma</item>
         <item>Suavizar texto</item>
 
-        <item>There is not internet connection</item>
-        <item>Сервер временно не доступен</item>
+        <item>No hay conexión a internet</item>
+        <item>El servidor no está disponible temporalmente</item>
 
     </string-array>
 </resources>

@@ -7,7 +7,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import ru.warfare.darkannihilation.systemd.service.Service;
 
-public class AudioExoPlayer {
+class AudioExoPlayer {
     public static volatile float volume = 1f;
 
     public static void newVolumeForBackground(float newVolume) {

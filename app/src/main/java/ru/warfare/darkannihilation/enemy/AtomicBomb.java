@@ -14,7 +14,7 @@ import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class AtomicBomb extends Sprite {
-    private int frame = -1;
+    private int frame = 0;
     private long lastFrame = System.currentTimeMillis();
     private boolean BOOM;
 
@@ -31,7 +31,7 @@ public class AtomicBomb extends Sprite {
     private void boom() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.doInBackGround(() -> {
+            HardThread.doInPool(() -> {
                 for (int i = 0; i < game.enemies.size(); i++) {
                     Sprite sprite = game.enemies.get(i);
                     if (!sprite.lock) {
@@ -123,11 +123,5 @@ public class AtomicBomb extends Sprite {
     @Override
     public void render() {
         Game.canvas.drawBitmap(ImageHub.atomBombImage[frame], x, y, Game.alphaEnemy);
-    }
-
-    @Override
-    public void turn() {
-        update();
-        render();
     }
 }

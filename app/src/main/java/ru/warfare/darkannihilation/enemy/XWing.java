@@ -12,15 +12,15 @@ import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE
 import static ru.warfare.darkannihilation.constant.Constants.XWING_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_SHOOT_TIME;
-import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 import static ru.warfare.darkannihilation.math.Math.getDistance;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 
 public class XWing extends Sprite {
     private long lastShoot = System.currentTimeMillis();
-    private static int R;
+    private static final int R = calculate(500);
     private final Vector vector = new Vector();
 
     public XWing(Game game) {
@@ -29,12 +29,6 @@ public class XWing extends Sprite {
 
         calculateBarriers();
         start();
-
-        if (Game.character == SATURN) {
-            R = 400;
-        } else {
-            R = 350;
-        }
 
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }

@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation.constant;
 public final class Constants {
 //    characters
     public static final byte MILLENNIUM_FALCON_HEALTH = 50;
-    public static final byte MILLENNIUM_FALCON_SHOOT_TIME = 80;
+    public static final byte MILLENNIUM_FALCON_SHOOT_TIME = 60;
     public static final short MILLENNIUM_FALCON_SHOTGUN_TIME = 515;
 
     public static final short EMERALD_SHOOT_TIME = 1_300;
