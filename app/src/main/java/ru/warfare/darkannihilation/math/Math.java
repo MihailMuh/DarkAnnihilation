@@ -13,4 +13,11 @@ public final class Math {
         }
         return 0;
     }
+
+    public static int abs(int x) {
+        if (x < 0) {
+            return -x;
+        }
+        return x;
+    }
 }

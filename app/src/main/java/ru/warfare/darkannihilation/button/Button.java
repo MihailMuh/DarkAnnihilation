@@ -46,31 +46,6 @@ public class Button extends BaseButton {
 
         text = name;
 
-        float len = Game.buttonsPaint.measureText(text);
-        if (len > width - 40) {
-            while (len > width - 40) {
-                width += 5;
-            }
-            ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed, width, height);
-            ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed, width, height);
-            if (func != game.buttonMenu.function) {
-                game.buttonMenu.updateFrontEnd();
-            }
-            if (func != game.buttonQuit.function) {
-                game.buttonQuit.updateFrontEnd();
-            }
-            if (func != game.buttonRestart.function) {
-                game.buttonRestart.updateFrontEnd();
-            }
-            if (func != game.buttonStart.function) {
-                game.buttonStart.updateFrontEnd();
-            }
-        }
-
-        updateFrontEnd();
-    }
-
-    public void updateFrontEnd() {
         width = ImageHub.buttonImageNotPressed.getWidth();
         halfWidth = width / 2;
 

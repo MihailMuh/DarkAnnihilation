@@ -305,7 +305,6 @@ public final class AudioHub extends AudioExoPlayer {
                         timeMachineNoneSnd.release();
                         activity.game.onLoading(() -> {
                             Game.level++;
-                            activity.game.portal.kill();
                             activity.game.generateNewGame();
                         });
                     }
@@ -358,7 +357,7 @@ public final class AudioHub extends AudioExoPlayer {
                         readySnd = null;
                     } else {
                         if (state == Player.STATE_READY) {
-                            if (Game.gameStatus == 4 | !activity.game.playing) {
+                            if (Game.gameStatus == PAUSE | !activity.game.playing) {
                                 readySnd.pause();
                                 playing[2] = true;
                             }

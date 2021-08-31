@@ -134,28 +134,26 @@ public class Settings {
         spinner.setSpinnerAdapter(iconSpinnerAdapter);
         spinner.setItems(iconSpinnerItems);
         spinner.setOnSpinnerItemSelectedListener((SpinnerListener) id -> {
-            switch (id) {
-                case 0:
-                    game.language = "en";
-                    ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed,
-                            ImageHub._300, ImageHub._70);
-                    ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed,
-                            ImageHub._300, ImageHub._70);
-                    break;
-                case 1:
-                    game.language = "ru";
-                    break;
-                case 2:
-                    game.language = "fr";
-                    break;
-                case 3:
-                    game.language = "sp";
-                    break;
-                case 4:
-                    game.language = "ge";
-                    break;
-            }
-            game.confirmLanguage(true);
+            HardThread.doInBackGround(() -> {
+                switch (id) {
+                    case 0:
+                        game.language = "en";
+                        break;
+                    case 1:
+                        game.language = "ru";
+                        break;
+                    case 2:
+                        game.language = "fr";
+                        break;
+                    case 3:
+                        game.language = "sp";
+                        break;
+                    case 4:
+                        game.language = "ge";
+                        break;
+                }
+                game.confirmLanguage(true);
+            });
             makeLanguage();
         });
         spinner.setLifecycleOwner(activity);

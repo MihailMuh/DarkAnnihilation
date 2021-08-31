@@ -17,6 +17,7 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseActivity;
 import ru.warfare.darkannihilation.systemd.service.Clerk;
 import ru.warfare.darkannihilation.systemd.service.ClientServer;
+import ru.warfare.darkannihilation.systemd.service.Fonts;
 import ru.warfare.darkannihilation.systemd.service.Service;
 import ru.warfare.darkannihilation.systemd.service.Vibrator;
 import ru.warfare.darkannihilation.systemd.service.Windows;
@@ -29,15 +30,17 @@ public final class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         game = findViewById(R.id.gameView);
-        game.setBackgroundResource(R.drawable.background);
 
         HardThread.doInBackGround(() -> {
             Service.init(this);
 
             Windows.init();
             ImageHub.init();
+
             AudioHub.init();
             Vibrator.init();
+            Fonts.init();
+
             game.init();
 
             runOnUiThread(this::checkOnFirstRun);
@@ -76,7 +79,7 @@ public final class MainActivity extends BaseActivity {
 
                 alertDialog.setOnShowListener(dialog ->
                         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(xView -> {
-                            String[] nick = ((EditText) view.findViewById(R.id.input_text)).getText().toString().split(" ");
+                            String[] nick = (((EditText) view.findViewById(R.id.input_text)).getText().toString() + " ").split(" ");
                             StringBuilder stringBuilder = new StringBuilder();
 
                             if (nick.length == 0) {

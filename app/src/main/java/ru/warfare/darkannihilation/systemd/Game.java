@@ -1,11 +1,53 @@
 package ru.warfare.darkannihilation.systemd;
 
+import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
+import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
+import static ru.warfare.darkannihilation.constant.Constants.NANOS_IN_SECOND;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSIONS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
+import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.AFTER_SETTINGS;
+import static ru.warfare.darkannihilation.constant.Modes.BOSS_PREVIEW;
+import static ru.warfare.darkannihilation.constant.Modes.GAME;
+import static ru.warfare.darkannihilation.constant.Modes.GAME_OVER;
+import static ru.warfare.darkannihilation.constant.Modes.LOADING;
+import static ru.warfare.darkannihilation.constant.Modes.MENU;
+import static ru.warfare.darkannihilation.constant.Modes.PASS;
+import static ru.warfare.darkannihilation.constant.Modes.PAUSE;
+import static ru.warfare.darkannihilation.constant.Modes.QUIT;
+import static ru.warfare.darkannihilation.constant.Modes.READY;
+import static ru.warfare.darkannihilation.constant.Modes.RESTART;
+import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
+import static ru.warfare.darkannihilation.constant.Modes.TOP;
+import static ru.warfare.darkannihilation.constant.Modes.WIN;
+import static ru.warfare.darkannihilation.constant.NamesConst.BOSS_VADERS;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
+import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
+import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
+import static ru.warfare.darkannihilation.constant.NamesConst.LARGE_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
+import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
+import static ru.warfare.darkannihilation.constant.NamesConst.SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.systemd.service.Py.print;
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+import static ru.warfare.darkannihilation.systemd.service.Service.resources;
+import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -15,13 +57,11 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.systemd.service.Clerk;
-import ru.warfare.darkannihilation.systemd.service.ClientServer;
+import ru.warfare.darkannihilation.CustomPaint;
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
-import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.audio.GameOver;
 import ru.warfare.darkannihilation.base.BaseBoss;
@@ -66,63 +106,24 @@ import ru.warfare.darkannihilation.screen.StarScreen;
 import ru.warfare.darkannihilation.screen.ThunderScreen;
 import ru.warfare.darkannihilation.support.HealthKit;
 import ru.warfare.darkannihilation.support.ShotgunKit;
+import ru.warfare.darkannihilation.systemd.service.Clerk;
+import ru.warfare.darkannihilation.systemd.service.ClientServer;
 import ru.warfare.darkannihilation.systemd.service.Service;
-
-import static ru.warfare.darkannihilation.systemd.service.Py.print;
-import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
-import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
-import static ru.warfare.darkannihilation.constant.Constants.NANOS_IN_SECOND;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSIONS;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
-import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
-import static ru.warfare.darkannihilation.constant.Modes.AFTER_SETTINGS;
-import static ru.warfare.darkannihilation.constant.Modes.BOSS_PREVIEW;
-import static ru.warfare.darkannihilation.constant.Modes.GAME;
-import static ru.warfare.darkannihilation.constant.Modes.GAME_OVER;
-import static ru.warfare.darkannihilation.constant.Modes.LOADING;
-import static ru.warfare.darkannihilation.constant.Modes.MENU;
-import static ru.warfare.darkannihilation.constant.Modes.PASS;
-import static ru.warfare.darkannihilation.constant.Modes.PAUSE;
-import static ru.warfare.darkannihilation.constant.Modes.QUIT;
-import static ru.warfare.darkannihilation.constant.Modes.READY;
-import static ru.warfare.darkannihilation.constant.Modes.RESTART;
-import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
-import static ru.warfare.darkannihilation.constant.Modes.TOP;
-import static ru.warfare.darkannihilation.constant.Modes.WIN;
-import static ru.warfare.darkannihilation.constant.NamesConst.BOSS_VADERS;
-import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
-import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
-import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
-import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
-import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
-import static ru.warfare.darkannihilation.constant.NamesConst.LARGE_EXPLOSION;
-import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
-import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
-import static ru.warfare.darkannihilation.constant.NamesConst.SMALL_EXPLOSION;
-import static ru.warfare.darkannihilation.systemd.service.Service.resources;
-import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
-import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
-import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
-import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+import ru.warfare.darkannihilation.systemd.service.Time;
 
 public final class Game extends SurfaceView implements Runnable {
     private final SurfaceHolder holder = getHolder();
     private Thread thread;
     public static Canvas canvas;
 
-    public static final Paint fpsPaint = new Paint();
-    public static final Paint startPaint = new Paint();
-    public static final Paint gameOverPaint = new Paint();
-    public static final Paint scorePaint = new Paint();
-    public static final Paint alphaEnemy = new Paint();
-    public static final Paint winPaint = new Paint();
-    public static final Paint paint50 = new Paint();
-    public static final Paint buttonsPaint = new Paint();
+    public static CustomPaint fpsPaint;
+    public static CustomPaint startPaint;
+    public static CustomPaint gameOverPaint;
+    public static CustomPaint scorePaint;
+    public static CustomPaint alphaEnemy;
+    public static CustomPaint winPaint;
+    public static CustomPaint paint50;
+    public static CustomPaint buttonsPaint;
 
     private static final StringBuilder stringBuilder = new StringBuilder();
 
@@ -131,7 +132,7 @@ public final class Game extends SurfaceView implements Runnable {
     public DefaultExplosion[] defaultLargeExplosion = new DefaultExplosion[NUMBER_DEFAULT_LARGE_EXPLOSION];
     public ExplosionTriple[] tripleSmallExplosion = new ExplosionTriple[NUMBER_TRIPLE_SMALL_EXPLOSION];
     public ExplosionTriple[] tripleLargeExplosion = new ExplosionTriple[NUMBER_TRIPLE_LARGE_EXPLOSION];
-    private final BaseExplosion[] allExplosion = new BaseExplosion[NUMBER_ALL_EXPLOSION];
+    private static final BaseExplosion[] allExplosion = new BaseExplosion[NUMBER_ALL_EXPLOSION];
 
     public ArrayList<BaseBullet> bullets = new ArrayList<>(0);
     public ArrayList<Sprite> intersectOnlyPlayer = new ArrayList<>(0);
@@ -167,20 +168,20 @@ public final class Game extends SurfaceView implements Runnable {
     public AtomicBomb atomicBomb;
     public BaseBoss boss;
 
-    public static volatile byte level = 1;
-    public static volatile byte gameStatus = PASS;
     private int count = 0;
-    public static int score = 0;
-    public int oldScore;
-    public int bestScore = 0;
+    private int oldScore;
     private int pointerCount;
     private int moveAll;
     private volatile boolean isPause = false;
     private volatile boolean isFirstRun = true;
     public volatile boolean playing = false;
+    public static volatile byte level = 1;
+    public static volatile byte gameStatus = PASS;
     public static volatile byte character = MILLENNIUM_FALCON;
     public static volatile boolean vibrate;
     public String language = "en";
+    public static int score = 0;
+    public int bestScore = 0;
 
     private int fpsX;
     private int scoreX;
@@ -226,8 +227,8 @@ public final class Game extends SurfaceView implements Runnable {
     public static String string_choose_lang;
     public static String string_smooth;
 
+    private long lastBoss;
     public int BOSS_TIME;
-    public long lastBoss;
     public long pauseTimer;
 
     private long timeFrame = System.nanoTime();
@@ -237,41 +238,33 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     public void init() {
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setFilterBitmap(true);
-        paint.setDither(true);
-        paint.setAntiAlias(true);
+        alphaEnemy = new CustomPaint();
+        gameOverPaint = new CustomPaint();
 
+        buttonsPaint = new CustomPaint();
+        buttonsPaint.setTextSize(25);
+
+        fpsPaint = new CustomPaint();
         fpsPaint.setColor(Color.RED);
         fpsPaint.setTextSize(40);
 
-        startPaint.set(paint);
+        startPaint = new CustomPaint();
         startPaint.setTextSize(300);
 
-        gameOverPaint.set(paint);
-
-        scorePaint.set(paint);
+        scorePaint = new CustomPaint();
         scorePaint.setTextSize(40);
-        scorePaint.setFakeBoldText(true);
 
-        winPaint.set(paint);
+        winPaint = new CustomPaint();
         winPaint.setTextSize(100);
 
-        paint50.set(paint);
+        paint50 = new CustomPaint();
         paint50.setTextSize(50);
-
-        buttonsPaint.set(paint);
 
         recoverySettings();
 
-        _3 = (int) ((SCREEN_WIDTH - startPaint.measureText("3")) / 2);
-        _2 = (int) ((SCREEN_WIDTH - startPaint.measureText("2")) / 2);
-        _1 = (int) ((SCREEN_WIDTH - startPaint.measureText("1")) / 2);
-        _321Y = (int) ((SCREEN_HEIGHT + startPaint.getTextSize()) / 2);
         buttonsY = (int) (SCREEN_HEIGHT - (ImageHub._70 * 1.5));
         fpsX = SCREEN_WIDTH - 250;
-        tableY = buttonsY - ImageHub._70;
+        tableY = buttonsY - (ImageHub._70 * 2);
 
         Time.waitImg();
 
@@ -279,20 +272,19 @@ public final class Game extends SurfaceView implements Runnable {
         buttonStart = new Button(this);
         buttonQuit = new Button(this);
         buttonRestart = new Button(this);
+        screen = new StarScreen();
+        player = new Bot(this);
 
-        Service.runOnUiThread(() -> {
+        HardThread.doInPool(() -> {
             pauseButton = new PauseButton(this);
-            player = new Bot(this);
             healthKit = new HealthKit(this);
             shotgunKit = new ShotgunKit(this);
-            screen = new StarScreen();
             loadingScreen = new LoadingScreen(this);
-            changerGuns = new ChangerGuns();
 
             newCharacterButtons();
-            updateMenuButtons();
 
-            holder.setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+            resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
+            updateMenuButtons();
         });
 
         count = NUMBER_VADER * 2;
@@ -539,6 +531,11 @@ public final class Game extends SurfaceView implements Runnable {
 
                         player.dontmove = false;
                         break;
+                    case TOP:
+                        if (table != null) {
+                            table.startMove(clickX);
+                        }
+                        break;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -560,6 +557,9 @@ public final class Game extends SurfaceView implements Runnable {
                         buttonQuit.sweep(clickX, clickY);
                     case TOP:
                         buttonMenu.sweep(clickX, clickY);
+                        if (table != null) {
+                            table.setCoords(clickX);
+                        }
                         break;
                 }
                 break;
@@ -576,6 +576,9 @@ public final class Game extends SurfaceView implements Runnable {
                         buttonQuit.setCoords(clickX, clickY);
                     case TOP:
                         buttonMenu.setCoords(clickX, clickY);
+                        if (table != null) {
+                            table.stopMove();
+                        }
                         break;
                 }
                 break;
@@ -1016,11 +1019,11 @@ public final class Game extends SurfaceView implements Runnable {
         buttonQuit.render();
         buttonMenu.render();
         buttonRestart.render();
-        buttonPlayer.render();
-        buttonSaturn.render();
-        buttonEmerald.render();
 
         if (buttonPlayer.x < SCREEN_WIDTH) {
+            buttonPlayer.render();
+            buttonSaturn.render();
+            buttonEmerald.render();
             canvas.drawText(string_choose_your_character, chooseChX, chooseChY, paint50);
         }
     }
@@ -1226,11 +1229,27 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     private void updateMenuButtons() {
-        while (buttonStart.right() > buttonMenu.x) {
-            buttonMenu.newFunc(string_top, HALF_SCREEN_WIDTH, buttonsY, TOP);
-            buttonStart.newFunc(string_start, HALF_SCREEN_WIDTH - buttonMenu.width, buttonsY, GAME);
-            buttonQuit.newFunc(string_quit, buttonStart.x - buttonStart.width, buttonsY, QUIT);
-            buttonRestart.newFunc(string_settings, buttonMenu.x + buttonQuit.width, buttonsY, SETTINGS);
+        buttonMenu.newFunc(string_top, HALF_SCREEN_WIDTH, buttonsY, TOP);
+        buttonRestart.newFunc(string_settings, buttonMenu.right(), buttonsY, SETTINGS);
+        buttonStart.newFunc(string_start, HALF_SCREEN_WIDTH - buttonMenu.width, buttonsY, GAME);
+        buttonQuit.newFunc(string_quit, buttonStart.x - buttonMenu.width, buttonsY, QUIT);
+    }
+
+    private void resizeButtons(String[] texts) {
+        if (ImageHub.buttonImagePressed != null) {
+            int max = 0;
+            for (String text : texts) {
+                int len = (int) buttonsPaint.measureText(text);
+                if (len > max) {
+                    max = len;
+                }
+            }
+            max += 70;
+
+            if (max != ImageHub.buttonImagePressed.getWidth()) {
+                ImageHub.buttonImagePressed = ImageHub.resizeBitmap(ImageHub.buttonImagePressed, max, ImageHub._70);
+                ImageHub.buttonImageNotPressed = ImageHub.resizeBitmap(ImageHub.buttonImageNotPressed, max, ImageHub._70);
+            }
         }
     }
 
@@ -1308,6 +1327,7 @@ public final class Game extends SurfaceView implements Runnable {
     private void startGame() {
         Service.runOnUiThread(() -> {
             setBackground(null);
+            holder.setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
             String[] settings = Clerk.getSettings().split(" ");
             AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
@@ -1350,28 +1370,21 @@ public final class Game extends SurfaceView implements Runnable {
 
     public void confirmLanguage(boolean set) {
         String[] strings = new String[0];
-        gameOverPaint.setTextSize(39);
         switch (language) {
             case "ru":
                 strings = resources.getStringArray(R.array.ru);
-                buttonsPaint.setTextSize(33);
                 break;
             case "en":
                 strings = resources.getStringArray(R.array.en);
-                gameOverPaint.setTextSize(50);
-                buttonsPaint.setTextSize(35);
                 break;
             case "fr":
                 strings = resources.getStringArray(R.array.fr);
-                buttonsPaint.setTextSize(34);
                 break;
             case "sp":
                 strings = resources.getStringArray(R.array.sp);
-                buttonsPaint.setTextSize(33);
                 break;
             case "ge":
                 strings = resources.getStringArray(R.array.ge);
-                buttonsPaint.setTextSize(34);
                 break;
         }
         string_current_score = strings[0] + " ";
@@ -1398,9 +1411,13 @@ public final class Game extends SurfaceView implements Runnable {
         string_choose_lang = strings[21];
         string_smooth = strings[22];
 
+        calculatePaint(gameOverPaint, string_go_to_menu, 50, SCREEN_WIDTH - calculate(200));
+        calculatePaint(startPaint, string_shoot, 270, SCREEN_WIDTH - calculate(200));
+        resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
+
         if (set) {
-            buttonQuit.setText(string_quit);
-            buttonMenu.setText(string_to_menu);
+            buttonQuit.newFunc(string_quit, HALF_SCREEN_WIDTH + 30, buttonsY, QUIT);
+            buttonMenu.newFunc(string_to_menu, HALF_SCREEN_WIDTH - 30 - buttonQuit.width, buttonsY, AFTER_SETTINGS);
         }
 
         makeScoresParams();
@@ -1414,6 +1431,18 @@ public final class Game extends SurfaceView implements Runnable {
         shootY = (int) ((SCREEN_HEIGHT + startPaint.getTextSize()) / 2);
         go_to_restartX = (int) ((SCREEN_WIDTH - gameOverPaint.measureText(string_go_to_restart)) / 2);
         go_to_restartY = (int) (SCREEN_HEIGHT * 0.7);
+        _3 = (int) ((SCREEN_WIDTH - startPaint.measureText("3")) / 2);
+        _2 = (int) ((SCREEN_WIDTH - startPaint.measureText("2")) / 2);
+        _1 = (int) ((SCREEN_WIDTH - startPaint.measureText("1")) / 2);
+        _321Y = (int) ((SCREEN_HEIGHT + startPaint.getTextSize()) / 2);
+    }
+
+    private static void calculatePaint(CustomPaint paint, String text, int startValue, int textLen) {
+        paint.setTextSize(startValue);
+
+        while (paint.measureText(text) >= textLen) {
+            paint.setTextSize(paint.getTextSize() - 2);
+        }
     }
 
     private void recoverySettings() {

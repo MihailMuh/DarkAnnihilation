@@ -1,7 +1,6 @@
 package ru.warfare.darkannihilation;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 
 import java.util.ArrayList;
 
@@ -12,11 +11,12 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Table {
-    private final Paint topPaint = new Paint();
-    private final Paint topPaintRed = new Paint();
+    private final CustomPaint topPaint = new CustomPaint();
+    private final CustomPaint topPaintRed = new CustomPaint();
 
     private final ArrayList<ArrayList<String>> table = new ArrayList<>(0);
     private final ArrayList<Float> maxes = new ArrayList<>(0);
+    private float[] finalMaxes;
 
     private float textHeight;
     private final int[] index = new int[2];
@@ -31,31 +31,27 @@ public class Table {
     private int errY;
     private String string_error;
 
+    private int startX = 0;
+    private volatile float speedX = 0;
+    private boolean stop = false;
+    private static final byte left = 100;
+    private int tableSize;
+
     public Table(int tableHeight) {
         table.add(new ArrayList<>(0));
         this.tableHeight = tableHeight;
 
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setFilterBitmap(true);
-        paint.setDither(true);
-        paint.setAntiAlias(true);
-        paint.setTextSize(30);
+        topPaint.setTextSize(30);
 
-        topPaint.set(paint);
-
-        topPaintRed.set(paint);
+        topPaintRed.set(topPaint);
         topPaintRed.setColor(Color.RED);
 
-        textHeight = topPaint.getTextSize() * 1.45f;
+        textHeight = topPaint.getTextSize() * 2f;
     }
 
     public Table(String lang, boolean err) {
         topPaintRed.setColor(Color.RED);
-        topPaintRed.setFilterBitmap(true);
-        topPaintRed.setDither(true);
-        topPaintRed.setAntiAlias(true);
-        topPaintRed.setTextSize(50);
+        topPaintRed.setTextSize(40);
 
         offline = true;
 
@@ -85,6 +81,20 @@ public class Table {
         errY = (int) ((SCREEN_HEIGHT + topPaintRed.getTextSize()) / 2);
     }
 
+    public void startMove(int X) {
+        startX = X;
+        stop = false;
+    }
+
+    public void setCoords(int X) {
+        speedX = (startX - X) / 1.5f;
+        startX = X;
+    }
+
+    public void stopMove() {
+        stop = true;
+    }
+
     public void addText(String text) {
         if (curHeight < tableHeight) {
             table.get(columns).add(text);
@@ -104,18 +114,22 @@ public class Table {
     }
 
     public void makeTable() {
-        for (int i = 0; i < table.size(); i++) {
-            maxes.add(-100f);
+        tableSize = table.size();
+        finalMaxes = new float[tableSize];
+
+        for (int i = 0; i < tableSize; i++) {
+            float max = 0;
 
             for (int j = 0; j < table.get(i).size(); j++) {
                 float currentLen = topPaint.measureText(table.get(i).get(j));
-                if (i == 0) currentLen /= 2f;
 
-                if (currentLen > maxes.get(i)) {
-                    maxes.set(i, currentLen);
+                if (currentLen > max) {
+                    max = currentLen;
                 }
             }
-            maxes.set(i, maxes.get(i) + 50);
+
+            maxes.add(max + left);
+            finalMaxes[i] = max;
         }
 
         finish = true;
@@ -125,11 +139,10 @@ public class Table {
         if (!offline) {
             if (finish) {
                 float xForCurColumn = 0;
-                for (int i = 0; i < table.size(); i++) {
-                    xForCurColumn += maxes.get(i);
+                for (int i = 0; i < tableSize; i++) {
                     for (int j = 0; j < table.get(i).size(); j++) {
                         String string = table.get(i).get(j);
-                        float x = xForCurColumn - (topPaint.measureText(string) / 2f);
+                        float x = ((maxes.get(i) - topPaint.measureText(string)) / 2f) + xForCurColumn;
                         float y = (j + 1) * textHeight;
 
                         if (i == index[0] && j == index[1]) {
@@ -138,6 +151,22 @@ public class Table {
                             Game.canvas.drawText(string, x, y, topPaint);
                         }
                     }
+
+                    maxes.set(i, maxes.get(i) - speedX);
+
+                    xForCurColumn += finalMaxes[i] + left;
+                }
+
+                while (maxes.get(0) - finalMaxes[0] >= left) {
+                    for (int i = 0; i < tableSize; i++) {
+                        maxes.set(i, maxes.get(i) - 10f);
+                    }
+                    stop = false;
+                    speedX = 0;
+                }
+
+                if (stop) {
+                    speedX /= 1.02f;
                 }
             }
         } else {

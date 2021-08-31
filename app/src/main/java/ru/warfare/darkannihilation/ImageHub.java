@@ -214,7 +214,7 @@ public final class ImageHub {
             stringBuilder.append("_").append(i);
             glideManager.run(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
                 screenImage[finalI] = object;
-                if (finalI > 31) {
+                if (finalI == 33) {
                     endImgInit = true;
                 }
             });
