@@ -15,7 +15,7 @@ import ru.warfare.darkannihilation.interfaces.BoxDrawable;
 import ru.warfare.darkannihilation.interfaces.GlideCallback;
 
 public class GlideManager {
-    public void run(int id, int width, int height, BoxBitmap boxBitmap) {
+    public void run(Object id, int width, int height, BoxBitmap boxBitmap) {
         GlideApp.with(activity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -25,11 +25,11 @@ public class GlideManager {
                 .submit();
     }
 
-    public void run(int id, int len, BoxBitmap boxBitmap) {
+    public void run(Object id, int len, BoxBitmap boxBitmap) {
         run(id, len, len, boxBitmap);
     }
 
-    public void runCrop(int id, int width, int height, BoxBitmap boxBitmap) {
+    public void runCrop(Object id, int width, int height, BoxBitmap boxBitmap) {
         GlideApp.with(activity)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -40,7 +40,7 @@ public class GlideManager {
                 .submit();
     }
 
-    public void runDrawable(int id, int width, int height, BoxDrawable boxDrawable) {
+    public void runDrawable(Object id, int width, int height, BoxDrawable boxDrawable) {
         GlideApp.with(activity)
                 .asDrawable()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -50,7 +50,7 @@ public class GlideManager {
                 .submit();
     }
 
-    public void runGif(int id, int width, int height, BoxDrawable boxDrawable, boolean crop) {
+    public void runGif(Object id, int width, int height, BoxDrawable boxDrawable, boolean crop) {
         RequestBuilder<GifDrawable> requestBuilder =
                 GlideApp.with(activity)
                         .asGif()

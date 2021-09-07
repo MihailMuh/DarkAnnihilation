@@ -15,8 +15,7 @@ import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
-import static ru.warfare.darkannihilation.systemd.service.Service.packageName;
-import static ru.warfare.darkannihilation.systemd.service.Service.resources;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.*;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
@@ -24,6 +23,7 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -179,40 +179,31 @@ public final class ImageHub {
         int _600 = calculate(600);
         int _144 = calculate(144);
         int _154 = calculate(154);
+        Uri uri;
         for (int i = 0; i < NUMBER_STAR_SCREEN_IMAGES; i++) {
             final int finalI = i;
 
             if (i < NUMBER_VADER_IMAGES) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("vader").append(i);
-                glideManager.run(getId(), _75, object -> vaderImages[finalI] = object);
+                glideManager.run(vader(i), _75, object -> vaderImages[finalI] = object);
             }
             if (i < NUMBER_LOADING_SCREEN_IMAGES) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("loading").append(i);
-                glideManager.runCrop(getId(), SCREEN_WIDTH, SCREEN_HEIGHT, object -> loadingImages[finalI] = object);
+                glideManager.runCrop(loadingScreen(i), SCREEN_WIDTH, SCREEN_HEIGHT, object -> loadingImages[finalI] = object);
             }
             if (i < NUMBER_SKULL_EXPLOSION_IMAGES) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("explosion_skull_").append(i);
-                glideManager.run(getId(), _522, _600, object -> explosionLarge[finalI] = object);
+                glideManager.run(skullExplosion(i), _522, _600, object -> explosionLarge[finalI] = object);
             }
             if (i < NUMBER_TRIPLE_EXPLOSION_IMAGES) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("explosion_").append(i);
-                glideManager.run(getId(), _150, _144, object -> explosionTripleImageMedium[finalI] = object);
-                glideManager.run(getId(), _50, object -> explosionTripleImageSmall[finalI] = object);
+                uri = tripleExplosion(i);
+                glideManager.run(uri, _150, _144, object -> explosionTripleImageMedium[finalI] = object);
+                glideManager.run(uri, _50, object -> explosionTripleImageSmall[finalI] = object);
             }
             if (i < NUMBER_DEFAULT_EXPLOSION_IMAGES) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("default_explosion_").append(i);
-                glideManager.run(getId(), _150, _154, object -> explosionDefaultImageMedium[finalI] = object);
-                glideManager.run(getId(), _50, object -> explosionDefaultImageSmall[finalI] = object);
+                uri = defaultExplosion(i);
+                glideManager.run(uri, _150, _154, object -> explosionDefaultImageMedium[finalI] = object);
+                glideManager.run(uri, _50, object -> explosionDefaultImageSmall[finalI] = object);
             }
 
-            stringBuilder.setLength(0);
-            stringBuilder.append("_").append(i);
-            glideManager.run(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
+            glideManager.run(starScreen(i), screenWidth_135, SCREEN_HEIGHT, object -> {
                 screenImage[finalI] = object;
                 if (finalI == 33) {
                     endImgInit = true;
@@ -223,12 +214,9 @@ public final class ImageHub {
 
     public static void loadPortalImages() {
         if (portalImages[0] == null) {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < NUMBER_PORTAL_IMAGES; i++) {
                 final int finalI = i;
-
-                stringBuilder.setLength(0);
-                stringBuilder.append("portal0").append(i);
-                glideManager.run(getId(), _300, object -> portalImages[finalI] = object);
+                glideManager.run(portal(i), _300, object -> portalImages[finalI] = object);
             }
         }
     }
@@ -251,22 +239,16 @@ public final class ImageHub {
         glideManager.run(R.drawable.bull_boss_vader, _150, object -> bulletBossVadersImg = object);
         glideManager.run(R.drawable.buffer, _400, _350, object -> bufferImg = object);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < NUMBER_THUNDER_SCREEN_IMAGES; i++) {
             final int finalI = i;
 
-            if (i < 3) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("vader0").append(i);
-                glideManager.run(getId(), _75, object -> vaderImages[finalI] = object);
+            if (i < NUMBER_VADER_IMAGES) {
+                glideManager.run(vaderOld(i), _75, object -> vaderImages[finalI] = object);
             }
-            if (i < 4) {
-                stringBuilder.setLength(0);
-                stringBuilder.append("atom").append(i);
-                glideManager.run(getId(), _100, _300, object -> atomBombImage[finalI] = object);
+            if (i < NUMBER_ATOMIC_BOMB_IMAGES) {
+                glideManager.run(atomicBomb(i), _100, _300, object -> atomBombImage[finalI] = object);
             }
-            stringBuilder.setLength(0);
-            stringBuilder.append("thunder").append(i);
-            glideManager.runCrop(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
+            glideManager.runCrop(thunderScreen(i), screenWidth_135, SCREEN_HEIGHT, object -> {
                 thunderScreen[finalI] = object;
                 if (finalI == 18) {
                     endImgInit = true;
@@ -279,9 +261,9 @@ public final class ImageHub {
 
     public static void deleteSecondLevelImages() {
         if (thunderScreen[0] != null) {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < NUMBER_THUNDER_SCREEN_IMAGES; i++) {
                 thunderScreen[i].recycle();
-                if (i < 4) {
+                if (i < NUMBER_ATOMIC_BOMB_IMAGES) {
                     atomBombImage[i].recycle();
                 }
             }
@@ -325,14 +307,12 @@ public final class ImageHub {
             for (int i = 0; i < NUMBER_STAR_SCREEN_IMAGES; i++) {
                 int finalI = i;
 
-                if (i < 3) {
-                    stringBuilder.setLength(0);
-                    stringBuilder.append("vader").append(i);
-                    glideManager.run(getId(), _75, object -> vaderImages[finalI] = object);
+                if (i < NUMBER_VADER_IMAGES) {
+                    glideManager.run(vader(i), _75, object -> vaderImages[finalI] = object);
                 }
                 stringBuilder.setLength(0);
                 stringBuilder.append("_").append(i);
-                glideManager.run(getId(), screenWidth_135, SCREEN_HEIGHT, object -> {
+                glideManager.run(starScreen(i), screenWidth_135, SCREEN_HEIGHT, object -> {
                     screenImage[finalI] = object;
                     if (finalI == 33) {
                         endImgInit = true;
@@ -486,9 +466,7 @@ public final class ImageHub {
 
         for (int i = 0; i < NUMBER_LIGHTNING_IMAGES; i++) {
             int finalI = i;
-            stringBuilder.setLength(0);
-            stringBuilder.append("laser").append(i);
-            glideManager.run(getId(), _03545, SCREEN_HEIGHT, object -> thunderImage[finalI] = object);
+            glideManager.run(laser(i), _03545, SCREEN_HEIGHT, object -> thunderImage[finalI] = object);
         }
 
         deleteSaturn();
@@ -505,24 +483,23 @@ public final class ImageHub {
 
     public static void loadGunsImages(byte character) {
         endImgInit = false;
-        String str = "";
-        switch (character) {
-            case SATURN:
-                str = "saturn";
-                break;
-            case MILLENNIUM_FALCON:
-                str = "millennium";
-                break;
-            case EMERALD:
-                str = "emerald";
-                break;
-        }
+        Uri uri = null;
 
         for (int i = 0; i < NUMBER_VADER_IMAGES; i++) {
             int finalI = i;
-            stringBuilder.setLength(0);
-            stringBuilder.append(str).append("_guns").append(i);
-            glideManager.run(getId(), _400, _314, object -> {
+
+            switch (character) {
+                case SATURN:
+                    uri = saturnGuns(i);
+                    break;
+                case MILLENNIUM_FALCON:
+                    uri = millennuimGuns(i);
+                    break;
+                case EMERALD:
+                    uri = emeraldGuns(i);
+                    break;
+            }
+            glideManager.run(uri, _400, _314, object -> {
                 gunsImage[finalI] = object;
 
                 if (finalI == 2) {
@@ -599,10 +576,6 @@ public final class ImageHub {
         }
     }
 
-    private static int getId() {
-        return resources.getIdentifier(stringBuilder.toString(), "drawable", packageName);
-    }
-
     public static Bitmap rotateBitmap(Bitmap image, float degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
@@ -619,7 +592,7 @@ public final class ImageHub {
         } else {
             matrix.postScale(1, -1, width / 2f, height / 2f);
         }
-        return Bitmap.createBitmap(image, 0, 0, width,height, matrix, true);
+        return Bitmap.createBitmap(image, 0, 0, width, height, matrix, true);
     }
 
     public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {

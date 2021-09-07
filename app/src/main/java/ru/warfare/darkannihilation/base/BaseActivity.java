@@ -41,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
         super.onStart();
         fullscreen();
     }

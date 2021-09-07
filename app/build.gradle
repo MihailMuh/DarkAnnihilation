@@ -3,10 +3,9 @@ plugins {
 }
 
 android {
-
     signingConfigs {
         config {
-        storeFile file('C:\\Program Files\\Android\\KeyStore\\key1.jks')
+            storeFile file('C:\\Program Files\\Android\\KeyStore\\key1.jks')
             storePassword '1234567mli'
             keyAlias 'key0'
             keyPassword '1234567mli'
@@ -70,7 +69,4 @@ dependencies {
     implementation 'com.github.skydoves:powerspinner:1.1.9'
 
     implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
-}
-repositories {
-    mavenCentral()
 }

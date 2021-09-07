@@ -165,9 +165,11 @@ public class Table {
                     speedX = 0;
                 }
 
-                if (stop) {
-                    speedX /= 1.02f;
-                }
+                HardThread.doInBackGround(() -> {
+                    if (stop) {
+                        speedX /= 1.02f;
+                    }
+                });
             }
         } else {
             Game.canvas.drawText(string_error, errX, errY, topPaintRed);
