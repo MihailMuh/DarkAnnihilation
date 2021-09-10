@@ -1,7 +1,6 @@
 package ru.warfare.darkannihilation.button;
 
 import static ru.warfare.darkannihilation.constant.Constants.CHANGER_GUNS_CLICK_TIME;
-import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
@@ -60,7 +59,7 @@ public class ChangerGuns extends BaseButton {
 
     @Override
     public void setCoords(int X, int Y) {
-        if (Game.gameStatus == GAME && checkCoords(X, Y)) {
+        if (check(X, Y)) {
             make();
         }
     }
@@ -68,11 +67,16 @@ public class ChangerGuns extends BaseButton {
     @Override
     public boolean checkCoords(int X, int Y) {
         if (!isInvisible) {
-            if (x < X) {
-                if (X < right()) {
-                    if (y < Y) {
-                        return Y < bottom();
-                    }
+            return check(X, Y);
+        }
+        return false;
+    }
+
+    private boolean check(int X, int Y) {
+        if (x < X) {
+            if (X < right()) {
+                if (y < Y) {
+                    return Y < bottom();
                 }
             }
         }

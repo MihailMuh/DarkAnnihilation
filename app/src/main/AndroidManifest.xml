@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.warfare.darkannihilation">
 
@@ -10,29 +9,33 @@
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <application
-        android:icon="@drawable/icon"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.DarkAnnihilation"
-
         android:allowBackup="false"
-        android:hardwareAccelerated="true"
-        android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:isGame="true"
         android:colorMode="wideColorGamut"
+        android:hardwareAccelerated="true"
+
+        android:icon="@drawable/icon"
+        android:isGame="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DarkAnnihilation"
+        android:usesCleartextTraffic="true"
 
         tools:replace="android:icon, android:allowBackup">
         <activity
-            android:screenOrientation="landscape"
-            android:immersive="true"
+            android:name=".systemd.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:hardwareAccelerated="true"
-            android:name=".systemd.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:immersive="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6694626552209820~1657512357" />
     </application>
 </manifest>

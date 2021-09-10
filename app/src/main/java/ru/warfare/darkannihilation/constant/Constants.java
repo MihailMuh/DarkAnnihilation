@@ -146,4 +146,5 @@ public final class Constants {
 //    constants
     public static final String SERVER_IP = "http://78.29.33.173:49150/";
     public static final String TAG = "D'Ark";
+    public static final String ADMOB_ID = "ca-app-pub-6694626552209820/7260374588";
 }

@@ -20,6 +20,7 @@ import static ru.warfare.darkannihilation.constant.Modes.QUIT;
 import static ru.warfare.darkannihilation.constant.Modes.RESTART;
 import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.TOP;
+import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 
 public class Button extends BaseButton {
     public byte function;
@@ -78,6 +79,7 @@ public class Button extends BaseButton {
                         Service.systemExit();
                         break;
                     case PAUSE:
+                        activity.closeAdMob();
                         game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
                         AudioHub.deletePauseMusic();
                         AudioHub.whoIsPlayed();

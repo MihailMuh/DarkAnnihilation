@@ -266,6 +266,10 @@ public final class Game extends SurfaceView implements Runnable {
         fpsX = SCREEN_WIDTH - 250;
         tableY = buttonsY - (ImageHub._70 * 2);
 
+        String[] settings = Clerk.getSettings().split(" ");
+        AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
+        AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
+
         Time.waitImg();
 
         buttonMenu = new Button(this);
@@ -662,6 +666,8 @@ public final class Game extends SurfaceView implements Runnable {
         buttonQuit.newFunc(string_quit, X, buttonMenu.bottom() + 30, QUIT);
 
         gameStatus = PAUSE;
+
+        activity.initAdMob();
     }
 
     public void generateSettings() {
@@ -685,6 +691,7 @@ public final class Game extends SurfaceView implements Runnable {
         AudioHub.pauseBackgroundMusic();
         AudioHub.pauseBossMusic();
         AudioHub.loadMenuSnd();
+        activity.closeAdMob();
 
         level = 1;
         enemies = new ArrayList<>(0);
@@ -741,6 +748,7 @@ public final class Game extends SurfaceView implements Runnable {
         AudioHub.deleteMenuSnd();
         AudioHub.pauseBossMusic();
         AudioHub.deletePauseMusic();
+        activity.closeAdMob();
 
         enemies = new ArrayList<>(0);
         ghosts = new ArrayList<>(0);
@@ -1328,10 +1336,6 @@ public final class Game extends SurfaceView implements Runnable {
         Service.runOnUiThread(() -> {
             setBackground(null);
             holder.setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-            String[] settings = Clerk.getSettings().split(" ");
-            AudioHub.newVolumeForBackground(Float.parseFloat(settings[0]));
-            AudioHub.newVolumeForEffects(Float.parseFloat(settings[1]));
 
             AudioHub.loadMenuSnd();
         });

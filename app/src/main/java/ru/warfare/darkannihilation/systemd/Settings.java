@@ -183,12 +183,10 @@ public class Settings {
     }
 
     private void makeLanguage() {
-        int angle = (int) (finalVolumeEffects * 100);
-        angleEffects.setText((string_volume + " " + angle));
+        angleEffects.setText((string_volume + " " + (int) (finalVolumeEffects * 100)));
         textViewEffects.setText(string_loud_effects);
 
-        angle = (int) (finalVolumeMusic * 100);
-        angleMusic.setText((string_volume + " " + angle));
+        angleMusic.setText((string_volume + " " + (int) (finalVolumeMusic * 100)));
         textViewMusic.setText(string_loud_music);
 
         textViewVibration.setText(string_vibration);

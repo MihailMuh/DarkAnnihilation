@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,9 +11,9 @@
         android:id="@+id/gameView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/background" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArcEffects"
@@ -20,6 +21,7 @@
         android:layout_height="250dp"
         android:layout_gravity="center"
         android:padding="30dp"
+        android:visibility="gone"
         app:arcColor="@color/white"
         app:arcWidth="7dp"
         app:clockwise="false"
@@ -34,19 +36,18 @@
         app:roundEdges="true"
         app:startAngle="30"
         app:sweepAngle="300"
-        app:touchInside="true"
-        android:visibility="gone" />
+        app:touchInside="true" />
 
     <TextView
         android:id="@+id/angleEffects"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/seekArcEffects"
         app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
         app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
-        app:layout_constraintTop_toTopOf="@+id/seekArcEffects"
-        android:visibility="gone" />
+        app:layout_constraintTop_toTopOf="@+id/seekArcEffects" />
 
     <TextView
         android:id="@+id/textViewEffects"
@@ -54,10 +55,10 @@
         android:layout_height="wrap_content"
         android:text="@string/change_loud_of_sound_effects"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/seekArcEffects"
         app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
-        app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
-        android:visibility="gone" />
+        app:layout_constraintStart_toStartOf="@+id/seekArcEffects" />
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArcMusic"
@@ -65,6 +66,7 @@
         android:layout_height="250dp"
         android:layout_gravity="center"
         android:padding="30dp"
+        android:visibility="gone"
         app:arcColor="@color/white"
         app:arcWidth="7dp"
         app:clockwise="false"
@@ -79,8 +81,7 @@
         app:roundEdges="true"
         app:startAngle="30"
         app:sweepAngle="300"
-        app:touchInside="true"
-        android:visibility="gone" />
+        app:touchInside="true" />
 
     <TextView
         android:id="@+id/textViewMusic"
@@ -88,21 +89,21 @@
         android:layout_height="wrap_content"
         android:text="@string/change_loud_of_sound_music"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/seekArcMusic"
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
-        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
-        android:visibility="gone" />
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic" />
 
     <TextView
         android:id="@+id/angleMusic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/seekArcMusic"
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
         app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
-        app:layout_constraintTop_toTopOf="@+id/seekArcMusic"
-        android:visibility="gone" />
+        app:layout_constraintTop_toTopOf="@+id/seekArcMusic" />
 
     <TextView
         android:id="@+id/textVibration"
@@ -112,15 +113,16 @@
         android:text="@string/vibration"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/stickySwitch"
         app:layout_constraintEnd_toEndOf="@+id/stickySwitch"
-        app:layout_constraintStart_toStartOf="@+id/stickySwitch"
-        android:visibility="gone" />
+        app:layout_constraintStart_toStartOf="@+id/stickySwitch" />
 
     <io.ghyeok.stickyswitch.widget.StickySwitch
         android:id="@+id/stickySwitch"
         android:layout_width="150dp"
         android:layout_height="90dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
         app:layout_constraintHorizontal_bias="0.49"
@@ -136,19 +138,18 @@
         app:ss_selectedTextSize="15sp"
         app:ss_sliderBackgroundColor="#87CEFA"
         app:ss_switchColor="#6A5ACD"
-        app:ss_textSize="12sp"
-        android:visibility="gone" />
+        app:ss_textSize="12sp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/gameView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gameView"
-        app:layout_constraintVertical_bias="0.155"
-        android:visibility="gone" />
+        app:layout_constraintVertical_bias="0.155" />
 
     <com.skydoves.powerspinner.PowerSpinnerView
         android:id="@+id/spinner"
@@ -162,6 +163,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/gameView"
         app:layout_constraintEnd_toStartOf="@+id/seekArcEffects"
         app:layout_constraintHorizontal_bias="0.538"
@@ -176,8 +178,7 @@
         app:spinner_divider_size="0.2dp"
         app:spinner_popup_animation="fade"
         app:spinner_popup_background="#87CEFA"
-        app:spinner_popup_elevation="14dp"
-        android:visibility="gone" />
+        app:spinner_popup_elevation="14dp" />
 
     <TextView
         android:id="@+id/textSpinner"
@@ -187,9 +188,33 @@
         android:text="@string/choose_your_language"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@+id/spinner"
-        android:visibility="gone" />
+        app:layout_constraintStart_toStartOf="@+id/spinner" />
+
+    <!--    <com.google.android.gms.ads.AdView-->
+    <!--        android:id="@+id/pauseAdMob"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="20dp"-->
+    <!--        ads:adSize="BANNER"-->
+    <!--        ads:adUnitId="ca-app-pub-3940256099942544/2247696110"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/pauseAdMob"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/2247696110"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

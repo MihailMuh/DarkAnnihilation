@@ -554,13 +554,20 @@ public final class ImageHub {
 
     public static void loadSettingsImages() {
         if (onImg == null) {
+            endImgInit = false;
+
             glideManager.runDrawable(R.drawable.on, _100, _80, object -> onImg = object);
             glideManager.runDrawable(R.drawable.off, _100, _100, object -> offImg = object);
             glideManager.runDrawable(R.drawable.en, _200, _100, object -> enImg = object);
             glideManager.runDrawable(R.drawable.ru, _200, _100, object -> ruImg = object);
             glideManager.runDrawable(R.drawable.fr, _200, _100, object -> frImg = object);
             glideManager.runDrawable(R.drawable.sp, _200, _100, object -> spImg = object);
-            glideManager.runDrawable(R.drawable.ge, _200, _100, object -> geImg = object);
+            glideManager.runDrawable(R.drawable.ge, _200, _100, object -> {
+                geImg = object;
+                endImgInit = true;
+            });
+
+            Time.waitImg();
         }
     }
 

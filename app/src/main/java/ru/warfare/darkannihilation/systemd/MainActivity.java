@@ -10,6 +10,13 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+
+import java.util.Collections;
+
 import ru.warfare.darkannihilation.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
@@ -24,6 +31,7 @@ import ru.warfare.darkannihilation.systemd.service.Windows;
 
 public final class MainActivity extends BaseActivity {
     public Game game;
+    private AdView pauseBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +48,17 @@ public final class MainActivity extends BaseActivity {
             AudioHub.init();
             Vibrator.init();
             Fonts.init();
+            MobileAds.initialize(this);
+            MobileAds.setRequestConfiguration(new RequestConfiguration.Builder()
+                    .setTestDeviceIds(Collections.singletonList("5371A173E68885BC058877681D34AB6B")).build());
 
             game.init();
 
             runOnUiThread(this::checkOnFirstRun);
         });
+//        pauseBanner = findViewById(R.id.pauseAdMob);
+//        pauseBanner.setAdUnitId(ADMOB_ID);
+//        pauseBanner = null;
     }
 
     @Override
@@ -57,6 +71,21 @@ public final class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         game.onResume();
+    }
+
+    public void initAdMob() {
+        pauseBanner = findViewById(R.id.pauseAdMob);
+        pauseBanner.loadAd(new AdRequest.Builder().build());
+
+        pauseBanner.setVisibility(View.VISIBLE);
+    }
+
+    public void closeAdMob() {
+        if (pauseBanner != null) {
+            pauseBanner.setVisibility(View.GONE);
+            pauseBanner.destroy();
+            pauseBanner = null;
+        }
     }
 
     @SuppressLint("InflateParams")
