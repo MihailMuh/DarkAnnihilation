@@ -5,6 +5,7 @@ import android.graphics.Color;
 import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 import static ru.warfare.darkannihilation.systemd.service.Service.resources;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;

@@ -13,7 +13,11 @@ public final class Time {
 
     public static void waitImg() {
         while (!endImgInit) {
-            sleep(250);
+            relax();
         }
+    }
+
+    public static void relax() {
+        Thread.yield();
     }
 }

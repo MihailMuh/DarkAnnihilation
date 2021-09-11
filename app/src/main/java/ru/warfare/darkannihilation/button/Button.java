@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.button;
 
 import ru.warfare.darkannihilation.systemd.service.Clerk;
 import ru.warfare.darkannihilation.systemd.service.ClientServer;
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -11,7 +11,6 @@ import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
 
 import static ru.warfare.darkannihilation.constant.Constants.BUTTON_CLICK_TIME;
-import static ru.warfare.darkannihilation.constant.Modes.AFTER_PAUSE;
 import static ru.warfare.darkannihilation.constant.Modes.AFTER_SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.constant.Modes.MENU;
@@ -20,7 +19,6 @@ import static ru.warfare.darkannihilation.constant.Modes.QUIT;
 import static ru.warfare.darkannihilation.constant.Modes.RESTART;
 import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.TOP;
-import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 
 public class Button extends BaseButton {
     public byte function;
@@ -79,15 +77,7 @@ public class Button extends BaseButton {
                         Service.systemExit();
                         break;
                     case PAUSE:
-                        activity.closeAdMob();
-                        game.BOSS_TIME += System.currentTimeMillis() - game.pauseTimer;
-                        AudioHub.deletePauseMusic();
-                        AudioHub.whoIsPlayed();
-                        if (PauseButton.oldStatus != GAME) {
-                            Game.gameStatus = PauseButton.oldStatus;
-                        } else {
-                            Game.gameStatus = AFTER_PAUSE;
-                        }
+                        game.generateAfterPauseScene();
                         break;
                     case MENU:
                         game.onLoading(() -> {

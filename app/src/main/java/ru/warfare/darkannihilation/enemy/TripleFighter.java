@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -31,13 +31,15 @@ public class TripleFighter extends Sprite {
 
     private void shoot() {
         if (System.currentTimeMillis() - lastShoot > TRIPLE_FIGHTER_SHOOT_TIME) {
-            HardThread.doInBackGround(() -> {
-                int X = centerX();
-                int Y = centerY();
-                int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
-                AudioHub.playShotgun();
-            });
+            if (x > 0 & x < screenWidthWidth & y > 0 & y < screenHeightHeight) {
+                HardThread.doInBackGround(() -> {
+                    int X = centerX();
+                    int Y = centerY();
+                    int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
+                    game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+                    AudioHub.playShotgun();
+                });
+            }
             lastShoot = System.currentTimeMillis();
         }
     }
@@ -80,9 +82,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void update() {
-        if (x > 0 & x < screenWidthWidth & y > 0 & y < screenHeightHeight) {
-            shoot();
-        }
+        shoot();
 
         x += speedX;
         y += speedY;

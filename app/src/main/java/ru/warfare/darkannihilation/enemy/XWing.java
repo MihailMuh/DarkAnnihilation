@@ -4,7 +4,7 @@ import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
@@ -34,8 +34,7 @@ public class XWing extends Sprite {
     }
 
     private void shoot() {
-        long now = System.currentTimeMillis();
-        if (now - lastShoot > XWING_SHOOT_TIME) {
+        if (System.currentTimeMillis() - lastShoot > XWING_SHOOT_TIME) {
             HardThread.doInBackGround(() -> {
                 int P_X = game.player.centerX();
                 int P_Y = game.player.centerY();
@@ -47,7 +46,7 @@ public class XWing extends Sprite {
                     AudioHub.playShoot();
                 }
             });
-            lastShoot = now;
+            lastShoot = System.currentTimeMillis();
         }
     }
 

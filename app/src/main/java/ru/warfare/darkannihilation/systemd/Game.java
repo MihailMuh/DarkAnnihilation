@@ -58,7 +58,8 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.CustomPaint;
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.GameTasks;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
@@ -114,6 +115,7 @@ import ru.warfare.darkannihilation.systemd.service.Time;
 public final class Game extends SurfaceView implements Runnable {
     private final SurfaceHolder holder = getHolder();
     private Thread thread;
+    private final GameTasks gameTasks = new GameTasks(this::backGroundTasks, 250);
     public static Canvas canvas;
 
     public static CustomPaint fpsPaint;
@@ -326,6 +328,93 @@ public final class Game extends SurfaceView implements Runnable {
         }
     }
 
+    private void backGroundTasks() {
+        if (player.intersect(changerGuns)) {
+            changerGuns.intersectionPlayer();
+        } else {
+            if (player.intersect(pauseButton)) {
+                pauseButton.intersectionPlayer();
+            } else {
+                changerGuns.work();
+                pauseButton.work();
+            }
+        }
+
+        checkTimeForBoss();
+
+        if (score >= 50) {
+            if (shotgunKit.lock && !shotgunKit.picked) {
+                if (Randomize.randFloat() <= 0.15) {
+                    shotgunKit.lock = false;
+                }
+            }
+        }
+
+        if (healthKit.lock) {
+            if (Randomize.randFloat() <= 0.015) {
+                healthKit.lock = false;
+            }
+        }
+
+        if (level == 1) {
+            if (score > 50) {
+                if (attention.lock) {
+                    if (Randomize.randFloat() <= 0.06) {
+                        attention.start();
+                    }
+                }
+            }
+            if (score > 170) {
+                if (boss == null) {
+                    if (factory.lock) {
+                        if (Randomize.randFloat() <= 0.0135) {
+                            factory.lock = false;
+                            removeSaturnTrash();
+                        }
+                    }
+                }
+            }
+            if (score > 70) {
+                if (demoman.lock) {
+                    if (Randomize.randFloat() <= 0.0315) {
+                        demoman.start();
+                    }
+                }
+            }
+
+        } else {
+            int curScore = score - oldScore;
+            if (curScore > 30) {
+                if (spider.lock) {
+                    if (Randomize.randFloat() <= 0.015) {
+                        spider.start();
+                    }
+                }
+            }
+            if (boss == null) {
+                if (curScore > 100) {
+                    if (sunrise.lock) {
+                        if (Randomize.randFloat() <= 0.0135) {
+                            sunrise.start();
+                        }
+                    }
+                }
+                if (curScore > 50) {
+                    if (buffer.lock) {
+                        if (Randomize.randFloat() <= 0.015) {
+                            buffer.start();
+                        }
+                    }
+                }
+                if (atomicBomb.lock) {
+                    if (Randomize.randFloat() <= 0.033) {
+                        atomicBomb.start();
+                    }
+                }
+            }
+        }
+    }
+
     private void gameplay() {
         moveAll = player.speedX / 3;
 
@@ -351,91 +440,6 @@ public final class Game extends SurfaceView implements Runnable {
 
         turnIntersectOnlyPlayer();
         turnExplosions();
-
-        if (player.intersect(changerGuns)) {
-            changerGuns.intersectionPlayer();
-        } else {
-            if (player.intersect(pauseButton)) {
-                pauseButton.intersectionPlayer();
-            } else {
-                changerGuns.work();
-                pauseButton.work();
-            }
-        }
-
-        checkTimeForBoss();
-
-        if (score >= 50) {
-            if (shotgunKit.lock && !shotgunKit.picked) {
-                if (Randomize.randFloat() <= 0.01) {
-                    shotgunKit.lock = false;
-                }
-            }
-        }
-
-        if (healthKit.lock) {
-            if (Randomize.randFloat() <= 0.001) {
-                healthKit.lock = false;
-            }
-        }
-
-        if (level == 1) {
-            if (score > 50) {
-                if (attention.lock) {
-                    if (Randomize.randFloat() <= 0.004) {
-                        attention.start();
-                    }
-                }
-            }
-            if (score > 170) {
-                if (boss == null) {
-                    if (factory.lock) {
-                        if (Randomize.randFloat() <= 0.0009) {
-                            factory.lock = false;
-                            removeSaturnTrash();
-                        }
-                    }
-                }
-            }
-            if (score > 70) {
-                if (demoman.lock) {
-                    if (Randomize.randFloat() <= 0.0021) {
-                        demoman.start();
-                    }
-                }
-            }
-
-        } else {
-            int curScore = score - oldScore;
-            if (curScore > 30) {
-                if (spider.lock) {
-                    if (Randomize.randFloat() <= 0.001) {
-                        spider.start();
-                    }
-                }
-            }
-            if (boss == null) {
-                if (curScore > 100) {
-                    if (sunrise.lock) {
-                        if (Randomize.randFloat() <= 0.0009) {
-                            sunrise.start();
-                        }
-                    }
-                }
-                if (curScore > 50) {
-                    if (buffer.lock) {
-                        if (Randomize.randFloat() <= 0.001) {
-                            buffer.start();
-                        }
-                    }
-                }
-                if (atomicBomb.lock) {
-                    if (Randomize.randFloat() <= 0.0022) {
-                        atomicBomb.start();
-                    }
-                }
-            }
-        }
 
         changerGuns.render();
         pauseButton.render();
@@ -610,11 +614,15 @@ public final class Game extends SurfaceView implements Runnable {
 
     public void onResume() {
         if (!isFirstRun) {
-            hardThread.startJob();
             AudioHub.whoIsPlayed();
             playing = true;
             thread = new Thread(this);
             thread.start();
+
+            if (gameStatus == GAME) {
+                gameTasks.start();
+            }
+            hardThread.startJob();
         } else {
             if (isPause) {
                 startGame();
@@ -635,6 +643,7 @@ public final class Game extends SurfaceView implements Runnable {
         AudioHub.playWinMusic();
         AudioHub.pauseBossMusic();
         AudioHub.pauseBackgroundMusic();
+        HardThread.stopSchedule();
         saveScore();
         portal.kill();
         gameStatus = PASS;
@@ -642,9 +651,10 @@ public final class Game extends SurfaceView implements Runnable {
 
     public void generateGameOver() {
         GameOver.play();
-        makeScoresParams();
         saveScore();
         getMaxScore();
+        makeScoresParams();
+        HardThread.stopSchedule();
 
         moveAll = 0;
 
@@ -656,6 +666,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         AudioHub.stopAndSavePlaying();
         AudioHub.playPauseMusic();
+        HardThread.stopSchedule();
 
         makeScoresParams();
         int X = HALF_SCREEN_WIDTH - buttonQuit.halfWidth;
@@ -671,6 +682,8 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     public void generateSettings() {
+        settings = new Settings(this);
+
         buttonPlayer.hide();
         buttonSaturn.hide();
         buttonEmerald.hide();
@@ -678,9 +691,20 @@ public final class Game extends SurfaceView implements Runnable {
         buttonQuit.newFunc(string_quit, HALF_SCREEN_WIDTH + 30, buttonsY, QUIT);
         buttonMenu.newFunc(string_to_menu, HALF_SCREEN_WIDTH - 30 - buttonQuit.width, buttonsY, AFTER_SETTINGS);
 
-        settings = new Settings(this);
-
         gameStatus = SETTINGS;
+    }
+
+    public void generateAfterPauseScene() {
+        activity.closeAdMob();
+        BOSS_TIME += System.currentTimeMillis() - pauseTimer;
+        AudioHub.deletePauseMusic();
+        AudioHub.whoIsPlayed();
+        if (PauseButton.oldStatus != GAME) {
+            gameStatus = PauseButton.oldStatus;
+        } else {
+            gameStatus = AFTER_PAUSE;
+        }
+        gameTasks.start();
     }
 
     public void generateMenu() {
@@ -709,6 +733,7 @@ public final class Game extends SurfaceView implements Runnable {
 
             ImageHub.deleteSecondLevelImages();
             ImageHub.deleteSettingsImages();
+            HardThread.stopSchedule();
 
             getMaxScore();
             alphaEnemy.setAlpha(255);
@@ -758,7 +783,7 @@ public final class Game extends SurfaceView implements Runnable {
             bullets = new ArrayList<>(0);
 
             stopExplosions();
-
+            HardThread.stopSchedule();
             makeScoresParams();
 
             BOSS_TIME = 100_000;
@@ -993,12 +1018,15 @@ public final class Game extends SurfaceView implements Runnable {
                     if (210 <= count & count < 280) {
                         canvas.drawText(string_shoot, shootX, shootY, startPaint);
                     } else {
-                        if (count >= 280) {
-                            player.lock = false;
-                            count = 0;
-                            changerGuns.x = 0;
-                            gameStatus = GAME;
-                            lastBoss = System.currentTimeMillis();
+                        if (count == 280) {
+                            HardThread.doInPool(() -> {
+                                gameStatus = GAME;
+                                player.lock = false;
+                                count = 0;
+                                changerGuns.x = 0;
+                                lastBoss = System.currentTimeMillis();
+                                gameTasks.start();
+                            });
                         }
                     }
                 }
@@ -1313,22 +1341,20 @@ public final class Game extends SurfaceView implements Runnable {
     private void checkTimeForBoss() {
         if (System.currentTimeMillis() - lastBoss > BOSS_TIME) {
             lastBoss = System.currentTimeMillis();
-            HardThread.doInPool(() -> {
-                if (boss == null && portal == null) {
-                    byte bossType = DEATH_STAR;
-                    if (level == 1) {
-                        boss = new DeathStar(this);
-                    } else {
-                        bossType = BOSS_VADERS;
-                        boss = new BossVaders(this);
-                    }
-
-                    ImageHub.loadFightScreen(character, bossType);
-
-                    fightScreen = new FightScreen();
-                    ghosts.add(boss);
+            if (boss == null && portal == null) {
+                byte bossType = DEATH_STAR;
+                if (level == 1) {
+                    boss = new DeathStar(this);
+                } else {
+                    bossType = BOSS_VADERS;
+                    boss = new BossVaders(this);
                 }
-            });
+
+                ImageHub.loadFightScreen(character, bossType);
+
+                fightScreen = new FightScreen();
+                ghosts.add(boss);
+            }
         }
     }
 

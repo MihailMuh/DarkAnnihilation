@@ -5,7 +5,7 @@ import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 

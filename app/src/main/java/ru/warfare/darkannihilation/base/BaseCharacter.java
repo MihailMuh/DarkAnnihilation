@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.service.Vibrator;
 import ru.warfare.darkannihilation.character.Heart;

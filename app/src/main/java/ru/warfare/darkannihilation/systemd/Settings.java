@@ -21,7 +21,7 @@ import com.triggertrap.seekarc.SeekArc;
 import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -108,7 +108,7 @@ public class Settings {
         stickySwitch.setOnSelectedChangeListener((direction, text) -> {
             if (text.equals(string_enable)) {
                 HardThread.doInBackGround(() -> {
-                    Time.sleep(300);
+                    Time.sleep(350);
                     Game.vibrate = true;
                     Vibrator.vibrate(60);
                 });

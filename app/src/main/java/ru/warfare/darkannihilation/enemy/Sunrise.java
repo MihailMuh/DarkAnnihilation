@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;

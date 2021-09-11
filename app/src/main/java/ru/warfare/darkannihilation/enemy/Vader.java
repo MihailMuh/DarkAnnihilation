@@ -14,6 +14,7 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 public class Vader extends Sprite {
     public Vader(Game game) {
@@ -111,7 +112,7 @@ public class Vader extends Sprite {
         y += speedY;
 
         if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
-            start();
+            HardThread.doInBackGround(this::start);
         }
     }
 

@@ -34,6 +34,7 @@ import ru.warfare.darkannihilation.glide.GlideManager;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
 import ru.warfare.darkannihilation.systemd.service.Time;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 public final class ImageHub {
     public static final Bitmap[] explosionTripleImageSmall = new Bitmap[NUMBER_TRIPLE_EXPLOSION_IMAGES];
@@ -378,10 +379,10 @@ public final class ImageHub {
             AudioHub.playFlightSnd();
             gif.start();
 
-            HardThread.doInBackGround(() -> {
+            HardThread.doInPool(() -> {
                 Time.sleep(4000);
                 while (gif.isRunning()) {
-                    Time.sleep(250);
+                    Time.relax();
                 }
 
                 Service.runOnUiThread(() -> game.setBackground(null));

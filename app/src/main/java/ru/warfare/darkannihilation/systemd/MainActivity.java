@@ -17,7 +17,7 @@ import com.google.android.gms.ads.RequestConfiguration;
 
 import java.util.Collections;
 
-import ru.warfare.darkannihilation.HardThread;
+import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -48,7 +48,8 @@ public final class MainActivity extends BaseActivity {
             AudioHub.init();
             Vibrator.init();
             Fonts.init();
-            MobileAds.initialize(this);
+            MobileAds.initialize(this, initializationStatus -> {
+            });
             MobileAds.setRequestConfiguration(new RequestConfiguration.Builder()
                     .setTestDeviceIds(Collections.singletonList("5371A173E68885BC058877681D34AB6B")).build());
 
@@ -64,6 +65,9 @@ public final class MainActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (pauseBanner != null) {
+            pauseBanner.pause();
+        }
         game.onPause();
     }
 
@@ -71,6 +75,16 @@ public final class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         game.onResume();
+        if (pauseBanner != null) {
+            pauseBanner.resume();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        game.onPause();
+        closeAdMob();
     }
 
     public void initAdMob() {

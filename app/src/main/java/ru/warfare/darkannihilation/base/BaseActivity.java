@@ -24,25 +24,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        fullscreen();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.activity_main);
-        fullscreen();
-    }
-
-    @Override
     public void onBackPressed() {
     }
 
     @Override
     protected void onResume() {
-        super.onStart();
+        super.onResume();
         fullscreen();
     }
 
