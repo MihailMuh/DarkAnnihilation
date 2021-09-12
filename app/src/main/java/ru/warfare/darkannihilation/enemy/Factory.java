@@ -4,6 +4,8 @@ import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.GameTask;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH_BAR_LEN;
@@ -13,9 +15,9 @@ import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 public class Factory extends Sprite {
-    private long lastSpawn = System.currentTimeMillis();
-    private boolean isSpawn;
+    private final GameTask gameTask = new GameTask(this::spawn, FACTORY_SPAWN_TIME);
     private float hp;
+    private boolean startSpawn = false;
 
     private static final int minionY = ImageHub.factoryImg.getHeight() - 100;
 
@@ -27,12 +29,9 @@ public class Factory extends Sprite {
         recreateRect(x + 20, y + 80, right() - 20, bottom() - 20);
     }
 
-    public void spawn() {
-        if (System.currentTimeMillis() - lastSpawn > FACTORY_SPAWN_TIME) {
-            lastSpawn = System.currentTimeMillis();
-            game.enemies.add(new Minion(game, randInt(x, right), minionY));
-            game.enemies.add(new Minion(game, randInt(x, right), minionY));
-        }
+    private void spawn() {
+        game.enemies.add(new Minion(game, randInt(x, right), minionY));
+        game.enemies.add(new Minion(game, randInt(x, right), minionY));
     }
 
     @Override
@@ -53,9 +52,12 @@ public class Factory extends Sprite {
 
     @Override
     public void kill() {
-        Game.score += 75;
-        createSkullExplosion();
-        hide();
+        HardThread.doInPool(() -> {
+            Game.score += 75;
+            createSkullExplosion();
+            hide();
+            gameTask.stop();
+        });
     }
 
     @Override
@@ -67,7 +69,6 @@ public class Factory extends Sprite {
     public void hide() {
         lock = true;
         hp = FACTORY_HEALTH_BAR_LEN;
-        isSpawn = false;
         y = -height;
         x = HALF_SCREEN_WIDTH - halfWidth;
         health = FACTORY_HEALTH;
@@ -78,10 +79,10 @@ public class Factory extends Sprite {
         if (y < 0) {
             y += FACTORY_SPEED;
         } else {
-            if (!isSpawn) {
-                isSpawn = true;
+            if (!startSpawn) {
+                startSpawn = true;
+                gameTask.start();
             }
-            spawn();
         }
     }
 

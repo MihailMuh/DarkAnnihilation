@@ -126,7 +126,6 @@ public final class ImageHub {
     private static int _7;
 
     private static final GlideManager glideManager = new GlideManager();
-    private static final StringBuilder stringBuilder = new StringBuilder();
 
     public static volatile boolean endImgInit = false;
 
@@ -311,8 +310,6 @@ public final class ImageHub {
                 if (i < NUMBER_VADER_IMAGES) {
                     glideManager.run(vader(i), _75, object -> vaderImages[finalI] = object);
                 }
-                stringBuilder.setLength(0);
-                stringBuilder.append("_").append(i);
                 glideManager.run(starScreen(i), screenWidth_135, SCREEN_HEIGHT, object -> {
                     screenImage[finalI] = object;
                     if (finalI == 33) {

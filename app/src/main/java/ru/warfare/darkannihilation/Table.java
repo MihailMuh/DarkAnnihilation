@@ -158,7 +158,7 @@ public class Table {
                     xForCurColumn += finalMaxes[i] + left;
                 }
 
-                while (maxes.get(0) - finalMaxes[0] >= left) {
+                while (maxes.get(0) - finalMaxes[0] > left) {
                     for (int i = 0; i < tableSize; i++) {
                         maxes.set(i, maxes.get(i) - 10f);
                     }

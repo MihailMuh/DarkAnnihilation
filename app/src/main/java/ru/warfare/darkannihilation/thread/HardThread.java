@@ -1,10 +1,8 @@
 package ru.warfare.darkannihilation.thread;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import ru.warfare.darkannihilation.interfaces.Function;
 
@@ -12,8 +10,7 @@ import static ru.warfare.darkannihilation.systemd.service.Py.print;
 
 public class HardThread implements Runnable {
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
-    private static final ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(8);
-    private static ScheduledFuture<?> future;
+    static ArrayList<GameTask> tasks = new ArrayList<>(0);
     private Thread thread;
     private static Function function;
     private volatile boolean playing;
@@ -36,16 +33,21 @@ public class HardThread implements Runnable {
         threadPool.execute(runnable);
     }
 
-    public static void stopSchedule() {
-        if (future != null) {
-            if (!future.isCancelled()) {
-                future.cancel(false);
-            }
+    public static void finishAndRemoveTasks() {
+        pauseTasks();
+        tasks = new ArrayList<>(0);
+    }
+
+    public static void pauseTasks() {
+        for (GameTask gameTask : tasks) {
+            gameTask.pause();
         }
     }
 
-    public static void startSchedule(Runnable runnable, int millis) {
-        future = scheduledThreadPool.scheduleWithFixedDelay(runnable, 0, millis, TimeUnit.MILLISECONDS);
+    public static void resumeTasks() {
+        for (GameTask gameTask : tasks) {
+            gameTask.resume();
+        }
     }
 
     public void stopJob() {
@@ -58,7 +60,7 @@ public class HardThread implements Runnable {
                 print("HardThread " + e);
             }
         }
-        stopSchedule();
+        pauseTasks();
     }
 
     public void startJob() {

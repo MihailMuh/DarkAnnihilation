@@ -58,7 +58,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.CustomPaint;
-import ru.warfare.darkannihilation.thread.GameTasks;
+import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.R;
@@ -114,8 +114,8 @@ import ru.warfare.darkannihilation.systemd.service.Time;
 
 public final class Game extends SurfaceView implements Runnable {
     private final SurfaceHolder holder = getHolder();
+    private final GameTask gameTask = new GameTask(this::backGroundTasks, 250);
     private Thread thread;
-    private final GameTasks gameTasks = new GameTasks(this::backGroundTasks, 250);
     public static Canvas canvas;
 
     public static CustomPaint fpsPaint;
@@ -286,6 +286,7 @@ public final class Game extends SurfaceView implements Runnable {
             healthKit = new HealthKit(this);
             shotgunKit = new ShotgunKit(this);
             loadingScreen = new LoadingScreen(this);
+            changerGuns = new ChangerGuns();
 
             newCharacterButtons();
 
@@ -619,10 +620,11 @@ public final class Game extends SurfaceView implements Runnable {
             thread = new Thread(this);
             thread.start();
 
-            if (gameStatus == GAME) {
-                gameTasks.start();
-            }
             hardThread.startJob();
+
+            if (gameStatus == GAME) {
+                HardThread.resumeTasks();
+            }
         } else {
             if (isPause) {
                 startGame();
@@ -643,7 +645,7 @@ public final class Game extends SurfaceView implements Runnable {
         AudioHub.playWinMusic();
         AudioHub.pauseBossMusic();
         AudioHub.pauseBackgroundMusic();
-        HardThread.stopSchedule();
+        HardThread.finishAndRemoveTasks();
         saveScore();
         portal.kill();
         gameStatus = PASS;
@@ -654,7 +656,7 @@ public final class Game extends SurfaceView implements Runnable {
         saveScore();
         getMaxScore();
         makeScoresParams();
-        HardThread.stopSchedule();
+        HardThread.finishAndRemoveTasks();
 
         moveAll = 0;
 
@@ -666,7 +668,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         AudioHub.stopAndSavePlaying();
         AudioHub.playPauseMusic();
-        HardThread.stopSchedule();
+        HardThread.pauseTasks();
 
         makeScoresParams();
         int X = HALF_SCREEN_WIDTH - buttonQuit.halfWidth;
@@ -704,7 +706,7 @@ public final class Game extends SurfaceView implements Runnable {
         } else {
             gameStatus = AFTER_PAUSE;
         }
-        gameTasks.start();
+        HardThread.resumeTasks();
     }
 
     public void generateMenu() {
@@ -733,7 +735,7 @@ public final class Game extends SurfaceView implements Runnable {
 
             ImageHub.deleteSecondLevelImages();
             ImageHub.deleteSettingsImages();
-            HardThread.stopSchedule();
+            HardThread.finishAndRemoveTasks();
 
             getMaxScore();
             alphaEnemy.setAlpha(255);
@@ -783,7 +785,7 @@ public final class Game extends SurfaceView implements Runnable {
             bullets = new ArrayList<>(0);
 
             stopExplosions();
-            HardThread.stopSchedule();
+            HardThread.finishAndRemoveTasks();
             makeScoresParams();
 
             BOSS_TIME = 100_000;
@@ -804,8 +806,6 @@ public final class Game extends SurfaceView implements Runnable {
             intersectOnlyPlayer.add(healthKit);
             intersectOnlyPlayer.add(shotgunKit);
         });
-
-        changerGuns = new ChangerGuns();
 
         switch (level) {
             case 1:
@@ -1025,7 +1025,7 @@ public final class Game extends SurfaceView implements Runnable {
                                 count = 0;
                                 changerGuns.x = 0;
                                 lastBoss = System.currentTimeMillis();
-                                gameTasks.start();
+                                gameTask.start();
                             });
                         }
                     }

@@ -1,6 +1,5 @@
 package ru.warfare.darkannihilation.enemy;
 
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.VADER_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.VADER_HEALTH;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
@@ -61,8 +60,7 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public void kill() {
-        createLargeExplosion();
+    public void hide() {
         if (Game.gameStatus == GAME) {
             Game.score++;
         }
@@ -70,19 +68,15 @@ public class Vader extends Sprite {
     }
 
     @Override
-    public void killInBack() {
-        AudioHub.playBoom();
-        for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
-            if (game.defaultLargeExplosion[i].lock) {
-                game.defaultLargeExplosion[i].start(centerX(), centerY());
-                break;
-            }
-        }
+    public void kill() {
+        createLargeExplosion();
+        hide();
+    }
 
-        if (Game.gameStatus == GAME) {
-            Game.score++;
-        }
-        start();
+    @Override
+    public void killInBack() {
+        largeExplosion();
+        hide();
     }
 
     @Override

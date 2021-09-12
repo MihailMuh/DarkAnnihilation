@@ -8,13 +8,14 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import android.graphics.Paint;
 
+import ru.warfare.darkannihilation.CustomPaint;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class ChangerGuns extends BaseButton {
-    private final Paint alphaPaint = new Paint();
+    private final CustomPaint alphaPaint = new CustomPaint();
     private boolean isInvisible;
     private long lastClick = System.currentTimeMillis();
 
@@ -22,10 +23,6 @@ public class ChangerGuns extends BaseButton {
         super(g, ImageHub.gunsImage[0]);
         y = SCREEN_HEIGHT - height;
         x = SCREEN_WIDTH;
-
-        alphaPaint.setFilterBitmap(true);
-        alphaPaint.setDither(true);
-        alphaPaint.setAntiAlias(true);
 
         if (game.shotgunKit.picked) {
             if (game.player.gun == SHOTGUN) {

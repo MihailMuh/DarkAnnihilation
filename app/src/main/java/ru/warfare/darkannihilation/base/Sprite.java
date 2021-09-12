@@ -131,6 +131,16 @@ public abstract class Sprite {
         }
     }
 
+    protected void largeExplosion() {
+        AudioHub.playBoom();
+        for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
+            if (game.defaultLargeExplosion[i].lock) {
+                game.defaultLargeExplosion[i].start(centerX(), centerY());
+                break;
+            }
+        }
+    }
+
     protected void createLargeExplosion() {
         int X = centerX();
         int Y = centerY();

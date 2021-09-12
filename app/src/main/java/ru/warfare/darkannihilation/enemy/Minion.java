@@ -85,7 +85,7 @@ public class Minion extends Sprite {
         shoot();
 
         if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
-            kill();
+            hide();
         }
     }
 }
