@@ -15,32 +15,32 @@ public class Bot extends BaseCharacter {
     private final int finalY;
 
     public Bot(Game game) {
-        super(game, ImageHub.playerImage, 0);
+        super(game, ImageHub.playerImage, 0, BOT_SHOOT_TIME, BOT_SHOOT_TIME);
         calculateBarriers();
-        
+
         speedX = randInt(3, 7);
         speedY = randInt(3, 7);
         finalX = screenWidthWidth - 30;
         finalY = screenHeightHeight - 30;
-        lock = false;
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
     }
 
-    public void shoot() {
-        now = System.currentTimeMillis();
-        if (now - lastShoot > BOT_SHOOT_TIME) {
-            int X = centerX();
+    @Override
+    public void shotgun() {
+    }
 
-            Bullet bullet = new Bullet(game, X + 3, y);
-            game.bullets.add(bullet);
+    @Override
+    public void gun() {
+        int X = centerX();
 
-            bullet = new Bullet(game, X - 3, y);
-            game.bullets.add(bullet);
+        Bullet bullet = new Bullet(game, X + 3, y);
+        game.bullets.add(bullet);
 
-            lastShoot = now;
-            AudioHub.playShoot();
-        }
+        bullet = new Bullet(game, X - 3, y);
+        game.bullets.add(bullet);
+
+        AudioHub.playShoot();
     }
 
     @Override
@@ -57,7 +57,6 @@ public class Bot extends BaseCharacter {
 
     @Override
     public void update() {
-        shoot();
         x += speedX;
         y += speedY;
 

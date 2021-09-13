@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.thread.HardThread;
+import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -14,7 +14,7 @@ import static ru.warfare.darkannihilation.math.Randomize.randBoolean;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
 public class Sunrise extends Sprite {
-    private long lastShoot = System.currentTimeMillis();
+    private final GameTask gameTask = new GameTask(this::shoot, SUNRISE_SHOOT_TIME);
     private boolean field;
     private boolean left = false;
 
@@ -28,44 +28,41 @@ public class Sunrise extends Sprite {
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
-    public void shoot() {
-        long now = System.currentTimeMillis();
-        if (now - lastShoot > SUNRISE_SHOOT_TIME) {
-            lastShoot = now;
-            HardThread.doInBackGround(() -> {
-                int X = centerX();
-                int Y = centerY();
+    private void shoot() {
+        int X = centerX();
+        int Y = centerY();
 
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 0, 0, -10));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 90, 10, 0));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 180, 0, 10));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -90, -10, 0));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 0, 0, -10));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 90, 10, 0));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 180, 0, 10));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -90, -10, 0));
 
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 45, 7, -7));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 135, 7, 7));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -45, -7, -7));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -135, -7, 7));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 45, 7, -7));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 135, 7, 7));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -45, -7, -7));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -135, -7, 7));
 
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 67, 10, -4));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 22, 4, -10));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -67, -10, -4));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -22, -4, -10));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 67, 10, -4));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 22, 4, -10));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -67, -10, -4));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -22, -4, -10));
 
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 157, 4, 10));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 113, 10, 4));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -157, -4, 10));
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -113, -10, 4));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 157, 4, 10));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 113, 10, 4));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -157, -4, 10));
+        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -113, -10, 4));
 
-                AudioHub.playDeagle();
-            });
-        }
+        AudioHub.playDeagle();
     }
 
+    @Override
     public void start() {
         lock = false;
         hide();
 
         super.start();
+
+        gameTask.start();
     }
 
     @Override
@@ -98,6 +95,7 @@ public class Sunrise extends Sprite {
 
     @Override
     public void intersectionPlayer() {
+        gameTask.stop();
         createSkullExplosion();
         lock = true;
     }
@@ -110,11 +108,8 @@ public class Sunrise extends Sprite {
 
     @Override
     public void update() {
-        if (y > 0 & !field) {
+        if (y > 0 && !field) {
             field = true;
-        }
-        if (y > -halfHeight) {
-            shoot();
         }
         if (x <= 0) {
             left = true;
@@ -122,7 +117,7 @@ public class Sunrise extends Sprite {
         if (x >= screenWidthWidth) {
             left = false;
         }
-        if ((y >= screenHeightHeight) | (field & y <= 0)) {
+        if ((y >= screenHeightHeight) || (field && y <= 0)) {
             speedY = -speedY;
         }
         if (left) {

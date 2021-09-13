@@ -164,6 +164,16 @@ public abstract class Sprite {
         }
     }
 
+    protected void largeTripleExplosion() {
+        AudioHub.playBoom();
+        for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
+            if (game.tripleLargeExplosion[i].lock) {
+                game.tripleLargeExplosion[i].start(centerX(), centerY());
+                break;
+            }
+        }
+    }
+
     protected void createLargeTripleExplosion() {
         int X = centerX();
         int Y = centerY();
@@ -221,13 +231,15 @@ public abstract class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
-        getRect();
-        sprite = sprite.getRect();
+        if (sprite != null) {
+            getRect();
+            sprite = sprite.getRect();
 
-        if (left <= sprite.right) {
-            if (sprite.left <= right) {
-                if (top <= sprite.bottom) {
-                    return sprite.top <= bottom;
+            if (left <= sprite.right) {
+                if (sprite.left <= right) {
+                    if (top <= sprite.bottom) {
+                        return sprite.top <= bottom;
+                    }
                 }
             }
         }

@@ -12,6 +12,8 @@ import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
+import ru.warfare.darkannihilation.systemd.service.Time;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 public final class AudioHub extends AudioExoPlayer {
     private static volatile boolean alreadySaved = false;
@@ -25,8 +27,6 @@ public final class AudioHub extends AudioExoPlayer {
     private static SimpleExoPlayer bossMusic;
     private static SimpleExoPlayer flightSnd;
     private static SimpleExoPlayer timeMachineSnd;
-    private static SimpleExoPlayer timeMachineSecondSnd;
-    private static SimpleExoPlayer timeMachineNoneSnd;
     private static SimpleExoPlayer readySnd;
     private static SimpleExoPlayer forgottenMusic;
     private static SimpleExoPlayer forgottenBossMusic;
@@ -83,8 +83,6 @@ public final class AudioHub extends AudioExoPlayer {
         release(forgottenBossMusic);
         release(forgottenMusic);
         release(portalSound);
-        release(timeMachineNoneSnd);
-        release(timeMachineSecondSnd);
         release(timeMachineSnd);
         release(pauseMusic);
 
@@ -267,19 +265,6 @@ public final class AudioHub extends AudioExoPlayer {
                 }
             });
 
-            timeMachineSecondSnd = new SimpleExoPlayer.Builder(activity).build();
-            timeMachineSecondSnd.setMediaItem(getItem(R.raw.time_machine1));
-            timeMachineSecondSnd.setVolume(volume);
-            timeMachineSecondSnd.prepare();
-            timeMachineSecondSnd.addListener(new Player.Listener() {
-                @Override
-                public void onPlaybackStateChanged(int state) {
-                    if (state == Player.STATE_ENDED) {
-                        timeMachineSecondSnd.release();
-                    }
-                }
-            });
-
             timeMachineSnd = new SimpleExoPlayer.Builder(activity).build();
             timeMachineSnd.setMediaItem(getItem(R.raw.time_machine));
             timeMachineSnd.setVolume(volume);
@@ -289,24 +274,6 @@ public final class AudioHub extends AudioExoPlayer {
                 public void onPlaybackStateChanged(int state) {
                     if (state == Player.STATE_ENDED) {
                         timeMachineSnd.release();
-                    }
-                }
-            });
-
-            timeMachineNoneSnd = new SimpleExoPlayer.Builder(activity).build();
-            timeMachineNoneSnd.setMediaItem(getItem(R.raw.time_machine_none));
-            timeMachineNoneSnd.setVolume(0);
-            timeMachineNoneSnd.prepare();
-            timeMachineNoneSnd.addListener(new Player.Listener() {
-                @Override
-                public void onPlaybackStateChanged(int state) {
-                    if (state == Player.STATE_ENDED) {
-                        timeMachineSecondSnd.play();
-                        timeMachineNoneSnd.release();
-                        activity.game.onLoading(() -> {
-                            Game.level++;
-                            activity.game.generateNewGame();
-                        });
                     }
                 }
             });
@@ -321,8 +288,15 @@ public final class AudioHub extends AudioExoPlayer {
     }
 
     public static void playTimeMachine() {
-        timeMachineNoneSnd.play();
-        timeMachineSnd.play();
+        Service.runOnUiThread(() -> timeMachineSnd.play());
+
+        HardThread.doInPool(() -> {
+            Time.sleep(10_250);
+            activity.game.onLoading(() -> {
+                Game.level++;
+                activity.game.generateNewGame();
+            });
+        });
     }
 
     public static void loadMenuSnd() {
@@ -437,15 +411,13 @@ public final class AudioHub extends AudioExoPlayer {
             playing[5] = stopIfPlaying(bossMusic);
             playing[6] = stopIfPlaying(portalSound);
             playing[7] = stopIfPlaying(timeMachineSnd);
-            playing[8] = stopIfPlaying(timeMachineSecondSnd);
-            playing[9] = stopIfPlaying(timeMachineNoneSnd);
-            playing[10] = stopIfPlaying(forgottenMusic);
-            playing[11] = stopIfPlaying(forgottenBossMusic);
-            playing[13] = stopIfPlaying(flightSnd);
-            playing[14] = stopIfPlaying(winMusic);
+            playing[8] = stopIfPlaying(forgottenMusic);
+            playing[9] = stopIfPlaying(forgottenBossMusic);
+            playing[11] = stopIfPlaying(flightSnd);
+            playing[12] = stopIfPlaying(winMusic);
             alreadySaved = true;
         } else {
-            playing[12] = stopIfPlaying(pauseMusic);
+            playing[10] = stopIfPlaying(pauseMusic);
             alreadySaved = false;
         }
     }
@@ -460,15 +432,13 @@ public final class AudioHub extends AudioExoPlayer {
             setPlaying(bossMusic, playing[5]);
             setPlaying(portalSound, playing[6]);
             setPlaying(timeMachineSnd, playing[7]);
-            setPlaying(timeMachineSecondSnd, playing[8]);
-            setPlaying(timeMachineNoneSnd, playing[9]);
-            setPlaying(forgottenMusic, playing[10]);
-            setPlaying(forgottenBossMusic, playing[11]);
-            setPlaying(flightSnd, playing[13]);
-            setPlaying(winMusic, playing[14]);
+            setPlaying(forgottenMusic, playing[8]);
+            setPlaying(forgottenBossMusic, playing[9]);
+            setPlaying(flightSnd, playing[11]);
+            setPlaying(winMusic, playing[12]);
             alreadySaved = false;
         } else {
-            setPlaying(pauseMusic, playing[12]);
+            setPlaying(pauseMusic, playing[10]);
             alreadySaved = true;
         }
     }

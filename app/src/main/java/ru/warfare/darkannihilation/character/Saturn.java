@@ -1,6 +1,10 @@
 package ru.warfare.darkannihilation.character;
 
-import ru.warfare.darkannihilation.thread.HardThread;
+import static ru.warfare.darkannihilation.constant.Constants.SATURN_HEALTH;
+import static ru.warfare.darkannihilation.constant.Constants.SATURN_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.SATURN_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.math.Randomize.randInt;
+
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseCharacter;
@@ -9,37 +13,24 @@ import ru.warfare.darkannihilation.bullet.BuckshotSaturn;
 import ru.warfare.darkannihilation.bullet.BulletSaturn;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.constant.Constants.SATURN_HEALTH;
-import static ru.warfare.darkannihilation.constant.Constants.SATURN_SHOOT_TIME;
-import static ru.warfare.darkannihilation.constant.Constants.SATURN_SHOTGUN_TIME;
-import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
-import static ru.warfare.darkannihilation.math.Randomize.randInt;
-
 public class Saturn extends BaseCharacter {
     public Saturn(Game g) {
-        super(g, ImageHub.saturnImg, SATURN_HEALTH);
+        super(g, ImageHub.saturnImg, SATURN_HEALTH, SATURN_SHOOT_TIME, SATURN_SHOTGUN_TIME);
         recreateRect(x + 25, y + 25, right() - 25, bottom() - 17);
     }
 
-    public void shoot() {
-        now = System.currentTimeMillis();
-        if (gun == SHOTGUN) {
-            if (now - lastShoot > SATURN_SHOTGUN_TIME) {
-                lastShoot = now;
-                game.bullets.add(new BuckshotSaturn(game, centerX(), y));
-            }
-        } else {
-            if (now - lastShoot > SATURN_SHOOT_TIME) {
-                HardThread.doInBackGround(() -> {
-                    int X = centerX();
-                    for (int i = 0; i < randInt(3, 6); i++) {
-                        game.bullets.add(new BulletSaturn(game, X, game.player.y));
-                    }
-                    AudioHub.playShoot();
-                });
-                lastShoot = now;
-            }
+    @Override
+    public void gun() {
+        int X = centerX();
+        for (int i = 0; i < randInt(3, 6); i++) {
+            game.bullets.add(new BulletSaturn(game, X, game.player.y));
         }
+        AudioHub.playShoot();
+    }
+
+    @Override
+    public void shotgun() {
+        game.bullets.add(new BuckshotSaturn(game, centerX(), y));
     }
 
     @Override
@@ -58,10 +49,6 @@ public class Saturn extends BaseCharacter {
 
     @Override
     public void update() {
-        if (!lock) {
-            shoot();
-        }
-
         x += speedX;
         y += speedY;
 

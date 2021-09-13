@@ -105,7 +105,7 @@ public class Vader extends Sprite {
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
+        if (x < -width || x > SCREEN_WIDTH || y > SCREEN_HEIGHT) {
             HardThread.doInBackGround(this::start);
         }
     }

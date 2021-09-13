@@ -372,12 +372,11 @@ public final class ImageHub {
             GifDrawable gif = (GifDrawable) drawable;
             gif.setLoopCount(1);
             game.setBackground(gif);
+            gif.start();
             game.generateWin();
             AudioHub.playFlightSnd();
-            gif.start();
 
-            HardThread.doInPool(() -> {
-                Time.sleep(4000);
+            HardThread.doInBackGround(() -> {
                 while (gif.isRunning()) {
                     Time.relax();
                 }

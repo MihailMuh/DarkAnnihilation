@@ -4,9 +4,6 @@ import static ru.warfare.darkannihilation.constant.Constants.CHANGER_GUNS_CLICK_
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
-import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
-
-import android.graphics.Paint;
 
 import ru.warfare.darkannihilation.CustomPaint;
 import ru.warfare.darkannihilation.ImageHub;
@@ -18,25 +15,27 @@ public class ChangerGuns extends BaseButton {
     private final CustomPaint alphaPaint = new CustomPaint();
     private boolean isInvisible;
     private long lastClick = System.currentTimeMillis();
+    private byte gun = GUN;
 
     public ChangerGuns(Game g) {
         super(g, ImageHub.gunsImage[0]);
         y = SCREEN_HEIGHT - height;
-        x = SCREEN_WIDTH;
-
-        if (game.shotgunKit.picked) {
-            if (game.player.gun == SHOTGUN) {
-                image = ImageHub.gunsImage[1];
-            } else {
-                image = ImageHub.gunsImage[2];
-            }
-        }
     }
 
-    public ChangerGuns() {
-        super(null, ImageHub.pauseButtonImg);
-
-        x = SCREEN_WIDTH;
+    @Override
+    public void start() {
+        work();
+        if (game.shotgunKit.picked) {
+            if (gun == SHOTGUN) {
+                image = ImageHub.gunsImage[1];
+                game.player.setShotgun();
+            } else {
+                image = ImageHub.gunsImage[2];
+                game.player.setGun();
+            }
+        } else {
+            game.player.setGun();
+        }
     }
 
     @Override
@@ -85,15 +84,15 @@ public class ChangerGuns extends BaseButton {
             lastClick = System.currentTimeMillis();
             if (game.shotgunKit.picked) {
                 AudioHub.playReload();
-                if (game.player.gun == SHOTGUN) {
-                    game.player.gun = GUN;
+                if (gun == SHOTGUN) {
+                    gun = GUN;
+                    game.player.setGun();
                     image = ImageHub.gunsImage[2];
                 } else {
-                    game.player.gun = SHOTGUN;
+                    gun = SHOTGUN;
+                    game.player.setShotgun();
                     image = ImageHub.gunsImage[1];
                 }
-            } else {
-                image = ImageHub.gunsImage[0];
             }
         }
     }

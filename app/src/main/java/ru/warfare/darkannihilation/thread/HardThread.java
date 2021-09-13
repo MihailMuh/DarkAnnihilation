@@ -9,7 +9,7 @@ import ru.warfare.darkannihilation.interfaces.Function;
 import static ru.warfare.darkannihilation.systemd.service.Py.print;
 
 public class HardThread implements Runnable {
-    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private static final ExecutorService threadPool = Executors.newWorkStealingPool();
     static ArrayList<GameTask> tasks = new ArrayList<>(0);
     private Thread thread;
     private static Function function;

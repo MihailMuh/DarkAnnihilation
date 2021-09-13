@@ -74,7 +74,7 @@ public class Minion extends Sprite {
     @Override
     public void kill() {
         hide();
-        createLargeTripleExplosion();
+        largeTripleExplosion();
     }
 
     @Override

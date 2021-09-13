@@ -4,13 +4,13 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
+import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.service.Vibrator;
 import ru.warfare.darkannihilation.character.Heart;
 import ru.warfare.darkannihilation.systemd.Game;
 
-import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
@@ -18,16 +18,14 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 public abstract class BaseCharacter extends Sprite {
     private static final short cup = 250;
     private boolean boom = false;
-    public boolean lock;
     public int endX;
     public int endY;
-    public long lastShoot = System.currentTimeMillis();
-    public long now;
     public boolean dontmove = false;
-    public byte gun = GUN;
     public int maxHealth;
-    public ArrayList<Heart> hearts = new ArrayList<>(0);
-    public int[] types;
+    private final ArrayList<Heart> hearts = new ArrayList<>(0);
+    private final GameTask gunTask;
+    private final GameTask shotgunTask;
+    private int[] types;
     public boolean god;
     private int bar;
     private static final int _25 = calculate(25);
@@ -35,10 +33,10 @@ public abstract class BaseCharacter extends Sprite {
     private static final int _90 = calculate(90);
     private static final int _385 = calculate(385);
 
-    public int heartX = _25;
-    public int heartY = _10;
+    private int heartX = _25;
+    private int heartY = _10;
 
-    public BaseCharacter(Game g, Bitmap bitmap, int maxHealth) {
+    public BaseCharacter(Game g, Bitmap bitmap, int maxHealth, short gunTime, short shotgunTime) {
         super(g, bitmap);
 
         this.maxHealth = maxHealth;
@@ -57,8 +55,30 @@ public abstract class BaseCharacter extends Sprite {
             }
         }
 
+        gunTask = new GameTask(this::gun, gunTime);
+        shotgunTask = new GameTask(this::shotgun, shotgunTime);
+
         newStatus();
         changeHearts();
+    }
+
+    abstract public void gun();
+
+    abstract public void shotgun();
+
+    public void stop() {
+        gunTask.kill();
+        shotgunTask.kill();
+    }
+
+    public void setGun() {
+        gunTask.start();
+        shotgunTask.stop();
+    }
+
+    public void setShotgun() {
+        shotgunTask.start();
+        gunTask.stop();
     }
 
     public void newStatus() {
@@ -68,6 +88,9 @@ public abstract class BaseCharacter extends Sprite {
         endY = y;
         lock = true;
         god = false;
+
+        shotgunTask.necromancy();
+        gunTask.necromancy();
     }
 
     public void checkIntersections(Sprite sprite) {
@@ -162,16 +185,10 @@ public abstract class BaseCharacter extends Sprite {
         }
     }
 
-    private void renderHearts() {
+    public void renderHearts() {
         for (bar = 0; bar < hearts.size(); bar++) {
             hearts.get(bar).render(types[bar]);
         }
-    }
-
-    @Override
-    public void render() {
-        super.render();
-        renderHearts();
     }
 
     @Override
@@ -184,10 +201,6 @@ public abstract class BaseCharacter extends Sprite {
 
     @Override
     public void check_intersectionBullet(BaseBullet bullet) {
-    }
-
-    @Override
-    public void start() {
     }
 
     @Override

@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.thread.HardThread;
+import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.Bomb;
 import ru.warfare.darkannihilation.ImageHub;
@@ -15,7 +15,9 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HE
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Demoman extends Sprite {
-    private long lastShoot = System.currentTimeMillis();
+    private final GameTask gameTask = new GameTask(() ->
+            game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())), DEMOMAN_SHOOT_TIME);
+
     private boolean goLeft = false;
     private final int endY;
 
@@ -31,13 +33,6 @@ public class Demoman extends Sprite {
         recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
     }
 
-    private void shoot() {
-        if (System.currentTimeMillis() - lastShoot > DEMOMAN_SHOOT_TIME) {
-            HardThread.doInBackGround(() -> game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())));
-            lastShoot = System.currentTimeMillis();
-        }
-    }
-
     @Override
     public Sprite getRect() {
         return newRect(x + 30, y + 25);
@@ -45,26 +40,27 @@ public class Demoman extends Sprite {
 
     @Override
     public void start() {
-        HardThread.doInPool(() -> {
-            health = DEMOMAN_HEALTH;
-            y = randInt(0, endY);
-            speedX = randInt(5, 10);
-            goLeft = randBoolean();
+        health = DEMOMAN_HEALTH;
+        y = randInt(0, endY);
+        speedX = randInt(5, 10);
+        goLeft = randBoolean();
 
-            if (goLeft) {
-                image = ImageHub.mirrorImage(ImageHub.demomanImg, true);
-                x = -width;
-            } else {
-                image = ImageHub.demomanImg;
-                x = SCREEN_WIDTH;
-                speedX = -speedX;
-            }
-            lock = false;
-        });
+        if (goLeft) {
+            image = ImageHub.mirrorImage(ImageHub.demomanImg, true);
+            x = -width;
+        } else {
+            image = ImageHub.demomanImg;
+            x = SCREEN_WIDTH;
+            speedX = -speedX;
+        }
+        lock = false;
+
+        gameTask.start();
     }
 
     @Override
     public void intersectionPlayer() {
+        gameTask.stop();
         createSkullExplosion();
         lock = true;
     }
@@ -77,16 +73,16 @@ public class Demoman extends Sprite {
 
     @Override
     public void update() {
-        shoot();
-
         x += speedX;
 
         if (goLeft) {
             if (x > SCREEN_WIDTH) {
+                gameTask.stop();
                 lock = true;
             }
         } else {
             if (x < -width) {
+                gameTask.stop();
                 lock = true;
             }
         }

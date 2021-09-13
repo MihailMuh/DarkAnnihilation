@@ -38,9 +38,8 @@ public class Spider extends Sprite {
     }
 
     private void shoot() {
-        long now = System.currentTimeMillis();
-        if (now - lastShoot > shootTripleTime) {
-            lastShoot = now;
+        if (System.currentTimeMillis() - lastShoot > shootTripleTime) {
+            lastShoot = System.currentTimeMillis();
             HardThread.doInBackGround(() -> {
                 if (!reload) {
                     int X = centerX();
@@ -50,15 +49,12 @@ public class Spider extends Sprite {
                     game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
                     AudioHub.playShotgun();
                     ammo++;
-                    reload = false;
-                    if (ammo == 20) {
+                    if (ammo == 30) {
                         reload = true;
-                        shootTripleTime = SPIDER_SHOOT_TIME * 2;
                     }
                 } else {
                     ammo--;
                     if (ammo == 0) {
-                        shootTripleTime = SPIDER_SHOOT_TIME;
                         reload = false;
                     }
                 }

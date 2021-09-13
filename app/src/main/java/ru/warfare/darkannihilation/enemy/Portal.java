@@ -41,17 +41,15 @@ public class Portal extends Sprite {
         touch = true;
         game.intersectOnlyPlayer.remove(this);
         game.ghosts.add(this);
-        Service.runOnUiThread(() -> {
-            AudioHub.deletePortalSnd();
-            if (Game.level == 2) {
-                ImageHub.loadWinImages(game);
-            } else {
-                AudioHub.playTimeMachine();
+        if (Game.level == 2) {
+            ImageHub.loadWinImages(game);
+        } else {
+            AudioHub.playTimeMachine();
 
-                game.player.god = true;
-                game.player.lock = true;
-            }
-        });
+            game.player.god = true;
+            game.player.stop();
+        }
+        Service.runOnUiThread(AudioHub::deletePortalSnd);
     }
 
     @Override

@@ -12,29 +12,23 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.EMERALD_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.EMERALD_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.EMERALD_SHOTGUN_TIME;
-import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
 public class Emerald extends BaseCharacter {
     public Emerald(Game g) {
-        super(g, ImageHub.emeraldImg, EMERALD_HEALTH);
+        super(g, ImageHub.emeraldImg, EMERALD_HEALTH, EMERALD_SHOOT_TIME, EMERALD_SHOTGUN_TIME);
         recreateRect(x + 30, y + 25, right() - 30, bottom() - 25);
     }
 
-    public void shoot() {
-        now = System.currentTimeMillis();
-        if (gun == SHOTGUN) {
-            if (now - lastShoot > EMERALD_SHOTGUN_TIME) {
-                lastShoot = now;
-                AudioHub.playThunderStorm();
-                game.bullets.add(new BulletThunder(game, centerX(), y));
-            }
-        } else {
-            if (now - lastShoot > EMERALD_SHOOT_TIME) {
-                AudioHub.playDynamite();
-                game.bullets.add(new BulletDynamite(game, centerX(), y));
-                lastShoot = now;
-            }
-        }
+    @Override
+    public void gun() {
+        AudioHub.playDynamite();
+        game.bullets.add(new BulletDynamite(game, centerX(), y));
+    }
+
+    @Override
+    public void shotgun() {
+        AudioHub.playThunderStorm();
+        game.bullets.add(new BulletThunder(game, centerX(), y));
     }
 
     @Override
@@ -67,10 +61,6 @@ public class Emerald extends BaseCharacter {
 
     @Override
     public void update() {
-        if (!lock) {
-            shoot();
-        }
-
         x += speedX;
         y += speedY;
 

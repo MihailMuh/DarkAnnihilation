@@ -39,7 +39,7 @@ public final class MainActivity extends BaseActivity {
 
         game = findViewById(R.id.gameView);
 
-        HardThread.doInBackGround(() -> {
+        HardThread.doInPool(() -> {
             Service.init(this);
 
             Windows.init();
@@ -53,9 +53,9 @@ public final class MainActivity extends BaseActivity {
             MobileAds.setRequestConfiguration(new RequestConfiguration.Builder()
                     .setTestDeviceIds(Collections.singletonList("5371A173E68885BC058877681D34AB6B")).build());
 
-            game.init();
-
             runOnUiThread(this::checkOnFirstRun);
+
+            game.init();
         });
 //        pauseBanner = findViewById(R.id.pauseAdMob);
 //        pauseBanner.setAdUnitId(ADMOB_ID);

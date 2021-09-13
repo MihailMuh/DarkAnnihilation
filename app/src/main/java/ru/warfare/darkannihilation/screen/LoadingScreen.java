@@ -4,6 +4,7 @@ import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 import static ru.warfare.darkannihilation.constant.Constants.LOADING_SCREEN_FRAME_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LOADING_SCREEN_IMAGES;
@@ -20,6 +21,8 @@ public class LoadingScreen extends Sprite {
     }
 
     public void launch(Runnable function, boolean longLoading) {
+        HardThread.finishAndRemoveTasks();
+
         this.function = function;
         if (longLoading) {
             c = 8;

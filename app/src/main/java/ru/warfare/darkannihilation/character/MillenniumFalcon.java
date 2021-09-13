@@ -11,38 +11,32 @@ import ru.warfare.darkannihilation.bullet.Bullet;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
-import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 
 public class MillenniumFalcon extends BaseCharacter {
     public MillenniumFalcon(Game g) {
-        super(g, ImageHub.playerImage, MILLENNIUM_FALCON_HEALTH);
+        super(g, ImageHub.playerImage, MILLENNIUM_FALCON_HEALTH, MILLENNIUM_FALCON_SHOOT_TIME, MILLENNIUM_FALCON_SHOTGUN_TIME);
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
     }
 
-    public void shoot() {
-        now = System.currentTimeMillis();
-        if (gun == SHOTGUN) {
-            if (now - lastShoot > MILLENNIUM_FALCON_SHOTGUN_TIME) {
-                lastShoot = now;
-                AudioHub.playShotgun();
-                int centerX = centerX();
-                for (int i = -4; i <= 4; i += 2) {
-                    Buckshot buckshot = new Buckshot(game, centerX, y, i);
-                    game.bullets.add(buckshot);
-                }
-            }
-        } else {
-            if (now - lastShoot > MILLENNIUM_FALCON_SHOOT_TIME) {
-                lastShoot = now;
-                AudioHub.playShoot();
-                int X = centerX();
+    @Override
+    public void gun() {
+        int X = centerX();
 
-                for (int i = -6; i <= 6; i += 6) {
-                    Bullet bullet = new Bullet(game, X + i, y);
-                    game.bullets.add(bullet);
-                }
-            }
+        for (int i = -6; i <= 6; i += 6) {
+            Bullet bullet = new Bullet(game, X + i, y);
+            game.bullets.add(bullet);
         }
+        AudioHub.playShoot();
+    }
+
+    @Override
+    public void shotgun() {
+        int centerX = centerX();
+        for (int i = -4; i <= 4; i += 2) {
+            Buckshot buckshot = new Buckshot(game, centerX, y, i);
+            game.bullets.add(buckshot);
+        }
+        AudioHub.playShotgun();
     }
 
     @Override
@@ -52,9 +46,6 @@ public class MillenniumFalcon extends BaseCharacter {
 
     @Override
     public void update() {
-        if (!lock) {
-            shoot();
-        }
         x += speedX;
         y += speedY;
 

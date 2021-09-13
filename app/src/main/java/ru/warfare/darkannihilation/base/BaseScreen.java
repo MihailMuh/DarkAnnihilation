@@ -28,12 +28,4 @@ public abstract class BaseScreen extends Sprite {
     @Override
     public void kill() {
     }
-
-    @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
-    }
-
-    @Override
-    public void start() {
-    }
 }

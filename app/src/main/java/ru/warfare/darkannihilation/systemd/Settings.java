@@ -8,6 +8,7 @@ import static ru.warfare.darkannihilation.systemd.Game.string_loud_music;
 import static ru.warfare.darkannihilation.systemd.Game.string_vibration;
 import static ru.warfare.darkannihilation.systemd.Game.string_volume;
 import static ru.warfare.darkannihilation.systemd.service.Service.activity;
+import static ru.warfare.darkannihilation.systemd.service.Service.runOnUiThread;
 import static ru.warfare.darkannihilation.systemd.service.Windows.LAYOUT_DENSITY;
 
 import android.view.ViewGroup;
@@ -153,8 +154,9 @@ public class Settings {
                         break;
                 }
                 game.confirmLanguage(true);
+
+                runOnUiThread(this::makeLanguage);
             });
-            makeLanguage();
         });
         spinner.setLifecycleOwner(activity);
         textSpinner = activity.findViewById(R.id.textSpinner);

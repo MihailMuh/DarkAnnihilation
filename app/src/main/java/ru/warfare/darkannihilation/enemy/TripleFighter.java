@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.thread.HardThread;
+import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -16,7 +16,7 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class TripleFighter extends Sprite {
-    private long lastShoot = System.currentTimeMillis();
+    private final GameTask gameTask = new GameTask(this::shoot, TRIPLE_FIGHTER_SHOOT_TIME);
     private final Vector vector = new Vector();
 
     public TripleFighter(Game game) {
@@ -30,17 +30,12 @@ public class TripleFighter extends Sprite {
     }
 
     private void shoot() {
-        if (System.currentTimeMillis() - lastShoot > TRIPLE_FIGHTER_SHOOT_TIME) {
-            if (x > 0 & x < screenWidthWidth & y > 0 & y < screenHeightHeight) {
-                HardThread.doInBackGround(() -> {
-                    int X = centerX();
-                    int Y = centerY();
-                    int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                    game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
-                    AudioHub.playShotgun();
-                });
-            }
-            lastShoot = System.currentTimeMillis();
+        if (x > 0 && x < screenWidthWidth && y > 0 && y < screenHeightHeight) {
+            int X = centerX();
+            int Y = centerY();
+            int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
+            game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+            AudioHub.playShotgun();
         }
     }
 
@@ -48,6 +43,7 @@ public class TripleFighter extends Sprite {
     public void hide() {
         if (game.boss != null) {
             lock = true;
+            gameTask.stop();
         }
         health = TRIPLE_FIGHTER_HEALTH;
         x = randInt(0, screenWidthWidth);
@@ -78,16 +74,15 @@ public class TripleFighter extends Sprite {
     @Override
     public void empireStart() {
         lock = false;
+        gameTask.start();
     }
 
     @Override
     public void update() {
-        shoot();
-
         x += speedX;
         y += speedY;
 
-        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT) {
+        if (x < -width || x > SCREEN_WIDTH || y > SCREEN_HEIGHT) {
             hide();
         }
     }
