@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation.button;
 import static ru.warfare.darkannihilation.constant.Constants.CHANGER_GUNS_CLICK_TIME;
 import static ru.warfare.darkannihilation.constant.NamesConst.GUN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 import ru.warfare.darkannihilation.CustomPaint;
@@ -14,7 +15,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 public class ChangerGuns extends BaseButton {
     private final CustomPaint alphaPaint = new CustomPaint();
     private boolean isInvisible;
-    private long lastClick = System.currentTimeMillis();
+    private long lastClick = now;
     private byte gun = GUN;
 
     public ChangerGuns(Game g) {
@@ -80,8 +81,8 @@ public class ChangerGuns extends BaseButton {
     }
 
     public void make() {
-        if (System.currentTimeMillis() - lastClick > CHANGER_GUNS_CLICK_TIME) {
-            lastClick = System.currentTimeMillis();
+        if (now - lastClick > CHANGER_GUNS_CLICK_TIME) {
+            lastClick = now;
             if (game.shotgunKit.picked) {
                 AudioHub.playReload();
                 if (gun == SHOTGUN) {

@@ -46,7 +46,7 @@ public class BulletEnemy extends BaseBullet {
         y += speedY;
         x += speedX;
 
-        if (x < -width | x > SCREEN_WIDTH | y > SCREEN_HEIGHT | y < -height) {
+        if (x < -width || x > SCREEN_WIDTH || y > SCREEN_HEIGHT || y < -height) {
             hide();
         }
     }

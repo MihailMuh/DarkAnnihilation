@@ -1,8 +1,6 @@
 package ru.warfare.darkannihilation.systemd;
 
 import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
-import static ru.warfare.darkannihilation.constant.Constants.DRAW_FPS;
-import static ru.warfare.darkannihilation.constant.Constants.NANOS_IN_SECOND;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
@@ -181,11 +179,11 @@ public final class Game extends SurfaceView implements Runnable {
     public static volatile byte gameStatus = PASS;
     public static volatile byte character = MILLENNIUM_FALCON;
     public static volatile boolean vibrate;
+    public static long now = System.currentTimeMillis();
     public String language = "en";
     public static int score = 0;
     public int bestScore = 0;
 
-    private int fpsX;
     private int scoreX;
     private int maxScoreX;
     private int chooseChX;
@@ -233,8 +231,6 @@ public final class Game extends SurfaceView implements Runnable {
     public int BOSS_TIME;
     public long pauseTimer;
 
-    private long timeFrame = System.nanoTime();
-
     public Game(Context mainActivity, AttributeSet attrs) {
         super(mainActivity, attrs);
     }
@@ -265,7 +261,6 @@ public final class Game extends SurfaceView implements Runnable {
         recoverySettings();
 
         buttonsY = (int) (SCREEN_HEIGHT - (ImageHub._70 * 1.5));
-        fpsX = SCREEN_WIDTH - 250;
         tableY = buttonsY - (ImageHub._70 * 2);
 
         String[] settings = Clerk.getSettings().split(" ");
@@ -279,7 +274,6 @@ public final class Game extends SurfaceView implements Runnable {
         buttonQuit = new Button(this);
         buttonRestart = new Button(this);
         screen = new StarScreen();
-        player = new Bot(this);
 
         HardThread.doInBackGround(() -> {
             pauseButton = new PauseButton(this);
@@ -331,13 +325,12 @@ public final class Game extends SurfaceView implements Runnable {
         });
 
         gameStatus = MENU;
+        player = new Bot(this);
 
         thread = new Thread(this);
         thread.start();
 
         isFirstRun = false;
-
-        player.setGun();
     }
 
     private void backGroundTasks() {
@@ -462,6 +455,7 @@ public final class Game extends SurfaceView implements Runnable {
         while (playing) {
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockHardwareCanvas();
+                now = System.currentTimeMillis();
                 switch (gameStatus) {
                     case GAME:
                         gameplay();
@@ -512,9 +506,6 @@ public final class Game extends SurfaceView implements Runnable {
                         break;
                 }
 
-                if (DRAW_FPS) {
-                    renderFPS();
-                }
                 holder.unlockCanvasAndPost(canvas);
             }
         }
@@ -674,7 +665,7 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     public void generatePause() {
-        pauseTimer = System.currentTimeMillis();
+        pauseTimer = now;
 
         AudioHub.stopAndSavePlaying();
         AudioHub.playPauseMusic();
@@ -708,7 +699,7 @@ public final class Game extends SurfaceView implements Runnable {
 
     public void generateAfterPauseScene() {
         activity.closeAdMob();
-        BOSS_TIME += System.currentTimeMillis() - pauseTimer;
+        BOSS_TIME += now - pauseTimer;
         AudioHub.deletePauseMusic();
         AudioHub.whoIsPlayed();
         if (PauseButton.oldStatus != GAME) {
@@ -775,8 +766,6 @@ public final class Game extends SurfaceView implements Runnable {
         player = new Bot(this);
 
         gameStatus = MENU;
-
-        player.setGun();
     }
 
     public void generateNewGame() {
@@ -791,7 +780,7 @@ public final class Game extends SurfaceView implements Runnable {
         ghosts = new ArrayList<>(0);
         intersectOnlyPlayer = new ArrayList<>(0);
 
-        HardThread.doInBackGround(() -> {
+        HardThread.doInPool(() -> {
             bullets = new ArrayList<>(0);
 
             stopExplosions();
@@ -835,7 +824,7 @@ public final class Game extends SurfaceView implements Runnable {
 
                 screen = new StarScreen();
 
-                HardThread.doInPool(() -> {
+                HardThread.doInBackGround(() -> {
                     ImageHub.loadGunsImages(character);
 
                     rocket = new Rocket(this);
@@ -879,7 +868,7 @@ public final class Game extends SurfaceView implements Runnable {
 
                 screen = new ThunderScreen();
 
-                HardThread.doInPool(() -> {
+                HardThread.doInBackGround(() -> {
                     player.newStatus();
 
                     spider = new Spider(this);
@@ -1048,7 +1037,7 @@ public final class Game extends SurfaceView implements Runnable {
                                 gameStatus = GAME;
                                 count = 0;
                                 changerGuns.start();
-                                lastBoss = System.currentTimeMillis();
+                                lastBoss = now;
                                 gameTask.start();
                                 startEmpire();
                             });
@@ -1315,15 +1304,6 @@ public final class Game extends SurfaceView implements Runnable {
         }
     }
 
-    private void renderFPS() {
-        stringBuilder.append("FPS: ").append(NANOS_IN_SECOND / (System.nanoTime() - timeFrame));
-        timeFrame = System.nanoTime();
-
-        canvas.drawText(stringBuilder.toString(), fpsX, 300, fpsPaint);
-
-        stringBuilder.setLength(0);
-    }
-
     private void renderCurrentScore() {
         stringBuilder.append(string_current_score).append(score);
         canvas.drawText(stringBuilder.toString(), scoreX, 50, scorePaint);
@@ -1365,8 +1345,8 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     private void checkTimeForBoss() {
-        if (System.currentTimeMillis() - lastBoss >= BOSS_TIME) {
-            lastBoss = System.currentTimeMillis();
+        if (now - lastBoss >= BOSS_TIME) {
+            lastBoss = now;
             if (boss == null && portal == null) {
                 byte bossType = DEATH_STAR;
                 if (level == 1) {
@@ -1404,7 +1384,7 @@ public final class Game extends SurfaceView implements Runnable {
     public void killBoss() {
         ghosts.remove(boss);
         boss = null;
-        lastBoss = System.currentTimeMillis();
+        lastBoss = now;
     }
 
     public void confirmLanguage(boolean set) {

@@ -33,7 +33,7 @@ public class Buckshot extends BaseBullet {
         y -= BUCKSHOT_SPEED;
         x += speedX;
 
-        if (y < -height | x < -width | x > SCREEN_WIDTH) {
+        if (y < -height || x < -width || x > SCREEN_WIDTH) {
             hide();
         }
     }

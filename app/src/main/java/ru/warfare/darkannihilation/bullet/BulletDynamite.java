@@ -11,6 +11,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_DYNAMITE_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class BulletDynamite extends BaseBullet {
     private final int rotSpeed = randInt(-10, 10);
@@ -18,7 +19,7 @@ public class BulletDynamite extends BaseBullet {
     private boolean BOOM = false;
     private boolean ready = false;
     private int frame;
-    private long lastShoot = System.currentTimeMillis();
+    private long lastShoot = now;
 
     public BulletDynamite(Game game, int X, int Y) {
         super(game, ImageHub.dynamiteImg, X, Y, BULLET_DYNAMITE_DAMAGE);
@@ -75,7 +76,6 @@ public class BulletDynamite extends BaseBullet {
             }
         }
         if (ready) {
-            long now = System.currentTimeMillis();
             if (now - lastShoot > 33) {
                 lastShoot = now;
                 frame++;

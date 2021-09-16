@@ -21,7 +21,7 @@ public class BulletSaturn extends BaseBullet {
         y -= speedY;
         x += speedX;
 
-        if (y < -height | x < -width | x > SCREEN_WIDTH) {
+        if (y < -height || x < -width || x > SCREEN_WIDTH) {
             hide();
         }
     }

@@ -19,13 +19,14 @@ import static ru.warfare.darkannihilation.constant.Modes.QUIT;
 import static ru.warfare.darkannihilation.constant.Modes.RESTART;
 import static ru.warfare.darkannihilation.constant.Modes.SETTINGS;
 import static ru.warfare.darkannihilation.constant.Modes.TOP;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class Button extends BaseButton {
     public byte function;
     private String text = " ";
     private float textX;
     private float textY;
-    private long lastClick = System.currentTimeMillis();
+    private long lastClick = now;
     private boolean isPressed = false;
 
     public Button(Game game) {
@@ -59,7 +60,6 @@ public class Button extends BaseButton {
     @Override
     public void setCoords(int X, int Y) {
         if (checkCoords(X, Y)) {
-            long now = System.currentTimeMillis();
             if (now - lastClick > BUTTON_CLICK_TIME) {
                 lastClick = now;
                 AudioHub.playClick();

@@ -12,11 +12,12 @@ import static ru.warfare.darkannihilation.constant.Constants.PORTAL_FRAME;
 import static ru.warfare.darkannihilation.constant.Constants.PORTAL_LIFE_TIME;
 import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class Portal extends Sprite {
     private int frame = 0;
-    private long lastFrame = System.currentTimeMillis();
-    private final long lifeTime = System.currentTimeMillis();
+    private long lastFrame = now;
+    private final long lifeTime = now;
     public boolean touch = false;
 
     public Portal(Game game) {
@@ -71,7 +72,6 @@ public class Portal extends Sprite {
         if (touch) {
             film();
         } else {
-            long now = System.currentTimeMillis();
             if (now - lastFrame > PORTAL_FRAME) {
                 lastFrame = now;
                 film();

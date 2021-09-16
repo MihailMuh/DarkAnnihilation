@@ -6,6 +6,8 @@ import ru.warfare.darkannihilation.bullet.Bullet;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.systemd.service.Time;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 import static ru.warfare.darkannihilation.constant.Constants.BOT_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
@@ -24,6 +26,11 @@ public class Bot extends BaseCharacter {
         finalY = screenHeightHeight - 30;
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
+
+        HardThread.doInPool(() -> {
+            Time.sleep(500);
+            setGun();
+        });
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class GameTask extends ScheduledThreadPoolExecutor {
     private final Runnable runnable;
-    private int delay;
+    private final int delay;
     private ScheduledFuture<?> future;
     private boolean dead;
 
@@ -15,12 +15,6 @@ public class GameTask extends ScheduledThreadPoolExecutor {
         super(1);
         this.runnable = runnable;
         delay = delayMillis;
-    }
-
-    public void newTime(int millis) {
-        delay = millis;
-        pause();
-        resume();
     }
 
     public void necromancy() {

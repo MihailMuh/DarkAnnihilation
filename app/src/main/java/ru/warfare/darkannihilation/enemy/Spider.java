@@ -15,16 +15,16 @@ import static ru.warfare.darkannihilation.constant.Constants.SPIDER_HEALTH_BAR_L
 import static ru.warfare.darkannihilation.constant.Constants.SPIDER_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.SPIDER_SPEED;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class Spider extends Sprite {
     private final Vector vector = new Vector();
 
     private int shootTripleTime;
-    private long lastShoot = System.currentTimeMillis();
+    private long lastShoot = now;
 
     private int ammo;
     private boolean reload;
-    private boolean isShoot = false;
     private float hp = 10;
 
     public Spider(Game game) {
@@ -38,8 +38,8 @@ public class Spider extends Sprite {
     }
 
     private void shoot() {
-        if (System.currentTimeMillis() - lastShoot > shootTripleTime) {
-            lastShoot = System.currentTimeMillis();
+        if (now - lastShoot > shootTripleTime) {
+            lastShoot = now;
             HardThread.doInBackGround(() -> {
                 if (!reload) {
                     int X = centerX();
@@ -90,7 +90,6 @@ public class Spider extends Sprite {
     public void hide() {
         hp = SPIDER_HEALTH_BAR_LEN;
         reload = false;
-        isShoot = false;
         ammo = 0;
         health = SPIDER_HEALTH;
         x = randInt(0, screenWidthWidth);
@@ -130,9 +129,6 @@ public class Spider extends Sprite {
         if (y < 35) {
             y += SPIDER_SPEED;
         } else {
-            if (!isShoot) {
-                isShoot = true;
-            }
             shoot();
         }
     }

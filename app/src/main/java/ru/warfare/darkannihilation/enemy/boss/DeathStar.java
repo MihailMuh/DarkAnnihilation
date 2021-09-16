@@ -13,6 +13,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class DeathStar extends BaseBoss {
@@ -24,7 +25,6 @@ public class DeathStar extends BaseBoss {
 
     @Override
     public void shoot() {
-        long now = System.currentTimeMillis();
         if (now - lastShoot > BOSS_SHOOT_TIME) {
             lastShoot = now;
             HardThread.doInBackGround(() -> {

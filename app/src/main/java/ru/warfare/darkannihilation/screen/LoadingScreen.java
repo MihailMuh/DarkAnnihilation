@@ -9,9 +9,10 @@ import ru.warfare.darkannihilation.thread.HardThread;
 import static ru.warfare.darkannihilation.constant.Constants.LOADING_SCREEN_FRAME_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LOADING_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.constant.Modes.LOADING;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class LoadingScreen extends Sprite {
-    private long lastFrame = System.currentTimeMillis();
+    private long lastFrame = now;
     private int frame = 0;
     private int c = 0;
     private Runnable function;
@@ -34,7 +35,6 @@ public class LoadingScreen extends Sprite {
 
     @Override
     public void update() {
-        long now = System.currentTimeMillis();
         if (now - lastFrame > LOADING_SCREEN_FRAME_TIME) {
             lastFrame = now;
             frame++;

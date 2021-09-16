@@ -5,9 +5,10 @@ import ru.warfare.darkannihilation.base.BaseScreen;
 
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_THUNDER_SCREEN_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.THUNDER_SCREEN_FRAME_TIME;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class ThunderScreen extends BaseScreen {
-    private long lastFrame = System.currentTimeMillis();
+    private long lastFrame = now;
 
     public ThunderScreen() {
         super(ImageHub.thunderScreen);
@@ -15,7 +16,6 @@ public class ThunderScreen extends BaseScreen {
 
     @Override
     public void update() {
-        long now = System.currentTimeMillis();
         if (now - lastFrame > THUNDER_SCREEN_FRAME_TIME) {
             lastFrame = now;
             frame++;

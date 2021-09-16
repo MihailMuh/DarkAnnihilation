@@ -10,9 +10,10 @@ import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH_BAR_LEN;
 import static ru.warfare.darkannihilation.constant.Modes.BOSS_PREVIEW;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public abstract class BaseBoss extends Sprite {
-    public long lastShoot = System.currentTimeMillis();
+    public long lastShoot = now;
     private float hp = BOSS_HEALTH_BAR_LEN;
     private boolean BOOM = false;
     private final float maxHealth;

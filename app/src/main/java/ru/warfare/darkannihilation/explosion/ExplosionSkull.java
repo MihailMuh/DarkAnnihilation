@@ -6,9 +6,10 @@ import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.SKULL_EXPLOSION_FRAME_TIME;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class ExplosionSkull extends BaseExplosion {
-    private long lastShoot = System.currentTimeMillis();
+    private long lastShoot = now;
     
     public ExplosionSkull(Game game) {
         super(game, ImageHub.explosionLarge);
@@ -16,7 +17,6 @@ public class ExplosionSkull extends BaseExplosion {
 
     @Override
     public void update() {
-        long now = System.currentTimeMillis();
         if (now - lastShoot > SKULL_EXPLOSION_FRAME_TIME) {
             lastShoot = now;
             frame++;

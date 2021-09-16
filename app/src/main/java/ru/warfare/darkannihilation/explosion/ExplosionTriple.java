@@ -7,9 +7,10 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_EXPLOSION_FRAME_TIME;
 import static ru.warfare.darkannihilation.constant.NamesConst.SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class ExplosionTriple extends BaseExplosion {
-    private long lastShoot = System.currentTimeMillis();
+    private long lastShoot = now;
 
     public ExplosionTriple(Game game, byte size) {
         super(game, ImageHub.explosionTripleImageMedium);
@@ -24,7 +25,6 @@ public class ExplosionTriple extends BaseExplosion {
 
     @Override
     public void update() {
-        long now = System.currentTimeMillis();
         if (now - lastShoot > TRIPLE_EXPLOSION_FRAME_TIME) {
             lastShoot = now;
             frame++;

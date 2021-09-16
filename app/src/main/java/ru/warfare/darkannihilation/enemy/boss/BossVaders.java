@@ -14,6 +14,7 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class BossVaders extends BaseBoss {
     private final Vector vector = new Vector();
@@ -29,8 +30,8 @@ public class BossVaders extends BaseBoss {
 
     @Override
     public void shoot() {
-        if (System.currentTimeMillis() - lastShoot > BOSS_VADERS_SHOOT_TIME) {
-            lastShoot = System.currentTimeMillis();
+        if (now - lastShoot > BOSS_VADERS_SHOOT_TIME) {
+            lastShoot = now;
             HardThread.doInBackGround(() -> {
                 int X = centerX();
                 int Y = centerY();

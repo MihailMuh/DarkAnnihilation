@@ -10,10 +10,11 @@ import static ru.warfare.darkannihilation.constant.Constants.LIGHTNING_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.LIGHTNING_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_LIGHTNING_IMAGES;
 import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class BulletThunder extends BaseBullet {
     private int frame = 0;
-    private long lastShoot = System.currentTimeMillis();
+    private long lastShoot = now;
 
     public BulletThunder(Game game, int X, int Y) {
         super(game, ImageHub.thunderImage[0], X, Y, LIGHTNING_DAMAGE);
@@ -24,8 +25,8 @@ public class BulletThunder extends BaseBullet {
 
     @Override
     public void update() {
-        if (System.currentTimeMillis() - lastShoot > LIGHTNING_SHOOT_TIME) {
-            lastShoot = System.currentTimeMillis();
+        if (now - lastShoot > LIGHTNING_SHOOT_TIME) {
+            lastShoot = now;
             frame++;
 
             if (frame == NUMBER_LIGHTNING_IMAGES) {

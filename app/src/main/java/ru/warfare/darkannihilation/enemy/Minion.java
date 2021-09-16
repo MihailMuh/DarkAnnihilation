@@ -13,11 +13,12 @@ import static ru.warfare.darkannihilation.constant.Constants.MINION_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Minion extends Sprite {
-    private long lastShoot = System.currentTimeMillis();
+    private long lastShoot = now;
     private final Vector vector = new Vector();
 
     public Minion(Game game, int x, int y) {
@@ -34,8 +35,8 @@ public class Minion extends Sprite {
     }
 
     private void shoot() {
-        if (System.currentTimeMillis() - lastShoot > MINION_SHOOT_TIME) {
-            lastShoot = System.currentTimeMillis();
+        if (now - lastShoot > MINION_SHOOT_TIME) {
+            lastShoot = now;
             HardThread.doInBackGround(() -> {
                 int X = centerX();
                 int Y = centerY();

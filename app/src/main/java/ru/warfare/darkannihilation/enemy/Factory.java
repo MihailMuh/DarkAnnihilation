@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation.enemy;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
@@ -17,7 +18,7 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WI
 public class Factory extends Sprite {
     private final GameTask gameTask = new GameTask(this::spawn, FACTORY_SPAWN_TIME);
     private float hp;
-    private boolean startSpawn = false;
+    private boolean startSpawn;
 
     private static final int minionY = ImageHub.factoryImg.getHeight() - 100;
 
@@ -32,6 +33,9 @@ public class Factory extends Sprite {
     private void spawn() {
         game.enemies.add(new Minion(game, randInt(x, right), minionY));
         game.enemies.add(new Minion(game, randInt(x, right), minionY));
+        if (Randomize.randBoolean()) {
+            game.enemies.add(new Minion(game, randInt(x, right), minionY));
+        }
     }
 
     @Override
@@ -72,6 +76,7 @@ public class Factory extends Sprite {
         y = -height;
         x = HALF_SCREEN_WIDTH - halfWidth;
         health = FACTORY_HEALTH;
+        startSpawn = false;
     }
 
     @Override

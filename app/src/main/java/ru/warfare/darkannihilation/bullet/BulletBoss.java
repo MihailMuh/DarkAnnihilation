@@ -58,7 +58,7 @@ public class BulletBoss extends BaseBullet {
         y += BULLET_BOSS_SPEED;
         x -= speedX;
 
-        if (y > SCREEN_HEIGHT | x < -height | x > SCREEN_WIDTH) {
+        if (y > SCREEN_HEIGHT || x < -height || x > SCREEN_WIDTH) {
             hide();
         }
     }

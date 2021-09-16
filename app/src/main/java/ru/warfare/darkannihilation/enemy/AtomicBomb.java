@@ -11,11 +11,12 @@ import static ru.warfare.darkannihilation.constant.Constants.ATOMIC_BOMB_FRAME_T
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.ROCKET_DAMAGE;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
+import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class AtomicBomb extends Sprite {
     private int frame = 0;
-    private long lastFrame = System.currentTimeMillis();
+    private long lastFrame = now;
     private boolean BOOM;
 
     public AtomicBomb(Game game) {
@@ -106,7 +107,6 @@ public class AtomicBomb extends Sprite {
     @Override
     public void update() {
         y += speedY;
-        long now = System.currentTimeMillis();
         if (now - lastFrame > ATOMIC_BOMB_FRAME_TIME) {
             lastFrame = now;
             frame++;
