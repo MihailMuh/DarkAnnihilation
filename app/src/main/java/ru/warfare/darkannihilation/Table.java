@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import java.util.ArrayList;
 
+import ru.warfare.darkannihilation.arts.CustomPaint;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.HardThread;
 

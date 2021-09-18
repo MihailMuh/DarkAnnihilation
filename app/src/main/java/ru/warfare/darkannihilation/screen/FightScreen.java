@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation.screen;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 public class FightScreen extends Sprite {

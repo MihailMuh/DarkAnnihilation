@@ -4,7 +4,7 @@ import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 
@@ -24,7 +24,6 @@ public class TripleFighter extends Sprite {
         damage = TRIPLE_FIGHTER_DAMAGE;
 
         calculateBarriers();
-        hide();
 
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
     }
@@ -44,12 +43,13 @@ public class TripleFighter extends Sprite {
         if (game.boss != null) {
             lock = true;
             gameTask.stop();
+        } else {
+            health = TRIPLE_FIGHTER_HEALTH;
+            x = randInt(0, screenWidthWidth);
+            y = -height;
+            speedX = randInt(-3, 3);
+            speedY = randInt(1, 10);
         }
-        health = TRIPLE_FIGHTER_HEALTH;
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        speedX = randInt(-3, 3);
-        speedY = randInt(1, 10);
     }
 
     @Override
@@ -73,6 +73,7 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void empireStart() {
+        hide();
         lock = false;
         gameTask.start();
     }

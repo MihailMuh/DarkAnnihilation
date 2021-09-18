@@ -6,7 +6,7 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.SPIDER_DAMAGE;
@@ -64,7 +64,13 @@ public class Spider extends Sprite {
 
     @Override
     public void start() {
-        hide();
+        hp = SPIDER_HEALTH_BAR_LEN;
+        reload = false;
+        ammo = 0;
+        health = SPIDER_HEALTH;
+        x = randInt(0, screenWidthWidth);
+        y = -height;
+        shootTripleTime = SPIDER_SHOOT_TIME;
         lock = false;
 
         super.start();
@@ -84,17 +90,6 @@ public class Spider extends Sprite {
     public void kill() {
         intersectionPlayer();
         Game.score += 50;
-    }
-
-    @Override
-    public void hide() {
-        hp = SPIDER_HEALTH_BAR_LEN;
-        reload = false;
-        ammo = 0;
-        health = SPIDER_HEALTH;
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        shootTripleTime = SPIDER_SHOOT_TIME;
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.service.Vibrator;
 import ru.warfare.darkannihilation.character.Heart;
 import ru.warfare.darkannihilation.systemd.Game;

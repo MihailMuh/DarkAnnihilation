@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.bullet;
 
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_VADERS_DAMAGE;

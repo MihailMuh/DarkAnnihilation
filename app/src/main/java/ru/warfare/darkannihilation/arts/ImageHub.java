@@ -1,4 +1,4 @@
-package ru.warfare.darkannihilation;
+package ru.warfare.darkannihilation.arts;
 
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ATOMIC_BOMB_IMAGES;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_EXPLOSION_IMAGES;
@@ -21,16 +21,14 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 
+import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.glide.GlideManager;
+import ru.warfare.darkannihilation.arts.glide.GlideManager;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
 import ru.warfare.darkannihilation.systemd.service.Time;
@@ -52,7 +50,6 @@ public final class ImageHub {
     public static Bitmap[] thunderImage = new Bitmap[NUMBER_LIGHTNING_IMAGES];
     public static Bitmap[] gunsImage = new Bitmap[NUMBER_VADER_IMAGES];
 
-    public static Bitmap bitmap;
     public static Bitmap bulletImage;
     public static Bitmap tripleFighterImg;
     public static Bitmap playerImage;
@@ -533,19 +530,17 @@ public final class ImageHub {
                 }
                 break;
         }
-        fightScreen(id);
 
-        Time.waitImg();
-    }
-
-    private static void fightScreen(int id) {
         glideManager.run(id, screenHeight_1_05, SCREEN_HEIGHT, object -> {
             fightScreen = object;
             endImgInit = true;
         });
+
+        Time.waitImg();
     }
 
     public static void deleteFightScreen() {
+        fightScreen.recycle();
         fightScreen = null;
     }
 
@@ -581,25 +576,17 @@ public final class ImageHub {
     }
 
     public static Bitmap rotateBitmap(Bitmap image, float degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), new CustomMatrix().rotate(degree), true);
     }
 
-    public static Bitmap mirrorImage(@NonNull Bitmap image, boolean horizontal) {
-        Matrix matrix = new Matrix();
-        int width = image.getWidth();
-        int height = image.getHeight();
+    public static Bitmap mirrorImage(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
 
-        if (horizontal) {
-            matrix.postScale(-1, 1, width / 2f, height / 2f);
-        } else {
-            matrix.postScale(1, -1, width / 2f, height / 2f);
-        }
-        return Bitmap.createBitmap(image, 0, 0, width, height, matrix, true);
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, new CustomMatrix().mirror(width, height), true);
     }
 
     public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
-        return Bitmap.createScaledBitmap(bitmap, width, height, true);
+        return glideManager.runResize(bitmap, width, height);
     }
 }

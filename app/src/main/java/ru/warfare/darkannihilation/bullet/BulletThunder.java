@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.bullet;
 
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 
 import static ru.warfare.darkannihilation.constant.Colors.THUNDER_FIRST;
 import static ru.warfare.darkannihilation.constant.Colors.THUNDER_SECOND;

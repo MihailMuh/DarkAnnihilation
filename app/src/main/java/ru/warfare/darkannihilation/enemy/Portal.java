@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
@@ -55,9 +55,6 @@ public class Portal extends Sprite {
 
     @Override
     public void kill() {
-        game.intersectOnlyPlayer.remove(this);
-        ImageHub.deletePortalImages();
-        game.portal = null;
     }
 
     private void film() {
@@ -80,7 +77,7 @@ public class Portal extends Sprite {
             if (now - lifeTime > PORTAL_LIFE_TIME) {
                 Game.gameStatus = GAME;
                 AudioHub.resumeBackgroundMusic();
-                kill();
+                game.killPortal();
             }
         }
     }

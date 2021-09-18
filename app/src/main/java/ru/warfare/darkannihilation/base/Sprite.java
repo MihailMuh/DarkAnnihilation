@@ -97,10 +97,6 @@ public abstract class Sprite {
 
     public abstract void kill();
 
-    public void killInBack() {
-        kill();
-    }
-
     public void hide() {
     }
 
@@ -128,16 +124,6 @@ public abstract class Sprite {
         if (buff) {
             onStopBuff();
             buff = false;
-        }
-    }
-
-    protected void largeExplosion() {
-        AudioHub.playBoom();
-        for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
-            if (game.defaultLargeExplosion[i].lock) {
-                game.defaultLargeExplosion[i].start(centerX(), centerY());
-                break;
-            }
         }
     }
 

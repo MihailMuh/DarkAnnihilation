@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.base;
 
 import android.graphics.Bitmap;
 
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Randomize;

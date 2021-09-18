@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.math.Randomize.randInt;

@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.support;
 
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.SHOTGUN_KIT_SPEED;

@@ -8,7 +8,7 @@ import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
@@ -23,21 +23,21 @@ public class Vader extends Sprite {
 
         makeParams();
         calculateBarriers();
-        start();
     }
 
     @Override
     public void start() {
         if (game.boss != null) {
             lock = true;
-        }
-        health = VADER_HEALTH;
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        speedX = randInt(-5, 5);
-        speedY = randInt(3, 10);
+        } else {
+            health = VADER_HEALTH;
+            x = randInt(0, screenWidthWidth);
+            y = -height;
+            speedX = randInt(-5, 5);
+            speedY = randInt(3, 10);
 
-        super.start();
+            super.start();
+        }
     }
 
     @Override
@@ -70,12 +70,6 @@ public class Vader extends Sprite {
     @Override
     public void kill() {
         createLargeExplosion();
-        hide();
-    }
-
-    @Override
-    public void killInBack() {
-        largeExplosion();
         hide();
     }
 

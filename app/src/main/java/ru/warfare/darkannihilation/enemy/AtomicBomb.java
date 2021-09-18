@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Randomize;
@@ -32,11 +32,11 @@ public class AtomicBomb extends Sprite {
     private void boom() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.doInPool(() -> {
+            HardThread.createBlackHole(() -> {
                 for (int i = 0; i < game.enemies.size(); i++) {
                     Sprite sprite = game.enemies.get(i);
                     if (!sprite.lock) {
-                        sprite.killInBack();
+                        sprite.kill();
                     }
                 }
 
@@ -52,8 +52,13 @@ public class AtomicBomb extends Sprite {
 
     @Override
     public void start() {
+        BOOM = false;
+        speedY = 1;
+        health = 20;
+        x = Randomize.randInt(0, screenWidthWidth);
+        y = -height;
         lock = false;
-        hide();
+
         super.start();
     }
 
@@ -71,15 +76,6 @@ public class AtomicBomb extends Sprite {
     public void kill() {
         intersectionPlayer();
         Game.score += 50;
-    }
-
-    @Override
-    public void hide() {
-        BOOM = false;
-        speedY = 1;
-        health = 20;
-        x = Randomize.randInt(0, screenWidthWidth);
-        y = -height;
     }
 
     @Override
@@ -116,7 +112,7 @@ public class AtomicBomb extends Sprite {
         }
 
         if (y > SCREEN_HEIGHT) {
-            hide();
+            lock = true;
         }
     }
 

@@ -1,4 +1,4 @@
-package ru.warfare.darkannihilation.glide;
+package ru.warfare.darkannihilation.arts.glide;
 
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;

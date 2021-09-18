@@ -5,10 +5,9 @@ import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.GameTask;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.XWING_SHOOT_TIME;
@@ -49,14 +48,15 @@ public class XWing extends Sprite {
         if (game.boss != null) {
             lock = true;
             gameTask.stop();
-        }
-        health = XWING_HEALTH;
-        x = randInt(0, screenWidthWidth);
-        y = -height;
-        speedX = randInt(-3, 3);
-        speedY = randInt(1, 8);
+        } else {
+            health = XWING_HEALTH;
+            x = randInt(0, screenWidthWidth);
+            y = -height;
+            speedX = randInt(-3, 3);
+            speedY = randInt(1, 8);
 
-        super.start();
+            super.start();
+        }
     }
 
     @Override
@@ -86,20 +86,6 @@ public class XWing extends Sprite {
     @Override
     public void kill() {
         createLargeTripleExplosion();
-        Game.score += 10;
-        start();
-    }
-
-    @Override
-    public void killInBack() {
-        AudioHub.playBoom();
-        for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
-            if (game.tripleLargeExplosion[i].lock) {
-                game.tripleLargeExplosion[i].start(centerX(), centerY());
-                break;
-            }
-        }
-
         Game.score += 10;
         start();
     }

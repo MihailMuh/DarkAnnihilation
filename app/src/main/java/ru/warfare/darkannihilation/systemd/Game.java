@@ -1,5 +1,6 @@
 package ru.warfare.darkannihilation.systemd;
 
+import static android.graphics.Color.RED;
 import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
@@ -33,6 +34,7 @@ import static ru.warfare.darkannihilation.constant.NamesConst.LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
 import static ru.warfare.darkannihilation.constant.NamesConst.SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.math.Math.abs;
 import static ru.warfare.darkannihilation.systemd.service.Py.print;
 import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 import static ru.warfare.darkannihilation.systemd.service.Service.resources;
@@ -45,7 +47,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -55,10 +56,10 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.CustomPaint;
+import ru.warfare.darkannihilation.arts.CustomPaint;
 import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -115,18 +116,18 @@ public final class Game extends SurfaceView implements Runnable {
     private Thread thread;
     public static Canvas canvas;
 
-    public static CustomPaint fpsPaint;
-    public static CustomPaint startPaint;
-    public static CustomPaint gameOverPaint;
+    private CustomPaint winPaint;
+    private CustomPaint paint50;
+    private CustomPaint startPaint;
+    private CustomPaint gameOverPaint;
     public static CustomPaint scorePaint;
-    public static CustomPaint alphaEnemy;
-    public static CustomPaint winPaint;
-    public static CustomPaint paint50;
     public static CustomPaint buttonsPaint;
+    public static CustomPaint fpsPaint;
 
     private static final StringBuilder stringBuilder = new StringBuilder();
-
+    private static final HardThread hardThread = new HardThread();
     private final GameTask gameTask = new GameTask(this::backGroundTasks, 250);
+    public static final CustomPaint alphaEnemy = new CustomPaint();
 
     public ExplosionSkull[] skullExplosion = new ExplosionSkull[NUMBER_SKULL_EXPLOSIONS];
     public DefaultExplosion[] defaultSmallExplosion = new DefaultExplosion[NUMBER_DEFAULT_SMALL_EXPLOSION];
@@ -140,45 +141,44 @@ public final class Game extends SurfaceView implements Runnable {
     public ArrayList<Sprite> ghosts = new ArrayList<>(0);
     public ArrayList<Sprite> enemies = new ArrayList<>(0);
 
-    private static final HardThread hardThread = new HardThread();
     private Settings settings;
     private Table table;
-    public BaseScreen screen;
-    public Button buttonStart;
-    public Button buttonQuit;
-    public Button buttonMenu;
-    public Button buttonRestart;
-    public PauseButton pauseButton;
-    public FightScreen fightScreen;
-    public HealthKit healthKit;
+    private BaseScreen screen;
+    private Button buttonStart;
+    private Button buttonQuit;
+    private Button buttonMenu;
+    private Button buttonRestart;
+    private PauseButton pauseButton;
+    private FightScreen fightScreen;
+    private HealthKit healthKit;
+    private Factory factory;
+    private Demoman demoman;
+    private Portal portal;
+    private LoadingScreen loadingScreen;
+    private Spider spider;
+    private Sunrise sunrise;
+    private Buffer buffer;
+    private AtomicBomb atomicBomb;
     public ShotgunKit shotgunKit;
     public ChangerGuns changerGuns;
     public Rocket rocket;
     public Attention attention;
-    public Factory factory;
-    public Demoman demoman;
-    public Portal portal;
     public ButtonPlayer buttonPlayer;
     public ButtonSaturn buttonSaturn;
     public ButtonEmerald buttonEmerald;
     public BaseCharacter player;
-    public LoadingScreen loadingScreen;
-    public Spider spider;
-    public Sunrise sunrise;
-    public Buffer buffer;
-    public AtomicBomb atomicBomb;
     public BaseBoss boss;
 
     private int count = 0;
     private int oldScore;
     private int pointerCount;
     private int moveAll;
-    private volatile boolean isFirstRun = true;
-    public volatile boolean playing = true;
-    public static volatile byte level = 1;
-    public static volatile byte gameStatus = PASS;
-    public static volatile byte character = MILLENNIUM_FALCON;
-    public static volatile boolean vibrate;
+    private boolean isFirstRun = true;
+    public boolean playing = true;
+    public static byte level = 1;
+    public static byte gameStatus = PASS;
+    public static byte character = MILLENNIUM_FALCON;
+    public static boolean vibrate;
     public static long now = System.currentTimeMillis();
     public String language = "en";
     public static int score = 0;
@@ -236,27 +236,13 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     public void init() {
-        alphaEnemy = new CustomPaint();
-        gameOverPaint = new CustomPaint();
-
-        buttonsPaint = new CustomPaint();
-        buttonsPaint.setTextSize(25);
-
-        fpsPaint = new CustomPaint();
-        fpsPaint.setColor(Color.RED);
-        fpsPaint.setTextSize(40);
-
-        startPaint = new CustomPaint();
-        startPaint.setTextSize(300);
-
-        scorePaint = new CustomPaint();
-        scorePaint.setTextSize(40);
-
         winPaint = new CustomPaint();
-        winPaint.setTextSize(100);
-
-        paint50 = new CustomPaint();
-        paint50.setTextSize(50);
+        startPaint = new CustomPaint();
+        gameOverPaint = new CustomPaint();
+        buttonsPaint = new CustomPaint(25);
+        fpsPaint = new CustomPaint(40, RED);
+        paint50 = new CustomPaint(50);
+        scorePaint = new CustomPaint(40);
 
         recoverySettings();
 
@@ -285,12 +271,13 @@ public final class Game extends SurfaceView implements Runnable {
 
             resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
             updateMenuButtons();
-        });
 
-        count = NUMBER_VADER * 2;
-        for (int i = 0; i < count; i++) {
-            generateVader();
-        }
+            count = NUMBER_VADER * 2;
+            for (int i = 0; i < count; i++) {
+                generateVader();
+            }
+            startEmpire();
+        });
 
         for (int i = 0; i < NUMBER_SKULL_EXPLOSIONS; i++) {
             skullExplosion[i] = new ExplosionSkull(this);
@@ -324,8 +311,8 @@ public final class Game extends SurfaceView implements Runnable {
             AudioHub.loadMenuSnd();
         });
 
-        gameStatus = MENU;
         player = new Bot(this);
+        gameStatus = MENU;
 
         thread = new Thread(this);
         thread.start();
@@ -407,7 +394,7 @@ public final class Game extends SurfaceView implements Runnable {
                 if (curScore > 50) {
                     if (buffer.lock) {
                         if (Randomize.randFloat() <= 0.015) {
-                            buffer.start();
+                            buffer.lock = false;
                         }
                     }
                 }
@@ -423,15 +410,15 @@ public final class Game extends SurfaceView implements Runnable {
     private void gameplay() {
         moveAll = player.speedX / 3;
 
-        if (screen.x < 0 & screen.right() > SCREEN_WIDTH) {
+        if (screen.x < 0 && screen.right() > SCREEN_WIDTH) {
             screen.x -= moveAll;
         } else {
-            moveAll = 0;
             if (screen.x >= 0) {
-                screen.x -= 2;
+                screen.x -= abs(moveAll);
             } else {
-                screen.x += 2;
+                screen.x += abs(moveAll);
             }
+            moveAll = 0;
         }
 
         screen.turn();
@@ -514,9 +501,16 @@ public final class Game extends SurfaceView implements Runnable {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        pointerCount = event.getPointerCount();
-        int clickX = (int) event.getX();
-        int clickY = (int) event.getY();
+        switch (gameStatus) {
+            case WIN:
+            case GAME_OVER:
+            case BOSS_PREVIEW:
+            case GAME:
+                pointerCount = event.getPointerCount();
+                break;
+        }
+        int clickX = (int) event.getX(0);
+        int clickY = (int) event.getY(0);
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
@@ -627,7 +621,7 @@ public final class Game extends SurfaceView implements Runnable {
 
             hardThread.startJob();
 
-            if (gameStatus != PAUSE || gameStatus != BOSS_PREVIEW) {
+            if (gameStatus != PAUSE && gameStatus != BOSS_PREVIEW) {
                 HardThread.resumeTasks();
             }
         }
@@ -648,7 +642,7 @@ public final class Game extends SurfaceView implements Runnable {
         AudioHub.pauseBackgroundMusic();
         HardThread.finishAndRemoveTasks();
         saveScore();
-        portal.kill();
+        killPortal();
         gameStatus = PASS;
     }
 
@@ -765,6 +759,8 @@ public final class Game extends SurfaceView implements Runnable {
         screen = new StarScreen();
         player = new Bot(this);
 
+        startEmpire();
+
         gameStatus = MENU;
     }
 
@@ -792,9 +788,7 @@ public final class Game extends SurfaceView implements Runnable {
             shotgunKit.kill();
             healthKit.kill();
             pauseButton.show();
-            if (portal != null) {
-                portal.kill();
-            }
+            killPortal();
 
             boss = null;
             buttonPlayer = null;
@@ -942,13 +936,13 @@ public final class Game extends SurfaceView implements Runnable {
 
     private void afterPause() {
         count++;
-        if (0 <= count & count < 23) {
+        if (0 <= count && count < 23) {
             canvas.drawText("3", _3, _321Y, startPaint);
         } else {
-            if (23 <= count & count < 46) {
+            if (23 <= count && count < 46) {
                 canvas.drawText("2", _2, _321Y, startPaint);
             } else {
-                if (46 <= count & count < 69) {
+                if (46 <= count && count < 69) {
                     canvas.drawText("1", _1, _321Y, startPaint);
                 } else {
                     if (count == 70) {
@@ -970,16 +964,16 @@ public final class Game extends SurfaceView implements Runnable {
             renderSprites();
 
             if (PauseButton.oldStatus == READY) {
-                if (0 <= count & count < 70) {
+                if (0 <= count && count < 70) {
                     canvas.drawText("3", _3, _321Y, startPaint);
                 } else {
-                    if (70 <= count & count < 140) {
+                    if (70 <= count && count < 140) {
                         canvas.drawText("2", _2, _321Y, startPaint);
                     } else {
-                        if (140 <= count & count < 210) {
+                        if (140 <= count && count < 210) {
                             canvas.drawText("1", _1, _321Y, startPaint);
                         } else {
-                            if (210 <= count & count < 280) {
+                            if (210 <= count && count < 280) {
                                 canvas.drawText(string_shoot, shootX, shootY, startPaint);
                             }
                         }
@@ -1002,7 +996,7 @@ public final class Game extends SurfaceView implements Runnable {
     private void ready() {
         moveAll = player.speedX / 3;
 
-        if (screen.x < 0 & screen.right() > SCREEN_WIDTH) {
+        if (screen.x < 0 && screen.right() > SCREEN_WIDTH) {
             screen.x -= moveAll;
         } else {
             moveAll = 0;
@@ -1020,20 +1014,20 @@ public final class Game extends SurfaceView implements Runnable {
         player.renderHearts();
 
         count++;
-        if (0 <= count & count < 70) {
+        if (0 <= count && count < 70) {
             canvas.drawText("3", _3, _321Y, startPaint);
         } else {
-            if (70 <= count & count < 140) {
+            if (70 <= count && count < 140) {
                 canvas.drawText("2", _2, _321Y, startPaint);
             } else {
-                if (140 <= count & count < 210) {
+                if (140 <= count && count < 210) {
                     canvas.drawText("1", _1, _321Y, startPaint);
                 } else {
-                    if (210 <= count & count < 280) {
+                    if (210 <= count && count < 280) {
                         canvas.drawText(string_shoot, shootX, shootY, startPaint);
                     } else {
                         if (count == 280) {
-                            HardThread.doInPool(() -> {
+                            HardThread.doInBackGround(() -> {
                                 gameStatus = GAME;
                                 count = 0;
                                 changerGuns.start();
@@ -1371,6 +1365,14 @@ public final class Game extends SurfaceView implements Runnable {
         }
     }
 
+    public void killPortal() {
+        if (portal != null) {
+            intersectOnlyPlayer.remove(portal);
+            ImageHub.deletePortalImages();
+            portal = null;
+        }
+    }
+
     public void startEmpire() {
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).empireStart();
@@ -1432,6 +1434,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         calculatePaint(gameOverPaint, string_go_to_menu, 50, SCREEN_WIDTH - calculate(200));
         calculatePaint(startPaint, string_shoot, 270, SCREEN_WIDTH - calculate(200));
+        calculatePaint(winPaint, string_thanks, 100, SCREEN_WIDTH - calculate(200));
         resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
 
         if (set) {

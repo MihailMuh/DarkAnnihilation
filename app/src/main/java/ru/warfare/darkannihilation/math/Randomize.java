@@ -13,10 +13,6 @@ public final class Randomize {
         return random.nextFloat();
     }
 
-    public static float randFloat(float min, float max) {
-        return (float) (java.lang.Math.random() * ((max - min) + 1) + min);
-    }
-
     public static boolean randBoolean() {
         return random.nextBoolean();
     }

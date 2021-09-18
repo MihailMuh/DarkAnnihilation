@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.enemy.boss;
 
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
 import ru.warfare.darkannihilation.base.Sprite;

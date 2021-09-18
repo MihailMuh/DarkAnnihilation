@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation.enemy;
 import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.Bomb;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_DAMAGE;
@@ -46,15 +46,15 @@ public class Demoman extends Sprite {
         goLeft = randBoolean();
 
         if (goLeft) {
-            image = ImageHub.mirrorImage(ImageHub.demomanImg, true);
+            image = ImageHub.mirrorImage(ImageHub.demomanImg);
             x = -width;
         } else {
             image = ImageHub.demomanImg;
             x = SCREEN_WIDTH;
             speedX = -speedX;
         }
-        lock = false;
 
+        lock = false;
         gameTask.start();
     }
 

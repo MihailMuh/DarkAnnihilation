@@ -6,7 +6,7 @@ import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
 
@@ -31,7 +31,6 @@ public class Button extends BaseButton {
 
     public Button(Game game) {
         super(game, ImageHub.buttonImagePressed);
-        x = 500;
     }
 
     public void setText(String text) {

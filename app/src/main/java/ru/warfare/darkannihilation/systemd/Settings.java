@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.interfaces.SeekArcListener;

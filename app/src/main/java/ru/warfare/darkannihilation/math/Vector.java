@@ -34,11 +34,6 @@ public class Vector {
         return new float[]{(float) (java.lang.Math.cos(rads) * len), (float) (java.lang.Math.sin(rads) * len)};
     }
 
-    public float[] rotateVector(int angle) {
-        rads = (float) java.lang.Math.toRadians(angle);
-        return new float[]{(float) (java.lang.Math.cos(rads) * len), (float) (java.lang.Math.sin(rads) * len)};
-    }
-
     public float getAngle() {
         return (float) java.lang.Math.toDegrees(rads + Math.HALF_PI);
     }

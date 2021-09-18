@@ -18,7 +18,7 @@ import com.google.android.gms.ads.RequestConfiguration;
 import java.util.Collections;
 
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseActivity;
@@ -53,13 +53,10 @@ public final class MainActivity extends BaseActivity {
             MobileAds.setRequestConfiguration(new RequestConfiguration.Builder()
                     .setTestDeviceIds(Collections.singletonList("5371A173E68885BC058877681D34AB6B")).build());
 
-            runOnUiThread(this::checkOnFirstRun);
-
             game.init();
+
+            runOnUiThread(this::checkOnFirstRun);
         });
-//        pauseBanner = findViewById(R.id.pauseAdMob);
-//        pauseBanner.setAdUnitId(ADMOB_ID);
-//        pauseBanner = null;
     }
 
     @Override

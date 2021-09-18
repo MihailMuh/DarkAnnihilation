@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 
 public class PauseButton extends BaseButton {
     public static volatile byte oldStatus;

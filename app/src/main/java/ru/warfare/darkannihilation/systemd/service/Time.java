@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.systemd.service;
 
-import static ru.warfare.darkannihilation.ImageHub.endImgInit;
+import static ru.warfare.darkannihilation.arts.ImageHub.endImgInit;
 
 public final class Time {
     public static void sleep(int millis) {

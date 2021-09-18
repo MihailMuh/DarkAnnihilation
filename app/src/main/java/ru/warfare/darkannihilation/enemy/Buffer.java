@@ -2,7 +2,7 @@ package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BUFFER_DAMAGE;
@@ -17,24 +17,18 @@ public class Buffer extends Sprite {
         damage = BUFFER_DAMAGE;
 
         calculateBarriers();
-        lock = true;
+        hide();
 
         recreateRect(x + 70, y + 70, right() - 70, bottom() - 35);
     }
 
     @Override
     public void hide() {
+        lock = true;
         health = BUFFER_HEALTH;
         x = randInt(0, screenWidthWidth);
         y = -height;
         speedY = randInt(5, 10);
-    }
-
-    @Override
-    public void start() {
-        lock = false;
-        hide();
-        super.start();
     }
 
     @Override
@@ -54,7 +48,7 @@ public class Buffer extends Sprite {
     @Override
     public void intersectionPlayer() {
         createSkullExplosion();
-        lock = true;
+        hide();
 
         HardThread.doInPool(this::stopBFF);
     }
@@ -63,16 +57,6 @@ public class Buffer extends Sprite {
     public void kill() {
         Game.score += 100;
         intersectionPlayer();
-    }
-
-    @Override
-    public void killInBack() {
-        Game.score += 100;
-
-        createSkullExplosion();
-        lock = true;
-
-        stopBFF();
     }
 
     @Override

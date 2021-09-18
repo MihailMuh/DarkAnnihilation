@@ -3,7 +3,7 @@ package ru.warfare.darkannihilation.bullet;
 import android.graphics.Matrix;
 
 import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -33,7 +33,7 @@ public class BulletDynamite extends BaseBullet {
     public void kill() {
         if (!BOOM) {
             BOOM = true;
-            HardThread.doInBackGround(() -> {
+            HardThread.createBlackHole(() -> {
                 width = ImageHub.explosionLarge[0].getWidth();
                 height = ImageHub.explosionLarge[0].getHeight();
 

@@ -4,7 +4,7 @@ import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_DAMAGE;
@@ -57,16 +57,6 @@ public class Sunrise extends Sprite {
 
     @Override
     public void start() {
-        lock = false;
-        hide();
-
-        super.start();
-
-        gameTask.start();
-    }
-
-    @Override
-    public void hide() {
         field = false;
         health = SUNRISE_HEALTH;
         x = randInt(0, screenWidthWidth);
@@ -74,6 +64,11 @@ public class Sunrise extends Sprite {
         speedX = randInt(2, 4);
         speedY = randInt(2, 4);
         left = randBoolean();
+        lock = false;
+
+        super.start();
+
+        gameTask.start();
     }
 
     @Override

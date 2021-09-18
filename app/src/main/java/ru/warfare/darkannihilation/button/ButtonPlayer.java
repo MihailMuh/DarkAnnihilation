@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.button;
 
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.BaseCharacterButton;
 import ru.warfare.darkannihilation.systemd.Game;
 

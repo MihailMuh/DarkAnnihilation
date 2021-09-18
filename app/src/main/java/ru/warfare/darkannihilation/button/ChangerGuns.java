@@ -6,8 +6,8 @@ import static ru.warfare.darkannihilation.constant.NamesConst.SHOTGUN;
 import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import ru.warfare.darkannihilation.CustomPaint;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.CustomPaint;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.systemd.Game;

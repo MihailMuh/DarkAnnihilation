@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.ImageHub;
+import ru.warfare.darkannihilation.arts.ImageHub;
 
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_BOSS_SPEED;
