@@ -23,6 +23,7 @@ public class Vader extends Sprite {
 
         makeParams();
         calculateBarriers();
+        lock = true;
     }
 
     @Override

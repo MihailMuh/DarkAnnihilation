@@ -27,7 +27,7 @@ public class XWing extends Sprite {
         damage = XWING_DAMAGE;
 
         calculateBarriers();
-
+        lock = true;
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 

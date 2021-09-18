@@ -93,6 +93,8 @@ public class HardThread implements Runnable {
         work = false;
         playing = true;
         thread = new Thread(this);
+        thread.setDaemon(true);
+        thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
     }
 

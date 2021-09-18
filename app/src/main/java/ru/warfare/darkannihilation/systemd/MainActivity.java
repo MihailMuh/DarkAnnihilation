@@ -57,6 +57,8 @@ public final class MainActivity extends BaseActivity {
 
             runOnUiThread(this::checkOnFirstRun);
         });
+
+        Thread.currentThread().setPriority(3);
     }
 
     @Override

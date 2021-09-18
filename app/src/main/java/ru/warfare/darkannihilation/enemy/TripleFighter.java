@@ -24,6 +24,7 @@ public class TripleFighter extends Sprite {
         damage = TRIPLE_FIGHTER_DAMAGE;
 
         calculateBarriers();
+        lock = true;
 
         recreateRect(x + 5, y + 5, right() - 5, bottom() - 5);
     }

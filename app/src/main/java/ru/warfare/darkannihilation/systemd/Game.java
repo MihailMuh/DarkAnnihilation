@@ -272,8 +272,8 @@ public final class Game extends SurfaceView implements Runnable {
             resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
             updateMenuButtons();
 
-            count = NUMBER_VADER * 2;
-            for (int i = 0; i < count; i++) {
+            int len = NUMBER_VADER * 2;
+            for (int i = 0; i < len; i++) {
                 generateVader();
             }
             startEmpire();
@@ -314,8 +314,7 @@ public final class Game extends SurfaceView implements Runnable {
         player = new Bot(this);
         gameStatus = MENU;
 
-        thread = new Thread(this);
-        thread.start();
+        startThread();
 
         isFirstRun = false;
     }
@@ -501,14 +500,7 @@ public final class Game extends SurfaceView implements Runnable {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        switch (gameStatus) {
-            case WIN:
-            case GAME_OVER:
-            case BOSS_PREVIEW:
-            case GAME:
-                pointerCount = event.getPointerCount();
-                break;
-        }
+        pointerCount = event.getPointerCount();
         int clickX = (int) event.getX(0);
         int clickY = (int) event.getY(0);
 
@@ -616,8 +608,7 @@ public final class Game extends SurfaceView implements Runnable {
         if (!isFirstRun) {
             AudioHub.whoIsPlayed();
             playing = true;
-            thread = new Thread(this);
-            thread.start();
+            startThread();
 
             hardThread.startJob();
 
@@ -1523,6 +1514,12 @@ public final class Game extends SurfaceView implements Runnable {
     private void makeScoresParams() {
         scoreX = (int) (HALF_SCREEN_WIDTH - scorePaint.measureText(string_current_score + score) / 2);
         maxScoreX = (int) (HALF_SCREEN_WIDTH - scorePaint.measureText(string_max_score + bestScore) / 2);
+    }
+
+    private void startThread() {
+        thread = new Thread(this);
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.start();
     }
 
     public void hideSettings() {
