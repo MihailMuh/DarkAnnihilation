@@ -27,7 +27,7 @@ public class Bot extends BaseCharacter {
 
         recreateRect(x + 20, y + 25, right() - 20, bottom() - 20);
 
-        HardThread.doInPool(() -> {
+        HardThread.doInBackGround(() -> {
             Time.sleep(200);
             setGun();
         });

@@ -73,6 +73,7 @@ public class Button extends BaseButton {
                     case QUIT:
                         AudioHub.releaseAP();
                         game.saveSettings();
+                        game.onPause();
                         Service.systemExit();
                         break;
                     case PAUSE:
@@ -87,7 +88,7 @@ public class Button extends BaseButton {
                     case TOP:
                         game.onLoading(game::generateTopScore);
 
-                        HardThread.doInPool(() -> {
+                        HardThread.doInBackGround(() -> {
                             ClientServer.postBestScore(Clerk.nickname, game.bestScore);
                             ClientServer.getStatistics();
                             game.generateTable();

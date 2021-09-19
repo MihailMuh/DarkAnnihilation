@@ -109,7 +109,7 @@ public final class MainActivity extends BaseActivity {
             LayoutInflater li = LayoutInflater.from(this);
 
             if (isOnline()) {
-                HardThread.doInPool(ClientServer::getStatistics);
+                HardThread.doInBackGround(ClientServer::getStatistics);
 
                 View view = li.inflate(R.layout.dialog, null);
 
@@ -141,7 +141,7 @@ public final class MainActivity extends BaseActivity {
                                     if (ClientServer.info_from_server.has(Clerk.nickname)) {
                                         makeToast("This nickname already exists", true);
                                     } else {
-                                        HardThread.doInPool(() -> {
+                                        HardThread.doInBackGround(() -> {
                                             Clerk.saveNickname();
                                             ClientServer.postBestScore(Clerk.nickname, 0);
                                         });
@@ -158,7 +158,10 @@ public final class MainActivity extends BaseActivity {
                 new AlertDialog.Builder(this)
                         .setView(li.inflate(R.layout.warning, null))
                         .setCancelable(false)
-                        .setNegativeButton("Exit", (dialogInterface, i) -> Service.systemExit())
+                        .setNegativeButton("Exit", (dialogInterface, i) -> {
+                            game.onPause();
+                            Service.systemExit();
+                        })
                         .setPositiveButton("Later", null)
                         .setNeutralButton("I enabled internet and want to register", (dialogInterface, i) -> checkOnFirstRun())
                         .create()

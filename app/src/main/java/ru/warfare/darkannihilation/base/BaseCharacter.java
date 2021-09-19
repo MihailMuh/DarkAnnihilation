@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-import ru.warfare.darkannihilation.thread.GameTask;
+import ru.warfare.darkannihilation.thread.PROGameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.service.Vibrator;
@@ -17,24 +17,27 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 
 public abstract class BaseCharacter extends Sprite {
     private static final short cup = 250;
-    private boolean boom = false;
-    public int endX;
-    public int endY;
-    public boolean dontmove = false;
-    public int maxHealth;
-    private final ArrayList<Heart> hearts = new ArrayList<>(0);
-    private final GameTask gunTask;
-    private final GameTask shotgunTask;
-    private int[] types;
-    public boolean god;
-    private int bar;
     private static final int _25 = calculate(25);
     private static final int _10 = calculate(10);
     private static final int _90 = calculate(90);
     private static final int _385 = calculate(385);
 
+    private final ArrayList<Heart> hearts = new ArrayList<>(0);
+    private int[] types;
+    private int bar;
     private int heartX = _25;
     private int heartY = _10;
+
+    private final PROGameTask gunTask;
+    private final PROGameTask shotgunTask;
+
+    private boolean boom = false;
+
+    public int endX;
+    public int endY;
+    public boolean dontmove = false;
+    public int maxHealth;
+    public boolean god;
 
     public BaseCharacter(Game g, Bitmap bitmap, int maxHealth, short gunTime, short shotgunTime) {
         super(g, bitmap);
@@ -55,8 +58,8 @@ public abstract class BaseCharacter extends Sprite {
             }
         }
 
-        gunTask = new GameTask(this::gun, gunTime);
-        shotgunTask = new GameTask(this::shotgun, shotgunTime);
+        gunTask = new PROGameTask(this::gun, gunTime);
+        shotgunTask = new PROGameTask(this::shotgun, shotgunTime);
 
         newStatus();
         changeHearts();

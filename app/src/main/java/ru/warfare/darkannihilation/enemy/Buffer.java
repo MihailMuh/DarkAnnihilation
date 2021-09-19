@@ -50,7 +50,7 @@ public class Buffer extends Sprite {
         createSkullExplosion();
         hide();
 
-        HardThread.doInPool(this::stopBFF);
+        HardThread.doInBackGround(this::stopBFF);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Buffer extends Sprite {
         } else {
             if (!startBuff) {
                 startBuff = true;
-                HardThread.doInPool(() -> {
+                HardThread.doInBackGround(() -> {
                     for (int i = 0; i < game.enemies.size(); i++) {
                         game.enemies.get(i).buff();
                     }

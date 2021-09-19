@@ -4,7 +4,7 @@ import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.thread.GameTask;
+import ru.warfare.darkannihilation.thread.SickGameTask;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
 
@@ -18,7 +18,7 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 
 public class XWing extends Sprite {
-    private final GameTask gameTask = new GameTask(this::shoot, XWING_SHOOT_TIME);
+    private final SickGameTask gameTask = new SickGameTask(this::shoot, XWING_SHOOT_TIME);
     private static final int R = calculate(500);
     private final Vector vector = new Vector();
 

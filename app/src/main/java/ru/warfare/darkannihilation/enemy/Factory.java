@@ -5,7 +5,7 @@ import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.thread.GameTask;
+import ru.warfare.darkannihilation.thread.SickGameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
 
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH;
@@ -16,7 +16,7 @@ import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 public class Factory extends Sprite {
-    private final GameTask gameTask = new GameTask(this::spawn, FACTORY_SPAWN_TIME);
+    private final SickGameTask gameTask = new SickGameTask(this::spawn, FACTORY_SPAWN_TIME);
     private float hp;
     private boolean startSpawn;
 
@@ -56,7 +56,7 @@ public class Factory extends Sprite {
 
     @Override
     public void kill() {
-        HardThread.doInPool(() -> {
+        HardThread.doInBackGround(() -> {
             Game.score += 75;
             createSkullExplosion();
             hide();

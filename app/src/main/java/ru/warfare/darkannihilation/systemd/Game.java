@@ -707,7 +707,7 @@ public final class Game extends SurfaceView implements Runnable {
         level = 1;
         enemies = new ArrayList<>(0);
 
-        HardThread.doInPool(() -> {
+        HardThread.doInBackGround(() -> {
             bullets = new ArrayList<>(0);
             ghosts = new ArrayList<>(0);
             intersectOnlyPlayer = new ArrayList<>(0);
@@ -1306,7 +1306,7 @@ public final class Game extends SurfaceView implements Runnable {
     public void saveScore() {
         if (score > bestScore) {
             Clerk.saveBestScore(score);
-            HardThread.doInPool(() -> ClientServer.postBestScore(Clerk.nickname, score));
+            HardThread.doInBackGround(() -> ClientServer.postBestScore(Clerk.nickname, score));
         }
     }
 

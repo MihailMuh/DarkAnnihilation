@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation.base;
 import android.graphics.Bitmap;
 
 import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Randomize;
@@ -10,15 +11,15 @@ import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH_BAR_LEN;
 import static ru.warfare.darkannihilation.constant.Modes.BOSS_PREVIEW;
-import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public abstract class BaseBoss extends Sprite {
-    public long lastShoot = now;
+    protected final GameTask gameTask;
+    protected boolean startShoot;
     private float hp = BOSS_HEALTH_BAR_LEN;
     private boolean BOOM = false;
     private final float maxHealth;
 
-    public BaseBoss(Game game, Bitmap bitmap, int maxHealth, int speedX) {
+    public BaseBoss(Game game, Bitmap bitmap, int maxHealth, int speedX, short shootTime) {
         super(game, bitmap);
 
         speedY = 1;
@@ -31,6 +32,8 @@ public abstract class BaseBoss extends Sprite {
 
         this.maxHealth = maxHealth;
         health = maxHealth;
+
+        gameTask = new GameTask(this::shoot, shootTime);
     }
 
     public abstract void shoot();
@@ -41,6 +44,8 @@ public abstract class BaseBoss extends Sprite {
 
             HardThread.doInPool(() -> {
                 AudioHub.pauseBossMusic();
+
+                gameTask.stop();
 
                 createSkullExplosion();
                 game.killBoss();

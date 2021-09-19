@@ -1,6 +1,5 @@
 package ru.warfare.darkannihilation.enemy.boss;
 
-import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
@@ -13,29 +12,23 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
-import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class DeathStar extends BaseBoss {
     public DeathStar(Game g) {
-        super(g, ImageHub.bossImage, BOSS_HEALTH, 10);
+        super(g, ImageHub.bossImage, BOSS_HEALTH, 10, BOSS_SHOOT_TIME);
 
         recreateRect(x + 20, y + 20, right() - 20, bottom() - 20);
     }
 
     @Override
     public void shoot() {
-        if (now - lastShoot > BOSS_SHOOT_TIME) {
-            lastShoot = now;
-            HardThread.doInBackGround(() -> {
-                int ri = right() - 115;
-                int y40 = y + 40;
-                for (int i = 1; i < 4; i++) {
-                    game.intersectOnlyPlayer.add(new BulletBoss(game, ri, y40, i));
-                }
-                AudioHub.playShoot();
-            });
+        int ri = right() - 115;
+        int y40 = y + 40;
+        for (int i = 1; i < 4; i++) {
+            game.intersectOnlyPlayer.add(new BulletBoss(game, ri, y40, i));
         }
+        AudioHub.playShoot();
     }
 
     @Override
@@ -75,7 +68,10 @@ public class DeathStar extends BaseBoss {
                     x = -width;
                 }
             }
-            shoot();
+            if (!startShoot) {
+                startShoot = true;
+                gameTask.start();
+            }
 
         } else {
             super.update();

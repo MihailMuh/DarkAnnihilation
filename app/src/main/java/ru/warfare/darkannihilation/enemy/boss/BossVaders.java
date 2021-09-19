@@ -1,6 +1,5 @@
 package ru.warfare.darkannihilation.enemy.boss;
 
-import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
@@ -14,7 +13,6 @@ import ru.warfare.darkannihilation.systemd.Game;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
-import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class BossVaders extends BaseBoss {
     private final Vector vector = new Vector();
@@ -23,24 +21,19 @@ public class BossVaders extends BaseBoss {
     private boolean left = Randomize.randBoolean();
 
     public BossVaders(Game game) {
-        super(game, ImageHub.bossVadersImg, BOSS_VADERS_HEALTH, 5);
+        super(game, ImageHub.bossVadersImg, BOSS_VADERS_HEALTH, 5, BOSS_VADERS_SHOOT_TIME);
 
         recreateRect(x + 35, y + 20, right() - 35, bottom() - 20);
     }
 
     @Override
     public void shoot() {
-        if (now - lastShoot > BOSS_VADERS_SHOOT_TIME) {
-            lastShoot = now;
-            HardThread.doInBackGround(() -> {
-                int X = centerX();
-                int Y = centerY();
-                int[] values = vector.easyVector(X, Y, game.player.centerX(),
-                        game.player.centerY(), 10);
-                game.enemies.add(new BulletBossVaders(game, X, Y, values[0], values[1]));
-                AudioHub.playBossShoot();
-            });
-        }
+        int X = centerX();
+        int Y = centerY();
+        int[] values = vector.easyVector(X, Y, game.player.centerX(),
+                game.player.centerY(), 10);
+        game.enemies.add(new BulletBossVaders(game, X, Y, values[0], values[1]));
+        AudioHub.playBossShoot();
     }
 
     @Override
@@ -78,11 +71,9 @@ public class BossVaders extends BaseBoss {
     public void update() {
         super.update();
 
-        if (y > 0 & !field) {
+        if (y > 0 && !field) {
             field = true;
-        }
-        if (y > -halfHeight) {
-            shoot();
+            gameTask.start();
         }
         if (field) {
             if (x <= 0) {

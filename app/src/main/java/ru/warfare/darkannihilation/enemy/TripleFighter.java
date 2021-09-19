@@ -1,6 +1,6 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.thread.GameTask;
+import ru.warfare.darkannihilation.thread.SickGameTask;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
@@ -16,7 +16,7 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class TripleFighter extends Sprite {
-    private final GameTask gameTask = new GameTask(this::shoot, TRIPLE_FIGHTER_SHOOT_TIME);
+    private final SickGameTask gameTask = new SickGameTask(this::shoot, TRIPLE_FIGHTER_SHOOT_TIME);
     private final Vector vector = new Vector();
 
     public TripleFighter(Game game) {

@@ -1,62 +1,63 @@
 package ru.warfare.darkannihilation.thread;
 
+import static ru.warfare.darkannihilation.systemd.service.Py.print;
+
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ru.warfare.darkannihilation.interfaces.Function;
 
-import static ru.warfare.darkannihilation.systemd.service.Py.print;
-
-public class HardThread implements Runnable {
-    private static final ExecutorService threadPool = Executors.newWorkStealingPool();
+public class HardThread {
+    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private static ArrayList<Function> functions = new ArrayList<>(0);
     static ArrayList<GameTask> tasks = new ArrayList<>(0);
-    private static ArrayList<Function> blackHole = new ArrayList<>(0);
-    private static volatile boolean hole;
+    private static Handler handler;
     private Thread thread;
-    private static Function function;
-    private boolean playing;
     private static volatile boolean work;
+    private static volatile boolean blackHole;
 
     public HardThread() {
         startJob();
     }
 
-    public static void createBlackHole(Function func) {
+    public static void createBlackHole(Function function) {
+        blackHole = true;
+
         threadPool.execute(() -> {
-            hole = true;
+            functions.add(function);
 
-            blackHole.add(func);
-
-            for (int i = 0; i < blackHole.size(); i++) {
-                blackHole.get(i).run();
+            for (int i = 0; i < functions.size(); i++) {
+                functions.get(i).run();
             }
 
-            hole = false;
+            blackHole = false;
 
-            blackHole = new ArrayList<>(0);
+            functions = new ArrayList<>(0);
         });
     }
 
-    public static void doInBackGround(Function func) {
+    public static void doInBackGround(Function function) {
         if (!work) {
-            function = func;
             work = true;
+            handler.post(() -> {
+                function.run();
+                work = false;
+            });
         } else {
-            if (!hole) {
-                threadPool.execute(func::run);
+            if (!blackHole) {
+                threadPool.execute(function::run);
             } else {
-                blackHole.add(func);
+                functions.add(function);
             }
         }
     }
 
-    public static void doInPool(Function function) {
-        if (!hole) {
-            threadPool.execute(function::run);
-        } else {
-            blackHole.add(function);
-        }
+    public static void doInPool(Runnable runnable) {
+        threadPool.execute(runnable);
     }
 
     public static void finishAndRemoveTasks() {
@@ -77,8 +78,9 @@ public class HardThread implements Runnable {
     }
 
     public void stopJob() {
-        playing = false;
         work = true;
+
+        handler.getLooper().quitSafely();
         while (!thread.isInterrupted()) {
             try {
                 thread.interrupt();
@@ -91,20 +93,13 @@ public class HardThread implements Runnable {
 
     public void startJob() {
         work = false;
-        playing = true;
-        thread = new Thread(this);
-        thread.setDaemon(true);
+
+        thread = new Thread(() -> {
+            Looper.prepare();
+            handler = new Handler();
+            Looper.loop();
+        });
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
-    }
-
-    @Override
-    public void run() {
-        while (playing) {
-            if (work) {
-                function.run();
-                work = false;
-            }
-        }
     }
 }
