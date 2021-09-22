@@ -9,9 +9,7 @@ import static ru.warfare.darkannihilation.systemd.Game.string_vibration;
 import static ru.warfare.darkannihilation.systemd.Game.string_volume;
 import static ru.warfare.darkannihilation.systemd.service.Service.activity;
 import static ru.warfare.darkannihilation.systemd.service.Service.runOnUiThread;
-import static ru.warfare.darkannihilation.systemd.service.Windows.LAYOUT_DENSITY;
 
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.skydoves.powerspinner.IconSpinnerAdapter;
@@ -22,9 +20,8 @@ import com.triggertrap.seekarc.SeekArc;
 import java.util.ArrayList;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
-import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.R;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.interfaces.SeekArcListener;
 import ru.warfare.darkannihilation.interfaces.SpinnerListener;
@@ -32,6 +29,7 @@ import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.systemd.service.Clerk;
 import ru.warfare.darkannihilation.systemd.service.Time;
 import ru.warfare.darkannihilation.systemd.service.Vibrator;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 public class Settings {
     private final Game game;
@@ -58,18 +56,11 @@ public class Settings {
 
         parseSettings();
 
-        int _200 = (int) (200 * LAYOUT_DENSITY + 0.5f);
-        ViewGroup.LayoutParams layoutParams;
-
         angleEffects = activity.findViewById(R.id.angleEffects);
         angleEffects.setVisibility(TextView.VISIBLE);
         textViewEffects = activity.findViewById(R.id.textViewEffects);
         textViewEffects.setVisibility(TextView.VISIBLE);
         seekArcEffects = activity.findViewById(R.id.seekArcEffects);
-        layoutParams = seekArcEffects.getLayoutParams();
-        layoutParams.width = _200;
-        layoutParams.height = _200;
-        seekArcEffects.setLayoutParams(layoutParams);
         seekArcEffects.setProgress((int) (finalVolumeEffects * 100));
         seekArcEffects.setVisibility(SeekArc.VISIBLE);
         seekArcEffects.setOnSeekArcChangeListener((SeekArcListener) newVolume -> {
@@ -83,10 +74,6 @@ public class Settings {
         textViewMusic = activity.findViewById(R.id.textViewMusic);
         textViewMusic.setVisibility(TextView.VISIBLE);
         seekArcMusic = activity.findViewById(R.id.seekArcMusic);
-        layoutParams = seekArcMusic.getLayoutParams();
-        layoutParams.width = _200;
-        layoutParams.height = _200;
-        seekArcMusic.setLayoutParams(layoutParams);
         seekArcMusic.setProgress((int) (finalVolumeMusic * 100));
         seekArcMusic.setVisibility(SeekArc.VISIBLE);
         seekArcMusic.setOnSeekArcChangeListener((SeekArcListener) newVolume -> {
@@ -99,6 +86,8 @@ public class Settings {
         textViewVibration.setVisibility(TextView.VISIBLE);
         stickySwitch = activity.findViewById(R.id.stickySwitch);
         stickySwitch.setVisibility(TextView.VISIBLE);
+        stickySwitch.setRightIcon(ImageHub.onImg);
+        stickySwitch.setLeftIcon(ImageHub.offImg);
         stickySwitch.setRightIcon(ImageHub.onImg);
         stickySwitch.setLeftIcon(ImageHub.offImg);
         if (Game.vibrate) {
@@ -118,7 +107,7 @@ public class Settings {
             }
         });
 
-        ArrayList<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
+        ArrayList<IconSpinnerItem> iconSpinnerItems = new ArrayList<>(0);
         iconSpinnerItems.add(new IconSpinnerItem("English", ImageHub.enImg));
         iconSpinnerItems.add(new IconSpinnerItem("Русский", ImageHub.ruImg));
         iconSpinnerItems.add(new IconSpinnerItem("Français", ImageHub.frImg));
@@ -127,43 +116,33 @@ public class Settings {
 
         spinner = activity.findViewById(R.id.spinner);
         spinner.setVisibility(TextView.VISIBLE);
-        layoutParams = spinner.getLayoutParams();
-        layoutParams.width = (int) (180 * LAYOUT_DENSITY + 0.5f);
-        layoutParams.height = (int) (50 * LAYOUT_DENSITY + 0.5f);
-        spinner.setLayoutParams(layoutParams);
-        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinner);
-        spinner.setSpinnerAdapter(iconSpinnerAdapter);
+        spinner.setSpinnerAdapter(new IconSpinnerAdapter(spinner));
         spinner.setItems(iconSpinnerItems);
-        spinner.setOnSpinnerItemSelectedListener((SpinnerListener) id -> {
-            HardThread.doInBackGround(() -> {
-                switch (id) {
-                    case 0:
-                        game.language = "en";
-                        break;
-                    case 1:
-                        game.language = "ru";
-                        break;
-                    case 2:
-                        game.language = "fr";
-                        break;
-                    case 3:
-                        game.language = "sp";
-                        break;
-                    case 4:
-                        game.language = "ge";
-                        break;
-                }
-                game.confirmLanguage(true);
+        spinner.setOnSpinnerItemSelectedListener((SpinnerListener) id -> HardThread.doInBackGround(() -> {
+            switch (id) {
+                case 0:
+                    game.language = "en";
+                    break;
+                case 1:
+                    game.language = "ru";
+                    break;
+                case 2:
+                    game.language = "fr";
+                    break;
+                case 3:
+                    game.language = "sp";
+                    break;
+                case 4:
+                    game.language = "ge";
+                    break;
+            }
+            game.confirmLanguage(true);
 
-                runOnUiThread(this::makeLanguage);
-            });
-        });
+            runOnUiThread(this::makeLanguage);
+        }));
         spinner.setLifecycleOwner(activity);
         textSpinner = activity.findViewById(R.id.textSpinner);
         textSpinner.setVisibility(TextView.VISIBLE);
-
-        stickySwitch.setRightIcon(ImageHub.onImg);
-        stickySwitch.setLeftIcon(ImageHub.offImg);
 
         switch (game.language) {
             case "en":

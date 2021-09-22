@@ -262,12 +262,12 @@ public final class Game extends SurfaceView implements Runnable {
         screen = new StarScreen();
 
         HardThread.doInBackGround(() -> {
+            newCharacterButtons();
+
             pauseButton = new PauseButton(this);
             healthKit = new HealthKit(this);
             shotgunKit = new ShotgunKit(this);
             loadingScreen = new LoadingScreen(this);
-
-            newCharacterButtons();
 
             resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
             updateMenuButtons();
