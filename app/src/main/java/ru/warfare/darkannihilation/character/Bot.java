@@ -67,10 +67,10 @@ public class Bot extends BaseCharacter {
         x += speedX;
         y += speedY;
 
-        if (x < 30 | x > finalX) {
+        if (x < 30 || x > finalX) {
             speedX = -speedX;
         }
-        if (y < 30 | y > finalY) {
+        if (y < 30 || y > finalY) {
             speedY = -speedY;
         }
     }

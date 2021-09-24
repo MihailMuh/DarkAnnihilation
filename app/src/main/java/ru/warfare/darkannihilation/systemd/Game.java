@@ -1103,8 +1103,11 @@ public final class Game extends SurfaceView implements Runnable {
             }
         }
         for (int i = 0; i < intersectOnlyPlayer.size(); i++) {
-            if (!intersectOnlyPlayer.get(i).lock) {
-                intersectOnlyPlayer.get(i).render();
+            Sprite sprite = intersectOnlyPlayer.get(i);
+            if (sprite != null) {
+                if (!sprite.lock) {
+                    sprite.render();
+                }
             }
         }
 
@@ -1183,8 +1186,7 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     private void turnExplosions() {
-        for (int i = 0; i < NUMBER_ALL_EXPLOSION; i++) {
-            BaseExplosion explosion = allExplosion[i];
+        for (BaseExplosion explosion : allExplosion) {
             if (!explosion.lock) {
                 explosion.x -= moveAll;
                 explosion.turn();

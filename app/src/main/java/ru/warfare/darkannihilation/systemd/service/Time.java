@@ -8,6 +8,7 @@ public final class Time {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             Py.print("Sleep " + e.toString());
+            sleep(millis);
         }
     }
 

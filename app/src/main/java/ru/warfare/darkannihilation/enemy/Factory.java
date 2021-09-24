@@ -19,6 +19,7 @@ public class Factory extends Sprite {
     private final SickGameTask gameTask = new SickGameTask(this::spawn, FACTORY_SPAWN_TIME);
     private float hp;
     private boolean startSpawn;
+    private boolean BOOM;
 
     private static final int minionY = ImageHub.factoryImg.getHeight() - 100;
 
@@ -56,12 +57,15 @@ public class Factory extends Sprite {
 
     @Override
     public void kill() {
-        HardThread.doInBackGround(() -> {
-            Game.score += 75;
-            createSkullExplosion();
-            hide();
-            gameTask.stop();
-        });
+        if (!BOOM) {
+            BOOM = true;
+            HardThread.doInBackGround(() -> {
+                Game.score += 75;
+                createSkullExplosion();
+                hide();
+                gameTask.stop();
+            });
+        }
     }
 
     @Override
@@ -77,6 +81,7 @@ public class Factory extends Sprite {
         x = HALF_SCREEN_WIDTH - halfWidth;
         health = FACTORY_HEALTH;
         startSpawn = false;
+        BOOM = false;
     }
 
     @Override

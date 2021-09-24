@@ -1,20 +1,19 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.thread.SickGameTask;
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.bullet.BulletEnemy;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.math.Vector;
-import ru.warfare.darkannihilation.systemd.Game;
-
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.TRIPLE_FIGHTER_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+
+import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.math.Vector;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.SickGameTask;
 
 public class TripleFighter extends Sprite {
     private final SickGameTask gameTask = new SickGameTask(this::shoot, TRIPLE_FIGHTER_SHOOT_TIME);
@@ -68,11 +67,9 @@ public class TripleFighter extends Sprite {
 
     @Override
     public void kill() {
-        HardThread.doInBackGround(() -> {
-            createLargeTripleExplosion();
-            Game.score += 5;
-            hide();
-        });
+        createLargeTripleExplosion();
+        Game.score += 5;
+        hide();
     }
 
     @Override

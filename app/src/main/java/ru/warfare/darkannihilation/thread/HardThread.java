@@ -99,6 +99,7 @@ public class HardThread {
             handler = new Handler();
             Looper.loop();
         });
+        thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
     }
 }
