@@ -26,7 +26,6 @@ import static ru.warfare.darkannihilation.constant.Modes.TOP;
 import static ru.warfare.darkannihilation.constant.Modes.WIN;
 import static ru.warfare.darkannihilation.constant.NamesConst.BOSS_VADERS;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ENEMY;
-import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
 import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
 import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
@@ -98,7 +97,6 @@ import ru.warfare.darkannihilation.enemy.boss.DeathStar;
 import ru.warfare.darkannihilation.explosion.DefaultExplosion;
 import ru.warfare.darkannihilation.explosion.ExplosionSkull;
 import ru.warfare.darkannihilation.explosion.ExplosionTriple;
-import ru.warfare.darkannihilation.math.Math;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.screen.FightScreen;
 import ru.warfare.darkannihilation.screen.LoadingScreen;
@@ -360,7 +358,6 @@ public final class Game extends SurfaceView implements Runnable {
                     if (factory.lock) {
                         if (Randomize.randFloat() <= 0.0135) {
                             factory.lock = false;
-                            removeSaturnTrash();
                         }
                     }
                 }
@@ -645,6 +642,7 @@ public final class Game extends SurfaceView implements Runnable {
         HardThread.finishAndRemoveTasks();
 
         moveAll = 0;
+        pauseButton.show();
 
         gameStatus = GAME_OVER;
     }
@@ -1312,21 +1310,6 @@ public final class Game extends SurfaceView implements Runnable {
 
     public void getMaxScore() {
         bestScore = Clerk.getMaxScore();
-    }
-
-    private void removeSaturnTrash() {
-        if (character == SATURN) {
-            HardThread.doInBackGround(() -> {
-                for (int i = 0; i < bullets.size(); i++) {
-                    Sprite bullet = bullets.get(i);
-                    if (bullet.name == BULLET_SATURN | bullet.name == BULLET_ORBIT) {
-                        if (Math.getDistance(player.centerX() - bullet.centerX(), player.centerY() - bullet.centerY()) >= 550) {
-                            bullet.kill();
-                        }
-                    }
-                }
-            });
-        }
     }
 
     private void checkTimeForBoss() {

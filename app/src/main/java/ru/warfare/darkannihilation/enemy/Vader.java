@@ -70,8 +70,10 @@ public class Vader extends Sprite {
 
     @Override
     public void kill() {
-        createLargeExplosion();
-        hide();
+        HardThread.doInBackGround(() -> {
+            createLargeExplosion();
+            hide();
+        });
     }
 
     @Override

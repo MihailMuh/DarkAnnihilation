@@ -1,11 +1,5 @@
 package ru.warfare.darkannihilation.base;
 
-import android.graphics.Bitmap;
-
-import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
-
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSIONS;
@@ -13,6 +7,11 @@ import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
+
+import android.graphics.Bitmap;
+
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.systemd.Game;
 
 public abstract class Sprite {
     public Game game;
@@ -128,17 +127,13 @@ public abstract class Sprite {
     }
 
     protected void createLargeExplosion() {
-        int X = centerX();
-        int Y = centerY();
-        HardThread.doInBackGround(() -> {
-            AudioHub.playBoom();
-            for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
-                if (game.defaultLargeExplosion[i].lock) {
-                    game.defaultLargeExplosion[i].start(X, Y);
-                    break;
-                }
+        AudioHub.playBoom();
+        for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
+            if (game.defaultLargeExplosion[i].lock) {
+                game.defaultLargeExplosion[i].start(centerX(), centerY());
+                break;
             }
-        });
+        }
     }
 
     protected void createSmallExplosion() {
@@ -161,17 +156,13 @@ public abstract class Sprite {
     }
 
     protected void createLargeTripleExplosion() {
-        int X = centerX();
-        int Y = centerY();
-        HardThread.doInBackGround(() -> {
-            AudioHub.playBoom();
-            for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
-                if (game.tripleLargeExplosion[i].lock) {
-                    game.tripleLargeExplosion[i].start(X, Y);
-                    break;
-                }
+        AudioHub.playBoom();
+        for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
+            if (game.tripleLargeExplosion[i].lock) {
+                game.tripleLargeExplosion[i].start(centerX(), centerY());
+                break;
             }
-        });
+        }
     }
 
     protected void createSmallTripleExplosion() {

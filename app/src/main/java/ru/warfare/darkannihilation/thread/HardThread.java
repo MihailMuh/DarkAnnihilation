@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import ru.warfare.darkannihilation.interfaces.Function;
 
 public class HardThread {
-    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private static ArrayList<Function> functions = new ArrayList<>(0);
     static ArrayList<GameTask> tasks = new ArrayList<>(0);
     private static Handler handler;
@@ -48,16 +48,16 @@ public class HardThread {
                 work = false;
             });
         } else {
-            if (!blackHole) {
-                threadPool.execute(function::run);
-            } else {
-                functions.add(function);
-            }
+            doInPool(function);
         }
     }
 
-    public static void doInPool(Runnable runnable) {
-        threadPool.execute(runnable);
+    public static void doInPool(Function function) {
+        if (!blackHole) {
+            threadPool.execute(function::run);
+        } else {
+            functions.add(function);
+        }
     }
 
     public static void finishAndRemoveTasks() {
