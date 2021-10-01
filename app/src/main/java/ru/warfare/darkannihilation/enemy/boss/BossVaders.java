@@ -4,7 +4,6 @@ import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.bullet.BulletBossVaders;
 import ru.warfare.darkannihilation.enemy.XWing;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.math.Vector;
@@ -28,12 +27,22 @@ public class BossVaders extends BaseBoss {
 
     @Override
     public void shoot() {
-        int X = centerX();
-        int Y = centerY();
-        int[] values = vector.easyVector(X, Y, game.player.centerX(),
-                game.player.centerY(), 10);
-        game.enemies.add(new BulletBossVaders(game, X, Y, values[0], values[1]));
-        AudioHub.playBossShoot();
+        for (int i = game.NUMBER_VADERS; i < game.NUMBER_MINIONS; i++) {
+            Sprite sprite = game.enemy[i];
+            if (sprite.lock) {
+                int X = centerX();
+                int Y = centerY();
+                int[] values = vector.easyVector(X, Y, game.player.centerX(),
+                        game.player.centerY(), 10);
+
+                sprite.x = X;
+                sprite.y = Y;
+                sprite.speedX = values[0];
+                sprite.speedY = values[1];
+                sprite.start();
+                AudioHub.playBossShoot();
+            }
+        }
     }
 
     @Override
@@ -51,15 +60,7 @@ public class BossVaders extends BaseBoss {
     @Override
     public void kill() {
         Game.score += 400;
-
-        int len = NUMBER_VADER / 4;
-        for (int i = 0; i < len; i++) {
-            if (Randomize.randFloat() <= 0.3) {
-                game.enemies.add(new XWing(game));
-            } else {
-                game.generateVader();
-            }
-        }
+        game.addEnemies(true);
     }
 
     @Override

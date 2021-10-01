@@ -33,15 +33,13 @@ public class AtomicBomb extends Sprite {
         if (!BOOM) {
             BOOM = true;
             HardThread.createBlackHole(() -> {
-                for (int i = 0; i < game.enemies.size(); i++) {
-                    Sprite sprite = game.enemies.get(i);
+                for (Sprite sprite : game.enemy) {
                     if (!sprite.lock) {
                         sprite.kill();
                     }
                 }
 
-                for (int i = 0; i < game.intersectOnlyPlayer.size(); i++) {
-                    Sprite bullet = game.intersectOnlyPlayer.get(i);
+                for (BaseBullet bullet : Game.bulletsEnemy) {
                     if (bullet.name == BULLET_ENEMY) {
                         bullet.kill();
                     }

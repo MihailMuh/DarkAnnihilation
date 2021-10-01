@@ -10,22 +10,23 @@ import static ru.warfare.darkannihilation.constant.NamesConst.SUPER;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Buckshot extends BaseBullet {
-    public Buckshot(Game game, int X, int Y, int speed) {
-        super(game, ImageHub.buckshotImg, X, Y, BUCKSHOT_DAMAGE);
-
-        speedX = speed;
+    public Buckshot(Game game) {
+        super(game, ImageHub.buckshotImg, BUCKSHOT_DAMAGE);
         power = SUPER;
+    }
+
+    @Override
+    public void start(int X, int Y, int Z) {
+        x = X - halfWidth;
+        y = Y;
+        speedX = Z;
+        lock = false;
     }
 
     @Override
     public void kill() {
         createSmallTripleExplosion();
-        hide();
-    }
-
-    @Override
-    public void hide() {
-        game.bullets.remove(this);
+        lock = true;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class Buckshot extends BaseBullet {
         x += speedX;
 
         if (y < -height || x < -width || x > SCREEN_WIDTH) {
-            hide();
+            lock = true;
         }
     }
 }

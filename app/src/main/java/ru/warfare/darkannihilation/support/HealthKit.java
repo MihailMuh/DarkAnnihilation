@@ -2,6 +2,7 @@ package ru.warfare.darkannihilation.support;
 
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.systemd.Game;
 
@@ -14,18 +15,26 @@ public class HealthKit extends Sprite {
         super(g, ImageHub.healthKitImg);
 
         calculateBarriers();
-        kill();
+        hide();
+    }
+
+    @Override
+    public void check_intersectionBullet(BaseBullet bullet) {
     }
 
     @Override
     public void intersectionPlayer() {
-        kill();
+        hide();
         AudioHub.playHealSnd();
         game.player.heal();
     }
 
     @Override
     public void kill() {
+    }
+
+    @Override
+    public void hide() {
         x = randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
@@ -36,7 +45,7 @@ public class HealthKit extends Sprite {
         y += HEALTH_KIT_SPEED;
 
         if (y > SCREEN_HEIGHT) {
-            kill();
+            hide();
         }
     }
 }

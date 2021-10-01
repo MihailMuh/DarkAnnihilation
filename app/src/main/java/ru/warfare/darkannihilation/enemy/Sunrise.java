@@ -1,8 +1,8 @@
 package ru.warfare.darkannihilation.enemy;
 
+import ru.warfare.darkannihilation.base.BaseEnemy;
 import ru.warfare.darkannihilation.thread.GameTask;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -13,44 +13,48 @@ import static ru.warfare.darkannihilation.constant.Constants.SUNRISE_SHOOT_TIME;
 import static ru.warfare.darkannihilation.math.Randomize.randBoolean;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 
-public class Sunrise extends Sprite {
+public class Sunrise extends BaseEnemy {
     private final GameTask gameTask = new GameTask(this::shoot, SUNRISE_SHOOT_TIME);
     private boolean field;
     private boolean left = false;
 
     public Sunrise(Game game) {
-        super(game, ImageHub.sunriseImg);
-        damage = SUNRISE_DAMAGE;
+        super(game, ImageHub.sunriseImg, SUNRISE_DAMAGE);
+        vector.len = 11;
 
         calculateBarriers();
-        lock = true;
-
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
-    private void shoot() {
+    @Override
+    public void shoot() {
         int X = centerX();
         int Y = centerY();
 
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 0, 0, -10));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 90, 10, 0));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 180, 0, 10));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -90, -10, 0));
+        for (int i = 0; i < 360; i += 18) {
+            int[] values = vector.rotateVector(i);
+            bulletEnemy(X, Y, new int[] {values[0], values[1], i + 90});
+        }
 
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 45, 7, -7));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 135, 7, 7));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -45, -7, -7));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -135, -7, 7));
-
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 67, 10, -4));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 22, 4, -10));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -67, -10, -4));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -22, -4, -10));
-
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 157, 4, 10));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 113, 10, 4));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -157, -4, 10));
-        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -113, -10, 4));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 0, 0, -10));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 90, 10, 0));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 180, 0, 10));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -90, -10, 0));
+//
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 45, 7, -7));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 135, 7, 7));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -45, -7, -7));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -135, -7, 7));
+//
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 67, 10, -4));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 22, 4, -10));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -67, -10, -4));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -22, -4, -10));
+//
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 157, 4, 10));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, 113, 10, 4));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -157, -4, 10));
+//        game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, -113, -10, 4));
 
         AudioHub.playDeagle();
     }

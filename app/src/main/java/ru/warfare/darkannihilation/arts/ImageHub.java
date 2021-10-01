@@ -15,7 +15,20 @@ import static ru.warfare.darkannihilation.constant.NamesConst.DEATH_STAR;
 import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.constant.NamesConst.MILLENNIUM_FALCON;
 import static ru.warfare.darkannihilation.constant.NamesConst.SATURN;
-import static ru.warfare.darkannihilation.systemd.service.UriManager.*;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.atomicBomb;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.defaultExplosion;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.emeraldGuns;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.laser;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.loadingScreen;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.millennuimGuns;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.portal;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.saturnGuns;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.skullExplosion;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.starScreen;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.thunderScreen;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.tripleExplosion;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.vader;
+import static ru.warfare.darkannihilation.systemd.service.UriManager.vaderOld;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
@@ -27,8 +40,8 @@ import android.net.Uri;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 
 import ru.warfare.darkannihilation.R;
-import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.arts.glide.GlideManager;
+import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
 import ru.warfare.darkannihilation.systemd.service.Time;
@@ -291,12 +304,10 @@ public final class ImageHub {
         return screenImage[0] == null;
     }
 
-    public static void loadFirstLevelAndCharacterImages(byte character) {
-        endImgInit = false;
-
-        loadCharacterImages(character, !needImagesForFirstLevel());
-
+    public static void loadFirstLevelImages() {
         if (needImagesForFirstLevel()) {
+            endImgInit = false;
+
             vaderImages = new Bitmap[NUMBER_VADER_IMAGES];
 
             loadFirstLevelBitmaps();
@@ -314,9 +325,9 @@ public final class ImageHub {
                     }
                 });
             }
-        }
 
-        Time.waitImg();
+            Time.waitImg();
+        }
     }
 
     private static void loadFirstLevelBitmaps() {
@@ -375,7 +386,7 @@ public final class ImageHub {
 
             HardThread.doInBackGround(() -> {
                 while (gif.isRunning()) {
-                    Time.relax();
+                    Time.sleep(1000);
                 }
 
                 Service.runOnUiThread(() -> game.setBackground(null));
@@ -384,29 +395,31 @@ public final class ImageHub {
         }, true);
     }
 
-    public static void loadCharacterImages(int character, boolean needWait) {
+    public static void loadCharacterImages(int character) {
+        endImgInit = false;
+
         switch (character) {
             case SATURN:
-                loadSaturn(needWait);
+                loadSaturn();
                 break;
             case MILLENNIUM_FALCON:
-                loadMillennium(needWait);
+                loadMillennium();
                 break;
             case EMERALD:
-                loadEmerald(needWait);
+                loadEmerald();
                 break;
         }
+
+        Time.waitImg();
     }
 
-    private static void loadSaturn(boolean needWait) {
-        glideManager.run(R.drawable.saturn, _100, _200, object -> {
-            saturnImg = object;
-            if (needWait) {
-                endImgInit = true;
-            }
-        });
+    private static void loadSaturn() {
+        glideManager.run(R.drawable.saturn, _100, _200, object -> saturnImg = object);
         glideManager.run(R.drawable.saturn_bullet, _15, object -> bulletSaturnImg = object);
-        glideManager.run(R.drawable.buckshot_saturn, _15, object -> bulletBuckshotSaturnImg = object);
+        glideManager.run(R.drawable.buckshot_saturn, _15, object -> {
+            bulletBuckshotSaturnImg = object;
+            endImgInit = true;
+        });
 
         deleteMillennium();
         deleteEmerald();
@@ -420,24 +433,20 @@ public final class ImageHub {
         }
     }
 
-    private static void loadMillennium(boolean needWait) {
+    private static void loadMillennium() {
         if (playerImage == null) {
-            glideManager.run(R.drawable.ship, _100, _120, object -> {
-                playerImage = object;
-                if (needWait) {
-                    endImgInit = true;
-                }
-            });
+            glideManager.run(R.drawable.ship, _100, _120, object -> playerImage = object);
 
             glideManager.run(R.drawable.cannon_ball, _15, object -> buckshotImg = object);
-            glideManager.run(R.drawable.bullet, _7, _30, object -> bulletImage = object);
+            glideManager.run(R.drawable.bullet, _7, _30, object -> {
+                bulletImage = object;
+                endImgInit = true;
+            });
 
             deleteSaturn();
             deleteEmerald();
         } else {
-            if (needWait) {
-                endImgInit = true;
-            }
+            endImgInit = true;
         }
     }
 
@@ -449,18 +458,18 @@ public final class ImageHub {
         }
     }
 
-    private static void loadEmerald(boolean needWait) {
-        glideManager.run(R.drawable.emerald, _150, _166, object -> {
-            emeraldImg = object;
-            if (needWait) {
-                endImgInit = true;
-            }
-        });
+    private static void loadEmerald() {
+        glideManager.run(R.drawable.emerald, _150, _166, object -> emeraldImg = object);
         glideManager.run(R.drawable.dynamite, _100, calculate(41.3), object -> dynamiteImg = object);
 
         for (int i = 0; i < NUMBER_LIGHTNING_IMAGES; i++) {
             int finalI = i;
-            glideManager.run(laser(i), _03545, SCREEN_HEIGHT, object -> thunderImage[finalI] = object);
+            glideManager.run(laser(i), _03545, SCREEN_HEIGHT, object -> {
+                thunderImage[finalI] = object;
+                if (finalI == 12) {
+                    endImgInit = true;
+                }
+            });
         }
 
         deleteSaturn();
@@ -501,6 +510,8 @@ public final class ImageHub {
                 }
             });
         }
+
+        Time.waitImg();
     }
 
     public static void loadFightScreen(byte character, byte boss) {

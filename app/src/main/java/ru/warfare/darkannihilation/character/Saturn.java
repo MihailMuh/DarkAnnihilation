@@ -1,5 +1,7 @@
 package ru.warfare.darkannihilation.character;
 
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SATURN_BUCKSHOT;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SATURN_BULLETS;
 import static ru.warfare.darkannihilation.constant.Constants.SATURN_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.SATURN_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.SATURN_SHOTGUN_TIME;
@@ -9,8 +11,6 @@ import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.bullet.BuckshotSaturn;
-import ru.warfare.darkannihilation.bullet.BulletSaturn;
 import ru.warfare.darkannihilation.systemd.Game;
 
 public class Saturn extends BaseCharacter {
@@ -22,15 +22,28 @@ public class Saturn extends BaseCharacter {
     @Override
     public void gun() {
         int X = centerX();
-        for (int i = 0; i < randInt(3, 6); i++) {
-            game.bullets.add(new BulletSaturn(game, X, game.player.y));
+        int count = randInt(2, 5);
+
+        for (int i = 0; i < NUMBER_SATURN_BULLETS; i++) {
+            if (game.bullets[i].lock) {
+                game.bullets[i].start(X, y);
+                count--;
+            }
+            if (count == -1) {
+                break;
+            }
         }
         AudioHub.playShoot();
     }
 
     @Override
     public void shotgun() {
-        game.bullets.add(new BuckshotSaturn(game, centerX(), y));
+        for (int i = NUMBER_SATURN_BULLETS; i < NUMBER_SATURN_BUCKSHOT; i++) {
+            if (game.bullets[i].lock) {
+                game.bullets[i].start(centerX(), y);
+                break;
+            }
+        }
     }
 
     @Override

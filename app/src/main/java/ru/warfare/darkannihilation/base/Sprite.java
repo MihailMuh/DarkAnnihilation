@@ -36,7 +36,7 @@ public abstract class Sprite {
     public byte name = 0;
 
     protected boolean buff = false;
-    public boolean lock = false;
+    public volatile boolean lock = false;
 
     public int left;
     public int top;
@@ -132,9 +132,9 @@ public abstract class Sprite {
         int X = centerX();
         int Y = centerY();
         HardThread.doInBackGround(() -> {
-            for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
-                if (game.defaultLargeExplosion[i].lock) {
-                    game.defaultLargeExplosion[i].start(X, Y);
+            for (int i = NUMBER_SKULL_EXPLOSIONS; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
+                if (Game.allExplosion[i].lock) {
+                    Game.allExplosion[i].start(X, Y);
                     break;
                 }
             }
@@ -142,19 +142,9 @@ public abstract class Sprite {
     }
 
     protected void createSmallExplosion() {
-        for (int i = 0; i < NUMBER_DEFAULT_SMALL_EXPLOSION; i++) {
-            if (game.defaultSmallExplosion[i].lock) {
-                game.defaultSmallExplosion[i].start(centerX(), centerY());
-                break;
-            }
-        }
-    }
-
-    protected void largeTripleExplosion() {
-        AudioHub.playBoom();
-        for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
-            if (game.tripleLargeExplosion[i].lock) {
-                game.tripleLargeExplosion[i].start(centerX(), centerY());
+        for (int i = NUMBER_DEFAULT_LARGE_EXPLOSION; i < NUMBER_DEFAULT_SMALL_EXPLOSION; i++) {
+            if (Game.allExplosion[i].lock) {
+                Game.allExplosion[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -165,9 +155,9 @@ public abstract class Sprite {
         int X = centerX();
         int Y = centerY();
         HardThread.doInBackGround(() -> {
-            for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
-                if (game.tripleLargeExplosion[i].lock) {
-                    game.tripleLargeExplosion[i].start(X, Y);
+            for (int i = NUMBER_DEFAULT_SMALL_EXPLOSION; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
+                if (Game.allExplosion[i].lock) {
+                    Game.allExplosion[i].start(X, Y);
                     break;
                 }
             }
@@ -175,9 +165,9 @@ public abstract class Sprite {
     }
 
     protected void createSmallTripleExplosion() {
-        for (int i = 0; i < NUMBER_TRIPLE_SMALL_EXPLOSION; i++) {
-            if (game.tripleSmallExplosion[i].lock) {
-                game.tripleSmallExplosion[i].start(centerX(), centerY());
+        for (int i = NUMBER_TRIPLE_LARGE_EXPLOSION; i < NUMBER_TRIPLE_SMALL_EXPLOSION; i++) {
+            if (Game.allExplosion[i].lock) {
+                Game.allExplosion[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -186,8 +176,8 @@ public abstract class Sprite {
     protected void createSkullExplosion() {
         AudioHub.playMegaBoom();
         for (int i = 0; i < NUMBER_SKULL_EXPLOSIONS; i++) {
-            if (game.skullExplosion[i].lock) {
-                game.skullExplosion[i].start(centerX(), centerY());
+            if (Game.allExplosion[i].lock) {
+                Game.allExplosion[i].start(centerX(), centerY());
                 break;
             }
         }
@@ -217,15 +207,13 @@ public abstract class Sprite {
     }
 
     public boolean intersect(Sprite sprite) {
-        if (sprite != null) {
-            getRect();
-            sprite = sprite.getRect();
+        getRect();
+        sprite = sprite.getRect();
 
-            if (left <= sprite.right) {
-                if (sprite.left <= right) {
-                    if (top <= sprite.bottom) {
-                        return sprite.top <= bottom;
-                    }
+        if (left <= sprite.right) {
+            if (sprite.left <= right) {
+                if (top <= sprite.bottom) {
+                    return sprite.top <= bottom;
                 }
             }
         }
@@ -248,7 +236,7 @@ public abstract class Sprite {
         return this;
     }
 
-    public Object[] getBox(int a, int b, Bitmap bitmap) {
+    public Object[] getBox(Bitmap bitmap) {
         return new Object[30];
     }
 }

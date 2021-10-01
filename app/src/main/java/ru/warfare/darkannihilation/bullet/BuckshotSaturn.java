@@ -14,14 +14,19 @@ import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_SATURN;
 public class BuckshotSaturn extends BaseBullet {
     private float X;
     private float Y;
-    private boolean orbit = false;
-    private float fly = 0;
+    private boolean orbit;
+    private float fly;
     private final Vector vector = new Vector();
 
-    public BuckshotSaturn(Game game, int X, int Y) {
-        super(game, ImageHub.bulletBuckshotSaturnImg, X, Y, BUCKSHOT_SATURN_DAMAGE);
-
+    public BuckshotSaturn(Game game) {
+        super(game, ImageHub.bulletBuckshotSaturnImg, BUCKSHOT_SATURN_DAMAGE);
         name = BULLET_SATURN;
+    }
+
+    @Override
+    public void start(int X, int Y) {
+        fly = 0;
+        orbit = false;
 
         this.X = X - halfWidth;
         this.Y = Y;
@@ -34,6 +39,8 @@ public class BuckshotSaturn extends BaseBullet {
         int XX = centerX();
         vector.basisVector(XX, centerY(), XX, 0, 4);
         vector.rads -= 0.0002;
+
+        lock = false;
     }
 
     @Override
@@ -47,8 +54,8 @@ public class BuckshotSaturn extends BaseBullet {
     }
 
     @Override
-    public Object[] getBox(int enemyX, int enemyY, Bitmap image) {
-        return new Object[]{game, enemyX, enemyY, orbit, vector.rads, fly, vector.len, image};
+    public Object[] getBox(Bitmap image) {
+        return new Object[]{X, Y, orbit, vector.rads, fly, vector.len, image};
     }
 
     @Override
@@ -63,7 +70,7 @@ public class BuckshotSaturn extends BaseBullet {
     @Override
     public void kill() {
         super.kill();
-        game.bullets.remove(this);
+        lock = true;
     }
 
     @Override
@@ -81,8 +88,8 @@ public class BuckshotSaturn extends BaseBullet {
         }
 
         float[] speeds = vector.rotateVector();
-        X += (speeds[0] + game.player.speedX);
-        Y += (speeds[1] + game.player.speedY);
+        X += speeds[0] + game.player.speedX;
+        Y += speeds[1] + game.player.speedY;
     }
 
     @Override

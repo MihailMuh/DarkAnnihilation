@@ -42,19 +42,23 @@ public abstract class BaseBoss extends Sprite {
         if (!BOOM) {
             BOOM = true;
 
-            HardThread.doInPool(() -> {
+            HardThread.doInBackGround(() -> {
                 AudioHub.pauseBossMusic();
 
                 gameTask.stop();
+                game.gameTask.stop();
 
                 createSkullExplosion();
                 game.killBoss();
 
-                game.startEmpire();
+                game.newPortal();
 
                 kill();
 
-                game.newPortal();
+                game.startEmpire();
+
+                game.changerGuns.show();
+                game.pauseButton.show();
             });
         }
     }

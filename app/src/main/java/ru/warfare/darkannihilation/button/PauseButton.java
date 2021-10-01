@@ -2,16 +2,15 @@ package ru.warfare.darkannihilation.button;
 
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import android.graphics.Paint;
-
+import ru.warfare.darkannihilation.arts.CustomPaint;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseButton;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.arts.ImageHub;
 
 public class PauseButton extends BaseButton {
     public static volatile byte oldStatus;
-    private final Paint alphaPaint = new Paint();
+    private final CustomPaint alphaPaint = new CustomPaint();
     private boolean isInvisible;
     private final int myX;
 
@@ -19,9 +18,6 @@ public class PauseButton extends BaseButton {
         super(g, ImageHub.pauseButtonImg);
         y = 20;
         myX = (int) (SCREEN_WIDTH - (width * 1.5));
-
-        alphaPaint.setFilterBitmap(true);
-        alphaPaint.setDither(true);
 
         show();
     }

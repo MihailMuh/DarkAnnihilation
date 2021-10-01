@@ -39,7 +39,7 @@ public final class MainActivity extends BaseActivity {
 
         game = findViewById(R.id.gameView);
 
-        HardThread.doInPool(() -> {
+        HardThread.doInBackGround(() -> {
             Service.init(this);
 
             Windows.init();

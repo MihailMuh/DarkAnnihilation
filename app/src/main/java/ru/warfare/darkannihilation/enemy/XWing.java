@@ -1,8 +1,7 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.base.BaseEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.SickGameTask;
 import ru.warfare.darkannihilation.arts.ImageHub;
@@ -17,28 +16,24 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static ru.warfare.darkannihilation.systemd.service.Windows.calculate;
 
-public class XWing extends Sprite {
+public class XWing extends BaseEnemy {
     private final SickGameTask gameTask = new SickGameTask(this::shoot, XWING_SHOOT_TIME);
     private static final int R = calculate(500);
-    private final Vector vector = new Vector();
 
     public XWing(Game game) {
-        super(game, ImageHub.XWingImg);
-        damage = XWING_DAMAGE;
-
+        super(game, ImageHub.XWingImg, XWING_DAMAGE);
         calculateBarriers();
-        lock = true;
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
-    private void shoot() {
+    @Override
+    public void shoot() {
         int P_X = game.player.centerX();
         int P_Y = game.player.centerY();
         int X = centerX();
         int Y = centerY();
         if (getDistance(X - P_X, Y - P_Y) < R) {
-            int[] values = vector.vector(X, Y, P_X, P_Y, 9);
-            game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+            bulletEnemy(P_X, P_Y, 9);
             AudioHub.playShoot();
         }
     }

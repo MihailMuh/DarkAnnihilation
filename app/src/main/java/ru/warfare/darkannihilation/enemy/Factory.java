@@ -1,19 +1,20 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.base.BaseBullet;
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.math.Randomize;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.thread.SickGameTask;
-import ru.warfare.darkannihilation.thread.HardThread;
-
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH_BAR_LEN;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPAWN_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPEED;
+import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
+
+import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.math.Randomize;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.HardThread;
+import ru.warfare.darkannihilation.thread.SickGameTask;
 
 public class Factory extends Sprite {
     private final SickGameTask gameTask = new SickGameTask(this::spawn, FACTORY_SPAWN_TIME);
@@ -32,10 +33,17 @@ public class Factory extends Sprite {
     }
 
     private void spawn() {
-        game.enemies.add(new Minion(game, randInt(x, right), minionY));
-        game.enemies.add(new Minion(game, randInt(x, right), minionY));
-        if (Randomize.randBoolean()) {
-            game.enemies.add(new Minion(game, randInt(x, right), minionY));
+        int count = 0;
+        for (int i = game.NUMBER_VADERS; i < game.NUMBER_MINIONS; i++) {
+            if (game.enemy[i].lock && Randomize.randBoolean()) {
+                game.enemy[i].x = randInt(x, right);
+                game.enemy[i].y = minionY;
+                game.enemy[i].start();
+                count++;
+            }
+            if (count == 3) {
+                break;
+            }
         }
     }
 
@@ -75,6 +83,9 @@ public class Factory extends Sprite {
 
     @Override
     public void hide() {
+        if (Game.character != EMERALD) {
+            HardThread.closeBlackHole();
+        }
         lock = true;
         hp = FACTORY_HEALTH_BAR_LEN;
         y = -height;
@@ -90,6 +101,9 @@ public class Factory extends Sprite {
             y += FACTORY_SPEED;
         } else {
             if (!startSpawn) {
+                if (Game.character != EMERALD) {
+                    HardThread.createBlackHole();
+                }
                 startSpawn = true;
                 gameTask.start();
             }

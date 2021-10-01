@@ -47,10 +47,14 @@ public class ChangerGuns extends BaseButton {
         }
     }
 
+    public void show() {
+        isInvisible = false;
+        alphaPaint.setAlpha(255);
+    }
+
     public void work() {
         if (isInvisible) {
-            isInvisible = false;
-            alphaPaint.setAlpha(255);
+            show();
         }
     }
 

@@ -1,25 +1,29 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.thread.GameTask;
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.bullet.Bomb;
-import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.systemd.Game;
-
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.DEMOMAN_SHOOT_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BOMBS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BULLETS_ENEMY;
 import static ru.warfare.darkannihilation.math.Randomize.randBoolean;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import android.graphics.Bitmap;
+
+import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.GameTask;
+
 public class Demoman extends Sprite {
-    private final GameTask gameTask = new GameTask(() ->
-            game.intersectOnlyPlayer.add(new Bomb(game, centerX(), centerY())), DEMOMAN_SHOOT_TIME);
+    private final GameTask gameTask = new GameTask(this::shoot, DEMOMAN_SHOOT_TIME);
 
     private boolean goLeft = false;
     private final int endY;
+    private final Bitmap mirrorImage;
 
     public Demoman(Game game) {
         super(game, ImageHub.demomanImg);
@@ -30,7 +34,19 @@ public class Demoman extends Sprite {
 
         lock = true;
 
+        mirrorImage = ImageHub.mirrorImage(ImageHub.demomanImg);
+
         recreateRect(x + 30, y + 25, right() - 20, bottom() - 50);
+    }
+
+    private void shoot() {
+        for (int i = NUMBER_BULLETS_ENEMY; i < NUMBER_BOMBS; i++) {
+            if (Game.bulletsEnemy[i].lock) {
+                Game.bulletsEnemy[i].start(centerX(), centerY());
+                AudioHub.playFallingBomb();
+                break;
+            }
+        }
     }
 
     @Override
@@ -46,7 +62,7 @@ public class Demoman extends Sprite {
         goLeft = randBoolean();
 
         if (goLeft) {
-            image = ImageHub.mirrorImage(ImageHub.demomanImg);
+            image = mirrorImage;
             x = -width;
         } else {
             image = ImageHub.demomanImg;
@@ -60,15 +76,17 @@ public class Demoman extends Sprite {
 
     @Override
     public void intersectionPlayer() {
+        lock = true;
         gameTask.stop();
         createSkullExplosion();
-        lock = true;
     }
 
     @Override
     public void kill() {
-        intersectionPlayer();
-        Game.score += 35;
+        if (!lock) {
+            intersectionPlayer();
+            Game.score += 35;
+        }
     }
 
     @Override

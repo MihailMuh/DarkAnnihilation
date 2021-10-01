@@ -13,12 +13,23 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class BulletBoss extends BaseBullet {
-    public BulletBoss(Game game, int X, int Y, int type) {
-        super(game, ImageHub.laserImage, X, Y, BULLET_BOSS_DAMAGE);
+    public BulletBoss(Game game) {
+        super(game, BULLET_BOSS_DAMAGE);
         name = BULLET_ENEMY;
+    }
 
-        switch (type)
+    @Override
+    public void start(int X, int Y, int Z) {
+        x = X - halfWidth;
+        y = Y;
+
+        speedX = 0;
+
+        switch (Z)
         {
+            case 1:
+                image = ImageHub.laserImage;
+                break;
             case 2:
                 speedX = 6;
                 image = ImageHub.rotateBitmap(ImageHub.laserImage, 45);
@@ -30,10 +41,12 @@ public class BulletBoss extends BaseBullet {
         }
 
         makeParams();
+
+        lock = false;
     }
 
     @Override
-    public Object[] getBox(int a, int b, Bitmap image) {
+    public Object[] getBox(Bitmap image) {
         return new Object[] {ImageHub.laserImage};
     }
 
@@ -50,7 +63,7 @@ public class BulletBoss extends BaseBullet {
 
     @Override
     public void hide() {
-        game.intersectOnlyPlayer.remove(this);
+        lock = true;
     }
 
     @Override

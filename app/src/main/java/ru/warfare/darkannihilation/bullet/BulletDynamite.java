@@ -1,32 +1,49 @@
 package ru.warfare.darkannihilation.bullet;
 
-import android.graphics.Matrix;
-
-import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.base.BaseBullet;
-import ru.warfare.darkannihilation.systemd.Game;
-
 import static ru.warfare.darkannihilation.constant.Constants.BULLET_DYNAMITE_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSION_IMAGES;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.Game.now;
 
+import android.graphics.Matrix;
+
+import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.systemd.Game;
+import ru.warfare.darkannihilation.thread.HardThread;
+
 public class BulletDynamite extends BaseBullet {
-    private final int rotSpeed = randInt(-10, 10);
+    private int rotSpeed;
     private final Matrix matrix = new Matrix();
-    private boolean BOOM = false;
-    private boolean ready = false;
+    private boolean BOOM;
+    private boolean ready;
     private int frame;
     private long lastShoot = now;
 
-    public BulletDynamite(Game game, int X, int Y) {
-        super(game, ImageHub.dynamiteImg, X, Y, BULLET_DYNAMITE_DAMAGE);
+    public BulletDynamite(Game game) {
+        super(game, ImageHub.dynamiteImg, BULLET_DYNAMITE_DAMAGE);
+    }
+
+    @Override
+    public void start(int X, int Y) {
+        if (damage != 1) {
+            image = ImageHub.dynamiteImg;
+            makeParams();
+
+            ready = false;
+            BOOM = false;
+
+            damage = 1;
+        }
+
+        x = X - halfWidth;
+        y = Y - height;
 
         speedY = randInt(6, 9);
+        rotSpeed = randInt(-10, 10);
 
-        y = Y - height;
+        lock = false;
     }
 
     @Override
@@ -61,18 +78,13 @@ public class BulletDynamite extends BaseBullet {
     }
 
     @Override
-    public void hide() {
-        game.bullets.remove(this);
-    }
-
-    @Override
     public void update() {
         if (!BOOM) {
             y -= speedY;
             frame += rotSpeed;
 
             if (y < -height) {
-                hide();
+                lock = true;
             }
         }
         if (ready) {
@@ -80,7 +92,8 @@ public class BulletDynamite extends BaseBullet {
                 lastShoot = now;
                 frame++;
                 if (frame == NUMBER_SKULL_EXPLOSION_IMAGES) {
-                    hide();
+                    HardThread.closeBlackHole();
+                    lock = true;
                 }
             }
         }

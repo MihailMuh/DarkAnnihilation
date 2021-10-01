@@ -39,8 +39,8 @@ public class Buffer extends Sprite {
     private void stopBFF() {
         if (startBuff) {
             startBuff = false;
-            for (int i = 0; i < game.enemies.size(); i++) {
-                game.enemies.get(i).stopBuff();
+            for (Sprite sprite : game.enemy) {
+                sprite.stopBuff();
             }
         }
     }
@@ -67,8 +67,8 @@ public class Buffer extends Sprite {
             if (!startBuff) {
                 startBuff = true;
                 HardThread.doInBackGround(() -> {
-                    for (int i = 0; i < game.enemies.size(); i++) {
-                        game.enemies.get(i).buff();
+                    for (Sprite sprite : game.enemy) {
+                        sprite.buff();
                     }
                 });
             }

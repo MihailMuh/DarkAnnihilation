@@ -3,8 +3,16 @@ package ru.warfare.darkannihilation.systemd;
 import static android.graphics.Color.RED;
 import static ru.warfare.darkannihilation.constant.Colors.WIN_COLOR;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_ALL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BOMBS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BOSS_SHOTS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BULLETS_ENEMY;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_DEFAULT_SMALL_EXPLOSION;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_MILLENNIUM_FALCON_BUCKSHOT;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SATURN_BUCKSHOT;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SATURN_BULLETS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SATURN_ENEMY_ORBIT;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_SKULL_EXPLOSIONS;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_LARGE_EXPLOSION;
 import static ru.warfare.darkannihilation.constant.Constants.NUMBER_TRIPLE_SMALL_EXPLOSION;
@@ -54,13 +62,12 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import ru.warfare.darkannihilation.arts.CustomPaint;
-import ru.warfare.darkannihilation.thread.GameTask;
-import ru.warfare.darkannihilation.thread.HardThread;
-import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.Table;
+import ru.warfare.darkannihilation.arts.CustomPaint;
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.audio.GameOver;
 import ru.warfare.darkannihilation.base.BaseBoss;
@@ -69,7 +76,17 @@ import ru.warfare.darkannihilation.base.BaseCharacter;
 import ru.warfare.darkannihilation.base.BaseExplosion;
 import ru.warfare.darkannihilation.base.BaseScreen;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.bullet.Bomb;
+import ru.warfare.darkannihilation.bullet.Buckshot;
+import ru.warfare.darkannihilation.bullet.BuckshotSaturn;
+import ru.warfare.darkannihilation.bullet.Bullet;
+import ru.warfare.darkannihilation.bullet.BulletBoss;
+import ru.warfare.darkannihilation.bullet.BulletBossVaders;
+import ru.warfare.darkannihilation.bullet.BulletDynamite;
+import ru.warfare.darkannihilation.bullet.BulletEnemy;
 import ru.warfare.darkannihilation.bullet.BulletEnemyOrbit;
+import ru.warfare.darkannihilation.bullet.BulletSaturn;
+import ru.warfare.darkannihilation.bullet.BulletThunder;
 import ru.warfare.darkannihilation.button.Button;
 import ru.warfare.darkannihilation.button.ButtonEmerald;
 import ru.warfare.darkannihilation.button.ButtonPlayer;
@@ -85,6 +102,7 @@ import ru.warfare.darkannihilation.enemy.Attention;
 import ru.warfare.darkannihilation.enemy.Buffer;
 import ru.warfare.darkannihilation.enemy.Demoman;
 import ru.warfare.darkannihilation.enemy.Factory;
+import ru.warfare.darkannihilation.enemy.Minion;
 import ru.warfare.darkannihilation.enemy.Portal;
 import ru.warfare.darkannihilation.enemy.Rocket;
 import ru.warfare.darkannihilation.enemy.Spider;
@@ -108,6 +126,8 @@ import ru.warfare.darkannihilation.systemd.service.Clerk;
 import ru.warfare.darkannihilation.systemd.service.ClientServer;
 import ru.warfare.darkannihilation.systemd.service.Service;
 import ru.warfare.darkannihilation.systemd.service.Time;
+import ru.warfare.darkannihilation.thread.GameTask;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 public final class Game extends SurfaceView implements Runnable {
     private final SurfaceHolder holder = getHolder();
@@ -124,20 +144,14 @@ public final class Game extends SurfaceView implements Runnable {
 
     private static final StringBuilder stringBuilder = new StringBuilder();
     private static final HardThread hardThread = new HardThread();
-    private final GameTask gameTask = new GameTask(this::backGroundTasks, 250);
+    public final GameTask gameTask = new GameTask(this::backGroundTasks, 250);
     public static final CustomPaint alphaEnemy = new CustomPaint();
 
-    public ExplosionSkull[] skullExplosion = new ExplosionSkull[NUMBER_SKULL_EXPLOSIONS];
-    public DefaultExplosion[] defaultSmallExplosion = new DefaultExplosion[NUMBER_DEFAULT_SMALL_EXPLOSION];
-    public DefaultExplosion[] defaultLargeExplosion = new DefaultExplosion[NUMBER_DEFAULT_LARGE_EXPLOSION];
-    public ExplosionTriple[] tripleSmallExplosion = new ExplosionTriple[NUMBER_TRIPLE_SMALL_EXPLOSION];
-    public ExplosionTriple[] tripleLargeExplosion = new ExplosionTriple[NUMBER_TRIPLE_LARGE_EXPLOSION];
-    private static final BaseExplosion[] allExplosion = new BaseExplosion[NUMBER_ALL_EXPLOSION];
-
-    public ArrayList<BaseBullet> bullets = new ArrayList<>(0);
-    public ArrayList<Sprite> intersectOnlyPlayer = new ArrayList<>(0);
     public ArrayList<Sprite> ghosts = new ArrayList<>(0);
-    public ArrayList<Sprite> enemies = new ArrayList<>(0);
+    public BaseBullet[] bullets;
+    public Sprite[] enemy;
+    public static final BaseBullet[] bulletsEnemy = new BaseBullet[NUMBER_BOSS_SHOTS];
+    public static final BaseExplosion[] allExplosion = new BaseExplosion[NUMBER_ALL_EXPLOSION];
 
     private Settings settings;
     private Table table;
@@ -146,12 +160,10 @@ public final class Game extends SurfaceView implements Runnable {
     private Button buttonQuit;
     private Button buttonMenu;
     private Button buttonRestart;
-    private PauseButton pauseButton;
     private FightScreen fightScreen;
     private HealthKit healthKit;
     private Factory factory;
     private Demoman demoman;
-    private Portal portal;
     private LoadingScreen loadingScreen;
     private Spider spider;
     private Sunrise sunrise;
@@ -159,6 +171,7 @@ public final class Game extends SurfaceView implements Runnable {
     private AtomicBomb atomicBomb;
     public ShotgunKit shotgunKit;
     public ChangerGuns changerGuns;
+    public PauseButton pauseButton;
     public Rocket rocket;
     public Attention attention;
     public ButtonPlayer buttonPlayer;
@@ -174,8 +187,11 @@ public final class Game extends SurfaceView implements Runnable {
     private boolean isFirstRun = true;
     public boolean playing = true;
     public static byte level = 1;
-    public static byte gameStatus = PASS;
-    public static byte character = MILLENNIUM_FALCON;
+    public static volatile byte gameStatus = PASS;
+    public static volatile byte character = MILLENNIUM_FALCON;
+    public int NUMBER_VADERS;
+    public int NUMBER_MINIONS;
+    public int PORTAL_ID;
     public static boolean vibrate;
     public static long now = System.currentTimeMillis();
     public String language = "en";
@@ -258,48 +274,55 @@ public final class Game extends SurfaceView implements Runnable {
         buttonQuit = new Button(this);
         buttonRestart = new Button(this);
         screen = new StarScreen();
+        player = new Bot(this);
+        bullets = new Bullet[25];
+        for (int i = 0; i < 25; i++) {
+            bullets[i] = new Bullet(this);
+        }
+
+        enemy = new Sprite[NUMBER_VADER * 2];
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i] = new Vader(this);
+        }
+
+        newCharacterButtons();
 
         HardThread.doInBackGround(() -> {
-            newCharacterButtons();
+            resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
+            updateMenuButtons();
+
+            for (int i = 0; i < NUMBER_BULLETS_ENEMY; i++) {
+                bulletsEnemy[i] = new BulletEnemy(this);
+            }
+            for (int i = NUMBER_BULLETS_ENEMY; i < NUMBER_BOMBS; i++) {
+                bulletsEnemy[i] = new Bomb(this);
+            }
+            for (int i = NUMBER_BOMBS; i < NUMBER_BOSS_SHOTS; i++) {
+                bulletsEnemy[i] = new BulletBoss(this);
+            }
 
             pauseButton = new PauseButton(this);
             healthKit = new HealthKit(this);
             shotgunKit = new ShotgunKit(this);
             loadingScreen = new LoadingScreen(this);
 
-            resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
-            updateMenuButtons();
-
-            int len = NUMBER_VADER * 2;
-            for (int i = 0; i < len; i++) {
-                generateVader();
-            }
             startEmpire();
         });
 
         for (int i = 0; i < NUMBER_SKULL_EXPLOSIONS; i++) {
-            skullExplosion[i] = new ExplosionSkull(this);
-            allExplosion[i] = skullExplosion[i];
+            allExplosion[i] = new ExplosionSkull(this);
         }
-        count = NUMBER_SKULL_EXPLOSIONS;
-        for (int i = 0; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
-            defaultLargeExplosion[i] = new DefaultExplosion(this, LARGE_EXPLOSION);
-            allExplosion[i + count] = defaultLargeExplosion[i];
+        for (int i = NUMBER_SKULL_EXPLOSIONS; i < NUMBER_DEFAULT_LARGE_EXPLOSION; i++) {
+            allExplosion[i] = new DefaultExplosion(this, LARGE_EXPLOSION);
         }
-        count += NUMBER_DEFAULT_LARGE_EXPLOSION;
-        for (int i = 0; i < NUMBER_DEFAULT_SMALL_EXPLOSION; i++) {
-            defaultSmallExplosion[i] = new DefaultExplosion(this, SMALL_EXPLOSION);
-            allExplosion[i + count] = defaultSmallExplosion[i];
+        for (int i = NUMBER_DEFAULT_LARGE_EXPLOSION; i < NUMBER_DEFAULT_SMALL_EXPLOSION; i++) {
+            allExplosion[i] = new DefaultExplosion(this, SMALL_EXPLOSION);
         }
-        count += NUMBER_DEFAULT_SMALL_EXPLOSION;
-        for (int i = 0; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
-            tripleLargeExplosion[i] = new ExplosionTriple(this, LARGE_EXPLOSION);
-            allExplosion[i + count] = tripleLargeExplosion[i];
+        for (int i = NUMBER_DEFAULT_SMALL_EXPLOSION; i < NUMBER_TRIPLE_LARGE_EXPLOSION; i++) {
+            allExplosion[i] = new ExplosionTriple(this, LARGE_EXPLOSION);
         }
-        count += NUMBER_TRIPLE_LARGE_EXPLOSION;
-        for (int i = 0; i < NUMBER_TRIPLE_SMALL_EXPLOSION; i++) {
-            tripleSmallExplosion[i] = new ExplosionTriple(this, SMALL_EXPLOSION);
-            allExplosion[i + count] = tripleSmallExplosion[i];
+        for (int i = NUMBER_TRIPLE_LARGE_EXPLOSION; i < NUMBER_TRIPLE_SMALL_EXPLOSION; i++) {
+            allExplosion[i] = new ExplosionTriple(this, SMALL_EXPLOSION);
         }
 
         Service.runOnUiThread(() -> {
@@ -309,12 +332,13 @@ public final class Game extends SurfaceView implements Runnable {
             AudioHub.loadMenuSnd();
         });
 
-        player = new Bot(this);
         gameStatus = MENU;
 
         startThread();
 
         isFirstRun = false;
+
+        player.setGun();
     }
 
     private void backGroundTasks() {
@@ -331,73 +355,44 @@ public final class Game extends SurfaceView implements Runnable {
 
         checkTimeForBoss();
 
-        if (score >= 50) {
-            if (shotgunKit.lock && !shotgunKit.picked) {
-                if (Randomize.randFloat() <= 0.15) {
-                    shotgunKit.lock = false;
-                }
-            }
+        if (!shotgunKit.picked && score >= 50 && shotgunKit.lock && Randomize.randFloat() <= 0.15) {
+            shotgunKit.lock = false;
         }
 
-        if (healthKit.lock) {
-            if (Randomize.randFloat() <= 0.015) {
-                healthKit.lock = false;
-            }
+        if (healthKit.lock && Randomize.randFloat() <= 0.015) {
+            healthKit.lock = false;
         }
 
         if (level == 1) {
-            if (score > 50) {
-                if (attention.lock) {
-                    if (Randomize.randFloat() <= 0.06) {
-                        attention.start();
-                    }
-                }
+            if (attention.lock && score > 50 && Randomize.randFloat() <= 0.06) {
+                attention.start();
             }
-            if (score > 170) {
-                if (boss == null) {
-                    if (factory.lock) {
-                        if (Randomize.randFloat() <= 0.0135) {
-                            factory.lock = false;
-                        }
-                    }
-                }
+
+            if (score > 170 && boss == null && factory.lock && Randomize.randFloat() <= 0.0135) {
+                factory.lock = false;
             }
-            if (score > 70) {
-                if (demoman.lock) {
-                    if (Randomize.randFloat() <= 0.0315) {
-                        demoman.start();
-                    }
-                }
+            if (demoman.lock && score > 70 && Randomize.randFloat() <= 0.0315) {
+                demoman.start();
             }
 
         } else {
             int curScore = score - oldScore;
-            if (curScore > 30) {
-                if (spider.lock) {
-                    if (Randomize.randFloat() <= 0.015) {
-                        spider.start();
-                    }
-                }
+
+            if (curScore > 30 && spider.lock && Randomize.randFloat() <= 0.015) {
+                spider.start();
             }
+
             if (boss == null) {
-                if (curScore > 100) {
-                    if (sunrise.lock) {
-                        if (Randomize.randFloat() <= 0.0135) {
-                            sunrise.start();
-                        }
-                    }
+                if (curScore > 100 && sunrise.lock && Randomize.randFloat() <= 0.0135) {
+                    sunrise.start();
                 }
-                if (curScore > 50) {
-                    if (buffer.lock) {
-                        if (Randomize.randFloat() <= 0.015) {
-                            buffer.lock = false;
-                        }
-                    }
+
+                if (curScore > 50 && buffer.lock && Randomize.randFloat() <= 0.015) {
+                    buffer.lock = false;
                 }
-                if (atomicBomb.lock) {
-                    if (Randomize.randFloat() <= 0.033) {
-                        atomicBomb.start();
-                    }
+
+                if (atomicBomb.lock && Randomize.randFloat() <= 0.033) {
+                    atomicBomb.start();
                 }
             }
         }
@@ -425,7 +420,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         player.turn();
 
-        turnIntersectOnlyPlayer();
+        turnBulletsEnemy();
         turnExplosions();
 
         changerGuns.render();
@@ -703,14 +698,12 @@ public final class Game extends SurfaceView implements Runnable {
         activity.closeAdMob();
 
         level = 1;
-        enemies = new ArrayList<>(0);
 
         HardThread.doInBackGround(() -> {
-            bullets = new ArrayList<>(0);
             ghosts = new ArrayList<>(0);
-            intersectOnlyPlayer = new ArrayList<>(0);
+            lock(bulletsEnemy);
+            lock(allExplosion);
 
-            stopExplosions();
             newCharacterButtons();
 
             score = 0;
@@ -738,11 +731,20 @@ public final class Game extends SurfaceView implements Runnable {
             updateMenuButtons();
         });
 
-        ImageHub.loadFirstLevelAndCharacterImages(MILLENNIUM_FALCON);
+        ImageHub.loadCharacterImages(MILLENNIUM_FALCON);
+        ImageHub.loadFirstLevelImages();
+
+        lock(enemy);
+        lock(bullets);
 
         count = NUMBER_VADER * 2;
+        enemy = new Sprite[count];
         for (int i = 0; i < count; i++) {
-            generateVader();
+            enemy[i] = new Vader(this);
+        }
+        bullets = new Bullet[25];
+        for (int i = 0; i < 25; i++) {
+            bullets[i] = new Bullet(this);
         }
 
         screen = new StarScreen();
@@ -751,6 +753,8 @@ public final class Game extends SurfaceView implements Runnable {
         startEmpire();
 
         gameStatus = MENU;
+
+        player.setGun();
     }
 
     public void generateNewGame() {
@@ -761,72 +765,105 @@ public final class Game extends SurfaceView implements Runnable {
         AudioHub.deletePauseMusic();
         activity.closeAdMob();
 
-        enemies = new ArrayList<>(0);
         ghosts = new ArrayList<>(0);
-        intersectOnlyPlayer = new ArrayList<>(0);
 
-        HardThread.doInPool(() -> {
-            bullets = new ArrayList<>(0);
+        lock(enemy);
+        lock(bullets);
 
-            stopExplosions();
+        HardThread.doInBackGround(() -> {
             makeScoresParams();
+            ImageHub.deletePortalImages();
 
             BOSS_TIME = 100_000;
             count = 0;
 
-            shotgunKit.kill();
-            healthKit.kill();
             pauseButton.show();
-            killPortal();
 
             boss = null;
             buttonPlayer = null;
             buttonSaturn = null;
             buttonEmerald = null;
 
-            intersectOnlyPlayer.add(healthKit);
-            intersectOnlyPlayer.add(shotgunKit);
+            lock(bulletsEnemy);
+            lock(allExplosion);
         });
 
         switch (level) {
             case 1:
                 AudioHub.loadFirstLevelSounds();
-                ImageHub.loadFirstLevelAndCharacterImages(character);
+                ImageHub.loadCharacterImages(character);
+                ImageHub.loadFirstLevelImages();
 
                 switch (character) {
                     case SATURN:
                         player = new Saturn(this);
+                        bullets = new BaseBullet[NUMBER_SATURN_ENEMY_ORBIT];
+                        for (int i = 0; i < NUMBER_SATURN_BULLETS; i++) {
+                            bullets[i] = new BulletSaturn(this);
+                        }
+                        for (int i = NUMBER_SATURN_BULLETS; i < NUMBER_SATURN_BUCKSHOT; i++) {
+                            bullets[i] = new BuckshotSaturn(this);
+                        }
+                        for (int i = NUMBER_SATURN_BUCKSHOT; i < NUMBER_SATURN_ENEMY_ORBIT; i++) {
+                            bullets[i] = new BulletEnemyOrbit(this);
+                        }
                         break;
                     case MILLENNIUM_FALCON:
                         player = new MillenniumFalcon(this);
+                        bullets = new BaseBullet[NUMBER_MILLENNIUM_FALCON_BUCKSHOT];
+                        for (int i = 0; i < NUMBER_MILLENNIUM_FALCON_BULLETS; i++) {
+                            bullets[i] = new Bullet(this);
+                        }
+                        for (int i = NUMBER_MILLENNIUM_FALCON_BULLETS; i < NUMBER_MILLENNIUM_FALCON_BUCKSHOT; i++) {
+                            bullets[i] = new Buckshot(this);
+                        }
                         break;
                     case EMERALD:
                         player = new Emerald(this);
+                        bullets = new BaseBullet[5];
+                        for (int i = 0; i < 3; i++) {
+                            bullets[i] = new BulletDynamite(this);
+                        }
+                        for (int i = 3; i < 5; i++) {
+                            bullets[i] = new BulletThunder(this);
+                        }
                         break;
                 }
 
                 screen = new StarScreen();
 
                 HardThread.doInBackGround(() -> {
-                    ImageHub.loadGunsImages(character);
-
                     rocket = new Rocket(this);
                     attention = new Attention(this);
                     factory = new Factory(this);
                     demoman = new Demoman(this);
 
-                    enemies.add(new TripleFighter(this));
-                    for (int i = 0; i < NUMBER_VADER; i++) {
+                    NUMBER_VADERS = NUMBER_VADER;
+                    NUMBER_MINIONS = NUMBER_VADERS + 14;
+                    PORTAL_ID = NUMBER_VADERS + 3;
+
+                    enemy = new Sprite[NUMBER_MINIONS];
+                    enemy[0] = new TripleFighter(this);
+                    enemy[NUMBER_VADERS] = demoman;
+                    enemy[NUMBER_VADERS + 1] = shotgunKit;
+                    enemy[NUMBER_VADERS + 2] = healthKit;
+                    enemy[NUMBER_VADERS + 3] = new Portal(this);
+
+                    for (int i = 1; i < NUMBER_VADER; i++) {
                         if (Randomize.randFloat() <= 0.12) {
-                            enemies.add(new TripleFighter(this));
+                            enemy[i] = new TripleFighter(this);
                         } else {
-                            generateVader();
+                            enemy[i] = new Vader(this);
                         }
                     }
 
-                    intersectOnlyPlayer.add(attention);
+                    NUMBER_VADERS += 4;
+                    for (int i = NUMBER_VADERS; i < NUMBER_MINIONS; i++) {
+                        enemy[i] = new Minion(this);
+                    }
+
+                    ghosts.add(attention);
                     ghosts.add(factory);
-                    enemies.add(demoman);
 
                     score = 0;
 
@@ -840,8 +877,7 @@ public final class Game extends SurfaceView implements Runnable {
                     alphaEnemy.setAlpha(255);
                     shotgunKit.picked = false;
 
-                    Time.waitImg();
-
+                    ImageHub.loadGunsImages(character);
                     changerGuns = new ChangerGuns(this);
                 });
                 break;
@@ -859,19 +895,29 @@ public final class Game extends SurfaceView implements Runnable {
                     buffer = new Buffer(this);
                     atomicBomb = new AtomicBomb(this);
 
-                    int len = NUMBER_VADER + 6;
-                    for (int i = 0; i < len; i++) {
+                    NUMBER_VADERS = NUMBER_VADER + 6;
+                    PORTAL_ID = NUMBER_VADERS + 4;
+                    NUMBER_MINIONS = PORTAL_ID + 4;
+
+                    enemy = new Sprite[NUMBER_MINIONS];
+                    enemy[NUMBER_VADERS] = spider;
+                    enemy[NUMBER_VADERS + 1] = sunrise;
+                    enemy[NUMBER_VADERS + 2] = buffer;
+                    enemy[NUMBER_VADERS + 3] = atomicBomb;
+                    enemy[NUMBER_VADERS + 4] = new Portal(this);
+                    enemy[NUMBER_VADERS + 5] = new BulletBossVaders(this);
+                    enemy[NUMBER_VADERS + 6] = new BulletBossVaders(this);
+                    enemy[NUMBER_VADERS + 7] = new BulletBossVaders(this);
+
+                    for (int i = 0; i < NUMBER_VADERS; i++) {
                         if (Randomize.randFloat() <= 0.18) {
-                            enemies.add(new XWing(this));
+                            enemy[i] = new XWing(this);
                         } else {
-                            generateVader();
+                            enemy[i] = new Vader(this);
                         }
                     }
 
-                    enemies.add(spider);
-                    enemies.add(sunrise);
-                    enemies.add(buffer);
-                    enemies.add(atomicBomb);
+                    NUMBER_VADERS += 5;
 
                     oldScore = score;
 
@@ -1034,15 +1080,18 @@ public final class Game extends SurfaceView implements Runnable {
     private void preview() {
         screen.turn();
 
-        for (int i = 0; i < enemies.size(); i++) {
-            Sprite sprite = enemies.get(i);
-            sprite.x -= moveAll;
-            sprite.turn();
-            for (int j = 0; j < bullets.size(); j++) {
-                sprite.check_intersectionBullet(bullets.get(j));
+        for (Sprite sprite : enemy) {
+            if (!sprite.lock) {
+                sprite.turn();
+                for (BaseBullet baseBullet : bullets) {
+                    if (!baseBullet.lock) {
+                        sprite.check_intersectionBullet(baseBullet);
+                    }
+                }
+                player.checkIntersections(sprite);
             }
-            player.checkIntersections(sprite);
         }
+
         turnBullets();
         turnExplosions();
 
@@ -1092,9 +1141,9 @@ public final class Game extends SurfaceView implements Runnable {
     private void renderSprites() {
         screen.render();
 
-        for (int i = 0; i < enemies.size(); i++) {
-            if (!enemies.get(i).lock) {
-                enemies.get(i).render();
+        for (Sprite sprite : enemy) {
+            if (!sprite.lock) {
+                sprite.render();
             }
         }
         for (int i = 0; i < ghosts.size(); i++) {
@@ -1102,19 +1151,19 @@ public final class Game extends SurfaceView implements Runnable {
                 ghosts.get(i).render();
             }
         }
-        for (int i = 0; i < intersectOnlyPlayer.size(); i++) {
-            Sprite sprite = intersectOnlyPlayer.get(i);
-            if (sprite != null) {
-                if (!sprite.lock) {
-                    sprite.render();
-                }
+
+        for (BaseBullet bullet : bulletsEnemy) {
+            if (!bullet.lock) {
+                bullet.render();
             }
         }
 
         player.render();
 
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).render();
+        for (BaseBullet baseBullet : bullets) {
+            if (!baseBullet.lock) {
+                baseBullet.render();
+            }
         }
         for (int i = 0; i < NUMBER_ALL_EXPLOSION; i++) {
             if (!allExplosion[i].lock) {
@@ -1125,46 +1174,31 @@ public final class Game extends SurfaceView implements Runnable {
         player.renderHearts();
     }
 
-    private void stopExplosions() {
-        for (int i = 0; i < NUMBER_ALL_EXPLOSION; i++) {
-            allExplosion[i].lock = true;
-        }
-    }
-
-    private void turnIntersectOnlyPlayer() {
+    private void turnBulletsEnemy() {
         if (character == SATURN) {
-            for (int i = 0; i < intersectOnlyPlayer.size(); i++) {
-                Sprite sprite = intersectOnlyPlayer.get(i);
-                if (sprite != null) {
-                    if (!sprite.lock) {
-                        sprite.x -= moveAll;
-                        sprite.turn();
-                        player.checkIntersections(sprite);
-                        if (sprite.name == BULLET_ENEMY) {
-                            for (int j = 0; j < bullets.size(); j++) {
-                                Sprite bulletPlayer = bullets.get(j);
-                                if (bulletPlayer != null) {
-                                    if (bulletPlayer.name == BULLET_SATURN) {
-                                        if (sprite.intersect(bulletPlayer)) {
-                                            if (Randomize.randBoolean()) {
-                                                HardThread.doInBackGround(() -> {
-                                                    Object[] info = bulletPlayer
-                                                            .getBox(bulletPlayer.centerX(), bulletPlayer.centerY(),
-                                                                    (Bitmap) sprite.getBox(0, 0, null)[0]);
-
-                                                    if ((boolean) info[3]) {
-                                                        BulletEnemyOrbit bulletEnemyOrbit = new BulletEnemyOrbit(info);
-                                                        bullets.add(bulletEnemyOrbit);
-
-                                                        intersectOnlyPlayer.remove(sprite);
-                                                    }
-                                                });
-                                            } else {
-                                                sprite.intersectionPlayer();
-                                                bulletPlayer.kill();
+            for (BaseBullet bullet : bulletsEnemy) {
+                if (!bullet.lock) {
+                    bullet.x -= moveAll;
+                    bullet.turn();
+                    player.checkIntersections(bullet);
+                    if (bullet.name == BULLET_ENEMY) {
+                        for (BaseBullet bulletPlayer : bullets) {
+                            if (!bulletPlayer.lock && bulletPlayer.name == BULLET_SATURN
+                                    && bullet.intersect(bulletPlayer)) {
+                                if (Randomize.randBoolean()) {
+                                    HardThread.doInBackGround(() -> {
+                                        for (int j = NUMBER_SATURN_BUCKSHOT; j < NUMBER_SATURN_ENEMY_ORBIT; j++) {
+                                            if (bullets[j].lock) {
+                                                bullets[j].start(bulletPlayer
+                                                        .getBox((Bitmap) bullet.getBox(null)[0]));
+                                                bullet.lock = true;
+                                                break;
                                             }
                                         }
-                                    }
+                                    });
+                                } else {
+                                    bullet.intersectionPlayer();
+                                    bulletPlayer.kill();
                                 }
                             }
                         }
@@ -1172,14 +1206,11 @@ public final class Game extends SurfaceView implements Runnable {
                 }
             }
         } else {
-            for (int i = 0; i < intersectOnlyPlayer.size(); i++) {
-                Sprite sprite = intersectOnlyPlayer.get(i);
-                if (sprite != null) {
-                    if (!sprite.lock) {
-                        sprite.x -= moveAll;
-                        sprite.turn();
-                        player.checkIntersections(sprite);
-                    }
+            for (BaseBullet bullet : bulletsEnemy) {
+                if (!bullet.lock) {
+                    bullet.x -= moveAll;
+                    bullet.turn();
+                    player.checkIntersections(bullet);
                 }
             }
         }
@@ -1200,8 +1231,10 @@ public final class Game extends SurfaceView implements Runnable {
             if (!sprite.lock) {
                 sprite.x -= moveAll;
                 sprite.turn();
-                for (int j = 0; j < bullets.size(); j++) {
-                    sprite.check_intersectionBullet(bullets.get(j));
+                for (BaseBullet baseBullet : bullets) {
+                    if (!baseBullet.lock) {
+                        sprite.check_intersectionBullet(baseBullet);
+                    }
                 }
             }
         }
@@ -1209,13 +1242,14 @@ public final class Game extends SurfaceView implements Runnable {
 
     private void turnEnemies() {
         if (level == 1) {
-            for (int i = 0; i < enemies.size(); i++) {
-                Sprite sprite = enemies.get(i);
+            for (Sprite sprite : enemy) {
                 if (!sprite.lock) {
                     sprite.x -= moveAll;
                     sprite.turn();
-                    for (int j = 0; j < bullets.size(); j++) {
-                        sprite.check_intersectionBullet(bullets.get(j));
+                    for (BaseBullet bullet : bullets) {
+                        if (!bullet.lock) {
+                            sprite.check_intersectionBullet(bullet);
+                        }
                     }
                     player.checkIntersections(sprite);
 
@@ -1228,19 +1262,22 @@ public final class Game extends SurfaceView implements Runnable {
             if (!rocket.lock) {
                 rocket.x -= moveAll;
                 rocket.turn();
-                for (int j = 0; j < bullets.size(); j++) {
-                    rocket.checkIntersections(bullets.get(j));
+                for (BaseBullet baseBullet : bullets) {
+                    if (!baseBullet.lock) {
+                        rocket.check_intersectionBullet(baseBullet);
+                    }
                 }
                 player.checkIntersections(rocket);
             }
         } else {
-            for (int i = 0; i < enemies.size(); i++) {
-                Sprite sprite = enemies.get(i);
+            for (Sprite sprite : enemy) {
                 if (!sprite.lock) {
                     sprite.x -= moveAll;
                     sprite.turn();
-                    for (int j = 0; j < bullets.size(); j++) {
-                        sprite.check_intersectionBullet(bullets.get(j));
+                    for (BaseBullet bullet : bullets) {
+                        if (!bullet.lock) {
+                            sprite.check_intersectionBullet(bullet);
+                        }
                     }
                     player.checkIntersections(sprite);
                 }
@@ -1249,11 +1286,10 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     private void turnBullets() {
-        for (int i = 0; i < bullets.size(); i++) {
-            Sprite bullet = bullets.get(i);
-            if (bullet != null) {
-                bullet.x -= moveAll;
-                bullet.turn();
+        for (BaseBullet baseBullet : bullets) {
+            if (!baseBullet.lock) {
+                baseBullet.x -= moveAll;
+                baseBullet.turn();
             }
         }
     }
@@ -1317,7 +1353,7 @@ public final class Game extends SurfaceView implements Runnable {
     private void checkTimeForBoss() {
         if (now - lastBoss >= BOSS_TIME) {
             lastBoss = now;
-            if (boss == null && portal == null) {
+            if (boss == null && enemy[PORTAL_ID].lock) {
                 byte bossType = DEATH_STAR;
                 if (level == 1) {
                     boss = new DeathStar(this);
@@ -1335,28 +1371,34 @@ public final class Game extends SurfaceView implements Runnable {
     }
 
     public void newPortal() {
-        if (portal == null) {
-            portal = new Portal(this);
-            intersectOnlyPlayer.add(portal);
+        if (enemy[PORTAL_ID].lock) {
+            enemy[PORTAL_ID].start();
         }
     }
 
     public void killPortal() {
-        if (portal != null) {
-            intersectOnlyPlayer.remove(portal);
+        if (!enemy[PORTAL_ID].lock) {
+            enemy[PORTAL_ID].lock = true;
             ImageHub.deletePortalImages();
-            portal = null;
         }
     }
 
     public void startEmpire() {
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).empireStart();
+        for (Sprite sprite : enemy) {
+            sprite.empireStart();
         }
     }
 
-    public void generateVader() {
-        enemies.add(new Vader(this));
+    public void addEnemies(boolean XWing) {
+        int len = enemy.length;
+        enemy = Arrays.copyOf(enemy, len + 3);
+        enemy[len] = new Vader(this);
+        enemy[len + 1] = new Vader(this);
+        if (XWing) {
+            enemy[len + 2] = new XWing(this);
+        } else {
+            enemy[len + 2] = new TripleFighter(this);
+        }
     }
 
     public void killBoss() {
@@ -1505,6 +1547,12 @@ public final class Game extends SurfaceView implements Runnable {
         thread = new Thread(this);
         thread.setPriority(Thread.MAX_PRIORITY);
         thread.start();
+    }
+
+    private void lock(Sprite[] array) {
+        for (Sprite sprite : array) {
+            sprite.lock = true;
+        }
     }
 
     public void hideSettings() {

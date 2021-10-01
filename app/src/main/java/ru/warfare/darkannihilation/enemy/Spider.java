@@ -1,7 +1,7 @@
 package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.base.BaseBullet;
-import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.base.BaseEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
@@ -17,7 +17,7 @@ import static ru.warfare.darkannihilation.constant.Constants.SPIDER_SPEED;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.Game.now;
 
-public class Spider extends Sprite {
+public class Spider extends BaseEnemy {
     private final Vector vector = new Vector();
 
     private int shootTripleTime;
@@ -28,25 +28,22 @@ public class Spider extends Sprite {
     private float hp = 10;
 
     public Spider(Game game) {
-        super(game, ImageHub.spiderImg);
-        damage = SPIDER_DAMAGE;
-
+        super(game, ImageHub.spiderImg, SPIDER_DAMAGE);
         calculateBarriers();
-        lock = true;
 
         recreateRect(x + 25, y + 5, right() - 5, centerY() + (halfHeight / 2));
     }
 
-    private void shoot() {
+    @Override
+    public void shoot() {
         if (now - lastShoot > shootTripleTime) {
             lastShoot = now;
             HardThread.doInBackGround(() -> {
                 if (!reload) {
                     int X = centerX();
                     int Y = centerY();
-                    int[] values = vector.dirtyVector(X, Y, game.player.centerX(),
-                            game.player.centerY(), 13, randInt(-20, 20));
-                    game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+                    bulletEnemy(X, Y, vector.dirtyVector(X, Y, game.player.centerX(),
+                            game.player.centerY(), 13, randInt(-20, 20)));
                     AudioHub.playShotgun();
                     ammo++;
                     if (ammo == 30) {

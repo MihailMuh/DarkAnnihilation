@@ -1,9 +1,8 @@
 package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.base.BaseBullet;
-import ru.warfare.darkannihilation.bullet.BulletEnemy;
+import ru.warfare.darkannihilation.base.BaseEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.arts.ImageHub;
@@ -17,31 +16,30 @@ import static ru.warfare.darkannihilation.systemd.Game.now;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-public class Minion extends Sprite {
+public class Minion extends BaseEnemy {
     private long lastShoot = now;
-    private final Vector vector = new Vector();
 
-    public Minion(Game game, int x, int y) {
-        super(game, ImageHub.minionImg);
-        health = MINION_HEALTH;
-        damage = MINION_DAMAGE;
-
-        this.x = x;
-        this.y = y;
-        speedX = randInt(-8, 8);
-        speedY = randInt(2, 5);
-
+    public Minion(Game game) {
+        super(game, ImageHub.minionImg, MINION_DAMAGE);
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
-    private void shoot() {
+    @Override
+    public void start() {
+        health = MINION_HEALTH;
+
+        speedX = randInt(-8, 8);
+        speedY = randInt(2, 5);
+
+        lock = false;
+    }
+
+    @Override
+    public void shoot() {
         if (now - lastShoot > MINION_SHOOT_TIME) {
             lastShoot = now;
             HardThread.doInBackGround(() -> {
-                int X = centerX();
-                int Y = centerY();
-                int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), 13);
-                game.intersectOnlyPlayer.add(new BulletEnemy(game, X, Y, values[2], values[0], values[1]));
+                bulletEnemy(game.player.centerX(), game.player.centerY(), 13);
                 AudioHub.playShotgun();
             });
         }
@@ -69,13 +67,13 @@ public class Minion extends Sprite {
 
     @Override
     public void hide() {
-        game.enemies.remove(this);
+        lock = true;
     }
 
     @Override
     public void kill() {
         hide();
-        largeTripleExplosion();
+        createLargeTripleExplosion();
     }
 
     @Override

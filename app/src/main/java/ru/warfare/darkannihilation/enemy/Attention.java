@@ -1,11 +1,12 @@
 package ru.warfare.darkannihilation.enemy;
 
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.systemd.Game;
-
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
+
+import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.systemd.Game;
 
 public class Attention extends Sprite {
     public Attention(Game game) {
@@ -13,6 +14,10 @@ public class Attention extends Sprite {
 
         calculateBarriers();
         kill();
+    }
+
+    @Override
+    public void check_intersectionBullet(BaseBullet bullet) {
     }
 
     @Override

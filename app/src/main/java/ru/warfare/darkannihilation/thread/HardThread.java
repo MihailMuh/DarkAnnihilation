@@ -12,9 +12,9 @@ import java.util.concurrent.Executors;
 import ru.warfare.darkannihilation.interfaces.Function;
 
 public class HardThread {
-    private static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private static ArrayList<Function> functions = new ArrayList<>(0);
+    private static final ExecutorService threadPool = Executors.newWorkStealingPool();
     static ArrayList<GameTask> tasks = new ArrayList<>(0);
+    private static ArrayList<Function> functions = new ArrayList<>(0);
     private static Handler handler;
     private Thread thread;
     private static volatile boolean work;
@@ -25,19 +25,32 @@ public class HardThread {
     }
 
     public static void createBlackHole(Function function) {
-        blackHole = true;
+        if (!blackHole) {
+            blackHole = true;
 
-        threadPool.execute(() -> {
-            functions.add(function);
+            threadPool.execute(() -> {
+                if (function != null) {
+                    functions.add(function);
+                }
 
-            for (int i = 0; i < functions.size(); i++) {
-                functions.get(i).run();
-            }
+                for (int i = 0; i < functions.size(); i++) {
+                    functions.get(i).run();
+                }
 
+                closeBlackHole();
+            });
+        }
+    }
+
+    public static void createBlackHole() {
+        createBlackHole(null);
+    }
+
+    public static void closeBlackHole() {
+        if (blackHole) {
             blackHole = false;
-
             functions = new ArrayList<>(0);
-        });
+        }
     }
 
     public static void doInBackGround(Function function) {
@@ -99,7 +112,7 @@ public class HardThread {
             handler = new Handler();
             Looper.loop();
         });
-        thread.setPriority(Thread.MIN_PRIORITY);
+        thread.setDaemon(true);
         thread.start();
     }
 }

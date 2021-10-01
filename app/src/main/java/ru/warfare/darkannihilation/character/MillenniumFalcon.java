@@ -1,16 +1,16 @@
 package ru.warfare.darkannihilation.character;
 
-import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.base.BaseCharacter;
-import ru.warfare.darkannihilation.bullet.Buckshot;
-import ru.warfare.darkannihilation.bullet.Bullet;
-
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_MILLENNIUM_FALCON_BUCKSHOT;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
+
+import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.audio.AudioHub;
+import ru.warfare.darkannihilation.base.BaseCharacter;
+import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.systemd.Game;
 
 public class MillenniumFalcon extends BaseCharacter {
     public MillenniumFalcon(Game g) {
@@ -20,21 +20,34 @@ public class MillenniumFalcon extends BaseCharacter {
 
     @Override
     public void gun() {
-        int X = centerX();
-
-        for (int i = -6; i <= 6; i += 6) {
-            Bullet bullet = new Bullet(game, X + i, y);
-            game.bullets.add(bullet);
+        int X = centerX() - 6;
+        int count = 0;
+        for (int i = 0; i < NUMBER_MILLENNIUM_FALCON_BULLETS; i++) {
+            if (game.bullets[i].lock) {
+                game.bullets[i].start(X, y);
+                X += 6;
+                count++;
+            }
+            if (count == 3) {
+                break;
+            }
         }
         AudioHub.playShoot();
     }
 
     @Override
     public void shotgun() {
-        int centerX = centerX();
-        for (int i = -4; i <= 4; i += 2) {
-            Buckshot buckshot = new Buckshot(game, centerX, y, i);
-            game.bullets.add(buckshot);
+        int X = centerX();
+        int count = -4;
+
+        for (int i = NUMBER_MILLENNIUM_FALCON_BULLETS; i < NUMBER_MILLENNIUM_FALCON_BUCKSHOT; i++) {
+            if (game.bullets[i].lock) {
+                game.bullets[i].start(X, y, count);
+                count += 2;
+            }
+            if (count == 6) {
+                break;
+            }
         }
         AudioHub.playShotgun();
     }

@@ -15,21 +15,35 @@ import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class Portal extends Sprite {
-    private int frame = 0;
-    private long lastFrame = now;
-    private final long lifeTime = now;
-    public boolean touch = false;
+    private int frame;
+    private long lastFrame;
+    private long lifeTime;
+    private boolean touch;
 
     public Portal(Game game) {
-        super(game, ImageHub.portalImages[0]);
+        super(game);
+        calculateBarriers();
+
+        lock = true;
+
+        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
+    }
+
+    @Override
+    public void start() {
         AudioHub.loadPortalSounds();
 
-        calculateBarriers();
+        image = ImageHub.portalImages[0];
+        makeParams();
 
         x = randInt(0, screenWidthWidth);
         y = randInt(20, height);
 
-        recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
+        touch = false;
+        frame = 0;
+
+        lock = false;
+        lifeTime = now;
     }
 
     @Override
@@ -39,18 +53,18 @@ public class Portal extends Sprite {
 
     @Override
     public void intersectionPlayer() {
-        touch = true;
-        game.intersectOnlyPlayer.remove(this);
-        game.ghosts.add(this);
-        if (Game.level == 2) {
-            ImageHub.loadWinImages(game);
-        } else {
-            AudioHub.playTimeMachine();
+        if (!touch) {
+            touch = true;
+            if (Game.level == 2) {
+                ImageHub.loadWinImages(game);
+            } else {
+                AudioHub.playTimeMachine();
 
-            game.player.god = true;
-            game.player.stop();
+                game.player.god = true;
+                game.player.stop();
+            }
+            Service.runOnUiThread(AudioHub::deletePortalSnd);
         }
-        Service.runOnUiThread(AudioHub::deletePortalSnd);
     }
 
     @Override
@@ -78,6 +92,7 @@ public class Portal extends Sprite {
                 Game.gameStatus = GAME;
                 AudioHub.resumeBackgroundMusic();
                 game.killPortal();
+                game.gameTask.start();
             }
         }
     }

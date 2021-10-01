@@ -4,14 +4,13 @@ import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.bullet.BulletBoss;
-import ru.warfare.darkannihilation.enemy.TripleFighter;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_SHOOT_TIME;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BOMBS;
+import static ru.warfare.darkannihilation.constant.Constants.NUMBER_BOSS_SHOTS;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class DeathStar extends BaseBoss {
@@ -25,8 +24,15 @@ public class DeathStar extends BaseBoss {
     public void shoot() {
         int ri = right() - 115;
         int y40 = y + 40;
-        for (int i = 1; i < 4; i++) {
-            game.intersectOnlyPlayer.add(new BulletBoss(game, ri, y40, i));
+        int count = 0;
+        for (int i = NUMBER_BOMBS; i < NUMBER_BOSS_SHOTS; i++) {
+            if (Game.bulletsEnemy[i].lock) {
+                count++;
+                Game.bulletsEnemy[i].start(ri, y40, count);
+            }
+            if (count == 3) {
+                break;
+            }
         }
         AudioHub.playShoot();
     }
@@ -34,15 +40,7 @@ public class DeathStar extends BaseBoss {
     @Override
     public void kill() {
         Game.score += 325;
-
-        int len = NUMBER_VADER / 4;
-        for (int i = 0; i < len; i++) {
-            if (Randomize.randFloat() <= 0.1) {
-                game.enemies.add(new TripleFighter(game));
-            } else {
-                game.generateVader();
-            }
-        }
+        game.addEnemies(false);
     }
 
     @Override

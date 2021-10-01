@@ -3,6 +3,7 @@ package ru.warfare.darkannihilation.bullet;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.arts.ImageHub;
+import ru.warfare.darkannihilation.thread.HardThread;
 
 import static ru.warfare.darkannihilation.constant.Colors.THUNDER_FIRST;
 import static ru.warfare.darkannihilation.constant.Colors.THUNDER_SECOND;
@@ -16,11 +17,20 @@ public class BulletThunder extends BaseBullet {
     private int frame = 0;
     private long lastShoot = now;
 
-    public BulletThunder(Game game, int X, int Y) {
-        super(game, ImageHub.thunderImage[0], X, Y, LIGHTNING_DAMAGE);
-
-        y = Y - height;
+    public BulletThunder(Game game) {
+        super(game, ImageHub.thunderImage[0], LIGHTNING_DAMAGE);
         power = SUPER;
+    }
+
+    @Override
+    public void start(int X, int Y) {
+        x = X - halfWidth;
+        y = Y - height;
+
+        frame = 0;
+        lock = false;
+
+        HardThread.createBlackHole();
     }
 
     @Override
@@ -30,7 +40,8 @@ public class BulletThunder extends BaseBullet {
             frame++;
 
             if (frame == NUMBER_LIGHTNING_IMAGES) {
-                game.bullets.remove(this);
+                HardThread.closeBlackHole();
+                lock = true;
             }
         }
     }

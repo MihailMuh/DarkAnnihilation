@@ -1,15 +1,16 @@
 package ru.warfare.darkannihilation.bullet;
 
+import static ru.warfare.darkannihilation.constant.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
+import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
+
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
+import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.BaseBullet;
-import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Vector;
-
-import static ru.warfare.darkannihilation.constant.Constants.BULLET_ENEMY_ORBIT_DAMAGE;
-import static ru.warfare.darkannihilation.constant.NamesConst.BULLET_ORBIT;
+import ru.warfare.darkannihilation.systemd.Game;
 
 public class BulletEnemyOrbit extends BaseBullet {
     private final Vector vector = new Vector();
@@ -18,22 +19,33 @@ public class BulletEnemyOrbit extends BaseBullet {
     private float Y;
     private float fly;
 
-    public BulletEnemyOrbit(Object[] info) {
-        super((Game) info[0], (Bitmap) info[7], 0, 0, BULLET_ENEMY_ORBIT_DAMAGE);
-
+    public BulletEnemyOrbit(Game game) {
+        super(game, ImageHub.pauseButtonImg, BULLET_ENEMY_ORBIT_DAMAGE);
         name = BULLET_ORBIT;
+    }
 
-        X = (int) info[1];
-        Y = (int) info[2];
-        fly = (float) info[5];
+    @Override
+    public void start(Object[] info) {
+        if ((boolean) info[2]) {
+            image = (Bitmap) info[6];
+            makeParams();
 
-        left = (int) X;
-        top = (int) Y;
-        right = (int) (X + width);
-        bottom = (int) (Y + height);
+            X = (float) info[0];
+            Y = (float) info[1];
+            fly = (float) info[4];
 
-        vector.len = (float) info[6];
-        vector.rads = (float) info[4];
+            left = (int) X;
+            top = (int) Y;
+            right = (int) (X + width);
+            bottom = (int) (Y + height);
+
+            vector.len = (float) info[5];
+            vector.rads = (double) info[3];
+
+            lock = false;
+        } else {
+            kill();
+        }
     }
 
     @Override
@@ -58,7 +70,7 @@ public class BulletEnemyOrbit extends BaseBullet {
     @Override
     public void kill() {
         super.kill();
-        game.bullets.remove(this);
+        lock = true;
     }
 
     @Override
