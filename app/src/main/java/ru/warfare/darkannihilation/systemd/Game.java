@@ -287,7 +287,7 @@ public final class Game extends SurfaceView implements Runnable {
 
         newCharacterButtons();
 
-        HardThread.doInBackGround(() -> {
+        HardThread.doInPool(() -> {
             resizeButtons(new String[]{string_top, string_settings, string_start, string_quit, string_back, string_resume, string_to_menu});
             updateMenuButtons();
 

@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/dialog_nick.xml" value="0.2" />
+        <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/warning.xml" value="0.264" />
+        <entry key="..\:/Users/muhor/Desktop/Geek_Brains/ANDROID/DarkAnnihilation/app/src/main/res/layout/warning_dialog.xml" value="0.2" />
       </map>
     </option>
   </component>

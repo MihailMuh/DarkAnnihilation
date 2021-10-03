@@ -290,7 +290,7 @@ public final class AudioHub extends AudioExoPlayer {
     public static void playTimeMachine() {
         Service.runOnUiThread(() -> timeMachineSnd.play());
 
-        HardThread.doInBackGround(() -> {
+        HardThread.doInPool(() -> {
             Time.sleep(10_250);
             activity.game.onLoading(() -> {
                 Game.level++;

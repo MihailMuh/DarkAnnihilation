@@ -88,7 +88,7 @@ public class Button extends BaseButton {
                     case TOP:
                         game.onLoading(game::generateTopScore);
 
-                        HardThread.doInBackGround(() -> {
+                        HardThread.doInPool(() -> {
                             ClientServer.postBestScore(Clerk.nickname, game.bestScore);
                             ClientServer.getStatistics();
                             game.generateTable();
