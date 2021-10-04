@@ -32,9 +32,7 @@ public class GameTask extends ScheduledThreadPoolExecutor {
 
     public void pause() {
         if (future != null) {
-            if (!future.isCancelled()) {
-                future.cancel(false);
-            }
+            future.cancel(false);
         }
     }
 }

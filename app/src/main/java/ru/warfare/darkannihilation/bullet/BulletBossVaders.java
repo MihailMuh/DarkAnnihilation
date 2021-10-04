@@ -11,15 +11,8 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class BulletBossVaders extends BaseBullet {
     public BulletBossVaders(Game game) {
-        super(game, BULLET_BOSS_VADERS_DAMAGE);
-        recreateRect(x + 25, y + 25, x + width - 25, y + height - 25);
-    }
-
-    @Override
-    public void start() {
-        image = ImageHub.bulletBossVadersImg;
-
-        lock = false;
+        super(game, ImageHub.bulletBossVadersImg, BULLET_BOSS_VADERS_DAMAGE);
+        recreateRect(x + 25, y + 25, right() - 25, bottom() - 25);
     }
 
     @Override
@@ -42,11 +35,6 @@ public class BulletBossVaders extends BaseBullet {
     @Override
     public void kill() {
         createSkullExplosion();
-        hide();
-    }
-
-    @Override
-    public void hide() {
         lock = true;
     }
 
@@ -56,7 +44,7 @@ public class BulletBossVaders extends BaseBullet {
         x += speedX;
 
         if (x < -width || x > SCREEN_WIDTH || y > SCREEN_HEIGHT || y < -height) {
-            hide();
+            lock = true;
         }
     }
 }

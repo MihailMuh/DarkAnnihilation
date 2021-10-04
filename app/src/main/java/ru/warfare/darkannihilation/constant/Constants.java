@@ -13,7 +13,7 @@ public final class Constants {
     public static final byte EMERALD_HEALTH = 100;
 
     public static final byte SATURN_SHOOT_TIME = 105;
-    public static final byte SATURN_SHOTGUN_TIME = 105;
+    public static final byte SATURN_SHOTGUN_TIME = 115;
     public static final byte SATURN_HEALTH = 20;
     public static final byte NUMBER_SATURN_BULLETS = 60;
     public static final short NUMBER_SATURN_BUCKSHOT = NUMBER_SATURN_BULLETS + 400;

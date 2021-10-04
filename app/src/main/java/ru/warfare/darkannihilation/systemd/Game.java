@@ -839,25 +839,25 @@ public final class Game extends SurfaceView implements Runnable {
                     demoman = new Demoman(this);
 
                     NUMBER_VADERS = NUMBER_VADER;
-                    NUMBER_MINIONS = NUMBER_VADERS + 14;
                     PORTAL_ID = NUMBER_VADERS + 3;
+                    NUMBER_MINIONS = PORTAL_ID + 15;
 
                     enemy = new Sprite[NUMBER_MINIONS];
-                    enemy[0] = new TripleFighter(this);
-                    enemy[NUMBER_VADERS] = demoman;
-                    enemy[NUMBER_VADERS + 1] = shotgunKit;
-                    enemy[NUMBER_VADERS + 2] = healthKit;
-                    enemy[NUMBER_VADERS + 3] = new Portal(this);
 
-                    for (int i = 1; i < NUMBER_VADER; i++) {
+                    enemy[0] = new TripleFighter(this);
+                    for (int i = 1; i < NUMBER_VADERS; i++) {
                         if (Randomize.randFloat() <= 0.12) {
                             enemy[i] = new TripleFighter(this);
                         } else {
                             enemy[i] = new Vader(this);
                         }
                     }
+                    enemy[NUMBER_VADERS] = demoman;
+                    enemy[NUMBER_VADERS + 1] = shotgunKit;
+                    enemy[NUMBER_VADERS + 2] = healthKit;
+                    enemy[PORTAL_ID] = new Portal(this);
 
-                    NUMBER_VADERS += 4;
+                    NUMBER_VADERS = PORTAL_ID + 1;
                     for (int i = NUMBER_VADERS; i < NUMBER_MINIONS; i++) {
                         enemy[i] = new Minion(this);
                     }
@@ -896,18 +896,10 @@ public final class Game extends SurfaceView implements Runnable {
                     atomicBomb = new AtomicBomb(this);
 
                     NUMBER_VADERS = NUMBER_VADER + 6;
-                    PORTAL_ID = NUMBER_VADERS + 4;
+                    PORTAL_ID = NUMBER_VADERS + 6;
                     NUMBER_MINIONS = PORTAL_ID + 4;
 
                     enemy = new Sprite[NUMBER_MINIONS];
-                    enemy[NUMBER_VADERS] = spider;
-                    enemy[NUMBER_VADERS + 1] = sunrise;
-                    enemy[NUMBER_VADERS + 2] = buffer;
-                    enemy[NUMBER_VADERS + 3] = atomicBomb;
-                    enemy[NUMBER_VADERS + 4] = new Portal(this);
-                    enemy[NUMBER_VADERS + 5] = new BulletBossVaders(this);
-                    enemy[NUMBER_VADERS + 6] = new BulletBossVaders(this);
-                    enemy[NUMBER_VADERS + 7] = new BulletBossVaders(this);
 
                     for (int i = 0; i < NUMBER_VADERS; i++) {
                         if (Randomize.randFloat() <= 0.18) {
@@ -916,8 +908,16 @@ public final class Game extends SurfaceView implements Runnable {
                             enemy[i] = new Vader(this);
                         }
                     }
-
-                    NUMBER_VADERS += 5;
+                    enemy[NUMBER_VADERS] = spider;
+                    enemy[NUMBER_VADERS + 1] = sunrise;
+                    enemy[NUMBER_VADERS + 2] = buffer;
+                    enemy[NUMBER_VADERS + 3] = atomicBomb;
+                    enemy[NUMBER_VADERS + 4] = shotgunKit;
+                    enemy[NUMBER_VADERS + 5] = healthKit;
+                    enemy[PORTAL_ID] = new Portal(this);
+                    enemy[NUMBER_VADERS + 7] = new BulletBossVaders(this);
+                    enemy[NUMBER_VADERS + 8] = new BulletBossVaders(this);
+                    enemy[NUMBER_VADERS + 9] = new BulletBossVaders(this);
 
                     oldScore = score;
 
@@ -1264,7 +1264,7 @@ public final class Game extends SurfaceView implements Runnable {
                 rocket.turn();
                 for (BaseBullet baseBullet : bullets) {
                     if (!baseBullet.lock) {
-                        rocket.check_intersectionBullet(baseBullet);
+                        rocket.checkIntersections(baseBullet);
                     }
                 }
                 player.checkIntersections(rocket);

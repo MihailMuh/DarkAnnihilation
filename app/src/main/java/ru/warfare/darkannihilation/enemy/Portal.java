@@ -2,8 +2,8 @@ package ru.warfare.darkannihilation.enemy;
 
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.base.SpriteWrapper;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.systemd.service.Service;
 
@@ -14,7 +14,7 @@ import static ru.warfare.darkannihilation.constant.Modes.GAME;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.Game.now;
 
-public class Portal extends Sprite {
+public class Portal extends SpriteWrapper {
     private int frame;
     private long lastFrame;
     private long lifeTime;
@@ -67,10 +67,6 @@ public class Portal extends Sprite {
         }
     }
 
-    @Override
-    public void kill() {
-    }
-
     private void film() {
         frame++;
         if (frame == NUMBER_PORTAL_IMAGES) {
@@ -100,9 +96,5 @@ public class Portal extends Sprite {
     @Override
     public void render() {
         Game.canvas.drawBitmap(ImageHub.portalImages[frame], x, y, null);
-    }
-
-    @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
     }
 }

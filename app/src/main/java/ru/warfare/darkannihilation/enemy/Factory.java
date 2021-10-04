@@ -4,7 +4,6 @@ import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_HEALTH_BAR_LEN;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPAWN_TIME;
 import static ru.warfare.darkannihilation.constant.Constants.FACTORY_SPEED;
-import static ru.warfare.darkannihilation.constant.NamesConst.EMERALD;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
@@ -83,9 +82,7 @@ public class Factory extends Sprite {
 
     @Override
     public void hide() {
-        if (Game.character != EMERALD) {
-            HardThread.closeBlackHole();
-        }
+        HardThread.closeBlackHole();
         lock = true;
         hp = FACTORY_HEALTH_BAR_LEN;
         y = -height;
@@ -101,9 +98,6 @@ public class Factory extends Sprite {
             y += FACTORY_SPEED;
         } else {
             if (!startSpawn) {
-                if (Game.character != EMERALD) {
-                    HardThread.createBlackHole();
-                }
                 startSpawn = true;
                 gameTask.start();
             }

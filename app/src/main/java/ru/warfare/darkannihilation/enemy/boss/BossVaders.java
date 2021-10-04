@@ -4,30 +4,31 @@ import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.base.BaseBoss;
 import ru.warfare.darkannihilation.base.Sprite;
-import ru.warfare.darkannihilation.enemy.XWing;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_HEALTH;
 import static ru.warfare.darkannihilation.constant.Constants.BOSS_VADERS_SHOOT_TIME;
-import static ru.warfare.darkannihilation.constant.Constants.NUMBER_VADER;
 
 public class BossVaders extends BaseBoss {
     private final Vector vector = new Vector();
 
     private boolean field = false;
     private boolean left = Randomize.randBoolean();
+    private final int start;
 
     public BossVaders(Game game) {
         super(game, ImageHub.bossVadersImg, BOSS_VADERS_HEALTH, 5, BOSS_VADERS_SHOOT_TIME);
+
+        start = game.PORTAL_ID + 1;
 
         recreateRect(x + 35, y + 20, right() - 35, bottom() - 20);
     }
 
     @Override
     public void shoot() {
-        for (int i = game.NUMBER_VADERS; i < game.NUMBER_MINIONS; i++) {
+        for (int i = start; i < game.NUMBER_MINIONS; i++) {
             Sprite sprite = game.enemy[i];
             if (sprite.lock) {
                 int X = centerX();
@@ -39,8 +40,9 @@ public class BossVaders extends BaseBoss {
                 sprite.y = Y;
                 sprite.speedX = values[0];
                 sprite.speedY = values[1];
-                sprite.start();
+                sprite.lock = false;
                 AudioHub.playBossShoot();
+                break;
             }
         }
     }
@@ -83,7 +85,7 @@ public class BossVaders extends BaseBoss {
             if (x >= screenWidthWidth) {
                 left = false;
             }
-            if ((y >= screenHeightHeight) | (y <= 0)) {
+            if ((y >= screenHeightHeight) || (y <= 0)) {
                 speedY = -speedY;
             }
 

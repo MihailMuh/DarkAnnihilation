@@ -1,15 +1,14 @@
 package ru.warfare.darkannihilation.support;
 
-import ru.warfare.darkannihilation.base.BaseBullet;
+import ru.warfare.darkannihilation.base.SpriteWrapper;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.arts.ImageHub;
-import ru.warfare.darkannihilation.base.Sprite;
 
 import static ru.warfare.darkannihilation.constant.Constants.SHOTGUN_KIT_SPEED;
 import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-public class ShotgunKit extends Sprite {
+public class ShotgunKit extends SpriteWrapper {
     public volatile boolean picked = false;
 
     public ShotgunKit(Game g) {
@@ -17,10 +16,6 @@ public class ShotgunKit extends Sprite {
 
         calculateBarriers();
         hide();
-    }
-
-    @Override
-    public void check_intersectionBullet(BaseBullet bullet) {
     }
 
     @Override
@@ -35,10 +30,6 @@ public class ShotgunKit extends Sprite {
         x = randInt(0, screenWidthWidth);
         y = -height;
         lock = true;
-    }
-
-    @Override
-    public void kill() {
     }
 
     @Override

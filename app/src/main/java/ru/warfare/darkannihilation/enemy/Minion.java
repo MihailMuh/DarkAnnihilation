@@ -48,7 +48,7 @@ public class Minion extends BaseEnemy {
     @Override
     public void intersectionPlayer() {
         AudioHub.playMetal();
-        hide();
+        lock = true;
         createSmallTripleExplosion();
     }
 
@@ -66,13 +66,8 @@ public class Minion extends BaseEnemy {
     }
 
     @Override
-    public void hide() {
-        lock = true;
-    }
-
-    @Override
     public void kill() {
-        hide();
+        lock = true;
         createLargeTripleExplosion();
     }
 
@@ -84,7 +79,7 @@ public class Minion extends BaseEnemy {
         shoot();
 
         if (x < -width || x > SCREEN_WIDTH || y > SCREEN_HEIGHT) {
-            hide();
+            lock = true;
         }
     }
 }

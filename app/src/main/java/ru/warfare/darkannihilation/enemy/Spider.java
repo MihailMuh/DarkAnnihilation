@@ -3,7 +3,6 @@ package ru.warfare.darkannihilation.enemy;
 import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.BaseEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
-import ru.warfare.darkannihilation.math.Vector;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.arts.ImageHub;
@@ -18,8 +17,6 @@ import static ru.warfare.darkannihilation.math.Randomize.randInt;
 import static ru.warfare.darkannihilation.systemd.Game.now;
 
 public class Spider extends BaseEnemy {
-    private final Vector vector = new Vector();
-
     private int shootTripleTime;
     private long lastShoot = now;
 

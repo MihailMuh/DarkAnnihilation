@@ -14,7 +14,7 @@ final class AudioPool {
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build())
-            .setMaxStreams(32)
+            .setMaxStreams(100)
             .build();
     private final ArrayList<Float> volumes = new ArrayList<>(0);
     private final ArrayList<Float> maxes = new ArrayList<>(0);
