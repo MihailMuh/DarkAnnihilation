@@ -27,7 +27,7 @@ public class TripleFighter extends BaseEnemy {
     @Override
     public void shoot() {
         if (x > 0 && x < screenWidthWidth && y > 0 && y < screenHeightHeight) {
-            bulletEnemy(game.player.centerX(), game.player.centerY(), 13);
+            bulletEnemy(13);
             AudioHub.playShotgun();
         }
     }

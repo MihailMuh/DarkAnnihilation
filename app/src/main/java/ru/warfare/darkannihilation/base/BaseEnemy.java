@@ -19,13 +19,12 @@ public abstract class BaseEnemy extends Sprite {
 
     public abstract void shoot();
 
-    public void bulletEnemy(int endX, int endY, int power) {
-        int X = centerX();
-        int Y = centerY();
-        int[] values = vector.vector(X, Y, endX, endY, power);
-        
+    public void bulletEnemy(int power) {
         for (int i = 0; i < NUMBER_BULLETS_ENEMY; i++) {
             if (Game.bulletsEnemy[i].lock) {
+                int X = centerX();
+                int Y = centerY();
+                int[] values = vector.vector(X, Y, game.player.centerX(), game.player.centerY(), power);
                 Game.bulletsEnemy[i].start(X, Y, values[2], values[0], values[1]);
                 break;
             }

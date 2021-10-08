@@ -28,12 +28,9 @@ public class XWing extends BaseEnemy {
 
     @Override
     public void shoot() {
-        int P_X = game.player.centerX();
-        int P_Y = game.player.centerY();
-        int X = centerX();
-        int Y = centerY();
-        if (getDistance(X - P_X, Y - P_Y) < R) {
-            bulletEnemy(P_X, P_Y, 9);
+        if (getDistance(centerX() - game.player.centerX(),
+                centerY() - game.player.centerY()) < R) {
+            bulletEnemy(9);
             AudioHub.playShoot();
         }
     }

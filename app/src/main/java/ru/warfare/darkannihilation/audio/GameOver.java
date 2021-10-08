@@ -6,9 +6,11 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import ru.warfare.darkannihilation.R;
 import ru.warfare.darkannihilation.systemd.service.Service;
 
+import static ru.warfare.darkannihilation.audio.AudioExoPlayer.volume;
+import static ru.warfare.darkannihilation.audio.AudioExoPlayer.getItem;
 import static ru.warfare.darkannihilation.audio.AudioHub.gameoverSnd;
 
-public class GameOver extends AudioExoPlayer {
+public class GameOver {
     public static void play() {
         Service.runOnUiThread(() -> {
             gameoverSnd = new SimpleExoPlayer.Builder(Service.activity).build();

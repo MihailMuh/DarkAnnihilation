@@ -13,10 +13,12 @@ import ru.warfare.darkannihilation.base.Sprite;
 import ru.warfare.darkannihilation.math.Randomize;
 import ru.warfare.darkannihilation.systemd.Game;
 import ru.warfare.darkannihilation.thread.HardThread;
+import ru.warfare.darkannihilation.thread.Process;
 import ru.warfare.darkannihilation.thread.SickGameTask;
 
 public class Factory extends Sprite {
     private final SickGameTask gameTask = new SickGameTask(this::spawn, FACTORY_SPAWN_TIME);
+    private final Process process = new Process();
     private float hp;
     private boolean startSpawn;
     private boolean BOOM;
@@ -35,9 +37,7 @@ public class Factory extends Sprite {
         int count = 0;
         for (int i = game.NUMBER_VADERS; i < game.NUMBER_MINIONS; i++) {
             if (game.enemy[i].lock && Randomize.randBoolean()) {
-                game.enemy[i].x = randInt(x, right);
-                game.enemy[i].y = minionY;
-                game.enemy[i].start();
+                ((Minion) game.enemy[i]).start(randInt(x, right), minionY, process);
                 count++;
             }
             if (count == 3) {
@@ -70,6 +70,7 @@ public class Factory extends Sprite {
                 Game.score += 75;
                 createSkullExplosion();
                 hide();
+                process.terminate();
                 gameTask.stop();
             });
         }
@@ -100,6 +101,7 @@ public class Factory extends Sprite {
             if (!startSpawn) {
                 startSpawn = true;
                 gameTask.start();
+                process.start();
             }
         }
     }

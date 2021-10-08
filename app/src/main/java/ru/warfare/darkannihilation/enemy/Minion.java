@@ -4,9 +4,9 @@ import ru.warfare.darkannihilation.base.BaseBullet;
 import ru.warfare.darkannihilation.base.BaseEnemy;
 import ru.warfare.darkannihilation.audio.AudioHub;
 import ru.warfare.darkannihilation.systemd.Game;
-import ru.warfare.darkannihilation.thread.HardThread;
 import ru.warfare.darkannihilation.arts.ImageHub;
 import ru.warfare.darkannihilation.base.Sprite;
+import ru.warfare.darkannihilation.thread.Process;
 
 import static ru.warfare.darkannihilation.constant.Constants.MINION_DAMAGE;
 import static ru.warfare.darkannihilation.constant.Constants.MINION_HEALTH;
@@ -18,14 +18,19 @@ import static ru.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 public class Minion extends BaseEnemy {
     private long lastShoot = now;
+    private Process process;
 
     public Minion(Game game) {
         super(game, ImageHub.minionImg, MINION_DAMAGE);
         recreateRect(x + 15, y + 15, right() - 15, bottom() - 15);
     }
 
-    @Override
-    public void start() {
+    public void start(int X, int Y, Process p) {
+        x = X;
+        y = Y;
+
+        process = p;
+
         health = MINION_HEALTH;
 
         speedX = randInt(-8, 8);
@@ -38,8 +43,8 @@ public class Minion extends BaseEnemy {
     public void shoot() {
         if (now - lastShoot > MINION_SHOOT_TIME) {
             lastShoot = now;
-            HardThread.doInBackGround(() -> {
-                bulletEnemy(game.player.centerX(), game.player.centerY(), 13);
+            process.post(() -> {
+                bulletEnemy(13);
                 AudioHub.playShotgun();
             });
         }

@@ -187,7 +187,7 @@ public final class Game extends SurfaceView implements Runnable {
     private boolean isFirstRun = true;
     public boolean playing = true;
     public static byte level = 1;
-    public static volatile byte gameStatus = PASS;
+    public static byte gameStatus = PASS;
     public static volatile byte character = MILLENNIUM_FALCON;
     public int NUMBER_VADERS;
     public int NUMBER_MINIONS;
