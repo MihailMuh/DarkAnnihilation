@@ -11,17 +11,17 @@ public class Frontend implements Disposable {
     static final OrthographicCamera camera = new OrthographicCamera();
     public static final SpriteBatch spriteBatch = new SpriteBatch(300);
 
-    private final DarkGame game;
+    private final MainGame game;
 
-    Frontend(DarkGame darkGame) {
-        game = darkGame;
+    Frontend(MainGame mainGame) {
+        game = mainGame;
     }
 
     public void render() {
         spriteBatch.begin();
 
-        game.player.render();
         game.screen.render();
+        game.player.render();
 
         spriteBatch.end();
     }

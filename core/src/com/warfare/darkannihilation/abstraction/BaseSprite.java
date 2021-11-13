@@ -8,6 +8,11 @@ import com.warfare.darkannihilation.Rect;
 public abstract class BaseSprite extends Rect {
     private final Texture image;
 
+    public BaseSprite(Texture texture, float x, float y, int width, int height) {
+        super(x, y, width, height);
+        image = texture;
+    }
+
     public BaseSprite(Texture texture, float x, float y) {
         super(x, y, texture.getWidth(), texture.getHeight());
         image = texture;

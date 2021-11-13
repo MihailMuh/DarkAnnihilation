@@ -1,32 +1,31 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.warfare.darkannihilation.systemd.service.Service.print;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.Screen;
-import com.warfare.darkannihilation.Sprite;
+import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.systemd.service.ImageHub;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
 
-public class DarkGame extends ApplicationAdapter {
+public class MainGame extends ApplicationAdapter {
     private Backend backend;
     private Frontend frontend;
     private OnClickListener clickListener;
 
-    Sprite player;
-    Texture img;
+    Player player;
     Screen screen;
 
     @Override
     public void create() {
         Gdx.graphics.setVSync(true);
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Windows.refresh();
         ImageHub.load();
 
-        img = new Texture("no.jpg");
-        img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        player = new Sprite(img);
+        player = new Player(ImageHub.millenniumFalcon);
         screen = new Screen(ImageHub.starScreen);
 
         backend = new Backend(this);
@@ -40,11 +39,14 @@ public class DarkGame extends ApplicationAdapter {
 
         backend.update();
         frontend.render();
+
+        print(Gdx.graphics.getFramesPerSecond());
     }
 
     @Override
     public void resize(int width, int height) {
         Windows.refresh();
+
         frontend.onResize();
     }
 
@@ -52,6 +54,5 @@ public class DarkGame extends ApplicationAdapter {
     public void dispose() {
         ImageHub.dispose();
         frontend.dispose();
-        img.dispose();
     }
 }

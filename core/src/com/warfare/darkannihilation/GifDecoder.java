@@ -7,6 +7,7 @@ package com.warfare.darkannihilation;
 
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import java.io.InputStream;
-import java.util.Vector;
 
 public class GifDecoder {
     /**
@@ -38,6 +38,8 @@ public class GifDecoder {
     protected int status;
     protected int width; // full image width
     protected int height; // full image height
+    protected int gifWidth;
+    protected int gifHeight;
     protected boolean gctFlag; // global color table used
     protected int gctSize; // size of global color table
     protected int loopCount = 1; // iterations; 0 = repeat forever
@@ -67,7 +69,7 @@ public class GifDecoder {
     protected byte[] suffix;
     protected byte[] pixelStack;
     protected byte[] pixels;
-    protected Vector<GifFrame> frames; // frames read from current file
+    protected Array<GifFrame> frames; // frames read from current file
     protected int frameCount;
 
     /**
@@ -92,6 +94,12 @@ public class GifDecoder {
         try {
             is.close();
         } catch (Exception ignored) {
+        }
+    }
+
+    private void disposePixmap(Pixmap pixmap) {
+        if (pixmap != null && !pixmap.isDisposed()) {
+            pixmap.dispose();
         }
     }
 
@@ -152,7 +160,7 @@ public class GifDecoder {
     public int getDelay(int n) {
         delay = -1;
         if ((n >= 0) && (n < frameCount)) {
-            delay = frames.elementAt(n).delay;
+            delay = frames.get(n).delay;
         }
         return delay;
     }
@@ -168,6 +176,7 @@ public class GifDecoder {
             if (lastDispose == 3) {
                 // use image before last
                 int n = frameCount - 2;
+                disposePixmap(lastPixmap);
                 if (n > 0) {
                     lastPixmap = getFrame(n - 1);
                 } else {
@@ -239,8 +248,9 @@ public class GifDecoder {
                 }
             }
         }
+
+        image.dispose();
         image = new DixieMap(dest, width, height, Pixmap.Format.RGBA8888);
-        //Pixmap.createPixmap(dest, width, height, Config.ARGB_4444);
     }
 
     /**
@@ -251,7 +261,7 @@ public class GifDecoder {
     public DixieMap getFrame(int n) {
         if (frameCount <= 0)
             return null;
-        return frames.elementAt(n % frameCount).image;
+        return frames.get(n % frameCount).image;
     }
 
     /**
@@ -374,7 +384,7 @@ public class GifDecoder {
     protected void init() {
         status = STATUS_OK;
         frameCount = 0;
-        frames = new Vector<>();
+        frames = new Array<>(30);
         gct = null;
         lct = null;
     }
@@ -571,10 +581,16 @@ public class GifDecoder {
             return;
         }
         frameCount++;
+
+        if (frameCount == 2) {
+            gifWidth = image.getWidth();
+            gifHeight = image.getHeight();
+        }
+
         // create new image to receive frame data
         image = new DixieMap(width, height, Pixmap.Format.RGBA8888);
         setPixels(); // transfer pixel data to image
-        frames.addElement(new GifFrame(image, delay)); // add image to frame
+        frames.add(new GifFrame(image, delay)); // add image to frame
         // list
         if (transparency) {
             act[transIndex] = save;
@@ -649,44 +665,44 @@ public class GifDecoder {
     }
 
     public Animation<TextureRegion> getAnimation(PlayMode playMode) {
-        int nrFrames = frameCount;
-        Pixmap frame = getFrame(0);
-        int width = frame.getWidth();
-        int height = frame.getHeight();
-        int vzones = (int) Math.sqrt(nrFrames);
+        int vzones = (int) Math.sqrt(frameCount);
         int hzones = vzones;
 
-        while (vzones * hzones < nrFrames) vzones++;
+        while (vzones * hzones < frameCount) vzones++;
 
         int v, h;
 
-        Pixmap target = new Pixmap(width * hzones, height * vzones, Pixmap.Format.RGBA8888);
+        Pixmap target = new Pixmap(gifWidth * hzones, gifHeight * vzones, Pixmap.Format.RGBA8888);
 
         for (h = 0; h < hzones; h++) {
             for (v = 0; v < vzones; v++) {
-                int frameID = v + h * vzones;
-                if (frameID < nrFrames) {
-                    frame = getFrame(frameID);
-                    target.drawPixmap(frame, h * width, v * height);
+                int frameID = v + (h * vzones);
+                if (frameID < frameCount) {
+                    Pixmap frame = getFrame(frameID);
+                    target.drawPixmap(frame, h * gifWidth, v * gifHeight);
+                    frame.dispose();
                 }
             }
         }
+
 
         Texture texture = new Texture(target);
         Array<TextureRegion> texReg = new Array<>();
 
         for (h = 0; h < hzones; h++) {
             for (v = 0; v < vzones; v++) {
-                if (v + (h * vzones) < nrFrames) {
-                    texReg.add(new TextureRegion(texture, h * width, v * height, width, height));
+                if (v + (h * vzones) < frameCount) {
+                    texReg.add(new TextureRegion(texture, h * gifWidth, v * gifHeight, gifWidth, gifHeight));
                 }
             }
         }
 
+        target.dispose();
+
         return new Animation<>(getDelay(0) / 1000f, texReg, playMode);
     }
 
-    public static Animation<TextureRegion> loadGIFAnimation(PlayMode playMode, InputStream is) {
-        return new GifDecoder(is).getAnimation(playMode);
+    public static Animation<TextureRegion> loadGIFAnimation(PlayMode playMode, String path) {
+        return new GifDecoder(Gdx.files.internal(path).read()).getAnimation(playMode);
     }
 }

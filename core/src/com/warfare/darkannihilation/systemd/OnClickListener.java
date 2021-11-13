@@ -7,15 +7,15 @@ import static com.warfare.darkannihilation.systemd.Frontend.camera;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
-import com.warfare.darkannihilation.Sprite;
+import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.abstraction.BaseClickListener;
 
 public class OnClickListener extends BaseClickListener {
     private static final Vector3 touchPos = new Vector3();
 
-    private final Sprite player;
+    private final Player player;
 
-    public OnClickListener(Sprite player) {
+    public OnClickListener(Player player) {
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchKey(BACK, true);
 

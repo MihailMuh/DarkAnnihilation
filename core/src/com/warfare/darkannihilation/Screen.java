@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Screen {
-    private final float x, width;
+    private final float width;
+    public float x;
     public Animation<TextureRegion> animation;
 
     public Screen(Animation<TextureRegion> textures) {

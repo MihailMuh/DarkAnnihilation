@@ -1,42 +1,36 @@
 package com.warfare.darkannihilation.systemd.service;
 
-import com.badlogic.gdx.Gdx;
+import static com.warfare.darkannihilation.systemd.service.Service.print;
+
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.GifDecoder;
 
 public final class ImageHub {
     private static final AssetManager assetManager = new AssetManager();
-    private static final StringBuilder stringBuilder = new StringBuilder();
 
     public static Animation<TextureRegion> starScreen;
 
+    public static Texture millenniumFalcon;
+
     public static void load() {
-        //Texture[] textures;
-        //int i;
+        int count = 0;
 
-        //for (i = 0; i < 12; i++) {
-        //    stringBuilder.length = 0;
-        //    stringBuilder.append("star_screen/").append(i).append(".jpg");
-        //    assetManager.load(stringBuilder.toString(), Texture.class);
-        //}
+        assetManager.load("players/ship.png", Texture.class);
 
-        //while (assetManager.getProgress() != 1) {
-        //    assetManager.update();
-        //    print(assetManager.getProgress());
-        //}
+        while (assetManager.getProgress() != 1) {
+            assetManager.update();
+            print(assetManager.getProgress());
+            if (count < 1) {
+                starScreen = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, "thunder.gif");
+                count++;
+            }
+        }
 
-        //textures = new Texture[12];
-        //for (i = 0; i < 12; i++) {
-        //    stringBuilder.length = 0;
-        //    stringBuilder.append("star_screen/").append(i).append(".jpg");
-        //    textures[i] = assetManager.get(stringBuilder.toString());
-        //}
-        //starScreen = new Animation<>(0.04f, textures);
-
-        starScreen = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("thunder.gif").read());
+        millenniumFalcon = assetManager.get("players/ship.png");
+        millenniumFalcon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     public static void dispose() {
