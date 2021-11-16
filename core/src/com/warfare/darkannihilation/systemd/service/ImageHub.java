@@ -3,8 +3,8 @@ package com.warfare.darkannihilation.systemd.service;
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.warfare.darkannihilation.GifDecoder;
 
@@ -13,24 +13,25 @@ public final class ImageHub {
 
     public static Animation<TextureRegion> starScreen;
 
-    public static Texture millenniumFalcon;
+    public static TextureAtlas.AtlasRegion[] vadersImages;
+    public static TextureAtlas.AtlasRegion millenniumFalcon;
 
     public static void load() {
-        int count = 0;
+        assetManager.load("first_level/first_level.atlas", TextureAtlas.class);
 
-        assetManager.load("players/ship.png", Texture.class);
-
-        while (assetManager.getProgress() != 1) {
-            assetManager.update();
+        while (!assetManager.update()) {
             print(assetManager.getProgress());
-            if (count < 1) {
-                starScreen = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, "thunder.gif");
-                count++;
-            }
         }
 
-        millenniumFalcon = assetManager.get("players/ship.png");
-        millenniumFalcon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        assetManager.finishLoading();
+        starScreen = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, "first_level/star_screen.gif");
+
+        TextureAtlas firstLvlAtlas = assetManager.get("first_level/first_level.atlas");
+
+        millenniumFalcon = firstLvlAtlas.findRegion("boss");
+
+        vadersImages = new TextureAtlas.AtlasRegion[]{firstLvlAtlas.findRegion("vader", 0),
+                firstLvlAtlas.findRegion("vader", 1), firstLvlAtlas.findRegion("vader", 2)};
     }
 
     public static void dispose() {

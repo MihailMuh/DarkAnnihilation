@@ -1,0 +1,90 @@
+
+first_level.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+attention
+  rotate: false
+  xy: 756, 373
+  size: 70, 63
+  orig: 70, 63
+  offset: 0, 0
+  index: -1
+bomb
+  rotate: false
+  xy: 756, 302
+  size: 30, 69
+  orig: 30, 69
+  offset: 0, 0
+  index: -1
+boss
+  rotate: false
+  xy: 2, 22
+  size: 450, 414
+  orig: 450, 450
+  offset: 0, 15
+  index: -1
+demoman
+  rotate: false
+  xy: 454, 262
+  size: 300, 174
+  orig: 300, 176
+  offset: 0, 0
+  index: -1
+factory
+  rotate: false
+  xy: 2, 438
+  size: 1906, 584
+  orig: 1906, 585
+  offset: 0, 0
+  index: -1
+laser
+  rotate: false
+  xy: 1910, 844
+  size: 20, 80
+  orig: 20, 80
+  offset: 0, 0
+  index: -1
+minion
+  rotate: false
+  xy: 454, 61
+  size: 80, 52
+  orig: 80, 54
+  offset: 0, 1
+  index: -1
+rocket
+  rotate: false
+  xy: 1910, 926
+  size: 51, 96
+  orig: 51, 99
+  offset: 0, 2
+  index: -1
+triple_fighter
+  rotate: false
+  xy: 454, 115
+  size: 150, 145
+  orig: 150, 145
+  offset: 0, 0
+  index: -1
+vader
+  rotate: false
+  xy: 454, 2
+  size: 64, 57
+  orig: 64, 64
+  offset: 0, 5
+  index: 1
+vader
+  rotate: false
+  xy: 606, 199
+  size: 64, 61
+  orig: 64, 64
+  offset: 0, 3
+  index: 2
+vader
+  rotate: false
+  xy: 1963, 962
+  size: 64, 60
+  orig: 64, 64
+  offset: 0, 2
+  index: 0
