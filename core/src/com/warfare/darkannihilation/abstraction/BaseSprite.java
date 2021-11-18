@@ -3,15 +3,10 @@ package com.warfare.darkannihilation.abstraction;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.warfare.darkannihilation.Rect;
 
 public abstract class BaseSprite extends Rect {
-    private final AtlasRegion image;
-
-    public BaseSprite(AtlasRegion texture, float x, float y, int width, int height) {
-        super(x, y, width, height);
-        image = texture;
-    }
+    protected final AtlasRegion image;
+    public boolean visible = true;
 
     public BaseSprite(AtlasRegion texture, float x, float y) {
         super(x, y, texture.originalWidth, texture.originalHeight);
@@ -23,8 +18,12 @@ public abstract class BaseSprite extends Rect {
         image = texture;
     }
 
-    public void render() {
+    protected void draw() {
         spriteBatch.draw(image, x, y, width, height);
+    }
+
+    public void render() {
+        draw();
     }
 
     public abstract void update();

@@ -1,0 +1,20 @@
+falcon.png
+size:2048,512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat:none
+bullet
+bounds:1208,416,7,32
+cannon_ball
+bounds:2,2,15,15
+guns
+index:1
+bounds:2,134,400,314
+guns
+index:0
+bounds:404,134,400,314
+guns
+index:2
+bounds:806,134,400,314
+ship
+bounds:2,19,100,113

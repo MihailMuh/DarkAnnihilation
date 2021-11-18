@@ -6,16 +6,16 @@ import static com.warfare.darkannihilation.Constants.VADER_HEALTH;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.warfare.darkannihilation.abstraction.BaseEnemy;
+import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.systemd.service.ImageHub;
 
-public class Vader extends BaseEnemy {
+public class Vader extends Warrior {
     public Vader() {
-        super(ImageHub.vadersImages[random(0, 2)], VADER_DAMAGE, VADER_HEALTH, true);
+        super(ImageHub.vadersImages[random(0, 2)], VADER_HEALTH, VADER_DAMAGE);
     }
 
     @Override
-    protected void reset() {
+    public void reset() {
         super.reset();
         x = random(SCREEN_WIDTH);
 
@@ -28,7 +28,7 @@ public class Vader extends BaseEnemy {
         x += speedX * delta;
         y -= speedY * delta;
 
-        if (x < -width || x > SCREEN_WIDTH || y < 0) {
+        if (x < -width || x > SCREEN_WIDTH || y < -height) {
             reset();
         }
     }

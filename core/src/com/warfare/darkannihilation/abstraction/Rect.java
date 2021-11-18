@@ -1,6 +1,6 @@
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.abstraction;
 
-public class Rect {
+public abstract class Rect {
     public float x, y, width, height, halfWidth, halfHeight;
 
     public Rect(float x, float y, float width, float height) {
@@ -10,13 +10,6 @@ public class Rect {
         this.height = height;
         halfWidth = width / 2f;
         halfHeight = height / 2f;
-    }
-
-    public Rect(Rect rect) {
-        x = rect.x;
-        y = rect.y;
-        width = rect.width;
-        height = rect.height;
     }
 
     public void setParams(float x, float y, float width, float height) {

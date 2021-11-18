@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation.systemd;
 
-import com.warfare.darkannihilation.abstraction.BaseEnemy;
+import com.warfare.darkannihilation.abstraction.Warrior;
 
 public class Backend {
     private final MainGame game;
@@ -12,17 +12,17 @@ public class Backend {
     }
 
     public void update() {
-        moveAll = game.player.boostX / 3;
+        moveAll = game.player.speedX / 3;
 
         game.screen.x -= moveAll;
 
-        for (BaseEnemy enemy : game.empire) {
+        game.player.update();
+
+        for (Warrior enemy : game.empire) {
             if (enemy.visible) {
                 enemy.x -= moveAll;
                 enemy.update();
             }
         }
-
-        game.player.update();
     }
 }

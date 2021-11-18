@@ -1,24 +1,36 @@
 package com.warfare.darkannihilation;
 
+import static com.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.warfare.darkannihilation.abstraction.BaseSprite;
+import com.warfare.darkannihilation.abstraction.Warrior;
 
-public class Player extends BaseSprite {
+public class Player extends Warrior {
     private float endX, endY;
     private final int speed;
-    public float boostX, boostY;
 
     public Player(AtlasRegion texture) {
-        super(texture, HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
+        super(texture, MILLENNIUM_FALCON_HEALTH, 10000, HALF_SCREEN_HEIGHT);
+
+        speed = 20;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        x = HALF_SCREEN_WIDTH;
 
         endX = (x -= halfWidth);
         endY = (y -= halfHeight);
+    }
 
-        speed = 20;
+    public void collidesWithEnemy(Warrior enemy) {
+        if (intersect(enemy)) {
+            enemy.boom();
+        }
     }
 
     public void setCoordinates(float X, float Y) {
@@ -28,10 +40,15 @@ public class Player extends BaseSprite {
 
     @Override
     public void update() {
-        x += boostX;
-        y += boostY;
+        x += speedX;
+        y += speedY;
 
-        boostX = (endX - x) * speed * delta;
-        boostY = (endY - y) * speed * delta;
+        speedX = (endX - x) * speed * delta;
+        speedY = (endY - y) * speed * delta;
+    }
+
+    @Override
+    public void render() {
+        draw();
     }
 }

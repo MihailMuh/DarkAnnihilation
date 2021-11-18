@@ -2,14 +2,14 @@ package com.warfare.darkannihilation.systemd.service;
 
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.warfare.darkannihilation.AssetManagerWrap;
 import com.warfare.darkannihilation.GifDecoder;
 
 public final class ImageHub {
-    private static final AssetManager assetManager = new AssetManager();
+    private static final AssetManagerWrap assetManager = new AssetManagerWrap();
 
     public static Animation<TextureRegion> starScreen;
 
@@ -17,21 +17,25 @@ public final class ImageHub {
     public static TextureAtlas.AtlasRegion millenniumFalcon;
 
     public static void load() {
-        assetManager.load("first_level/first_level.atlas", TextureAtlas.class);
+        TextureAtlas atlas;
+
+        assetManager.loadAtlas("first_level/first_level.atlas");
+        assetManager.loadAtlas("players/falcon.atlas");
 
         while (!assetManager.update()) {
             print(assetManager.getProgress());
         }
 
-        assetManager.finishLoading();
         starScreen = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, "first_level/star_screen.gif");
 
-        TextureAtlas firstLvlAtlas = assetManager.get("first_level/first_level.atlas");
+        atlas = assetManager.get("first_level/first_level.atlas");
+        vadersImages = new TextureAtlas.AtlasRegion[]{atlas.findRegion("vader", 0),
+                atlas.findRegion("vader", 1), atlas.findRegion("vader", 2)};
 
-        millenniumFalcon = firstLvlAtlas.findRegion("boss");
+        atlas = assetManager.get("players/falcon.atlas");
+        millenniumFalcon = atlas.findRegion("ship");
 
-        vadersImages = new TextureAtlas.AtlasRegion[]{firstLvlAtlas.findRegion("vader", 0),
-                firstLvlAtlas.findRegion("vader", 1), firstLvlAtlas.findRegion("vader", 2)};
+        assetManager.finishLoading();
     }
 
     public static void dispose() {

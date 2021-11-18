@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.Screen;
-import com.warfare.darkannihilation.abstraction.BaseEnemy;
+import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.systemd.service.ImageHub;
 import com.warfare.darkannihilation.systemd.service.Watch;
@@ -21,7 +21,7 @@ public class MainGame extends ApplicationAdapter {
     Player player;
     Screen screen;
 
-    public Array<BaseEnemy> empire = new Array<>(NUMBER_VADER);
+    public Array<Warrior> empire = new Array<>(NUMBER_VADER);
 
     @Override
     public void create() {

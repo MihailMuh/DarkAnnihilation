@@ -6,7 +6,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import com.warfare.darkannihilation.abstraction.BaseEnemy;
+import com.warfare.darkannihilation.abstraction.Warrior;
 
 public class Frontend implements Disposable {
     static final OrthographicCamera camera = new OrthographicCamera();
@@ -22,12 +22,11 @@ public class Frontend implements Disposable {
         spriteBatch.begin();
 
         game.screen.render();
+        game.player.render();
 
-        for (BaseEnemy enemy : game.empire) {
+        for (Warrior enemy : game.empire) {
             enemy.render();
         }
-
-        game.player.render();
 
         spriteBatch.end();
     }
