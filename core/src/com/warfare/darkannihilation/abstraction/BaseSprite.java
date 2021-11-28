@@ -3,8 +3,9 @@ package com.warfare.darkannihilation.abstraction;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
-public abstract class BaseSprite extends Rect {
+public abstract class BaseSprite extends Rect implements Poolable {
     protected final AtlasRegion image;
     public boolean visible = true;
 

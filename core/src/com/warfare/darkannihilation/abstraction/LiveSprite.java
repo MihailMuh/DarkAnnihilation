@@ -1,16 +1,15 @@
 package com.warfare.darkannihilation.abstraction;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
-public abstract class LiveSprite extends BaseSprite implements Poolable {
+public abstract class LiveSprite extends BaseSprite {
     public float speedX, speedY;
 
-    public LiveSprite(TextureAtlas.AtlasRegion texture, float x, float y) {
+    public LiveSprite(AtlasRegion texture, float x, float y) {
         super(texture, x, y);
     }
 
-    public LiveSprite(TextureAtlas.AtlasRegion texture) {
+    public LiveSprite(AtlasRegion texture) {
         super(texture);
     }
 

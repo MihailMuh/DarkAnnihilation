@@ -3,7 +3,7 @@ package com.warfare.darkannihilation;
 public final class Constants {
     //    characters
     public static final byte MILLENNIUM_FALCON_HEALTH = 50;
-    public static final byte MILLENNIUM_FALCON_SHOOT_TIME = 60;
+    public static final float MILLENNIUM_FALCON_SHOOT_TIME = 0.065f;
     public static final short MILLENNIUM_FALCON_SHOTGUN_TIME = 515;
     public static final byte NUMBER_MILLENNIUM_FALCON_BULLETS = 60;
     public static final short NUMBER_MILLENNIUM_FALCON_BUCKSHOT = NUMBER_MILLENNIUM_FALCON_BULLETS + 30;
@@ -68,7 +68,7 @@ public final class Constants {
 
     public static final byte VADER_HEALTH = 2;
     public static final byte VADER_DAMAGE = 5;
-    public static final byte NUMBER_VADER = 9;
+    public static final byte NUMBER_VADER = 12;
 
     public static final short TRIPLE_FIGHTER_SHOOT_TIME = 1_500;
     public static final byte TRIPLE_FIGHTER_HEALTH = 6;
@@ -129,7 +129,7 @@ public final class Constants {
     public static final byte BULLET_BOSS_SPEED = 6;
 
     public static final byte BULLET_DAMAGE = 1;
-    public static final byte BULLET_SPEED = 10;
+    public static final short BULLET_SPEED = 770;
 
     public static final byte BUCKSHOT_DAMAGE = 3;
     public static final byte BUCKSHOT_SPEED = 8;

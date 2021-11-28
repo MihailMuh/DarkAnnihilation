@@ -7,7 +7,8 @@ import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Warrior;
-import com.warfare.darkannihilation.systemd.service.ImageHub;
+import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.hub.PoolHub;
 
 public class Vader extends Warrior {
     public Vader() {
@@ -19,8 +20,8 @@ public class Vader extends Warrior {
         super.reset();
         x = random(SCREEN_WIDTH);
 
-        speedX = random(-295f, 295f);
-        speedY = random(175f, 590f);
+        speedX = random(-385f, 385f);
+        speedY = random(230f, 770f);
     }
 
     @Override
@@ -31,5 +32,10 @@ public class Vader extends Warrior {
         if (x < -width || x > SCREEN_WIDTH || y < -height) {
             reset();
         }
+    }
+
+    @Override
+    protected void explode() {
+        PoolHub.explosionPool.obtain().start(centerX(), centerY());
     }
 }

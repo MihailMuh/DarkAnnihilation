@@ -3,11 +3,17 @@ package com.warfare.darkannihilation.systemd.service;
 import com.badlogic.gdx.Gdx;
 
 public final class Service {
-    public static void print(Object o) {
+    private static final StringBuilder stringBuilder = new StringBuilder();
+
+    public synchronized static void print(Object... objects) {
         try {
-            Gdx.app.error("DART", o.toString());
+            for (Object o : objects) {
+                stringBuilder.append(o).append(" ");
+            }
+            Gdx.app.error("DART", stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
+            stringBuilder.setLength(0);
         } catch (Exception exception) {
-            print("Error When Log " + exception);
+            print("Error When Log:", exception);
         }
     }
 
@@ -15,7 +21,7 @@ public final class Service {
         try {
             Thread.sleep(millis);
         } catch (Exception e) {
-            print("Error When Sleep " + e);
+            print("Error When Sleep:", e);
             sleep(millis);
         }
     }

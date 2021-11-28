@@ -3,15 +3,13 @@
 /* Released under Apache 2.0 */
 /* https://code.google.com/p/animated-gifs-in-android/ */
 
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.utils;
 
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -420,7 +418,7 @@ public class GifDecoder {
                     n += count;
                 }
             } catch (Exception e) {
-                print("GifDecoder " + e);
+                print("GifDecoder", e);
             }
             if (n < blockSize) {
                 status = STATUS_FORMAT_ERROR;
@@ -664,7 +662,7 @@ public class GifDecoder {
         } while ((blockSize > 0) && !err());
     }
 
-    public Animation<TextureRegion> getAnimation(PlayMode playMode) {
+    public AnimationG<TextureRegion> getAnimation() {
         int vzones = (int) Math.sqrt(frameCount);
         int hzones = vzones;
 
@@ -687,22 +685,23 @@ public class GifDecoder {
 
 
         Texture texture = new Texture(target);
-        Array<TextureRegion> texReg = new Array<>();
+        TextureRegion[] texReg = new TextureRegion[frameCount];
 
         for (h = 0; h < hzones; h++) {
             for (v = 0; v < vzones; v++) {
-                if (v + (h * vzones) < frameCount) {
-                    texReg.add(new TextureRegion(texture, h * gifWidth, v * gifHeight, gifWidth, gifHeight));
+                int i = v + (h * vzones);
+                if (i < frameCount) {
+                    texReg[i] = new TextureRegion(texture, h * gifWidth, v * gifHeight, gifWidth, gifHeight);
                 }
             }
         }
 
         target.dispose();
 
-        return new Animation<>(getDelay(0) / 1000f, texReg, playMode);
+        return new AnimationG<>(texReg, getDelay(0) / 1000f);
     }
 
-    public static Animation<TextureRegion> loadGIFAnimation(PlayMode playMode, String path) {
-        return new GifDecoder(Gdx.files.internal(path).read()).getAnimation(playMode);
+    public static AnimationG<TextureRegion> loadGIFAnimation(String path) {
+        return new GifDecoder(Gdx.files.internal(path).read()).getAnimation();
     }
 }

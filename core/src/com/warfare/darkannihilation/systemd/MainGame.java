@@ -5,11 +5,15 @@ import static com.warfare.darkannihilation.Constants.NUMBER_VADER;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.Screen;
 import com.warfare.darkannihilation.abstraction.Warrior;
+import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Vader;
-import com.warfare.darkannihilation.systemd.service.ImageHub;
+import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.hub.PoolHub;
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
 
@@ -21,6 +25,8 @@ public class MainGame extends ApplicationAdapter {
     Player player;
     Screen screen;
 
+    public static final Array<Explosion> explosions = new Array<>(10);
+    public Array<Bullet> bullets = new Array<>(15);
     public Array<Warrior> empire = new Array<>(NUMBER_VADER);
 
     @Override
@@ -30,6 +36,12 @@ public class MainGame extends ApplicationAdapter {
         Windows.refresh();
         ImageHub.load();
 
+        Processor.post(() -> {
+            PoolHub.init(explosions, bullets);
+
+            clickListener = new OnClickListener(player);
+        });
+        
         player = new Player(ImageHub.millenniumFalcon);
         screen = new Screen(ImageHub.starScreen);
         for (int i = 0; i < NUMBER_VADER; i++) {
@@ -38,7 +50,6 @@ public class MainGame extends ApplicationAdapter {
 
         backend = new Backend(this);
         frontend = new Frontend(this);
-        clickListener = new OnClickListener(player);
     }
 
     @Override

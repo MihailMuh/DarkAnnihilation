@@ -1,7 +1,9 @@
 package com.warfare.darkannihilation.abstraction;
 
 public abstract class Rect {
-    public float x, y, width, height, halfWidth, halfHeight;
+    public float x, y;
+    public final float width, height, halfWidth, halfHeight;
+    private float indentX, indentY, indentWidth, indentHeight;
 
     public Rect(float x, float y, float width, float height) {
         this.x = x;
@@ -12,11 +14,19 @@ public abstract class Rect {
         halfHeight = height / 2f;
     }
 
-    public void setParams(float x, float y, float width, float height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    protected void setIndents(float X, float Y, float indentWidth, float indentHeight) {
+        indentX = X;
+        indentY = Y;
+        this.indentWidth = indentWidth;
+        this.indentHeight = indentHeight;
+    }
+
+    protected float x() {
+        return x + indentX;
+    }
+
+    protected float y() {
+        return y + indentY;
     }
 
     public float centerX() {
@@ -28,14 +38,14 @@ public abstract class Rect {
     }
 
     public float right() {
-        return x + width;
+        return x + width - indentWidth;
     }
 
-    public float bottom() {
-        return y + height;
+    public float top() {
+        return y + height - indentHeight;
     }
 
     public boolean intersect(Rect r) {
-        return x < r.right() && right() > r.x && y < r.bottom() && bottom() > r.y;
+        return x() < r.right() && right() > r.x() && y() < r.top() && top() > r.y();
     }
 }
