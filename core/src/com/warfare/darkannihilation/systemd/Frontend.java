@@ -24,18 +24,19 @@ public class Frontend implements Disposable {
     public void render() {
         spriteBatch.begin();
 
-        game.screen.render();
-        game.player.render();
-
-        for (Warrior enemy : game.empire) {
-            enemy.render();
-        }
-        for (Bullet bullet : game.bullets) {
-            bullet.render();
-        }
-        for (Explosion explosion : explosions) {
-            explosion.render();
-        }
+        game.scene.render();
+//        game.screen.render();
+//        game.player.render();
+//
+//        for (Warrior enemy : game.empire) {
+//            enemy.render();
+//        }
+//        for (Bullet bullet : game.bullets) {
+//            bullet.render();
+//        }
+//        for (Explosion explosion : explosions) {
+//            explosion.render();
+//        }
 
         spriteBatch.end();
     }

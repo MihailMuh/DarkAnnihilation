@@ -1,5 +1,6 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.badlogic.gdx.Input.Keys.BACK;
 import static com.warfare.darkannihilation.Constants.NUMBER_VADER;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -7,17 +8,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.Player;
-import com.warfare.darkannihilation.Screen;
+import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.hub.PoolHub;
+import com.warfare.darkannihilation.systemd.menu.Scene;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
 
 public class MainGame extends ApplicationAdapter {
+    Scene scene;
     private Backend backend;
     private Frontend frontend;
     private OnClickListener clickListener;
@@ -33,22 +34,25 @@ public class MainGame extends ApplicationAdapter {
     public void create() {
         Gdx.graphics.setVSync(true);
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        Gdx.input.setCatchKey(BACK, true);
         Windows.refresh();
         ImageHub.load();
 
         Processor.post(() -> {
-            PoolHub.init(explosions, bullets);
+//            PoolHub.init(explosions, bullets);
 
-            clickListener = new OnClickListener(player);
+//            clickListener = new OnClickListener(player);
         });
-        
-        player = new Player(ImageHub.millenniumFalcon);
-        screen = new Screen(ImageHub.starScreen);
-        for (int i = 0; i < NUMBER_VADER; i++) {
-            empire.add(new Vader());
-        }
 
-        backend = new Backend(this);
+        scene = new Scene();
+        
+//        player = new Player(ImageHub.millenniumFalcon);
+//        screen = new Screen(ImageHub.starScreen);
+//        for (int i = 0; i < NUMBER_VADER; i++) {
+//            empire.add(new Vader());
+//        }
+//
+//        backend = new Backend(this);
         frontend = new Frontend(this);
     }
 
@@ -56,7 +60,8 @@ public class MainGame extends ApplicationAdapter {
     public void render() {
         Watch.update();
 
-        backend.update();
+        scene.update();
+
         frontend.render();
     }
 
@@ -70,6 +75,6 @@ public class MainGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         ImageHub.dispose();
-        frontend.dispose();
+        scene.dispose();
     }
 }

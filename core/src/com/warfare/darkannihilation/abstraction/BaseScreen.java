@@ -1,23 +1,22 @@
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.abstraction;
 
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
-import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.warfare.darkannihilation.utils.AnimationG;
 
-public class Screen {
+public abstract class BaseScreen {
     private final AnimationG<TextureRegion> animation;
     private final float width;
     private float time = 0;
     public float x;
 
-    public Screen(AnimationG<TextureRegion> textures) {
-        animation = textures;
-        x = SCREEN_WIDTH * -0.175f;
-        width = SCREEN_WIDTH * 1.35f;
+    public BaseScreen(AnimationG<TextureRegion> animation, float width, float X) {
+        this.animation = animation;
+        this.width = width;
+        x = X;
     }
 
     public void render() {

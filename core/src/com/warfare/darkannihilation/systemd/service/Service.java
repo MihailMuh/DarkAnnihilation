@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.systemd.service;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.StringBuilder;
 
 public final class Service {
     private static final StringBuilder stringBuilder = new StringBuilder();
@@ -10,8 +11,8 @@ public final class Service {
             for (Object o : objects) {
                 stringBuilder.append(o).append(" ");
             }
-            Gdx.app.error("DART", stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
-            stringBuilder.setLength(0);
+            Gdx.app.error("DART", stringBuilder.deleteCharAt(stringBuilder.length - 1).toString());
+            stringBuilder.clear();
         } catch (Exception exception) {
             print("Error When Log:", exception);
         }
