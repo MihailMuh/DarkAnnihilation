@@ -9,4 +9,8 @@ public final class Processor {
     public static void post(Runnable runnable) {
         pool.execute(runnable);
     }
+
+    public static void dispose() {
+        pool.shutdown();
+    }
 }

@@ -20,9 +20,4 @@ public abstract class BaseBullet extends AggressiveSprite {
     public void reset() {
         visible = false;
     }
-
-    @Override
-    public void render() {
-        draw();
-    }
 }

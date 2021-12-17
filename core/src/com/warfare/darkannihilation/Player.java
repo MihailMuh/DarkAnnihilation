@@ -71,11 +71,6 @@ public class Player extends Warrior {
     }
 
     @Override
-    public void render() {
-        draw();
-    }
-
-    @Override
     protected void explode() {
 
     }

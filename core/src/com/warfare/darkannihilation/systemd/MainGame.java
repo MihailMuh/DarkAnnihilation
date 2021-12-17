@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.Player;
+import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.bullet.Bullet;
@@ -33,10 +34,9 @@ public class MainGame extends ApplicationAdapter {
     @Override
     public void create() {
         Gdx.graphics.setVSync(true);
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Gdx.input.setCatchKey(BACK, true);
         Windows.refresh();
-        ImageHub.load();
+        ImageHub.storage.load();
 
         Processor.post(() -> {
 //            PoolHub.init(explosions, bullets);
@@ -67,6 +67,7 @@ public class MainGame extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Windows.refresh();
 
         frontend.onResize();
@@ -74,7 +75,9 @@ public class MainGame extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        ImageHub.dispose();
+        ImageHub.storage.dispose();
+        FontHub.dispose();
+        Processor.dispose();
         scene.dispose();
     }
 }

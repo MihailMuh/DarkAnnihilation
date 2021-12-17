@@ -19,12 +19,8 @@ public abstract class BaseSprite extends Rect implements Poolable {
         image = texture;
     }
 
-    protected void draw() {
-        spriteBatch.draw(image, x, y, width, height);
-    }
-
     public void render() {
-        draw();
+        spriteBatch.draw(image, x, y, width, height);
     }
 
     public abstract void update();

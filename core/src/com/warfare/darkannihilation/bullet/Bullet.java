@@ -9,7 +9,7 @@ import com.warfare.darkannihilation.hub.ImageHub;
 
 public class Bullet extends BaseBullet {
     public Bullet() {
-        super(ImageHub.bulletImg, BULLET_DAMAGE);
+        super(ImageHub.storage.bulletImg, BULLET_DAMAGE);
     }
 
     @Override

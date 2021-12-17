@@ -1,5 +1,7 @@
 package com.warfare.darkannihilation.abstraction;
 
+import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
+
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 public abstract class LiveSprite extends BaseSprite {
@@ -16,7 +18,7 @@ public abstract class LiveSprite extends BaseSprite {
     @Override
     public void render() {
         if (visible) {
-            draw();
+            spriteBatch.draw(image, x, y, width, height);
         }
     }
 }

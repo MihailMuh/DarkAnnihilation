@@ -12,7 +12,7 @@ import com.warfare.darkannihilation.hub.PoolHub;
 
 public class Vader extends Warrior {
     public Vader() {
-        super(ImageHub.vadersImages[random(0, 2)], VADER_HEALTH, VADER_DAMAGE);
+        super(ImageHub.storage.vadersImages[random(0, 2)], VADER_HEALTH, VADER_DAMAGE);
     }
 
     @Override

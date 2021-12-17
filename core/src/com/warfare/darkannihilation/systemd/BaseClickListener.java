@@ -7,13 +7,14 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HARDCORE_WIDT
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public abstract class BaseClickListener {
+public abstract class BaseClickListener implements Disposable {
     private final Vector3 touchPos = new Vector3();
-    private final ExecutorService pool = Executors.newSingleThreadExecutor();
+    private final ExecutorService pool = Executors.newCachedThreadPool();
 
     public BaseClickListener() {
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -50,6 +51,12 @@ public abstract class BaseClickListener {
         touchPos.x = Gdx.input.getX(0);
         touchPos.y = Gdx.input.getY(0);
         camera.unproject(touchPos, 0, 0, HARDCORE_WIDTH, HARDCORE_HEIGHT);
+    }
+
+    @Override
+    public void dispose() {
+        pool.shutdown();
+        Gdx.input.setInputProcessor(null);
     }
 
     public void touchDown(float x, float y, int pointer) {

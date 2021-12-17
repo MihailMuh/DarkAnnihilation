@@ -20,9 +20,8 @@ class MenuClickListener extends BaseClickListener {
 
     @Override
     public void touchDragged(float x, float y, int pointer) {
-//        for (Button button : buttons) {
-//            button.sweep(x, y);
-//        }
-        buttons[0].sweep(x, y);
+        for (Button button : buttons) {
+            button.sweep(x, y);
+        }
     }
 }
