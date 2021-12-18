@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.warfare.darkannihilation.abstraction.BaseScreen;
 import com.warfare.darkannihilation.utils.AnimationG;
 
-public class FullScreen extends BaseScreen {
-    public FullScreen(AnimationG<TextureRegion> animation) {
-        super(animation, SCREEN_WIDTH, 0);
+public class DynamicScreen extends BaseScreen {
+    public DynamicScreen(AnimationG<TextureRegion> textures) {
+        super(textures, SCREEN_WIDTH * 1.35f, SCREEN_WIDTH * -0.175f);
     }
 }

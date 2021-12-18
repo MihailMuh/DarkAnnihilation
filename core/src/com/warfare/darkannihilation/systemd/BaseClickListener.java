@@ -1,26 +1,22 @@
 package com.warfare.darkannihilation.systemd;
 
 import static com.warfare.darkannihilation.systemd.Frontend.camera;
+import static com.warfare.darkannihilation.systemd.service.Processor.postOnTouch;
 import static com.warfare.darkannihilation.systemd.service.Windows.HARDCORE_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HARDCORE_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Disposable;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public abstract class BaseClickListener implements Disposable {
+public abstract class BaseClickListener {
     private final Vector3 touchPos = new Vector3();
-    private final ExecutorService pool = Executors.newCachedThreadPool();
 
     public BaseClickListener() {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
-                pool.execute(() -> {
+                postOnTouch(() -> {
                     onTouch();
                     BaseClickListener.this.touchDragged(touchPos.x, touchPos.y, pointer);
                 });
@@ -29,7 +25,7 @@ public abstract class BaseClickListener implements Disposable {
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                pool.execute(() -> {
+                postOnTouch(() -> {
                     onTouch();
                     BaseClickListener.this.touchDown(touchPos.x, touchPos.y, pointer);
                 });
@@ -38,25 +34,28 @@ public abstract class BaseClickListener implements Disposable {
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                pool.execute(() -> {
+                postOnTouch(() -> {
                     onTouch();
                     BaseClickListener.this.touchUp(touchPos.x, touchPos.y, pointer);
+                });
+                return true;
+            }
+
+            @Override
+            public boolean keyDown(int keycode) {
+                postOnTouch(() -> {
+                    onTouch();
+                    BaseClickListener.this.keyDown(keycode);
                 });
                 return true;
             }
         });
     }
 
-    private void onTouch() {
+    private synchronized void onTouch() {
         touchPos.x = Gdx.input.getX(0);
         touchPos.y = Gdx.input.getY(0);
         camera.unproject(touchPos, 0, 0, HARDCORE_WIDTH, HARDCORE_HEIGHT);
-    }
-
-    @Override
-    public void dispose() {
-        pool.shutdown();
-        Gdx.input.setInputProcessor(null);
     }
 
     public void touchDown(float x, float y, int pointer) {
@@ -68,6 +67,10 @@ public abstract class BaseClickListener implements Disposable {
     }
 
     public void touchDragged(float x, float y, int pointer) {
+
+    }
+
+    public void keyDown(int key) {
 
     }
 }

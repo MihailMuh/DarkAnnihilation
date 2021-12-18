@@ -1,6 +1,5 @@
 package com.warfare.darkannihilation.hub;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,61 +8,92 @@ import com.warfare.darkannihilation.utils.AnimationG;
 import com.warfare.darkannihilation.utils.AssetManagerWrap;
 import com.warfare.darkannihilation.utils.GifDecoder;
 
-public final class ImageHub {
-    public static final Storage storage = new Storage();
-    public static class Storage implements Disposable {
-        final AssetManagerWrap assetManager = new AssetManagerWrap();
+public final class ImageHub implements Disposable {
+    final AssetManagerWrap assetManager = new AssetManagerWrap();
 
-        public AnimationG<TextureRegion> starScreen;
-        public AnimationG<AtlasRegion> defaultExplosion;
+    private final TextureAtlas commonAtlas;
+    private TextureAtlas levelAtlas, characterAtlas;
 
-        public AtlasRegion[] vadersImages;
-        public AtlasRegion millenniumFalcon;
-        public AtlasRegion bulletImg;
-        public AtlasRegion gameOverScreen;
-        public AtlasRegion buttonPress, buttonNotPress;
+    public AnimationG<TextureRegion> starScreenGIF;
+    public AnimationG<TextureRegion> menuScreenGIF;
+    public static AnimationG<AtlasRegion> defaultExplosionAnim;
 
-        public void load() {
-            TextureAtlas atlas;
-            AtlasRegion[] atlasRegions;
+    public static AtlasRegion[] vadersImages;
+    public static AtlasRegion millenniumFalcon;
+    public static AtlasRegion bulletImg;
+    public static AtlasRegion buttonPress, buttonNotPress;
 
-//        starScreen = GifDecoder.loadGIFAnimation("first_level/star_screen.gif");
+    public ImageHub() {
+        FontHub.prepare(this);
 
-//        assetManager.loadAtlas("first_level/first_level.atlas");
-//        assetManager.loadAtlas("players/falcon.atlas");
-            assetManager.loadAtlas("common.atlas");
+        assetManager.loadAtlas("common.atlas");
 
-            FontHub.prepare();
+        waitAssetMgr();
 
-            while (!assetManager.update()) {
-            }
+        commonAtlas = assetManager.get("common.atlas");
+        FontHub.finish();
+    }
 
-//        atlas = assetManager.get("first_level/first_level.atlas");
-//        vadersImages = new AtlasRegion[]{atlas.findRegion("vader", 0),
-//                atlas.findRegion("vader", 1), atlas.findRegion("vader", 2)};
-//
-//        atlas = assetManager.get("players/falcon.atlas");
-//        millenniumFalcon = atlas.findRegion("ship");
-//        bulletImg = atlas.findRegion("bullet");
-//
-            atlas = assetManager.get("common.atlas");
-            buttonPress = atlas.findRegion("button_press");
-            buttonNotPress = atlas.findRegion("button_not_press");
-
-//        atlasRegions = new AtlasRegion[28];
-//        for (int i = 0; i < 28; i++) {
-//            atlasRegions[i] = atlas.findRegion("default_explosion", i);
-//        }
-//        defaultExplosion = new AnimationG<>(atlasRegions, 0.02f);
-
-            FontHub.load();
-            assetManager.finishLoading();
+    public void findExplosions() {
+        AtlasRegion[] atlasRegions = new AtlasRegion[28];
+        for (int i = 0; i < 28; i++) {
+            atlasRegions[i] = commonAtlas.findRegion("default_explosion", i);
         }
+        defaultExplosionAnim = new AnimationG<>(atlasRegions, 0.02f);
+    }
 
-        @Override
-        public void dispose() {
-            assetManager.dispose();
-            starScreen.dispose();
+    private void waitAssetMgr() {
+        while (!assetManager.update()) {
         }
+    }
+
+    public void loadMenuImages() {
+        buttonPress = commonAtlas.findRegion("button_press");
+        buttonNotPress = commonAtlas.findRegion("button_not_press");
+        menuScreenGIF = GifDecoder.loadGIFAnimation("menu/menu_screen.gif");
+    }
+
+    public void disposeMenuImages() {
+        menuScreenGIF.dispose();
+        buttonNotPress = null;
+        buttonPress = null;
+        menuScreenGIF = null;
+    }
+
+    public void loadGameImages() {
+        starScreenGIF = GifDecoder.loadGIFAnimation("first_level/star_screen.gif");
+        assetManager.loadAtlas("first_level/first_level.atlas");
+        assetManager.loadAtlas("players/falcon.atlas");
+
+        waitAssetMgr();
+
+        levelAtlas = assetManager.get("first_level/first_level.atlas");
+        vadersImages = new AtlasRegion[]{levelAtlas.findRegion("vader", 0),
+                levelAtlas.findRegion("vader", 1), levelAtlas.findRegion("vader", 2)};
+
+        characterAtlas = assetManager.get("players/falcon.atlas");
+        millenniumFalcon = characterAtlas.findRegion("ship");
+        bulletImg = characterAtlas.findRegion("bullet");
+    }
+
+    public void disposeGameImages() {
+        assetManager.unload("first_level/first_level.atlas");
+        assetManager.unload("players/falcon.atlas");
+
+        starScreenGIF.dispose();
+        starScreenGIF = null;
+
+        levelAtlas = null;
+
+        characterAtlas = null;
+
+        vadersImages = null;
+        millenniumFalcon = null;
+        bulletImg = null;
+    }
+
+    @Override
+    public void dispose() {
+        assetManager.dispose();
     }
 }

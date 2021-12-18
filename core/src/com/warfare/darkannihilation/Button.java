@@ -9,23 +9,26 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.warfare.darkannihilation.abstraction.BaseButton;
 import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 
 public class Button extends BaseButton {
     private final GlyphLayout glyph = new GlyphLayout();
+    private Runnable runnable;
     private String text;
     private float textX;
     private float textY;
     private volatile boolean pressed;
     private float shootTime;
 
-    public Button(String name, float X, float Y) {
-        super(ImageHub.storage.buttonNotPress);
+    public Button(String name, float X, float Y, Runnable runnable) {
+        super(ImageHub.buttonNotPress);
 
-        setParams(name, X, Y);
+        setParams(name, X, Y, runnable);
     }
 
-    public void setParams(String name, float X, float Y) {
+    public void setParams(String name, float X, float Y, Runnable runnable) {
+        this.runnable = runnable;
         text = name;
 
         x = X;
@@ -46,6 +49,7 @@ public class Button extends BaseButton {
                 pressed = true;
                 Service.sleep(160);
                 pressed = false;
+                Processor.post(runnable);
             }
         }
     }
@@ -57,7 +61,7 @@ public class Button extends BaseButton {
     @Override
     public void render() {
         if (pressed) {
-            spriteBatch.draw(ImageHub.storage.buttonPress, x, y, width, height);
+            spriteBatch.draw(ImageHub.buttonPress, x, y, width, height);
             fontButtons.setColor(Color.LIGHT_GRAY);
         } else {
             spriteBatch.draw(image, x, y, width, height);

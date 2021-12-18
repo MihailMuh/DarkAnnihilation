@@ -6,6 +6,7 @@
         android:allowBackup="true"
         android:appCategory="game"
         android:fullBackupOnly="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:isGame="true"
         android:label="@string/app_name"

@@ -1,7 +1,5 @@
 package com.warfare.darkannihilation.hub;
 
-import static com.warfare.darkannihilation.hub.ImageHub.storage;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,13 +10,16 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 
 public final class FontHub {
+    private static ImageHub imageHub;
     public static BitmapFont fontButtons;
 
-    static void prepare() {
-        storage.assetManager.setLoader(FreeTypeFontGenerator.class,
-                new FreeTypeFontGeneratorLoader(storage.assetManager.getFileHandleResolver()));
-        storage.assetManager.setLoader(BitmapFont.class,
-                new FreetypeFontLoader(storage.assetManager.getFileHandleResolver()));
+    static void prepare(ImageHub imageHub) {
+        FontHub.imageHub = imageHub;
+
+        imageHub.assetManager.setLoader(FreeTypeFontGenerator.class,
+                new FreeTypeFontGeneratorLoader(imageHub.assetManager.getFileHandleResolver()));
+        imageHub.assetManager.setLoader(BitmapFont.class,
+                new FreetypeFontLoader(imageHub.assetManager.getFileHandleResolver()));
 
         FreeTypeFontLoaderParameter params = new FreeTypeFontLoaderParameter();
         params.fontFileName = "fonts/canis_minor.ttf";
@@ -30,11 +31,11 @@ public final class FontHub {
         params.fontParameters.shadowOffsetX = 10;
         params.fontParameters.borderWidth = 2.5f;
 
-        storage.assetManager.load("canis_minor.ttf", BitmapFont.class, params);
+        imageHub.assetManager.load("canis_minor.ttf", BitmapFont.class, params);
     }
 
-    static void load() {
-        fontButtons = storage.assetManager.get("canis_minor.ttf", BitmapFont.class);
+    static void finish() {
+        fontButtons = imageHub.assetManager.get("canis_minor.ttf", BitmapFont.class);
     }
 
     public static void resizeFont(BitmapFont font, float width, String... texts) {

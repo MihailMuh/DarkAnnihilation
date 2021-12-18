@@ -13,7 +13,7 @@ public final class PoolHub {
         explosionPool = new PoolWrap<Explosion>(explosions) {
             @Override
             protected Explosion newObject() {
-                return new Explosion(ImageHub.storage.defaultExplosion);
+                return new Explosion(ImageHub.defaultExplosionAnim);
             }
         };
 

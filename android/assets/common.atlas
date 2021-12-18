@@ -2,291 +2,224 @@ common.png
 	size: 2048, 2048
 	filter: Linear, Linear
 	repeat: none
-buckshot
-	bounds: 1953, 202, 90, 115
-	offsets: 4, 4, 100, 124
 bullet_enemy
-	bounds: 423, 10, 15, 46
+	bounds: 0, 0, 15, 46
 button_not_press
-	bounds: 0, 4, 423, 129
+	bounds: 1563, 1008, 423, 129
 button_press
-	bounds: 496, 45, 423, 129
-default_explosion
-	index: 8
-	bounds: 1192, 1108, 150, 140
-	offsets: 0, 9, 150, 155
-default_explosion
-	index: 6
-	bounds: 1192, 961, 139, 147
-	offsets: 5, 5, 150, 155
-default_explosion
-	index: 9
-	bounds: 1333, 261, 149, 141
-	offsets: 1, 7, 150, 155
-default_explosion
-	index: 5
-	bounds: 1333, 115, 148, 146
-	offsets: 1, 3, 150, 155
-default_explosion
-	index: 27
-	bounds: 1953, 317, 92, 92
-	offsets: 29, 30, 150, 155
-default_explosion
-	index: 4
-	bounds: 1888, 1906, 146, 142
-	offsets: 2, 7, 150, 155
-default_explosion
-	index: 18
-	bounds: 1888, 1773, 145, 133
-	offsets: 2, 12, 150, 155
-default_explosion
-	index: 7
-	bounds: 1888, 1630, 144, 143
-	offsets: 0, 8, 150, 155
-default_explosion
-	index: 14
-	bounds: 1888, 1492, 143, 138
-	offsets: 1, 6, 150, 155
-default_explosion
-	index: 3
-	bounds: 1888, 1351, 142, 141
-	offsets: 5, 5, 150, 155
-default_explosion
-	index: 13
-	bounds: 1888, 1212, 142, 139
-	offsets: 4, 7, 150, 155
-default_explosion
-	index: 12
-	bounds: 1888, 1078, 142, 134
-	offsets: 3, 11, 150, 155
-full_blue_heart
-	bounds: 1453, 4, 70, 60
-full_heart
-	bounds: 1210, 7, 99, 84
-gameover
-	bounds: 0, 1248, 1367, 800
-half_heart
-	bounds: 1111, 7, 99, 84
-health
-	bounds: 1135, 1015, 56, 57
-	offsets: 13, 13, 82, 82
-non_heart
-	bounds: 1012, 7, 99, 84
-pause_button
-	bounds: 1016, 1072, 176, 176
-	offsets: 2, 2, 180, 180
-skull_explosion
-	index: 11
-	bounds: 1367, 1491, 521, 557
-	offsets: 0, 41, 521, 600
-skull_explosion
-	index: 9
-	bounds: 1367, 955, 521, 536
-	offsets: 0, 57, 521, 600
-skull_explosion
-	index: 12
-	bounds: 0, 672, 497, 576
-	offsets: 4, 9, 521, 600
-skull_explosion
-	index: 7
-	bounds: 497, 710, 519, 538
-	offsets: 0, 37, 521, 600
-skull_explosion
-	index: 5
-	bounds: 1016, 402, 516, 553
-	offsets: 0, 47, 521, 600
-skull_explosion
-	index: 8
-	bounds: 497, 174, 519, 536
-	offsets: 0, 44, 521, 600
-skull_explosion
-	index: 4
-	bounds: 0, 133, 496, 539
-	offsets: 2, 58, 521, 600
-skull_explosion
-	index: 10
-	bounds: 1532, 409, 514, 546
-	offsets: 7, 54, 521, 600
-skull_explosion
-	index: 2
-	bounds: 1532, 5, 421, 404
-	offsets: 50, 117, 521, 600
-skull_explosion
-	index: 0
-	bounds: 1016, 91, 317, 311
-	offsets: 123, 121, 521, 600
-triple_explosion
-	index: 0
-	bounds: 423, 56, 70, 77
-	offsets: 41, 32, 150, 144
-triple_explosion
-	index: 12
-	bounds: 919, 75, 93, 99
-	offsets: 24, 23, 150, 144
-triple_explosion
-	index: 22
-	bounds: 438, 22, 53, 34
-	offsets: 37, 62, 150, 144
-triple_explosion
-	index: 6
-	bounds: 1016, 955, 119, 117
-	offsets: 14, 16, 150, 144
-triple_explosion
-	index: 8
-	bounds: 1333, 0, 120, 115
-	offsets: 12, 13, 150, 144
-triple_explosion
-	index: 20
-	bounds: 1453, 64, 79, 51
-	offsets: 30, 54, 150, 144
-triple_explosion
-	index: 13
-	bounds: 1953, 109, 88, 93
-	offsets: 27, 23, 150, 144
-triple_explosion
-	index: 14
-	bounds: 1953, 26, 88, 83
-	offsets: 26, 31, 150, 144
-triple_explosion
-	index: 16
-	bounds: 919, 4, 83, 71
-	offsets: 28, 34, 150, 144
-triple_explosion
-	index: 21
-	bounds: 491, 2, 75, 43
-	offsets: 29, 60, 150, 144
-triple_explosion
-	index: 4
-	bounds: 1888, 956, 122, 122
-	offsets: 11, 8, 150, 144
-
-common2.png
-	size: 2048, 1024
-	filter: Linear, Linear
-	repeat: none
-default_explosion
-	index: 10
-	bounds: 502, 565, 139, 143
-	offsets: 6, 11, 150, 155
-default_explosion
-	index: 17
-	bounds: 818, 882, 138, 136
-	offsets: 4, 10, 150, 155
-default_explosion
-	index: 16
-	bounds: 641, 572, 136, 136
-	offsets: 6, 9, 150, 155
-default_explosion
-	index: 2
-	bounds: 818, 747, 137, 135
-	offsets: 6, 10, 150, 155
-default_explosion
-	index: 11
-	bounds: 956, 885, 138, 133
-	offsets: 8, 15, 150, 155
-default_explosion
-	index: 15
-	bounds: 1094, 881, 133, 137
-	offsets: 9, 7, 150, 155
-default_explosion
-	index: 19
-	bounds: 1227, 881, 129, 137
-	offsets: 9, 9, 150, 155
+	bounds: 1367, 1317, 423, 129
 default_explosion
 	index: 20
-	bounds: 1356, 886, 122, 132
-	offsets: 11, 12, 150, 155
+	bounds: 1888, 1891, 150, 155
 default_explosion
-	index: 21
-	bounds: 1478, 889, 124, 129
-	offsets: 13, 14, 150, 155
+	index: 7
+	bounds: 1888, 1736, 150, 155
 default_explosion
-	index: 0
-	bounds: 1727, 896, 122, 122
-	offsets: 14, 20, 150, 155
-default_explosion
-	index: 1
-	bounds: 1849, 896, 120, 122
-	offsets: 17, 22, 150, 155
-default_explosion
-	index: 22
-	bounds: 468, 316, 115, 129
-	offsets: 17, 15, 150, 155
-default_explosion
-	index: 23
-	bounds: 468, 197, 118, 119
-	offsets: 15, 17, 150, 155
-default_explosion
-	index: 24
-	bounds: 588, 112, 109, 104
-	offsets: 22, 27, 150, 155
-default_explosion
-	index: 26
-	bounds: 588, 17, 106, 95
-	offsets: 20, 29, 150, 155
+	index: 12
+	bounds: 1888, 1581, 150, 155
 default_explosion
 	index: 25
-	bounds: 623, 461, 99, 104
-	offsets: 24, 25, 150, 155
-half_blue_heart
-	bounds: 468, 0, 99, 84
-skull_explosion
-	index: 6
-	bounds: 0, 495, 502, 523
-	offsets: 13, 28, 521, 600
-skull_explosion
-	index: 3
-	bounds: 0, 1, 468, 494
-	offsets: 33, 73, 521, 600
-skull_explosion
-	index: 1
-	bounds: 502, 708, 316, 310
-	offsets: 123, 122, 521, 600
-triple_explosion
-	index: 3
-	bounds: 1602, 897, 125, 121
-	offsets: 10, 8, 150, 144
-triple_explosion
-	index: 5
-	bounds: 502, 445, 121, 120
-	offsets: 13, 12, 150, 144
-triple_explosion
-	index: 7
-	bounds: 468, 84, 120, 113
-	offsets: 12, 16, 150, 144
-triple_explosion
-	index: 10
-	bounds: 777, 588, 108, 120
-	offsets: 19, 11, 150, 144
-triple_explosion
-	index: 9
-	bounds: 583, 329, 114, 116
-	offsets: 17, 12, 150, 144
-triple_explosion
-	index: 2
-	bounds: 586, 216, 120, 113
-	offsets: 15, 15, 150, 144
-triple_explosion
-	index: 11
-	bounds: 885, 641, 100, 106
-	offsets: 21, 21, 150, 144
-triple_explosion
-	index: 1
-	bounds: 885, 536, 101, 105
-	offsets: 25, 18, 150, 144
-triple_explosion
-	index: 15
-	bounds: 722, 491, 85, 81
-	offsets: 28, 29, 150, 144
-triple_explosion
-	index: 18
-	bounds: 722, 436, 83, 55
-	offsets: 28, 46, 150, 144
-triple_explosion
+	bounds: 1563, 853, 150, 155
+default_explosion
 	index: 17
-	bounds: 697, 368, 83, 68
-	offsets: 30, 37, 150, 144
+	bounds: 1563, 698, 150, 155
+default_explosion
+	index: 4
+	bounds: 1713, 853, 150, 155
+default_explosion
+	index: 22
+	bounds: 1563, 543, 150, 155
+default_explosion
+	index: 9
+	bounds: 1713, 698, 150, 155
+default_explosion
+	index: 14
+	bounds: 1563, 388, 150, 155
+default_explosion
+	index: 27
+	bounds: 1713, 543, 150, 155
+default_explosion
+	index: 1
+	bounds: 1563, 233, 150, 155
+default_explosion
+	index: 19
+	bounds: 1713, 388, 150, 155
+default_explosion
+	index: 6
+	bounds: 1563, 78, 150, 155
+default_explosion
+	index: 11
+	bounds: 1713, 233, 150, 155
+default_explosion
+	index: 24
+	bounds: 1713, 78, 150, 155
+default_explosion
+	index: 16
+	bounds: 1863, 853, 150, 155
+default_explosion
+	index: 3
+	bounds: 1863, 698, 150, 155
+default_explosion
+	index: 21
+	bounds: 1863, 543, 150, 155
+default_explosion
+	index: 8
+	bounds: 1863, 388, 150, 155
+default_explosion
+	index: 13
+	bounds: 1863, 233, 150, 155
+default_explosion
+	index: 26
+	bounds: 1863, 78, 150, 155
+default_explosion
+	index: 0
+	bounds: 1743, 1162, 150, 155
+default_explosion
+	index: 18
+	bounds: 1893, 1282, 150, 155
+full_blue_heart
+	bounds: 1367, 1257, 70, 60
+gameover
+	bounds: 0, 1246, 1367, 800
+health
+	bounds: 1790, 1364, 82, 82
+pause_button
+	bounds: 1563, 1137, 180, 180
+skull_explosion
+	index: 0
+	bounds: 0, 646, 521, 600
+skull_explosion
+	index: 5
+	bounds: 1367, 1446, 521, 600
+skull_explosion
+	index: 11
+	bounds: 0, 46, 521, 600
+skull_explosion
+	index: 2
+	bounds: 521, 646, 521, 600
+skull_explosion
+	index: 7
+	bounds: 521, 46, 521, 600
+skull_explosion
+	index: 4
+	bounds: 1042, 646, 521, 600
+skull_explosion
+	index: 9
+	bounds: 1042, 46, 521, 600
 triple_explosion
 	index: 19
-	bounds: 1602, 848, 80, 49
-	offsets: 28, 58, 150, 144
+	bounds: 1888, 1437, 150, 144
+triple_explosion
+	index: 7
+	bounds: 1893, 1138, 150, 144
+
+common2.png
+	size: 2048, 2048
+	filter: Linear, Linear
+	repeat: none
+buckshot
+	bounds: 1342, 1171, 100, 124
+default_explosion
+	index: 5
+	bounds: 0, 84, 150, 155
+default_explosion
+	index: 10
+	bounds: 521, 684, 150, 155
+default_explosion
+	index: 23
+	bounds: 1042, 1284, 150, 155
+default_explosion
+	index: 15
+	bounds: 1563, 1884, 150, 155
+default_explosion
+	index: 2
+	bounds: 150, 84, 150, 155
+full_heart
+	bounds: 1713, 1667, 99, 84
+half_blue_heart
+	bounds: 1863, 1811, 99, 84
+half_heart
+	bounds: 1563, 1512, 99, 84
+non_heart
+	bounds: 0, 0, 99, 84
+skull_explosion
+	index: 10
+	bounds: 0, 1439, 521, 600
+skull_explosion
+	index: 1
+	bounds: 0, 839, 521, 600
+skull_explosion
+	index: 6
+	bounds: 521, 1439, 521, 600
+skull_explosion
+	index: 12
+	bounds: 0, 239, 521, 600
+skull_explosion
+	index: 3
+	bounds: 521, 839, 521, 600
+skull_explosion
+	index: 8
+	bounds: 1042, 1439, 521, 600
+triple_explosion
+	index: 11
+	bounds: 521, 540, 150, 144
+triple_explosion
+	index: 16
+	bounds: 671, 695, 150, 144
+triple_explosion
+	index: 4
+	bounds: 1042, 1140, 150, 144
+triple_explosion
+	index: 21
+	bounds: 1192, 1295, 150, 144
+triple_explosion
+	index: 9
+	bounds: 1563, 1740, 150, 144
+triple_explosion
+	index: 1
+	bounds: 1713, 1895, 150, 144
+triple_explosion
+	index: 13
+	bounds: 300, 95, 150, 144
+triple_explosion
+	index: 18
+	bounds: 521, 396, 150, 144
+triple_explosion
+	index: 6
+	bounds: 671, 551, 150, 144
+triple_explosion
+	index: 10
+	bounds: 821, 695, 150, 144
+triple_explosion
+	index: 15
+	bounds: 1042, 996, 150, 144
+triple_explosion
+	index: 3
+	bounds: 1192, 1151, 150, 144
+triple_explosion
+	index: 20
+	bounds: 1342, 1295, 150, 144
+triple_explosion
+	index: 8
+	bounds: 1563, 1596, 150, 144
+triple_explosion
+	index: 0
+	bounds: 1713, 1751, 150, 144
+triple_explosion
+	index: 12
+	bounds: 1863, 1895, 150, 144
+triple_explosion
+	index: 17
+	bounds: 521, 252, 150, 144
+triple_explosion
+	index: 22
+	bounds: 671, 407, 150, 144
+triple_explosion
+	index: 5
+	bounds: 821, 551, 150, 144
+triple_explosion
+	index: 14
+	bounds: 1042, 852, 150, 144
+triple_explosion
+	index: 2
+	bounds: 1192, 1007, 150, 144
