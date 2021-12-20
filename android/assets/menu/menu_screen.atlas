@@ -1,0 +1,43 @@
+menu_screen.png
+	size: 2048, 2048
+	repeat: none
+menu_screen
+	index: 8
+	bounds: 0, 1431, 960, 477
+menu_screen
+	index: 0
+	bounds: 0, 954, 960, 477
+menu_screen
+	index: 5
+	bounds: 960, 1431, 960, 477
+menu_screen
+	index: 2
+	bounds: 0, 477, 960, 477
+menu_screen
+	index: 11
+	bounds: 960, 954, 960, 477
+menu_screen
+	index: 7
+	bounds: 0, 0, 960, 477
+menu_screen
+	index: 4
+	bounds: 960, 477, 960, 477
+menu_screen
+	index: 9
+	bounds: 960, 0, 960, 477
+
+menu_screen2.png
+	size: 2048, 1024
+	repeat: none
+menu_screen
+	index: 1
+	bounds: 0, 477, 960, 477
+menu_screen
+	index: 10
+	bounds: 0, 0, 960, 477
+menu_screen
+	index: 6
+	bounds: 960, 477, 960, 477
+menu_screen
+	index: 3
+	bounds: 960, 0, 960, 477

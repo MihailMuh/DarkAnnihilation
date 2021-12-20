@@ -39,7 +39,6 @@ public class Menu extends Scene {
         clickListener = new MenuClickListener(buttons);
     }
 
-
     @Override
     public void render() {
         screen.render();

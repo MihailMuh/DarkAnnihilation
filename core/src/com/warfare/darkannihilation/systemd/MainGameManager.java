@@ -16,9 +16,10 @@ public class MainGameManager {
 
     public void startScene(Scene newScene) {
         Gdx.app.postRunnable(() -> {
-            Processor.post(() -> mainGame.scene.dispose());
+            Scene oldScene = mainGame.scene;
             newScene.run();
             mainGame.scene = newScene;
+            Processor.post(oldScene::dispose);
         });
     }
 }

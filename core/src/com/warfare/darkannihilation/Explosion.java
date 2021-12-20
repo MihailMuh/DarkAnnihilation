@@ -8,10 +8,10 @@ import com.warfare.darkannihilation.abstraction.BaseSprite;
 import com.warfare.darkannihilation.utils.AnimationG;
 
 public class Explosion extends BaseSprite {
-    private final AnimationG<AtlasRegion> animation;
+    private final AnimationG animation;
     private float timer;
 
-    public Explosion(AnimationG<AtlasRegion> animation) {
+    public Explosion(AnimationG animation) {
         super(animation.get(0));
         this.animation = animation;
     }
