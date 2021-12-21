@@ -1,20 +1,22 @@
 package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
 public abstract class Warrior extends AggressiveSprite {
     protected final int maxHealth;
     private int health;
 
-    public Warrior(AtlasRegion texture, int maxHealth, int damage) {
-        super(texture, damage);
+    public Warrior(AtlasRegion texture, int maxHealth, int damage, PoolWrap<Explosion> explosionPool) {
+        super(texture, damage, explosionPool);
         this.maxHealth = maxHealth;
 
         reset();
     }
 
-    public Warrior(AtlasRegion texture, int maxHealth, int damage, float Y) {
-        super(texture, damage, Y);
+    public Warrior(AtlasRegion texture, int maxHealth, int damage, float Y, PoolWrap<Explosion> explosionPool) {
+        super(texture, damage, Y, explosionPool);
         this.maxHealth = maxHealth;
 
         reset();
@@ -38,11 +40,12 @@ public abstract class Warrior extends AggressiveSprite {
         return false;
     }
 
-    public boolean collidesWithBullet(BaseBullet bullet) {
+    public boolean collidedWithBullet(BaseBullet bullet) {
+        boolean collide = false;
         if (intersect(bullet)) {
+            collide = damage(bullet.damage);
             bullet.boom();
-            return damage(bullet.damage);
         }
-        return false;
+        return collide;
     }
 }

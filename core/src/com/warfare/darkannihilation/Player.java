@@ -9,15 +9,18 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.Warrior;
-import com.warfare.darkannihilation.hub.PoolHub;
+import com.warfare.darkannihilation.bullet.Bullet;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Player extends Warrior {
-    private float endX, endY;
+    private final PoolWrap<Bullet> bulletPool;
     private final int speed;
+    private float endX, endY;
     private float shootTime;
 
-    public Player(AtlasRegion texture) {
-        super(texture, MILLENNIUM_FALCON_HEALTH, 10000, HALF_SCREEN_HEIGHT);
+    public Player(AtlasRegion texture, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+        super(texture, MILLENNIUM_FALCON_HEALTH, 10000, HALF_SCREEN_HEIGHT, explosionPool);
+        this.bulletPool = bulletPool;
 
         speed = 20;
 
@@ -30,9 +33,9 @@ public class Player extends Warrior {
 
             float X = centerX();
             float Y = top() + 5;
-            PoolHub.bulletPool.obtain().start(X - 7, Y);
-            PoolHub.bulletPool.obtain().start(X, Y);
-            PoolHub.bulletPool.obtain().start(X + 7, Y);
+            bulletPool.obtain().start(X - 7, Y);
+            bulletPool.obtain().start(X, Y);
+            bulletPool.obtain().start(X + 7, Y);
         }
     }
 
@@ -45,9 +48,9 @@ public class Player extends Warrior {
         endY = (y -= halfHeight);
     }
 
-    public boolean collidesWithEnemy(Warrior enemy) {
+    public boolean collidedWithEnemy(Warrior enemy) {
         if (intersect(enemy)) {
-            enemy.boom();
+            enemy.boomFromPlayer();
             return true;
         }
 

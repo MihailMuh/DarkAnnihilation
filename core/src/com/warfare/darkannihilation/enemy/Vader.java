@@ -6,13 +6,14 @@ import static com.warfare.darkannihilation.Constants.VADER_HEALTH;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.hub.PoolHub;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Vader extends Warrior {
-    public Vader() {
-        super(ImageHub.vadersImages[random(0, 2)], VADER_HEALTH, VADER_DAMAGE);
+    public Vader(PoolWrap<Explosion> explosionPool) {
+        super(ImageHub.vadersImages[random(0, 2)], VADER_HEALTH, VADER_DAMAGE, explosionPool);
     }
 
     @Override
@@ -36,6 +37,6 @@ public class Vader extends Warrior {
 
     @Override
     protected void explode() {
-        PoolHub.explosionPool.obtain().start(centerX(), centerY());
+        explosionPool.obtain().start(centerX(), centerY(), false);
     }
 }

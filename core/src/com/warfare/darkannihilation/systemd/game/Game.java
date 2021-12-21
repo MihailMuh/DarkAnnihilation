@@ -1,8 +1,8 @@
 package com.warfare.darkannihilation.systemd.game;
 
+import static com.warfare.darkannihilation.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
+import static com.warfare.darkannihilation.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.Constants.NUMBER_VADER;
-import static com.warfare.darkannihilation.hub.PoolHub.bulletPool;
-import static com.warfare.darkannihilation.hub.PoolHub.explosionPool;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
@@ -12,18 +12,22 @@ import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.hub.PoolHub;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
 import java.util.Iterator;
 
 public class Game extends Scene {
+    private Frontend frontend;
     private Player player;
 
-    private final Array<Explosion> explosions = new Array<>(10);
-    public Array<Bullet> bullets = new Array<>(15);
-    public Array<Warrior> empire = new Array<>(NUMBER_VADER);
+    private final Array<Explosion> explosions = new Array<>(NUMBER_DEFAULT_LARGE_EXPLOSION);
+    private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
+    private final Array<Warrior> empire = new Array<>(NUMBER_VADER);
+
+    private PoolWrap<Explosion> explosionPool;
+    private PoolWrap<Bullet> bulletPool;
 
     public Game(MainGameManager mainGameManager) {
         super(mainGameManager);
@@ -33,30 +37,28 @@ public class Game extends Scene {
     public void run() {
         mainGameManager.imageHub.loadGameImages();
 
-        player = new Player(ImageHub.millenniumFalcon);
+        explosionPool = new PoolWrap<Explosion>(explosions) {
+            @Override
+            protected Explosion newObject() {
+                return new Explosion(mainGameManager.imageHub.defaultExplosionAnim);
+            }
+        };
+        bulletPool = new PoolWrap<Bullet>(bullets) {
+            @Override
+            protected Bullet newObject() {
+                return new Bullet(explosionPool);
+            }
+        };
+
+        player = new Player(ImageHub.millenniumFalcon, bulletPool, explosionPool);
         screen = new DynamicScreen(mainGameManager.imageHub.starScreenGIF);
         clickListener = new GameClickListener(player, mainGameManager);
+
         for (int i = 0; i < NUMBER_VADER; i++) {
-            empire.add(new Vader());
+            empire.add(new Vader(explosionPool));
         }
 
-        PoolHub.init(explosions, bullets);
-    }
-
-    @Override
-    public void render() {
-        screen.render();
-        player.render();
-
-        for (Warrior enemy : empire) {
-            enemy.render();
-        }
-        for (Bullet bullet : bullets) {
-            bullet.render();
-        }
-        for (Explosion explosion : explosions) {
-            explosion.render();
-        }
+        frontend = new Frontend(player, screen, explosions, bullets, empire);
     }
 
     @Override
@@ -71,14 +73,13 @@ public class Game extends Scene {
             if (enemy.visible) {
                 enemy.x -= moveAll;
                 enemy.update();
-                if (player.collidesWithEnemy(enemy)) {
+                if (player.collidedWithEnemy(enemy)) {
                     continue;
                 }
                 for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
                     Bullet bullet = iterator.next();
                     if (bullet.visible) {
-//                        damage enemy and check if it dies
-                        if (enemy.collidesWithBullet(bullet)) {
+                        if (enemy.collidedWithBullet(bullet)) {
                             break;
                         }
                     } else {
@@ -103,6 +104,11 @@ public class Game extends Scene {
                 explosionPool.free(explosion);
             }
         }
+    }
+
+    @Override
+    public void render() {
+        frontend.render();
     }
 
     @Override

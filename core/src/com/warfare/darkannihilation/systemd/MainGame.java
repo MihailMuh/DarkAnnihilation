@@ -1,9 +1,6 @@
 package com.warfare.darkannihilation.systemd;
 
-import static com.badlogic.gdx.Input.Keys.BACK;
-
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
+import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
@@ -11,18 +8,15 @@ import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
-import com.warfare.darkannihilation.systemd.service.Windows;
 
-public class MainGame extends ApplicationAdapter {
+public class MainGame extends BaseApp {
     Scene scene;
     private ImageHub imageHub;
     private Frontend frontend;
 
     @Override
     public void create() {
-        Gdx.graphics.setVSync(true);
-        Gdx.input.setCatchKey(BACK, true);
-        Windows.refresh();
+        super.create();
         imageHub = new ImageHub();
 
         scene = new Menu(new MainGameManager(imageHub, this));
@@ -47,8 +41,7 @@ public class MainGame extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        Windows.refresh();
+        super.resize(width, height);
 
         frontend.onResize();
     }
