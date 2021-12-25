@@ -60,8 +60,4 @@ public final class FontHub {
             glyph.setText(font, maxStr);
         }
     }
-
-    public static void dispose() {
-        fontButtons.dispose();
-    }
 }

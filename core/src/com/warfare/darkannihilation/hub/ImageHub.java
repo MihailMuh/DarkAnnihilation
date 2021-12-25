@@ -14,13 +14,13 @@ public final class ImageHub implements Disposable {
     private final TextureAtlas commonAtlas;
     private TextureAtlas levelAtlas, characterAtlas;
 
-    public AnimationG starScreenGIF;
-    public AnimationG menuScreenGIF;
-    public static AnimationG defaultExplosionAnim;
+    public AnimationG starScreenGIF, menuScreenGIF;
+    public AnimationG defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
 
     public static AtlasRegion[] vadersImages;
+    public AtlasRegion demomanImg, bombImg, factoryImg, minionImg;
     public static AtlasRegion millenniumFalcon;
-    public static AtlasRegion bulletImg;
+    public AtlasRegion bulletImg;
     public static AtlasRegion buttonPress, buttonNotPress;
 
     public ImageHub() {
@@ -35,8 +35,9 @@ public final class ImageHub implements Disposable {
     }
 
     public void findExplosions() {
-        defaultExplosionAnim = new AnimationG(assetManager.getAtlasRegions(commonAtlas,
-                "default_explosion", 28), 0.02f);
+        defaultExplosionAnim = new AnimationG(assetManager.getAtlasRegions(commonAtlas, "default_explosion", 28), 0.02f);
+        hugeExplosionAnim = new AnimationG(assetManager.getAtlasRegions(commonAtlas, "skull_explosion", 13), 0.05f);
+        tripleExplosionAnim = new AnimationG(assetManager.getAtlasRegions(commonAtlas, "triple_explosion", 23), 0.02f);
     }
 
     private void waitAssetMgr(int millis) {
@@ -52,12 +53,11 @@ public final class ImageHub implements Disposable {
     public void loadMenuImages() {
         assetManager.loadAtlas("menu/menu_screen.atlas");
 
-        waitAssetMgr(20);
+        waitAssetMgr(0);
 
         buttonPress = commonAtlas.findRegion("button_press");
         buttonNotPress = commonAtlas.findRegion("button_not_press");
-        menuScreenGIF = new AnimationG(assetManager.getAtlasRegions("menu/menu_screen.atlas",
-                "menu_screen", 12), 0.11f);
+        menuScreenGIF = new AnimationG(assetManager.getAtlasRegions("menu/menu_screen.atlas", "menu_screen", 12), 0.11f);
     }
 
     public void disposeMenuImages() {
@@ -80,18 +80,27 @@ public final class ImageHub implements Disposable {
         characterAtlas = assetManager.get("players/falcon.atlas");
         millenniumFalcon = characterAtlas.findRegion("ship");
         bulletImg = characterAtlas.findRegion("bullet");
-        starScreenGIF = new AnimationG(assetManager.getAtlasRegions(levelAtlas,
-                "star_screen", 24), 0.07f);
+
+        demomanImg = levelAtlas.findRegion("demoman");
+        bombImg = levelAtlas.findRegion("bomb");
+        factoryImg = levelAtlas.findRegion("factory");
+        minionImg = levelAtlas.findRegion("minion");
+        starScreenGIF = new AnimationG(assetManager.getAtlasRegions(levelAtlas, "star_screen", 24), 0.07f);
     }
 
     public void disposeGameImages() {
         assetManager.unload("first_level/first_level.atlas");
         assetManager.unload("players/falcon.atlas");
 
-        starScreenGIF = null;
         levelAtlas = null;
-        characterAtlas = null;
         vadersImages = null;
+        starScreenGIF = null;
+        demomanImg = null;
+        bombImg = null;
+        factoryImg = null;
+        minionImg = null;
+
+        characterAtlas = null;
         millenniumFalcon = null;
         bulletImg = null;
     }

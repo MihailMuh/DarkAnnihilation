@@ -1,8 +1,8 @@
 package com.warfare.darkannihilation.enemy;
 
 import static com.badlogic.gdx.math.MathUtils.random;
-import static com.warfare.darkannihilation.Constants.VADER_DAMAGE;
-import static com.warfare.darkannihilation.Constants.VADER_HEALTH;
+import static com.warfare.darkannihilation.constants.Constants.VADER_DAMAGE;
+import static com.warfare.darkannihilation.constants.Constants.VADER_HEALTH;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
@@ -37,6 +37,6 @@ public class Vader extends Warrior {
 
     @Override
     protected void explode() {
-        explosionPool.obtain().start(centerX(), centerY(), false);
+        explodeDefault();
     }
 }

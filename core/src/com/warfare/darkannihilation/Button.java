@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation;
 
-import static com.warfare.darkannihilation.Constants.BUTTON_CLICK_TIME;
+import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
 import static com.warfare.darkannihilation.hub.FontHub.fontButtons;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;

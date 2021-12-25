@@ -1,5 +1,10 @@
 package com.warfare.darkannihilation.abstraction;
 
+import static com.warfare.darkannihilation.constants.Names.HUGE_EXPLOSION;
+import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_DEFAULT;
+import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIPLE;
+import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
+import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -8,7 +13,7 @@ import com.warfare.darkannihilation.utils.PoolWrap;
 
 public abstract class AggressiveSprite extends LiveSprite {
     protected final PoolWrap<Explosion> explosionPool;
-    protected final float SHh;
+    protected float startY;
     public final int damage;
 
     public AggressiveSprite(AtlasRegion texture, int damage, PoolWrap<Explosion> explosionPool) {
@@ -16,15 +21,15 @@ public abstract class AggressiveSprite extends LiveSprite {
         this.damage = damage;
         this.explosionPool = explosionPool;
 
-        SHh = SCREEN_HEIGHT + height;
+        startY = SCREEN_HEIGHT + height;
     }
 
-    public AggressiveSprite(AtlasRegion texture, int damage, float Y, PoolWrap<Explosion> explosionPool) {
+    public AggressiveSprite(AtlasRegion texture, int damage, float startY, PoolWrap<Explosion> explosionPool) {
         super(texture);
         this.damage = damage;
         this.explosionPool = explosionPool;
 
-        SHh = Y;
+        this.startY = startY;
     }
 
     public boolean damage(int dmg) {
@@ -44,6 +49,18 @@ public abstract class AggressiveSprite extends LiveSprite {
     protected abstract void explode();
 
     protected void explodeSmall() {
-        explosionPool.obtain().start(centerX(), centerY(), true);
+        explosionPool.obtain().start(centerX(), centerY(), SMALL_EXPLOSION_DEFAULT);
+    }
+    protected void explodeSmallTriple() {
+        explosionPool.obtain().start(centerX(), centerY(), SMALL_EXPLOSION_TRIPLE);
+    }
+    protected void explodeDefault() {
+        explosionPool.obtain().start(centerX(), centerY(), MEDIUM_EXPLOSION_DEFAULT);
+    }
+    protected void explodeDefaultTriple() {
+        explosionPool.obtain().start(centerX(), centerY(), MEDIUM_EXPLOSION_TRIPLE);
+    }
+    protected void explodeHuge() {
+        explosionPool.obtain().start(centerX(), centerY(), HUGE_EXPLOSION);
     }
 }

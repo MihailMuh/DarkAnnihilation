@@ -1,13 +1,14 @@
 package com.warfare.darkannihilation;
 
-import static com.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_HEALTH;
-import static com.warfare.darkannihilation.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
+import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
+import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.warfare.darkannihilation.abstraction.AggressiveSprite;
 import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
@@ -48,9 +49,9 @@ public class Player extends Warrior {
         endY = (y -= halfHeight);
     }
 
-    public boolean collidedWithEnemy(Warrior enemy) {
-        if (intersect(enemy)) {
-            enemy.boomFromPlayer();
+    public boolean collidedWithEnemy(AggressiveSprite sprite) {
+        if (intersect(sprite)) {
+            sprite.boomFromPlayer();
             return true;
         }
 

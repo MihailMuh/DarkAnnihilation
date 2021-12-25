@@ -2,7 +2,6 @@ package com.warfare.darkannihilation.systemd;
 
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
@@ -48,9 +47,8 @@ public class MainGame extends BaseApp {
 
     @Override
     public void dispose() {
-        FontHub.dispose();
-        Processor.dispose();
         scene.dispose();
         imageHub.dispose();
+        Processor.dispose();
     }
 }

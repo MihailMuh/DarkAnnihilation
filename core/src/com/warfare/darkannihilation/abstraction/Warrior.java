@@ -6,7 +6,7 @@ import com.warfare.darkannihilation.utils.PoolWrap;
 
 public abstract class Warrior extends AggressiveSprite {
     protected final int maxHealth;
-    private int health;
+    protected int health;
 
     public Warrior(AtlasRegion texture, int maxHealth, int damage, PoolWrap<Explosion> explosionPool) {
         super(texture, damage, explosionPool);
@@ -15,8 +15,8 @@ public abstract class Warrior extends AggressiveSprite {
         reset();
     }
 
-    public Warrior(AtlasRegion texture, int maxHealth, int damage, float Y, PoolWrap<Explosion> explosionPool) {
-        super(texture, damage, Y, explosionPool);
+    public Warrior(AtlasRegion texture, int maxHealth, int damage, float startY, PoolWrap<Explosion> explosionPool) {
+        super(texture, damage, startY, explosionPool);
         this.maxHealth = maxHealth;
 
         reset();
@@ -26,7 +26,7 @@ public abstract class Warrior extends AggressiveSprite {
     public void reset() {
         health = maxHealth;
 
-        y = SHh;
+        y = startY;
     }
 
     @Override
