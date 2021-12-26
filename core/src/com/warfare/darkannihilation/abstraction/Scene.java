@@ -13,11 +13,12 @@ public abstract class Scene implements Disposable {
         this.mainGameManager = mainGameManager;
     }
 
+    public abstract void readyAssets();
+
     public abstract void run();
 
     public abstract void render();
 
     public void update() {
-
     }
 }

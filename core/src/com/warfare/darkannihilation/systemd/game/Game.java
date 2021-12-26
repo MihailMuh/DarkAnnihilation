@@ -1,5 +1,7 @@
 package com.warfare.darkannihilation.systemd.game;
 
+import static com.warfare.darkannihilation.constants.Assets.FALCON_ATLAS;
+import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_ATLAS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
@@ -44,8 +46,14 @@ public class Game extends Scene {
     }
 
     @Override
+    public void readyAssets() {
+        mainGameManager.imageHub.assetManager.loadAtlas(FIRST_LEVEL_ATLAS);
+        mainGameManager.imageHub.assetManager.loadAtlas(FALCON_ATLAS);
+    }
+
+    @Override
     public void run() {
-        mainGameManager.imageHub.loadGameImages();
+        mainGameManager.imageHub.getGameImages();
 
         explosionPool = new PoolWrap<Explosion>(explosions) {
             @Override

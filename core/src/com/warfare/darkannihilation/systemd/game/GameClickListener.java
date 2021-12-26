@@ -25,7 +25,7 @@ class GameClickListener extends BaseClickListener {
     @Override
     public void keyDown(int key) {
         if (key == BACK) {
-            manager.startScene(new Menu(manager));
+            manager.startScene(new Menu(manager), true);
         }
     }
 }

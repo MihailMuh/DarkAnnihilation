@@ -1,5 +1,8 @@
 package com.warfare.darkannihilation.systemd;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.warfare.darkannihilation.LoadingScreen;
+import com.warfare.darkannihilation.SceneWrap;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.ImageHub;
@@ -10,6 +13,7 @@ import com.warfare.darkannihilation.systemd.service.Watch;
 
 public class MainGame extends BaseApp {
     Scene scene;
+    LoadingScreen loadingScreen;
     private ImageHub imageHub;
     private Frontend frontend;
 
@@ -17,15 +21,16 @@ public class MainGame extends BaseApp {
     public void create() {
         super.create();
         imageHub = new ImageHub();
-
-        scene = new Menu(new MainGameManager(imageHub, this));
-        scene.run();
-
         frontend = new Frontend(this);
+        scene = new SceneWrap(null);
+
+        MainGameManager mainGameManager = new MainGameManager(imageHub, this);
+        mainGameManager.startScene(new Menu(mainGameManager), false);
 
         Processor.post(() -> {
-            Service.sleep(1000);
-            imageHub.findExplosions();
+            Service.sleep(500);
+            imageHub.lazyLoading();
+            loadingScreen = new LoadingScreen(imageHub.loadingScreenGIF, imageHub.assetManager);
         });
     }
 
@@ -43,6 +48,12 @@ public class MainGame extends BaseApp {
         super.resize(width, height);
 
         frontend.onResize();
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+        Texture.setAssetManager(imageHub.assetManager);
     }
 
     @Override
