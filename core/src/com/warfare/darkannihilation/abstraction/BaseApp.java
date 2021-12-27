@@ -13,10 +13,4 @@ public abstract class BaseApp extends ApplicationAdapter {
         Gdx.input.setCatchKey(BACK, true);
         Windows.refresh();
     }
-
-    @Override
-    public void resize(int width, int height) {
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        Windows.refresh();
-    }
 }

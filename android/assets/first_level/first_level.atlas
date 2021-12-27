@@ -2,113 +2,113 @@ first_level.png
 	size: 2048, 2048
 	repeat: none
 attention
-	bounds: 1867, 1804, 70, 63
+	bounds: 1923, 1885, 70, 63
 bomb
-	bounds: 2007, 1822, 30, 70
+	bounds: 1871, 1778, 30, 70
 boss
-	bounds: 1467, 1642, 400, 400
-demoman
-	bounds: 1467, 1467, 300, 175
+	bounds: 1469, 1625, 400, 400
 factory
-	bounds: 0, 1592, 1467, 450
+	bounds: 0, 1575, 1467, 450
 laser
-	bounds: 1942, 1882, 15, 60
+	bounds: 2025, 1965, 15, 60
 minion
-	bounds: 1867, 1750, 80, 54
+	bounds: 179, 46, 80, 54
 rocket
-	bounds: 1957, 1794, 50, 98
+	bounds: 1871, 1850, 50, 98
 star_screen
 	index: 15
-	bounds: 0, 1103, 960, 489
+	bounds: 0, 1084, 960, 489
 star_screen
 	index: 20
-	bounds: 960, 978, 960, 489
+	bounds: 0, 593, 960, 489
 star_screen
 	index: 3
-	bounds: 0, 614, 960, 489
+	bounds: 0, 102, 960, 489
 star_screen
 	index: 12
-	bounds: 960, 489, 960, 489
+	bounds: 962, 1084, 960, 489
 star_screen
 	index: 8
-	bounds: 0, 125, 960, 489
+	bounds: 962, 593, 960, 489
 star_screen
 	index: 0
-	bounds: 960, 0, 960, 489
+	bounds: 962, 102, 960, 489
 triple_fighter
-	bounds: 1867, 1942, 100, 100
+	bounds: 0, 0, 100, 100
 vader
 	index: 1
-	bounds: 1967, 1967, 75, 75
+	bounds: 1871, 1950, 75, 75
 vader
 	index: 0
-	bounds: 1967, 1892, 75, 75
+	bounds: 102, 25, 75, 75
 vader
 	index: 2
-	bounds: 1867, 1867, 75, 75
+	bounds: 1948, 1950, 75, 75
 
 first_level2.png
 	size: 2048, 2048
 	repeat: none
 star_screen
 	index: 17
-	bounds: 0, 1467, 960, 489
+	bounds: 0, 1473, 960, 489
 star_screen
 	index: 22
-	bounds: 0, 978, 960, 489
+	bounds: 0, 982, 960, 489
 star_screen
 	index: 5
-	bounds: 960, 1467, 960, 489
+	bounds: 962, 1473, 960, 489
 star_screen
 	index: 14
-	bounds: 0, 489, 960, 489
+	bounds: 0, 491, 960, 489
 star_screen
 	index: 2
-	bounds: 960, 978, 960, 489
+	bounds: 962, 982, 960, 489
 star_screen
 	index: 19
 	bounds: 0, 0, 960, 489
 star_screen
 	index: 11
-	bounds: 960, 489, 960, 489
+	bounds: 962, 491, 960, 489
 star_screen
 	index: 7
-	bounds: 960, 0, 960, 489
+	bounds: 962, 0, 960, 489
 
 first_level3.png
 	size: 2048, 2048
 	repeat: none
 star_screen
 	index: 16
-	bounds: 0, 1467, 960, 489
+	bounds: 0, 1473, 960, 489
 star_screen
 	index: 4
-	bounds: 0, 978, 960, 489
+	bounds: 0, 982, 960, 489
 star_screen
 	index: 21
-	bounds: 960, 1467, 960, 489
+	bounds: 962, 1473, 960, 489
 star_screen
 	index: 13
-	bounds: 0, 489, 960, 489
+	bounds: 0, 491, 960, 489
 star_screen
 	index: 9
-	bounds: 960, 978, 960, 489
+	bounds: 962, 982, 960, 489
 star_screen
 	index: 1
 	bounds: 0, 0, 960, 489
 star_screen
 	index: 18
-	bounds: 960, 489, 960, 489
+	bounds: 962, 491, 960, 489
 star_screen
 	index: 10
-	bounds: 960, 0, 960, 489
+	bounds: 962, 0, 960, 489
 
 first_level4.png
-	size: 2048, 512
+	size: 2048, 1024
 	repeat: none
+demoman
+	bounds: 962, 805, 300, 175
 star_screen
 	index: 23
-	bounds: 0, 0, 960, 489
+	bounds: 0, 491, 960, 489
 star_screen
 	index: 6
-	bounds: 960, 0, 960, 489
+	bounds: 0, 0, 960, 489

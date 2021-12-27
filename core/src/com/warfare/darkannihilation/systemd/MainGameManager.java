@@ -18,23 +18,47 @@ public class MainGameManager {
 
     public void startScene(Scene newScene, boolean loadingScreen) {
         Processor.post(() -> {
-            Scene oldScene = mainGame.scene;
+            Scene oldScene = mainGame.scenes.first();
             Runnable runnable = () -> {
-                newScene.run();
-                mainGame.scene = newScene;
+                newScene.create();
+                oldScene.pause();
+                mainGame.scenes.set(0, newScene);
+                newScene.resume();
             };
 
             newScene.readyAssets();
-            if (loadingScreen) mainGame.scene = mainGame.loadingScreen.run(runnable);
+            if (loadingScreen) mainGame.scenes.set(0, mainGame.loadingScreen.resume(runnable));
             else {
                 finishLoading = false;
                 while (!finishLoading) {
                     Service.sleep(20);
-                    Gdx.app.postRunnable(() -> finishLoading = imageHub.assetManager.update());
+                    Gdx.app.postRunnable(() -> finishLoading = imageHub.update());
                 }
                 runnable.run();
             }
             oldScene.dispose();
+        });
+    }
+
+    public void startTopScene(Scene newScene) {
+        Gdx.app.postRunnable(() -> {
+            for (Scene scene : mainGame.scenes) {
+                scene.pause();
+            }
+            newScene.create();
+            mainGame.scenes.add(newScene);
+            newScene.resume();
+        });
+    }
+
+    public void stopScene(Scene sceneToStop) {
+        Gdx.app.postRunnable(() -> {
+            sceneToStop.pause();
+            mainGame.scenes.removeValue(sceneToStop, true);
+            sceneToStop.dispose();
+            for (Scene scene : mainGame.scenes) {
+                scene.resume();
+            }
         });
     }
 }

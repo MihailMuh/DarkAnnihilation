@@ -17,7 +17,7 @@ public class LoadingScreen extends SceneWrap {
         screen = new BackgroundScreen(animation);
     }
 
-    public LoadingScreen run(Runnable runnable) {
+    public LoadingScreen resume(Runnable runnable) {
         finishLoading = true;
         this.runnable = runnable;
         Processor.post(() -> {

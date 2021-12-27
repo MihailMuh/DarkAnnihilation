@@ -28,7 +28,7 @@ public class Player extends Warrior {
         setIndents(20, 25, 20, 20);
     }
 
-    protected void shoot() {
+    public void shoot() {
         if (time - shootTime >= MILLENNIUM_FALCON_SHOOT_TIME) {
             shootTime = time;
 
@@ -70,8 +70,6 @@ public class Player extends Warrior {
 
         speedX = (endX - x) * speed * delta;
         speedY = (endY - y) * speed * delta;
-
-        shoot();
     }
 
     @Override

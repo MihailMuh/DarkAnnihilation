@@ -20,7 +20,6 @@ import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
@@ -41,18 +40,20 @@ public class Game extends Scene {
     private PoolWrap<Bullet> bulletPool;
     private PoolWrap<BaseBullet> bombPool;
 
+    private boolean firstRun = true;
+
     public Game(MainGameManager mainGameManager) {
         super(mainGameManager);
     }
 
     @Override
     public void readyAssets() {
-        mainGameManager.imageHub.assetManager.loadAtlas(FIRST_LEVEL_ATLAS);
-        mainGameManager.imageHub.assetManager.loadAtlas(FALCON_ATLAS);
+        mainGameManager.imageHub.loadAtlas(FIRST_LEVEL_ATLAS);
+        mainGameManager.imageHub.loadAtlas(FALCON_ATLAS);
     }
 
     @Override
-    public void run() {
+    public void create() {
         mainGameManager.imageHub.getGameImages();
 
         explosionPool = new PoolWrap<Explosion>(explosions) {
@@ -85,11 +86,23 @@ public class Game extends Scene {
 
         frontend = new Frontend(player, screen, explosions, bullets, empire, bulletsEnemy);
 
-        Processor.post(() -> {
-            clickListener = new GameClickListener(player, mainGameManager);
+        clickListener = new GameClickListener(player, mainGameManager);
 
+        mainGameManager.startTopScene(new Countdown(mainGameManager, player, screen));
+    }
+
+    @Override
+    public void resume() {
+        if (!firstRun) {
             gameTask.start();
-        });
+        } else {
+            firstRun = false;
+        }
+    }
+
+    @Override
+    public void pause() {
+        gameTask.stop();
     }
 
     @Override
@@ -99,6 +112,7 @@ public class Game extends Scene {
         screen.x -= moveAll;
 
         player.update();
+        player.shoot();
 
         for (Warrior enemy : empire) {
             if (enemy.visible) {
@@ -164,7 +178,6 @@ public class Game extends Scene {
 
     @Override
     public void dispose() {
-        gameTask.stop();
         mainGameManager.imageHub.disposeGameImages();
     }
 }

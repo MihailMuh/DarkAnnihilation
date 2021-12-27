@@ -1,10 +1,13 @@
 package com.warfare.darkannihilation.systemd.menu;
 
 import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
+import static com.warfare.darkannihilation.hub.FontHub.buttonFont;
+import static com.warfare.darkannihilation.hub.FontHub.canisMinor;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.Button;
+import com.warfare.darkannihilation.FontWrap;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
@@ -21,18 +24,17 @@ public class Menu extends Scene {
 
     @Override
     public void readyAssets() {
-        mainGameManager.imageHub.assetManager.loadAtlas(MENU_ATLAS);
+        mainGameManager.imageHub.loadAtlas(MENU_ATLAS);
     }
 
     @Override
-    public void run() {
+    public void create() {
         mainGameManager.imageHub.getMenuImages();
 
         screen = new BackgroundScreen(mainGameManager.imageHub.menuScreenGIF);
 
-        FontHub.resizeFont(FontHub.fontButtons,
-                ImageHub.buttonPress.originalWidth - 150,
-                "Quit", "Start", "Top Score", "Settings");
+        buttonFont = new FontWrap(canisMinor, FontHub.resizeFont(canisMinor, ImageHub.buttonPress.originalWidth - 150,
+                "Quit", "Start", "Top Score", "Settings"));
         int step = 50;
         buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
@@ -48,6 +50,7 @@ public class Menu extends Scene {
     @Override
     public void render() {
         screen.render();
+
         for (Button button : buttons) {
             button.render();
         }

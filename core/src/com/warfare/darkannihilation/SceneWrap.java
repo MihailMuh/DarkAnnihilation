@@ -14,7 +14,7 @@ public class SceneWrap extends Scene {
     }
 
     @Override
-    public void run() {
+    public void create() {
 
     }
 
