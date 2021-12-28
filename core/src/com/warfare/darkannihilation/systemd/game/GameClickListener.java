@@ -4,6 +4,7 @@ import static com.badlogic.gdx.Input.Keys.BACK;
 
 import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.systemd.BaseClickListener;
+import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.menu.Menu;
 
@@ -25,7 +26,7 @@ class GameClickListener extends BaseClickListener {
     @Override
     public void keyDown(int key) {
         if (key == BACK) {
-            manager.startScene(new Menu(manager), true);
+            manager.startScene(new Intent(Menu.class), true);
         }
     }
 }

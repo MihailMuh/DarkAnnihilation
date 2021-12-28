@@ -2,18 +2,17 @@ package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.warfare.darkannihilation.systemd.BaseClickListener;
+import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 
 public abstract class Scene implements ApplicationListener {
-    protected final MainGameManager mainGameManager;
+    protected MainGameManager mainGameManager;
     protected BaseClickListener clickListener;
     protected BaseScreen screen;
 
-    protected Scene(MainGameManager mainGameManager) {
-        this.mainGameManager = mainGameManager;
+    public void bootAssets(Intent intent) {
+        this.mainGameManager = intent.gameManager;
     }
-
-    public abstract void readyAssets();
 
     public void update() {
     }

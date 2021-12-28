@@ -11,20 +11,20 @@ import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.SceneTop;
 import com.warfare.darkannihilation.abstraction.BaseScreen;
 import com.warfare.darkannihilation.hub.FontHub;
-import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 
 public class Countdown extends SceneTop {
-    private final Player player;
+    private Player player;
     private String text = "3";
     private float textX, textY;
 
-    public Countdown(MainGameManager mainGameManager, Player player, BaseScreen screen) {
-        super(mainGameManager);
-
-        this.player = player;
-        this.screen = screen;
+    @Override
+    public void bootAssets(Intent intent) {
+        super.bootAssets(intent);
+        player = (Player) intent.get("player");
+        screen = (BaseScreen) intent.get("screen");
         countdownFont = new FontWrap(canisMinorHuge, FontHub.resizeFont(canisMinorHuge, SCREEN_WIDTH - 400, "SHOOT!"));
     }
 

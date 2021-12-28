@@ -19,7 +19,7 @@ import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.screens.DynamicScreen;
-import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
@@ -42,12 +42,9 @@ public class Game extends Scene {
 
     private boolean firstRun = true;
 
-    public Game(MainGameManager mainGameManager) {
-        super(mainGameManager);
-    }
-
     @Override
-    public void readyAssets() {
+    public void bootAssets(Intent intent) {
+        super.bootAssets(intent);
         mainGameManager.imageHub.loadAtlas(FIRST_LEVEL_ATLAS);
         mainGameManager.imageHub.loadAtlas(FALCON_ATLAS);
     }
@@ -88,7 +85,7 @@ public class Game extends Scene {
 
         clickListener = new GameClickListener(player, mainGameManager);
 
-        mainGameManager.startTopScene(new Countdown(mainGameManager, player, screen));
+        mainGameManager.startTopScene(new Intent(Countdown.class).put("player", player).put("screen", screen));
     }
 
     @Override

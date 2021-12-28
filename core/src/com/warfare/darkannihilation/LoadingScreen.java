@@ -12,7 +12,6 @@ public class LoadingScreen extends SceneWrap {
     private boolean finishLoading;
 
     public LoadingScreen(AnimationG animation, AssetManager assetManager) {
-        super(null);
         this.assetManager = assetManager;
         screen = new BackgroundScreen(animation);
     }

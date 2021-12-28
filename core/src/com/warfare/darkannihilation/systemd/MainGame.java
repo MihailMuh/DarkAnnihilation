@@ -1,7 +1,5 @@
 package com.warfare.darkannihilation.systemd;
 
-import static com.warfare.darkannihilation.systemd.service.Service.print;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.LoadingScreen;
@@ -13,10 +11,9 @@ import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
-import com.warfare.darkannihilation.systemd.service.Windows;
 
 public class MainGame extends BaseApp {
-    Array<Scene> scenes = new Array<>(1);
+    Array<Scene> scenes = new Array<>(new Scene[]{new SceneWrap()});
     LoadingScreen loadingScreen;
     private ImageHub imageHub;
     private Frontend frontend;
@@ -25,11 +22,10 @@ public class MainGame extends BaseApp {
     public void create() {
         super.create();
         imageHub = new ImageHub();
-        frontend = new Frontend(this);
-        scenes.add(new SceneWrap(null));
 
-        MainGameManager mainGameManager = new MainGameManager(imageHub, this);
-        mainGameManager.startScene(new Menu(mainGameManager), false);
+        new MainGameManager(imageHub, this).startScene(new Intent(Menu.class), false);
+
+        frontend = new Frontend(this);
 
         Processor.post(() -> {
             Service.sleep(500);
@@ -45,11 +41,6 @@ public class MainGame extends BaseApp {
         scenes.peek().update();
 
         frontend.render();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        print(width, height, Windows.HARDCORE_WIDTH, Windows.HARDCORE_HEIGHT);
     }
 
     @Override

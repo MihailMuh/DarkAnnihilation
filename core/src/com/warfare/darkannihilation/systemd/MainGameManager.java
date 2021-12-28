@@ -1,5 +1,7 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.warfare.darkannihilation.systemd.service.Watch.delta;
+
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.ImageHub;
@@ -16,49 +18,66 @@ public class MainGameManager {
         this.mainGame = mainGame;
     }
 
-    public void startScene(Scene newScene, boolean loadingScreen) {
-        Processor.post(() -> {
-            Scene oldScene = mainGame.scenes.first();
-            Runnable runnable = () -> {
-                newScene.create();
-                oldScene.pause();
-                mainGame.scenes.set(0, newScene);
-                newScene.resume();
-            };
+    private void startScene(Scene newScene, boolean loadingScreen) {
+        Scene oldScene = mainGame.scenes.first();
+        Runnable runnable = () -> {
+            newScene.create();
+            oldScene.pause();
+            mainGame.scenes.set(0, newScene);
+            newScene.resume();
+        };
 
-            newScene.readyAssets();
-            if (loadingScreen) mainGame.scenes.set(0, mainGame.loadingScreen.resume(runnable));
-            else {
-                finishLoading = false;
-                while (!finishLoading) {
-                    Service.sleep(20);
-                    Gdx.app.postRunnable(() -> finishLoading = imageHub.update());
-                }
-                runnable.run();
+        if (loadingScreen) mainGame.scenes.set(0, mainGame.loadingScreen.resume(runnable));
+        else {
+            finishLoading = false;
+            while (!finishLoading) {
+                Service.sleep((int) (delta * 1000));
+                Gdx.app.postRunnable(() -> finishLoading = imageHub.update());
             }
-            oldScene.dispose();
-        });
+            runnable.run();
+        }
+        oldScene.dispose();
     }
 
-    public void startTopScene(Scene newScene) {
+    private void startTopScene(Scene newScene) {
+        newScene.create();
+
         Gdx.app.postRunnable(() -> {
             for (Scene scene : mainGame.scenes) {
                 scene.pause();
             }
-            newScene.create();
             mainGame.scenes.add(newScene);
             newScene.resume();
         });
+    }
+
+    private void startScene(Intent intent, boolean onTop, boolean loadingScreen) {
+        Processor.post(() -> {
+            Scene scene = intent.boot(this);
+            if (onTop) {
+                startTopScene(scene);
+            } else {
+                startScene(scene, loadingScreen);
+            }
+        });
+    }
+
+    public void startScene(Intent intent, boolean loadingScreen) {
+        startScene(intent, false, loadingScreen);
+    }
+
+    public void startTopScene(Intent intent) {
+        startScene(intent, true, false);
     }
 
     public void stopScene(Scene sceneToStop) {
         Gdx.app.postRunnable(() -> {
             sceneToStop.pause();
             mainGame.scenes.removeValue(sceneToStop, true);
-            sceneToStop.dispose();
             for (Scene scene : mainGame.scenes) {
                 scene.resume();
             }
+            Processor.post(sceneToStop::dispose);
         });
     }
 }

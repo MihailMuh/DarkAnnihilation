@@ -12,18 +12,15 @@ import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.screens.BackgroundScreen;
-import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.game.Game;
 
 public class Menu extends Scene {
     private final Button[] buttons = new Button[4];
 
-    public Menu(MainGameManager mainGameManager) {
-        super(mainGameManager);
-    }
-
     @Override
-    public void readyAssets() {
+    public void bootAssets(Intent intent) {
+        super.bootAssets(intent);
         mainGameManager.imageHub.loadAtlas(MENU_ATLAS);
     }
 
@@ -39,7 +36,7 @@ public class Menu extends Scene {
         buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
         buttons[1] = new Button("Start", buttons[0].x - buttons[0].width - step, 10,
-                () -> mainGameManager.startScene(new Game(mainGameManager), true));
+                () -> mainGameManager.startScene(new Intent(Game.class), true));
         buttons[2] = new Button("Settings", buttons[0].right() + step, 10, () -> {
         });
         buttons[3] = new Button("Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
