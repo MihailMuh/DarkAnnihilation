@@ -8,23 +8,18 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
-import com.warfare.darkannihilation.FontWrap;
 
 public final class FontHub {
-    private static ImageHub imageHub;
-    private static final GlyphLayout glyph = new GlyphLayout();
+    private final ResourcesManager resourcesManager;
+    public BitmapFont canisMinor, canisMinorHuge;
 
-    public static BitmapFont canisMinor, canisMinorHuge;
-    public static FontWrap buttonFont;
-    public static FontWrap countdownFont;
+    public FontHub(ResourcesManager resourcesManager) {
+        this.resourcesManager = resourcesManager;
 
-    static void prepare(ImageHub imageHub) {
-        FontHub.imageHub = imageHub;
-
-        imageHub.setLoader(FreeTypeFontGenerator.class,
-                new FreeTypeFontGeneratorLoader(imageHub.getFileHandleResolver()));
-        imageHub.setLoader(BitmapFont.class,
-                new FreetypeFontLoader(imageHub.getFileHandleResolver()));
+        resourcesManager.setLoader(FreeTypeFontGenerator.class,
+                new FreeTypeFontGeneratorLoader(resourcesManager.resolver));
+        resourcesManager.setLoader(BitmapFont.class,
+                new FreetypeFontLoader(resourcesManager.resolver));
 
         FreeTypeFontLoaderParameter params = new FreeTypeFontLoaderParameter();
         params.fontFileName = "fonts/canis_minor.ttf";
@@ -36,7 +31,7 @@ public final class FontHub {
         params.fontParameters.shadowOffsetX = 10;
         params.fontParameters.borderWidth = 2.5f;
 
-        imageHub.load("canis_minor.ttf", BitmapFont.class, params);
+        resourcesManager.load("canis_minor.ttf", BitmapFont.class, params);
 
         params = new FreeTypeFontLoaderParameter();
         params.fontFileName = "fonts/canis_minor.ttf";
@@ -49,15 +44,17 @@ public final class FontHub {
         params.fontParameters.shadowOffsetY = 5;
         params.fontParameters.shadowOffsetX = 5;
         params.fontParameters.borderWidth = 2.5f;
-        imageHub.load("canis_minor_huge.ttf", BitmapFont.class, params);
+        resourcesManager.load("canis_minor_huge.ttf", BitmapFont.class, params);
     }
 
-    static void finish() {
-        canisMinor = imageHub.get("canis_minor.ttf", BitmapFont.class);
-        canisMinorHuge = imageHub.get("canis_minor_huge.ttf", BitmapFont.class);
+    public void boot() {
+        canisMinor = resourcesManager.get("canis_minor.ttf", BitmapFont.class);
+        canisMinorHuge = resourcesManager.get("canis_minor_huge.ttf", BitmapFont.class);
     }
 
     public static float resizeFont(BitmapFont font, float maxWidth, String... texts) {
+        GlyphLayout glyph = new GlyphLayout();
+
         if (texts.length != 1) {
             float maxTextWidth = -45366;
             String maxStr = "";

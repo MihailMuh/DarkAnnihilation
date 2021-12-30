@@ -1,25 +1,27 @@
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.utils;
 
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
-import static com.warfare.darkannihilation.systemd.service.Service.print;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class FontWrap {
     private final BitmapFont bitmapFont;
+    private final BitmapFont.BitmapFontData bitmapFontData;
     private final GlyphLayout glyph = new GlyphLayout();
     private final float scale;
 
     public FontWrap(BitmapFont font, float scale) {
         this.scale = scale;
         bitmapFont = font;
+        bitmapFontData = bitmapFont.getData();
     }
 
     private void setText(String text) {
-        bitmapFont.getData().setScale(scale);
+        bitmapFontData.setScale(scale);
         glyph.setText(bitmapFont, text);
-        bitmapFont.getData().setScale(1);
+        bitmapFontData.setScale(1);
     }
 
     public float getTextWidth(String text) {
@@ -32,9 +34,17 @@ public class FontWrap {
         return glyph.height;
     }
 
+    public void setColor(float r, float g, float b, float a) {
+        bitmapFont.setColor(r, g, b, a);
+    }
+
+    public void setColor(Color color) {
+        bitmapFont.setColor(color);
+    }
+
     public void draw(float x, float y, String text) {
-        bitmapFont.getData().setScale(scale);
+        bitmapFontData.setScale(scale);
         bitmapFont.draw(spriteBatch, text, x, y);
-        bitmapFont.getData().setScale(1);
+        bitmapFontData.setScale(1);
     }
 }

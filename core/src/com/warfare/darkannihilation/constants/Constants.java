@@ -5,7 +5,7 @@ public final class Constants {
     public static final byte MILLENNIUM_FALCON_HEALTH = 50;
     public static final float MILLENNIUM_FALCON_SHOOT_TIME = 0.065f;
     public static final short MILLENNIUM_FALCON_SHOTGUN_TIME = 515;
-    public static final byte NUMBER_MILLENNIUM_FALCON_BULLETS = 40;
+    public static final byte NUMBER_MILLENNIUM_FALCON_BULLETS = 30;
     public static final short NUMBER_MILLENNIUM_FALCON_BUCKSHOT = NUMBER_MILLENNIUM_FALCON_BULLETS + 30;
 
     public static final short EMERALD_SHOOT_TIME = 1_300;
@@ -75,20 +75,7 @@ public final class Constants {
     public static final byte TRIPLE_FIGHTER_DAMAGE = 10;
 
     //    explosions
-    public static final byte NUMBER_SKULL_EXPLOSION_IMAGES = 13;
-    public static final byte SKULL_EXPLOSION_FRAME_TIME = 33;
-    public static final byte NUMBER_SKULL_EXPLOSIONS = 3;
-
-    public static final byte NUMBER_DEFAULT_EXPLOSION_IMAGES = 28;
-    public static final byte NUMBER_DEFAULT_LARGE_EXPLOSION = 20;
-    public static final byte NUMBER_DEFAULT_SMALL_EXPLOSION = NUMBER_DEFAULT_LARGE_EXPLOSION + 18;
-
-    public static final byte NUMBER_TRIPLE_EXPLOSION_IMAGES = 23;
-    public static final byte TRIPLE_EXPLOSION_FRAME_TIME = 30;
-    public static final byte NUMBER_TRIPLE_LARGE_EXPLOSION = NUMBER_DEFAULT_SMALL_EXPLOSION + 23;
-    public static final byte NUMBER_TRIPLE_SMALL_EXPLOSION = NUMBER_TRIPLE_LARGE_EXPLOSION + 13;
-
-    public static final int NUMBER_ALL_EXPLOSION = 3 + 23 + 18 + 23 + 13;
+    public static final byte NUMBER_EXPLOSION = 30;
 
     //    screens
     public static final byte LOADING_SCREEN_FRAME_TIME = 45;
@@ -129,13 +116,13 @@ public final class Constants {
     public static final byte BULLET_BOSS_SPEED = 6;
 
     public static final byte BULLET_DAMAGE = 1;
-    public static final short BULLET_SPEED = 770;
+    public static final short BULLET_SPEED = 2000;
 
     public static final byte BUCKSHOT_DAMAGE = 3;
     public static final byte BUCKSHOT_SPEED = 8;
 
     public static final byte BOMB_DAMAGE = 5;
-    public static final byte BOMB_SPEED = 15;
+    public static final short BOMB_SPEED = 1200;
 
     public static final byte NUMBER_BULLETS_ENEMY = 50;
     public static final byte NUMBER_BOMBS = NUMBER_BULLETS_ENEMY + 20;

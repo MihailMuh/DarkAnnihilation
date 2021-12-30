@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.bullet;
 
 import static com.warfare.darkannihilation.constants.Constants.BOMB_DAMAGE;
+import static com.warfare.darkannihilation.constants.Constants.BOMB_SPEED;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,7 +12,6 @@ import com.warfare.darkannihilation.utils.PoolWrap;
 public class Bomb extends BaseBullet {
     public Bomb(TextureAtlas.AtlasRegion texture, PoolWrap<Explosion> explosionPool) {
         super(texture, BOMB_DAMAGE, explosionPool);
-        speedY = 1155;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Bomb extends BaseBullet {
 
     @Override
     public void update() {
-        y -= speedY * delta;
+        y -= BOMB_SPEED * delta;
         if (top() <= 0) {
             visible = false;
         }

@@ -1,10 +1,13 @@
 package com.warfare.darkannihilation.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
 public class AssetManagerWrap extends AssetManager {
+    public FileHandleResolver resolver = getFileHandleResolver();
+
     public void loadAtlas(String path) {
         load(path, TextureAtlas.class);
     }

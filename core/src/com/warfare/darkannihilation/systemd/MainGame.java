@@ -1,9 +1,9 @@
 package com.warfare.darkannihilation.systemd;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.LoadingScreen;
-import com.warfare.darkannihilation.SceneWrap;
+import com.warfare.darkannihilation.hub.FontHub;
+import com.warfare.darkannihilation.hub.ResourcesManager;
+import com.warfare.darkannihilation.scenes.LoadingScene;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.ImageHub;
@@ -11,26 +11,38 @@ import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
+import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.SceneStack;
 
 public class MainGame extends BaseApp {
-    Array<Scene> scenes = new Array<>(new Scene[]{new SceneWrap()});
-    LoadingScreen loadingScreen;
-    private ImageHub imageHub;
+    private ResourcesManager resourcesManager;
     private Frontend frontend;
+
+    final SceneStack sceneStack = new SceneStack();
+    LoadingScene loadingScene;
 
     @Override
     public void create() {
         super.create();
-        imageHub = new ImageHub();
+        resourcesManager = new ResourcesManager();
+        ImageHub imageHub = new ImageHub(resourcesManager);
+        FontHub fontHub = new FontHub(resourcesManager);
 
-        new MainGameManager(imageHub, this).startScene(new Intent(Menu.class), false);
+        Scene menu = new Intent(Menu.class).boot(new MainGameManager(imageHub, fontHub, resourcesManager, this));
+        resourcesManager.finishLoading();
+        imageHub.boot();
+        fontHub.boot();
 
-        frontend = new Frontend(this);
+        menu.create();
+        sceneStack.put(menu);
+        menu.resume();
+
+        frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 1.1f));
 
         Processor.post(() -> {
             Service.sleep(500);
             imageHub.lazyLoading();
-            loadingScreen = new LoadingScreen(imageHub.loadingScreenGIF, imageHub);
+            loadingScene = new LoadingScene(imageHub.loadingScreenGIF, resourcesManager);
         });
     }
 
@@ -38,7 +50,7 @@ public class MainGame extends BaseApp {
     public void render() {
         Watch.update();
 
-        scenes.peek().update();
+        sceneStack.lastScene.update();
 
         frontend.render();
     }
@@ -46,25 +58,25 @@ public class MainGame extends BaseApp {
     @Override
     public void resume() {
         super.resume();
-        Texture.setAssetManager(imageHub);
-        for (Scene scene : scenes) {
+        Texture.setAssetManager(resourcesManager);
+        for (Scene scene : sceneStack) {
             scene.resume();
         }
     }
 
     @Override
     public void pause() {
-        for (Scene scene : scenes) {
+        for (Scene scene : sceneStack) {
             scene.pause();
         }
     }
 
     @Override
     public void dispose() {
-        for (Scene scene : scenes) {
+        for (Scene scene : sceneStack) {
             scene.dispose();
         }
-        imageHub.dispose();
+        resourcesManager.dispose();
         Processor.dispose();
     }
 }

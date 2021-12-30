@@ -2,12 +2,11 @@ package com.warfare.darkannihilation.systemd.game;
 
 import static com.warfare.darkannihilation.constants.Assets.FALCON_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_ATLAS;
-import static com.warfare.darkannihilation.constants.Constants.NUMBER_DEFAULT_LARGE_EXPLOSION;
+import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.abstraction.BaseBullet;
@@ -17,9 +16,9 @@ import com.warfare.darkannihilation.bullet.Bomb;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Vader;
-import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.systemd.Intent;
+import com.warfare.darkannihilation.utils.ArrayG;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
@@ -31,10 +30,10 @@ public class Game extends Scene {
     private Player player;
     private Demoman demoman;
 
-    private final Array<Explosion> explosions = new Array<>(NUMBER_DEFAULT_LARGE_EXPLOSION);
-    private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
-    private final Array<BaseBullet> bulletsEnemy = new Array<>(15);
-    private final Array<Warrior> empire = new Array<>(NUMBER_VADER);
+    private final ArrayG<Explosion> explosions = new ArrayG<>(NUMBER_EXPLOSION, Explosion.class);
+    private final ArrayG<Bullet> bullets = new ArrayG<>(NUMBER_MILLENNIUM_FALCON_BULLETS, Bullet.class);
+    private final ArrayG<BaseBullet> bulletsEnemy = new ArrayG<>(15, BaseBullet.class);
+    private final ArrayG<Warrior> empire = new ArrayG<>(NUMBER_VADER, Warrior.class);
 
     private PoolWrap<Explosion> explosionPool;
     private PoolWrap<Bullet> bulletPool;
@@ -45,8 +44,8 @@ public class Game extends Scene {
     @Override
     public void bootAssets(Intent intent) {
         super.bootAssets(intent);
-        mainGameManager.imageHub.loadAtlas(FIRST_LEVEL_ATLAS);
-        mainGameManager.imageHub.loadAtlas(FALCON_ATLAS);
+        mainGameManager.resourcesManager.loadAtlas(FIRST_LEVEL_ATLAS);
+        mainGameManager.resourcesManager.loadAtlas(FALCON_ATLAS);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class Game extends Scene {
         };
 
         demoman = new Demoman(mainGameManager.imageHub.demomanImg, explosionPool, bombPool);
-        player = new Player(ImageHub.millenniumFalcon, bulletPool, explosionPool);
+        player = new Player(mainGameManager.imageHub.millenniumFalcon, bulletPool, explosionPool);
         screen = new DynamicScreen(mainGameManager.imageHub.starScreenGIF);
 
         for (int i = 0; i < NUMBER_VADER; i++) {

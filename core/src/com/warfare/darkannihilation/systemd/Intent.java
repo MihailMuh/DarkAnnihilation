@@ -15,7 +15,7 @@ public class Intent {
         try {
             scene = (Scene) cls.getConstructor().newInstance();
         } catch (Exception e) {
-            print("Error in intent", e);
+            print("Error in intent", e, e.getCause());
         }
     }
 

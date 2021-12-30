@@ -7,7 +7,6 @@ import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.BaseBullet;
-import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Bullet extends BaseBullet {

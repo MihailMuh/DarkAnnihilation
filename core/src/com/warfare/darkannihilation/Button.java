@@ -1,8 +1,6 @@
 package com.warfare.darkannihilation;
 
 import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
-import static com.warfare.darkannihilation.hub.FontHub.buttonFont;
-import static com.warfare.darkannihilation.hub.FontHub.canisMinor;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
@@ -11,6 +9,7 @@ import com.warfare.darkannihilation.abstraction.BaseButton;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
+import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Button extends BaseButton {
     private Runnable runnable;
@@ -19,6 +18,8 @@ public class Button extends BaseButton {
     private float textY;
     private volatile boolean pressed;
     private float shootTime;
+
+    public static FontWrap buttonFont;
 
     public Button(String name, float X, float Y, Runnable runnable) {
         super(ImageHub.buttonNotPress);
@@ -59,10 +60,10 @@ public class Button extends BaseButton {
     public void render() {
         if (pressed) {
             spriteBatch.draw(ImageHub.buttonPress, x, y, width, height);
-            canisMinor.setColor(Color.LIGHT_GRAY);
+            buttonFont.setColor(Color.LIGHT_GRAY);
         } else {
             spriteBatch.draw(image, x, y, width, height);
-            canisMinor.setColor(255, 255, 255, 1);
+            buttonFont.setColor(255, 255, 255, 1);
         }
 
         buttonFont.draw(textX, textY, text);

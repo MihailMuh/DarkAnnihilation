@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.scenes;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 

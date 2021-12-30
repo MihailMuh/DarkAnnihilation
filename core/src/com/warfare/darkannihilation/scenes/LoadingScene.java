@@ -1,22 +1,22 @@
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.scenes;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.warfare.darkannihilation.hub.ResourcesManager;
 import com.warfare.darkannihilation.screens.BackgroundScreen;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.AnimationG;
 
-public class LoadingScreen extends SceneWrap {
-    private final AssetManager assetManager;
+public class LoadingScene extends SceneWrap {
+    private final ResourcesManager resourcesManager;
     private Runnable runnable;
     private boolean finishLoading;
 
-    public LoadingScreen(AnimationG animation, AssetManager assetManager) {
-        this.assetManager = assetManager;
+    public LoadingScene(AnimationG animation, ResourcesManager resourcesManager) {
+        this.resourcesManager = resourcesManager;
         screen = new BackgroundScreen(animation);
     }
 
-    public LoadingScreen resume(Runnable runnable) {
+    public LoadingScene resume(Runnable runnable) {
         finishLoading = true;
         this.runnable = runnable;
         Processor.post(() -> {
@@ -30,7 +30,7 @@ public class LoadingScreen extends SceneWrap {
     public void render() {
         screen.render();
 
-        if (!finishLoading && assetManager.update()) {
+        if (!finishLoading && resourcesManager.update()) {
             finishLoading = true;
             Processor.post(runnable);
         }

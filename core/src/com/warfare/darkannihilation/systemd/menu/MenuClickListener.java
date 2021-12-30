@@ -1,7 +1,7 @@
 package com.warfare.darkannihilation.systemd.menu;
 
 import com.warfare.darkannihilation.Button;
-import com.warfare.darkannihilation.systemd.BaseClickListener;
+import com.warfare.darkannihilation.abstraction.BaseClickListener;
 
 class MenuClickListener extends BaseClickListener {
     private final Button[] buttons;

@@ -1,7 +1,6 @@
 package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.warfare.darkannihilation.systemd.BaseClickListener;
 import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 

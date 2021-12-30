@@ -1,14 +1,12 @@
 package com.warfare.darkannihilation.systemd.game;
 
-import static com.warfare.darkannihilation.hub.FontHub.canisMinorHuge;
-import static com.warfare.darkannihilation.hub.FontHub.countdownFont;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.warfare.darkannihilation.FontWrap;
+import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.Player;
-import com.warfare.darkannihilation.SceneTop;
+import com.warfare.darkannihilation.scenes.SceneTop;
 import com.warfare.darkannihilation.abstraction.BaseScreen;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.systemd.Intent;
@@ -19,13 +17,15 @@ public class Countdown extends SceneTop {
     private Player player;
     private String text = "3";
     private float textX, textY;
+    private FontWrap countdownFont;
 
     @Override
     public void bootAssets(Intent intent) {
         super.bootAssets(intent);
         player = (Player) intent.get("player");
         screen = (BaseScreen) intent.get("screen");
-        countdownFont = new FontWrap(canisMinorHuge, FontHub.resizeFont(canisMinorHuge, SCREEN_WIDTH - 400, "SHOOT!"));
+        countdownFont = new FontWrap(mainGameManager.fontHub.canisMinorHuge,
+                FontHub.resizeFont(mainGameManager.fontHub.canisMinorHuge, SCREEN_WIDTH - 400, "SHOOT!"));
     }
 
     private void setTextXY() {
