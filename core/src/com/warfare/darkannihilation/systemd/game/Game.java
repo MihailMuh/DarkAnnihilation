@@ -30,10 +30,10 @@ public class Game extends Scene {
     private Player player;
     private Demoman demoman;
 
-    private final ArrayG<Explosion> explosions = new ArrayG<>(NUMBER_EXPLOSION, Explosion.class);
-    private final ArrayG<Bullet> bullets = new ArrayG<>(NUMBER_MILLENNIUM_FALCON_BULLETS, Bullet.class);
-    private final ArrayG<BaseBullet> bulletsEnemy = new ArrayG<>(15, BaseBullet.class);
-    private final ArrayG<Warrior> empire = new ArrayG<>(NUMBER_VADER, Warrior.class);
+    private final ArrayG<Explosion> explosions = new ArrayG<>(NUMBER_EXPLOSION);
+    private final ArrayG<Bullet> bullets = new ArrayG<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
+    private final ArrayG<BaseBullet> bulletsEnemy = new ArrayG<>(15);
+    private final ArrayG<Warrior> empire = new ArrayG<>(NUMBER_VADER);
 
     private PoolWrap<Explosion> explosionPool;
     private PoolWrap<Bullet> bulletPool;
@@ -103,7 +103,7 @@ public class Game extends Scene {
 
     @Override
     public void update() {
-        float moveAll = player.speedX / 3;
+        double moveAll = player.speedX / 2.8;
 
         screen.x -= moveAll;
 

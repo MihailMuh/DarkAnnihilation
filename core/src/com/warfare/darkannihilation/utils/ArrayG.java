@@ -1,17 +1,17 @@
 package com.warfare.darkannihilation.utils;
 
-import com.badlogic.gdx.utils.reflect.ArrayReflection;
-
 import java.util.Iterator;
 
 public class ArrayG<T> implements Iterable<T>, Iterator<T> {
-    public T[] items;
-    public int size, capacity, index;
+    private int size, index;
 
-    public ArrayG(int capacity, Class<?> cls) {
+    public T[] items;
+    public int capacity;
+
+    public ArrayG(int capacity) {
         this.capacity = capacity;
         if (capacity <= 10_000) capacity *= 2;
-        items = (T[]) ArrayReflection.newInstance(cls, capacity);
+        items = (T[]) new Object[capacity];
     }
 
     public void add(T value) {

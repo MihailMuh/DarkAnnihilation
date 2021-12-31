@@ -21,7 +21,7 @@ public class SceneStack implements Iterable<Scene>, Iterator<Scene> {
     }
 
     public void pop() {
-        scenes[size--] = null;
+        scenes[--size] = null;
         lastScene = scenes[size - 1];
     }
 
