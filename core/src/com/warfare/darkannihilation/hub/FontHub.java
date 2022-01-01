@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
+import com.warfare.darkannihilation.abstraction.BaseHub;
 
-public final class FontHub {
-    private final ResourcesManager resourcesManager;
+public class FontHub extends BaseHub {
     public BitmapFont canisMinor, canisMinorHuge;
 
     public FontHub(ResourcesManager resourcesManager) {
-        this.resourcesManager = resourcesManager;
+        super(resourcesManager);
 
         resourcesManager.setLoader(FreeTypeFontGenerator.class,
                 new FreeTypeFontGeneratorLoader(resourcesManager.resolver));
@@ -47,6 +47,7 @@ public final class FontHub {
         resourcesManager.load("canis_minor_huge.ttf", BitmapFont.class, params);
     }
 
+    @Override
     public void boot() {
         canisMinor = resourcesManager.get("canis_minor.ttf", BitmapFont.class);
         canisMinorHuge = resourcesManager.get("canis_minor_huge.ttf", BitmapFont.class);

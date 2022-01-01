@@ -7,6 +7,7 @@ import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.AggressiveSprite;
 import com.warfare.darkannihilation.abstraction.Warrior;
@@ -14,14 +15,16 @@ import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Player extends Warrior {
+    private final Sound sound;
     private final PoolWrap<Bullet> bulletPool;
     private final int speed;
     private float endX, endY;
     private float shootTime;
 
-    public Player(AtlasRegion texture, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+    public Player(AtlasRegion texture, Sound sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
         super(texture, MILLENNIUM_FALCON_HEALTH, 10000, HALF_SCREEN_HEIGHT, explosionPool);
         this.bulletPool = bulletPool;
+        this.sound = sound;
 
         speed = 20;
 
@@ -37,6 +40,8 @@ public class Player extends Warrior {
             bulletPool.obtain().start(X - 7, Y);
             bulletPool.obtain().start(X, Y);
             bulletPool.obtain().start(X + 7, Y);
+
+            sound.play(0.17f);
         }
     }
 

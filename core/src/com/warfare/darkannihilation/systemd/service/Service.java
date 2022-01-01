@@ -26,6 +26,10 @@ public final class Service {
         }
     }
 
+    public static void printErr(String comment, Exception e) {
+        print(comment, e.getStackTrace());
+    }
+
     public static void sleep(int millis) {
         try {
             Thread.sleep(millis);

@@ -3,6 +3,7 @@ package com.warfare.darkannihilation.systemd;
 import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ResourcesManager;
+import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.scenes.LoadingScene;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -27,15 +28,15 @@ public class MainGame extends BaseApp {
         resourcesManager = new ResourcesManager();
         ImageHub imageHub = new ImageHub(resourcesManager);
         FontHub fontHub = new FontHub(resourcesManager);
+        SoundHub soundHub = new SoundHub(resourcesManager);
 
-        Scene menu = new Intent(Menu.class).boot(new MainGameManager(imageHub, fontHub, resourcesManager, this));
+        Scene menu = new Intent(Menu.class).boot(new MainGameManager(imageHub, fontHub, soundHub, resourcesManager, this));
         resourcesManager.finishLoading();
         imageHub.boot();
         fontHub.boot();
 
         menu.create();
         sceneStack.put(menu);
-        menu.resume();
 
         frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 1.1f));
 
@@ -44,6 +45,8 @@ public class MainGame extends BaseApp {
             imageHub.lazyLoading();
             loadingScene = new LoadingScene(imageHub.loadingScreenGIF, resourcesManager);
         });
+
+        resume();
     }
 
     @Override
@@ -57,7 +60,6 @@ public class MainGame extends BaseApp {
 
     @Override
     public void resume() {
-        super.resume();
         Texture.setAssetManager(resourcesManager);
         for (Scene scene : sceneStack) {
             scene.resume();
@@ -73,9 +75,6 @@ public class MainGame extends BaseApp {
 
     @Override
     public void dispose() {
-        for (Scene scene : sceneStack) {
-            scene.dispose();
-        }
         resourcesManager.dispose();
         Processor.dispose();
     }

@@ -6,10 +6,10 @@ import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.warfare.darkannihilation.abstraction.BaseHub;
 import com.warfare.darkannihilation.utils.AnimationG;
 
-public final class ImageHub {
-    private final ResourcesManager resourcesManager;
+public class ImageHub extends BaseHub {
     private TextureAtlas commonAtlas;
     private TextureAtlas levelAtlas, characterAtlas;
 
@@ -23,11 +23,12 @@ public final class ImageHub {
     public static AtlasRegion buttonPress, buttonNotPress;
 
     public ImageHub(ResourcesManager resourcesManager) {
-        this.resourcesManager = resourcesManager;
+        super(resourcesManager);
 
         resourcesManager.loadAtlas("common.atlas");
     }
 
+    @Override
     public void boot() {
         commonAtlas = resourcesManager.get("common.atlas");
     }

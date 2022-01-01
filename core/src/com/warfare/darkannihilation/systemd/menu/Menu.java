@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.systemd.menu;
 
 import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
+import static com.warfare.darkannihilation.constants.Assets.MENU_MUSIC;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
@@ -20,11 +21,13 @@ public class Menu extends Scene {
     public void bootAssets(Intent intent) {
         super.bootAssets(intent);
         mainGameManager.resourcesManager.loadAtlas(MENU_ATLAS);
+        mainGameManager.resourcesManager.loadMusic(MENU_MUSIC);
     }
 
     @Override
     public void create() {
         mainGameManager.imageHub.getMenuImages();
+        mainGameManager.soundHub.getMenuSounds();
 
         screen = new BackgroundScreen(mainGameManager.imageHub.menuScreenGIF);
 
@@ -45,6 +48,12 @@ public class Menu extends Scene {
     }
 
     @Override
+    public void resume() {
+        mainGameManager.soundHub.menuMusic.play();
+        mainGameManager.soundHub.menuMusic.setLooping(true);
+    }
+
+    @Override
     public void render() {
         screen.render();
 
@@ -56,5 +65,6 @@ public class Menu extends Scene {
     @Override
     public void dispose() {
         mainGameManager.imageHub.disposeMenuImages();
+        mainGameManager.soundHub.disposeMenuSounds();
     }
 }

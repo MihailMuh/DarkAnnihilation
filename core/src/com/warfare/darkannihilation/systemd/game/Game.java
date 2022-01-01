@@ -46,11 +46,13 @@ public class Game extends Scene {
         super.bootAssets(intent);
         mainGameManager.resourcesManager.loadAtlas(FIRST_LEVEL_ATLAS);
         mainGameManager.resourcesManager.loadAtlas(FALCON_ATLAS);
+        mainGameManager.soundHub.loadGameSounds();
     }
 
     @Override
     public void create() {
         mainGameManager.imageHub.getGameImages();
+        mainGameManager.soundHub.getGameSounds();
 
         explosionPool = new PoolWrap<Explosion>(explosions) {
             @Override
@@ -72,7 +74,7 @@ public class Game extends Scene {
         };
 
         demoman = new Demoman(mainGameManager.imageHub.demomanImg, explosionPool, bombPool);
-        player = new Player(mainGameManager.imageHub.millenniumFalcon, bulletPool, explosionPool);
+        player = new Player(mainGameManager.imageHub.millenniumFalcon, mainGameManager.soundHub.laserSound, bulletPool, explosionPool);
         screen = new DynamicScreen(mainGameManager.imageHub.starScreenGIF);
 
         for (int i = 0; i < NUMBER_VADER; i++) {
@@ -175,5 +177,6 @@ public class Game extends Scene {
     @Override
     public void dispose() {
         mainGameManager.imageHub.disposeGameImages();
+        mainGameManager.soundHub.disposeGameSounds();
     }
 }

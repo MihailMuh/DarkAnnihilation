@@ -1,7 +1,12 @@
 package com.warfare.darkannihilation.utils;
 
+import static com.warfare.darkannihilation.systemd.service.Service.printErr;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
@@ -10,6 +15,14 @@ public class AssetManagerWrap extends AssetManager {
 
     public void loadAtlas(String path) {
         load(path, TextureAtlas.class);
+    }
+
+    public void loadSound(String path) {
+        load(path, Sound.class);
+    }
+
+    public void loadMusic(String path) {
+        load(path, Music.class);
     }
 
     public TextureAtlas.AtlasRegion[] getAtlasRegions(String path, String name) {
@@ -29,5 +42,20 @@ public class AssetManagerWrap extends AssetManager {
         }
 
         return atlasRegions.toArray(TextureAtlas.AtlasRegion.class);
+    }
+
+    @Override
+    public synchronized void unload(String fileName) {
+        try {
+            super.unload(fileName);
+        } catch (Exception e) {
+            printErr("Error in assetManagerWrap", e);
+            Gdx.app.postRunnable(() -> super.unload(fileName));
+        }
+    }
+
+    @Override
+    public void finishLoading() {
+        while (!update()) ;
     }
 }

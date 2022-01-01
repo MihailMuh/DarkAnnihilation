@@ -7,6 +7,7 @@ import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.hub.ResourcesManager;
+import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 
@@ -15,12 +16,16 @@ public class MainGameManager {
     public final ResourcesManager resourcesManager;
     public final ImageHub imageHub;
     public final FontHub fontHub;
+    public final SoundHub soundHub;
+
     public final MainGame mainGame;
 
-    public MainGameManager(ImageHub imageHub, FontHub fontHub, ResourcesManager resourcesManager, MainGame mainGame) {
+    public MainGameManager(ImageHub imageHub, FontHub fontHub, SoundHub soundHub, ResourcesManager resourcesManager, MainGame mainGame) {
         this.imageHub = imageHub;
         this.fontHub = fontHub;
         this.resourcesManager = resourcesManager;
+        this.soundHub = soundHub;
+
         this.mainGame = mainGame;
     }
 

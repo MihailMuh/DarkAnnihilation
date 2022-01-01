@@ -7,8 +7,8 @@ import com.warfare.darkannihilation.systemd.MainGame;
 public class DesktopLauncher {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.backgroundFPS = 0;
-        config.foregroundFPS = 0;
+        config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
+        config.useGL30 = true;
 
         new LwjglApplication(new MainGame(), config);
     }
