@@ -1,13 +1,17 @@
 package com.warfare.darkannihilation.abstraction;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.ApplicationAdapter;
 import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.utils.ClickListener;
 
-public abstract class Scene implements ApplicationListener {
+public abstract class Scene extends ApplicationAdapter {
     protected MainGameManager mainGameManager;
-    protected BaseClickListener clickListener;
     protected BaseScreen screen;
+    protected ClickListener clickListener;
+
+    public boolean isShadow = false;
 
     public void bootAssets(Intent intent) {
         this.mainGameManager = intent.gameManager;
@@ -17,14 +21,7 @@ public abstract class Scene implements ApplicationListener {
     }
 
     @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void resize(int width, int height) {
+    public void dispose() {
+        Processor.multiProcessor.removeProcessor(clickListener);
     }
 }

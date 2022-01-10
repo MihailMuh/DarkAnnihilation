@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation.hub;
 
-import com.warfare.darkannihilation.utils.AssetManagerWrap;
+import com.warfare.darkannihilation.utils.AssetManagerSuper;
 
-public class ResourcesManager extends AssetManagerWrap {
+public class ResourcesManager extends AssetManagerSuper {
 }

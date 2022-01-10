@@ -22,19 +22,20 @@ public final class Service {
             print(stringBuilder.deleteCharAt(stringBuilder.length - 1).toString());
             stringBuilder.clear();
         } catch (Exception exception) {
-            print("Error When Log:", exception);
+            printErr("Error When Log:", exception);
         }
     }
 
     public static void printErr(String comment, Exception e) {
-        print(comment, e.getStackTrace());
+        print(comment);
+        e.printStackTrace();
     }
 
     public static void sleep(int millis) {
         try {
             Thread.sleep(millis);
         } catch (Exception e) {
-            print("Error When Sleep:", e);
+            printErr("Error When Sleep:", e);
             sleep(millis);
         }
     }

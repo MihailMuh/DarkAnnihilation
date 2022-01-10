@@ -1,5 +1,7 @@
 package com.warfare.darkannihilation;
 
+import static android.hardware.SensorManager.SENSOR_DELAY_FASTEST;
+
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -17,6 +19,8 @@ public class AndroidLauncher extends AndroidApplication {
         config.useGyroscope = false;
         config.hideStatusBar = true;
         config.useImmersiveMode = true;
+        config.touchSleepTime = 0;
+        config.sensorDelay = SENSOR_DELAY_FASTEST;
 
         initialize(new MainGame(), config);
     }

@@ -6,6 +6,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.Button;
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
@@ -39,12 +40,13 @@ public class Menu extends Scene {
         buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
         buttons[1] = new Button("Start", buttons[0].x - buttons[0].width - step, 10,
-                () -> mainGameManager.startScene(new Intent(Game.class), true));
+                () -> mainGameManager.startScene(new Intent(mainGameManager, Game.class), true));
         buttons[2] = new Button("Settings", buttons[0].right() + step, 10, () -> {
         });
         buttons[3] = new Button("Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
 
         clickListener = new MenuClickListener(buttons);
+        Processor.multiProcessor.insertProcessor(clickListener);
     }
 
     @Override
@@ -64,6 +66,7 @@ public class Menu extends Scene {
 
     @Override
     public void dispose() {
+        super.dispose();
         mainGameManager.imageHub.disposeMenuImages();
         mainGameManager.soundHub.disposeMenuSounds();
     }

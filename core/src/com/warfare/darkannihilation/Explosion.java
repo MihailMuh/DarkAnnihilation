@@ -10,13 +10,13 @@ import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
 import com.warfare.darkannihilation.abstraction.BaseSprite;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.utils.AnimationG;
+import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class Explosion extends BaseSprite {
-    private final AnimationG animationTriple;
-    private final AnimationG animationDefault;
-    private final AnimationG animationHuge;
-    private AnimationG mainAnim;
+    private final AnimationSuper animationTriple;
+    private final AnimationSuper animationDefault;
+    private final AnimationSuper animationHuge;
+    private AnimationSuper mainAnim;
     private int additionalWidth, additionalHeight;
 
     private float timer;

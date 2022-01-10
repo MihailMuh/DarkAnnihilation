@@ -2,8 +2,8 @@ package com.warfare.darkannihilation.abstraction;
 
 import static com.warfare.darkannihilation.systemd.Frontend.camera;
 import static com.warfare.darkannihilation.systemd.service.Processor.postOnTouch;
-import static com.warfare.darkannihilation.systemd.service.Windows.HARDCORE_HEIGHT;
-import static com.warfare.darkannihilation.systemd.service.Windows.HARDCORE_WIDTH;
+import static com.warfare.darkannihilation.systemd.service.Windows.PHONE_HEIGHT;
+import static com.warfare.darkannihilation.systemd.service.Windows.PHONE_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -55,7 +55,7 @@ public abstract class BaseClickListener {
     private synchronized void onTouch() {
         touchPos.x = Gdx.input.getX(0);
         touchPos.y = Gdx.input.getY(0);
-        camera.unproject(touchPos, 0, 0, HARDCORE_WIDTH, HARDCORE_HEIGHT);
+        camera.unproject(touchPos, 0, 0, PHONE_WIDTH, PHONE_HEIGHT);
     }
 
     public void touchDown(float x, float y, int pointer) {

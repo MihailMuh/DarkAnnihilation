@@ -9,20 +9,20 @@ import com.badlogic.gdx.graphics.g2d.CpuSpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.utils.FontWrap;
-import com.warfare.darkannihilation.utils.SceneStack;
+import com.warfare.darkannihilation.utils.ScenesList;
 
 public class Frontend implements Disposable {
     private static final int x = (int) (SCREEN_WIDTH - 200);
-    private static final int y = (int) (SCREEN_HEIGHT - 100);
+    private static final int y = SCREEN_HEIGHT - 100;
 
     public static final OrthographicCamera camera = new OrthographicCamera();
     public static final CpuSpriteBatch spriteBatch = new CpuSpriteBatch(300);
 
-    private final SceneStack sceneStack;
+    private final ScenesList scenesList;
     private final FontWrap fontWrap;
 
     Frontend(MainGame mainGame, FontWrap fontWrap) {
-        sceneStack = mainGame.sceneStack;
+        scenesList = mainGame.scenesList;
         this.fontWrap = fontWrap;
 
         camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -32,7 +32,7 @@ public class Frontend implements Disposable {
     public void render() {
         spriteBatch.begin();
 
-        for (Scene scene : sceneStack) {
+        for (Scene scene : scenesList) {
             scene.render();
         }
 

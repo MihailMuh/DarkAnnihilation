@@ -10,7 +10,7 @@ public class SceneStack implements Iterable<Scene>, Iterator<Scene> {
 
     public Scene lastScene;
 
-    public void put(Scene newScene) {
+    public void push(Scene newScene) {
         scenes[size++] = newScene;
         lastScene = newScene;
     }
@@ -23,6 +23,25 @@ public class SceneStack implements Iterable<Scene>, Iterator<Scene> {
     public void pop() {
         scenes[--size] = null;
         lastScene = scenes[size - 1];
+    }
+
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            scenes[i] = null;
+        }
+        size = 0;
+        lastScene = null;
+    }
+
+    public void remove(Scene scene) {
+        for (int i = 0; i < size; i++) {
+            if (scenes[i] == scene) {
+                size--;
+                System.arraycopy(scenes, i + 1, scenes, i, size - i);
+                scenes[size] = null;
+                break;
+            }
+        }
     }
 
     @Override

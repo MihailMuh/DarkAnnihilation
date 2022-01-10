@@ -57,7 +57,7 @@ public class FontHub extends BaseHub {
         GlyphLayout glyph = new GlyphLayout();
 
         if (texts.length != 1) {
-            float maxTextWidth = -45366;
+            float maxTextWidth = -1;
             String maxStr = "";
 
             for (String text : texts) {

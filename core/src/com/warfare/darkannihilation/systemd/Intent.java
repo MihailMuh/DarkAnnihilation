@@ -1,33 +1,35 @@
 package com.warfare.darkannihilation.systemd;
 
-import static com.warfare.darkannihilation.systemd.service.Service.print;
+import static com.warfare.darkannihilation.systemd.service.Service.printErr;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 
 import java.util.HashMap;
 
 public class Intent {
-    private final HashMap<String, Object> map = new HashMap<>(3);
+    private HashMap<String, Object> map;
     private Scene scene;
     public MainGameManager gameManager;
 
-    public Intent(Class<?> cls) {
+    public Intent(MainGameManager mainGameManager, Class<?> cls) {
+        this(mainGameManager, cls, new Parameters());
+    }
+
+    public Intent(MainGameManager mainGameManager, Class<?> cls, Parameters parameters) {
         try {
+            gameManager = mainGameManager;
+            map = parameters.map;
+
             scene = (Scene) cls.getConstructor().newInstance();
+            scene.bootAssets(this);
         } catch (Exception e) {
-            print("Error in intent", e, e.getCause());
+            printErr("Error in intent", e);
         }
     }
 
-    public Scene boot(MainGameManager mainGameManager) {
-        gameManager = mainGameManager;
-        scene.bootAssets(this);
+    Scene getScene() {
+        scene.create();
         return scene;
-    }
-
-    public Intent put(String key, Object value) {
-        map.put(key, value);
-        return this;
     }
 
     public Object get(String key) {

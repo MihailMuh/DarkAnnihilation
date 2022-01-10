@@ -2,18 +2,19 @@ package com.warfare.darkannihilation.utils;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
-public class AnimationG {
+public class AnimationSuper {
     private final AtlasRegion[] images;
-    private final int len_1;
+    private final int lastElem;
     private final float frameDuration;
+
     public final int size;
     public int index;
 
-    public AnimationG(AtlasRegion[] images, float frameDuration) {
+    public AnimationSuper(AtlasRegion[] images, float frameDuration) {
         this.images = images;
         this.frameDuration = frameDuration;
-        len_1 = images.length - 1;
         size = images.length;
+        lastElem = size - 1;
     }
 
     public AtlasRegion get(float time) {
@@ -21,10 +22,10 @@ public class AnimationG {
         if (index < size) {
             return images[index];
         }
-        return images[len_1];
+        return images[lastElem];
     }
 
     public boolean isFinished() {
-        return index >= len_1;
+        return index >= lastElem;
     }
 }

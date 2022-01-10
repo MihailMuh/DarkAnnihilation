@@ -7,6 +7,7 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.Player;
 import com.warfare.darkannihilation.abstraction.BaseBullet;
@@ -18,7 +19,8 @@ import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.systemd.Intent;
-import com.warfare.darkannihilation.utils.ArrayG;
+import com.warfare.darkannihilation.systemd.Parameters;
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
@@ -30,16 +32,17 @@ public class Game extends Scene {
     private Player player;
     private Demoman demoman;
 
-    private final ArrayG<Explosion> explosions = new ArrayG<>(NUMBER_EXPLOSION);
-    private final ArrayG<Bullet> bullets = new ArrayG<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
-    private final ArrayG<BaseBullet> bulletsEnemy = new ArrayG<>(15);
-    private final ArrayG<Warrior> empire = new ArrayG<>(NUMBER_VADER);
+    private final Array<Explosion> explosions = new Array<>(NUMBER_EXPLOSION);
+    private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
+    private final Array<BaseBullet> bulletsEnemy = new Array<>(15);
+    private final Array<Warrior> empire = new Array<>(NUMBER_VADER);
 
     private PoolWrap<Explosion> explosionPool;
     private PoolWrap<Bullet> bulletPool;
     private PoolWrap<BaseBullet> bombPool;
 
     private boolean firstRun = true;
+    private float moveAll;
 
     @Override
     public void bootAssets(Intent intent) {
@@ -85,8 +88,7 @@ public class Game extends Scene {
         frontend = new Frontend(player, screen, explosions, bullets, empire, bulletsEnemy);
 
         clickListener = new GameClickListener(player, mainGameManager);
-
-        mainGameManager.startTopScene(new Intent(Countdown.class).put("player", player).put("screen", screen));
+        Processor.multiProcessor.insertProcessor(clickListener);
     }
 
     @Override
@@ -95,6 +97,7 @@ public class Game extends Scene {
             gameTask.start();
         } else {
             firstRun = false;
+            mainGameManager.startTopScene(new Intent(mainGameManager, Countdown.class, new Parameters("function", (Runnable) this::baseUpdate)));
         }
     }
 
@@ -103,13 +106,18 @@ public class Game extends Scene {
         gameTask.stop();
     }
 
-    @Override
-    public void update() {
-        double moveAll = player.speedX / 2.8;
+    private void baseUpdate() {
+        moveAll = player.speedX / 2.8f;
 
         screen.x -= moveAll;
 
         player.update();
+    }
+
+    @Override
+    public void update() {
+        baseUpdate();
+
         player.shoot();
 
         for (Warrior enemy : empire) {
@@ -176,6 +184,7 @@ public class Game extends Scene {
 
     @Override
     public void dispose() {
+        super.dispose();
         mainGameManager.imageHub.disposeGameImages();
         mainGameManager.soundHub.disposeGameSounds();
     }

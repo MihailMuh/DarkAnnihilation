@@ -7,20 +7,23 @@ import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.BaseHub;
-import com.warfare.darkannihilation.utils.AnimationG;
+import com.warfare.darkannihilation.screens.BackgroundScreen;
+import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class ImageHub extends BaseHub {
     private TextureAtlas commonAtlas;
     private TextureAtlas levelAtlas, characterAtlas;
 
-    public AnimationG loadingScreenGIF, starScreenGIF, menuScreenGIF;
-    public AnimationG defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
+    public static BackgroundScreen loadingScreen;
+    public AnimationSuper starScreenGIF, menuScreenGIF;
+    public AnimationSuper defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
 
     public static AtlasRegion[] vadersImages;
+    public static AtlasRegion buttonPress, buttonNotPress;
     public AtlasRegion demomanImg, bombImg, factoryImg, minionImg;
     public AtlasRegion millenniumFalcon;
     public AtlasRegion bulletImg;
-    public static AtlasRegion buttonPress, buttonNotPress;
+    public AtlasRegion blackColor;
 
     public ImageHub(ResourcesManager resourcesManager) {
         super(resourcesManager);
@@ -34,16 +37,17 @@ public class ImageHub extends BaseHub {
     }
 
     public void lazyLoading() {
-        defaultExplosionAnim = new AnimationG(resourcesManager.getAtlasRegions(commonAtlas, "default_explosion"), 0.02f);
-        hugeExplosionAnim = new AnimationG(resourcesManager.getAtlasRegions(commonAtlas, "skull_explosion"), 0.05f);
-        tripleExplosionAnim = new AnimationG(resourcesManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.02f);
-        loadingScreenGIF = new AnimationG(resourcesManager.getAtlasRegions(commonAtlas, "loading"), 0.05f);
+        defaultExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "default_explosion"), 0.02f);
+        hugeExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "skull_explosion"), 0.05f);
+        tripleExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.02f);
+        loadingScreen = new BackgroundScreen(new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "loading"), 0.05f));
+        blackColor = commonAtlas.findRegion("dark_null");
     }
 
     public void getMenuImages() {
         buttonPress = commonAtlas.findRegion("button_press");
         buttonNotPress = commonAtlas.findRegion("button_not_press");
-        menuScreenGIF = new AnimationG(resourcesManager.getAtlasRegions(MENU_ATLAS, "menu_screen"), 0.11f);
+        menuScreenGIF = new AnimationSuper(resourcesManager.getAtlasRegions(MENU_ATLAS, "menu_screen"), 0.11f);
     }
 
     public void disposeMenuImages() {
@@ -66,7 +70,7 @@ public class ImageHub extends BaseHub {
         bombImg = levelAtlas.findRegion("bomb");
         factoryImg = levelAtlas.findRegion("factory");
         minionImg = levelAtlas.findRegion("minion");
-        starScreenGIF = new AnimationG(resourcesManager.getAtlasRegions(levelAtlas, "star_screen"), 0.07f);
+        starScreenGIF = new AnimationSuper(resourcesManager.getAtlasRegions(levelAtlas, "star_screen"), 0.07f);
     }
 
     public void disposeGameImages() {

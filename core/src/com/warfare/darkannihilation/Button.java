@@ -43,6 +43,7 @@ public class Button extends BaseButton {
         if (time - shootTime >= BUTTON_CLICK_TIME) {
             shootTime = time;
 
+            pressed = false;
             if (checkClick(X, Y)) {
                 pressed = true;
                 Service.sleep(160);

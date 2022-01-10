@@ -199,6 +199,8 @@ loading
 loading
 	index: 7
 	bounds: 1002, 0, 1000, 500
+dark_null
+	bounds: 0, 15, 10, 5	
 
 common3.png
 	size: 2048, 2048

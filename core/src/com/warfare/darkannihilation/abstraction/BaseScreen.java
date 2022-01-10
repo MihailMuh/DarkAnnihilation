@@ -4,15 +4,15 @@ import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.warfare.darkannihilation.utils.AnimationG;
+import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public abstract class BaseScreen {
-    private final AnimationG animation;
+    private final AnimationSuper animation;
     private final float width;
     private float time = 0;
     public float x;
 
-    public BaseScreen(AnimationG animation, float width, float X) {
+    public BaseScreen(AnimationSuper animation, float width, float X) {
         this.animation = animation;
         this.width = width;
         x = X;

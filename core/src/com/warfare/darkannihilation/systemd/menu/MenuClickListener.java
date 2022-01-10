@@ -1,27 +1,28 @@
 package com.warfare.darkannihilation.systemd.menu;
 
 import com.warfare.darkannihilation.Button;
-import com.warfare.darkannihilation.abstraction.BaseClickListener;
+import com.warfare.darkannihilation.utils.ClickListener;
 
-class MenuClickListener extends BaseClickListener {
+class MenuClickListener extends ClickListener {
     private final Button[] buttons;
 
     MenuClickListener(Button[] buttons) {
-        super();
         this.buttons = buttons;
     }
 
     @Override
-    public void touchUp(float x, float y, int pointer) {
+    public boolean touchUp(float x, float y, int pointer) {
         for (Button button : buttons) {
             button.onClick(x, y);
         }
+        return true;
     }
 
     @Override
-    public void touchDragged(float x, float y, int pointer) {
+    public boolean touchDragged(float x, float y, int pointer) {
         for (Button button : buttons) {
             button.sweep(x, y);
         }
+        return false;
     }
 }
