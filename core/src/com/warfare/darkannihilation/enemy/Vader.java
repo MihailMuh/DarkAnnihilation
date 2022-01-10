@@ -17,7 +17,7 @@ public class Vader extends Warrior {
     private AtlasRegion img;
 
     public Vader(PoolWrap<Explosion> explosionPool) {
-        super(ImageHub.vadersImages[0], VADER_HEALTH, VADER_DAMAGE, explosionPool);
+        super(ImageHub.vadersImages[0], VADER_HEALTH, VADER_DAMAGE, 1, explosionPool);
     }
 
     @Override

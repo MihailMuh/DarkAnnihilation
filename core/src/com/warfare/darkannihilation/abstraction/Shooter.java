@@ -10,19 +10,19 @@ public abstract class Shooter extends Warrior {
     protected float lastShot;
     protected float shootTime;
 
-    public Shooter(TextureAtlas.AtlasRegion texture, int maxHealth, int damage, float shootTime, PoolWrap<Explosion> explosionPool) {
-        super(texture, maxHealth, damage, explosionPool);
+    public Shooter(TextureAtlas.AtlasRegion texture, int maxHealth, int damage, float shootTime, int killSCore, PoolWrap<Explosion> explosionPool) {
+        super(texture, maxHealth, damage, killSCore, explosionPool);
         this.shootTime = shootTime;
     }
 
-    public Shooter(TextureAtlas.AtlasRegion texture, int maxHealth, int damage, float startY, float shootTime, PoolWrap<Explosion> explosionPool) {
-        super(texture, maxHealth, damage, startY, explosionPool);
+    public Shooter(TextureAtlas.AtlasRegion texture, int maxHealth, int damage, float startY, float shootTime, int killSCore, PoolWrap<Explosion> explosionPool) {
+        super(texture, maxHealth, damage, startY, killSCore, explosionPool);
         this.shootTime = shootTime;
     }
 
     protected abstract void shot();
 
-    protected void shooting() {
+    public void shooting() {
         if (time - lastShot >= shootTime) {
             lastShot = time;
 

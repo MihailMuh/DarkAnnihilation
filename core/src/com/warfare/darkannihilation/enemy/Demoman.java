@@ -20,7 +20,7 @@ public class Demoman extends Shooter {
     private boolean goLeft;
 
     public Demoman(AtlasRegion texture, PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bombPool) {
-        super(texture, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 0, explosionPool);
+        super(texture, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 0, 35, explosionPool);
         this.bombPool = bombPool;
 
         startY = HALF_SCREEN_HEIGHT - height;

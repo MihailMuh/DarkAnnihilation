@@ -51,15 +51,19 @@ public abstract class AggressiveSprite extends LiveSprite {
     protected void explodeSmall() {
         explosionPool.obtain().start(centerX(), centerY(), SMALL_EXPLOSION_DEFAULT);
     }
+
     protected void explodeSmallTriple() {
         explosionPool.obtain().start(centerX(), centerY(), SMALL_EXPLOSION_TRIPLE);
     }
+
     protected void explodeDefault() {
         explosionPool.obtain().start(centerX(), centerY(), MEDIUM_EXPLOSION_DEFAULT);
     }
+
     protected void explodeDefaultTriple() {
         explosionPool.obtain().start(centerX(), centerY(), MEDIUM_EXPLOSION_TRIPLE);
     }
+
     protected void explodeHuge() {
         explosionPool.obtain().start(centerX(), centerY(), HUGE_EXPLOSION);
     }

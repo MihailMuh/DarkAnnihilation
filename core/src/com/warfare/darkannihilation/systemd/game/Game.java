@@ -43,6 +43,7 @@ public class Game extends Scene {
 
     private boolean firstRun = true;
     private float moveAll;
+    int score;
 
     @Override
     public void bootAssets(Intent intent) {
@@ -85,7 +86,7 @@ public class Game extends Scene {
         }
         empire.add(demoman);
 
-        frontend = new Frontend(player, screen, explosions, bullets, empire, bulletsEnemy);
+        frontend = new Frontend(this, mainGameManager.fontHub.canisMinor, player, screen, explosions, bullets, empire, bulletsEnemy);
 
         clickListener = new GameClickListener(player, mainGameManager);
         Processor.multiProcessor.insertProcessor(clickListener);
@@ -118,7 +119,7 @@ public class Game extends Scene {
     public void update() {
         baseUpdate();
 
-        player.shoot();
+        player.shooting();
 
         for (Warrior enemy : empire) {
             if (enemy.visible) {
@@ -131,6 +132,7 @@ public class Game extends Scene {
                     Bullet bullet = iterator.next();
                     if (bullet.visible) {
                         if (enemy.collidedWithBullet(bullet)) {
+                            score += enemy.killScore;
                             break;
                         }
                     } else {

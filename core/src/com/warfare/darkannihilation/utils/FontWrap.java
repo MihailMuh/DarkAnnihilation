@@ -5,6 +5,7 @@ import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.utils.StringBuilder;
 
 public class FontWrap {
     private final BitmapFont bitmapFont;

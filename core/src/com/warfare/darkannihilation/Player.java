@@ -2,42 +2,38 @@ package com.warfare.darkannihilation;
 
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
-import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.AggressiveSprite;
-import com.warfare.darkannihilation.abstraction.Warrior;
+import com.warfare.darkannihilation.abstraction.Shooter;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
-public class Player extends Warrior {
+public class Player extends Shooter {
     private final Sound sound;
     private final PoolWrap<Bullet> bulletPool;
-    private float endX, endY, shootTime;
+    private float endX, endY;
 
     public Player(AtlasRegion texture, Sound sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
-        super(texture, MILLENNIUM_FALCON_HEALTH, 10000, HALF_SCREEN_HEIGHT, explosionPool);
+        super(texture, MILLENNIUM_FALCON_HEALTH, 10000, HALF_SCREEN_HEIGHT, MILLENNIUM_FALCON_SHOOT_TIME, 0, explosionPool);
         this.bulletPool = bulletPool;
         this.sound = sound;
 
         setIndents(20, 25, 20, 20);
     }
 
-    public void shoot() {
-        if (time - shootTime >= MILLENNIUM_FALCON_SHOOT_TIME) {
-            shootTime = time;
+    @Override
+    protected void shot() {
+        float X = centerX();
+        float Y = top() + 5;
+        bulletPool.obtain().start(X - 7, Y);
+        bulletPool.obtain().start(X, Y);
+        bulletPool.obtain().start(X + 7, Y);
 
-            float X = centerX();
-            float Y = top() + 5;
-            bulletPool.obtain().start(X - 7, Y);
-            bulletPool.obtain().start(X, Y);
-            bulletPool.obtain().start(X + 7, Y);
-
-            sound.play(0.17f);
-        }
+        sound.play(0.17f);
     }
 
     @Override
