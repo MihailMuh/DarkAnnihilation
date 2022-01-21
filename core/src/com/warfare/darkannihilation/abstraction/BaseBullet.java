@@ -2,18 +2,18 @@ package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
-public abstract class BaseBullet extends AggressiveSprite {
-    public BaseBullet(AtlasRegion texture, int damage, PoolWrap<Explosion> explosionPool) {
-        super(texture, damage, explosionPool);
+public abstract class BaseBullet extends MovementSprite {
+    public BaseBullet(PoolWrap<Explosion> explosionPool, AtlasRegion texture, int maxHealth, int damage) {
+        super(explosionPool, texture, maxHealth, damage, 0);
 
         visible = false;
     }
 
-    @Override
-    protected void explode() {
-        explodeSmall();
+    public BaseBullet(PoolWrap<Explosion> explosionPool, AtlasRegion texture, int damage) {
+        super(explosionPool, texture, 0, damage, 0);
     }
 
     public void start(float X, float Y) {
@@ -25,6 +25,5 @@ public abstract class BaseBullet extends AggressiveSprite {
 
     @Override
     public void reset() {
-        visible = false;
     }
 }

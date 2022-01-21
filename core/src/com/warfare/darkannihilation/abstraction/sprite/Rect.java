@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.abstraction;
+package com.warfare.darkannihilation.abstraction.sprite;
 
 public abstract class Rect {
     public float x, y;

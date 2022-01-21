@@ -4,7 +4,7 @@ import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_HEALTH;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
-import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
+import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
@@ -12,28 +12,28 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.BaseBullet;
-import com.warfare.darkannihilation.abstraction.Shooter;
+import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
-public class Demoman extends Shooter {
+public class Demoman extends Opponent {
     private final PoolWrap<BaseBullet> bombPool;
     private boolean goLeft;
+    private float lastShot, shootTime;
 
-    public Demoman(AtlasRegion texture, PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bombPool) {
-        super(texture, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 0, 35, explosionPool);
+    public Demoman(PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bombPool, AtlasRegion texture) {
+        super(explosionPool, texture, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 35);
+
         this.bombPool = bombPool;
 
-        startY = HALF_SCREEN_HEIGHT - height;
         visible = false;
-
         setIndents(30, 25, 20, 50);
     }
 
     @Override
     public void reset() {
         health = maxHealth;
-        y = MathUtils.random(startY, SCREEN_HEIGHT - height);
-        speedX = MathUtils.random(385, 770);
+        y = MathUtils.random(0, SCREEN_HEIGHT - height);
+        speedX = MathUtils.random(5, 10);
         goLeft = MathUtils.randomBoolean();
         shootTime = MathUtils.random(0.1f, 0.2f);
 
@@ -48,30 +48,23 @@ public class Demoman extends Shooter {
     }
 
     @Override
-    protected void shot() {
-        bombPool.obtain().start(centerX(), centerY());
-    }
-
-    @Override
-    public void boom() {
-        boomFromPlayer();
-    }
-
-    @Override
-    public void boomFromPlayer() {
-        explode();
-    }
-
-    @Override
-    protected void explode() {
+    public void kill() {
         explodeHuge();
         visible = false;
     }
 
+    private void shoot() {
+        if (time - lastShot >= shootTime) {
+            lastShot = time;
+
+            bombPool.obtain().start(centerX(), centerY());
+        }
+    }
+
     @Override
     public void update() {
-        super.update();
-        x += speedX * delta;
+        x += speedX;
+        shoot();
 
         if (goLeft) {
             if (x < -width) {

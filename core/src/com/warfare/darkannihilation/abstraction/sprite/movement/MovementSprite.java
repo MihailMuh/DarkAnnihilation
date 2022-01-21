@@ -1,52 +1,61 @@
-package com.warfare.darkannihilation.abstraction;
+package com.warfare.darkannihilation.abstraction.sprite.movement;
 
 import static com.warfare.darkannihilation.constants.Names.HUGE_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPLE;
-import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.abstraction.BaseBullet;
+import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
-public abstract class AggressiveSprite extends LiveSprite {
-    protected final PoolWrap<Explosion> explosionPool;
-    protected float startY;
+public abstract class MovementSprite extends BaseSprite {
+    private final PoolWrap<Explosion> explosionPool;
+
+    protected final int maxHealth;
+    protected int health;
+
     public final int damage;
+    public final int killScore;
 
-    public AggressiveSprite(AtlasRegion texture, int damage, PoolWrap<Explosion> explosionPool) {
+    public float speedX, speedY;
+
+    public MovementSprite(PoolWrap<Explosion> explosionPool, TextureAtlas.AtlasRegion texture, int maxHealth, int damage, int killScore) {
         super(texture);
+
+        this.maxHealth = maxHealth;
         this.damage = damage;
         this.explosionPool = explosionPool;
-
-        startY = SCREEN_HEIGHT + height;
+        this.killScore = killScore;
     }
 
-    public AggressiveSprite(AtlasRegion texture, int damage, float startY, PoolWrap<Explosion> explosionPool) {
-        super(texture);
-        this.damage = damage;
-        this.explosionPool = explosionPool;
+    //    damage and check if dead
+    protected boolean damage(int dmg) {
+        health -= dmg;
 
-        this.startY = startY;
+        return health <= 0;
     }
 
-    public boolean damage(int dmg) {
-        return false;
+    public boolean killedByBullet(BaseBullet bullet) {
+        boolean killed = false;
+        if (intersect(bullet)) {
+            killed = damage(bullet.damage);
+
+            if (killed) {
+                kill();
+            }
+            bullet.kill();
+        }
+        return killed;
     }
 
-    public void boom() {
-        explode();
+    public void kill() {
+        visible = false;
         reset();
     }
-
-    public void boomFromPlayer() {
-        explodeSmall();
-        reset();
-    }
-
-    protected abstract void explode();
 
     protected void explodeSmall() {
         explosionPool.obtain().start(centerX(), centerY(), SMALL_EXPLOSION_DEFAULT);

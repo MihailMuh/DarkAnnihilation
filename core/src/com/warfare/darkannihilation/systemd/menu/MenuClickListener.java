@@ -23,6 +23,6 @@ class MenuClickListener extends ClickListener {
         for (Button button : buttons) {
             button.sweep(x, y);
         }
-        return false;
+        return true;
     }
 }

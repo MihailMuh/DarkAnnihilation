@@ -6,25 +6,17 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.systemd.Intent;
-import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.utils.ClickListener;
 
 public class Loading extends Scene {
-    private Runnable runnable;
+    private final Runnable runnable;
     private float alpha = 1;
     private byte status = -1;
 
-    @Override
-    public void bootAssets(Intent intent) {
-        super.bootAssets(intent);
-        runnable = (Runnable) intent.get("runnable");
-    }
-
-    @Override
-    public void create() {
-        screen = ImageHub.loadingScreen;
-        clickListener = new LoadingClickListener();
-        Processor.multiProcessor.insertProcessor(clickListener);
+    public Loading(MainGameManager mainGameManager, Runnable runnable) {
+        super(mainGameManager, new ClickListener(), ImageHub.loadingScreen);
+        this.runnable = runnable;
     }
 
     @Override
@@ -40,7 +32,8 @@ public class Loading extends Scene {
                 }
                 break;
             case 0:
-                if (mainGameManager.resourcesManager.update()) status = 1; return;
+                if (mainGameManager.resourcesManager.update()) status = 1;
+                return;
             case 1:
                 alpha += 0.02f;
 

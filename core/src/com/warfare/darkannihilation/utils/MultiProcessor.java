@@ -65,12 +65,10 @@ public class MultiProcessor extends InputAdapter {
     }
 
     public synchronized void insertProcessor(ClickListener clickListener) {
-        listeners.insert(0, clickListener);
+        if (clickListener != null) listeners.insert(0, clickListener);
     }
 
     public synchronized void removeProcessor(ClickListener clickListener) {
-        if (clickListener != null) {
-            listeners.removeValue(clickListener, true);
-        }
+        if (clickListener != null) listeners.removeValue(clickListener, true);
     }
 }

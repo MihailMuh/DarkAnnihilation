@@ -29,38 +29,36 @@ public class MainGameManager {
         this.mainGame = mainGame;
     }
 
-    public void startScene(Intent intent, boolean loadingScreen) {
+    public void startScene(Scene scene, boolean loadingScreen) {
         if (loadingScreen) {
-            Parameters params = new Parameters();
-            params.put("runnable", (Runnable) () -> finishAllScenes(intent));
-            params.put("secs", 1.5f);
-            startTopScene(new Intent(this, DarkScene.class, params));
+            startTopScene(new DarkScene(this, () -> finishAllScenes(scene), 1.5f));
         } else {
             finishLoading = false;
             while (!finishLoading) {
                 Service.sleep((int) (delta * 1000));
                 Processor.postToUI(() -> finishLoading = resourcesManager.update());
             }
-            finishAllScenes(intent);
+            finishAllScenes(scene);
         }
     }
 
-    public void startTopScene(Intent intent) {
-        Scene newScene = intent.getScene();
+    public void startTopScene(Scene scene) {
+        scene.create();
 
         Processor.postToUI(() -> {
             int len = mainGame.scenesList.size();
             for (int i = 0; i < len; i++) {
                 mainGame.scenesList.get(i).pause();
             }
-            mainGame.scenesList.add(newScene);
-            newScene.resume();
+            mainGame.scenesList.add(scene);
+            scene.resume();
         });
     }
 
     public void finishScene() {
+        Scene lastScene = mainGame.scenesList.lastScene;
+
         Processor.postToUI(() -> {
-            Scene lastScene = mainGame.scenesList.lastScene;
             mainGame.scenesList.pop();
 
             Processor.post(() -> {
@@ -75,7 +73,9 @@ public class MainGameManager {
         });
     }
 
-    public void finishAllScenes(Intent intent) {
+    public void finishAllScenes(Scene newScene) {
+        newScene.create();
+
         Processor.postToUI(() -> {
             int len = mainGame.scenesList.size();
             for (int i = 0; i < len; i++) {
@@ -85,8 +85,6 @@ public class MainGameManager {
             }
 
             mainGame.scenesList.clear();
-
-            Scene newScene = intent.getScene();
             mainGame.scenesList.add(newScene);
 
             newScene.resume();

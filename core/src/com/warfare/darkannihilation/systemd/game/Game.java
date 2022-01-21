@@ -9,17 +9,16 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.Player;
+import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.abstraction.BaseBullet;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.bullet.Bomb;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.screens.DynamicScreen;
-import com.warfare.darkannihilation.systemd.Intent;
-import com.warfare.darkannihilation.systemd.Parameters;
+import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.utils.PoolWrap;
@@ -35,7 +34,7 @@ public class Game extends Scene {
     private final Array<Explosion> explosions = new Array<>(NUMBER_EXPLOSION);
     private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
     private final Array<BaseBullet> bulletsEnemy = new Array<>(15);
-    private final Array<Warrior> empire = new Array<>(NUMBER_VADER);
+    private final Array<Opponent> empire = new Array<>(NUMBER_VADER);
 
     private PoolWrap<Explosion> explosionPool;
     private PoolWrap<Bullet> bulletPool;
@@ -45,9 +44,8 @@ public class Game extends Scene {
     private float moveAll;
     int score;
 
-    @Override
-    public void bootAssets(Intent intent) {
-        super.bootAssets(intent);
+    public Game(MainGameManager mainGameManager) {
+        super(mainGameManager);
         mainGameManager.resourcesManager.loadAtlas(FIRST_LEVEL_ATLAS);
         mainGameManager.resourcesManager.loadAtlas(FALCON_ATLAS);
         mainGameManager.soundHub.loadGameSounds();
@@ -67,17 +65,17 @@ public class Game extends Scene {
         bulletPool = new PoolWrap<Bullet>(bullets) {
             @Override
             protected Bullet newObject() {
-                return new Bullet(mainGameManager.imageHub.bulletImg, explosionPool);
+                return new Bullet(explosionPool, mainGameManager.imageHub.bulletImg);
             }
         };
         bombPool = new PoolWrap<BaseBullet>(bulletsEnemy) {
             @Override
             protected Bomb newObject() {
-                return new Bomb(mainGameManager.imageHub.bombImg, explosionPool);
+                return new Bomb(explosionPool, mainGameManager.imageHub.bombImg);
             }
         };
 
-        demoman = new Demoman(mainGameManager.imageHub.demomanImg, explosionPool, bombPool);
+        demoman = new Demoman(explosionPool, bombPool, mainGameManager.imageHub.demomanImg);
         player = new Player(mainGameManager.imageHub.millenniumFalcon, mainGameManager.soundHub.laserSound, bulletPool, explosionPool);
         screen = new DynamicScreen(mainGameManager.imageHub.starScreenGIF);
 
@@ -98,7 +96,7 @@ public class Game extends Scene {
             gameTask.start();
         } else {
             firstRun = false;
-            mainGameManager.startTopScene(new Intent(mainGameManager, Countdown.class, new Parameters("function", (Runnable) this::baseUpdate)));
+            mainGameManager.startTopScene(new Countdown(mainGameManager, this::baseUpdate));
         }
     }
 
@@ -119,20 +117,22 @@ public class Game extends Scene {
     public void update() {
         baseUpdate();
 
-        player.shooting();
+        player.shoot();
 
-        for (Warrior enemy : empire) {
-            if (enemy.visible) {
-                enemy.x -= moveAll;
-                enemy.update();
-                if (player.collidedWithEnemy(enemy)) {
-                    continue;
-                }
+        for (Opponent opponent : empire) {
+            if (opponent.visible) {
+                opponent.x -= moveAll;
+                opponent.update();
+                if (opponent.killedByPlayer(player)) continue;
+
                 for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
                     Bullet bullet = iterator.next();
                     if (bullet.visible) {
-                        if (enemy.collidedWithBullet(bullet)) {
-                            score += enemy.killScore;
+                        if (opponent.killedByBullet(bullet)) {
+                            score += opponent.killScore;
+
+                            iterator.remove();
+                            bulletPool.free(bullet);
                             break;
                         }
                     } else {
@@ -148,7 +148,7 @@ public class Game extends Scene {
             if (baseBullet.visible) {
                 baseBullet.x -= moveAll;
                 baseBullet.update();
-                player.collidedWithEnemy(baseBullet);
+                player.killedByBullet(baseBullet);
             } else {
                 iterator.remove();
                 if (baseBullet.getClass() == Bomb.class) {
@@ -174,7 +174,7 @@ public class Game extends Scene {
     }
 
     private void spawn() {
-        if (!demoman.visible && MathUtils.randomBoolean(0.0315f)) {
+        if (!demoman.visible && score > 70 && MathUtils.randomBoolean(0.0315f)) {
             demoman.reset();
         }
     }

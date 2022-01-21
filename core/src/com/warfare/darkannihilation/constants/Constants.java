@@ -50,7 +50,6 @@ public final class Constants {
     public static final short BOSS_HEALTH = 300;
     public static final short BOSS_HEALTH_BAR_LEN = 140;
 
-    public static final float DEMOMAN_SHOOT_TIME = 0.15f;
     public static final byte DEMOMAN_DAMAGE = 40;
     public static final byte DEMOMAN_HEALTH = 30;
 

@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.Player;
+import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.abstraction.BaseBullet;
 import com.warfare.darkannihilation.abstraction.BaseScreen;
-import com.warfare.darkannihilation.abstraction.Warrior;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.utils.FontWrap;
@@ -27,11 +27,11 @@ class Frontend {
 
     private final Array<Explosion> explosions;
     private final Array<Bullet> bullets;
-    private final Array<Warrior> empire;
+    private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
 
     Frontend(Game game, BitmapFont bitmapFont, Player player, BaseScreen screen, Array<Explosion> explosions,
-             Array<Bullet> bullets, Array<Warrior> empire, Array<BaseBullet> bulletsEnemy) {
+             Array<Bullet> bullets, Array<Opponent> empire, Array<BaseBullet> bulletsEnemy) {
         this.game = game;
         this.player = player;
         this.screen = screen;
@@ -49,8 +49,8 @@ class Frontend {
         screen.render();
         player.render();
 
-        for (Warrior enemy : empire) {
-            enemy.render();
+        for (Opponent opponent : empire) {
+            opponent.render();
         }
         for (BaseBullet baseBullet : bulletsEnemy) {
             baseBullet.render();
@@ -61,6 +61,7 @@ class Frontend {
         for (Explosion explosion : explosions) {
             explosion.render();
         }
+        player.renderHearts();
 
         font.draw(textX, textY, stringBuilder.append("Current score: ").append(game.score).toString());
         stringBuilder.length = 0;

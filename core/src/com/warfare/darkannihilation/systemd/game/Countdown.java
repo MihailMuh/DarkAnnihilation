@@ -7,21 +7,20 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
-import com.warfare.darkannihilation.systemd.Intent;
+import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Countdown extends Scene {
-    private Runnable function;
+    private final Runnable function;
+    private final FontWrap countdownFont;
+
     private String text = "3";
     private float textX, textY, lastSwitch;
-    private FontWrap countdownFont;
     private int count = 3;
 
-    @Override
-    public void bootAssets(Intent intent) {
-        super.bootAssets(intent);
-        function = (Runnable) intent.get("function");
-
+    public Countdown(MainGameManager mainGameManager, Runnable runnable) {
+        super(mainGameManager);
+        function = runnable;
         countdownFont = new FontWrap(mainGameManager.fontHub.canisMinorHuge,
                 FontHub.resizeFont(mainGameManager.fontHub.canisMinorHuge, SCREEN_WIDTH - 400, "SHOOT!"));
     }

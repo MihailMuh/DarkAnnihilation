@@ -8,7 +8,7 @@ import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPL
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
-import com.warfare.darkannihilation.abstraction.BaseSprite;
+import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 

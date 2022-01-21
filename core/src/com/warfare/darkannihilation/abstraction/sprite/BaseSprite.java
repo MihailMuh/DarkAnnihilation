@@ -1,22 +1,22 @@
-package com.warfare.darkannihilation.abstraction;
+package com.warfare.darkannihilation.abstraction.sprite;
 
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.warfare.darkannihilation.abstraction.sprite.Rect;
 
 public abstract class BaseSprite extends Rect implements Poolable {
     protected final AtlasRegion image;
     public boolean visible = true;
 
-    public BaseSprite(AtlasRegion texture, float x, float y) {
-        super(x, y, texture.originalWidth, texture.originalHeight);
+    public BaseSprite(AtlasRegion texture, float width, float height) {
+        super(0, 0, width, height);
         image = texture;
     }
 
     public BaseSprite(AtlasRegion texture) {
-        super(0, 0, texture.originalWidth, texture.originalHeight);
-        image = texture;
+        this(texture, texture.originalWidth, texture.originalHeight);
     }
 
     public void render() {

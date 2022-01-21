@@ -6,21 +6,20 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.Button;
+import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.screens.BackgroundScreen;
-import com.warfare.darkannihilation.systemd.Intent;
 import com.warfare.darkannihilation.systemd.game.Game;
 
 public class Menu extends Scene {
     private final Button[] buttons = new Button[4];
 
-    @Override
-    public void bootAssets(Intent intent) {
-        super.bootAssets(intent);
+    public Menu(MainGameManager mainGameManager) {
+        super(mainGameManager);
         mainGameManager.resourcesManager.loadAtlas(MENU_ATLAS);
         mainGameManager.resourcesManager.loadMusic(MENU_MUSIC);
     }
@@ -40,7 +39,7 @@ public class Menu extends Scene {
         buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
         buttons[1] = new Button("Start", buttons[0].x - buttons[0].width - step, 10,
-                () -> mainGameManager.startScene(new Intent(mainGameManager, Game.class), true));
+                () -> mainGameManager.startScene(new Game(mainGameManager), true));
         buttons[2] = new Button("Settings", buttons[0].right() + step, 10, () -> {
         });
         buttons[3] = new Button("Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());

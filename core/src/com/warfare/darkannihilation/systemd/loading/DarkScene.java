@@ -5,27 +5,19 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.systemd.Intent;
-import com.warfare.darkannihilation.systemd.Parameters;
-import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.systemd.MainGameManager;
 
 public class DarkScene extends Scene {
-    private Runnable runnable;
-    private float alpha, time;
+    private final Runnable runnable;
+    private final float time;
+    private float alpha;
 
-    @Override
-    public void bootAssets(Intent intent) {
-        super.bootAssets(intent);
-        runnable = (Runnable) intent.get("runnable");
-        time = 1f / ((float) intent.get("secs") * 60);
-    }
-
-    @Override
-    public void create() {
+    public DarkScene(MainGameManager mainGameManager, Runnable runnable, float secs) {
+        super(mainGameManager, new DarkClickListener());
         isShadow = true;
 
-        clickListener = new DarkClickListener();
-        Processor.multiProcessor.insertProcessor(clickListener);
+        this.runnable = runnable;
+        time = 1f / (secs * 60);
     }
 
     @Override
@@ -36,6 +28,6 @@ public class DarkScene extends Scene {
 
         alpha += time;
         if (alpha > 1)
-            mainGameManager.finishAllScenes(new Intent(mainGameManager, Loading.class, new Parameters("runnable", runnable)));
+            mainGameManager.finishAllScenes(new Loading(mainGameManager, runnable));
     }
 }

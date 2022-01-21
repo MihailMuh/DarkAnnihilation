@@ -10,14 +10,8 @@ import com.warfare.darkannihilation.abstraction.BaseBullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Bomb extends BaseBullet {
-    public Bomb(TextureAtlas.AtlasRegion texture, PoolWrap<Explosion> explosionPool) {
-        super(texture, BOMB_DAMAGE, explosionPool);
-    }
-
-    @Override
-    public void boomFromPlayer() {
-        explodeSmallTriple();
-        reset();
+    public Bomb(PoolWrap<Explosion> explosionPool, TextureAtlas.AtlasRegion texture) {
+        super(explosionPool, texture, BOMB_DAMAGE);
     }
 
     @Override
@@ -26,5 +20,11 @@ public class Bomb extends BaseBullet {
         if (top() <= 0) {
             visible = false;
         }
+    }
+
+    @Override
+    public void reset() {
+        explodeSmallTriple();
+        visible = false;
     }
 }

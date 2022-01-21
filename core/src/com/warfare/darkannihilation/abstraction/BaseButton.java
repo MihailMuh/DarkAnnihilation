@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 
 public abstract class BaseButton extends BaseSprite {
     public BaseButton(TextureAtlas.AtlasRegion texture) {

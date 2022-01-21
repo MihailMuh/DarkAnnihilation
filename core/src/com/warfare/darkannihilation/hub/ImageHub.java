@@ -20,6 +20,7 @@ public class ImageHub extends BaseHub {
 
     public static AtlasRegion[] vadersImages;
     public static AtlasRegion buttonPress, buttonNotPress;
+    public static AtlasRegion fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
     public AtlasRegion demomanImg, bombImg, factoryImg, minionImg;
     public AtlasRegion millenniumFalcon;
     public AtlasRegion bulletImg;
@@ -41,7 +42,13 @@ public class ImageHub extends BaseHub {
         hugeExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "skull_explosion"), 0.05f);
         tripleExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.02f);
         loadingScreen = new BackgroundScreen(new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "loading"), 0.05f));
+
         blackColor = commonAtlas.findRegion("dark_null");
+        fullHeartBlue = commonAtlas.findRegion("full_blue_heart");
+        halfHeartBlue = commonAtlas.findRegion("half_blue_heart");
+        fullHeartRed = commonAtlas.findRegion("full_heart");
+        halfHeartRed = commonAtlas.findRegion("half_heart");
+        nullHeartRed = commonAtlas.findRegion("non_heart");
     }
 
     public void getMenuImages() {
