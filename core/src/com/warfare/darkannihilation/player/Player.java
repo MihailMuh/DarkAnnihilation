@@ -12,25 +12,18 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.systemd.service.Service;
+import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Player extends MovementSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
     private final Sound sound;
     private final PoolWrap<Bullet> bulletPool;
-    private final PoolWrap<Heart> armorPool = new PoolWrap<Heart>(hearts) {
-        @Override
-        protected ArmorHeart newObject() {
-            return new ArmorHeart();
-        }
-    };
+    private final PoolWrap<Heart> armorPool;
 
     private float lastShot;
     private float endX, endY;
@@ -38,30 +31,30 @@ public class Player extends MovementSprite {
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
-    public Player(AtlasRegion texture, Sound sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
-        super(explosionPool, texture, MILLENNIUM_FALCON_HEALTH, 10000, 0);
+    public Player(ImageHub imageHub, Sound sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+        super(explosionPool, imageHub.millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
         this.bulletPool = bulletPool;
         this.sound = sound;
+        armorPool = new PoolWrap<Heart>(hearts) {
+            @Override
+            protected ArmorHeart newObject() {
+                return new ArmorHeart(imageHub);
+            }
+        };
+
         mxHealthMinus5 = maxHealth - 5;
         health = maxHealth;
 
         int len = maxHealth / 10;
         for (int i = 0; i < len; i++) {
-            hearts.add(new Heart(heartX, heartY));
+            hearts.add(new Heart(imageHub, heartX, heartY));
 
             heartX += 90;
             checkLevel(true);
         }
 
-        setIndents(20, 25, 20, 20);
+        shrinkBorders(25, 30, 25, 25);
 
-//        Processor.post(() -> {
-//            Service.sleep(5000);
-//            while (true) {
-//                heal(15);
-//                Service.sleep(2000);
-//            }
-//        });
         reset();
     }
 
@@ -87,7 +80,7 @@ public class Player extends MovementSprite {
         }
     }
 
-    private void heal(int value) {
+    public void heal(int value) {
         int len = roundPositive(value / 10f);
 
         if (value % 10 == 5 && health % 10 == 5) len--;

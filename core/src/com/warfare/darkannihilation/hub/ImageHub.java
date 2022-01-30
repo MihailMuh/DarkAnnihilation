@@ -6,70 +6,74 @@ import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.warfare.darkannihilation.abstraction.BaseHub;
-import com.warfare.darkannihilation.screens.BackgroundScreen;
+import com.warfare.darkannihilation.screens.StaticScreen;
 import com.warfare.darkannihilation.utils.AnimationSuper;
+import com.warfare.darkannihilation.utils.AssetManagerSuper;
 
 public class ImageHub extends BaseHub {
     private TextureAtlas commonAtlas;
     private TextureAtlas levelAtlas, characterAtlas;
 
-    public static BackgroundScreen loadingScreen;
+    public static StaticScreen loadingScreen;
     public AnimationSuper starScreenGIF, menuScreenGIF;
     public AnimationSuper defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
 
-    public static AtlasRegion[] vadersImages;
-    public static AtlasRegion buttonPress, buttonNotPress;
-    public static AtlasRegion fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
+    public AtlasRegion[] vadersImages;
+    public AtlasRegion buttonPress, buttonNotPress;
+    public AtlasRegion fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
     public AtlasRegion demomanImg, bombImg, factoryImg, minionImg;
     public AtlasRegion millenniumFalcon;
     public AtlasRegion bulletImg;
     public AtlasRegion blackColor;
+    public AtlasRegion healthKitImg;
 
-    public ImageHub(ResourcesManager resourcesManager) {
-        super(resourcesManager);
+    public ImageHub(AssetManagerSuper assetManagerSuper) {
+        super(assetManagerSuper);
 
-        resourcesManager.loadAtlas("common.atlas");
+        assetManagerSuper.loadAtlas("common.atlas");
     }
 
     @Override
     public void boot() {
-        commonAtlas = resourcesManager.get("common.atlas");
+        commonAtlas = assetManager.get("common.atlas");
+
+        buttonPress = commonAtlas.findRegion("button_press");
+        buttonNotPress = commonAtlas.findRegion("button_not_press");
     }
 
+    @Override
     public void lazyLoading() {
-        defaultExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "default_explosion"), 0.02f);
-        hugeExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "skull_explosion"), 0.05f);
-        tripleExplosionAnim = new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.02f);
-        loadingScreen = new BackgroundScreen(new AnimationSuper(resourcesManager.getAtlasRegions(commonAtlas, "loading"), 0.05f));
+        defaultExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "default_explosion"), 0.02f);
+        hugeExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "skull_explosion"), 0.05f);
+        tripleExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.02f);
+        loadingScreen = new StaticScreen(new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "loading"), 0.05f));
 
         blackColor = commonAtlas.findRegion("dark_null");
+
         fullHeartBlue = commonAtlas.findRegion("full_blue_heart");
         halfHeartBlue = commonAtlas.findRegion("half_blue_heart");
         fullHeartRed = commonAtlas.findRegion("full_heart");
         halfHeartRed = commonAtlas.findRegion("half_heart");
         nullHeartRed = commonAtlas.findRegion("non_heart");
+
+        healthKitImg = commonAtlas.findRegion("health");
     }
 
     public void getMenuImages() {
-        buttonPress = commonAtlas.findRegion("button_press");
-        buttonNotPress = commonAtlas.findRegion("button_not_press");
-        menuScreenGIF = new AnimationSuper(resourcesManager.getAtlasRegions(MENU_ATLAS, "menu_screen"), 0.11f);
+        menuScreenGIF = new AnimationSuper(assetManager.getAtlasRegions(MENU_ATLAS, "menu_screen"), 0.11f);
     }
 
     public void disposeMenuImages() {
-        resourcesManager.unload(MENU_ATLAS);
-        buttonNotPress = null;
-        buttonPress = null;
+        assetManager.unload(MENU_ATLAS);
         menuScreenGIF = null;
     }
 
     public void getGameImages() {
-        levelAtlas = resourcesManager.get(FIRST_LEVEL_ATLAS);
+        levelAtlas = assetManager.get(FIRST_LEVEL_ATLAS);
         vadersImages = new AtlasRegion[]{levelAtlas.findRegion("vader", 0),
                 levelAtlas.findRegion("vader", 1), levelAtlas.findRegion("vader", 2)};
 
-        characterAtlas = resourcesManager.get(FALCON_ATLAS);
+        characterAtlas = assetManager.get(FALCON_ATLAS);
         millenniumFalcon = characterAtlas.findRegion("ship");
         bulletImg = characterAtlas.findRegion("bullet");
 
@@ -77,12 +81,13 @@ public class ImageHub extends BaseHub {
         bombImg = levelAtlas.findRegion("bomb");
         factoryImg = levelAtlas.findRegion("factory");
         minionImg = levelAtlas.findRegion("minion");
-        starScreenGIF = new AnimationSuper(resourcesManager.getAtlasRegions(levelAtlas, "star_screen"), 0.07f);
+
+        starScreenGIF = new AnimationSuper(assetManager.getAtlasRegions(levelAtlas, "star_screen"), 0.07f);
     }
 
     public void disposeGameImages() {
-        resourcesManager.unload(FIRST_LEVEL_ATLAS);
-        resourcesManager.unload(FALCON_ATLAS);
+        assetManager.unload(FIRST_LEVEL_ATLAS);
+        assetManager.unload(FALCON_ATLAS);
 
         levelAtlas = null;
         vadersImages = null;

@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.abstraction;
+package com.warfare.darkannihilation.screens;
 
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;

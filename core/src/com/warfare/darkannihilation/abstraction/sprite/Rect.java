@@ -14,7 +14,7 @@ public abstract class Rect {
         halfHeight = height / 2f;
     }
 
-    protected void setIndents(float X, float Y, float indentWidth, float indentHeight) {
+    protected void shrinkBorders(float X, float Y, float indentWidth, float indentHeight) {
         indentX = X;
         indentY = Y;
         this.indentWidth = indentWidth;

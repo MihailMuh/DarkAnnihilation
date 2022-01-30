@@ -6,12 +6,17 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class AssetManagerSuper extends AssetManager {
     public FileHandleResolver resolver = getFileHandleResolver();
+
+    public AssetManagerSuper() {
+        Texture.setAssetManager(this);
+    }
 
     public void loadAtlas(String path) {
         load(path, TextureAtlas.class);
@@ -52,10 +57,5 @@ public class AssetManagerSuper extends AssetManager {
             printErr("Error in assetManagerWrap", e);
             Processor.postToUI(() -> super.unload(fileName));
         }
-    }
-
-    @Override
-    public void finishLoading() {
-        while (!update()) ;
     }
 }

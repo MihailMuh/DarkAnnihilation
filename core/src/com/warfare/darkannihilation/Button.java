@@ -5,6 +5,7 @@ import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.abstraction.BaseButton;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.systemd.service.Processor;
@@ -12,6 +13,8 @@ import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Button extends BaseButton {
+    private final TextureAtlas.AtlasRegion buttonPress;
+
     private Runnable runnable;
     private String text;
     private float textX;
@@ -21,8 +24,9 @@ public class Button extends BaseButton {
 
     public static FontWrap buttonFont;
 
-    public Button(String name, float X, float Y, Runnable runnable) {
-        super(ImageHub.buttonNotPress);
+    public Button(ImageHub imageHub, String name, float X, float Y, Runnable runnable) {
+        super(imageHub.buttonNotPress);
+        buttonPress = imageHub.buttonPress;
 
         setParams(name, X, Y, runnable);
     }
@@ -60,7 +64,7 @@ public class Button extends BaseButton {
     @Override
     public void render() {
         if (pressed) {
-            spriteBatch.draw(ImageHub.buttonPress, x, y, width, height);
+            spriteBatch.draw(buttonPress, x, y, width, height);
             buttonFont.setColor(Color.LIGHT_GRAY);
         } else {
             spriteBatch.draw(image, x, y, width, height);

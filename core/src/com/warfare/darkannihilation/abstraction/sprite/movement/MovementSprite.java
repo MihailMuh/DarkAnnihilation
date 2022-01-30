@@ -8,7 +8,7 @@ import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPL
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.BaseBullet;
+import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.utils.PoolWrap;
 

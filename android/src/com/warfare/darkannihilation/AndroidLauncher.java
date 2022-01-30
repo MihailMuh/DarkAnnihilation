@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation;
 
 import android.os.Bundle;
+import android.os.Process;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -16,8 +17,13 @@ public class AndroidLauncher extends AndroidApplication {
         config.useGyroscope = false;
         config.hideStatusBar = true;
         config.useImmersiveMode = true;
-        config.touchSleepTime = 0;
 
         initialize(new MainGame(), config);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Process.killProcess(Process.myPid());
     }
 }

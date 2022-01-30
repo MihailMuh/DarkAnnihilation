@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public final class Processor {
     private static final ExecutorService pool = Executors.newWorkStealingPool();
-    private static final ExecutorService poolOnTouch = Executors.newCachedThreadPool();
+    private static final ExecutorService poolOnTouch = Executors.newSingleThreadExecutor();
     public static final MultiProcessor multiProcessor = new MultiProcessor();
     public static Thread UIThread;
 

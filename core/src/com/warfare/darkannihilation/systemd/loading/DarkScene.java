@@ -8,15 +8,16 @@ import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 
 public class DarkScene extends Scene {
-    private final Runnable runnable;
+    private final Scene sceneToRun, sceneToUpdate;
+
     private final float time;
     private float alpha;
 
-    public DarkScene(MainGameManager mainGameManager, Runnable runnable, float secs) {
+    public DarkScene(MainGameManager mainGameManager, Scene sceneToRun, Scene sceneToUpdate, float secs) {
         super(mainGameManager, new DarkClickListener());
-        isShadow = true;
 
-        this.runnable = runnable;
+        this.sceneToRun = sceneToRun;
+        this.sceneToUpdate = sceneToUpdate;
         time = 1f / (secs * 60);
     }
 
@@ -27,7 +28,15 @@ public class DarkScene extends Scene {
         spriteBatch.setColor(1, 1, 1, 1);
 
         alpha += time;
-        if (alpha > 1)
-            mainGameManager.finishAllScenes(new Loading(mainGameManager, runnable));
+        if (alpha > 1) {
+            mainGameManager.finishLastScene();
+            mainGameManager.finishLastScene();
+            mainGameManager.startScene(new Loading(mainGameManager, sceneToRun), false);
+        }
+    }
+
+    @Override
+    public void update() {
+        sceneToUpdate.update();
     }
 }

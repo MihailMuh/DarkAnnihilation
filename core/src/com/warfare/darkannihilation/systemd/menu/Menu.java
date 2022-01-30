@@ -11,8 +11,7 @@ import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.hub.FontHub;
-import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.screens.BackgroundScreen;
+import com.warfare.darkannihilation.screens.StaticScreen;
 import com.warfare.darkannihilation.systemd.game.Game;
 
 public class Menu extends Scene {
@@ -20,8 +19,8 @@ public class Menu extends Scene {
 
     public Menu(MainGameManager mainGameManager) {
         super(mainGameManager);
-        mainGameManager.resourcesManager.loadAtlas(MENU_ATLAS);
-        mainGameManager.resourcesManager.loadMusic(MENU_MUSIC);
+        mainGameManager.assetManager.loadAtlas(MENU_ATLAS);
+        mainGameManager.assetManager.loadMusic(MENU_MUSIC);
     }
 
     @Override
@@ -29,29 +28,26 @@ public class Menu extends Scene {
         mainGameManager.imageHub.getMenuImages();
         mainGameManager.soundHub.getMenuSounds();
 
-        screen = new BackgroundScreen(mainGameManager.imageHub.menuScreenGIF);
+        screen = new StaticScreen(mainGameManager.imageHub.menuScreenGIF);
 
         Button.buttonFont = new FontWrap(mainGameManager.fontHub.canisMinor,
-                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, ImageHub.buttonPress.originalWidth - 150,
+                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, mainGameManager.imageHub.buttonPress.originalWidth - 150,
                         "Quit", "Start", "Top Score", "Settings"));
 
         int step = 50;
-        buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
+        buttons[0] = new Button(mainGameManager.imageHub, "Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
-        buttons[1] = new Button("Start", buttons[0].x - buttons[0].width - step, 10,
+        buttons[1] = new Button(mainGameManager.imageHub, "Start", buttons[0].x - buttons[0].width - step, 10,
                 () -> mainGameManager.startScene(new Game(mainGameManager), true));
-        buttons[2] = new Button("Settings", buttons[0].right() + step, 10, () -> {
+        buttons[2] = new Button(mainGameManager.imageHub, "Settings", buttons[0].right() + step, 10, () -> {
         });
-        buttons[3] = new Button("Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
+        buttons[3] = new Button(mainGameManager.imageHub, "Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
 
         clickListener = new MenuClickListener(buttons);
         Processor.multiProcessor.insertProcessor(clickListener);
-    }
 
-    @Override
-    public void resume() {
-        mainGameManager.soundHub.menuMusic.play();
         mainGameManager.soundHub.menuMusic.setLooping(true);
+        mainGameManager.soundHub.menuMusic.play();
     }
 
     @Override

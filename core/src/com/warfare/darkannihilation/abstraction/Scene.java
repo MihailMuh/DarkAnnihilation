@@ -1,16 +1,15 @@
 package com.warfare.darkannihilation.abstraction;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
+import com.warfare.darkannihilation.screens.BaseScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.ClickListener;
 
-public abstract class Scene extends ApplicationAdapter {
+public abstract class Scene implements ApplicationListener {
     protected final MainGameManager mainGameManager;
     protected ClickListener clickListener;
     protected BaseScreen screen;
-
-    public boolean isShadow = false;
 
     public Scene(MainGameManager mainGameManager) {
         this(mainGameManager, null, null);
@@ -31,7 +30,23 @@ public abstract class Scene extends ApplicationAdapter {
         Processor.multiProcessor.insertProcessor(clickListener);
     }
 
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
     public void update() {
+
     }
 
     @Override

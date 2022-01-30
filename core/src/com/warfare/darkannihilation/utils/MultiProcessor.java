@@ -18,7 +18,7 @@ public class MultiProcessor extends InputAdapter {
         Gdx.input.setInputProcessor(this);
     }
 
-    private synchronized void onTouch() {
+    private void onTouch() {
         touchPos.x = Gdx.input.getX(0);
         touchPos.y = Gdx.input.getY(0);
         camera.unproject(touchPos, 0, 0, PHONE_WIDTH, PHONE_HEIGHT);

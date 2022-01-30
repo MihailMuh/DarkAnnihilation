@@ -1,23 +1,25 @@
 package com.warfare.darkannihilation.systemd.game;
 
+import static com.badlogic.gdx.math.MathUtils.randomBoolean;
 import static com.warfare.darkannihilation.constants.Assets.FALCON_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_ATLAS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
+import static com.warfare.darkannihilation.constants.Names.BOMB;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
 import com.warfare.darkannihilation.player.Player;
-import com.warfare.darkannihilation.abstraction.BaseBullet;
+import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.bullet.Bomb;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.screens.DynamicScreen;
+import com.warfare.darkannihilation.support.HealthKit;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
@@ -28,8 +30,10 @@ import java.util.Iterator;
 public class Game extends Scene {
     private final GameTask gameTask = new GameTask(this::spawn, 250);
     private Frontend frontend;
+
     private Player player;
     private Demoman demoman;
+    private HealthKit healthKit;
 
     private final Array<Explosion> explosions = new Array<>(NUMBER_EXPLOSION);
     private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
@@ -46,8 +50,8 @@ public class Game extends Scene {
 
     public Game(MainGameManager mainGameManager) {
         super(mainGameManager);
-        mainGameManager.resourcesManager.loadAtlas(FIRST_LEVEL_ATLAS);
-        mainGameManager.resourcesManager.loadAtlas(FALCON_ATLAS);
+        mainGameManager.assetManager.loadAtlas(FIRST_LEVEL_ATLAS);
+        mainGameManager.assetManager.loadAtlas(FALCON_ATLAS);
         mainGameManager.soundHub.loadGameSounds();
     }
 
@@ -76,13 +80,14 @@ public class Game extends Scene {
         };
 
         demoman = new Demoman(explosionPool, bombPool, mainGameManager.imageHub.demomanImg);
-        player = new Player(mainGameManager.imageHub.millenniumFalcon, mainGameManager.soundHub.laserSound, bulletPool, explosionPool);
+        healthKit = new HealthKit(mainGameManager.imageHub.healthKitImg);
+        player = new Player(mainGameManager.imageHub, mainGameManager.soundHub.laserSound, bulletPool, explosionPool);
         screen = new DynamicScreen(mainGameManager.imageHub.starScreenGIF);
 
         for (int i = 0; i < NUMBER_VADER; i++) {
-            empire.add(new Vader(explosionPool));
+            empire.add(new Vader(explosionPool, mainGameManager.imageHub.vadersImages));
         }
-        empire.add(demoman);
+        empire.add(demoman, healthKit);
 
         frontend = new Frontend(this, mainGameManager.fontHub.canisMinor, player, screen, explosions, bullets, empire, bulletsEnemy);
 
@@ -96,7 +101,10 @@ public class Game extends Scene {
             gameTask.start();
         } else {
             firstRun = false;
-            mainGameManager.startTopScene(new Countdown(mainGameManager, this::baseUpdate));
+            mainGameManager.startScene(new Countdown(mainGameManager, this::baseUpdate), false);
+
+            mainGameManager.soundHub.firstLevelMusic.setLooping(true);
+            mainGameManager.soundHub.firstLevelMusic.play();
         }
     }
 
@@ -151,7 +159,7 @@ public class Game extends Scene {
                 player.killedByBullet(baseBullet);
             } else {
                 iterator.remove();
-                if (baseBullet.getClass() == Bomb.class) {
+                if (baseBullet.name == BOMB) {
                     bombPool.free(baseBullet);
                 }
             }
@@ -174,9 +182,9 @@ public class Game extends Scene {
     }
 
     private void spawn() {
-        if (!demoman.visible && score > 70 && MathUtils.randomBoolean(0.0315f)) {
-            demoman.reset();
-        }
+        if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
+
+        if (!healthKit.visible && randomBoolean(0.015f)) healthKit.reset();
     }
 
     @Override

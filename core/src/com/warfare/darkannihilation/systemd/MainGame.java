@@ -4,38 +4,38 @@ import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.hub.ResourcesManager;
 import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
+import com.warfare.darkannihilation.utils.AssetManagerSuper;
 import com.warfare.darkannihilation.utils.FontWrap;
-import com.warfare.darkannihilation.utils.ScenesList;
+import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
-    private ResourcesManager resourcesManager;
+    private AssetManagerSuper assetManager;
     private Frontend frontend;
 
-    final ScenesList scenesList = new ScenesList();
+    final ScenesStack scenesStack = new ScenesStack();
 
     @Override
     public void create() {
         super.create();
-        resourcesManager = new ResourcesManager();
+        assetManager = new AssetManagerSuper();
 
-        ImageHub imageHub = new ImageHub(resourcesManager);
-        FontHub fontHub = new FontHub(resourcesManager);
-        SoundHub soundHub = new SoundHub(resourcesManager);
-        MainGameManager mainGameManager = new MainGameManager(imageHub, fontHub, soundHub, resourcesManager, this);
+        ImageHub imageHub = new ImageHub(assetManager);
+        FontHub fontHub = new FontHub(assetManager);
+        SoundHub soundHub = new SoundHub(assetManager);
+        MainGameManager mainGameManager = new MainGameManager(imageHub, fontHub, soundHub, assetManager, this);
 
         Menu menu = new Menu(mainGameManager);
-        resourcesManager.finishLoading();
+        assetManager.finishLoading();
         imageHub.boot();
         fontHub.boot();
         menu.create();
 
-        scenesList.add(menu);
+        scenesStack.push(menu);
 
         frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 1.1f));
 
@@ -51,26 +51,26 @@ public class MainGame extends BaseApp {
     public void render() {
         Watch.update();
 
-        scenesList.lastScene.update();
+        scenesStack.lastScene.update();
 
         frontend.render();
     }
 
     @Override
     public void resume() {
-        Texture.setAssetManager(resourcesManager);
-        scenesList.lastScene.resume();
+        Texture.setAssetManager(assetManager);
+        scenesStack.lastScene.resume();
     }
 
     @Override
     public void pause() {
-        scenesList.lastScene.pause();
+        scenesStack.lastScene.pause();
     }
 
     @Override
     public void dispose() {
         frontend.dispose();
-        resourcesManager.dispose();
+        assetManager.dispose();
         Processor.dispose();
     }
 }

@@ -32,7 +32,7 @@ public class Countdown extends Scene {
         if (time - lastSwitch > 1) {
             lastSwitch = time;
 
-            if (count == -1) mainGameManager.finishScene();
+            if (count == -1) mainGameManager.finishLastScene();
             else {
                 if (count == 0) text = "SHOOT!";
                 else text = String.valueOf(count);

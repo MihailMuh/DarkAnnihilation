@@ -1,14 +1,15 @@
 package com.warfare.darkannihilation.abstraction.sprite;
 
+import static com.warfare.darkannihilation.constants.Names.NO_NAME;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.warfare.darkannihilation.abstraction.sprite.Rect;
 
 public abstract class BaseSprite extends Rect implements Poolable {
-    protected final AtlasRegion image;
+    protected AtlasRegion image;
     public boolean visible = true;
+    public byte name = NO_NAME;
 
     public BaseSprite(AtlasRegion texture, float width, float height) {
         super(0, 0, width, height);
@@ -24,4 +25,8 @@ public abstract class BaseSprite extends Rect implements Poolable {
     }
 
     public abstract void update();
+
+    @Override
+    public void reset() {
+    }
 }

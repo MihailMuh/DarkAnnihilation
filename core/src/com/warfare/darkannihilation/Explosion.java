@@ -57,15 +57,12 @@ public class Explosion extends BaseSprite {
                 mainAnim = animationHuge;
                 break;
         }
+
         x = X - additionalWidth / 2f;
         y = Y - additionalHeight / 2f;
 
-        visible = true;
-    }
-
-    @Override
-    public void reset() {
         timer = 0;
+        visible = true;
     }
 
     @Override

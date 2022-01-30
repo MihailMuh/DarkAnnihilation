@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.abstraction;
+package com.warfare.darkannihilation.bullet;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.Explosion;
@@ -21,9 +21,5 @@ public abstract class BaseBullet extends MovementSprite {
         y = Y - halfHeight;
 
         visible = true;
-    }
-
-    @Override
-    public void reset() {
     }
 }

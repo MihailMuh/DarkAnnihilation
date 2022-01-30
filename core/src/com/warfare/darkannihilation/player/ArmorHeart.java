@@ -5,9 +5,9 @@ import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 
 import com.warfare.darkannihilation.hub.ImageHub;
 
-public class ArmorHeart extends Heart {
-    public ArmorHeart() {
-        super(0, 0);
+class ArmorHeart extends Heart {
+    public ArmorHeart(ImageHub imageHub) {
+        super(imageHub, 0, 0);
     }
 
     public void start(int X, int Y) {
@@ -16,17 +16,17 @@ public class ArmorHeart extends Heart {
         x = X;
         y = Y;
 
-        region = ImageHub.fullHeartBlue;
+        image = imageHub.fullHeartBlue;
     }
 
     @Override
     public void setType(byte heart) {
         switch (heart) {
             case FULL_HEART:
-                region = ImageHub.fullHeartBlue;
+                image = imageHub.fullHeartBlue;
                 return;
             case HALF_HEART:
-                region = ImageHub.halfHeartBlue;
+                image = imageHub.halfHeartBlue;
                 return;
         }
         visible = false;
