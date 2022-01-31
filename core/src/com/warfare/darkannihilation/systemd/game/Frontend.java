@@ -40,9 +40,9 @@ class Frontend {
         this.empire = empire;
         this.bulletsEnemy = bulletsEnemy;
 
-        font = new FontWrap(bitmapFont, FontHub.resizeFont(bitmapFont, HALF_SCREEN_WIDTH / 1.8f, "Current score: 0"));
-        textX = HALF_SCREEN_WIDTH - font.getTextWidth("Current score: 0") / 2f;
-        textY = SCREEN_HEIGHT - font.getTextHeight("Current score: 0");
+        font = new FontWrap(bitmapFont, FontHub.resizeFont(bitmapFont, HALF_SCREEN_WIDTH / 1.75f, "Current score: 10"));
+        textX = HALF_SCREEN_WIDTH - font.getTextWidth("Current score: 10") / 2f;
+        textY = SCREEN_HEIGHT - font.getTextHeight("Current score: 10");
     }
 
     public void render() {

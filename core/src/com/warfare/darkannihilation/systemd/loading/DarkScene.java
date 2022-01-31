@@ -28,9 +28,10 @@ public class DarkScene extends Scene {
         spriteBatch.setColor(1, 1, 1, 1);
 
         alpha += time;
+        mainGameManager.soundHub.setVolume(1 - alpha);
+
         if (alpha > 1) {
-            mainGameManager.finishLastScene();
-            mainGameManager.finishLastScene();
+            mainGameManager.finishAllScenes();
             mainGameManager.startScene(new Loading(mainGameManager, sceneToRun), false);
         }
     }

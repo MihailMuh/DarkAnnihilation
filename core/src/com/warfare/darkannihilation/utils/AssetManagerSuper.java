@@ -3,17 +3,16 @@ package com.warfare.darkannihilation.utils;
 import static com.warfare.darkannihilation.systemd.service.Service.printErr;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.utils.audio.MusicWrap;
+import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
 public class AssetManagerSuper extends AssetManager {
-    public FileHandleResolver resolver = getFileHandleResolver();
-
     public AssetManagerSuper() {
         Texture.setAssetManager(this);
     }
@@ -26,8 +25,16 @@ public class AssetManagerSuper extends AssetManager {
         load(path, Sound.class);
     }
 
+    public SoundWrap getSound(String path, float volume) {
+        return new SoundWrap(get(path, Sound.class), volume);
+    }
+
     public void loadMusic(String path) {
         load(path, Music.class);
+    }
+
+    public MusicWrap getMusic(String path, float volume) {
+        return new MusicWrap(get(path, Music.class), volume);
     }
 
     public TextureAtlas.AtlasRegion[] getAtlasRegions(String path, String name) {

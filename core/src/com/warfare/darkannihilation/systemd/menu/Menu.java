@@ -31,7 +31,7 @@ public class Menu extends Scene {
         screen = new StaticScreen(mainGameManager.imageHub.menuScreenGIF);
 
         Button.buttonFont = new FontWrap(mainGameManager.fontHub.canisMinor,
-                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, mainGameManager.imageHub.buttonPress.originalWidth - 150,
+                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, mainGameManager.imageHub.buttonPress.originalWidth - 140,
                         "Quit", "Start", "Top Score", "Settings"));
 
         int step = 50;
@@ -46,7 +46,6 @@ public class Menu extends Scene {
         clickListener = new MenuClickListener(buttons);
         Processor.multiProcessor.insertProcessor(clickListener);
 
-        mainGameManager.soundHub.menuMusic.setLooping(true);
         mainGameManager.soundHub.menuMusic.play();
     }
 

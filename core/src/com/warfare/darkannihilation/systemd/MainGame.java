@@ -37,7 +37,7 @@ public class MainGame extends BaseApp {
 
         scenesStack.push(menu);
 
-        frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 1.1f));
+        frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 0.7f));
 
         Processor.post(() -> {
             resume();

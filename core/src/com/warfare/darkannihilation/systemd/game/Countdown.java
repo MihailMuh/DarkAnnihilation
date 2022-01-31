@@ -21,8 +21,8 @@ public class Countdown extends Scene {
     public Countdown(MainGameManager mainGameManager, Runnable runnable) {
         super(mainGameManager);
         function = runnable;
-        countdownFont = new FontWrap(mainGameManager.fontHub.canisMinorHuge,
-                FontHub.resizeFont(mainGameManager.fontHub.canisMinorHuge, SCREEN_WIDTH - 400, "SHOOT!"));
+        countdownFont = new FontWrap(mainGameManager.fontHub.canisMinor,
+                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, SCREEN_WIDTH - 400, "SHOOT!"));
     }
 
     @Override

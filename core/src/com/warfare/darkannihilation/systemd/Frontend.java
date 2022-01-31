@@ -12,7 +12,7 @@ import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class Frontend implements Disposable {
-    private static final int x = (int) (SCREEN_WIDTH - 200);
+    private static final int x = (int) (SCREEN_WIDTH - 300);
     private static final int y = SCREEN_HEIGHT - 100;
 
     public static final OrthographicCamera camera = new OrthographicCamera();

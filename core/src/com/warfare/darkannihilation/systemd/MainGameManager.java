@@ -33,14 +33,18 @@ public class MainGameManager {
         lastScene.dispose();
     }
 
+    public void finishAllScenes() {
+        mainGame.scenesStack.clear();
+    }
+
     public void startScene(Scene scene, boolean loadingScreen) {
         if (loadingScreen)
             startScene(new DarkScene(this, scene, mainGame.scenesStack.lastScene, 1.5f), false);
         else {
             scene.create();
 
-            mainGame.scenesStack.push(scene);
             mainGame.pause();
+            mainGame.scenesStack.push(scene);
 
             scene.resume();
         }

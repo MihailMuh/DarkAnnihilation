@@ -21,6 +21,7 @@ import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.support.HealthKit;
 import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.systemd.gameover.GameOver;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.utils.PoolWrap;
@@ -103,7 +104,6 @@ public class Game extends Scene {
             firstRun = false;
             mainGameManager.startScene(new Countdown(mainGameManager, this::baseUpdate), false);
 
-            mainGameManager.soundHub.firstLevelMusic.setLooping(true);
             mainGameManager.soundHub.firstLevelMusic.play();
         }
     }
@@ -127,6 +127,13 @@ public class Game extends Scene {
 
         player.shoot();
 
+        updateEmpire();
+        updateBulletsEnemy();
+        updateBullets();
+        updateExplosions();
+    }
+
+    private void updateEmpire() {
         for (Opponent opponent : empire) {
             if (opponent.visible) {
                 opponent.x -= moveAll;
@@ -150,7 +157,9 @@ public class Game extends Scene {
                 }
             }
         }
+    }
 
+    private void updateBulletsEnemy() {
         for (Iterator<BaseBullet> iterator = bulletsEnemy.iterator(); iterator.hasNext(); ) {
             BaseBullet baseBullet = iterator.next();
             if (baseBullet.visible) {
@@ -164,12 +173,9 @@ public class Game extends Scene {
                 }
             }
         }
+    }
 
-        for (Bullet bullet : bullets) {
-            bullet.x -= moveAll;
-            bullet.update();
-        }
-
+    private void updateExplosions() {
         for (Iterator<Explosion> iterator = explosions.iterator(); iterator.hasNext(); ) {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
@@ -181,10 +187,27 @@ public class Game extends Scene {
         }
     }
 
+    private void updateBullets() {
+        for (Bullet bullet : bullets) {
+            bullet.x -= moveAll;
+            bullet.update();
+        }
+    }
+
     private void spawn() {
         if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
 
         if (!healthKit.visible && randomBoolean(0.015f)) healthKit.reset();
+
+        if (player.isDead()) {
+            moveAll = 0;
+            mainGameManager.startScene(new GameOver(mainGameManager, () -> {
+                updateEmpire();
+                updateBulletsEnemy();
+                updateBullets();
+                updateExplosions();
+            }, empire, bullets, bulletsEnemy, explosionPool), false);
+        }
     }
 
     @Override

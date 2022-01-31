@@ -13,47 +13,35 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoa
 import com.warfare.darkannihilation.utils.AssetManagerSuper;
 
 public class FontHub extends BaseHub {
-    public BitmapFont canisMinor, canisMinorHuge;
+    public BitmapFont canisMinor;
 
     public FontHub(AssetManagerSuper assetManager) {
         super(assetManager);
 
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-        assetManager.setLoader(BitmapFont.class, ".otf", new FreetypeFontLoader(resolver));
+        assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 
         FreeTypeFontLoaderParameter params = new FreeTypeFontLoaderParameter();
-        params.fontFileName = "fonts/canis_minor.otf";
-        params.fontParameters.size = 80;
-        params.fontParameters.minFilter = Texture.TextureFilter.Linear;
+        params.fontFileName = "fonts/canis_minor.ttf";
+        params.fontParameters.size = 150;
+        params.fontParameters.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         params.fontParameters.magFilter = Texture.TextureFilter.Linear;
         params.fontParameters.borderColor = Color.WHITE;
         params.fontParameters.hinting = FreeTypeFontGenerator.Hinting.Full;
-        params.fontParameters.shadowOffsetY = 11;
-        params.fontParameters.shadowOffsetX = 11;
-        params.fontParameters.borderWidth = 3f;
+        params.fontParameters.gamma = 0.5f;
+        params.fontParameters.shadowOffsetY = 13;
+        params.fontParameters.shadowOffsetX = 13;
+        params.fontParameters.borderWidth = 5f;
+        params.fontParameters.incremental = true;
+        params.fontParameters.genMipMaps = true;
 
-        assetManager.load("canis_minor.otf", BitmapFont.class, params);
-
-        params = new FreeTypeFontLoaderParameter();
-        params.fontFileName = "fonts/canis_minor.otf";
-        params.fontParameters.size = 140;
-        params.fontParameters.borderColor = Color.WHITE;
-        params.fontParameters.hinting = FreeTypeFontGenerator.Hinting.Full;
-        params.fontParameters.minFilter = Texture.TextureFilter.Linear;
-        params.fontParameters.magFilter = Texture.TextureFilter.Linear;
-        params.fontParameters.gamma = 1f;
-        params.fontParameters.shadowOffsetY = 5;
-        params.fontParameters.shadowOffsetX = 5;
-        params.fontParameters.borderWidth = 3f;
-
-        assetManager.load("canis_minor_huge.otf", BitmapFont.class, params);
+        assetManager.load("canis_minor.ttf", BitmapFont.class, params);
     }
 
     @Override
     public void boot() {
-        canisMinor = assetManager.get("canis_minor.otf", BitmapFont.class);
-        canisMinorHuge = assetManager.get("canis_minor_huge.otf", BitmapFont.class);
+        canisMinor = assetManager.get("canis_minor.ttf", BitmapFont.class);
     }
 
     public static float resizeFont(BitmapFont font, float maxWidth, String... texts) {

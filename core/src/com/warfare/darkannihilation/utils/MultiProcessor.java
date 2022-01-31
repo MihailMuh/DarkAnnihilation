@@ -28,8 +28,8 @@ public class MultiProcessor extends InputAdapter {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         postOnTouch(() -> {
             onTouch();
-            for (int i = 0; i < listeners.size; i++)
-                if (listeners.get(i).touchDragged(touchPos.x, touchPos.y, pointer)) break;
+            for (ClickListener listener : listeners)
+                if (listener.touchDragged(touchPos.x, touchPos.y, pointer)) break;
         });
         return true;
     }
@@ -38,8 +38,8 @@ public class MultiProcessor extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         postOnTouch(() -> {
             onTouch();
-            for (int i = 0; i < listeners.size; i++)
-                if (listeners.get(i).touchDown(touchPos.x, touchPos.y, pointer)) break;
+            for (ClickListener listener : listeners)
+                if (listener.touchDown(touchPos.x, touchPos.y, pointer)) break;
         });
         return true;
     }
@@ -48,8 +48,8 @@ public class MultiProcessor extends InputAdapter {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         postOnTouch(() -> {
             onTouch();
-            for (int i = 0; i < listeners.size; i++)
-                if (listeners.get(i).touchUp(touchPos.x, touchPos.y, pointer)) break;
+            for (ClickListener listener : listeners)
+                if (listener.touchUp(touchPos.x, touchPos.y, pointer)) break;
         });
         return true;
     }
@@ -58,8 +58,8 @@ public class MultiProcessor extends InputAdapter {
     public boolean keyDown(int keycode) {
         postOnTouch(() -> {
             onTouch();
-            for (int i = 0; i < listeners.size; i++)
-                if (listeners.get(i).keyDown(keycode)) break;
+            for (ClickListener listener : listeners)
+                if (listener.keyDown(keycode)) break;
         });
         return true;
     }

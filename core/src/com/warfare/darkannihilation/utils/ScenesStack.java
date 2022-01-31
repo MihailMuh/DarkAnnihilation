@@ -32,6 +32,20 @@ public class ScenesStack implements Iterable<Scene> {
         return removed;
     }
 
+    public void clear() {
+        lastScene.pause();
+
+        for (int i = 0; i < scenes.size; i++) {
+            scenes.get(i).dispose();
+        }
+        lastScene.dispose();
+
+        scenes.clear();
+
+        lastScene = blankScene;
+        size = 0;
+    }
+
     @Override
     public Iterator<Scene> iterator() {
         return scenes.iterator();

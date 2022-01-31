@@ -45,7 +45,7 @@ public class ImageHub extends BaseHub {
     public void lazyLoading() {
         defaultExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "default_explosion"), 0.02f);
         hugeExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "skull_explosion"), 0.05f);
-        tripleExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.02f);
+        tripleExplosionAnim = new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "triple_explosion"), 0.03f);
         loadingScreen = new StaticScreen(new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "loading"), 0.05f));
 
         blackColor = commonAtlas.findRegion("dark_null");

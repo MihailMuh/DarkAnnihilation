@@ -11,17 +11,17 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_H
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.utils.PoolWrap;
+import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
 public class Player extends MovementSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
-    private final Sound sound;
+    private final SoundWrap sound;
     private final PoolWrap<Bullet> bulletPool;
     private final PoolWrap<Heart> armorPool;
 
@@ -31,7 +31,7 @@ public class Player extends MovementSprite {
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
-    public Player(ImageHub imageHub, Sound sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+    public Player(ImageHub imageHub, SoundWrap sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
         super(explosionPool, imageHub.millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
         this.bulletPool = bulletPool;
         this.sound = sound;
@@ -129,7 +129,7 @@ public class Player extends MovementSprite {
             bulletPool.obtain().start(X, Y);
             bulletPool.obtain().start(X + 7, Y);
 
-            sound.play(0.17f);
+            sound.play();
         }
     }
 
@@ -161,17 +161,26 @@ public class Player extends MovementSprite {
         health -= dmg;
         changeHearts();
 
-        if (health <= 0) kill();
-
+        if (isDead() && visible) kill();
         return false;
     }
 
     @Override
     public void kill() {
+        visible = false;
         explodeHuge();
+    }
+
+    public boolean isDead() {
+        return health <= 0;
     }
 
     public void renderHearts() {
         for (Heart heart : hearts) heart.render();
+    }
+
+    @Override
+    public void render() {
+        if (visible) super.render();
     }
 }
