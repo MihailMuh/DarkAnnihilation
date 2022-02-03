@@ -10,15 +10,16 @@ import static com.warfare.darkannihilation.constants.Names.BOMB;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.player.Player;
-import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.abstraction.Scene;
+import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bomb;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Vader;
+import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.screens.DynamicScreen;
+import com.warfare.darkannihilation.systemd.gameover.GameOverScreen;
 import com.warfare.darkannihilation.support.HealthKit;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.gameover.GameOver;
@@ -102,7 +103,7 @@ public class Game extends Scene {
             gameTask.start();
         } else {
             firstRun = false;
-            mainGameManager.startScene(new Countdown(mainGameManager, this::baseUpdate), false);
+            mainGameManager.startScene(new Countdown(mainGameManager, screen, player), false);
 
             mainGameManager.soundHub.firstLevelMusic.play();
         }
@@ -113,23 +114,22 @@ public class Game extends Scene {
         gameTask.stop();
     }
 
-    private void baseUpdate() {
+    @Override
+    public void update() {
         moveAll = player.speedX / 2.8f;
-
         screen.x -= moveAll;
 
         player.update();
-    }
-
-    @Override
-    public void update() {
-        baseUpdate();
-
         player.shoot();
 
         updateEmpire();
         updateBulletsEnemy();
-        updateBullets();
+
+        for (Bullet bullet : bullets) {
+            bullet.x -= moveAll;
+            bullet.update();
+        }
+
         updateExplosions();
     }
 
@@ -150,10 +150,10 @@ public class Game extends Scene {
                             bulletPool.free(bullet);
                             break;
                         }
-                    } else {
-                        iterator.remove();
-                        bulletPool.free(bullet);
+                        continue;
                     }
+                    iterator.remove();
+                    bulletPool.free(bullet);
                 }
             }
         }
@@ -166,11 +166,11 @@ public class Game extends Scene {
                 baseBullet.x -= moveAll;
                 baseBullet.update();
                 player.killedByBullet(baseBullet);
-            } else {
-                iterator.remove();
-                if (baseBullet.name == BOMB) {
-                    bombPool.free(baseBullet);
-                }
+                continue;
+            }
+            iterator.remove();
+            if (baseBullet.name == BOMB) {
+                bombPool.free(baseBullet);
             }
         }
     }
@@ -180,17 +180,10 @@ public class Game extends Scene {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
                 explosion.x -= moveAll;
-            } else {
-                iterator.remove();
-                explosionPool.free(explosion);
+                continue;
             }
-        }
-    }
-
-    private void updateBullets() {
-        for (Bullet bullet : bullets) {
-            bullet.x -= moveAll;
-            bullet.update();
+            iterator.remove();
+            explosionPool.free(explosion);
         }
     }
 
@@ -199,14 +192,10 @@ public class Game extends Scene {
 
         if (!healthKit.visible && randomBoolean(0.015f)) healthKit.reset();
 
-        if (player.isDead()) {
-            moveAll = 0;
-            mainGameManager.startScene(new GameOver(mainGameManager, () -> {
-                updateEmpire();
-                updateBulletsEnemy();
-                updateBullets();
-                updateExplosions();
-            }, empire, bullets, bulletsEnemy, explosionPool), false);
+        if (player.isDead() && player.visible) {
+            player.visible = false;
+            frontend.setScreen(new GameOverScreen(mainGameManager.imageHub.gameOverScreen, mainGameManager.fontHub));
+            mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions, explosionPool), false);
         }
     }
 

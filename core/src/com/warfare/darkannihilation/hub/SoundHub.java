@@ -44,7 +44,7 @@ public class SoundHub extends BaseHub {
     }
 
     public void getGameSounds() {
-        firstLevelMusic = assetManager.getMusic(FIRST_LEVEL_MUSIC, 0.75f);
+        firstLevelMusic = assetManager.getMusic(FIRST_LEVEL_MUSIC, 1);
         allMusic.add(firstLevelMusic);
 
         laserSound = assetManager.getSound(LASER_SOUND, 0.17f);

@@ -10,7 +10,6 @@ import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.screens.StaticScreen;
 import com.warfare.darkannihilation.systemd.game.Game;
 
@@ -30,9 +29,8 @@ public class Menu extends Scene {
 
         screen = new StaticScreen(mainGameManager.imageHub.menuScreenGIF);
 
-        Button.buttonFont = new FontWrap(mainGameManager.fontHub.canisMinor,
-                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, mainGameManager.imageHub.buttonPress.originalWidth - 140,
-                        "Quit", "Start", "Top Score", "Settings"));
+        Button.buttonFont = FontWrap.scaledFontWrap(mainGameManager.fontHub.canisMinor,
+                mainGameManager.imageHub.buttonPress.originalWidth - 140, "Quit", "Start", "Top Score", "Settings");
 
         int step = 50;
         buttons[0] = new Button(mainGameManager.imageHub, "Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {

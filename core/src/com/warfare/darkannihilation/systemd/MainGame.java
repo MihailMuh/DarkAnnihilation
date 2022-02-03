@@ -40,10 +40,10 @@ public class MainGame extends BaseApp {
         frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 0.7f));
 
         Processor.post(() -> {
-            resume();
-
             Service.sleep(500);
             imageHub.lazyLoading();
+
+            resume();
         });
     }
 

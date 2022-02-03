@@ -6,16 +6,19 @@ import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
+import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.PoolWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
@@ -152,22 +155,31 @@ public class Player extends MovementSprite {
         x += speedX;
         y += speedY;
 
-        speedX = (endX - x) / 3f;
-        speedY = (endY - y) / 3f;
+        speedX = (endX - x) * 20 * delta;
+        speedY = (endY - y) * 20 * delta;
     }
 
     @Override
     public boolean damage(int dmg) {
-        health -= dmg;
-        changeHearts();
+        Processor.post(() -> {
+            health -= dmg;
+            changeHearts();
 
-        if (isDead() && visible) kill();
+            if (isDead() && visible) {
+                kill();
+
+                Gdx.input.vibrate(1500);
+            } else {
+
+                if (dmg >= 20) Gdx.input.vibrate(120);
+                else Gdx.input.vibrate(60);
+            }
+        });
         return false;
     }
 
     @Override
     public void kill() {
-        visible = false;
         explodeHuge();
     }
 

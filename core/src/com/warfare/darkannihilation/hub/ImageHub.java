@@ -26,6 +26,7 @@ public class ImageHub extends BaseHub {
     public AtlasRegion bulletImg;
     public AtlasRegion blackColor;
     public AtlasRegion healthKitImg;
+    public AtlasRegion gameOverScreen;
 
     public ImageHub(AssetManagerSuper assetManagerSuper) {
         super(assetManagerSuper);
@@ -49,6 +50,7 @@ public class ImageHub extends BaseHub {
         loadingScreen = new StaticScreen(new AnimationSuper(assetManager.getAtlasRegions(commonAtlas, "loading"), 0.05f));
 
         blackColor = commonAtlas.findRegion("dark_null");
+        gameOverScreen = commonAtlas.findRegion("gameover");
 
         fullHeartBlue = commonAtlas.findRegion("full_blue_heart");
         halfHeartBlue = commonAtlas.findRegion("half_blue_heart");

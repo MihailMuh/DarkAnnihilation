@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.screens.BaseScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
@@ -9,7 +10,7 @@ import com.warfare.darkannihilation.utils.ClickListener;
 public abstract class Scene implements ApplicationListener {
     protected final MainGameManager mainGameManager;
     protected ClickListener clickListener;
-    protected BaseScreen screen;
+    protected BaseSprite screen;
 
     public Scene(MainGameManager mainGameManager) {
         this(mainGameManager, null, null);

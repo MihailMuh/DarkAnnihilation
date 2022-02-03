@@ -7,12 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.bullet.BaseBullet;
-import com.warfare.darkannihilation.screens.BaseScreen;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 class Frontend {
@@ -23,14 +22,14 @@ class Frontend {
     private final float textX, textY;
 
     private final Player player;
-    private final BaseScreen screen;
+    private BaseSprite screen;
 
     private final Array<Explosion> explosions;
     private final Array<Bullet> bullets;
     private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
 
-    Frontend(Game game, BitmapFont bitmapFont, Player player, BaseScreen screen, Array<Explosion> explosions,
+    Frontend(Game game, BitmapFont bitmapFont, Player player, BaseSprite screen, Array<Explosion> explosions,
              Array<Bullet> bullets, Array<Opponent> empire, Array<BaseBullet> bulletsEnemy) {
         this.game = game;
         this.player = player;
@@ -40,12 +39,16 @@ class Frontend {
         this.empire = empire;
         this.bulletsEnemy = bulletsEnemy;
 
-        font = new FontWrap(bitmapFont, FontHub.resizeFont(bitmapFont, HALF_SCREEN_WIDTH / 1.75f, "Current score: 10"));
+        font = FontWrap.scaledFontWrap(bitmapFont, HALF_SCREEN_WIDTH / 1.75f, "Current score: 10");
         textX = HALF_SCREEN_WIDTH - font.getTextWidth("Current score: 10") / 2f;
         textY = SCREEN_HEIGHT - font.getTextHeight("Current score: 10");
     }
 
-    public void render() {
+    void setScreen(BaseSprite screen) {
+        this.screen = screen;
+    }
+
+    void render() {
         screen.render();
         player.render();
 

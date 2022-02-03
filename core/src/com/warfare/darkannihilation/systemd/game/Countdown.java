@@ -6,28 +6,31 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.hub.FontHub;
+import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
+import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Countdown extends Scene {
-    private final Runnable function;
+    private final Player player;
     private final FontWrap countdownFont;
 
     private String text = "3";
     private float textX, textY, lastSwitch;
     private int count = 3;
 
-    public Countdown(MainGameManager mainGameManager, Runnable runnable) {
+    public Countdown(MainGameManager mainGameManager, BaseSprite screen, Player player) {
         super(mainGameManager);
-        function = runnable;
-        countdownFont = new FontWrap(mainGameManager.fontHub.canisMinor,
-                FontHub.resizeFont(mainGameManager.fontHub.canisMinor, SCREEN_WIDTH - 400, "SHOOT!"));
+        this.screen = screen;
+        this.player = player;
+
+        countdownFont = FontWrap.scaledFontWrap(mainGameManager.fontHub.canisMinor, SCREEN_WIDTH - 400, "SHOOT!");
     }
 
     @Override
     public void update() {
-        function.run();
+        screen.x -= player.speedX / 2.8f;
+        player.update();
 
         if (time - lastSwitch > 1) {
             lastSwitch = time;

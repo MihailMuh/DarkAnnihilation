@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.systemd.gameover;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Names.HUGE_EXPLOSION;
+import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
@@ -18,32 +19,53 @@ import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
+import java.util.Iterator;
+
 public class GameOver extends Scene {
     private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
     private final Array<Bullet> bullets;
+    private final Array<Explosion> explosions;
     private final PoolWrap<Explosion> explosionPool;
-
-    private final Runnable update;
 
     private float lastEmpire, lastBullet, lastEnemyBullet;
 
-    public GameOver(MainGameManager mainGameManager, Runnable update, Array<Opponent> empire,
-                    Array<Bullet> bullets, Array<BaseBullet> bulletsEnemy, PoolWrap<Explosion> explosionPool) {
-        super(mainGameManager);
+    public GameOver(MainGameManager mainGameManager, Array<Opponent> empire, Array<Bullet> bullets,
+                    Array<BaseBullet> bulletsEnemy, Array<Explosion> explosions, PoolWrap<Explosion> explosionPool) {
+        super(mainGameManager, new GameOverClickListener(mainGameManager));
 
         this.empire = empire;
         this.bullets = bullets;
         this.bulletsEnemy = bulletsEnemy;
+        this.explosions = explosions;
         this.explosionPool = explosionPool;
-        this.update = update;
     }
 
     @Override
     public void update() {
-        update.run();
+        for (Opponent opponent : empire) {
+            if (opponent.visible) {
+                opponent.update();
+            }
+        }
 
-        if (time - lastEmpire >= 0.2) {
+        for (BaseBullet bullet : bulletsEnemy) {
+            bullet.update();
+        }
+
+        for (Bullet bullet : bullets) {
+            bullet.update();
+        }
+
+        for (Iterator<Explosion> iterator = explosions.iterator(); iterator.hasNext(); ) {
+            Explosion explosion = iterator.next();
+            if (!explosion.visible) {
+                iterator.remove();
+                explosionPool.free(explosion);
+            }
+        }
+
+        if (time - lastEmpire >= 0.38) {
             lastEmpire = time;
 
             randBoom();
@@ -51,7 +73,8 @@ public class GameOver extends Scene {
             if (empire.size > 0) {
                 Opponent opponent = empire.pop();
 
-                if (opponent.visible) boom(opponent.centerX(), opponent.centerY());
+                if (opponent.visible)
+                    boom(opponent.centerX(), opponent.centerY(), MEDIUM_EXPLOSION_DEFAULT);
             }
         }
 
@@ -62,18 +85,18 @@ public class GameOver extends Scene {
 
             if (bullets.size > 0) {
                 Bullet bullet = bullets.pop();
-                boom(bullet.centerX(), bullet.centerY());
+                boom(bullet.centerX(), bullet.centerY(), SMALL_EXPLOSION_DEFAULT);
             }
         }
 
-        if (time - lastEnemyBullet >= 0.1) {
+        if (time - lastEnemyBullet >= 0.05) {
             lastEnemyBullet = time;
 
             randBoom();
 
             if (bulletsEnemy.size > 0) {
                 BaseBullet bullet = bulletsEnemy.pop();
-                boom(bullet.centerX(), bullet.centerY());
+                boom(bullet.centerX(), bullet.centerY(), SMALL_EXPLOSION_DEFAULT);
             }
         }
     }

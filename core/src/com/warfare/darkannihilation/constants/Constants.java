@@ -128,7 +128,7 @@ public final class Constants {
     public static final byte NUMBER_BOSS_SHOTS = NUMBER_BOMBS + 30;
 
     //    other
-    public static final float BUTTON_CLICK_TIME = 0.35f;
+    public static final float BUTTON_CLICK_TIME = 0.1f;
 
     public static final short CHANGER_GUNS_CLICK_TIME = 700;
 

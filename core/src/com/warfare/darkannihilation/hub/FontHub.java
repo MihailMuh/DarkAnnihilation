@@ -1,7 +1,5 @@
 package com.warfare.darkannihilation.hub;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,14 +11,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoa
 import com.warfare.darkannihilation.utils.AssetManagerSuper;
 
 public class FontHub extends BaseHub {
-    public BitmapFont canisMinor;
+    public BitmapFont canisMinor, fiendish;
 
     public FontHub(AssetManagerSuper assetManager) {
         super(assetManager);
 
-        FileHandleResolver resolver = new InternalFileHandleResolver();
-        assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-        assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+        assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(assetManager.resolver));
+        assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(assetManager.resolver));
 
         FreeTypeFontLoaderParameter params = new FreeTypeFontLoaderParameter();
         params.fontFileName = "fonts/canis_minor.ttf";
@@ -36,12 +33,31 @@ public class FontHub extends BaseHub {
         params.fontParameters.incremental = true;
         params.fontParameters.genMipMaps = true;
 
+        loadFiendish(new FreeTypeFontLoaderParameter());
+
         assetManager.load("canis_minor.ttf", BitmapFont.class, params);
+    }
+
+    private void loadFiendish(FreeTypeFontLoaderParameter params) {
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = params.fontParameters;
+
+        params.fontFileName = "fonts/fiendish.ttf";
+        parameter.size = 190;
+        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
+        parameter.hinting = FreeTypeFontGenerator.Hinting.Full;
+        parameter.color = Color.BLACK;
+        parameter.spaceX = 20;
+        parameter.incremental = true;
+        parameter.genMipMaps = true;
+
+        assetManager.load("fiendish.ttf", BitmapFont.class, params);
     }
 
     @Override
     public void boot() {
-        canisMinor = assetManager.get("canis_minor.ttf", BitmapFont.class);
+        canisMinor = assetManager.get("canis_minor.ttf");
+        fiendish = assetManager.get("fiendish.ttf");
     }
 
     public static float resizeFont(BitmapFont font, float maxWidth, String... texts) {

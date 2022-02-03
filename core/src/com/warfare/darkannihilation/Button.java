@@ -4,6 +4,7 @@ import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.abstraction.BaseButton;
@@ -46,11 +47,14 @@ public class Button extends BaseButton {
     public void onClick(float X, float Y) {
         if (time - shootTime >= BUTTON_CLICK_TIME) {
             shootTime = time;
-
             pressed = false;
+
             if (checkClick(X, Y)) {
                 pressed = true;
-                Service.sleep(160);
+                Gdx.input.vibrate(50);
+
+                Service.sleep(95);
+
                 pressed = false;
                 Processor.post(runnable);
             }
@@ -68,7 +72,7 @@ public class Button extends BaseButton {
             buttonFont.setColor(Color.LIGHT_GRAY);
         } else {
             spriteBatch.draw(image, x, y, width, height);
-            buttonFont.setColor(255, 255, 255, 1);
+            buttonFont.resetColor();
         }
 
         buttonFont.draw(textX, textY, text);
