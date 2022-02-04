@@ -56,9 +56,4 @@ public class Vader extends Opponent {
 
         if (x < -width || x > SCREEN_WIDTH || y < -height) reset();
     }
-
-    @Override
-    public void render() {
-        if (visible) super.render();
-    }
 }

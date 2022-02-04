@@ -1,8 +1,11 @@
 package com.warfare.darkannihilation.hub;
 
+import static com.warfare.darkannihilation.constants.Assets.ATTENTION_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.LASER_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.MENU_MUSIC;
+import static com.warfare.darkannihilation.constants.Assets.METAL_SOUND;
+import static com.warfare.darkannihilation.constants.Assets.SHOTGUN_SOUND;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.utils.AssetManagerSuper;
@@ -14,10 +17,12 @@ public class SoundHub extends BaseHub {
     private final Array<Audio> allMusic = new Array<>(3);
     private boolean cache = false;
 
+    public static SoundWrap metalSound;
+    public SoundWrap shotgunSound;
     public SoundWrap laserSound;
 
     public MusicWrap menuMusic;
-    public MusicWrap firstLevelMusic;
+    public MusicWrap firstLevelMusic, attentionSound;
 
     public SoundHub(AssetManagerSuper assetManager) {
         super(assetManager);
@@ -36,25 +41,38 @@ public class SoundHub extends BaseHub {
 
     public void loadGameSounds() {
         assetManager.loadMusic(FIRST_LEVEL_MUSIC);
+        assetManager.loadMusic(ATTENTION_SOUND);
 
         if (!cache) {
             assetManager.loadSound(LASER_SOUND);
-            cache = true;
+            assetManager.loadSound(METAL_SOUND);
+            assetManager.loadSound(SHOTGUN_SOUND);
         }
     }
 
     public void getGameSounds() {
-        firstLevelMusic = assetManager.getMusic(FIRST_LEVEL_MUSIC, 1);
-        allMusic.add(firstLevelMusic);
+        firstLevelMusic = assetManager.getMusic(FIRST_LEVEL_MUSIC, 0.85f);
+        attentionSound = assetManager.getMusic(ATTENTION_SOUND, 0.85f);
+        allMusic.add(firstLevelMusic, attentionSound);
 
-        laserSound = assetManager.getSound(LASER_SOUND, 0.17f);
-        allMusic.add(laserSound);
+        if (!cache) {
+            laserSound = assetManager.getSound(LASER_SOUND, 0.17f);
+            metalSound = assetManager.getSound(METAL_SOUND, 0.45f);
+            shotgunSound = assetManager.getSound(SHOTGUN_SOUND, 0.25f);
+
+            cache = true;
+
+            allMusic.add(laserSound, metalSound, shotgunSound);
+        }
     }
 
     public void disposeGameSounds() {
         assetManager.unload(FIRST_LEVEL_MUSIC);
         allMusic.removeValue(firstLevelMusic, true);
+        allMusic.removeValue(attentionSound, true);
+
         firstLevelMusic = null;
+        attentionSound = null;
     }
 
     public void setVolume(float newVolume) {

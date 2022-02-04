@@ -69,7 +69,6 @@ public final class Constants {
     public static final byte VADER_DAMAGE = 5;
     public static final byte NUMBER_VADER = 12;
 
-    public static final short TRIPLE_FIGHTER_SHOOT_TIME = 1_500;
     public static final byte TRIPLE_FIGHTER_HEALTH = 6;
     public static final byte TRIPLE_FIGHTER_DAMAGE = 10;
 

@@ -18,13 +18,13 @@ import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.PoolWrap;
-import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
 public class Player extends MovementSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
-    private final SoundWrap sound;
+    private final SoundHub soundHub;
     private final PoolWrap<Bullet> bulletPool;
     private final PoolWrap<Heart> armorPool;
 
@@ -34,10 +34,10 @@ public class Player extends MovementSprite {
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
-    public Player(ImageHub imageHub, SoundWrap sound, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+    public Player(ImageHub imageHub, SoundHub soundHub, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
         super(explosionPool, imageHub.millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
         this.bulletPool = bulletPool;
-        this.sound = sound;
+        this.soundHub = soundHub;
         armorPool = new PoolWrap<Heart>(hearts) {
             @Override
             protected ArmorHeart newObject() {
@@ -132,7 +132,7 @@ public class Player extends MovementSprite {
             bulletPool.obtain().start(X, Y);
             bulletPool.obtain().start(X + 7, Y);
 
-            sound.play();
+            soundHub.laserSound.play();
         }
     }
 
@@ -180,6 +180,7 @@ public class Player extends MovementSprite {
 
     @Override
     public void kill() {
+        visible = false;
         explodeHuge();
     }
 

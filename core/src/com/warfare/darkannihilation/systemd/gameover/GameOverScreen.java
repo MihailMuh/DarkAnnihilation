@@ -13,7 +13,7 @@ import com.warfare.darkannihilation.utils.FontWrap;
 public class GameOverScreen extends BaseSprite {
     private final FontWrap fontFinger;
     private final float textFingerX, textFingerY;
-    private static final String TEXT_FINGER = "Tap four or more fingers to restart";
+    private static final String TEXT_FINGER = "Tap this screen to restart";
 
     private final FontWrap fontDead;
     private static final String YOU_DEAD = "You Dead";

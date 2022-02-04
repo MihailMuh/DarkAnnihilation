@@ -8,6 +8,7 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -15,7 +16,11 @@ import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bomb;
 import com.warfare.darkannihilation.bullet.Bullet;
+import com.warfare.darkannihilation.bullet.BulletEnemy;
+import com.warfare.darkannihilation.enemy.Attention;
 import com.warfare.darkannihilation.enemy.Demoman;
+import com.warfare.darkannihilation.enemy.Rocket;
+import com.warfare.darkannihilation.enemy.TripleFighter;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.screens.DynamicScreen;
@@ -36,6 +41,7 @@ public class Game extends Scene {
     private Player player;
     private Demoman demoman;
     private HealthKit healthKit;
+    private Attention attention;
 
     private final Array<Explosion> explosions = new Array<>(NUMBER_EXPLOSION);
     private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
@@ -45,6 +51,7 @@ public class Game extends Scene {
     private PoolWrap<Explosion> explosionPool;
     private PoolWrap<Bullet> bulletPool;
     private PoolWrap<BaseBullet> bombPool;
+    private PoolWrap<BaseBullet> bulletEnemyPool;
 
     private boolean firstRun = true;
     private float moveAll;
@@ -80,16 +87,27 @@ public class Game extends Scene {
                 return new Bomb(explosionPool, mainGameManager.imageHub.bombImg);
             }
         };
+        bulletEnemyPool = new PoolWrap<BaseBullet>(bulletsEnemy) {
+            @Override
+            protected BulletEnemy newObject() {
+                return new BulletEnemy(explosionPool, mainGameManager.imageHub.bulletEnemyImg);
+            }
+        };
 
         demoman = new Demoman(explosionPool, bombPool, mainGameManager.imageHub.demomanImg);
         healthKit = new HealthKit(mainGameManager.imageHub.healthKitImg);
-        player = new Player(mainGameManager.imageHub, mainGameManager.soundHub.laserSound, bulletPool, explosionPool);
+        Rocket rocket = new Rocket(explosionPool, mainGameManager.imageHub.rocketImg);
+        attention = new Attention(mainGameManager.imageHub.attentionImg, mainGameManager.soundHub.attentionSound, rocket);
+        player = new Player(mainGameManager.imageHub, mainGameManager.soundHub, bulletPool, explosionPool);
         screen = new DynamicScreen(mainGameManager.imageHub.starScreenGIF);
 
         for (int i = 0; i < NUMBER_VADER; i++) {
-            empire.add(new Vader(explosionPool, mainGameManager.imageHub.vadersImages));
+            if (MathUtils.random() <= 0.12)
+                newTriple();
+            else empire.add(new Vader(explosionPool, mainGameManager.imageHub.vadersImages));
         }
-        empire.add(demoman, healthKit);
+        newTriple();
+        empire.add(demoman, healthKit, attention, rocket);
 
         frontend = new Frontend(this, mainGameManager.fontHub.canisMinor, player, screen, explosions, bullets, empire, bulletsEnemy);
 
@@ -161,16 +179,18 @@ public class Game extends Scene {
 
     private void updateBulletsEnemy() {
         for (Iterator<BaseBullet> iterator = bulletsEnemy.iterator(); iterator.hasNext(); ) {
-            BaseBullet baseBullet = iterator.next();
-            if (baseBullet.visible) {
-                baseBullet.x -= moveAll;
-                baseBullet.update();
-                player.killedByBullet(baseBullet);
+            BaseBullet bullet = iterator.next();
+            if (bullet.visible) {
+                bullet.x -= moveAll;
+                bullet.update();
+                player.killedByBullet(bullet);
                 continue;
             }
             iterator.remove();
-            if (baseBullet.name == BOMB) {
-                bombPool.free(baseBullet);
+            if (bullet.name == BOMB) {
+                bombPool.free(bullet);
+            } else {
+                bulletEnemyPool.free(bullet);
             }
         }
     }
@@ -192,11 +212,17 @@ public class Game extends Scene {
 
         if (!healthKit.visible && randomBoolean(0.015f)) healthKit.reset();
 
-        if (player.isDead() && player.visible) {
-            player.visible = false;
+        if (!attention.visible && score > 50 && randomBoolean(0.06f)) attention.reset();
+
+        if (player.isDead()) {
             frontend.setScreen(new GameOverScreen(mainGameManager.imageHub.gameOverScreen, mainGameManager.fontHub));
             mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions, explosionPool), false);
         }
+    }
+
+    private void newTriple() {
+        empire.add(new TripleFighter(explosionPool, bulletEnemyPool, mainGameManager.imageHub.tripleFighterImg,
+                mainGameManager.soundHub.shotgunSound, player));
     }
 
     @Override

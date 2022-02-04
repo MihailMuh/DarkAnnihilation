@@ -13,7 +13,7 @@ public class GameOverClickListener extends ClickListener {
 
     @Override
     public boolean touchDown(float x, float y, int pointer) {
-        if (pointer >= 3) manager.startScene(new Game(manager), true);
+        if (pointer >= 0) manager.startScene(new Game(manager), true);
         return true;
     }
 

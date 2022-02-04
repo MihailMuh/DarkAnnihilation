@@ -4,10 +4,9 @@ import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
-public abstract class Shooter extends MovementSprite {
+public abstract class Shooter extends Opponent {
     protected float lastShot;
     protected float shootTime;
 

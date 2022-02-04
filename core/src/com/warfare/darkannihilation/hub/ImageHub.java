@@ -21,12 +21,13 @@ public class ImageHub extends BaseHub {
     public AtlasRegion[] vadersImages;
     public AtlasRegion buttonPress, buttonNotPress;
     public AtlasRegion fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
-    public AtlasRegion demomanImg, bombImg, factoryImg, minionImg;
+    public AtlasRegion demomanImg, bombImg, factoryImg, minionImg, tripleFighterImg, attentionImg, rocketImg;
     public AtlasRegion millenniumFalcon;
     public AtlasRegion bulletImg;
     public AtlasRegion blackColor;
     public AtlasRegion healthKitImg;
     public AtlasRegion gameOverScreen;
+    public AtlasRegion bulletEnemyImg;
 
     public ImageHub(AssetManagerSuper assetManagerSuper) {
         super(assetManagerSuper);
@@ -59,6 +60,7 @@ public class ImageHub extends BaseHub {
         nullHeartRed = commonAtlas.findRegion("non_heart");
 
         healthKitImg = commonAtlas.findRegion("health");
+        bulletEnemyImg = commonAtlas.findRegion("bullet_enemy");
     }
 
     public void getMenuImages() {
@@ -83,6 +85,9 @@ public class ImageHub extends BaseHub {
         bombImg = levelAtlas.findRegion("bomb");
         factoryImg = levelAtlas.findRegion("factory");
         minionImg = levelAtlas.findRegion("minion");
+        tripleFighterImg = levelAtlas.findRegion("triple_fighter");
+        attentionImg = levelAtlas.findRegion("attention");
+        rocketImg = levelAtlas.findRegion("rocket");
 
         starScreenGIF = new AnimationSuper(assetManager.getAtlasRegions(levelAtlas, "star_screen"), 0.07f);
     }
@@ -98,6 +103,9 @@ public class ImageHub extends BaseHub {
         bombImg = null;
         factoryImg = null;
         minionImg = null;
+        tripleFighterImg = null;
+        attentionImg = null;
+        rocketImg = null;
 
         characterAtlas = null;
         millenniumFalcon = null;
