@@ -6,6 +6,7 @@ import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
+import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
@@ -19,6 +20,7 @@ import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.hub.SoundHub;
+import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
@@ -27,6 +29,7 @@ public class Player extends MovementSprite {
     private final SoundHub soundHub;
     private final PoolWrap<Bullet> bulletPool;
     private final PoolWrap<Heart> armorPool;
+    private final DifficultyAnalyzer difficultyAnalyzer;
 
     private float lastShot;
     private float endX, endY;
@@ -34,8 +37,9 @@ public class Player extends MovementSprite {
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
-    public Player(ImageHub imageHub, SoundHub soundHub, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+    public Player(DifficultyAnalyzer difficultyAnalyzer, ImageHub imageHub, SoundHub soundHub, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
         super(explosionPool, imageHub.millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
+        this.difficultyAnalyzer = difficultyAnalyzer;
         this.bulletPool = bulletPool;
         this.soundHub = soundHub;
         armorPool = new PoolWrap<Heart>(hearts) {
@@ -45,6 +49,7 @@ public class Player extends MovementSprite {
             }
         };
 
+        name = PLAYER;
         mxHealthMinus5 = maxHealth - 5;
         health = maxHealth;
 
@@ -155,14 +160,14 @@ public class Player extends MovementSprite {
         x += speedX;
         y += speedY;
 
-        speedX = (endX - x) * 20 * delta;
-        speedY = (endY - y) * 20 * delta;
+        speedX = (endX - x) * (20 * delta);
+        speedY = (endY - y) * (20 * delta);
     }
 
     @Override
-    public boolean damage(int dmg) {
+    public void damage(MovementSprite sprite) {
         Processor.post(() -> {
-            health -= dmg;
+            health -= sprite.damage;
             changeHearts();
 
             if (isDead() && visible) {
@@ -170,12 +175,12 @@ public class Player extends MovementSprite {
 
                 Gdx.input.vibrate(1500);
             } else {
-
-                if (dmg >= 20) Gdx.input.vibrate(120);
+                if (sprite.damage >= 20) Gdx.input.vibrate(120);
                 else Gdx.input.vibrate(60);
+
+                difficultyAnalyzer.addStatistics();
             }
         });
-        return false;
     }
 
     @Override

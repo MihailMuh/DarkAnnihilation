@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.constants;
 
 public final class Names {
     public static final byte NO_NAME = -123;
+    public static final byte PLAYER = -122;
 
     public static final byte SMALL_EXPLOSION_DEFAULT = -10;
     public static final byte MEDIUM_EXPLOSION_DEFAULT = -9;
@@ -16,5 +17,9 @@ public final class Names {
     public static final byte BOMB = -2;
     public static final byte BULLET = -1;
     public static final byte BULLET_ENEMY = 0;
+
     public static final byte ENEMY = 1;
+    public static final byte VADER = 2;
+    public static final byte TRIPLE = 3;
+
 }

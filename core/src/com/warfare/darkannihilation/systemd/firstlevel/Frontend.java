@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.systemd.game;
+package com.warfare.darkannihilation.systemd.firstlevel;
 
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
@@ -15,7 +15,7 @@ import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 class Frontend {
-    private final Game game;
+    private final FirstLevel firstLevel;
     private final StringBuilder stringBuilder = new StringBuilder(30);
 
     private final FontWrap font;
@@ -29,9 +29,9 @@ class Frontend {
     private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
 
-    Frontend(Game game, BitmapFont bitmapFont, Player player, BaseSprite screen, Array<Explosion> explosions,
+    Frontend(FirstLevel firstLevel, BitmapFont bitmapFont, Player player, BaseSprite screen, Array<Explosion> explosions,
              Array<Bullet> bullets, Array<Opponent> empire, Array<BaseBullet> bulletsEnemy) {
-        this.game = game;
+        this.firstLevel = firstLevel;
         this.player = player;
         this.screen = screen;
         this.explosions = explosions;
@@ -66,7 +66,7 @@ class Frontend {
         }
         player.renderHearts();
 
-        font.draw(textX, textY, stringBuilder.append("Current score: ").append(game.score).toString());
+        font.draw(textX, textY, stringBuilder.append("Current score: ").append(firstLevel.score).toString());
         stringBuilder.length = 0;
     }
 }

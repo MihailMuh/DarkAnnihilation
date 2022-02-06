@@ -1,14 +1,15 @@
 package com.warfare.darkannihilation.support;
 
 import static com.badlogic.gdx.math.MathUtils.random;
+import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
+import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
@@ -42,17 +43,13 @@ public class HealthKit extends Opponent {
     }
 
     @Override
-    public boolean killedByBullet(BaseBullet bullet) {
-        return false;
-    }
-
-    @Override
-    public boolean killedByPlayer(Player player) {
-        if (intersect(player)) {
-            visible = false;
-            Processor.post(() -> player.heal(damage));
-            return true;
+    public boolean killedBy(MovementSprite sprite) {
+        if (intersect(sprite)) {
+            if (sprite.name == PLAYER) {
+                visible = false;
+                Processor.post(() -> ((Player) sprite).heal(damage));
+            }
         }
-        return false;
+        return true;
     }
 }

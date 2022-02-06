@@ -5,8 +5,8 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
+import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.utils.audio.MusicWrap;
 
 public class Attention extends Opponent {
@@ -28,7 +28,7 @@ public class Attention extends Opponent {
     }
 
     @Override
-    public boolean killedByPlayer(Player player) {
+    public boolean killedBy(MovementSprite sprite) {
         return true;
     }
 

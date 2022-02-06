@@ -63,6 +63,10 @@ public class ImageHub extends BaseHub {
         bulletEnemyImg = commonAtlas.findRegion("bullet_enemy");
     }
 
+    public void loadMenuImages() {
+        assetManager.loadAtlas(MENU_ATLAS);
+    }
+
     public void getMenuImages() {
         menuScreenGIF = new AnimationSuper(assetManager.getAtlasRegions(MENU_ATLAS, "menu_screen"), 0.11f);
     }
@@ -72,7 +76,12 @@ public class ImageHub extends BaseHub {
         menuScreenGIF = null;
     }
 
-    public void getGameImages() {
+    public void loadFirstLevelImages() {
+        assetManager.loadAtlas(FIRST_LEVEL_ATLAS);
+        assetManager.loadAtlas(FALCON_ATLAS);
+    }
+
+    public void getFirstLevelImages() {
         levelAtlas = assetManager.get(FIRST_LEVEL_ATLAS);
         vadersImages = new AtlasRegion[]{levelAtlas.findRegion("vader", 0),
                 levelAtlas.findRegion("vader", 1), levelAtlas.findRegion("vader", 2)};
@@ -92,7 +101,7 @@ public class ImageHub extends BaseHub {
         starScreenGIF = new AnimationSuper(assetManager.getAtlasRegions(levelAtlas, "star_screen"), 0.07f);
     }
 
-    public void disposeGameImages() {
+    public void disposeFirstLevelImages() {
         assetManager.unload(FIRST_LEVEL_ATLAS);
         assetManager.unload(FALCON_ATLAS);
 

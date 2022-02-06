@@ -33,20 +33,20 @@ public class Loading extends Scene {
                 }
                 break;
             case 0:
-                if (mainGameManager.assetManager.update()) status = 1;
+                if (mainGameManager.loadResources()) status = 1;
                 return;
             case 1:
                 alpha += 0.02f;
 
                 if (alpha >= 1) {
-                    mainGameManager.soundHub.setVolume(1);
+                    soundHub.setVolume(1);
                     mainGameManager.finishLastScene();
                     mainGameManager.startScene(sceneToRun, false);
                 }
         }
 
         spriteBatch.setColor(0, 0, 0, alpha);
-        spriteBatch.draw(mainGameManager.imageHub.blackColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        spriteBatch.draw(imageHub.blackColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         spriteBatch.setColor(1, 1, 1, 1);
     }
 }

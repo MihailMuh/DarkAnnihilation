@@ -3,6 +3,7 @@ package com.warfare.darkannihilation.enemy;
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Constants.VADER_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.VADER_HEALTH;
+import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
@@ -10,6 +11,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Vader extends Opponent {
@@ -21,20 +23,25 @@ public class Vader extends Opponent {
         super(explosionPool, vadersImages[0], VADER_HEALTH, VADER_DAMAGE, 1);
         this.vadersImages = vadersImages;
 
+        name = VADER;
         borderY = SCREEN_HEIGHT + height;
         reset();
     }
 
     @Override
     public void reset() {
-        health = maxHealth;
-        image = vadersImages[random(0, 2)];
+        Processor.post(() -> {
+            if (shouldKill) visible = false;
 
-        x = random(SCREEN_WIDTH);
-        y = borderY;
+            health = maxHealth;
+            image = vadersImages[random(0, 2)];
 
-        speedX = random(-385f, 385f);
-        speedY = random(230f, 770f);
+            x = random(SCREEN_WIDTH);
+            y = borderY;
+
+            speedX = random(-385f, 385f);
+            speedY = random(230f, 770f);
+        });
     }
 
     @Override

@@ -6,6 +6,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class DarkScene extends Scene {
     private final Scene sceneToRun, sceneToUpdate;
@@ -24,11 +25,11 @@ public class DarkScene extends Scene {
     @Override
     public void render() {
         spriteBatch.setColor(0, 0, 0, alpha);
-        spriteBatch.draw(mainGameManager.imageHub.blackColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        spriteBatch.draw(imageHub.blackColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         spriteBatch.setColor(1, 1, 1, 1);
 
         alpha += time;
-        mainGameManager.soundHub.setVolume(1 - alpha);
+        Processor.post(() -> soundHub.setVolume(1 - alpha));
 
         if (alpha > 1) {
             mainGameManager.finishAllScenes();

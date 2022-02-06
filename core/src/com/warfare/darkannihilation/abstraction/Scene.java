@@ -2,6 +2,9 @@ package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
+import com.warfare.darkannihilation.hub.FontHub;
+import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.screens.BaseScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
@@ -9,6 +12,10 @@ import com.warfare.darkannihilation.utils.ClickListener;
 
 public abstract class Scene implements ApplicationListener {
     protected final MainGameManager mainGameManager;
+    protected final ImageHub imageHub;
+    protected final SoundHub soundHub;
+    protected final FontHub fontHub;
+
     protected ClickListener clickListener;
     protected BaseSprite screen;
 
@@ -22,6 +29,10 @@ public abstract class Scene implements ApplicationListener {
 
     public Scene(MainGameManager mainGameManager, ClickListener clickListener, BaseScreen screen) {
         this.mainGameManager = mainGameManager;
+        imageHub = mainGameManager.imageHub;
+        soundHub = mainGameManager.soundHub;
+        fontHub = mainGameManager.fontHub;
+
         this.clickListener = clickListener;
         this.screen = screen;
     }

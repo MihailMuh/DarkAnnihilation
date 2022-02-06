@@ -21,12 +21,9 @@ public class BulletEnemy extends BaseBullet {
     public void start(float X, float Y, float speedX, float speedY, float angle) {
         this.speedX = speedX;
         this.speedY = speedY;
-
-        x = X - halfWidth;
-        y = Y - halfHeight;
-
         this.angle = angle;
-        visible = true;
+
+        start(X, Y);
     }
 
     @Override

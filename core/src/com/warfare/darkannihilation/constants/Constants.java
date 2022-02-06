@@ -67,13 +67,14 @@ public final class Constants {
 
     public static final byte VADER_HEALTH = 2;
     public static final byte VADER_DAMAGE = 5;
-    public static final byte NUMBER_VADER = 12;
+    public static final byte NUMBER_VADER = 10;
+    public static final byte MIN_NUMBER_VADER = (byte) (NUMBER_VADER / 2f);
 
     public static final byte TRIPLE_FIGHTER_HEALTH = 6;
     public static final byte TRIPLE_FIGHTER_DAMAGE = 10;
 
     //    explosions
-    public static final byte NUMBER_EXPLOSION = 30;
+    public static final byte NUMBER_EXPLOSION = 40;
 
     //    screens
     public static final byte LOADING_SCREEN_FRAME_TIME = 45;

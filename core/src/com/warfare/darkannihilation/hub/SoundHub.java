@@ -28,6 +28,10 @@ public class SoundHub extends BaseHub {
         super(assetManager);
     }
 
+    public void loadMenuSounds() {
+        assetManager.loadMusic(MENU_MUSIC);
+    }
+
     public void getMenuSounds() {
         menuMusic = assetManager.getMusic(MENU_MUSIC, 1);
         allMusic.add(menuMusic);

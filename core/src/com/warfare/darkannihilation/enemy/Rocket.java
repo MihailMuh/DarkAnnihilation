@@ -1,13 +1,14 @@
 package com.warfare.darkannihilation.enemy;
 
 import static com.warfare.darkannihilation.constants.Constants.ROCKET_DAMAGE;
+import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Rocket extends Opponent {
@@ -26,15 +27,13 @@ public class Rocket extends Opponent {
     }
 
     @Override
-    public boolean killedByBullet(BaseBullet bullet) {
-        if (intersect(bullet)) bullet.kill();
-        return false;
-    }
+    public boolean killedBy(MovementSprite sprite) {
+        if (intersect(sprite)) {
+            sprite.damage(this);
 
-    @Override
-    public void killFromPlayer() {
-        explodeHuge();
-        visible = false;
+            if (sprite.name == PLAYER) kill();
+        }
+        return false;
     }
 
     @Override
@@ -51,5 +50,7 @@ public class Rocket extends Opponent {
 
     @Override
     public void kill() {
+        explodeHuge();
+        visible = false;
     }
 }

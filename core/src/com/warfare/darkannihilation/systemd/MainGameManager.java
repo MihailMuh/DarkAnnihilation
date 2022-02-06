@@ -5,20 +5,17 @@ import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.loading.DarkScene;
-import com.warfare.darkannihilation.utils.AssetManagerSuper;
 
 public class MainGameManager {
     private final MainGame mainGame;
 
-    public final AssetManagerSuper assetManager;
     public final ImageHub imageHub;
     public final FontHub fontHub;
     public final SoundHub soundHub;
 
-    public MainGameManager(ImageHub imageHub, FontHub fontHub, SoundHub soundHub, AssetManagerSuper assetManager, MainGame mainGame) {
+    public MainGameManager(ImageHub imageHub, FontHub fontHub, SoundHub soundHub, MainGame mainGame) {
         this.imageHub = imageHub;
         this.fontHub = fontHub;
-        this.assetManager = assetManager;
         this.soundHub = soundHub;
 
         this.mainGame = mainGame;
@@ -48,5 +45,9 @@ public class MainGameManager {
 
             scene.resume();
         }
+    }
+
+    public boolean loadResources() {
+        return mainGame.assetManager.update();
     }
 }

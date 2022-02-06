@@ -8,7 +8,6 @@ import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPL
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
@@ -32,22 +31,23 @@ public abstract class MovementSprite extends BaseSprite {
         this.killScore = killScore;
     }
 
-    //    damage and check if dead
-    protected boolean damage(int dmg) {
-        health -= dmg;
+    public void damage(MovementSprite sprite) {
+        health -= sprite.damage;
 
-        return health <= 0;
+        if (health <= 0) kill();
     }
 
-    public boolean killedByBullet(BaseBullet bullet) {
+    public boolean killedBy(MovementSprite sprite) {
         boolean killed = false;
-        if (intersect(bullet)) {
-            killed = damage(bullet.damage);
+        if (intersect(sprite)) {
+            health -= sprite.damage;
 
-            if (killed) {
+            if (health <= 0) {
                 kill();
+                killed = true;
             }
-            bullet.kill();
+
+            sprite.damage(this);
         }
         return killed;
     }

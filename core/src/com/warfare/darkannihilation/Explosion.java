@@ -9,7 +9,7 @@ import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class Explosion extends BaseSprite {
@@ -21,11 +21,11 @@ public class Explosion extends BaseSprite {
 
     private float timer;
 
-    public Explosion(MainGameManager mainGameManager) {
-        super(mainGameManager.imageHub.defaultExplosionAnim.get(0));
-        this.animationTriple = mainGameManager.imageHub.tripleExplosionAnim;
-        this.animationDefault = mainGameManager.imageHub.defaultExplosionAnim;
-        this.animationHuge = mainGameManager.imageHub.hugeExplosionAnim;
+    public Explosion(ImageHub imageHub) {
+        super(imageHub.defaultExplosionAnim.get(0));
+        this.animationTriple = imageHub.tripleExplosionAnim;
+        this.animationDefault = imageHub.defaultExplosionAnim;
+        this.animationHuge = imageHub.hugeExplosionAnim;
     }
 
     public void start(float X, float Y, byte type) {

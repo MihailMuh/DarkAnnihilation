@@ -10,12 +10,12 @@ import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.utils.AssetManagerSuper;
-import com.warfare.darkannihilation.utils.FontWrap;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
-    private AssetManagerSuper assetManager;
     private Frontend frontend;
+
+    AssetManagerSuper assetManager;
 
     final ScenesStack scenesStack = new ScenesStack();
 
@@ -27,9 +27,8 @@ public class MainGame extends BaseApp {
         ImageHub imageHub = new ImageHub(assetManager);
         FontHub fontHub = new FontHub(assetManager);
         SoundHub soundHub = new SoundHub(assetManager);
-        MainGameManager mainGameManager = new MainGameManager(imageHub, fontHub, soundHub, assetManager, this);
 
-        Menu menu = new Menu(mainGameManager);
+        Menu menu = new Menu(new MainGameManager(imageHub, fontHub, soundHub, this));
         assetManager.finishLoading();
         imageHub.boot();
         fontHub.boot();
@@ -37,7 +36,7 @@ public class MainGame extends BaseApp {
 
         scenesStack.push(menu);
 
-        frontend = new Frontend(this, new FontWrap(fontHub.canisMinor, 0.7f));
+        frontend = new Frontend(this);
 
         Processor.post(() -> {
             Service.sleep(500);
@@ -59,12 +58,12 @@ public class MainGame extends BaseApp {
     @Override
     public void resume() {
         Texture.setAssetManager(assetManager);
-        scenesStack.lastScene.resume();
+        if (scenesStack.lastScene != null) scenesStack.lastScene.resume();
     }
 
     @Override
     public void pause() {
-        scenesStack.lastScene.pause();
+        if (scenesStack.lastScene != null) scenesStack.lastScene.pause();
     }
 
     @Override

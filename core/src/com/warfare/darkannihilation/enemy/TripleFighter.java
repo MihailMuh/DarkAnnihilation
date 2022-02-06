@@ -3,10 +3,12 @@ package com.warfare.darkannihilation.enemy;
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Constants.TRIPLE_FIGHTER_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.TRIPLE_FIGHTER_HEALTH;
+import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.Explosion;
@@ -32,6 +34,7 @@ public class TripleFighter extends Shooter {
         this.bulletsEnemy = bulletsEnemy;
         this.sound = sound;
 
+        name = TRIPLE;
         borderY = SCREEN_HEIGHT + height;
         reset();
     }
@@ -50,6 +53,8 @@ public class TripleFighter extends Shooter {
 
     @Override
     public void reset() {
+        if (shouldKill) visible = false;
+
         health = maxHealth;
 
         x = random(SCREEN_WIDTH);
@@ -76,12 +81,13 @@ public class TripleFighter extends Shooter {
 
     private void calculate(float X, float Y) {
         float rads = MathUtils.atan2(player.centerY() - Y, player.centerX() - X);
-
-        ((BulletEnemy) bulletsEnemy.obtain()).start(X, Y,
-                VECTOR_LEN * MathUtils.cos(rads), VECTOR_LEN * MathUtils.sin(rads),
-                (rads - MathUtils.HALF_PI) * MathUtils.radDeg);
+        float spdX = VECTOR_LEN * MathUtils.cos(rads);
+        float spdY = VECTOR_LEN * MathUtils.sin(rads);
+        float angle = (rads - MathUtils.HALF_PI) * MathUtils.radDeg;
 
         shootTime = random(1f, 2f);
         sound.play();
+
+        Gdx.app.postRunnable(() -> ((BulletEnemy) bulletsEnemy.obtain()).start(X, Y, spdX, spdY, angle));
     }
 }

@@ -3,6 +3,8 @@ package com.warfare.darkannihilation.utils;
 import static com.warfare.darkannihilation.systemd.service.Service.printErr;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -11,17 +13,15 @@ public class GameTask extends ScheduledThreadPoolExecutor {
     protected final int delay;
     protected ScheduledFuture<?> future;
 
-    public GameTask(Runnable runnable, int delayMillis) {
+    public GameTask(Runnable runnable, int delayMillis, boolean inUI) {
         super(1);
-        this.runnable = runnable;
         delay = delayMillis;
+
+        if (inUI) this.runnable = () -> Gdx.app.postRunnable(runnable);
+        else this.runnable = runnable;
     }
 
     public void start() {
-        resume();
-    }
-
-    public void resume() {
         try {
             future = scheduleWithFixedDelay(runnable, 0, delay, MILLISECONDS);
         } catch (Exception e) {
@@ -30,10 +30,6 @@ public class GameTask extends ScheduledThreadPoolExecutor {
     }
 
     public void stop() {
-        pause();
-    }
-
-    public void pause() {
         if (future != null) {
             future.cancel(false);
         }
