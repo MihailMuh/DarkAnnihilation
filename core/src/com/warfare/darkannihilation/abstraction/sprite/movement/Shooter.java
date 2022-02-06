@@ -2,16 +2,16 @@ package com.warfare.darkannihilation.abstraction.sprite.movement;
 
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.utils.Image;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public abstract class Shooter extends Opponent {
     protected float lastShot;
     protected float shootTime;
 
-    public Shooter(PoolWrap<Explosion> explosionPool, TextureAtlas.AtlasRegion texture, int maxHealth, int damage, int killScore, float shootTime) {
-        super(explosionPool, texture, maxHealth, damage, killScore);
+    public Shooter(PoolWrap<Explosion> explosionPool, Image image, int maxHealth, int damage, int killScore, float shootTime) {
+        super(explosionPool, image, maxHealth, damage, killScore);
 
         this.shootTime = shootTime;
     }

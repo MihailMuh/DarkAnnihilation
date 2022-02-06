@@ -1,20 +1,17 @@
 package com.warfare.darkannihilation;
 
 import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.abstraction.BaseButton;
-import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Button extends BaseButton {
-    private final TextureAtlas.AtlasRegion buttonPress;
 
     private Runnable runnable;
     private String text;
@@ -25,9 +22,8 @@ public class Button extends BaseButton {
 
     public static FontWrap buttonFont;
 
-    public Button(ImageHub imageHub, String name, float X, float Y, Runnable runnable) {
-        super(imageHub.buttonNotPress);
-        buttonPress = imageHub.buttonPress;
+    public Button(String name, float X, float Y, Runnable runnable) {
+        super(getImages().buttonNotPress);
 
         setParams(name, X, Y, runnable);
     }
@@ -68,10 +64,10 @@ public class Button extends BaseButton {
     @Override
     public void render() {
         if (pressed) {
-            spriteBatch.draw(buttonPress, x, y, width, height);
+            getImages().buttonPress.draw(x, y);
             buttonFont.setColor(Color.LIGHT_GRAY);
         } else {
-            spriteBatch.draw(image, x, y, width, height);
+            super.render();
             buttonFont.resetColor();
         }
 

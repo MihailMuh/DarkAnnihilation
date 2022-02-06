@@ -1,23 +1,12 @@
 package com.warfare.darkannihilation.systemd;
 
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.hub.FontHub;
-import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.loading.DarkScene;
 
 public class MainGameManager {
     private final MainGame mainGame;
 
-    public final ImageHub imageHub;
-    public final FontHub fontHub;
-    public final SoundHub soundHub;
-
-    public MainGameManager(ImageHub imageHub, FontHub fontHub, SoundHub soundHub, MainGame mainGame) {
-        this.imageHub = imageHub;
-        this.fontHub = fontHub;
-        this.soundHub = soundHub;
-
+    public MainGameManager(MainGame mainGame) {
         this.mainGame = mainGame;
     }
 

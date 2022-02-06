@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.utils;
+package com.warfare.darkannihilation.hub;
 
 import static com.warfare.darkannihilation.systemd.service.Service.printErr;
 
@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.utils.AnimationSuper;
+import com.warfare.darkannihilation.utils.Image;
+import com.warfare.darkannihilation.utils.ImageAtlas;
 import com.warfare.darkannihilation.utils.audio.MusicWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
@@ -44,23 +47,23 @@ public class AssetManagerSuper extends AssetManager {
         return new MusicWrap(get(path, Music.class), volume);
     }
 
-    public TextureAtlas.AtlasRegion[] getAtlasRegions(String path, String name) {
-        return getAtlasRegions(get(path, TextureAtlas.class), name);
+    public ImageAtlas getAtlas(String name) {
+        return new ImageAtlas(get(name));
     }
 
-    public TextureAtlas.AtlasRegion[] getAtlasRegions(TextureAtlas textureAtlas, String name) {
-        Array<TextureAtlas.AtlasRegion> atlasRegions = new Array<>(10);
+    public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration) {
+        Array<Image> images = new Array<>(10);
         int i = 0;
         while (true) {
-            TextureAtlas.AtlasRegion region = textureAtlas.findRegion(name, i);
-            if (region == null) {
+            Image image = atlas.getImage(name, i);
+            if (image == null) {
                 break;
             }
-            atlasRegions.add(region);
+            images.add(image);
             i++;
         }
 
-        return atlasRegions.toArray(TextureAtlas.AtlasRegion.class);
+        return new AnimationSuper(images.toArray(Image.class), frameDuration);
     }
 
     @Override

@@ -15,7 +15,7 @@ public final class Names {
     public static final byte NULL_HEART = -3;
 
     public static final byte BOMB = -2;
-    public static final byte BULLET = -1;
+    public static final byte LASER = -1;
     public static final byte BULLET_ENEMY = 0;
 
     public static final byte ENEMY = 1;

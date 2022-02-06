@@ -1,9 +1,9 @@
 package com.warfare.darkannihilation.systemd.firstlevel;
 
+import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.Explosion;
@@ -29,7 +29,7 @@ class Frontend {
     private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
 
-    Frontend(FirstLevel firstLevel, BitmapFont bitmapFont, Player player, BaseSprite screen, Array<Explosion> explosions,
+    Frontend(FirstLevel firstLevel, Player player, BaseSprite screen, Array<Explosion> explosions,
              Array<Bullet> bullets, Array<Opponent> empire, Array<BaseBullet> bulletsEnemy) {
         this.firstLevel = firstLevel;
         this.player = player;
@@ -39,7 +39,7 @@ class Frontend {
         this.empire = empire;
         this.bulletsEnemy = bulletsEnemy;
 
-        font = FontWrap.scaledFontWrap(bitmapFont, HALF_SCREEN_WIDTH / 1.75f, "Current score: 10");
+        font = FontWrap.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH / 1.75f, "Current score: 10");
         textX = HALF_SCREEN_WIDTH - font.getTextWidth("Current score: 10") / 2f;
         textY = SCREEN_HEIGHT - font.getTextHeight("Current score: 10");
     }

@@ -6,6 +6,6 @@ import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class DynamicScreen extends BaseScreen {
     public DynamicScreen(AnimationSuper textures) {
-        super(textures, SCREEN_WIDTH * 1.35f, SCREEN_WIDTH * -0.175f);
+        super(textures, (int) (SCREEN_WIDTH * 1.35), SCREEN_WIDTH * -0.175f);
     }
 }

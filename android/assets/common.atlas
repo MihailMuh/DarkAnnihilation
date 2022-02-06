@@ -6,8 +6,6 @@ dark_null
 	bounds: 0, 42, 1, 1
 buckshot
 	bounds: 1913, 318, 100, 124
-bullet_enemy
-	bounds: 2014, 270, 15, 46
 button_not_press
 	bounds: 1488, 182, 423, 129
 button_press

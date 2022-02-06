@@ -8,7 +8,6 @@ import static com.warfare.darkannihilation.constants.Assets.METAL_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.SHOTGUN_SOUND;
 
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.utils.AssetManagerSuper;
 import com.warfare.darkannihilation.utils.audio.Audio;
 import com.warfare.darkannihilation.utils.audio.MusicWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
@@ -17,12 +16,13 @@ public class SoundHub extends BaseHub {
     private final Array<Audio> allMusic = new Array<>(3);
     private boolean cache = false;
 
-    public static SoundWrap metalSound;
-    public SoundWrap shotgunSound;
+    public SoundWrap metalSound;
+    public SoundWrap bigLaserSound;
     public SoundWrap laserSound;
+    public SoundWrap attentionSound;
 
     public MusicWrap menuMusic;
-    public MusicWrap firstLevelMusic, attentionSound;
+    public MusicWrap firstLevelMusic;
 
     public SoundHub(AssetManagerSuper assetManager) {
         super(assetManager);
@@ -45,7 +45,7 @@ public class SoundHub extends BaseHub {
 
     public void loadGameSounds() {
         assetManager.loadMusic(FIRST_LEVEL_MUSIC);
-        assetManager.loadMusic(ATTENTION_SOUND);
+        assetManager.loadSound(ATTENTION_SOUND);
 
         if (!cache) {
             assetManager.loadSound(LASER_SOUND);
@@ -56,17 +56,17 @@ public class SoundHub extends BaseHub {
 
     public void getGameSounds() {
         firstLevelMusic = assetManager.getMusic(FIRST_LEVEL_MUSIC, 0.85f);
-        attentionSound = assetManager.getMusic(ATTENTION_SOUND, 0.85f);
+        attentionSound = assetManager.getSound(ATTENTION_SOUND, 0.85f);
         allMusic.add(firstLevelMusic, attentionSound);
 
         if (!cache) {
             laserSound = assetManager.getSound(LASER_SOUND, 0.17f);
             metalSound = assetManager.getSound(METAL_SOUND, 0.45f);
-            shotgunSound = assetManager.getSound(SHOTGUN_SOUND, 0.25f);
+            bigLaserSound = assetManager.getSound(LASER_SOUND, 0.6f);
 
             cache = true;
 
-            allMusic.add(laserSound, metalSound, shotgunSound);
+            allMusic.add(laserSound, metalSound, bigLaserSound);
         }
     }
 

@@ -1,5 +1,8 @@
 package com.warfare.darkannihilation.systemd.menu;
 
+import static com.warfare.darkannihilation.hub.Resources.getFonts;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
@@ -16,33 +19,33 @@ public class Menu extends Scene {
 
     public Menu(MainGameManager mainGameManager) {
         super(mainGameManager);
-        imageHub.loadMenuImages();
-        soundHub.loadMenuSounds();
+        getImages().loadMenuImages();
+        getSounds().loadMenuSounds();
     }
 
     @Override
     public void create() {
-        imageHub.getMenuImages();
-        soundHub.getMenuSounds();
+        getImages().getMenuImages();
+        getSounds().getMenuSounds();
 
-        screen = new StaticScreen(imageHub.menuScreenGIF);
+        screen = new StaticScreen(getImages().menuScreenGIF);
 
-        Button.buttonFont = FontWrap.scaledFontWrap(fontHub.canisMinor,
-                imageHub.buttonPress.originalWidth - 140, "Quit", "Start", "Top Score", "Settings");
+        Button.buttonFont = FontWrap.scaledFontWrap(getFonts().canisMinor,
+                getImages().buttonPress.width - 140, "Quit", "Start", "Top Score", "Settings");
 
         int step = 50;
-        buttons[0] = new Button(imageHub, "Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
+        buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
-        buttons[1] = new Button(imageHub, "Start", buttons[0].x - buttons[0].width - step, 10,
+        buttons[1] = new Button("Start", buttons[0].x - buttons[0].width - step, 10,
                 () -> mainGameManager.startScene(new FirstLevel(mainGameManager), true));
-        buttons[2] = new Button(imageHub, "Settings", buttons[0].right() + step, 10, () -> {
+        buttons[2] = new Button("Settings", buttons[0].right() + step, 10, () -> {
         });
-        buttons[3] = new Button(imageHub, "Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
+        buttons[3] = new Button("Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
 
         clickListener = new MenuClickListener(buttons);
         Processor.multiProcessor.insertProcessor(clickListener);
 
-        soundHub.menuMusic.play();
+        getSounds().menuMusic.play();
     }
 
     @Override
@@ -57,7 +60,7 @@ public class Menu extends Scene {
     @Override
     public void dispose() {
         super.dispose();
-        imageHub.disposeMenuImages();
-        soundHub.disposeMenuSounds();
+        getImages().disposeMenuImages();
+        getSounds().disposeMenuSounds();
     }
 }

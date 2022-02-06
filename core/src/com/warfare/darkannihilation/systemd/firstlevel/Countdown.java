@@ -1,5 +1,6 @@
 package com.warfare.darkannihilation.systemd.firstlevel;
 
+import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
@@ -24,7 +25,7 @@ public class Countdown extends Scene {
         this.screen = screen;
         this.player = player;
 
-        countdownFont = FontWrap.scaledFontWrap(fontHub.canisMinor, SCREEN_WIDTH - 400, "SHOOT!");
+        countdownFont = FontWrap.scaledFontWrap(getFonts().canisMinor, SCREEN_WIDTH - 400, "SHOOT!");
     }
 
     @Override

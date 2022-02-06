@@ -1,11 +1,11 @@
 package com.warfare.darkannihilation.abstraction;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
+import com.warfare.darkannihilation.utils.Image;
 
 public abstract class BaseButton extends BaseSprite {
-    public BaseButton(TextureAtlas.AtlasRegion texture) {
-        super(texture);
+    public BaseButton(Image image) {
+        super(image);
     }
 
     public abstract void onClick(float X, float Y);

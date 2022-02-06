@@ -6,10 +6,14 @@ import com.badlogic.gdx.utils.Pool;
 public abstract class PoolWrap<T> extends Pool<T> {
     private final Array<T> items;
 
-    public PoolWrap(Array<T> items) {
-        super(items.items.length);
+    public PoolWrap(Array<T> items, int capacity) {
+        super(capacity);
         this.items = items;
         fill(items.size);
+    }
+
+    public PoolWrap(Array<T> items) {
+        this(items, items.items.length);
     }
 
     @Override

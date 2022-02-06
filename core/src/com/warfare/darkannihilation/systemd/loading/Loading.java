@@ -1,11 +1,12 @@
 package com.warfare.darkannihilation.systemd.loading;
 
+import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ClickListener;
 
@@ -16,7 +17,7 @@ public class Loading extends Scene {
     private byte status = -1;
 
     public Loading(MainGameManager mainGameManager, Scene sceneToRun) {
-        super(mainGameManager, new ClickListener(), ImageHub.loadingScreen);
+        super(mainGameManager, new ClickListener(), getImages().loadingScreen);
         this.sceneToRun = sceneToRun;
     }
 
@@ -39,14 +40,14 @@ public class Loading extends Scene {
                 alpha += 0.02f;
 
                 if (alpha >= 1) {
-                    soundHub.setVolume(1);
+                    getSounds().setVolume(1);
                     mainGameManager.finishLastScene();
                     mainGameManager.startScene(sceneToRun, false);
                 }
         }
 
         spriteBatch.setColor(0, 0, 0, alpha);
-        spriteBatch.draw(imageHub.blackColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        getImages().blackColor.draw(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         spriteBatch.setColor(1, 1, 1, 1);
     }
 }

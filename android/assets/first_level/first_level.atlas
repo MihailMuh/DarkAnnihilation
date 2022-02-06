@@ -10,7 +10,7 @@ boss
 factory
 	bounds: 0, 1575, 1467, 450
 laser
-	bounds: 2025, 1965, 15, 60
+	bounds: 1871, 1706, 30, 70
 minion
 	bounds: 179, 46, 80, 54
 rocket

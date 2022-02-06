@@ -5,11 +5,10 @@ import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_DEFA
 import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPLE;
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class Explosion extends BaseSprite {
@@ -17,49 +16,49 @@ public class Explosion extends BaseSprite {
     private final AnimationSuper animationDefault;
     private final AnimationSuper animationHuge;
     private AnimationSuper mainAnim;
-    private int additionalWidth, additionalHeight;
+    private int explosionWidth, explosionHeight;
 
     private float timer;
 
-    public Explosion(ImageHub imageHub) {
-        super(imageHub.defaultExplosionAnim.get(0));
-        this.animationTriple = imageHub.tripleExplosionAnim;
-        this.animationDefault = imageHub.defaultExplosionAnim;
-        this.animationHuge = imageHub.hugeExplosionAnim;
+    public Explosion() {
+        super(getImages().defaultExplosionAnim.get(0));
+        this.animationTriple = getImages().tripleExplosionAnim;
+        this.animationDefault = getImages().defaultExplosionAnim;
+        this.animationHuge = getImages().hugeExplosionAnim;
     }
 
     public void start(float X, float Y, byte type) {
-        switch (type)
-        {
+        boolean small = false;
+
+        switch (type) {
             case SMALL_EXPLOSION_TRIPLE:
-                additionalWidth = (int) (animationTriple.get(0).originalWidth / 2.5);
-                additionalHeight = (int) (animationTriple.get(0).originalHeight / 2.5);
+                small = true;
                 mainAnim = animationTriple;
                 break;
             case SMALL_EXPLOSION_DEFAULT:
-                additionalWidth = (int) (animationDefault.get(0).originalWidth / 2.5);
-                additionalHeight = (int) (animationDefault.get(0).originalHeight / 2.5);
+                small = true;
                 mainAnim = animationDefault;
                 break;
             case MEDIUM_EXPLOSION_TRIPLE:
-                additionalWidth = animationTriple.get(0).originalWidth;
-                additionalHeight = animationTriple.get(0).originalHeight;
                 mainAnim = animationTriple;
                 break;
             case MEDIUM_EXPLOSION_DEFAULT:
-                additionalWidth = animationDefault.get(0).originalWidth;
-                additionalHeight = animationDefault.get(0).originalHeight;
                 mainAnim = animationDefault;
                 break;
             case HUGE_EXPLOSION:
-                additionalWidth = animationHuge.get(0).originalWidth;
-                additionalHeight = animationHuge.get(0).originalHeight;
                 mainAnim = animationHuge;
                 break;
         }
 
-        x = X - additionalWidth / 2f;
-        y = Y - additionalHeight / 2f;
+        explosionWidth = mainAnim.get(0).width;
+        explosionHeight = mainAnim.get(0).height;
+        if (small) {
+            explosionWidth /= 2.5;
+            explosionHeight /= 2.5;
+        }
+
+        x = X - explosionWidth / 2f;
+        y = Y - explosionHeight / 2f;
 
         timer = 0;
         visible = true;
@@ -67,7 +66,7 @@ public class Explosion extends BaseSprite {
 
     @Override
     public void render() {
-        spriteBatch.draw(mainAnim.get(timer), x, y, additionalWidth, additionalHeight);
+        mainAnim.get(timer).draw(x, y, explosionWidth, explosionHeight);
 
         timer += delta;
         if (mainAnim.isFinished()) {

@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.hub.Resources;
 import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
-import com.warfare.darkannihilation.utils.AssetManagerSuper;
+import com.warfare.darkannihilation.hub.AssetManagerSuper;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
@@ -23,15 +24,12 @@ public class MainGame extends BaseApp {
     public void create() {
         super.create();
         assetManager = new AssetManagerSuper();
+        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager));
 
-        ImageHub imageHub = new ImageHub(assetManager);
-        FontHub fontHub = new FontHub(assetManager);
-        SoundHub soundHub = new SoundHub(assetManager);
-
-        Menu menu = new Menu(new MainGameManager(imageHub, fontHub, soundHub, this));
+        Menu menu = new Menu(new MainGameManager(this));
         assetManager.finishLoading();
-        imageHub.boot();
-        fontHub.boot();
+        Resources.getImages().boot();
+        Resources.getFonts().boot();
         menu.create();
 
         scenesStack.push(menu);
@@ -40,7 +38,7 @@ public class MainGame extends BaseApp {
 
         Processor.post(() -> {
             Service.sleep(500);
-            imageHub.lazyLoading();
+            Resources.getImages().lazyLoading();
 
             resume();
         });

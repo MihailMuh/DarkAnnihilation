@@ -1,27 +1,22 @@
 package com.warfare.darkannihilation.enemy;
 
+import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.utils.audio.MusicWrap;
+import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.systemd.service.Service;
 
 public class Attention extends Opponent {
-    private final MusicWrap music;
+    private final Rocket rocket;
 
-    public Attention(TextureAtlas.AtlasRegion texture, MusicWrap music, Rocket rocket) {
-        super(null, texture, 0, 0, 0);
-        this.music = music;
-        music.setLooping(false);
-        music.setOnCompletionListener(m -> {
-            m.stop();
-            visible = false;
-
-            rocket.start(x);
-        });
+    public Attention(Rocket rocket) {
+        super(null, getImages().attentionImg, 0, 0, 0);
+        this.rocket = rocket;
 
         y = SCREEN_HEIGHT - height - 10;
         visible = false;
@@ -35,7 +30,14 @@ public class Attention extends Opponent {
     @Override
     public void reset() {
         x = MathUtils.random(SCREEN_WIDTH);
-        music.play();
+
+        getSounds().attentionSound.play();
+        Processor.post(() -> {
+            Service.sleep(1750);
+
+            visible = false;
+            rocket.start(x);
+        });
 
         visible = true;
     }
@@ -43,10 +45,5 @@ public class Attention extends Opponent {
     @Override
     public void update() {
 
-    }
-
-    @Override
-    public void render() {
-        if (visible) super.render();
     }
 }

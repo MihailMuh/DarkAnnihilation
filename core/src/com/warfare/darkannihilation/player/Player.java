@@ -3,11 +3,13 @@ package com.warfare.darkannihilation.player;
 import static com.badlogic.gdx.math.MathUtils.roundPositive;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
+import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.PLAYER;
-import static com.warfare.darkannihilation.systemd.service.Watch.delta;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
@@ -18,15 +20,12 @@ import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.hub.ImageHub;
-import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Player extends MovementSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
-    private final SoundHub soundHub;
     private final PoolWrap<Bullet> bulletPool;
     private final PoolWrap<Heart> armorPool;
     private final DifficultyAnalyzer difficultyAnalyzer;
@@ -37,15 +36,14 @@ public class Player extends MovementSprite {
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
-    public Player(DifficultyAnalyzer difficultyAnalyzer, ImageHub imageHub, SoundHub soundHub, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
-        super(explosionPool, imageHub.millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
+    public Player(DifficultyAnalyzer difficultyAnalyzer, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
+        super(explosionPool, getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
         this.difficultyAnalyzer = difficultyAnalyzer;
         this.bulletPool = bulletPool;
-        this.soundHub = soundHub;
         armorPool = new PoolWrap<Heart>(hearts) {
             @Override
             protected ArmorHeart newObject() {
-                return new ArmorHeart(imageHub);
+                return new ArmorHeart();
             }
         };
 
@@ -55,7 +53,7 @@ public class Player extends MovementSprite {
 
         int len = maxHealth / 10;
         for (int i = 0; i < len; i++) {
-            hearts.add(new Heart(imageHub, heartX, heartY));
+            hearts.add(new Heart(heartX, heartY));
 
             heartX += 90;
             checkLevel(true);
@@ -137,7 +135,7 @@ public class Player extends MovementSprite {
             bulletPool.obtain().start(X, Y);
             bulletPool.obtain().start(X + 7, Y);
 
-            soundHub.laserSound.play();
+            getSounds().laserSound.play();
         }
     }
 
@@ -160,8 +158,8 @@ public class Player extends MovementSprite {
         x += speedX;
         y += speedY;
 
-        speedX = (endX - x) * (20 * delta);
-        speedY = (endY - y) * (20 * delta);
+        speedX = (endX - x) / 3f;
+        speedY = (endY - y) / 3f;
     }
 
     @Override
@@ -169,6 +167,8 @@ public class Player extends MovementSprite {
         Processor.post(() -> {
             health -= sprite.damage;
             changeHearts();
+
+            if (sprite.name > BULLET_ENEMY) getSounds().metalSound.play();
 
             if (isDead() && visible) {
                 kill();

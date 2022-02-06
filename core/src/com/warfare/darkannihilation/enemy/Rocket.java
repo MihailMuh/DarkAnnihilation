@@ -1,21 +1,20 @@
 package com.warfare.darkannihilation.enemy;
 
 import static com.warfare.darkannihilation.constants.Constants.ROCKET_DAMAGE;
+import static com.warfare.darkannihilation.constants.Constants.ROCKET_SPEED;
 import static com.warfare.darkannihilation.constants.Names.PLAYER;
-import static com.warfare.darkannihilation.systemd.service.Watch.delta;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Rocket extends Opponent {
-    public Rocket(PoolWrap<Explosion> explosionPool, TextureAtlas.AtlasRegion texture) {
-        super(explosionPool, texture, 0, ROCKET_DAMAGE, 0);
+    public Rocket(PoolWrap<Explosion> explosionPool) {
+        super(explosionPool, getImages().rocketImg, 0, ROCKET_DAMAGE, 0);
 
-        speedY = 2700;
         visible = false;
     }
 
@@ -38,7 +37,7 @@ public class Rocket extends Opponent {
 
     @Override
     public void update() {
-        y -= 2700 * delta;
+        y -= ROCKET_SPEED;
 
         if (y <= -height) visible = false;
     }

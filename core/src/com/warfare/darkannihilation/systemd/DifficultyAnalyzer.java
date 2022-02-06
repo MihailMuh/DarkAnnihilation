@@ -36,24 +36,20 @@ public class DifficultyAnalyzer {
         lastDamage = time;
 
         if (difference <= EASY) {
-            if (PLAYER_SKILL - 10 < 10) {
+            if (PLAYER_SKILL - 10 < 15) {
                 if (randomBoolean(0.2f)) firstLevel.killTriple();
                 firstLevel.killVader();
                 firstLevel.killVader();
-                PLAYER_SKILL -= 3;
-            } else {
-                PLAYER_SKILL -= 2;
             }
+            PLAYER_SKILL -= 5;
             return;
         }
         if (difference <= NOT_BAD) {
             if (PLAYER_SKILL - 10 < 20) {
                 firstLevel.killVader();
                 if (randomBoolean()) firstLevel.killVader();
-                PLAYER_SKILL -= 2;
-            } else {
-                PLAYER_SKILL--;
             }
+            PLAYER_SKILL -= 2;
             return;
         }
         if (difference <= NORMAL) {
@@ -68,6 +64,7 @@ public class DifficultyAnalyzer {
         }
         if (difference <= HURT) {
             chillSpawn();
+            PLAYER_SKILL += 2;
             return;
         }
         if (difference <= INSANE) {
@@ -76,6 +73,7 @@ public class DifficultyAnalyzer {
             } else {
                 chillSpawn();
             }
+            PLAYER_SKILL += 3;
             return;
         }
 
@@ -83,21 +81,19 @@ public class DifficultyAnalyzer {
             chillSpawn();
             firstLevel.newVader(1);
             firstLevel.newTriple();
-            PLAYER_SKILL += 4;
         } else {
             normalSpawn();
         }
+        PLAYER_SKILL += 5;
     }
 
     private void normalSpawn() {
         if (randomBoolean()) firstLevel.newTriple();
         firstLevel.newVader(2);
-        PLAYER_SKILL += 3;
     }
 
     private void chillSpawn() {
         firstLevel.newVader(1);
         if (randomBoolean()) firstLevel.newVader(1);
-        PLAYER_SKILL += 2;
     }
 }

@@ -1,18 +1,18 @@
 package com.warfare.darkannihilation.enemy;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+import static com.badlogic.gdx.math.MathUtils.randomBoolean;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_HEALTH;
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Demoman extends Opponent {
@@ -20,8 +20,8 @@ public class Demoman extends Opponent {
     private boolean goLeft;
     private float lastShot, shootTime;
 
-    public Demoman(PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bombPool, AtlasRegion texture) {
-        super(explosionPool, texture, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 35);
+    public Demoman(PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bombPool) {
+        super(explosionPool, getImages().demomanImg, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 35);
 
         this.bombPool = bombPool;
 
@@ -32,10 +32,10 @@ public class Demoman extends Opponent {
     @Override
     public void reset() {
         health = maxHealth;
-        y = MathUtils.random(HALF_SCREEN_HEIGHT - height, SCREEN_HEIGHT - height);
-        speedX = MathUtils.random(5, 10);
-        goLeft = MathUtils.randomBoolean();
-        shootTime = MathUtils.random(0.1f, 0.2f);
+        y = random(HALF_SCREEN_HEIGHT - height, SCREEN_HEIGHT - height);
+        speedX = random(5, 10);
+        goLeft = randomBoolean();
+        shootTime = random(0.1f, 0.2f);
 
         if (goLeft) {
             x = SCREEN_WIDTH;
@@ -80,9 +80,8 @@ public class Demoman extends Opponent {
     @Override
     public void render() {
         if (visible) {
-            if (goLeft) spriteBatch.draw(image, x, y, width, height);
-
-            else spriteBatch.draw(image, x + width, y, -width, height);
+            if (goLeft) super.render();
+            else image.draw(x + width, y, -width, height);
         }
     }
 }

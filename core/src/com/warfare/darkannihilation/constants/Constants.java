@@ -46,7 +46,7 @@ public final class Constants {
     public static final short SPIDER_HEALTH_BAR_LEN = 150;
 
     //    first level
-    public static final short BOSS_SHOOT_TIME = 450;
+    public static final float BOSS_SHOOT_TIME = 0.45f;
     public static final short BOSS_HEALTH = 300;
     public static final short BOSS_HEALTH_BAR_LEN = 140;
 
@@ -62,7 +62,7 @@ public final class Constants {
     public static final short MINION_SHOOT_TIME = 900;
     public static final byte MINION_DAMAGE = 5;
 
-    public static final byte ROCKET_SPEED = 35;
+    public static final byte ROCKET_SPEED = 45;
     public static final short ROCKET_DAMAGE = 175;
 
     public static final byte VADER_HEALTH = 2;
@@ -108,6 +108,7 @@ public final class Constants {
     public static final byte BULLET_ENEMY_ORBIT_DAMAGE = 5;
 
     public static final byte BULLET_ENEMY_DAMAGE = 5;
+    public static final byte BULLET_ENEMY_SPEED = 15;
 
     public static final byte BULLET_BOSS_VADERS_DAMAGE = 25;
 
@@ -115,13 +116,13 @@ public final class Constants {
     public static final byte BULLET_BOSS_SPEED = 6;
 
     public static final byte BULLET_DAMAGE = 1;
-    public static final short BULLET_SPEED = 2000;
+    public static final byte BULLET_SPEED = 34;
 
     public static final byte BUCKSHOT_DAMAGE = 3;
     public static final byte BUCKSHOT_SPEED = 8;
 
     public static final byte BOMB_DAMAGE = 5;
-    public static final short BOMB_SPEED = 1200;
+    public static final byte BOMB_SPEED = 20;
 
     public static final byte NUMBER_BULLETS_ENEMY = 50;
     public static final byte NUMBER_BOMBS = NUMBER_BULLETS_ENEMY + 20;

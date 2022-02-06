@@ -6,9 +6,9 @@ import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIP
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPLE;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
+import com.warfare.darkannihilation.utils.Image;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
 public abstract class MovementSprite extends BaseSprite {
@@ -22,8 +22,8 @@ public abstract class MovementSprite extends BaseSprite {
 
     public float speedX, speedY;
 
-    public MovementSprite(PoolWrap<Explosion> explosionPool, TextureAtlas.AtlasRegion texture, int maxHealth, int damage, int killScore) {
-        super(texture);
+    public MovementSprite(PoolWrap<Explosion> explosionPool, Image image, int maxHealth, int damage, int killScore) {
+        super(image);
 
         this.maxHealth = maxHealth;
         this.damage = damage;

@@ -8,6 +8,8 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -65,58 +67,58 @@ public class FirstLevel extends Scene {
 
     public FirstLevel(MainGameManager mainGameManager) {
         super(mainGameManager);
-        imageHub.loadFirstLevelImages();
-        soundHub.loadGameSounds();
+        getImages().loadFirstLevelImages();
+        getSounds().loadGameSounds();
     }
 
     @Override
     public void create() {
-        imageHub.getFirstLevelImages();
-        soundHub.getGameSounds();
+        getImages().getFirstLevelImages();
+        getSounds().getGameSounds();
 
         explosionPool = new PoolWrap<Explosion>(explosions) {
             @Override
             protected Explosion newObject() {
-                return new Explosion(imageHub);
+                return new Explosion();
             }
         };
         bulletPool = new PoolWrap<Bullet>(bullets) {
             @Override
             protected Bullet newObject() {
-                return new Bullet(explosionPool, imageHub.bulletImg);
+                return new Bullet(explosionPool);
             }
         };
-        bombPool = new PoolWrap<BaseBullet>(bulletsEnemy) {
+        bombPool = new PoolWrap<BaseBullet>(bulletsEnemy, 20) {
             @Override
             protected Bomb newObject() {
-                return new Bomb(explosionPool, imageHub.bombImg);
+                return new Bomb(explosionPool);
             }
         };
-        bulletEnemyPool = new PoolWrap<BaseBullet>(bulletsEnemy) {
+        bulletEnemyPool = new PoolWrap<BaseBullet>(bulletsEnemy, 15) {
             @Override
             protected BulletEnemy newObject() {
-                return new BulletEnemy(explosionPool, imageHub.bulletEnemyImg);
+                return new BulletEnemy(explosionPool);
             }
         };
-        vaderPool = new PoolWrap<Opponent>(empire) {
+        vaderPool = new PoolWrap<Opponent>(empire, 15) {
             @Override
             protected Opponent newObject() {
-                return new Vader(explosionPool, imageHub.vadersImages);
+                return new Vader(explosionPool);
             }
         };
-        triplePool = new PoolWrap<Opponent>(empire) {
+        triplePool = new PoolWrap<Opponent>(empire, 10) {
             @Override
             protected Opponent newObject() {
-                return new TripleFighter(explosionPool, bulletEnemyPool, imageHub.tripleFighterImg, soundHub.shotgunSound, player);
+                return new TripleFighter(explosionPool, bulletEnemyPool, player);
             }
         };
 
-        demoman = new Demoman(explosionPool, bombPool, imageHub.demomanImg);
-        healthKit = new HealthKit(imageHub.healthKitImg);
-        Rocket rocket = new Rocket(explosionPool, imageHub.rocketImg);
-        attention = new Attention(imageHub.attentionImg, soundHub.attentionSound, rocket);
-        player = new Player(difficultyAnalyzer, imageHub, soundHub, bulletPool, explosionPool);
-        screen = new DynamicScreen(imageHub.starScreenGIF);
+        demoman = new Demoman(explosionPool, bombPool);
+        healthKit = new HealthKit();
+        Rocket rocket = new Rocket(explosionPool);
+        attention = new Attention(rocket);
+        player = new Player(difficultyAnalyzer, bulletPool, explosionPool);
+        screen = new DynamicScreen(getImages().starScreenGIF);
 
         for (int i = 0; i < NUMBER_VADER; i++) {
             vaderPool.obtain().visible = true;
@@ -125,7 +127,7 @@ public class FirstLevel extends Scene {
 
         empire.add(demoman, healthKit, attention, rocket);
 
-        frontend = new Frontend(this, fontHub.canisMinor, player, screen, explosions, bullets, empire, bulletsEnemy);
+        frontend = new Frontend(this, player, screen, explosions, bullets, empire, bulletsEnemy);
 
         clickListener = new GameClickListener(player, mainGameManager);
         Processor.multiProcessor.insertProcessor(clickListener);
@@ -144,7 +146,7 @@ public class FirstLevel extends Scene {
             firstRun = false;
             mainGameManager.startScene(new Countdown(mainGameManager, screen, player), false);
 
-            soundHub.firstLevelMusic.play();
+            getSounds().firstLevelMusic.play();
         }
     }
 
@@ -171,7 +173,7 @@ public class FirstLevel extends Scene {
                 bullet.update();
             } else {
                 iterator.remove();
-                Processor.post(() -> bulletPool.free(bullet));
+                Processor.postToLooper(() -> bulletPool.free(bullet));
             }
         }
 
@@ -195,11 +197,11 @@ public class FirstLevel extends Scene {
             } else {
                 if (opponent.name == VADER) {
                     iterator.remove();
-                    vaderPool.free(opponent);
+                    Processor.postToLooper(() -> vaderPool.free(opponent));
                 } else {
                     if (opponent.name == TRIPLE) {
                         iterator.remove();
-                        triplePool.free(opponent);
+                        Processor.postToLooper(() -> triplePool.free(opponent));
                     }
                 }
             }
@@ -215,7 +217,7 @@ public class FirstLevel extends Scene {
                 bullet.killedBy(player);
             } else {
                 iterator.remove();
-                Processor.post(() -> {
+                Processor.postToLooper(() -> {
                     if (bullet.name == BOMB) {
                         bombPool.free(bullet);
                     } else {
@@ -233,7 +235,7 @@ public class FirstLevel extends Scene {
                 explosion.x -= moveAll;
             } else {
                 iterator.remove();
-                explosionPool.free(explosion);
+                Processor.postToLooper(() -> explosionPool.free(explosion));
             }
         }
     }
@@ -246,7 +248,7 @@ public class FirstLevel extends Scene {
         if (!attention.visible && score > 50 && randomBoolean(0.06f)) attention.reset();
 
         if (player.isDead()) {
-            frontend.setScreen(new GameOverScreen(imageHub.gameOverScreen, fontHub));
+            frontend.setScreen(new GameOverScreen());
             mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions, explosionPool), false);
         }
 
@@ -299,7 +301,7 @@ public class FirstLevel extends Scene {
     @Override
     public void dispose() {
         super.dispose();
-        imageHub.disposeFirstLevelImages();
-        soundHub.disposeGameSounds();
+        getImages().disposeFirstLevelImages();
+        getSounds().disposeGameSounds();
     }
 }
