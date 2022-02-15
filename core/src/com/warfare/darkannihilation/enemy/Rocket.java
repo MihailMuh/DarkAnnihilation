@@ -6,14 +6,12 @@ import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.utils.PoolWrap;
+import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
+import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 
 public class Rocket extends Opponent {
-    public Rocket(PoolWrap<Explosion> explosionPool) {
-        super(explosionPool, getImages().rocketImg, 0, ROCKET_DAMAGE, 0);
+    public Rocket() {
+        super(getImages().rocketImg, 0, ROCKET_DAMAGE, 0);
 
         visible = false;
     }

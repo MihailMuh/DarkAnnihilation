@@ -21,7 +21,7 @@ public final class Processor {
         looper.execute(runnable);
     }
 
-    public static void postOnTouch(Runnable runnable) {
+    public static void postToTouchLooper(Runnable runnable) {
         poolOnTouch.execute(runnable);
     }
 

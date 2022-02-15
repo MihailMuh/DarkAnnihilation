@@ -1,15 +1,23 @@
 package com.warfare.darkannihilation.bullet;
 
-import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
+import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
 import com.warfare.darkannihilation.utils.Image;
-import com.warfare.darkannihilation.utils.PoolWrap;
 
 public abstract class BaseBullet extends MovementSprite {
-    public BaseBullet(PoolWrap<Explosion> explosionPool, Image image, int damage) {
-        super(explosionPool, image, 0, damage, 0);
+    public BaseBullet(Image image, int damage) {
+        super(image, 0, damage, 0);
 
         visible = false;
+    }
+
+    @Override
+    public boolean killedBy(MovementSprite sprite) {
+        if (intersect(sprite)) {
+            sprite.damage(this);
+            kill();
+            return true;
+        }
+        return false;
     }
 
     public void start(float X, float Y) {

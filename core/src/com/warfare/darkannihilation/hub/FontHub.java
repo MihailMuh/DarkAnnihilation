@@ -59,7 +59,7 @@ public class FontHub extends BaseHub {
         fiendish = assetManager.get("fiendish.ttf");
     }
 
-    public static float resizeFont(BitmapFont font, float maxWidth, String... texts) {
+    public synchronized static float resizeFont(BitmapFont font, float maxWidth, String... texts) {
         GlyphLayout glyph = new GlyphLayout();
 
         if (texts.length != 1) {

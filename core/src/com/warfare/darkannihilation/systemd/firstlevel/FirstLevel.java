@@ -9,22 +9,22 @@ import static com.warfare.darkannihilation.constants.Names.BOMB;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.pools.OpponentPool;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
-import com.warfare.darkannihilation.bullet.Bomb;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.bullet.BulletEnemy;
 import com.warfare.darkannihilation.enemy.Attention;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Rocket;
 import com.warfare.darkannihilation.enemy.TripleFighter;
 import com.warfare.darkannihilation.enemy.Vader;
+import com.warfare.darkannihilation.hub.PoolHub;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.screens.DynamicScreen;
@@ -34,31 +34,25 @@ import com.warfare.darkannihilation.systemd.gameover.GameOver;
 import com.warfare.darkannihilation.systemd.gameover.GameOverScreen;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
-import com.warfare.darkannihilation.utils.PoolWrap;
 
 import java.util.Iterator;
 
 public class FirstLevel extends Scene {
-    private final GameTask gameTask = new GameTask(this::spawn, 250, false);
+    private final GameTask gameTask = new GameTask(this::systemTask, 250);
     private final DifficultyAnalyzer difficultyAnalyzer = new DifficultyAnalyzer(this);
-    private Frontend frontend;
-
-    private Player player;
-    private Demoman demoman;
-    private HealthKit healthKit;
-    private Attention attention;
+    private final PoolHub poolHub = getPools();
 
     private final Array<Explosion> explosions = new Array<>(NUMBER_EXPLOSION);
     private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
     private final Array<BaseBullet> bulletsEnemy = new Array<>(30);
-    private final Array<Opponent> empire = new Array<>(30);
+    private final Array<Opponent> empire = new Array<>(40);
 
-    private PoolWrap<Explosion> explosionPool;
-    private PoolWrap<Bullet> bulletPool;
-    private PoolWrap<BaseBullet> bombPool;
-    private PoolWrap<BaseBullet> bulletEnemyPool;
-    private PoolWrap<Opponent> vaderPool;
-    private PoolWrap<Opponent> triplePool;
+    private Frontend frontend;
+    private Player player;
+    private Demoman demoman;
+    private HealthKit healthKit;
+    private Attention attention;
+    private OpponentPool vaderPool, triplePool;
 
     private boolean firstRun = true;
     private boolean single = false;
@@ -75,59 +69,37 @@ public class FirstLevel extends Scene {
     public void create() {
         getImages().getFirstLevelImages();
         getSounds().getGameSounds();
+        poolHub.initPools(explosions, bulletsEnemy, bullets);
 
-        explosionPool = new PoolWrap<Explosion>(explosions) {
+        vaderPool = new OpponentPool(empire, (int) (NUMBER_VADER * 2.5)) {
             @Override
-            protected Explosion newObject() {
-                return new Explosion();
+            protected Vader newObject() {
+                return new Vader();
             }
         };
-        bulletPool = new PoolWrap<Bullet>(bullets) {
+        triplePool = new OpponentPool(empire, NUMBER_VADER) {
             @Override
-            protected Bullet newObject() {
-                return new Bullet(explosionPool);
-            }
-        };
-        bombPool = new PoolWrap<BaseBullet>(bulletsEnemy, 20) {
-            @Override
-            protected Bomb newObject() {
-                return new Bomb(explosionPool);
-            }
-        };
-        bulletEnemyPool = new PoolWrap<BaseBullet>(bulletsEnemy, 15) {
-            @Override
-            protected BulletEnemy newObject() {
-                return new BulletEnemy(explosionPool);
-            }
-        };
-        vaderPool = new PoolWrap<Opponent>(empire, 15) {
-            @Override
-            protected Opponent newObject() {
-                return new Vader(explosionPool);
-            }
-        };
-        triplePool = new PoolWrap<Opponent>(empire, 10) {
-            @Override
-            protected Opponent newObject() {
-                return new TripleFighter(explosionPool, bulletEnemyPool, player);
+            protected TripleFighter newObject() {
+                return new TripleFighter(player);
             }
         };
 
-        demoman = new Demoman(explosionPool, bombPool);
-        healthKit = new HealthKit();
-        Rocket rocket = new Rocket(explosionPool);
-        attention = new Attention(rocket);
-        player = new Player(difficultyAnalyzer, bulletPool, explosionPool);
+        player = new Player(difficultyAnalyzer);
         screen = new DynamicScreen(getImages().starScreenGIF);
-
-        for (int i = 0; i < NUMBER_VADER; i++) {
-            vaderPool.obtain().visible = true;
-        }
-        triplePool.obtain().visible = true;
-
-        empire.add(demoman, healthKit, attention, rocket);
-
         frontend = new Frontend(this, player, screen, explosions, bullets, empire, bulletsEnemy);
+
+        Processor.post(this::initEnemies);
+    }
+
+    private void initEnemies() {
+        newVader(NUMBER_VADER);
+        newTriple();
+
+        demoman = new Demoman();
+        healthKit = new HealthKit();
+        Rocket rocket = new Rocket();
+        attention = new Attention(rocket);
+        empire.add(demoman, healthKit, attention, rocket);
 
         clickListener = new GameClickListener(player, mainGameManager);
         Processor.multiProcessor.insertProcessor(clickListener);
@@ -173,7 +145,7 @@ public class FirstLevel extends Scene {
                 bullet.update();
             } else {
                 iterator.remove();
-                Processor.postToLooper(() -> bulletPool.free(bullet));
+                Processor.postToLooper(() -> poolHub.bulletPool.free(bullet));
             }
         }
 
@@ -219,9 +191,9 @@ public class FirstLevel extends Scene {
                 iterator.remove();
                 Processor.postToLooper(() -> {
                     if (bullet.name == BOMB) {
-                        bombPool.free(bullet);
+                        poolHub.bombPool.free(bullet);
                     } else {
-                        bulletEnemyPool.free(bullet);
+                        poolHub.bulletEnemyPool.free(bullet);
                     }
                 });
             }
@@ -235,12 +207,12 @@ public class FirstLevel extends Scene {
                 explosion.x -= moveAll;
             } else {
                 iterator.remove();
-                Processor.postToLooper(() -> explosionPool.free(explosion));
+                Processor.postToLooper(() -> poolHub.explosionPool.free(explosion));
             }
         }
     }
 
-    private void spawn() {
+    private void systemTask() {
         if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
 
         if (!healthKit.visible && randomBoolean(0.015f)) healthKit.reset();
@@ -249,35 +221,33 @@ public class FirstLevel extends Scene {
 
         if (player.isDead()) {
             frontend.setScreen(new GameOverScreen());
-            mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions, explosionPool), false);
+            mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions), false);
         }
-
-        difficultyAnalyzer.checkTime();
 
         if (empire.size - 4 < MIN_NUMBER_VADER) {
             newVader(1);
         }
+
+        difficultyAnalyzer.checkTime();
     }
 
     public void newTriple() {
-        Gdx.app.postRunnable(() -> triplePool.obtain().start());
+        triplePool.obtain();
     }
 
     public void newVader(int count) {
         for (int i = 0; i < count; i++) {
-            Gdx.app.postRunnable(() -> vaderPool.obtain().start());
+            vaderPool.obtain();
         }
     }
 
     public void killTriple() {
-        if (NUMBER_VADER - triplePool.getFree() > 0) {
-            for (int i = empire.size - 1; i >= 0; i--) {
-                Opponent opponent = empire.get(i);
+        for (int i = empire.size - 1; i >= 0; i--) {
+            Opponent opponent = empire.get(i);
 
-                if (opponent.name == TRIPLE && !opponent.shouldKill) {
-                    opponent.shouldKill = true;
-                    break;
-                }
+            if (opponent.name == TRIPLE && !opponent.shouldKill) {
+                opponent.shouldKill = true;
+                break;
             }
         }
     }
@@ -303,5 +273,6 @@ public class FirstLevel extends Scene {
         super.dispose();
         getImages().disposeFirstLevelImages();
         getSounds().disposeGameSounds();
+        poolHub.disposePools();
     }
 }

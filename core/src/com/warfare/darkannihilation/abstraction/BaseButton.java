@@ -18,9 +18,4 @@ public abstract class BaseButton extends BaseSprite {
     public void update() {
 
     }
-
-    @Override
-    public void reset() {
-
-    }
 }

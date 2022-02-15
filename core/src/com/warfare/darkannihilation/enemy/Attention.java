@@ -6,8 +6,8 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
+import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 
@@ -15,7 +15,7 @@ public class Attention extends Opponent {
     private final Rocket rocket;
 
     public Attention(Rocket rocket) {
-        super(null, getImages().attentionImg, 0, 0, 0);
+        super(getImages().attentionImg, 0, 0, 0);
         this.rocket = rocket;
 
         y = SCREEN_HEIGHT - height - 10;

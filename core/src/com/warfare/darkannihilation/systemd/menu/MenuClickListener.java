@@ -11,7 +11,7 @@ class MenuClickListener extends ClickListener {
     }
 
     @Override
-    public boolean touchUp(float x, float y, int pointer) {
+    public boolean touchUp(float x, float y) {
         for (Button button : buttons) {
             button.onClick(x, y);
         }
@@ -19,7 +19,7 @@ class MenuClickListener extends ClickListener {
     }
 
     @Override
-    public boolean touchDragged(float x, float y, int pointer) {
+    public boolean touchDragged(float x, float y) {
         for (Button button : buttons) {
             button.sweep(x, y);
         }

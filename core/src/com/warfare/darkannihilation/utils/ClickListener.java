@@ -1,15 +1,15 @@
 package com.warfare.darkannihilation.utils;
 
 public class ClickListener {
-    public boolean touchDown(float x, float y, int pointer) {
+    public boolean touchDown(float x, float y) {
         return true;
     }
 
-    public boolean touchUp(float x, float y, int pointer) {
+    public boolean touchUp(float x, float y) {
         return true;
     }
 
-    public boolean touchDragged(float x, float y, int pointer) {
+    public boolean touchDragged(float x, float y) {
         return true;
     }
 

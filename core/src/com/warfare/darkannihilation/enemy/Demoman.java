@@ -5,25 +5,19 @@ import static com.badlogic.gdx.math.MathUtils.randomBoolean;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_HEALTH;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
-import static com.warfare.darkannihilation.systemd.service.Watch.time;
+import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
-import com.warfare.darkannihilation.bullet.BaseBullet;
-import com.warfare.darkannihilation.utils.PoolWrap;
+import com.warfare.darkannihilation.abstraction.sprite.Shooter;
+import com.warfare.darkannihilation.systemd.service.Processor;
 
-public class Demoman extends Opponent {
-    private final PoolWrap<BaseBullet> bombPool;
+public class Demoman extends Shooter {
     private boolean goLeft;
-    private float lastShot, shootTime;
 
-    public Demoman(PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bombPool) {
-        super(explosionPool, getImages().demomanImg, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 35);
-
-        this.bombPool = bombPool;
+    public Demoman() {
+        super(getImages().demomanImg, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 35, 0);
 
         visible = false;
         shrinkBorders(30, 25, 20, 50);
@@ -53,18 +47,15 @@ public class Demoman extends Opponent {
         visible = false;
     }
 
-    private void shoot() {
-        if (time - lastShot >= shootTime) {
-            lastShot = time;
-
-            bombPool.obtain().start(centerX(), centerY());
-        }
+    @Override
+    public void shot() {
+        Processor.postToLooper(() -> getPools().bombPool.obtain(centerX(), centerY()));
     }
 
     @Override
     public void update() {
         x += speedX;
-        shoot();
+        shooting();
 
         if (goLeft) {
             if (x < -width) {

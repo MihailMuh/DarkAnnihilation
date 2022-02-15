@@ -12,19 +12,13 @@ import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class Explosion extends BaseSprite {
-    private final AnimationSuper animationTriple;
-    private final AnimationSuper animationDefault;
-    private final AnimationSuper animationHuge;
-    private AnimationSuper mainAnim;
+    private AnimationSuper animation;
     private int explosionWidth, explosionHeight;
 
     private float timer;
 
     public Explosion() {
-        super(getImages().defaultExplosionAnim.get(0));
-        this.animationTriple = getImages().tripleExplosionAnim;
-        this.animationDefault = getImages().defaultExplosionAnim;
-        this.animationHuge = getImages().hugeExplosionAnim;
+        super(getImages().blackColor);
     }
 
     public void start(float X, float Y, byte type) {
@@ -33,25 +27,25 @@ public class Explosion extends BaseSprite {
         switch (type) {
             case SMALL_EXPLOSION_TRIPLE:
                 small = true;
-                mainAnim = animationTriple;
+                animation = getImages().tripleExplosionAnim;
                 break;
             case SMALL_EXPLOSION_DEFAULT:
                 small = true;
-                mainAnim = animationDefault;
+                animation = getImages().defaultExplosionAnim;
                 break;
             case MEDIUM_EXPLOSION_TRIPLE:
-                mainAnim = animationTriple;
+                animation = getImages().tripleExplosionAnim;
                 break;
             case MEDIUM_EXPLOSION_DEFAULT:
-                mainAnim = animationDefault;
+                animation = getImages().defaultExplosionAnim;
                 break;
             case HUGE_EXPLOSION:
-                mainAnim = animationHuge;
+                animation = getImages().hugeExplosionAnim;
                 break;
         }
 
-        explosionWidth = mainAnim.get(0).width;
-        explosionHeight = mainAnim.get(0).height;
+        explosionWidth = animation.get(0).width;
+        explosionHeight = animation.get(0).height;
         if (small) {
             explosionWidth /= 2.5;
             explosionHeight /= 2.5;
@@ -66,10 +60,10 @@ public class Explosion extends BaseSprite {
 
     @Override
     public void render() {
-        mainAnim.get(timer).draw(x, y, explosionWidth, explosionHeight);
+        animation.get(timer).draw(x, y, explosionWidth, explosionHeight);
 
         timer += delta;
-        if (mainAnim.isFinished()) {
+        if (animation.isFinished()) {
             visible = false;
         }
     }

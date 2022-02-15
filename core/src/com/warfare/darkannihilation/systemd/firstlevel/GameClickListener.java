@@ -17,7 +17,7 @@ class GameClickListener extends ClickListener {
     }
 
     @Override
-    public boolean touchDragged(float x, float y, int pointer) {
+    public boolean touchDragged(float x, float y) {
         player.setCoordinates(x, y);
         return true;
     }

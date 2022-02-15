@@ -5,19 +5,16 @@ import static com.warfare.darkannihilation.constants.Constants.BULLET_ENEMY_SPEE
 import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
-
 import static java.lang.Math.max;
 
-import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class BulletEnemy extends BaseBullet {
     private float angle;
     private float shrinkWidth, shrinkHeight;
 
-    public BulletEnemy(PoolWrap<Explosion> explosionPool) {
-        super(explosionPool, getImages().laserImg, BULLET_ENEMY_DAMAGE);
+    public BulletEnemy() {
+        super(getImages().laserImg, BULLET_ENEMY_DAMAGE);
         name = BULLET_ENEMY;
     }
 

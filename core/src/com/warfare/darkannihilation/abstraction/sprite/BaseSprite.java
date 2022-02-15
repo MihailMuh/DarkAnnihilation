@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.warfare.darkannihilation.utils.Image;
 
 public abstract class BaseSprite implements Poolable {
-    private float indentX, indentY, indentWidth, indentHeight;
+    private int indentX, indentY, indentWidth, indentHeight;
 
     protected Image image;
 
@@ -32,7 +32,7 @@ public abstract class BaseSprite implements Poolable {
         this(image, image.width, image.height);
     }
 
-    protected void shrinkBorders(float X, float Y, float indentWidth, float indentHeight) {
+    protected void shrinkBorders(int X, int Y, int indentWidth, int indentHeight) {
         indentX = X;
         indentY = Y;
         this.indentWidth = indentWidth;

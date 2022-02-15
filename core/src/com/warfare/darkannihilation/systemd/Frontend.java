@@ -40,7 +40,7 @@ public class Frontend implements Disposable {
             scene.render();
         }
 
-        fontWrap.draw(x, y, String.valueOf(Gdx.graphics.getFramesPerSecond()));
+//        fontWrap.draw(x, y, String.valueOf(Gdx.graphics.getFramesPerSecond()));
 
         spriteBatch.end();
     }

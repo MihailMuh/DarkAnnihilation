@@ -1,7 +1,7 @@
 package com.warfare.darkannihilation.utils;
 
 import static com.warfare.darkannihilation.systemd.Frontend.camera;
-import static com.warfare.darkannihilation.systemd.service.Processor.postOnTouch;
+import static com.warfare.darkannihilation.systemd.service.Processor.postToTouchLooper;
 import static com.warfare.darkannihilation.systemd.service.Windows.PHONE_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.PHONE_WIDTH;
 
@@ -26,37 +26,37 @@ public class MultiProcessor extends InputAdapter {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        postOnTouch(() -> {
+        postToTouchLooper(() -> {
             onTouch();
             for (ClickListener listener : listeners)
-                if (listener.touchDragged(touchPos.x, touchPos.y, pointer)) break;
+                if (listener.touchDragged(touchPos.x, touchPos.y)) break;
         });
         return true;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        postOnTouch(() -> {
+        postToTouchLooper(() -> {
             onTouch();
             for (ClickListener listener : listeners)
-                if (listener.touchDown(touchPos.x, touchPos.y, pointer)) break;
+                if (listener.touchDown(touchPos.x, touchPos.y)) break;
         });
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        postOnTouch(() -> {
+        postToTouchLooper(() -> {
             onTouch();
             for (ClickListener listener : listeners)
-                if (listener.touchUp(touchPos.x, touchPos.y, pointer)) break;
+                if (listener.touchUp(touchPos.x, touchPos.y)) break;
         });
         return true;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        postOnTouch(() -> {
+        postToTouchLooper(() -> {
             onTouch();
             for (ClickListener listener : listeners)
                 if (listener.keyDown(keycode)) break;

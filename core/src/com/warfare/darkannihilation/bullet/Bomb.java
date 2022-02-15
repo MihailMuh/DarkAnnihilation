@@ -5,12 +5,9 @@ import static com.warfare.darkannihilation.constants.Constants.BOMB_SPEED;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 
-import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.utils.PoolWrap;
-
 public class Bomb extends BaseBullet {
-    public Bomb(PoolWrap<Explosion> explosionPool) {
-        super(explosionPool, getImages().bombImg, BOMB_DAMAGE);
+    public Bomb() {
+        super(getImages().bombImg, BOMB_DAMAGE);
 
         name = BOMB;
     }
@@ -23,8 +20,8 @@ public class Bomb extends BaseBullet {
     }
 
     @Override
-    public void reset() {
-        explodeSmallTriple();
+    public void kill() {
+        explodeSmall();
         visible = false;
     }
 }

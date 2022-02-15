@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Opponent;
+import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;

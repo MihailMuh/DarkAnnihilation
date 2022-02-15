@@ -5,34 +5,25 @@ import static com.warfare.darkannihilation.constants.Constants.TRIPLE_FIGHTER_DA
 import static com.warfare.darkannihilation.constants.Constants.TRIPLE_FIGHTER_HEALTH;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.Shooter;
-import com.warfare.darkannihilation.bullet.BaseBullet;
-import com.warfare.darkannihilation.bullet.BulletEnemy;
+import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class TripleFighter extends Shooter {
     private final Player player;
-    private final PoolWrap<BaseBullet> bulletsEnemy;
-
-    private final float borderY;
     private final int right, top;
 
-    public TripleFighter(PoolWrap<Explosion> explosionPool, PoolWrap<BaseBullet> bulletsEnemy, Player player) {
-        super(explosionPool, getImages().tripleFighterImg, TRIPLE_FIGHTER_HEALTH, TRIPLE_FIGHTER_DAMAGE, 5, random(1f, 2f));
+    public TripleFighter(Player player) {
+        super(getImages().tripleFighterImg, TRIPLE_FIGHTER_HEALTH, TRIPLE_FIGHTER_DAMAGE, 5, random(1f, 2f));
         this.player = player;
-        this.bulletsEnemy = bulletsEnemy;
 
         name = TRIPLE;
-        borderY = SCREEN_HEIGHT + height;
         right = SCREEN_WIDTH - width;
         top = SCREEN_HEIGHT - height;
         reset();
@@ -58,7 +49,7 @@ public class TripleFighter extends Shooter {
             health = maxHealth;
 
             x = random(SCREEN_WIDTH);
-            y = borderY;
+            y = topY;
 
             speedX = random(-4f, 4f);
             speedY = random(1.3f, 13f);
@@ -88,9 +79,7 @@ public class TripleFighter extends Shooter {
 
             shootTime = random(1f, 2f);
             getSounds().bigLaserSound.play();
-
-            Gdx.app.postRunnable(() -> ((BulletEnemy) bulletsEnemy.obtain()).
-                    start(X, Y, cos, sin, (rads - MathUtils.HALF_PI) * MathUtils.radDeg));
+            getPools().bulletEnemyPool.obtain(X, Y, cos, sin, (rads - MathUtils.HALF_PI) * MathUtils.radDeg);
         }
     }
 }

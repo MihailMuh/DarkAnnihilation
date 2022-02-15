@@ -9,6 +9,7 @@ import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
@@ -17,17 +18,15 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.abstraction.sprite.movement.MovementSprite;
-import com.warfare.darkannihilation.bullet.Bullet;
+import com.warfare.darkannihilation.pools.BulletPool;
+import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.PoolWrap;
 
 public class Player extends MovementSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
-    private final PoolWrap<Bullet> bulletPool;
-    private final PoolWrap<Heart> armorPool;
+    private final BulletPool bulletPool = getPools().bulletPool;
+    private final ArmorPool armorPool = new ArmorPool(hearts);
     private final DifficultyAnalyzer difficultyAnalyzer;
 
     private float lastShot;
@@ -36,16 +35,9 @@ public class Player extends MovementSprite {
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
-    public Player(DifficultyAnalyzer difficultyAnalyzer, PoolWrap<Bullet> bulletPool, PoolWrap<Explosion> explosionPool) {
-        super(explosionPool, getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
+    public Player(DifficultyAnalyzer difficultyAnalyzer) {
+        super(getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
         this.difficultyAnalyzer = difficultyAnalyzer;
-        this.bulletPool = bulletPool;
-        armorPool = new PoolWrap<Heart>(hearts) {
-            @Override
-            protected ArmorHeart newObject() {
-                return new ArmorHeart();
-            }
-        };
 
         name = PLAYER;
         mxHealthMinus5 = maxHealth - 5;
@@ -103,7 +95,7 @@ public class Player extends MovementSprite {
             hlth += i * 10;
 
             if (hlth >= mxHealthMinus5) {
-                ((ArmorHeart) armorPool.obtain()).start(heartX, heartY);
+                armorPool.obtain(heartX, heartY);
                 heartX += 90;
 
                 checkLevel(true);
@@ -129,13 +121,16 @@ public class Player extends MovementSprite {
         if (time - lastShot >= MILLENNIUM_FALCON_SHOOT_TIME) {
             lastShot = time;
 
-            float X = centerX();
-            float Y = top() + 5;
-            bulletPool.obtain().start(X - 7, Y);
-            bulletPool.obtain().start(X, Y);
-            bulletPool.obtain().start(X + 7, Y);
+            Processor.post(() -> {
+                float X = centerX();
+                float Y = top() + 5;
 
-            getSounds().laserSound.play();
+                bulletPool.obtain(X - 7, Y);
+                bulletPool.obtain(X, Y);
+                bulletPool.obtain(X + 7, Y);
+
+                getSounds().laserSound.play();
+            });
         }
     }
 
@@ -178,7 +173,7 @@ public class Player extends MovementSprite {
                 if (sprite.damage >= 20) Gdx.input.vibrate(120);
                 else Gdx.input.vibrate(60);
 
-                difficultyAnalyzer.addStatistics();
+                difficultyAnalyzer.addStatistics(health);
             }
         });
     }
