@@ -1,7 +1,6 @@
 package com.warfare.darkannihilation.systemd;
 
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.systemd.loading.DarkScene;
 
 public class MainGameManager {
     private final MainGame mainGame;
@@ -24,9 +23,10 @@ public class MainGameManager {
     }
 
     public void startScene(Scene scene, boolean loadingScreen) {
-        if (loadingScreen)
-            startScene(new DarkScene(this, scene, mainGame.scenesStack.lastScene, 1.5f), false);
-        else {
+        if (loadingScreen) {
+            mainGame.loading.setSceneToRun(scene, mainGame.scenesStack.lastScene);
+            startScene(mainGame.loading, false);
+        } else {
             scene.create();
 
             mainGame.pause();
@@ -37,6 +37,7 @@ public class MainGameManager {
     }
 
     public boolean loadResources() {
-        return mainGame.assetManager.update();
+        mainGame.assetManager.finishLoading();
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.systemd;
 
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
+import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
@@ -21,7 +22,7 @@ public class Frontend implements Disposable {
     private final int y = SCREEN_HEIGHT - 100;
 
     public static final OrthographicCamera camera = new OrthographicCamera();
-    public static final SpriteBatchSuper spriteBatch = new SpriteBatchSuper(40);
+    public static final SpriteBatchSuper spriteBatch = new SpriteBatchSuper(70);
 
     Frontend(MainGame mainGame) {
         scenesStack = mainGame.scenesStack;
@@ -41,6 +42,7 @@ public class Frontend implements Disposable {
         }
 
 //        fontWrap.draw(x, y, String.valueOf(Gdx.graphics.getFramesPerSecond()));
+//        fontWrap.draw(HALF_SCREEN_WIDTH, y, spriteBatch.renderCalls + " " + spriteBatch.maxSpritesInBatch);
 
         spriteBatch.end();
     }

@@ -10,9 +10,13 @@ public class Image {
     public final int width, height, halfWidth, halfHeight;
 
     public Image(AtlasRegion atlasRegion) {
+        this(atlasRegion, 1);
+    }
+
+    public Image(AtlasRegion atlasRegion, float scale) {
         this.atlasRegion = atlasRegion;
-        width = atlasRegion.originalWidth;
-        height = atlasRegion.originalHeight;
+        width = (int) (atlasRegion.originalWidth * scale);
+        height = (int) (atlasRegion.originalHeight * scale);
 
         halfWidth = width / 2;
         halfHeight = height / 2;

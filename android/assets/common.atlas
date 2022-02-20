@@ -3,269 +3,46 @@ common.png
 	filter: Linear, Linear
 	repeat: none
 dark_null
-	bounds: 0, 42, 1, 1
-buckshot
-	bounds: 1913, 318, 100, 124
+	bounds: 0, 42, 1, 1	
 button_not_press
-	bounds: 1488, 182, 423, 129
+	bounds: 1364, 935, 288, 88
 button_press
-	bounds: 1488, 313, 423, 129
-default_explosion
-	index: 20
-	bounds: 1184, 287, 150, 155
-default_explosion
-	index: 7
-	bounds: 1336, 287, 150, 155
-default_explosion
-	index: 12
-	bounds: 1184, 130, 150, 155
-default_explosion
-	index: 25
-	bounds: 1002, 105, 150, 155
-default_explosion
-	index: 17
-	bounds: 1336, 130, 150, 155
-default_explosion
-	index: 4
-	bounds: 1488, 25, 150, 155
-default_explosion
-	index: 22
-	bounds: 1640, 25, 150, 155
-full_blue_heart
-	bounds: 1002, 19, 99, 84
-full_heart
-	bounds: 1944, 60, 99, 84
-half_blue_heart
-	bounds: 1154, 44, 99, 84
-half_heart
-	bounds: 1913, 146, 99, 84
-health
-	bounds: 1255, 46, 82, 82
-loading
-	index: 1
-	bounds: 0, 1548, 1000, 500
-loading
-	index: 6
-	bounds: 0, 1046, 1000, 500
-loading
-	index: 3
-	bounds: 1002, 946, 1000, 500
-loading
-	index: 8
-	bounds: 0, 544, 1000, 500
-loading
-	index: 0
-	bounds: 1002, 444, 1000, 500
-loading
-	index: 5
-	bounds: 0, 42, 1000, 500
-non_heart
-	bounds: 1913, 232, 99, 84
-pause_button
-	bounds: 1002, 262, 180, 180
-skull_explosion
-	index: 0
-	bounds: 1002, 1448, 521, 600
-skull_explosion
-	index: 5
-	bounds: 1525, 1448, 521, 600
-triple_explosion
-	index: 2
-	bounds: 1792, 0, 150, 144
-
-common2.png
-	size: 2048, 2048
-	filter: Linear, Linear
-	repeat: none
-default_explosion
-	index: 9
-	bounds: 1002, 345, 150, 155
-default_explosion
-	index: 14
-	bounds: 1002, 188, 150, 155
-default_explosion
-	index: 27
-	bounds: 1154, 345, 150, 155
-default_explosion
-	index: 1
-	bounds: 1002, 31, 150, 155
-default_explosion
-	index: 19
-	bounds: 1154, 188, 150, 155
-default_explosion
-	index: 6
-	bounds: 1306, 345, 150, 155
-default_explosion
-	index: 11
-	bounds: 1154, 31, 150, 155
-default_explosion
-	index: 24
-	bounds: 1306, 188, 150, 155
-default_explosion
-	index: 16
-	bounds: 1458, 345, 150, 155
-default_explosion
-	index: 3
-	bounds: 1306, 31, 150, 155
-default_explosion
-	index: 21
-	bounds: 1458, 188, 150, 155
-default_explosion
-	index: 8
-	bounds: 1610, 345, 150, 155
-default_explosion
-	index: 13
-	bounds: 1458, 31, 150, 155
-default_explosion
-	index: 26
-	bounds: 1610, 188, 150, 155
-default_explosion
-	index: 0
-	bounds: 1762, 345, 150, 155
-default_explosion
-	index: 18
-	bounds: 1610, 31, 150, 155
-default_explosion
-	index: 5
-	bounds: 1762, 188, 150, 155
-default_explosion
-	index: 10
-	bounds: 1762, 31, 150, 155
+	bounds: 682, 594, 288, 88
 gameover
-	bounds: 0, 0, 1000, 500
+	bounds: 682, 682, 682, 341
 loading
-	index: 11
-	bounds: 0, 1506, 1000, 500
-loading
-	index: 2
-	bounds: 0, 1004, 1000, 500
-loading
-	index: 7
-	bounds: 1002, 1506, 1000, 500
-loading
-	index: 4
-	bounds: 0, 502, 1000, 500
-loading
-	index: 9
-	bounds: 1002, 1004, 1000, 500
-loading
-	index: 10
-	bounds: 1002, 502, 1000, 500
-
-common3.png
-	size: 2048, 2048
-	filter: Linear, Linear
-	repeat: none
-default_explosion
-	index: 23
-	bounds: 0, 0, 150, 155
-default_explosion
-	index: 15
-	bounds: 1569, 1806, 150, 155
-default_explosion
-	index: 2
-	bounds: 152, 0, 150, 155
-skull_explosion
-	index: 11
-	bounds: 0, 1361, 521, 600
-skull_explosion
-	index: 2
-	bounds: 0, 759, 521, 600
-skull_explosion
-	index: 7
-	bounds: 523, 1361, 521, 600
-skull_explosion
-	index: 4
-	bounds: 0, 157, 521, 600
-skull_explosion
-	index: 9
-	bounds: 523, 759, 521, 600
-skull_explosion
-	index: 10
-	bounds: 1046, 1361, 521, 600
-skull_explosion
 	index: 1
-	bounds: 523, 157, 521, 600
-skull_explosion
+	bounds: 0, 1705, 682, 341
+loading
 	index: 6
-	bounds: 1046, 759, 521, 600
-skull_explosion
-	index: 12
-	bounds: 1046, 157, 521, 600
-triple_explosion
-	index: 19
-	bounds: 1569, 1660, 150, 144
-triple_explosion
-	index: 7
-	bounds: 1721, 1817, 150, 144
-triple_explosion
-	index: 11
-	bounds: 304, 11, 150, 144
-triple_explosion
-	index: 16
-	bounds: 1569, 1514, 150, 144
-triple_explosion
-	index: 4
-	bounds: 1721, 1671, 150, 144
-triple_explosion
-	index: 21
-	bounds: 1873, 1817, 150, 144
-triple_explosion
-	index: 9
-	bounds: 456, 11, 150, 144
-triple_explosion
-	index: 1
-	bounds: 1569, 1368, 150, 144
-triple_explosion
-	index: 13
-	bounds: 1721, 1525, 150, 144
-triple_explosion
-	index: 18
-	bounds: 1873, 1671, 150, 144
-triple_explosion
-	index: 6
-	bounds: 608, 11, 150, 144
-triple_explosion
-	index: 10
-	bounds: 1569, 1222, 150, 144
-triple_explosion
-	index: 15
-	bounds: 1721, 1379, 150, 144
-triple_explosion
-	index: 20
-	bounds: 1873, 1525, 150, 144
-triple_explosion
+	bounds: 0, 1364, 682, 341
+loading
 	index: 3
-	bounds: 760, 11, 150, 144
-triple_explosion
+	bounds: 682, 1705, 682, 341
+loading
 	index: 8
-	bounds: 1569, 1076, 150, 144
-triple_explosion
+	bounds: 0, 1023, 682, 341
+loading
 	index: 0
-	bounds: 1721, 1233, 150, 144
-triple_explosion
-	index: 12
-	bounds: 1873, 1379, 150, 144
-triple_explosion
-	index: 17
-	bounds: 912, 11, 150, 144
-triple_explosion
-	index: 22
-	bounds: 1569, 930, 150, 144
-triple_explosion
+	bounds: 682, 1364, 682, 341
+loading
 	index: 5
-	bounds: 1721, 1087, 150, 144
-triple_explosion
-	index: 14
-	bounds: 1873, 1233, 150, 144
-
-common4.png
-	size: 2048, 1024
-	filter: Linear, Linear
-	repeat: none
-skull_explosion
-	index: 3
-	bounds: 0, 0, 521, 600
-skull_explosion
-	index: 8
-	bounds: 523, 0, 521, 600
+	bounds: 1364, 1705, 682, 341
+loading
+	index: 11
+	bounds: 0, 682, 682, 341
+loading
+	index: 2
+	bounds: 682, 1023, 682, 341
+loading
+	index: 7
+	bounds: 1364, 1364, 682, 341
+loading
+	index: 4
+	bounds: 0, 341, 682, 341
+loading
+	index: 10
+	bounds: 1364, 1023, 682, 341
+loading
+	index: 9
+	bounds: 0, 0, 682, 341

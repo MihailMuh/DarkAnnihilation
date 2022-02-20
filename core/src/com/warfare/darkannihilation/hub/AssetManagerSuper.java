@@ -51,11 +51,11 @@ public class AssetManagerSuper extends AssetManager {
         return new ImageAtlas(get(name));
     }
 
-    public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration) {
+    public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration, float scale) {
         Array<Image> images = new Array<>(10);
         int i = 0;
         while (true) {
-            Image image = atlas.getImage(name, i);
+            Image image = atlas.getImage(name, i, scale);
             if (image == null) {
                 break;
             }
@@ -64,6 +64,10 @@ public class AssetManagerSuper extends AssetManager {
         }
 
         return new AnimationSuper(images.toArray(Image.class), frameDuration);
+    }
+
+    public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration) {
+        return getAnimation(atlas, name, frameDuration, 1);
     }
 
     @Override

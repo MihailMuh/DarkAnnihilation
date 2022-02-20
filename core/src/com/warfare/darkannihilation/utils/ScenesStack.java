@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.utils;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.Scene;
+import com.warfare.darkannihilation.systemd.service.Processor;
 
 import java.util.Iterator;
 
@@ -30,12 +31,11 @@ public class ScenesStack implements Iterable<Scene> {
     public void clear() {
         lastScene.pause();
 
-        for (int i = 0; i < scenes.size; i++) {
-            scenes.get(i).dispose();
+        for (Iterator<Scene> iterator = iterator(); iterator.hasNext();) {
+            Scene scene = iterator.next();
+            Processor.post(scene::dispose);
+            iterator.remove();
         }
-        lastScene.dispose();
-
-        scenes.clear();
 
         lastScene = null;
         size = 0;

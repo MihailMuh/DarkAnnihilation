@@ -6,6 +6,7 @@ import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.hub.Resources;
 import com.warfare.darkannihilation.hub.SoundHub;
+import com.warfare.darkannihilation.systemd.loading.Loading;
 import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
@@ -14,11 +15,13 @@ import com.warfare.darkannihilation.hub.AssetManagerSuper;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
+    private final MainGameManager mainGameManager = new MainGameManager(this);
     private Frontend frontend;
 
-    AssetManagerSuper assetManager;
-
     final ScenesStack scenesStack = new ScenesStack();
+
+    AssetManagerSuper assetManager;
+    Loading loading;
 
     @Override
     public void create() {
@@ -26,7 +29,7 @@ public class MainGame extends BaseApp {
         assetManager = new AssetManagerSuper();
         Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager));
 
-        Menu menu = new Menu(new MainGameManager(this));
+        Menu menu = new Menu(mainGameManager);
         assetManager.finishLoading();
         Resources.getImages().boot();
         Resources.getFonts().boot();
@@ -39,6 +42,7 @@ public class MainGame extends BaseApp {
         Processor.post(() -> {
             Service.sleep(500);
             Resources.getImages().lazyLoading();
+            loading = new Loading(mainGameManager, scenesStack);
 
             resume();
         });

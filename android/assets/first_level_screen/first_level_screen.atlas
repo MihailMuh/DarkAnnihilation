@@ -1,0 +1,75 @@
+first_level_screen.jpg
+	size: 2048, 2048
+	repeat: none
+star_screen
+	index: 15
+	bounds: 0, 1715, 480, 245
+star_screen
+	index: 20
+	bounds: 0, 1470, 480, 245
+star_screen
+	index: 3
+	bounds: 480, 1715, 480, 245
+star_screen
+	index: 12
+	bounds: 0, 1225, 480, 245
+star_screen
+	index: 8
+	bounds: 480, 1470, 480, 245
+star_screen
+	index: 0
+	bounds: 960, 1715, 480, 245
+star_screen
+	index: 17
+	bounds: 0, 980, 480, 245
+star_screen
+	index: 22
+	bounds: 480, 1225, 480, 245
+star_screen
+	index: 5
+	bounds: 960, 1470, 480, 245
+star_screen
+	index: 14
+	bounds: 1440, 1715, 480, 245
+star_screen
+	index: 2
+	bounds: 0, 735, 480, 245
+star_screen
+	index: 19
+	bounds: 480, 980, 480, 245
+star_screen
+	index: 11
+	bounds: 960, 1225, 480, 245
+star_screen
+	index: 7
+	bounds: 1440, 1470, 480, 245
+star_screen
+	index: 16
+	bounds: 0, 490, 480, 245
+star_screen
+	index: 4
+	bounds: 480, 735, 480, 245
+star_screen
+	index: 21
+	bounds: 960, 980, 480, 245
+star_screen
+	index: 13
+	bounds: 1440, 1225, 480, 245
+star_screen
+	index: 9
+	bounds: 0, 245, 480, 245
+star_screen
+	index: 1
+	bounds: 480, 490, 480, 245
+star_screen
+	index: 18
+	bounds: 960, 735, 480, 245
+star_screen
+	index: 10
+	bounds: 1440, 980, 480, 245
+star_screen
+	index: 23
+	bounds: 0, 0, 480, 245
+star_screen
+	index: 6
+	bounds: 480, 245, 480, 245

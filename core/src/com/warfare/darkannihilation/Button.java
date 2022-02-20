@@ -12,7 +12,6 @@ import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Button extends BaseButton {
-
     private Runnable runnable;
     private String text;
     private float textX;

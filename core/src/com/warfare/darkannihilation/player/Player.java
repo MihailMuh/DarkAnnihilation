@@ -121,7 +121,7 @@ public class Player extends MovementSprite {
         if (time - lastShot >= MILLENNIUM_FALCON_SHOOT_TIME) {
             lastShot = time;
 
-            Processor.post(() -> {
+            Processor.postToLooper(() -> {
                 float X = centerX();
                 float Y = top() + 5;
 

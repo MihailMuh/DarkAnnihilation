@@ -40,7 +40,6 @@ public class SoundHub extends BaseHub {
     public void disposeMenuSounds() {
         assetManager.unload(MENU_MUSIC);
         allMusic.removeValue(menuMusic, true);
-        menuMusic = null;
     }
 
     public void loadGameSounds() {
@@ -74,13 +73,11 @@ public class SoundHub extends BaseHub {
         assetManager.unload(FIRST_LEVEL_MUSIC);
         allMusic.removeValue(firstLevelMusic, true);
         allMusic.removeValue(attentionSound, true);
-
-        firstLevelMusic = null;
-        attentionSound = null;
     }
 
     public void setVolume(float newVolume) {
         if (newVolume < 0) newVolume = 0;
+        else if (newVolume > 1) newVolume = 1;
 
         for (Audio audio : allMusic) audio.setVolume(newVolume);
     }

@@ -10,16 +10,28 @@ public class ImageAtlas {
         this.atlas = atlas;
     }
 
-    private Image get(AtlasRegion region) {
-        if (region != null) return new Image(region);
+    private Image get(AtlasRegion region, float scale) {
+        if (region != null) return new Image(region, scale);
         return null;
     }
 
+    private Image get(AtlasRegion region) {
+        return get(region, 1);
+    }
+
     public Image getImage(String name) {
-        return get(atlas.findRegion(name));
+        return getImage(name, 1f);
+    }
+
+    public Image getImage(String name, float scale) {
+        return get(atlas.findRegion(name), scale);
     }
 
     public Image getImage(String name, int index) {
         return get(atlas.findRegion(name, index));
+    }
+
+    public Image getImage(String name, int index, float scale) {
+        return get(atlas.findRegion(name, index), scale);
     }
 }
