@@ -1,0 +1,61 @@
+first_level.png
+	size: 2048, 1024
+	repeat: none
+attention
+	bounds: 589, 166, 70, 63
+bomb
+	bounds: 282, 73, 30, 70
+boss
+	bounds: 2, 145, 400, 400
+buckshot
+	bounds: 2, 19, 100, 124
+bullet
+	bounds: 1471, 547, 7, 32
+cannon_ball
+	bounds: 2, 2, 15, 15
+demoman
+	bounds: 1208, 370, 300, 175
+factory
+	bounds: 2, 547, 1467, 450
+full_blue_heart
+	bounds: 1573, 597, 99, 84
+full_heart
+	bounds: 104, 59, 99, 84
+guns
+	index: 1
+	bounds: 1471, 683, 400, 314
+guns
+	index: 0
+	bounds: 404, 231, 400, 314
+guns
+	index: 2
+	bounds: 806, 231, 400, 314
+half_blue_heart
+	bounds: 1873, 798, 99, 84
+half_heart
+	bounds: 1390, 284, 99, 84
+health
+	bounds: 505, 147, 82, 82
+laser
+	bounds: 314, 73, 30, 70
+minion
+	bounds: 1674, 627, 80, 54
+non_heart
+	bounds: 404, 145, 99, 84
+pause_button
+	bounds: 1208, 188, 180, 180
+rocket
+	bounds: 1975, 899, 50, 98
+ship
+	bounds: 1873, 884, 100, 113
+triple_fighter
+	bounds: 1471, 581, 100, 100
+vader
+	index: 1
+	bounds: 1390, 207, 75, 75
+vader
+	index: 0
+	bounds: 205, 68, 75, 75
+vader
+	index: 2
+	bounds: 1873, 721, 75, 75
