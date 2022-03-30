@@ -11,10 +11,10 @@ import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
+import static com.warfare.darkannihilation.systemd.service.Processor.postToLooper;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.pools.OpponentPool;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
@@ -25,10 +25,11 @@ import com.warfare.darkannihilation.enemy.Rocket;
 import com.warfare.darkannihilation.enemy.TripleFighter;
 import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.hub.PoolHub;
-import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.player.Player;
+import com.warfare.darkannihilation.pools.OpponentPool;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.support.HealthKit;
+import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.gameover.GameOver;
 import com.warfare.darkannihilation.systemd.gameover.GameOverScreen;
@@ -42,10 +43,10 @@ public class FirstLevel extends Scene {
     private final DifficultyAnalyzer difficultyAnalyzer = new DifficultyAnalyzer(this);
     private final PoolHub poolHub = getPools();
 
-    private final Array<Explosion> explosions = new Array<>(NUMBER_EXPLOSION);
-    private final Array<Bullet> bullets = new Array<>(NUMBER_MILLENNIUM_FALCON_BULLETS);
-    private final Array<BaseBullet> bulletsEnemy = new Array<>(30);
-    private final Array<Opponent> empire = new Array<>(40);
+    private final Array<Explosion> explosions = new Array<>(false, NUMBER_EXPLOSION);
+    private final Array<Bullet> bullets = new Array<>(false, NUMBER_MILLENNIUM_FALCON_BULLETS);
+    private final Array<BaseBullet> bulletsEnemy = new Array<>(false, 30);
+    private final Array<Opponent> empire = new Array<>(false, 40);
 
     private Frontend frontend;
     private Player player;
@@ -56,7 +57,6 @@ public class FirstLevel extends Scene {
 
     private boolean firstRun = true;
     private boolean single = false;
-    private float moveAll;
     int score;
 
     public FirstLevel(MainGameManager mainGameManager) {
@@ -129,14 +129,14 @@ public class FirstLevel extends Scene {
 
     @Override
     public void update() {
-        moveAll = player.speedX / 2.8f;
+        float moveAll = player.speedX / 2.8f;
         screen.x -= moveAll;
 
         player.update();
         player.shoot();
 
-        updateEmpire();
-        updateBulletsEnemy();
+        updateEmpire(moveAll);
+        updateBulletsEnemy(moveAll);
 
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet bullet = iterator.next();
@@ -145,20 +145,24 @@ public class FirstLevel extends Scene {
                 bullet.update();
             } else {
                 iterator.remove();
-                Processor.postToLooper(() -> poolHub.bulletPool.free(bullet));
+                postToLooper(() -> poolHub.bulletPool.free(bullet));
             }
         }
 
-        updateExplosions();
+        updateExplosions(moveAll);
     }
 
-    private void updateEmpire() {
+    private void updateEmpire(float moveAll) {
+        Player player = this.player;
+
         for (Iterator<Opponent> iterator = empire.iterator(); iterator.hasNext(); ) {
             Opponent opponent = iterator.next();
             if (opponent.visible) {
                 opponent.x -= moveAll;
                 opponent.update();
-                if (opponent.killedBy(player)) continue;
+                if (opponent.killedBy(player)) {
+                    continue;
+                }
 
                 for (Bullet bullet : bullets) {
                     if (bullet.visible && opponent.killedBy(bullet)) {
@@ -169,18 +173,20 @@ public class FirstLevel extends Scene {
             } else {
                 if (opponent.name == VADER) {
                     iterator.remove();
-                    Processor.postToLooper(() -> vaderPool.free(opponent));
+                    postToLooper(() -> vaderPool.free(opponent));
                 } else {
                     if (opponent.name == TRIPLE) {
                         iterator.remove();
-                        Processor.postToLooper(() -> triplePool.free(opponent));
+                        postToLooper(() -> triplePool.free(opponent));
                     }
                 }
             }
         }
     }
 
-    private void updateBulletsEnemy() {
+    private void updateBulletsEnemy(float moveAll) {
+        Player player = this.player;
+
         for (Iterator<BaseBullet> iterator = bulletsEnemy.iterator(); iterator.hasNext(); ) {
             BaseBullet bullet = iterator.next();
             if (bullet.visible) {
@@ -189,7 +195,7 @@ public class FirstLevel extends Scene {
                 bullet.killedBy(player);
             } else {
                 iterator.remove();
-                Processor.postToLooper(() -> {
+                postToLooper(() -> {
                     if (bullet.name == BOMB) {
                         poolHub.bombPool.free(bullet);
                     } else {
@@ -200,14 +206,14 @@ public class FirstLevel extends Scene {
         }
     }
 
-    private void updateExplosions() {
+    private void updateExplosions(float moveAll) {
         for (Iterator<Explosion> iterator = explosions.iterator(); iterator.hasNext(); ) {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
                 explosion.x -= moveAll;
             } else {
                 iterator.remove();
-                Processor.postToLooper(() -> poolHub.explosionPool.free(explosion));
+                postToLooper(() -> poolHub.explosionPool.free(explosion));
             }
         }
     }

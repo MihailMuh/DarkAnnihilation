@@ -28,8 +28,11 @@ public class MultiProcessor extends InputAdapter {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         postToTouchLooper(() -> {
             onTouch();
-            for (ClickListener listener : listeners)
-                if (listener.touchDragged(touchPos.x, touchPos.y)) break;
+            for (ClickListener listener : listeners) {
+                if (listener.touchDragged(touchPos.x, touchPos.y)) {
+                    break;
+                }
+            }
         });
         return true;
     }
@@ -38,8 +41,11 @@ public class MultiProcessor extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         postToTouchLooper(() -> {
             onTouch();
-            for (ClickListener listener : listeners)
-                if (listener.touchDown(touchPos.x, touchPos.y)) break;
+            for (ClickListener listener : listeners) {
+                if (listener.touchDown(touchPos.x, touchPos.y)) {
+                    break;
+                }
+            }
         });
         return true;
     }
@@ -48,8 +54,11 @@ public class MultiProcessor extends InputAdapter {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         postToTouchLooper(() -> {
             onTouch();
-            for (ClickListener listener : listeners)
-                if (listener.touchUp(touchPos.x, touchPos.y)) break;
+            for (ClickListener listener : listeners) {
+                if (listener.touchUp(touchPos.x, touchPos.y)) {
+                    break;
+                }
+            }
         });
         return true;
     }
@@ -58,17 +67,24 @@ public class MultiProcessor extends InputAdapter {
     public boolean keyDown(int keycode) {
         postToTouchLooper(() -> {
             onTouch();
-            for (ClickListener listener : listeners)
-                if (listener.keyDown(keycode)) break;
+            for (ClickListener listener : listeners) {
+                if (listener.keyDown(keycode)) {
+                    break;
+                }
+            }
         });
         return true;
     }
 
     public synchronized void insertProcessor(ClickListener clickListener) {
-        if (clickListener != null) listeners.insert(0, clickListener);
+        if (clickListener != null) {
+            listeners.insert(0, clickListener);
+        }
     }
 
     public synchronized void removeProcessor(ClickListener clickListener) {
-        if (clickListener != null) listeners.removeValue(clickListener, true);
+        if (clickListener != null) {
+            listeners.removeValue(clickListener, true);
+        }
     }
 }

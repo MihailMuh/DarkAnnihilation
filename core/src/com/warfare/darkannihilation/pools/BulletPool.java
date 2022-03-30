@@ -4,10 +4,10 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.utils.PoolSuper;
 
-public class BulletPool extends PoolSuper<Bullet> {
+public class BulletPool extends Pool<Bullet> {
     private final Array<Bullet> bullets;
 
     public BulletPool(Array<Bullet> bullets) {

@@ -1,9 +1,9 @@
 package com.warfare.darkannihilation.player;
 
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.utils.PoolSuper;
+import com.badlogic.gdx.utils.Pool;
 
-public class ArmorPool extends PoolSuper<Heart> {
+public class ArmorPool extends Pool<Heart> {
     private final Array<Heart> hearts;
 
     public ArmorPool(Array<Heart> hearts) {

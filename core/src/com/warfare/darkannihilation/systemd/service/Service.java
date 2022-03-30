@@ -1,13 +1,14 @@
 package com.warfare.darkannihilation.systemd.service;
 
-import com.badlogic.gdx.Gdx;
+import static com.badlogic.gdx.Gdx.app;
+
 import com.badlogic.gdx.utils.StringBuilder;
 
 public final class Service {
     private static final StringBuilder stringBuilder = new StringBuilder();
 
     private static void print(String s) {
-        Gdx.app.error("DART", s);
+        app.error("DART", s);
     }
 
     public synchronized static void print(Object... objects) {
@@ -38,5 +39,9 @@ public final class Service {
             printErr("Error When Sleep:", e);
             sleep(millis);
         }
+    }
+
+    public static void makeALeak() {
+        final byte[] leak = new byte[1024 * 1024 * 64];
     }
 }
