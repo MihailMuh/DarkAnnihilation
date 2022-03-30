@@ -21,5 +21,5 @@ public final class Names {
     public static final byte ENEMY = 1;
     public static final byte VADER = 2;
     public static final byte TRIPLE = 3;
-
+    public static final byte DEMOMAN = 4;
 }

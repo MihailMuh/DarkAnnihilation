@@ -4,6 +4,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 import static com.badlogic.gdx.math.MathUtils.randomBoolean;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_HEALTH;
+import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
@@ -20,6 +21,7 @@ public class Demoman extends Shooter {
         super(getImages().demomanImg, DEMOMAN_HEALTH, DEMOMAN_DAMAGE, 35, 0);
 
         visible = false;
+        name = DEMOMAN;
         shrinkBorders(30, 25, 20, 50);
     }
 

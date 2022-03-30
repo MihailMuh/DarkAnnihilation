@@ -6,6 +6,7 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
+import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
@@ -53,6 +54,7 @@ public class FirstLevel extends Scene {
     private Demoman demoman;
     private HealthKit healthKit;
     private Attention attention;
+    private Rocket rocket;
     private OpponentPool vaderPool, triplePool;
 
     private boolean firstRun = true;
@@ -97,7 +99,7 @@ public class FirstLevel extends Scene {
 
         demoman = new Demoman();
         healthKit = new HealthKit();
-        Rocket rocket = new Rocket();
+        rocket = new Rocket();
         attention = new Attention(rocket);
         empire.add(demoman, healthKit, attention, rocket);
 
@@ -154,13 +156,14 @@ public class FirstLevel extends Scene {
 
     private void updateEmpire(float moveAll) {
         Player player = this.player;
+        Rocket rocket = this.rocket;
 
         for (Iterator<Opponent> iterator = empire.iterator(); iterator.hasNext(); ) {
             Opponent opponent = iterator.next();
             if (opponent.visible) {
                 opponent.x -= moveAll;
                 opponent.update();
-                if (opponent.killedBy(player)) {
+                if (opponent.killedBy(player) || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
                     continue;
                 }
 
@@ -168,6 +171,13 @@ public class FirstLevel extends Scene {
                     if (bullet.visible && opponent.killedBy(bullet)) {
                         score += opponent.killScore;
                         break;
+                    }
+                }
+                if (opponent.name != DEMOMAN) {
+                    for (BaseBullet bullet : bulletsEnemy) {
+                        if (bullet.visible && bullet.name == BOMB && opponent.killedBy(bullet)) {
+                            break;
+                        }
                     }
                 }
             } else {

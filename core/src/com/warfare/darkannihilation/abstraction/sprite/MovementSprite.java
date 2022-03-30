@@ -37,7 +37,9 @@ public abstract class MovementSprite extends BaseSprite {
     public void damage(MovementSprite sprite) {
         health -= sprite.damage;
 
-        if (health <= 0) kill();
+        if (health <= 0) {
+            kill();
+        }
     }
 
     public boolean killedBy(MovementSprite sprite) {

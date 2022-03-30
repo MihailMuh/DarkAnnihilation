@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.enemy;
 
 import static com.warfare.darkannihilation.constants.Constants.ROCKET_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.ROCKET_SPEED;
+import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
@@ -17,6 +18,7 @@ public class Rocket extends Opponent {
     }
 
     public void start(float X) {
+        health = maxHealth;
         x = X;
         y = SCREEN_HEIGHT;
 
@@ -28,7 +30,9 @@ public class Rocket extends Opponent {
         if (intersect(sprite)) {
             sprite.damage(this);
 
-            if (sprite.name == PLAYER) kill();
+            if (sprite.name == PLAYER || sprite.name == DEMOMAN) {
+                kill();
+            }
         }
         return false;
     }
@@ -37,7 +41,9 @@ public class Rocket extends Opponent {
     public void update() {
         y -= ROCKET_SPEED;
 
-        if (y <= -height) visible = false;
+        if (y <= -height) {
+            visible = false;
+        }
     }
 
     @Override
@@ -49,5 +55,9 @@ public class Rocket extends Opponent {
     public void kill() {
         explodeHuge();
         visible = false;
+    }
+
+    @Override
+    public void damage(MovementSprite sprite) {
     }
 }
