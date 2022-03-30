@@ -23,10 +23,10 @@ public class PoolHub {
     }
 
     public void disposePools() {
-        explosionPool.dispose();
+        explosionPool.clear();
         explosionPool = null;
 
-        bombPool.dispose();
+        bombPool.clear();
         bombPool = null;
     }
 }

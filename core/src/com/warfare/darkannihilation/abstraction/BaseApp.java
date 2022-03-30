@@ -4,6 +4,7 @@ import static com.badlogic.gdx.Input.Keys.BACK;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Collections;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Windows;
 
@@ -14,5 +15,6 @@ public abstract class BaseApp extends ApplicationAdapter {
 
         Windows.refresh();
         Processor.UIThread = Thread.currentThread();
+        Collections.allocateIterators = false;
     }
 }

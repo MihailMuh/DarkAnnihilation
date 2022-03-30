@@ -18,14 +18,13 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.pools.BulletPool;
 import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
+import com.warfare.darkannihilation.pools.BulletPool;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class Player extends MovementSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
-    private final BulletPool bulletPool = getPools().bulletPool;
     private final ArmorPool armorPool = new ArmorPool(hearts);
     private final DifficultyAnalyzer difficultyAnalyzer;
 
@@ -57,6 +56,7 @@ public class Player extends MovementSprite {
     }
 
     private void changeHearts() {
+        final Array<Heart> hearts = this.hearts;
         final int len = health / 10;
         int bar;
 
@@ -122,8 +122,9 @@ public class Player extends MovementSprite {
             lastShot = time;
 
             Processor.postToLooper(() -> {
-                float X = centerX();
-                float Y = top() + 5;
+                final float X = centerX();
+                final float Y = top() + 5;
+                final BulletPool bulletPool = getPools().bulletPool;
 
                 bulletPool.obtain(X - 7, Y);
                 bulletPool.obtain(X, Y);

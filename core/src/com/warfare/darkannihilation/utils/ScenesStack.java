@@ -19,6 +19,8 @@ public class ScenesStack implements Iterable<Scene> {
     }
 
     public Scene pop() {
+        final Array<Scene> scenes = this.scenes;
+
         if (size < 2) lastScene = null;
         else lastScene = scenes.items[size - 2];
 

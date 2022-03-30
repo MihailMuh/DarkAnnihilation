@@ -51,6 +51,8 @@ public class FontWrap {
     }
 
     public void draw(float x, float y, String text) {
+        final BitmapFont bitmapFont = this.bitmapFont;
+
         bitmapFontData.setScale(scale);
         bitmapFont.setColor(color);
 

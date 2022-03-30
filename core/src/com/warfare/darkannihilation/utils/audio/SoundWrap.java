@@ -11,7 +11,7 @@ public class SoundWrap extends Audio {
     }
 
     @Override
-    public void play() {
+    public synchronized void play() {
         sound.play(volume);
     }
 }
