@@ -53,10 +53,10 @@ public final class Constants {
     public static final byte DEMOMAN_DAMAGE = 40;
     public static final byte DEMOMAN_HEALTH = 30;
 
-    public static final short FACTORY_SPAWN_TIME = 1_000;
-    public static final short FACTORY_HEALTH = 300;
+    public static final float FACTORY_SPAWN_TIME = 1.65f;
+    public static final short FACTORY_HEALTH = 1000;
     public static final byte FACTORY_SPEED = 3;
-    public static final short FACTORY_HEALTH_BAR_LEN = 500;
+    public static final short FACTORY_HEALTH_BAR_LEN = 800;
 
     public static final byte MINION_HEALTH = 2;
     public static final short MINION_SHOOT_TIME = 900;

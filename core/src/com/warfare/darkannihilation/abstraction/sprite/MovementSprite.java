@@ -25,7 +25,11 @@ public abstract class MovementSprite extends BaseSprite {
     public float speedX, speedY;
 
     public MovementSprite(Image image, int maxHealth, int damage, int killScore) {
-        super(image);
+        this(image, image.width, image.height, maxHealth, damage, killScore);
+    }
+
+    public MovementSprite(Image image, int width, int height, int maxHealth, int damage, int killScore) {
+        super(image, width, height);
 
         this.maxHealth = maxHealth;
         this.damage = damage;

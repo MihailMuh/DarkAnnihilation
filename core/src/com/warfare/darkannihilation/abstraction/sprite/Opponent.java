@@ -9,7 +9,11 @@ public abstract class Opponent extends MovementSprite {
     public boolean shouldKill = false;
 
     public Opponent(Image image, int maxHealth, int damage, int killScore) {
-        super(image, maxHealth, damage, killScore);
+        this(image, image.width, image.height, maxHealth, damage, killScore);
+    }
+
+    public Opponent(Image image, int width, int height, int maxHealth, int damage, int killScore) {
+        super(image, width, height, maxHealth, damage, killScore);
         name = ENEMY;
     }
 

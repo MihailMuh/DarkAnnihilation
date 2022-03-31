@@ -9,7 +9,11 @@ public abstract class Shooter extends Opponent {
     protected float shootTime;
 
     public Shooter(Image image, int maxHealth, int damage, int killScore, float shootTime) {
-        super(image, maxHealth, damage, killScore);
+        this(image, image.width, image.height, maxHealth, damage, killScore, shootTime);
+    }
+
+    public Shooter(Image image, int width, int height, int maxHealth, int damage, int killScore, float shootTime) {
+        super(image, width, height, maxHealth, damage, killScore);
 
         this.shootTime = shootTime;
     }

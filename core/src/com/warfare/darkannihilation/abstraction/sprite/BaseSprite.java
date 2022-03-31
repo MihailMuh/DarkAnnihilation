@@ -66,14 +66,22 @@ public abstract class BaseSprite implements Poolable {
     }
 
     public float right() {
-        return x + width - indentWidth;
+        return x + width;
+    }
+
+    public float rightWithBorders() {
+        return right() - indentWidth;
     }
 
     public float top() {
-        return y + height - indentHeight;
+        return y + height;
+    }
+
+    public float topWithBorders() {
+        return top() - indentHeight;
     }
 
     public boolean intersect(BaseSprite r) {
-        return x() < r.right() && right() > r.x() && y() < r.top() && top() > r.y();
+        return x() < r.rightWithBorders() && rightWithBorders() > r.x() && y() < r.topWithBorders() && topWithBorders() > r.y();
     }
 }

@@ -7,8 +7,6 @@ import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static java.lang.Math.max;
 
-import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-
 public class BulletEnemy extends BaseBullet {
     private float angle;
     private float shrinkWidth, shrinkHeight;
@@ -29,8 +27,13 @@ public class BulletEnemy extends BaseBullet {
     }
 
     @Override
-    public boolean intersect(BaseSprite r) {
-        return x < r.right() && x + shrinkWidth > r.x() && y < r.top() && y + shrinkHeight > r.y();
+    public float rightWithBorders() {
+        return x + shrinkWidth;
+    }
+
+    @Override
+    public float topWithBorders() {
+        return y + shrinkHeight;
     }
 
     @Override

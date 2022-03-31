@@ -50,7 +50,6 @@ class Frontend {
 
     void render() {
         screen.render();
-        player.render();
 
         for (Opponent opponent : empire) {
             opponent.render();
@@ -58,6 +57,8 @@ class Frontend {
         for (BaseBullet baseBullet : bulletsEnemy) {
             baseBullet.render();
         }
+
+        player.render();
         for (Bullet bullet : bullets) {
             bullet.render();
         }

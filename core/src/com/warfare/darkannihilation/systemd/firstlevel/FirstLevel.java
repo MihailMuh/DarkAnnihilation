@@ -7,6 +7,8 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
+import static com.warfare.darkannihilation.constants.Names.FACTORY;
+import static com.warfare.darkannihilation.constants.Names.MINION;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
@@ -22,12 +24,10 @@ import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Attention;
 import com.warfare.darkannihilation.enemy.Demoman;
+import com.warfare.darkannihilation.enemy.Factory;
 import com.warfare.darkannihilation.enemy.Rocket;
-import com.warfare.darkannihilation.enemy.TripleFighter;
-import com.warfare.darkannihilation.enemy.Vader;
 import com.warfare.darkannihilation.hub.PoolHub;
 import com.warfare.darkannihilation.player.Player;
-import com.warfare.darkannihilation.pools.OpponentPool;
 import com.warfare.darkannihilation.screens.DynamicScreen;
 import com.warfare.darkannihilation.support.HealthKit;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
@@ -55,10 +55,10 @@ public class FirstLevel extends Scene {
     private HealthKit healthKit;
     private Attention attention;
     private Rocket rocket;
-    private OpponentPool vaderPool, triplePool;
+    public Factory factory;
 
     private boolean firstRun = true;
-    private boolean single = false;
+    private boolean startAnalytics = false;
     int score;
 
     public FirstLevel(MainGameManager mainGameManager) {
@@ -73,23 +73,11 @@ public class FirstLevel extends Scene {
         getSounds().getGameSounds();
         poolHub.initPools(explosions, bulletsEnemy, bullets);
 
-        vaderPool = new OpponentPool(empire, (int) (NUMBER_VADER * 2.5)) {
-            @Override
-            protected Vader newObject() {
-                return new Vader();
-            }
-        };
-        triplePool = new OpponentPool(empire, NUMBER_VADER) {
-            @Override
-            protected TripleFighter newObject() {
-                return new TripleFighter(player);
-            }
-        };
-
         player = new Player(difficultyAnalyzer);
         screen = new DynamicScreen(getImages().starScreenGIF);
         frontend = new Frontend(this, player, screen, explosions, bullets, empire, bulletsEnemy);
 
+        poolHub.initWithPlayer(empire, player);
         Processor.post(this::initEnemies);
     }
 
@@ -101,7 +89,8 @@ public class FirstLevel extends Scene {
         healthKit = new HealthKit();
         rocket = new Rocket();
         attention = new Attention(rocket);
-        empire.add(demoman, healthKit, attention, rocket);
+        factory = new Factory();
+        empire.addAll(demoman, healthKit, attention, rocket, factory);
 
         clickListener = new GameClickListener(player, mainGameManager);
         Processor.multiProcessor.insertProcessor(clickListener);
@@ -112,8 +101,8 @@ public class FirstLevel extends Scene {
         if (!firstRun) {
             gameTask.start();
 
-            if (!single) {
-                single = true;
+            if (!startAnalytics) {
+                startAnalytics = true;
                 difficultyAnalyzer.startCollecting();
             }
         } else {
@@ -173,7 +162,7 @@ public class FirstLevel extends Scene {
                         break;
                     }
                 }
-                if (opponent.name != DEMOMAN) {
+                if (opponent.name != DEMOMAN && opponent.name != FACTORY) {
                     for (BaseBullet bullet : bulletsEnemy) {
                         if (bullet.visible && bullet.name == BOMB && opponent.killedBy(bullet)) {
                             break;
@@ -181,14 +170,18 @@ public class FirstLevel extends Scene {
                     }
                 }
             } else {
-                if (opponent.name == VADER) {
-                    iterator.remove();
-                    postToLooper(() -> vaderPool.free(opponent));
-                } else {
-                    if (opponent.name == TRIPLE) {
+                switch (opponent.name) {
+                    case VADER:
                         iterator.remove();
-                        postToLooper(() -> triplePool.free(opponent));
-                    }
+                        postToLooper(() -> poolHub.vaderPool.free(opponent));
+                        continue;
+                    case TRIPLE:
+                        iterator.remove();
+                        postToLooper(() -> poolHub.triplePool.free(opponent));
+                        continue;
+                    case MINION:
+                        iterator.remove();
+                        postToLooper(() -> poolHub.minionPool.free(opponent));
                 }
             }
         }
@@ -230,34 +223,31 @@ public class FirstLevel extends Scene {
 
     private void systemTask() {
         if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
-
-        if (!healthKit.visible && randomBoolean(0.015f)) healthKit.reset();
-
+        if (!healthKit.visible && randomBoolean(0.0155f)) healthKit.reset();
         if (!attention.visible && score > 50 && randomBoolean(0.06f)) attention.reset();
+        if (!factory.visible && score > 170 && randomBoolean(0.0135f)) factory.reset();
 
         if (player.isDead()) {
             frontend.setScreen(new GameOverScreen());
             mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions), false);
         }
 
-        if (empire.size - 4 < MIN_NUMBER_VADER) {
-            newVader(1);
-        }
-
         difficultyAnalyzer.checkTime();
     }
 
     public void newTriple() {
-        triplePool.obtain();
+        poolHub.triplePool.obtain();
     }
 
     public void newVader(int count) {
         for (int i = 0; i < count; i++) {
-            vaderPool.obtain();
+            poolHub.vaderPool.obtain();
         }
     }
 
     public void killTriple() {
+        Array<Opponent> empire = this.empire;
+
         for (int i = empire.size - 1; i >= 0; i--) {
             Opponent opponent = empire.get(i);
 
@@ -269,14 +259,33 @@ public class FirstLevel extends Scene {
     }
 
     public void killVader() {
-        for (int i = 0; i < empire.size; i++) {
-            Opponent opponent = empire.get(i);
+        Array<Opponent> empire = this.empire;
+        long numVaders = getNumberVaders(empire);
 
-            if (!opponent.shouldKill && opponent.name == VADER) {
-                opponent.shouldKill = true;
-                break;
+        if (numVaders <= MIN_NUMBER_VADER) {
+            newVader((int) (MIN_NUMBER_VADER - numVaders));
+            killTriple();
+        } else {
+            for (int i = 0; i < empire.size; i++) {
+                Opponent opponent = empire.get(i);
+                if (opponent.name == VADER && !opponent.shouldKill) {
+                    opponent.shouldKill = true;
+                    return;
+                }
             }
         }
+    }
+
+    private int getNumberVaders(Array<Opponent> empire) {
+        int numVaders = 0;
+
+        for (int i = 0; i < empire.size; i++) {
+            Opponent opponent = empire.get(i);
+            if (opponent.name == VADER && !opponent.shouldKill) {
+                numVaders++;
+            }
+        }
+        return numVaders;
     }
 
     @Override

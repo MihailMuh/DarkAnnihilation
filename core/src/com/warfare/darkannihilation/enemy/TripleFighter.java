@@ -14,19 +14,24 @@ import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.utils.Image;
 
 public class TripleFighter extends Shooter {
     private final Player player;
     private final int right, top;
 
     public TripleFighter(Player player) {
-        super(getImages().tripleFighterImg, TRIPLE_FIGHTER_HEALTH, TRIPLE_FIGHTER_DAMAGE, 5, random(1f, 2f));
-        this.player = player;
+        this(player, getImages().tripleFighterImg, TRIPLE_FIGHTER_HEALTH, TRIPLE_FIGHTER_DAMAGE, 5, random(1f, 2f));
 
         name = TRIPLE;
+        reset();
+    }
+
+    public TripleFighter(Player player, Image image, byte health, byte damage, int killScore, float shootTime) {
+        super(image, health, damage, killScore, shootTime);
+        this.player = player;
         right = SCREEN_WIDTH - width;
         top = SCREEN_HEIGHT - height;
-        reset();
     }
 
     @Override

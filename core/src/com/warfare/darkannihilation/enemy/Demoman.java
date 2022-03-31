@@ -73,8 +73,11 @@ public class Demoman extends Shooter {
     @Override
     public void render() {
         if (visible) {
-            if (goLeft) super.render();
-            else image.draw(x + width, y, -width, height);
+            if (goLeft) {
+                super.render();
+            } else {
+                image.draw(x + width, y, -width, height);
+            }
         }
     }
 }

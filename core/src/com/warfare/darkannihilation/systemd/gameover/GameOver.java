@@ -12,11 +12,11 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
-import com.warfare.darkannihilation.pools.ExplosionPool;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;
+import com.warfare.darkannihilation.pools.ExplosionPool;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.GameTask;
 
@@ -24,8 +24,8 @@ import java.util.Iterator;
 
 public class GameOver extends Scene {
     private final GameTask gameTask1 = new GameTask(this::randBoom, 50);
-    private final GameTask gameTask2 = new GameTask(this::randBoom, 150);
-    private final GameTask gameTask3 = new GameTask(this::killSprites, 400);
+    private final GameTask gameTask2 = new GameTask(this::randBoom, 100);
+    private final GameTask gameTask3 = new GameTask(this::killSprites, 150);
 
     private final ExplosionPool explosionPool = getPools().explosionPool;
 
@@ -89,27 +89,28 @@ public class GameOver extends Scene {
 
     private void randBoom() {
         for (int i = 0; i < 3; i++) {
-            if (MathUtils.randomBoolean())
+            if (MathUtils.randomBoolean()) {
                 boom(random(SCREEN_WIDTH), random(SCREEN_HEIGHT));
+            }
         }
 
-        if (random(1, 35) == 1) explosionPool.obtain(random(SCREEN_WIDTH), random(SCREEN_HEIGHT), HUGE_EXPLOSION);
+        if (random(1, 35) == 1) {
+            explosionPool.obtain(random(SCREEN_WIDTH), random(SCREEN_HEIGHT), HUGE_EXPLOSION);
+        }
     }
 
     private void killSprites() {
         randBoom();
 
-        if (empire.size > 0) {
+        if (empire.notEmpty()) {
             Opponent opponent = empire.pop();
-
-            if (opponent.visible)
-                explosionPool.obtain(opponent.centerX(), opponent.centerY(), MEDIUM_EXPLOSION_DEFAULT);
+            explosionPool.obtain(opponent.centerX(), opponent.centerY(), MEDIUM_EXPLOSION_DEFAULT);
         }
-        if (bullets.size > 0) {
+        if (bullets.notEmpty()) {
             Bullet bullet = bullets.pop();
             explosionPool.obtain(bullet.centerX(), bullet.centerY(), SMALL_EXPLOSION_DEFAULT);
         }
-        if (bulletsEnemy.size > 0) {
+        if (bulletsEnemy.notEmpty()) {
             BaseBullet bullet = bulletsEnemy.pop();
             explosionPool.obtain(bullet.centerX(), bullet.centerY(), SMALL_EXPLOSION_DEFAULT);
         }

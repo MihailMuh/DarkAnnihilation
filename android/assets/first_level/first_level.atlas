@@ -44,6 +44,8 @@ non_heart
 	bounds: 404, 145, 99, 84
 pause_button
 	bounds: 1208, 188, 180, 180
+red
+	bounds: 104, 56, 1, 1
 rocket
 	bounds: 1975, 899, 50, 98
 ship
@@ -59,3 +61,5 @@ vader
 vader
 	index: 2
 	bounds: 1873, 721, 75, 75
+white
+	bounds: 1491, 367, 1, 1

@@ -29,7 +29,7 @@ public class DifficultyAnalyzer {
     public void checkTime() {
         if (time - lastDamage > INSANE) {
             lastDamage = time;
-            awesomeSpawn();
+            awesome();
         }
     }
 
@@ -45,21 +45,12 @@ public class DifficultyAnalyzer {
         checkCritical();
         if (difference <= EASY) {
             if (PLAYER_SKILL - 10 < 15 && health <= MILLENNIUM_FALCON_HEALTH * 1.5) {
-                if (randomBoolean(0.75f)) firstLevel.killTriple();
-                firstLevel.killVader();
-                firstLevel.killVader();
-                PLAYER_SKILL -= 3;
-                print("easy", PLAYER_SKILL);
+                easy();
                 return;
             }
         }
         if (difference <= NOT_BAD) {
-            if (PLAYER_SKILL - 10 < 20) {
-                firstLevel.killVader();
-                if (randomBoolean() || health < MILLENNIUM_FALCON_HEALTH - 30) firstLevel.killVader();
-            }
-            PLAYER_SKILL -= 2;
-            print("not bad", PLAYER_SKILL);
+            notBad();
             return;
         }
         if (difference <= NORMAL) {
@@ -91,7 +82,47 @@ public class DifficultyAnalyzer {
             return;
         }
 
-        awesomeSpawn();
+        awesome();
+    }
+
+    private void easy() {
+        if (reduceEffectIfFactory(0.2f)) {
+            if (randomBoolean(0.75f)) {
+                firstLevel.killTriple();
+            }
+            firstLevel.killVader();
+            firstLevel.killVader();
+            PLAYER_SKILL -= 3;
+            print("easy", PLAYER_SKILL);
+        }
+    }
+
+    private void notBad() {
+        if (reduceEffectIfFactory(0.35f)) {
+            if (PLAYER_SKILL - 10 < 20) {
+                firstLevel.killVader();
+                if (randomBoolean() || health < MILLENNIUM_FALCON_HEALTH - 30)
+                    firstLevel.killVader();
+            }
+            PLAYER_SKILL -= 2;
+            print("not bad", PLAYER_SKILL);
+        }
+    }
+
+    private void awesome() {
+        if (PLAYER_SKILL > 2) {
+            chillSpawn();
+            firstLevel.newVader(1);
+            firstLevel.newTriple();
+        } else {
+            normalSpawn();
+        }
+        PLAYER_SKILL += 5;
+        print("WOOOOW", PLAYER_SKILL);
+    }
+
+    private boolean reduceEffectIfFactory(float chance) {
+        return firstLevel.factory.visible && randomBoolean(chance);
     }
 
     private void normalSpawn() {
@@ -102,18 +133,6 @@ public class DifficultyAnalyzer {
     private void chillSpawn() {
         firstLevel.newVader(1);
         if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 20) firstLevel.newVader(1);
-    }
-
-    private void awesomeSpawn() {
-        if (PLAYER_SKILL > 2) {
-            chillSpawn();
-            firstLevel.newVader(1);
-            firstLevel.newTriple();
-        } else {
-            normalSpawn();
-        }
-        PLAYER_SKILL += 5;
-        print("WOOOOW", PLAYER_SKILL);
     }
 
     private void checkCritical() {

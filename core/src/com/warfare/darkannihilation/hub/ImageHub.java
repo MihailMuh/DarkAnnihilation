@@ -22,7 +22,7 @@ public class ImageHub extends BaseHub {
     public Image demomanImg, bombImg, factoryImg, minionImg, tripleFighterImg, attentionImg, rocketImg, laserImg, deathStarImg;
     public Image millenniumFalcon;
     public Image bulletImg;
-    public Image blackColor;
+    public Image blackColor, whiteColor, redColor;
     public Image healthKitImg;
     public Image gameOverScreen;
 
@@ -96,6 +96,9 @@ public class ImageHub extends BaseHub {
         nullHeartRed = firstLevelAtlas.getImage("non_heart");
 
         healthKitImg = firstLevelAtlas.getImage("health");
+
+        whiteColor = firstLevelAtlas.getImage("white");
+        redColor = firstLevelAtlas.getImage("red");
 
         starScreenGIF = assetManager.getAnimation(assetManager.getAtlas(FIRST_LEVEL_SCREEN_ATLAS), "star_screen", 0.07f, 2);
     }
