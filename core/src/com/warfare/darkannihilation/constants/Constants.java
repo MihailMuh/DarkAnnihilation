@@ -54,7 +54,7 @@ public final class Constants {
     public static final byte DEMOMAN_HEALTH = 30;
 
     public static final float FACTORY_SPAWN_TIME = 1.65f;
-    public static final short FACTORY_HEALTH = 1000;
+    public static final short FACTORY_HEALTH = 800;
     public static final byte FACTORY_SPEED = 3;
     public static final short FACTORY_HEALTH_BAR_LEN = 800;
 

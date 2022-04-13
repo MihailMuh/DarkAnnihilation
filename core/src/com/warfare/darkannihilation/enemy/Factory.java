@@ -22,12 +22,14 @@ public class Factory extends Shooter {
     private final Image red = getImages().redColor;
     private final Image white = getImages().whiteColor;
 
+    private float whiteBarY, redBarY;
     private final int yToStop;
+
     private int healthBar;
 
     public Factory() {
         super(getImages().factoryImg, SCREEN_WIDTH - 300, getImages().factoryImg.height,
-                FACTORY_HEALTH, 0, 100, FACTORY_SPAWN_TIME);
+                FACTORY_HEALTH, 10000, 100, FACTORY_SPAWN_TIME);
 
         visible = false;
         name = FACTORY;
@@ -44,6 +46,9 @@ public class Factory extends Shooter {
         y = topY;
         x = HALF_SCREEN_WIDTH - halfWidth;
 
+        whiteBarY = y + 390;
+        redBarY = whiteBarY + 2;
+
         visible = true;
     }
 
@@ -51,6 +56,8 @@ public class Factory extends Shooter {
     public void update() {
         if (y >= yToStop) {
             y -= FACTORY_SPEED;
+            whiteBarY -= FACTORY_SPEED;
+            redBarY -= FACTORY_SPEED;
         } else {
             shooting();
         }
@@ -101,8 +108,8 @@ public class Factory extends Shooter {
             super.render();
 
             float centerX = centerX();
-            white.draw(centerX - 400, y + 390, FACTORY_HEALTH_BAR_LEN, 18);
-            red.draw(centerX - 397, y + 392, healthBar, 14);
+            white.draw(centerX - 400, whiteBarY, FACTORY_HEALTH_BAR_LEN, 18);
+            red.draw(centerX - 397, redBarY, healthBar, 14);
         }
     }
 }

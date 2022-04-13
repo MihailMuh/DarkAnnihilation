@@ -15,6 +15,7 @@ import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Processor.postToLooper;
+import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
@@ -144,31 +145,12 @@ public class FirstLevel extends Scene {
     }
 
     private void updateEmpire(float moveAll) {
-        Player player = this.player;
-        Rocket rocket = this.rocket;
-
         for (Iterator<Opponent> iterator = empire.iterator(); iterator.hasNext(); ) {
             Opponent opponent = iterator.next();
             if (opponent.visible) {
                 opponent.x -= moveAll;
                 opponent.update();
-                if (opponent.killedBy(player) || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
-                    continue;
-                }
-
-                for (Bullet bullet : bullets) {
-                    if (bullet.visible && opponent.killedBy(bullet)) {
-                        score += opponent.killScore;
-                        break;
-                    }
-                }
-                if (opponent.name != DEMOMAN && opponent.name != FACTORY) {
-                    for (BaseBullet bullet : bulletsEnemy) {
-                        if (bullet.visible && bullet.name == BOMB && opponent.killedBy(bullet)) {
-                            break;
-                        }
-                    }
-                }
+                checkIntersectionsWithAnybody(opponent);
             } else {
                 switch (opponent.name) {
                     case VADER:
@@ -195,7 +177,9 @@ public class FirstLevel extends Scene {
             if (bullet.visible) {
                 bullet.x -= moveAll;
                 bullet.update();
-                bullet.killedBy(player);
+                if (frameCount % 2 == 0) {
+                    bullet.killedBy(player);
+                }
             } else {
                 iterator.remove();
                 postToLooper(() -> {
@@ -217,6 +201,30 @@ public class FirstLevel extends Scene {
             } else {
                 iterator.remove();
                 postToLooper(() -> poolHub.explosionPool.free(explosion));
+            }
+        }
+    }
+
+    private void checkIntersectionsWithAnybody(Opponent opponent) {
+        if (frameCount % 2 != 0) {
+            return;
+        }
+
+        if (opponent.killedBy(player) || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
+            return;
+        }
+
+        for (Bullet bullet : bullets) {
+            if (bullet.visible && opponent.killedBy(bullet)) {
+                score += opponent.killScore;
+                return;
+            }
+        }
+        if (opponent.name != DEMOMAN && opponent.name != FACTORY) {
+            for (BaseBullet bullet : bulletsEnemy) {
+                if (bullet.visible && bullet.name == BOMB && opponent.killedBy(bullet)) {
+                    return;
+                }
             }
         }
     }
@@ -253,7 +261,7 @@ public class FirstLevel extends Scene {
 
             if (opponent.name == TRIPLE && !opponent.shouldKill) {
                 opponent.shouldKill = true;
-                break;
+                return;
             }
         }
     }

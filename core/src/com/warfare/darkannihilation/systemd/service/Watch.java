@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 
 public final class Watch {
     public static float delta, time;
+    public static int frameCount;
 
     public static void update() {
         delta = Gdx.graphics.getDeltaTime();
-        if (delta > 1) {
-            delta = 1;
-        }
         time += delta;
+        frameCount++;
     }
 }

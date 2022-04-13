@@ -1,7 +1,10 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.abstraction.BaseApp;
+import com.warfare.darkannihilation.hub.AssetManagerSuper;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.hub.Resources;
@@ -11,7 +14,6 @@ import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
-import com.warfare.darkannihilation.hub.AssetManagerSuper;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
@@ -60,12 +62,17 @@ public class MainGame extends BaseApp {
     @Override
     public void resume() {
         Texture.setAssetManager(assetManager);
-        if (scenesStack.lastScene != null) scenesStack.lastScene.resume();
+        if (scenesStack.lastScene != null) {
+            scenesStack.lastScene.resume();
+        }
     }
 
     @Override
     public void pause() {
-        if (scenesStack.lastScene != null) scenesStack.lastScene.pause();
+        if (scenesStack.lastScene != null) {
+            scenesStack.lastScene.pause();
+        }
+        frameCount = 0;
     }
 
     @Override

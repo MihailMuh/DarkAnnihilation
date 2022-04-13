@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.hub;
 
 import static com.warfare.darkannihilation.systemd.service.Service.printErr;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.audio.Music;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 import com.warfare.darkannihilation.utils.Image;
 import com.warfare.darkannihilation.utils.ImageAtlas;
@@ -76,7 +76,7 @@ public class AssetManagerSuper extends AssetManager {
             super.unload(fileName);
         } catch (Exception e) {
             printErr("Error in assetManagerWrap", e);
-            Processor.postToUI(() -> super.unload(fileName));
+            Gdx.app.postRunnable(() -> super.unload(fileName));
         }
     }
 }
