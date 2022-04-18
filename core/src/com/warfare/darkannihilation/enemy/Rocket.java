@@ -40,6 +40,5 @@ public class Rocket extends Opponent {
     @Override
     public void kill() {
         explodeHuge();
-        visible = false;
     }
 }

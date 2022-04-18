@@ -20,9 +20,9 @@ public class Vader extends Opponent {
 
     @Override
     public void reset() {
-        Processor.postToLooper(() -> {
-            if (shouldKill) visible = false;
+        if (!shouldKill) visible = true;
 
+        Processor.postToLooper(() -> {
             health = maxHealth;
             image = getImages().vadersImages[random(0, 2)];
 

@@ -5,9 +5,11 @@ import static com.warfare.darkannihilation.constants.Constants.MIN_NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
+import static com.warfare.darkannihilation.constants.Names.ATTENTION;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
+import static com.warfare.darkannihilation.constants.Names.HEALTH_KIT;
 import static com.warfare.darkannihilation.constants.Names.MINION;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
@@ -122,13 +124,15 @@ public class FirstLevel extends Scene {
     @Override
     public void update() {
         float moveAll = player.speedX / 2.8f;
+        boolean needFindIntersections = frameCount % 2 == 0;
+
         screen.x -= moveAll;
 
         player.update();
         player.shoot();
 
-        updateEmpire(moveAll);
-        updateBulletsEnemy(moveAll);
+        updateEmpire(moveAll, needFindIntersections);
+        updateBulletsEnemy(moveAll, needFindIntersections);
 
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet bullet = iterator.next();
@@ -144,13 +148,13 @@ public class FirstLevel extends Scene {
         updateExplosions(moveAll);
     }
 
-    private void updateEmpire(float moveAll) {
+    private void updateEmpire(float moveAll, boolean needFindIntersections) {
         for (Iterator<Opponent> iterator = empire.iterator(); iterator.hasNext(); ) {
             Opponent opponent = iterator.next();
             if (opponent.visible) {
                 opponent.x -= moveAll;
                 opponent.update();
-                checkIntersectionsWithAnybody(opponent);
+                if (needFindIntersections) checkIntersectionsWithAnybody(opponent);
             } else {
                 switch (opponent.name) {
                     case VADER:
@@ -169,7 +173,7 @@ public class FirstLevel extends Scene {
         }
     }
 
-    private void updateBulletsEnemy(float moveAll) {
+    private void updateBulletsEnemy(float moveAll, boolean needFindIntersections) {
         Player player = this.player;
 
         for (Iterator<BaseBullet> iterator = bulletsEnemy.iterator(); iterator.hasNext(); ) {
@@ -177,8 +181,8 @@ public class FirstLevel extends Scene {
             if (bullet.visible) {
                 bullet.x -= moveAll;
                 bullet.update();
-                if (frameCount % 2 == 0) {
-                    bullet.killedBy(player);
+                if (needFindIntersections) {
+                    bullet.killedByPlayer(player);
                 }
             } else {
                 iterator.remove();
@@ -206,11 +210,16 @@ public class FirstLevel extends Scene {
     }
 
     private void checkIntersectionsWithAnybody(Opponent opponent) {
-        if (frameCount % 2 != 0) {
+        if (opponent.name == ATTENTION) return;
+        if (opponent.name == HEALTH_KIT) {
+            if (opponent.intersect(player)) {
+                Processor.post(() -> player.heal(15));
+                opponent.kill();
+            }
             return;
         }
 
-        if (opponent.killedBy(player) || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
+        if (opponent.killedByPlayer(player) || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
             return;
         }
 

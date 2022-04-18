@@ -14,7 +14,6 @@ public class Minion extends TripleFighter {
 
         visible = false;
         name = MINION;
-        shrinkBorders(15, 15, 15, 15);
     }
 
     public void start(float x, float y) {

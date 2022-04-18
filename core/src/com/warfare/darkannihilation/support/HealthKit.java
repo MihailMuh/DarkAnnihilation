@@ -1,28 +1,26 @@
 package com.warfare.darkannihilation.support;
 
 import static com.badlogic.gdx.math.MathUtils.random;
-import static com.warfare.darkannihilation.constants.Names.PLAYER;
+import static com.warfare.darkannihilation.constants.Names.HEALTH_KIT;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
-import com.warfare.darkannihilation.player.Player;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class HealthKit extends Opponent {
     public HealthKit() {
-        super(getImages().healthKitImg, 0, 15, 0);
+        super(getImages().healthKitImg, 0, 0, 0);
 
-        visible = false;
+        kill();
+        name = HEALTH_KIT;
     }
 
     @Override
     public void update() {
         y -= speedY;
 
-        if (y < -height) visible = false;
+        if (y < -height) kill();
     }
 
     @Override
@@ -40,13 +38,7 @@ public class HealthKit extends Opponent {
     }
 
     @Override
-    public boolean killedBy(MovementSprite sprite) {
-        if (intersect(sprite)) {
-            if (sprite.name == PLAYER) {
-                visible = false;
-                Processor.post(() -> ((Player) sprite).heal(damage));
-            }
-        }
-        return true;
+    public void kill() {
+        visible = false;
     }
 }

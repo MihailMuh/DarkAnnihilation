@@ -2,10 +2,13 @@ package com.warfare.darkannihilation.systemd;
 
 import static com.badlogic.gdx.Gdx.gl;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
+import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
+import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Disposable;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -21,7 +24,7 @@ public class Frontend implements Disposable {
     private final int y = SCREEN_HEIGHT - 100;
 
     public static final OrthographicCamera camera = new OrthographicCamera();
-    public static final SpriteBatchSuper spriteBatch = new SpriteBatchSuper(70);
+    public static final SpriteBatchSuper spriteBatch = new SpriteBatchSuper(NUMBER_VADER * 80);
 
     Frontend(MainGame mainGame) {
         scenesStack = mainGame.scenesStack;

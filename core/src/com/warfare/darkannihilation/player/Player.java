@@ -158,35 +158,24 @@ public class Player extends MovementSprite {
         speedY = (endY - y) / 3f;
     }
 
-    @Override
     public void damage(MovementSprite sprite) {
         Processor.post(() -> {
-            health -= sprite.damage;
+            damage(sprite.damage);
             changeHearts();
 
             if (sprite.name > BULLET_ENEMY) getSounds().metalSound.play();
 
-            if (isDead() && visible) {
-                kill();
+            if (sprite.damage >= 20) Gdx.input.vibrate(120);
+            else Gdx.input.vibrate(60);
 
-                Gdx.input.vibrate(1500);
-            } else {
-                if (sprite.damage >= 20) Gdx.input.vibrate(120);
-                else Gdx.input.vibrate(60);
-
-                difficultyAnalyzer.addStatistics(health);
-            }
+            difficultyAnalyzer.addStatistics(health);
         });
     }
 
     @Override
     public void kill() {
-        visible = false;
         explodeHuge();
-    }
-
-    public boolean isDead() {
-        return health <= 0;
+        Gdx.input.vibrate(150);
     }
 
     public void renderHearts() {

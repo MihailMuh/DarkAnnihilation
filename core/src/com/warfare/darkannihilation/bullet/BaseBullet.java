@@ -1,23 +1,17 @@
 package com.warfare.darkannihilation.bullet;
 
-import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
+import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.utils.Image;
 
-public abstract class BaseBullet extends MovementSprite {
+public abstract class BaseBullet extends Opponent {
     public BaseBullet(Image image, int damage) {
-        super(image, 0, damage, 0);
-
-        visible = false;
+        this(image, damage, 0);
     }
 
-    @Override
-    public boolean killedBy(MovementSprite sprite) {
-        if (intersect(sprite)) {
-            sprite.damage(this);
-            kill();
-            return true;
-        }
-        return false;
+    public BaseBullet(Image image, int damage, int maxHealth) {
+        super(image, maxHealth, damage, 0);
+
+        visible = false;
     }
 
     public void start(float X, float Y) {

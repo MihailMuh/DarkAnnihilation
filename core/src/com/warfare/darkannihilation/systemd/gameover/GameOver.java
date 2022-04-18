@@ -2,7 +2,6 @@ package com.warfare.darkannihilation.systemd.gameover;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Names.HUGE_EXPLOSION;
-import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
@@ -103,16 +102,13 @@ public class GameOver extends Scene {
         randBoom();
 
         if (empire.notEmpty()) {
-            Opponent opponent = empire.pop();
-            explosionPool.obtain(opponent.centerX(), opponent.centerY(), MEDIUM_EXPLOSION_DEFAULT);
+            empire.pop().kill();
         }
         if (bullets.notEmpty()) {
-            Bullet bullet = bullets.pop();
-            explosionPool.obtain(bullet.centerX(), bullet.centerY(), SMALL_EXPLOSION_DEFAULT);
+            bullets.pop().kill();
         }
         if (bulletsEnemy.notEmpty()) {
-            BaseBullet bullet = bulletsEnemy.pop();
-            explosionPool.obtain(bullet.centerX(), bullet.centerY(), SMALL_EXPLOSION_DEFAULT);
+            bulletsEnemy.pop().kill();
         }
     }
 

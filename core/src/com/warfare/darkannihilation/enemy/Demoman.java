@@ -46,7 +46,6 @@ public class Demoman extends Shooter {
     @Override
     public void kill() {
         explodeHuge();
-        visible = false;
     }
 
     @Override

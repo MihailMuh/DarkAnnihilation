@@ -38,33 +38,36 @@ public abstract class MovementSprite extends BaseSprite {
         topY = SCREEN_HEIGHT + height;
     }
 
-    public void damage(MovementSprite sprite) {
-        health -= sprite.damage;
+    public void damage(int damage) {
+        health -= damage;
 
-        if (health <= 0) {
-            kill();
+        if (isDead()) {
+            internalKill();
         }
     }
 
-    public boolean killedBy(MovementSprite sprite) {
+    public final boolean killedBy(MovementSprite sprite) {
         boolean killed = false;
+
         if (intersect(sprite)) {
-            health -= sprite.damage;
+            sprite.damage(damage);
 
-            if (health <= 0) {
-                kill();
-                killed = true;
-            }
-
-            sprite.damage(this);
+            killed = sprite.damage >= health;
+            damage(sprite.damage);
         }
         return killed;
     }
 
-    public void kill() {
-        visible = false;
-        reset();
+    public final boolean isDead() {
+        return health <= 0;
     }
+
+    protected final void internalKill() {
+        visible = false;
+        kill();
+    }
+
+    public abstract void kill();
 
     protected void explosion(byte type) {
         float X = centerX();

@@ -1,12 +1,12 @@
 package com.warfare.darkannihilation.enemy;
 
+import static com.warfare.darkannihilation.constants.Names.ATTENTION;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
@@ -20,11 +20,7 @@ public class Attention extends Opponent {
 
         y = SCREEN_HEIGHT - height - 10;
         visible = false;
-    }
-
-    @Override
-    public boolean killedBy(MovementSprite sprite) {
-        return true;
+        name = ATTENTION;
     }
 
     @Override
@@ -44,6 +40,11 @@ public class Attention extends Opponent {
 
     @Override
     public void update() {
+
+    }
+
+    @Override
+    public void kill() {
 
     }
 }

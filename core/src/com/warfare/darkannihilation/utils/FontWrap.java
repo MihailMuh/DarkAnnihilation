@@ -26,7 +26,7 @@ public class FontWrap {
         return new FontWrap(font, FontHub.resizeFont(font, limit, strings));
     }
 
-    private void setText(String text) {
+    private synchronized void setText(String text) {
         bitmapFontData.setScale(scale);
         glyph.setText(bitmapFont, text);
         bitmapFontData.setScale(1);
@@ -52,6 +52,7 @@ public class FontWrap {
 
     public void draw(float x, float y, String text) {
         final BitmapFont bitmapFont = this.bitmapFont;
+        final BitmapFont.BitmapFontData bitmapFontData = this.bitmapFontData;
 
         bitmapFontData.setScale(scale);
         bitmapFont.setColor(color);

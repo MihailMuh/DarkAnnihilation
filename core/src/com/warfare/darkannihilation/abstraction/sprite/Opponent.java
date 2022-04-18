@@ -1,8 +1,8 @@
 package com.warfare.darkannihilation.abstraction.sprite;
 
 import static com.warfare.darkannihilation.constants.Names.ENEMY;
-import static com.warfare.darkannihilation.constants.Names.PLAYER;
 
+import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.utils.Image;
 
 public abstract class Opponent extends MovementSprite {
@@ -22,28 +22,17 @@ public abstract class Opponent extends MovementSprite {
         shouldKill = false;
     }
 
-    @Override
-    public boolean killedBy(MovementSprite sprite) {
-        boolean killed = false;
-        if (intersect(sprite)) {
-            sprite.damage(this);
-
-            if (sprite.name == PLAYER) {
-                killFromPlayer();
-                return true;
-            }
-            health -= sprite.damage;
-
-            if (health <= 0) {
-                kill();
-                killed = true;
-            }
+    public boolean killedByPlayer(Player player) {
+        if (intersect(player)) {
+            player.damage(this);
+            killFromPlayer();
+            return true;
         }
-        return killed;
+        return false;
     }
 
     public void killFromPlayer() {
-        kill();
+        internalKill();
     }
 
     @Override

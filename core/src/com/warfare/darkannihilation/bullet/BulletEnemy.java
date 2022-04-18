@@ -39,7 +39,6 @@ public class BulletEnemy extends BaseBullet {
     @Override
     public void kill() {
         explodeSmallTriple();
-        visible = false;
     }
 
     @Override

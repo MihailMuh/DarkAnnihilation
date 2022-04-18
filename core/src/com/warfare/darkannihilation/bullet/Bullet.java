@@ -20,7 +20,6 @@ public class Bullet extends BaseBullet {
 
     @Override
     public void kill() {
-        visible = false;
         explodeSmall();
     }
 }

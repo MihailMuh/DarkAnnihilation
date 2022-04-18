@@ -6,15 +6,14 @@ import static com.warfare.darkannihilation.constants.Constants.FACTORY_HEALTH_BA
 import static com.warfare.darkannihilation.constants.Constants.FACTORY_SPAWN_TIME;
 import static com.warfare.darkannihilation.constants.Constants.FACTORY_SPEED;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
-import static com.warfare.darkannihilation.constants.Names.PLAYER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
+import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.Image;
 
@@ -64,33 +63,26 @@ public class Factory extends Shooter {
     }
 
     @Override
-    public boolean killedBy(MovementSprite sprite) {
-        boolean killed = false;
-        if (sprite.name != PLAYER && intersect(sprite)) {
-            sprite.damage(this);
+    public void damage(int damage) {
+        super.damage(damage);
 
-            Processor.postToLooper(() -> {
-                health -= sprite.damage;
-
-                if (healthBar > 0) {
-                    healthBar = (int) ((health / (float) FACTORY_HEALTH) * FACTORY_HEALTH_BAR_LEN) - 3;
-                } else {
-                    healthBar = 0;
-                }
-            });
-
-            if (health <= 0) {
-                kill();
-                killed = true;
+        Processor.postToLooper(() -> {
+            if (healthBar > 0) {
+                healthBar = (int) ((health / (float) FACTORY_HEALTH) * FACTORY_HEALTH_BAR_LEN) - 3;
+            } else {
+                healthBar = 0;
             }
-        }
-        return killed;
+        });
+    }
+
+    @Override
+    public boolean killedByPlayer(Player player) {
+        return false;
     }
 
     @Override
     public void kill() {
         explodeHuge();
-        visible = false;
     }
 
     @Override

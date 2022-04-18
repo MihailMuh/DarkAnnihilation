@@ -48,9 +48,9 @@ public class TripleFighter extends Shooter {
 
     @Override
     public void reset() {
-        Processor.postToLooper(() -> {
-            if (shouldKill) visible = false;
+        if (!shouldKill) visible = true;
 
+        Processor.postToLooper(() -> {
             health = maxHealth;
 
             x = random(SCREEN_WIDTH);
