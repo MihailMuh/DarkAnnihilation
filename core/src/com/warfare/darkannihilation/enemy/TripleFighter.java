@@ -48,7 +48,7 @@ public class TripleFighter extends Shooter {
 
     @Override
     public void reset() {
-        if (!shouldKill) visible = true;
+        visible = !shouldKill;
 
         Processor.postToLooper(() -> {
             health = maxHealth;
@@ -73,12 +73,18 @@ public class TripleFighter extends Shooter {
 
     @Override
     protected void shot() {
-        Processor.post(() -> calculate(centerX(), centerY()));
+        calculate(centerX(), centerY());
+    }
+
+    private float getMiniAngle() {
+        float rads = 12 * MathUtils.degreesToRadians;
+
+        return MathUtils.random(-rads, rads);
     }
 
     private void calculate(float X, float Y) {
         if (0 < x && x < right && 0 < y && y < top) {
-            float rads = MathUtils.atan2(player.centerY() - Y, player.centerX() - X);
+            float rads = MathUtils.atan2(player.centerY() - Y, player.centerX() - X) + getMiniAngle();
             float cos = MathUtils.cos(rads);
             float sin = MathUtils.sin(rads);
 

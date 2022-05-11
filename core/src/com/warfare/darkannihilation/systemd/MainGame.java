@@ -14,6 +14,7 @@ import com.warfare.darkannihilation.systemd.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
+import com.warfare.darkannihilation.systemd.service.Windows;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
@@ -35,6 +36,7 @@ public class MainGame extends BaseApp {
         assetManager.finishLoading();
         Resources.getImages().boot();
         Resources.getFonts().boot();
+        Resources.getSounds().boot();
         menu.create();
 
         scenesStack.push(menu);
@@ -44,6 +46,8 @@ public class MainGame extends BaseApp {
         Processor.post(() -> {
             Service.sleep(500);
             Resources.getImages().lazyLoading();
+            Resources.getSounds().lazyLoading();
+            Resources.getFonts().lazyLoading();
             loading = new Loading(mainGameManager, scenesStack);
 
             resume();
@@ -73,6 +77,12 @@ public class MainGame extends BaseApp {
             scenesStack.lastScene.pause();
         }
         frameCount = 0;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        Windows.refresh();
+        frontend.resize(width, height);
     }
 
     @Override

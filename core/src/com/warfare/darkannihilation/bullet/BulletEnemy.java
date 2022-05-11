@@ -12,13 +12,13 @@ public class BulletEnemy extends BaseBullet {
     private float shrinkWidth, shrinkHeight;
 
     public BulletEnemy() {
-        super(getImages().laserImg, BULLET_ENEMY_DAMAGE);
+        super(getImages().laserImg, BULLET_ENEMY_DAMAGE, BULLET_ENEMY_SPEED);
         name = BULLET_ENEMY;
     }
 
     public void start(float X, float Y, float cos, float sin, float angle) {
-        this.speedX = BULLET_ENEMY_SPEED * cos;
-        this.speedY = BULLET_ENEMY_SPEED * sin;
+        speedX = BULLET_ENEMY_SPEED * cos;
+        speedY = BULLET_ENEMY_SPEED * sin;
         this.angle = angle;
         shrinkWidth = max(cos * width, width);
         shrinkHeight = max(sin * height, height);

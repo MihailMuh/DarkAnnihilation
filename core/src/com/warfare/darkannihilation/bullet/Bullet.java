@@ -6,12 +6,12 @@ import static com.warfare.darkannihilation.hub.Resources.getImages;
 
 public class Bullet extends BaseBullet {
     public Bullet() {
-        super(getImages().bulletImg, BULLET_DAMAGE);
+        super(getImages().bulletImg, BULLET_DAMAGE, BULLET_SPEED);
     }
 
     @Override
     public void update() {
-        y += BULLET_SPEED;
+        y += speedY;
 
         if (y > topY) {
             visible = false;

@@ -87,7 +87,7 @@ public class GameOver extends Scene {
     }
 
     private void randBoom() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (MathUtils.randomBoolean()) {
                 boom(random(SCREEN_WIDTH), random(SCREEN_HEIGHT));
             }
@@ -101,15 +101,16 @@ public class GameOver extends Scene {
     private void killSprites() {
         randBoom();
 
-        if (empire.notEmpty()) {
-            empire.pop().kill();
-        }
-        if (bullets.notEmpty()) {
-            bullets.pop().kill();
-        }
-        if (bulletsEnemy.notEmpty()) {
-            bulletsEnemy.pop().kill();
-        }
+        killInArray(empire);
+        killInArray(bullets);
+        killInArray(bulletsEnemy);
+    }
+
+    private void killInArray(Array<?> sprites) {
+        if (sprites.isEmpty()) return;
+
+        Opponent opponent = (Opponent) sprites.pop();
+        if (opponent.visible) opponent.kill();
     }
 
     @Override

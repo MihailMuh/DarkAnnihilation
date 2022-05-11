@@ -20,7 +20,7 @@ public class Vader extends Opponent {
 
     @Override
     public void reset() {
-        if (!shouldKill) visible = true;
+        visible = !shouldKill;
 
         Processor.postToLooper(() -> {
             health = maxHealth;

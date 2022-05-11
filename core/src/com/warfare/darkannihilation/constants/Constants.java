@@ -47,8 +47,9 @@ public final class Constants {
 
     //    first level
     public static final float BOSS_SHOOT_TIME = 0.45f;
-    public static final short BOSS_HEALTH = 300;
+    public static final short BOSS_HEALTH = 1100;
     public static final short BOSS_HEALTH_BAR_LEN = 140;
+    public static final byte BOSS_PERIOD = 120;
 
     public static final byte DEMOMAN_DAMAGE = 40;
     public static final byte DEMOMAN_HEALTH = 30;
@@ -132,6 +133,8 @@ public final class Constants {
     public static final float BUTTON_CLICK_TIME = 0.1f;
 
     public static final short CHANGER_GUNS_CLICK_TIME = 700;
+
+    public static final short ULTIMATE_DAMAGE = 10_000;
 
     //    constants
     public static final String SERVER_IP = "http://78.29.33.173:49150/";

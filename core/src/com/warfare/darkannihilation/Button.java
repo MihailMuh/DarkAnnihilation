@@ -2,6 +2,7 @@ package com.warfare.darkannihilation;
 
 import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
 import com.badlogic.gdx.Gdx;
@@ -16,7 +17,7 @@ public class Button extends BaseButton {
     private String text;
     private float textX;
     private float textY;
-    private volatile boolean pressed;
+    private volatile boolean pressed, swept;
     private float shootTime;
 
     public static FontWrap buttonFont;
@@ -45,6 +46,8 @@ public class Button extends BaseButton {
             pressed = false;
 
             if (checkClick(X, Y)) {
+                getSounds().spaceBarSound.play();
+
                 pressed = true;
                 Gdx.input.vibrate(50);
 
@@ -58,6 +61,15 @@ public class Button extends BaseButton {
 
     public void sweep(float X, float Y) {
         pressed = checkClick(X, Y);
+
+        if (pressed) {
+            if (!swept) {
+                swept = true;
+                getSounds().joystickSound.play();
+            }
+        } else {
+            swept = false;
+        }
     }
 
     @Override

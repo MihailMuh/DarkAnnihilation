@@ -5,6 +5,7 @@ import static com.warfare.darkannihilation.constants.Constants.FACTORY_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.FACTORY_HEALTH_BAR_LEN;
 import static com.warfare.darkannihilation.constants.Constants.FACTORY_SPAWN_TIME;
 import static com.warfare.darkannihilation.constants.Constants.FACTORY_SPEED;
+import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
@@ -28,7 +29,7 @@ public class Factory extends Shooter {
 
     public Factory() {
         super(getImages().factoryImg, SCREEN_WIDTH - 300, getImages().factoryImg.height,
-                FACTORY_HEALTH, 10000, 100, FACTORY_SPAWN_TIME);
+                FACTORY_HEALTH, ULTIMATE_DAMAGE, 100, FACTORY_SPAWN_TIME);
 
         visible = false;
         name = FACTORY;
@@ -68,7 +69,7 @@ public class Factory extends Shooter {
 
         Processor.postToLooper(() -> {
             if (healthBar > 0) {
-                healthBar = (int) ((health / (float) FACTORY_HEALTH) * FACTORY_HEALTH_BAR_LEN) - 3;
+                healthBar = (int) ((health / (float) maxHealth) * FACTORY_HEALTH_BAR_LEN) - 3;
             } else {
                 healthBar = 0;
             }
@@ -87,11 +88,9 @@ public class Factory extends Shooter {
 
     @Override
     protected void shot() {
-        Processor.post(() -> {
-            for (int i = 0; i < random(1, 3); i++) {
-                getPools().minionPool.obtain(random(x, right()), y + 100);
-            }
-        });
+        for (int i = 0; i < random(1, 3); i++) {
+            getPools().minionPool.obtain(random(x, right()), y + 100);
+        }
     }
 
     @Override

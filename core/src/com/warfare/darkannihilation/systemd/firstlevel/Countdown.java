@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.systemd.firstlevel;
 
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
@@ -38,8 +39,13 @@ public class Countdown extends Scene {
 
             if (count == -1) mainGameManager.finishLastScene();
             else {
-                if (count == 0) text = "SHOOT!";
-                else text = String.valueOf(count);
+                if (count == 0) {
+                    text = "SHOOT!";
+                    getSounds().readySound1.play();
+                } else {
+                    text = String.valueOf(count);
+                    getSounds().readySound0.play();
+                }
 
                 textX = HALF_SCREEN_WIDTH - countdownFont.getTextWidth(text) / 2f;
                 textY = HALF_SCREEN_HEIGHT + countdownFont.getTextHeight(text) / 2f;

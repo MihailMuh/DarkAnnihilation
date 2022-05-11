@@ -9,7 +9,7 @@ public final class Processor {
     private static final ExecutorService pool = Executors.newCachedThreadPool();
 
     private static final ExecutorService looper = Executors.newSingleThreadExecutor();
-    private static final ExecutorService looperOnTouch = Executors.newSingleThreadExecutor();
+    private static final ExecutorService looperSounds = Executors.newSingleThreadExecutor();
 
     public static final MultiProcessor multiProcessor = new MultiProcessor();
     public static Thread UIThread;
@@ -22,13 +22,17 @@ public final class Processor {
         looper.execute(runnable);
     }
 
-    public static void postToTouchLooper(Runnable runnable) {
-        looperOnTouch.execute(runnable);
+    public static void postToLooperSounds(Runnable runnable) {
+        looperSounds.execute(runnable);
+    }
+
+    public static boolean isUIThread() {
+        return Thread.currentThread() == UIThread;
     }
 
     public static void dispose() {
         pool.shutdown();
         looper.shutdown();
-        looperOnTouch.shutdown();
+        looperSounds.shutdown();
     }
 }

@@ -3,6 +3,7 @@ package com.warfare.darkannihilation.player;
 import static com.badlogic.gdx.math.MathUtils.roundPositive;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
+import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
 import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
@@ -35,7 +36,7 @@ public class Player extends MovementSprite {
     private final int mxHealthMinus5;
 
     public Player(DifficultyAnalyzer difficultyAnalyzer) {
-        super(getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, 10000, 0);
+        super(getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, ULTIMATE_DAMAGE, 0);
         this.difficultyAnalyzer = difficultyAnalyzer;
 
         name = PLAYER;
@@ -55,7 +56,7 @@ public class Player extends MovementSprite {
         reset();
     }
 
-    private void changeHearts() {
+    private void updateHeartsPositions() {
         final Array<Heart> hearts = this.hearts;
         final int len = health / 10;
         int bar;
@@ -74,7 +75,9 @@ public class Player extends MovementSprite {
 
                 heartX -= 90;
                 checkLevel(false);
-            } else bar++;
+            } else {
+                bar++;
+            }
         }
     }
 
@@ -85,7 +88,9 @@ public class Player extends MovementSprite {
 
         addArmorHeart(len);
         health += value;
-        changeHearts();
+        updateHeartsPositions();
+
+        getSounds().healSound.play();
     }
 
     private void addArmorHeart(int times) {
@@ -161,7 +166,7 @@ public class Player extends MovementSprite {
     public void damage(MovementSprite sprite) {
         Processor.post(() -> {
             damage(sprite.damage);
-            changeHearts();
+            updateHeartsPositions();
 
             if (sprite.name > BULLET_ENEMY) getSounds().metalSound.play();
 
@@ -175,7 +180,7 @@ public class Player extends MovementSprite {
     @Override
     public void kill() {
         explodeHuge();
-        Gdx.input.vibrate(150);
+        Gdx.input.vibrate(200);
     }
 
     public void renderHearts() {

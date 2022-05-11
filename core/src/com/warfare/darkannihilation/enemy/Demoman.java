@@ -7,6 +7,7 @@ import static com.warfare.darkannihilation.constants.Constants.DEMOMAN_HEALTH;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
@@ -50,7 +51,8 @@ public class Demoman extends Shooter {
 
     @Override
     public void shot() {
-        Processor.postToLooper(() -> getPools().bombPool.obtain(centerX(), centerY()));
+        getPools().bombPool.obtain(centerX(), centerY());
+        getSounds().fallingBombSound.play();
     }
 
     @Override

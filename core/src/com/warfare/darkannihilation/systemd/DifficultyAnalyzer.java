@@ -19,6 +19,7 @@ public class DifficultyAnalyzer {
 
     private final FirstLevel firstLevel;
 
+    private volatile boolean bossTime;
     private float lastDamage;
     private int health;
 
@@ -26,8 +27,12 @@ public class DifficultyAnalyzer {
         this.firstLevel = firstLevel;
     }
 
+    public void isBossTime(boolean bossTime) {
+        this.bossTime = bossTime;
+    }
+
     public void checkTime() {
-        if (time - lastDamage > INSANE) {
+        if (!bossTime && time - lastDamage > INSANE) {
             lastDamage = time;
             awesome();
         }
@@ -38,6 +43,8 @@ public class DifficultyAnalyzer {
     }
 
     public void addStatistics(int health) {
+        if (bossTime) return;
+
         float difference = time - lastDamage;
         lastDamage = time;
         this.health = health;

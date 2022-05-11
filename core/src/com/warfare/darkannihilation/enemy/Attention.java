@@ -32,7 +32,7 @@ public class Attention extends Opponent {
             Service.sleep(1750);
 
             visible = false;
-            rocket.start(x);
+            rocket.start(x, SCREEN_HEIGHT);
         });
 
         visible = true;

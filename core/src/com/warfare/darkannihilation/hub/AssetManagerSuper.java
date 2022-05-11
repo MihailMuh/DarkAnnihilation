@@ -29,8 +29,10 @@ public class AssetManagerSuper extends AssetManager {
         load(path, TextureAtlas.class);
     }
 
-    public void loadSound(String path) {
-        load(path, Sound.class);
+    public void loadSounds(String... paths) {
+        for (String path : paths) {
+            load(path, Sound.class);
+        }
     }
 
     public SoundWrap getSound(String path, float volume) {

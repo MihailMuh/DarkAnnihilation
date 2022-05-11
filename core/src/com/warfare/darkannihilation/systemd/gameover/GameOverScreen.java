@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.systemd.gameover;
 
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.systemd.service.Service.print;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 
@@ -21,6 +22,7 @@ public class GameOverScreen extends BaseScreen {
         super(getImages().gameOverScreen);
 
         fontDead = FontWrap.scaledFontWrap(getFonts().fiendish, HALF_SCREEN_WIDTH + 150, YOU_DEAD);
+
         textDeadX = HALF_SCREEN_WIDTH - fontDead.getTextWidth(YOU_DEAD) / 2f;
         textDeadY = HALF_SCREEN_HEIGHT + fontDead.getTextHeight(YOU_DEAD) / 1.4f;
 

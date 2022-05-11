@@ -26,6 +26,8 @@ public class ImageHub extends BaseHub {
     public Image healthKitImg;
     public Image gameOverScreen;
 
+
+
     public ImageHub(AssetManagerSuper assetManager) {
         super(assetManager);
 

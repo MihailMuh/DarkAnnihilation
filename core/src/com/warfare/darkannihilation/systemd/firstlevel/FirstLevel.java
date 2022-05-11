@@ -1,12 +1,15 @@
 package com.warfare.darkannihilation.systemd.firstlevel;
 
+import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 import static com.badlogic.gdx.math.MathUtils.randomBoolean;
+import static com.warfare.darkannihilation.constants.Constants.BOSS_PERIOD;
 import static com.warfare.darkannihilation.constants.Constants.MIN_NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.ATTENTION;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
+import static com.warfare.darkannihilation.constants.Names.BOSS;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
 import static com.warfare.darkannihilation.constants.Names.HEALTH_KIT;
@@ -18,7 +21,9 @@ import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Processor.postToLooper;
 import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
+import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -29,6 +34,7 @@ import com.warfare.darkannihilation.enemy.Attention;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Factory;
 import com.warfare.darkannihilation.enemy.Rocket;
+import com.warfare.darkannihilation.enemy.boss.DeathStar;
 import com.warfare.darkannihilation.hub.PoolHub;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.screens.DynamicScreen;
@@ -62,6 +68,8 @@ public class FirstLevel extends Scene {
 
     private boolean firstRun = true;
     private boolean startAnalytics = false;
+    private float lastBoss;
+    private int numBosses;
     int score;
 
     public FirstLevel(MainGameManager mainGameManager) {
@@ -107,6 +115,7 @@ public class FirstLevel extends Scene {
             if (!startAnalytics) {
                 startAnalytics = true;
                 difficultyAnalyzer.startCollecting();
+                lastBoss = time;
             }
         } else {
             firstRun = false;
@@ -168,6 +177,18 @@ public class FirstLevel extends Scene {
                     case MINION:
                         iterator.remove();
                         postToLooper(() -> poolHub.minionPool.free(opponent));
+                        continue;
+                    case BOSS:
+                        iterator.remove();
+                        Processor.post(() -> {
+                            lastBoss = time;
+                            numBosses--;
+                            difficultyAnalyzer.isBossTime(numBosses != 0);
+
+                            newVader((int) (NUMBER_VADER * 1.5));
+                            newTriple();
+                            newTriple();
+                        });
                 }
             }
         }
@@ -242,14 +263,33 @@ public class FirstLevel extends Scene {
         if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
         if (!healthKit.visible && randomBoolean(0.0155f)) healthKit.reset();
         if (!attention.visible && score > 50 && randomBoolean(0.06f)) attention.reset();
-        if (!factory.visible && score > 170 && randomBoolean(0.0135f)) factory.reset();
+        if (!factory.visible && score > 170 && randomBoolean(0.0135f) && numBosses == 0) {
+            factory.reset();
+        }
 
-        if (player.isDead()) {
-            frontend.setScreen(new GameOverScreen());
-            mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions), false);
+        if (time - lastBoss > BOSS_PERIOD && numBosses == 0) {
+            lastBoss = time;
+
+            difficultyAnalyzer.isBossTime(true);
+            numBosses++;
+            empire.add(new DeathStar());
+
+            killEmpire();
         }
 
         difficultyAnalyzer.checkTime();
+
+        if (player.isDead()) {
+            Runnable runnable = () -> {
+                frontend.setScreen(new GameOverScreen());
+                mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions), false);
+            };
+            if (Gdx.app.getType() == Desktop) {
+                Gdx.app.postRunnable(runnable);
+            } else {
+                runnable.run();
+            }
+        }
     }
 
     public void newTriple() {
@@ -263,37 +303,31 @@ public class FirstLevel extends Scene {
     }
 
     public void killTriple() {
-        Array<Opponent> empire = this.empire;
+        kill(TRIPLE);
+    }
 
-        for (int i = empire.size - 1; i >= 0; i--) {
+    public void killVader() {
+        long numVaders = getNumberVaders();
+
+        if (numVaders <= MIN_NUMBER_VADER) {
+            newVader((int) (MIN_NUMBER_VADER - numVaders));
+            killTriple();
+        } else {
+            kill(VADER);
+        }
+    }
+
+    private void kill(int name) {
+        for (int i = 0; i < empire.size; i++) {
             Opponent opponent = empire.get(i);
-
-            if (opponent.name == TRIPLE && !opponent.shouldKill) {
+            if (opponent.name == name && !opponent.shouldKill) {
                 opponent.shouldKill = true;
                 return;
             }
         }
     }
 
-    public void killVader() {
-        Array<Opponent> empire = this.empire;
-        long numVaders = getNumberVaders(empire);
-
-        if (numVaders <= MIN_NUMBER_VADER) {
-            newVader((int) (MIN_NUMBER_VADER - numVaders));
-            killTriple();
-        } else {
-            for (int i = 0; i < empire.size; i++) {
-                Opponent opponent = empire.get(i);
-                if (opponent.name == VADER && !opponent.shouldKill) {
-                    opponent.shouldKill = true;
-                    return;
-                }
-            }
-        }
-    }
-
-    private int getNumberVaders(Array<Opponent> empire) {
+    private int getNumberVaders() {
         int numVaders = 0;
 
         for (int i = 0; i < empire.size; i++) {
@@ -303,6 +337,17 @@ public class FirstLevel extends Scene {
             }
         }
         return numVaders;
+    }
+
+    private void killEmpire() {
+        Array<Opponent> empire = this.empire;
+
+        for (int i = 0; i < empire.size; i++) {
+            Opponent opponent = empire.get(i);
+            if (opponent.name == VADER || opponent.name == TRIPLE) {
+                opponent.shouldKill = true;
+            }
+        }
     }
 
     @Override

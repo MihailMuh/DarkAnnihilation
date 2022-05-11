@@ -7,14 +7,14 @@ import static com.warfare.darkannihilation.hub.Resources.getImages;
 
 public class Bomb extends BaseBullet {
     public Bomb() {
-        super(getImages().bombImg, BOMB_DAMAGE);
+        super(getImages().bombImg, BOMB_DAMAGE, BOMB_SPEED);
 
         name = BOMB;
     }
 
     @Override
     public void update() {
-        y -= BOMB_SPEED;
+        y -= speedY;
 
         if (y < -height) visible = false;
     }

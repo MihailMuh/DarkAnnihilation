@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.abstraction.sprite;
 
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
+import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.Image;
 
 public abstract class Shooter extends Opponent {
@@ -24,7 +25,7 @@ public abstract class Shooter extends Opponent {
         if (time - lastShot >= shootTime) {
             lastShot = time;
 
-            shot();
+            Processor.postToLooper(this::shot);
         }
     }
 }

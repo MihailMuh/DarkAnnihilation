@@ -26,5 +26,6 @@ public final class Names {
     public static final byte DEMOMAN = 4;
     public static final byte FACTORY = 5;
     public static final byte MINION = 6;
+    public static final byte BOSS = 7;
 
 }
