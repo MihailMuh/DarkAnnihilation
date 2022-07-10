@@ -6,7 +6,7 @@ import static com.warfare.darkannihilation.constants.Constants.BOSS_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.BOSS_HEALTH_BAR_LEN;
 import static com.warfare.darkannihilation.constants.Constants.BOSS_SHOOT_TIME;
 import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
-import static com.warfare.darkannihilation.constants.Names.BOSS;
+import static com.warfare.darkannihilation.constants.Names.DEATH_STAR;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
@@ -29,9 +29,9 @@ public class DeathStar extends Shooter {
 
     public DeathStar() {
         super(getImages().deathStarImg, BOSS_HEALTH, ULTIMATE_DAMAGE, 325, BOSS_SHOOT_TIME);
-        name = BOSS;
+        name = DEATH_STAR;
 
-        y = topY;
+        y = SCREEN_HEIGHT;
         x = random(SCREEN_WIDTH - width);
         speedY = 2;
         speedX = random(7, 15);

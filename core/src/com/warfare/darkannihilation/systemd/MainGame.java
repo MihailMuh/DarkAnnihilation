@@ -1,5 +1,9 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.warfare.darkannihilation.hub.Resources.getFonts;
+import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getLocales;
+import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -7,10 +11,12 @@ import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.hub.AssetManagerSuper;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
+import com.warfare.darkannihilation.hub.LocaleHub;
 import com.warfare.darkannihilation.hub.Resources;
 import com.warfare.darkannihilation.hub.SoundHub;
-import com.warfare.darkannihilation.systemd.loading.Loading;
-import com.warfare.darkannihilation.systemd.menu.Menu;
+import com.warfare.darkannihilation.scenes.error.ErrorScene;
+import com.warfare.darkannihilation.scenes.loading.Loading;
+import com.warfare.darkannihilation.scenes.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
@@ -20,6 +26,7 @@ import com.warfare.darkannihilation.utils.ScenesStack;
 public class MainGame extends BaseApp {
     private final MainGameManager mainGameManager = new MainGameManager(this);
     private Frontend frontend;
+    private ErrorScene errorScene;
 
     final ScenesStack scenesStack = new ScenesStack();
 
@@ -30,37 +37,58 @@ public class MainGame extends BaseApp {
     public void create() {
         super.create();
         assetManager = new AssetManagerSuper();
-        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager));
+        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager), new LocaleHub(assetManager));
 
         Menu menu = new Menu(mainGameManager);
         assetManager.finishLoading();
-        Resources.getImages().boot();
-        Resources.getFonts().boot();
-        Resources.getSounds().boot();
+        getImages().boot();
+        getFonts().boot();
+        getSounds().boot();
+        getLocales().boot();
         menu.create();
 
         scenesStack.push(menu);
 
         frontend = new Frontend(this);
 
-        Processor.post(() -> {
+        Processor.postTask(() -> {
             Service.sleep(500);
-            Resources.getImages().lazyLoading();
-            Resources.getSounds().lazyLoading();
-            Resources.getFonts().lazyLoading();
+            getImages().lazyLoading();
+            getSounds().lazyLoading();
+            getFonts().lazyLoading();
+            getLocales().lazyLoading();
             loading = new Loading(mainGameManager, scenesStack);
 
             resume();
+
+            errorScene = new ErrorScene(this, mainGameManager, scenesStack);
+            Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> error(throwable));
         });
     }
 
     @Override
     public void render() {
-        Watch.update();
+        try {
+            Watch.update();
 
-        scenesStack.lastScene.update();
+            scenesStack.lastScene.update();
 
-        frontend.render();
+            frontend.render();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            error(exception);
+        }
+    }
+
+    private void error(Throwable throwable) {
+        if (errorScene.running) return;
+
+        errorScene.init(throwable);
+        try {
+            mainGameManager.startScene(errorScene, false);
+        } catch (Exception exception2) {
+            errorScene.hardRun();
+        }
     }
 
     @Override

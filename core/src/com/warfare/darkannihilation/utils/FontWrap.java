@@ -37,9 +37,17 @@ public class FontWrap {
         return glyph.width;
     }
 
+    public float getHalfTextWidth(String string) {
+        return getTextWidth(string) / 2f;
+    }
+
     public float getTextHeight(String text) {
         setText(text);
         return glyph.height;
+    }
+
+    public float getHalfTextHeight(String string) {
+        return getTextHeight(string) / 2f;
     }
 
     public void setColor(Color color) {

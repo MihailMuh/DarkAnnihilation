@@ -7,10 +7,14 @@ import com.warfare.darkannihilation.systemd.service.Processor;
 import java.util.Iterator;
 
 public class ScenesStack implements Iterable<Scene> {
-    private final Array<Scene> scenes = new Array<>(true, 4, Scene.class);
+    private final Array<Scene> scenes = new Array<>(true, 10, Scene.class);
 
     public Scene lastScene;
     public int size;
+
+    public Scene[] toArray() {
+        return scenes.toArray();
+    }
 
     public void push(Scene scene) {
         lastScene = scene;
@@ -35,7 +39,7 @@ public class ScenesStack implements Iterable<Scene> {
 
         for (Iterator<Scene> iterator = iterator(); iterator.hasNext();) {
             Scene scene = iterator.next();
-            Processor.post(scene::dispose);
+            Processor.postTask(scene::dispose);
             iterator.remove();
         }
 

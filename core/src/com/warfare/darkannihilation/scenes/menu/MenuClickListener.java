@@ -1,6 +1,4 @@
-package com.warfare.darkannihilation.systemd.menu;
-
-import static com.warfare.darkannihilation.systemd.service.Service.print;
+package com.warfare.darkannihilation.scenes.menu;
 
 import com.warfare.darkannihilation.Button;
 import com.warfare.darkannihilation.utils.ClickListener;

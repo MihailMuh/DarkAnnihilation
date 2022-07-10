@@ -1,16 +1,19 @@
-package com.warfare.darkannihilation.systemd.menu;
+package com.warfare.darkannihilation.scenes.menu;
 
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getLocales;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
+import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
+import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.Button;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.screens.StaticScreen;
+import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
+import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.systemd.firstlevel.FirstLevel;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.FontWrap;
 
@@ -28,19 +31,19 @@ public class Menu extends Scene {
         getImages().getMenuImages();
         getSounds().getMenuSounds();
 
-        screen = new StaticScreen(getImages().menuScreenGIF);
+        screen = new Screen(getImages().menuScreenGIF, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        Button.buttonFont = FontWrap.scaledFontWrap(getFonts().canisMinor,
-                getImages().buttonPress.width - 140, "Quit", "Start", "Top Score", "Settings");
+        Button.buttonFont = FontWrap.scaledFontWrap(getFonts().canisMinor, getImages().buttonPress.width - 140,
+                getLocales().quit, getLocales().start, getLocales().topScore, getLocales().settings);
 
         int step = 50;
-        buttons[0] = new Button("Top Score", HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
+        buttons[0] = new Button(getLocales().topScore, HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
-        buttons[1] = new Button("Start", buttons[0].x - buttons[0].width - step, 10,
+        buttons[1] = new Button(getLocales().start, buttons[0].x - buttons[0].width - step, 10,
                 () -> mainGameManager.startScene(new FirstLevel(mainGameManager), true));
-        buttons[2] = new Button("Settings", buttons[0].right() + step, 10, () -> {
+        buttons[2] = new Button(getLocales().settings, buttons[0].right() + step, 10, () -> {
         });
-        buttons[3] = new Button("Quit", buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
+        buttons[3] = new Button(getLocales().quit, buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
 
         clickListener = new MenuClickListener(buttons);
         Processor.multiProcessor.insertProcessor(clickListener);

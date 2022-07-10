@@ -5,12 +5,18 @@ import static com.warfare.darkannihilation.constants.Assets.EXPLOSIONS_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_SCREEN_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
+import static com.warfare.darkannihilation.constants.Assets.MILLENNIUM_VS_STAR;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 import com.warfare.darkannihilation.utils.Image;
 import com.warfare.darkannihilation.utils.ImageAtlas;
 
 public class ImageHub extends BaseHub {
+    private String versusScreenName;
     private ImageAtlas commonAtlas;
 
     public AnimationSuper starScreenGIF, menuScreenGIF, loadingScreen;
@@ -25,8 +31,7 @@ public class ImageHub extends BaseHub {
     public Image blackColor, whiteColor, redColor;
     public Image healthKitImg;
     public Image gameOverScreen;
-
-
+    public Image versusScreen;
 
     public ImageHub(AssetManagerSuper assetManager) {
         super(assetManager);
@@ -53,6 +58,13 @@ public class ImageHub extends BaseHub {
         hugeExplosionAnim = assetManager.getAnimation(explosionsAtlas, "skull_explosion", 0.05f, 1.2f);
         tripleExplosionAnim = assetManager.getAnimation(explosionsAtlas, "triple_explosion", 0.03f, 1.2f);
         gameOverScreen = commonAtlas.getImage("gameover");
+    }
+
+    public void loadInCycle() {
+        while (!assetManager.isFinished()) {
+            Service.sleep(17);
+            Gdx.app.postRunnable(assetManager::update);
+        }
     }
 
     public void loadMenuImages() {
@@ -108,5 +120,19 @@ public class ImageHub extends BaseHub {
     public void disposeFirstLevelImages() {
         assetManager.unload(FIRST_LEVEL_ATLAS);
         assetManager.unload(FIRST_LEVEL_SCREEN_ATLAS);
+    }
+
+    public void loadVersusImage(byte playerName, byte bossName) {
+        assetManager.load(MILLENNIUM_VS_STAR, Texture.class);
+    }
+
+    public void getVersusImage() {
+        Texture versusTexture = assetManager.get(MILLENNIUM_VS_STAR, Texture.class);
+        versusScreen = new Image(new TextureAtlas.AtlasRegion(versusTexture, 0, 0, versusTexture.getWidth(), versusTexture.getHeight()));
+        versusScreenName = MILLENNIUM_VS_STAR;
+    }
+
+    public void disposeVersusImage() {
+        assetManager.unload(versusScreenName);
     }
 }

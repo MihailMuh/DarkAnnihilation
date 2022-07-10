@@ -1,8 +1,8 @@
-package com.warfare.darkannihilation.systemd.gameover;
+package com.warfare.darkannihilation.scenes.gameover;
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.systemd.firstlevel.FirstLevel;
+import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
 import com.warfare.darkannihilation.utils.ClickListener;
 
 public class GameOverClickListener extends ClickListener {

@@ -5,7 +5,7 @@ import static com.warfare.darkannihilation.constants.Names.ENEMY;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.utils.Image;
 
-public abstract class Opponent extends MovementSprite {
+public abstract class Opponent extends MovingSprite {
     public boolean shouldKill = false;
 
     public Opponent(Image image, int maxHealth, int damage, int killScore) {

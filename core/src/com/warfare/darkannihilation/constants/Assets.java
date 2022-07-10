@@ -6,6 +6,7 @@ public final class Assets {
     public static final String FIRST_LEVEL_ATLAS = "first_level/first_level.atlas";
     public static final String FIRST_LEVEL_SCREEN_ATLAS = "first_level_screen/first_level_screen.atlas";
     public static final String EXPLOSIONS_ATLAS = "explosions/explosions.atlas";
+    public static final String MILLENNIUM_VS_STAR = "vs_screens/millennium_vs_star.png";
 
     public static final String LASER_SOUND = "sounds/laser.mp3";
     public static final String METAL_SOUND = "sounds/metal.mp3";
@@ -23,4 +24,5 @@ public final class Assets {
     public static final String MENU_MUSIC = "sounds/menu.mp3";
     public static final String FIRST_LEVEL_MUSIC = "sounds/first_level.mp3";
 
+    public static final String LOCALES = "locales/locale";
 }

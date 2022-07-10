@@ -1,10 +1,10 @@
-package com.warfare.darkannihilation.systemd.firstlevel;
+package com.warfare.darkannihilation.scenes.firstlevel;
 
 import static com.badlogic.gdx.Input.Keys.BACK;
 
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.systemd.menu.Menu;
+import com.warfare.darkannihilation.scenes.menu.Menu;
 import com.warfare.darkannihilation.utils.ClickListener;
 
 class GameClickListener extends ClickListener {

@@ -5,7 +5,7 @@ import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
-import com.warfare.darkannihilation.systemd.firstlevel.FirstLevel;
+import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 
 public class DifficultyAnalyzer {
     public static final float EASY = 1.5f;
@@ -17,14 +17,16 @@ public class DifficultyAnalyzer {
 
     private int PLAYER_SKILL = 10;
 
-    private final FirstLevel firstLevel;
+    private final EnemyController enemyController;
+    private final Opponent powerfulEnemy;
 
     private volatile boolean bossTime;
     private float lastDamage;
     private int health;
 
-    public DifficultyAnalyzer(FirstLevel firstLevel) {
-        this.firstLevel = firstLevel;
+    public DifficultyAnalyzer(EnemyController enemyController, Opponent powerfulEnemy) {
+        this.enemyController = enemyController;
+        this.powerfulEnemy = powerfulEnemy;
     }
 
     public void isBossTime(boolean bossTime) {
@@ -61,13 +63,13 @@ public class DifficultyAnalyzer {
             return;
         }
         if (difference <= NORMAL) {
-            if (randomBoolean() || health < MILLENNIUM_FALCON_HEALTH - 20) firstLevel.killVader();
+            if (randomBoolean() || health < MILLENNIUM_FALCON_HEALTH - 20) enemyController.killVader();
             PLAYER_SKILL--;
             print("normal", PLAYER_SKILL);
             return;
         }
         if (difference <= HARD) {
-            if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH) firstLevel.newVader(1);
+            if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH) enemyController.newVader(1);
             PLAYER_SKILL++;
             print("hard", PLAYER_SKILL);
             return;
@@ -93,23 +95,23 @@ public class DifficultyAnalyzer {
     }
 
     private void easy() {
-        if (reduceEffectIfFactory(0.2f)) {
+        if (reduceEffectIfPowerfulEnemy(0.2f)) {
             if (randomBoolean(0.75f)) {
-                firstLevel.killTriple();
+                enemyController.killTriple();
             }
-            firstLevel.killVader();
-            firstLevel.killVader();
+            enemyController.killVader();
+            enemyController.killVader();
             PLAYER_SKILL -= 3;
             print("easy", PLAYER_SKILL);
         }
     }
 
     private void notBad() {
-        if (reduceEffectIfFactory(0.35f)) {
+        if (reduceEffectIfPowerfulEnemy(0.35f)) {
             if (PLAYER_SKILL - 10 < 20) {
-                firstLevel.killVader();
+                enemyController.killVader();
                 if (randomBoolean() || health < MILLENNIUM_FALCON_HEALTH - 30)
-                    firstLevel.killVader();
+                    enemyController.killVader();
             }
             PLAYER_SKILL -= 2;
             print("not bad", PLAYER_SKILL);
@@ -119,8 +121,8 @@ public class DifficultyAnalyzer {
     private void awesome() {
         if (PLAYER_SKILL > 2) {
             chillSpawn();
-            firstLevel.newVader(1);
-            firstLevel.newTriple();
+            enemyController.newVader(1);
+            enemyController.newTriple();
         } else {
             normalSpawn();
         }
@@ -128,25 +130,25 @@ public class DifficultyAnalyzer {
         print("WOOOOW", PLAYER_SKILL);
     }
 
-    private boolean reduceEffectIfFactory(float chance) {
-        return firstLevel.factory.visible && randomBoolean(chance);
+    private boolean reduceEffectIfPowerfulEnemy(float chance) {
+        return powerfulEnemy.visible && randomBoolean(chance);
     }
 
     private void normalSpawn() {
-        if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 40) firstLevel.newTriple();
-        firstLevel.newVader(2);
+        if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 40) enemyController.newTriple();
+        enemyController.newVader(2);
     }
 
     private void chillSpawn() {
-        firstLevel.newVader(1);
-        if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 20) firstLevel.newVader(1);
+        enemyController.newVader(1);
+        if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 20) enemyController.newVader(1);
     }
 
     private void checkCritical() {
         if (health < MILLENNIUM_FALCON_HEALTH - 30) {
-            firstLevel.killTriple();
-            firstLevel.killVader();
-            firstLevel.killVader();
+            enemyController.killTriple();
+            enemyController.killVader();
+            enemyController.killVader();
         }
     }
 }

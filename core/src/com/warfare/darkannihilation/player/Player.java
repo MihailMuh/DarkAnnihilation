@@ -8,7 +8,7 @@ import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
-import static com.warfare.darkannihilation.constants.Names.PLAYER;
+import static com.warfare.darkannihilation.constants.Names.MILLENNIUM_FALCON;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
@@ -19,12 +19,12 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.abstraction.sprite.MovementSprite;
+import com.warfare.darkannihilation.abstraction.sprite.MovingSprite;
 import com.warfare.darkannihilation.pools.BulletPool;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
-public class Player extends MovementSprite {
+public class Player extends MovingSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
     private final ArmorPool armorPool = new ArmorPool(hearts);
     private final DifficultyAnalyzer difficultyAnalyzer;
@@ -39,7 +39,7 @@ public class Player extends MovementSprite {
         super(getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, ULTIMATE_DAMAGE, 0);
         this.difficultyAnalyzer = difficultyAnalyzer;
 
-        name = PLAYER;
+        name = MILLENNIUM_FALCON;
         mxHealthMinus5 = maxHealth - 5;
         health = maxHealth;
 
@@ -163,8 +163,8 @@ public class Player extends MovementSprite {
         speedY = (endY - y) / 3f;
     }
 
-    public void damage(MovementSprite sprite) {
-        Processor.post(() -> {
+    public void damage(MovingSprite sprite) {
+        Processor.postTask(() -> {
             damage(sprite.damage);
             updateHeartsPositions();
 

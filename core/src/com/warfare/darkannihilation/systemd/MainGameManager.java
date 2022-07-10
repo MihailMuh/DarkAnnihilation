@@ -9,7 +9,7 @@ public class MainGameManager {
         this.mainGame = mainGame;
     }
 
-    public void finishLastScene() {
+    public void finishScene() {
         Scene lastScene = mainGame.scenesStack.pop();
 
         mainGame.resume();
@@ -36,8 +36,7 @@ public class MainGameManager {
         }
     }
 
-    public boolean loadResources() {
+    public void loadAllResources() {
         mainGame.assetManager.finishLoading();
-        return true;
     }
 }

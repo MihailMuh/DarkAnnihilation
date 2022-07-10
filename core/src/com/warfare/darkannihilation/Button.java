@@ -35,8 +35,8 @@ public class Button extends BaseButton {
         x = X;
         y = Y;
 
-        textX = centerX() - buttonFont.getTextWidth(text) / 2f;
-        textY = centerY() + buttonFont.getTextHeight(text) / 2f + 5;
+        textX = centerX() - buttonFont.getHalfTextWidth(text);
+        textY = centerY() + buttonFont.getHalfTextHeight(text) + 5;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Button extends BaseButton {
                 Service.sleep(95);
 
                 pressed = false;
-                Processor.post(runnable);
+                Processor.postTask(runnable);
             }
         }
     }

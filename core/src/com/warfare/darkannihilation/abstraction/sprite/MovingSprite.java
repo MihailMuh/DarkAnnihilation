@@ -12,7 +12,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.Image;
 
-public abstract class MovementSprite extends BaseSprite {
+public abstract class MovingSprite extends BaseSprite {
     protected final int topY;
     protected final int maxHealth;
     protected int health;
@@ -22,11 +22,11 @@ public abstract class MovementSprite extends BaseSprite {
 
     public float speedX, speedY;
 
-    public MovementSprite(Image image, int maxHealth, int damage, int killScore) {
+    public MovingSprite(Image image, int maxHealth, int damage, int killScore) {
         this(image, image.width, image.height, maxHealth, damage, killScore);
     }
 
-    public MovementSprite(Image image, int width, int height, int maxHealth, int damage, int killScore) {
+    public MovingSprite(Image image, int width, int height, int maxHealth, int damage, int killScore) {
         super(image, width, height);
 
         this.maxHealth = maxHealth;
@@ -45,7 +45,7 @@ public abstract class MovementSprite extends BaseSprite {
         }
     }
 
-    public final boolean killedBy(MovementSprite sprite) {
+    public final boolean killedBy(MovingSprite sprite) {
         boolean killed = false;
 
         if (intersect(sprite)) {

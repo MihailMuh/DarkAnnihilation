@@ -28,7 +28,7 @@ public class Attention extends Opponent {
         x = MathUtils.random(SCREEN_WIDTH);
 
         getSounds().attentionSound.play();
-        Processor.post(() -> {
+        Processor.postTask(() -> {
             Service.sleep(1750);
 
             visible = false;

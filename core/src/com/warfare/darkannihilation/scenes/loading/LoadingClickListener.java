@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.systemd.loading;
+package com.warfare.darkannihilation.scenes.loading;
 
 import com.warfare.darkannihilation.utils.ClickListener;
 

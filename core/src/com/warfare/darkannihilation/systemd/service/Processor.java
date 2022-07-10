@@ -1,5 +1,8 @@
 package com.warfare.darkannihilation.systemd.service;
 
+import static com.badlogic.gdx.Application.ApplicationType.Desktop;
+
+import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.utils.MultiProcessor;
 
 import java.util.concurrent.ExecutorService;
@@ -14,7 +17,7 @@ public final class Processor {
     public static final MultiProcessor multiProcessor = new MultiProcessor();
     public static Thread UIThread;
 
-    public static void post(Runnable runnable) {
+    public static void postTask(Runnable runnable) {
         pool.execute(runnable);
     }
 
@@ -24,6 +27,14 @@ public final class Processor {
 
     public static void postToLooperSounds(Runnable runnable) {
         looperSounds.execute(runnable);
+    }
+
+    public static void runForDifferentOS(Runnable function) {
+        if (Gdx.app.getType() == Desktop) {
+            Gdx.app.postRunnable(function);
+        } else {
+            function.run();
+        }
     }
 
     public static boolean isUIThread() {

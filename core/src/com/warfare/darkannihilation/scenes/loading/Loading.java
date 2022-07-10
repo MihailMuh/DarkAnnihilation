@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.systemd.loading;
+package com.warfare.darkannihilation.scenes.loading;
 
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
@@ -8,7 +8,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.screens.StaticScreen;
+import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
@@ -20,7 +20,7 @@ public class Loading extends Scene {
     private byte status;
 
     public Loading(MainGameManager mainGameManager, ScenesStack scenesStack) {
-        super(mainGameManager, new LoadingClickListener(), new StaticScreen(getImages().loadingScreen));
+        super(mainGameManager, new LoadingClickListener(), new Screen(getImages().loadingScreen, SCREEN_WIDTH, SCREEN_HEIGHT));
         this.scenesStack = scenesStack;
     }
 
@@ -34,10 +34,18 @@ public class Loading extends Scene {
 
     @Override
     public void render() {
+        spriteBatch.setColor(0, 0, 0, alpha);
+        getImages().blackColor.draw(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        spriteBatch.setColor(1, 1, 1, 1);
+    }
+
+    @Override
+    public void update() {
         switch (status) {
-            case -2:
+            case -2: // потускнение
                 alpha += 0.011;
                 getSounds().setVolume(1 - alpha);
+                sceneToUpdate.update();
 
                 if (alpha > 1) {
                     Gdx.app.postRunnable(() -> {
@@ -48,32 +56,24 @@ public class Loading extends Scene {
                     });
                 }
                 break;
-            case -1:
-                if (mainGameManager.loadResources()) {
-                    getSounds().setVolume(1);
-                    mainGameManager.finishLastScene();
-                    mainGameManager.startScene(sceneToRun, false);
-                    sceneToUpdate = scenesStack.lastScene;
-                    mainGameManager.startScene(this, false);
-                    status = 0;
-                }
+            case -1: // загрузка новой сцены
+                mainGameManager.loadAllResources();
+                mainGameManager.finishScene();
+                mainGameManager.startScene(sceneToRun, false);
+                sceneToUpdate = scenesStack.lastScene;
+                mainGameManager.startScene(this, false);
+
+                getSounds().setVolume(1);
+                status = 0;
                 break;
-            case 0:
+            case 0: // рассвет
                 alpha -= 0.011;
 
                 if (alpha < 0) {
                     alpha = 0;
-                    mainGameManager.finishLastScene();
+                    mainGameManager.finishScene();
                 }
+                sceneToUpdate.update();
         }
-
-        spriteBatch.setColor(0, 0, 0, alpha);
-        getImages().blackColor.draw(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        spriteBatch.setColor(1, 1, 1, 1);
-    }
-
-    @Override
-    public void update() {
-        if (status != -1) sceneToUpdate.update();
     }
 }

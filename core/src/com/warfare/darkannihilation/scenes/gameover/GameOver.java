@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation.systemd.gameover;
+package com.warfare.darkannihilation.scenes.gameover;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Names.HUGE_EXPLOSION;
@@ -45,6 +45,7 @@ public class GameOver extends Scene {
 
     @Override
     public void resume() {
+        super.resume();
         gameTask1.start();
         gameTask2.start();
         gameTask3.start();
