@@ -28,11 +28,6 @@ public class Rocket extends BaseBullet {
     }
 
     @Override
-    public void render() {
-        if (visible) super.render();
-    }
-
-    @Override
     public void kill() {
         explodeHuge();
     }

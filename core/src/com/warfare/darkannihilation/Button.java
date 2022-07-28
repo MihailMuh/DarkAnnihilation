@@ -3,13 +3,13 @@ package com.warfare.darkannihilation;
 import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
+import static com.warfare.darkannihilation.systemd.service.Service.sleep;
+import static com.warfare.darkannihilation.systemd.service.Service.vibrate;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.warfare.darkannihilation.abstraction.BaseButton;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.FontWrap;
 
 public class Button extends BaseButton {
@@ -17,7 +17,7 @@ public class Button extends BaseButton {
     private String text;
     private float textX;
     private float textY;
-    private volatile boolean pressed, swept;
+    private boolean pressed, swept;
     private float shootTime;
 
     public static FontWrap buttonFont;
@@ -46,12 +46,11 @@ public class Button extends BaseButton {
             pressed = false;
 
             if (checkClick(X, Y)) {
-                getSounds().spaceBarSound.play();
-
                 pressed = true;
-                Gdx.input.vibrate(50);
 
-                Service.sleep(95);
+                getSounds().spaceBarSound.play();
+                vibrate(50);
+                sleep(140);
 
                 pressed = false;
                 Processor.postTask(runnable);

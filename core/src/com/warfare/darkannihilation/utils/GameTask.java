@@ -1,6 +1,5 @@
 package com.warfare.darkannihilation.utils;
 
-import static com.warfare.darkannihilation.systemd.service.Service.printErr;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.util.concurrent.ScheduledFuture;
@@ -18,11 +17,7 @@ public class GameTask extends ScheduledThreadPoolExecutor {
     }
 
     public void start() {
-        try {
-            future = scheduleWithFixedDelay(runnable, 0, delay, MILLISECONDS);
-        } catch (Exception e) {
-            printErr("Error in GameTask", e);
-        }
+        future = scheduleWithFixedDelay(runnable, 0, delay, MILLISECONDS);
     }
 
     public void stop() {

@@ -1,4 +1,4 @@
-menu_screen.jpg
+menu_screen.png
 	size: 2048, 2048
 	repeat: none
 menu_screen
@@ -26,7 +26,7 @@ menu_screen
 	index: 9
 	bounds: 960, 0, 960, 477
 
-menu_screen2.jpg
+menu_screen2.png
 	size: 2048, 1024
 	repeat: none
 menu_screen

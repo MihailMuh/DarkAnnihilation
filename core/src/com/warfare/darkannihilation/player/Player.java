@@ -1,26 +1,26 @@
 package com.warfare.darkannihilation.player;
 
 import static com.badlogic.gdx.math.MathUtils.roundPositive;
+import static com.warfare.darkannihilation.Settings.GOD_MODE;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
 import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
 import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
-import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.MILLENNIUM_FALCON;
+import static com.warfare.darkannihilation.constants.Names.NULL_HEART;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
+import static com.warfare.darkannihilation.systemd.service.Service.vibrate;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.sprite.MovingSprite;
-import com.warfare.darkannihilation.pools.BulletPool;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
@@ -82,6 +82,8 @@ public class Player extends MovingSprite {
     }
 
     public void heal(int value) {
+        if (isDead()) return;
+
         int len = roundPositive(value / 10f);
 
         if (value % 10 == 5 && health % 10 == 5) len--;
@@ -128,12 +130,11 @@ public class Player extends MovingSprite {
 
             Processor.postToLooper(() -> {
                 final float X = centerX();
-                final float Y = top() + 5;
-                final BulletPool bulletPool = getPools().bulletPool;
+                final float Y = top();
 
-                bulletPool.obtain(X - 7, Y);
-                bulletPool.obtain(X, Y);
-                bulletPool.obtain(X + 7, Y);
+                getPools().bulletPool.obtain(X - 7, Y);
+                getPools().bulletPool.obtain(X, Y);
+                getPools().bulletPool.obtain(X + 7, Y);
 
                 getSounds().laserSound.play();
             });
@@ -165,13 +166,15 @@ public class Player extends MovingSprite {
 
     public void damage(MovingSprite sprite) {
         Processor.postTask(() -> {
-            damage(sprite.damage);
-            updateHeartsPositions();
+            if (!GOD_MODE) {
+                damage(sprite.damage);
+                updateHeartsPositions();
+            }
 
             if (sprite.name > BULLET_ENEMY) getSounds().metalSound.play();
 
-            if (sprite.damage >= 20) Gdx.input.vibrate(120);
-            else Gdx.input.vibrate(60);
+            if (sprite.damage >= 20) vibrate(120);
+            else vibrate(60);
 
             difficultyAnalyzer.addStatistics(health);
         });
@@ -180,15 +183,12 @@ public class Player extends MovingSprite {
     @Override
     public void kill() {
         explodeHuge();
-        Gdx.input.vibrate(200);
-    }
-
-    public void renderHearts() {
-        for (Heart heart : hearts) heart.render();
+        vibrate(200);
     }
 
     @Override
     public void render() {
         if (visible) super.render();
+        for (Heart heart : hearts) heart.render();
     }
 }

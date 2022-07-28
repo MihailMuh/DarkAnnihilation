@@ -1,14 +1,13 @@
 package com.warfare.darkannihilation.scenes.loading;
 
+import static com.warfare.darkannihilation.hub.Resources.getAssetManager;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
@@ -20,7 +19,7 @@ public class Loading extends Scene {
     private byte status;
 
     public Loading(MainGameManager mainGameManager, ScenesStack scenesStack) {
-        super(mainGameManager, new LoadingClickListener(), new Screen(getImages().loadingScreen, SCREEN_WIDTH, SCREEN_HEIGHT));
+        super(mainGameManager, new LoadingClickListener());
         this.scenesStack = scenesStack;
     }
 
@@ -44,30 +43,29 @@ public class Loading extends Scene {
         switch (status) {
             case -2: // потускнение
                 alpha += 0.011;
-                getSounds().setVolume(1 - alpha);
                 sceneToUpdate.update();
+                getAssetManager().update();
+                getSounds().setVolume(1 - alpha); // в status = -1 не делаем эту строчку, т.к. вылетает ошибка в Native, в soundWrap
 
                 if (alpha > 1) {
-                    Gdx.app.postRunnable(() -> {
-                        mainGameManager.finishAllScenes();
-                        scenesStack.push(this);
-                        status = -1;
-                        alpha = 1;
-                    });
+                    mainGameManager.finishAllScenes();
+                    scenesStack.push(this);
+                    status = -1;
+                    alpha = 1;
                 }
                 break;
             case -1: // загрузка новой сцены
-                mainGameManager.loadAllResources();
+                getAssetManager().finishLoading();
                 mainGameManager.finishScene();
                 mainGameManager.startScene(sceneToRun, false);
                 sceneToUpdate = scenesStack.lastScene;
                 mainGameManager.startScene(this, false);
 
-                getSounds().setVolume(1);
                 status = 0;
                 break;
             case 0: // рассвет
                 alpha -= 0.011;
+                getSounds().setVolume(1 - alpha);
 
                 if (alpha < 0) {
                     alpha = 0;

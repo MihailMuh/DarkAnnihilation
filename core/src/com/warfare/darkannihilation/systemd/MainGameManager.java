@@ -1,42 +1,41 @@
 package com.warfare.darkannihilation.systemd;
 
 import com.warfare.darkannihilation.abstraction.Scene;
+import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGameManager {
     private final MainGame mainGame;
+    private final ScenesStack scenesStack;
 
-    public MainGameManager(MainGame mainGame) {
+    public MainGameManager(MainGame mainGame, ScenesStack scenesStack) {
         this.mainGame = mainGame;
+        this.scenesStack = scenesStack;
     }
 
     public void finishScene() {
-        Scene lastScene = mainGame.scenesStack.pop();
+        Scene lastScene = scenesStack.pop();
 
-        mainGame.resume();
+        scenesStack.resumeScene();
 
         lastScene.pause();
         lastScene.dispose();
     }
 
     public void finishAllScenes() {
-        mainGame.scenesStack.clear();
+        scenesStack.clear();
     }
 
     public void startScene(Scene scene, boolean loadingScreen) {
         if (loadingScreen) {
-            mainGame.loading.setSceneToRun(scene, mainGame.scenesStack.lastScene);
+            mainGame.loading.setSceneToRun(scene, scenesStack.lastScene);
             startScene(mainGame.loading, false);
         } else {
             scene.create();
 
-            mainGame.pause();
-            mainGame.scenesStack.push(scene);
+            scenesStack.pauseScene();
+            scenesStack.push(scene);
 
             scene.resume();
         }
-    }
-
-    public void loadAllResources() {
-        mainGame.assetManager.finishLoading();
     }
 }

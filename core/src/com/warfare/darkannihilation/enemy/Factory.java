@@ -16,24 +16,19 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.Image;
+import com.warfare.darkannihilation.utils.HealthBar;
 
 public class Factory extends Shooter {
-    private final Image red = getImages().redColor;
-    private final Image white = getImages().whiteColor;
-
-    private float whiteBarY, redBarY;
+    private final HealthBar healthBar;
     private final int yToStop;
 
-    private int healthBar;
-
     public Factory() {
-        super(getImages().factoryImg, SCREEN_WIDTH - 300, getImages().factoryImg.height,
-                FACTORY_HEALTH, ULTIMATE_DAMAGE, 100, FACTORY_SPAWN_TIME);
+        super(getImages().factoryImg, FACTORY_HEALTH, ULTIMATE_DAMAGE, 100, FACTORY_SPAWN_TIME);
 
         visible = false;
         name = FACTORY;
         yToStop = SCREEN_HEIGHT - height - 100;
+        healthBar = new HealthBar(FACTORY_HEALTH_BAR_LEN, maxHealth, 22, 18);
 
         shrinkBorders(20, 80, 20, halfHeight);
     }
@@ -41,13 +36,9 @@ public class Factory extends Shooter {
     @Override
     public void reset() {
         health = maxHealth;
-        healthBar = FACTORY_HEALTH_BAR_LEN - 3;
 
-        y = topY;
+        y = SCREEN_HEIGHT;
         x = HALF_SCREEN_WIDTH - halfWidth;
-
-        whiteBarY = y + 390;
-        redBarY = whiteBarY + 2;
 
         visible = true;
     }
@@ -56,24 +47,18 @@ public class Factory extends Shooter {
     public void update() {
         if (y >= yToStop) {
             y -= FACTORY_SPEED;
-            whiteBarY -= FACTORY_SPEED;
-            redBarY -= FACTORY_SPEED;
         } else {
             shooting();
         }
+
+        healthBar.setOutlineBarCoords(centerX(), top() - 100);
     }
 
     @Override
     public void damage(int damage) {
         super.damage(damage);
 
-        Processor.postToLooper(() -> {
-            if (healthBar > 0) {
-                healthBar = (int) ((health / (float) maxHealth) * FACTORY_HEALTH_BAR_LEN) - 3;
-            } else {
-                healthBar = 0;
-            }
-        });
+        Processor.postToLooper(() -> healthBar.updateHealthBar(health));
     }
 
     @Override
@@ -84,6 +69,7 @@ public class Factory extends Shooter {
     @Override
     public void kill() {
         explodeHuge();
+        healthBar.hide();
     }
 
     @Override
@@ -95,12 +81,7 @@ public class Factory extends Shooter {
 
     @Override
     public void render() {
-        if (visible) {
-            super.render();
-
-            float centerX = centerX();
-            white.draw(centerX - 400, whiteBarY, FACTORY_HEALTH_BAR_LEN, 18);
-            red.draw(centerX - 397, redBarY, healthBar, 14);
-        }
+        super.render();
+        if (visible) healthBar.render();
     }
 }

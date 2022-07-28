@@ -1,16 +1,18 @@
 package com.warfare.darkannihilation.pools;
 
+import static com.warfare.darkannihilation.constants.Constants.NUMBER_BOMBS;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bomb;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
-public class BombPool extends Pool<BaseBullet> {
+public class BombPool extends PoolWrap<BaseBullet> {
     private final Array<BaseBullet> bulletsEnemy;
 
     public BombPool(Array<BaseBullet> bulletsEnemy) {
-        super(10);
+        super(NUMBER_BOMBS);
         this.bulletsEnemy = bulletsEnemy;
     }
 

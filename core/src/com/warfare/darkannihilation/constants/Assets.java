@@ -23,6 +23,7 @@ public final class Assets {
 
     public static final String MENU_MUSIC = "sounds/menu.mp3";
     public static final String FIRST_LEVEL_MUSIC = "sounds/first_level.mp3";
+    public static final String DEATH_STAR_MUSIC  = "sounds/death_star.mp3";
 
     public static final String LOCALES = "locales/locale";
 }

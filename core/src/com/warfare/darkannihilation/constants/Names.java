@@ -17,8 +17,8 @@ public final class Names {
     public static final byte HEALTH_KIT = -4;
     public static final byte ATTENTION = -3;
     public static final byte BOMB = -2;
-    public static final byte LASER = -1;
-    public static final byte BULLET_ENEMY = 0;
+    public static final byte BULLET_ENEMY = -1;
+    public static final byte SUNRISE_BOMB = 0;
 
     public static final byte ENEMY = 1;
     public static final byte VADER = 2;
@@ -27,6 +27,4 @@ public final class Names {
     public static final byte FACTORY = 5;
     public static final byte MINION = 6;
     public static final byte DEATH_STAR = 7;
-
-
 }

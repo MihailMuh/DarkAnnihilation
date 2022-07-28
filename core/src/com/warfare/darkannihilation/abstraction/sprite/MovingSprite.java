@@ -13,7 +13,6 @@ import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.Image;
 
 public abstract class MovingSprite extends BaseSprite {
-    protected final int topY;
     protected final int maxHealth;
     protected int health;
 
@@ -34,7 +33,6 @@ public abstract class MovingSprite extends BaseSprite {
         this.killScore = killScore;
 
         health = maxHealth;
-        topY = SCREEN_HEIGHT + height;
     }
 
     public void damage(int damage) {
@@ -49,9 +47,9 @@ public abstract class MovingSprite extends BaseSprite {
         boolean killed = false;
 
         if (intersect(sprite)) {
-            sprite.damage(damage);
-
             killed = sprite.damage >= health;
+
+            sprite.damage(damage);
             damage(sprite.damage);
         }
         return killed;

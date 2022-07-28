@@ -1,48 +1,15 @@
 common.png
-	size: 2048, 2048
-	filter: Linear, Linear
+	size: 2048, 512
 	repeat: none
-dark_null
-	bounds: 0, 42, 1, 1	
+black
+	bounds: 0, 0, 10, 10
 button_not_press
-	bounds: 1364, 935, 288, 88
+	bounds: 1002, 252, 423, 129
 button_press
-	bounds: 682, 594, 288, 88
+	bounds: 1002, 383, 423, 129
 gameover
-	bounds: 682, 682, 682, 341
-loading
-	index: 1
-	bounds: 0, 1705, 682, 341
-loading
-	index: 6
-	bounds: 0, 1364, 682, 341
-loading
-	index: 3
-	bounds: 682, 1705, 682, 341
-loading
-	index: 8
-	bounds: 0, 1023, 682, 341
-loading
-	index: 0
-	bounds: 682, 1364, 682, 341
-loading
-	index: 5
-	bounds: 1364, 1705, 682, 341
-loading
-	index: 11
-	bounds: 0, 682, 682, 341
-loading
-	index: 2
-	bounds: 682, 1023, 682, 341
-loading
-	index: 7
-	bounds: 1364, 1364, 682, 341
-loading
-	index: 4
-	bounds: 0, 341, 682, 341
-loading
-	index: 10
-	bounds: 1364, 1023, 682, 341
-loading
-	index: 9
-	bounds: 0, 0, 682, 341
+	bounds: 0, 12, 1000, 500
+red
+	bounds: 1002, 249, 1, 1
+white
+	bounds: 1427, 511, 1, 1

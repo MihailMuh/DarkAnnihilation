@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.hub;
 
 import static com.warfare.darkannihilation.constants.Assets.ATTENTION_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.BOOM_SOUND;
+import static com.warfare.darkannihilation.constants.Assets.DEATH_STAR_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.FALLING_BOMB_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.HEAL_SOUND;
@@ -36,6 +37,7 @@ public class SoundHub extends BaseHub {
 
     public MusicWrap menuMusic;
     public MusicWrap firstLevelMusic;
+    public MusicWrap deathStarMusic;
 
     public SoundHub(AssetManagerSuper assetManager) {
         super(assetManager);
@@ -103,9 +105,23 @@ public class SoundHub extends BaseHub {
         allAudio.removeValue(fallingBombSound, true);
     }
 
+    public void loadDeathStarMusic() {
+        assetManager.loadMusic(DEATH_STAR_MUSIC);
+    }
+
+    public void getDeathStarMusic() {
+        deathStarMusic = assetManager.getMusic(DEATH_STAR_MUSIC, 0.45f);
+        allAudio.add(deathStarMusic, attentionSound, fallingBombSound);
+    }
+
+    public void disposeDeathStarMusic() {
+        assetManager.unload(DEATH_STAR_MUSIC);
+        allAudio.removeValue(deathStarMusic, true);
+    }
+
     public void setVolume(float newVolume) {
         if (newVolume < 0) newVolume = 0;
-        else if (newVolume > 1) newVolume = 1;
+        if (newVolume > 1) newVolume = 1;
 
         for (Audio audio : allAudio) audio.setVolume(newVolume);
     }

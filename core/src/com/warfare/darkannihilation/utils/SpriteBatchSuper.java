@@ -1,8 +1,8 @@
 package com.warfare.darkannihilation.utils;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.CpuSpriteBatch;
 
-public class SpriteBatchSuper extends SpriteBatch {
+public class SpriteBatchSuper extends CpuSpriteBatch {
     public SpriteBatchSuper(int size) {
         super(size);
     }

@@ -5,6 +5,7 @@ import static com.warfare.darkannihilation.constants.Constants.VADER_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.VADER_HEALTH;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
@@ -27,7 +28,7 @@ public class Vader extends Opponent {
             image = getImages().vadersImages[random(0, 2)];
 
             x = random(SCREEN_WIDTH);
-            y = topY;
+            y = SCREEN_HEIGHT;
 
             speedX = random(-6.5f, 6.5f);
             speedY = random(4f, 13f);

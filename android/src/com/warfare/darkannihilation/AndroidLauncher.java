@@ -18,6 +18,7 @@ public class AndroidLauncher extends AndroidApplication {
         config.useImmersiveMode = true;
         config.hideStatusBar = false;
         config.maxSimultaneousSounds = 32;
+        config.useGL30 = true;
 
         initialize(new MainGame(), config);
     }

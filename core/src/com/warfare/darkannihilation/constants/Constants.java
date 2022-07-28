@@ -1,5 +1,9 @@
 package com.warfare.darkannihilation.constants;
 
+import static com.warfare.darkannihilation.Settings.getBossHealth;
+
+import com.warfare.darkannihilation.Settings;
+
 public final class Constants {
     // characters
     public static final byte MILLENNIUM_FALCON_HEALTH = 50;
@@ -46,11 +50,18 @@ public final class Constants {
     public static final short SPIDER_HEALTH_BAR_LEN = 150;
 
     // first level
-    public static final float BOSS_SHOOT_TIME = 0.45f;
-    public static final short BOSS_HEALTH = 1100;
-    public static final short BOSS_HEALTH_BAR_LEN = 140;
-    public static final byte BOSS_PERIOD_IN_SECS = 120;
-    public static final byte BOSS_VERSUS_SCREEN_IN_SECS = 4;
+    public static final float DEATH_STAR_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS = 0.8f;
+    public static final float DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS = 3.5f;
+    public static final float DEATH_STAR_SHOOT_TIME_FOR_SECOND_PHASE_IN_SECS = 0.8f;
+    public static final short DEATH_STAR_HEALTH = getBossHealth();
+    public static final int DEATH_STAR_THIRD_PHASE_HEALTH = DEATH_STAR_HEALTH / 3;
+    public static final int DEATH_STAR_SECOND_PHASE_HEALTH = DEATH_STAR_THIRD_PHASE_HEALTH * 2;
+    public static final byte DEATH_STAR_SPEED_FOR_THIRD_PHASE = 4;
+    public static final short DEATH_STAR_HEALTH_BAR_LEN = 260;
+    public static final byte DEATH_STAR_PERIOD_IN_SECS = Settings.getBossPeriodInSecs();
+    public static final byte DEATH_STAR_VERSUS_SCREEN_IN_SECS = 4;
+
+    public static final short STAR_SHIELD_HEALTH = 800;
 
     public static final byte DEMOMAN_DAMAGE = 40;
     public static final byte DEMOMAN_HEALTH = 30;
@@ -110,6 +121,7 @@ public final class Constants {
 
     public static final byte BULLET_ENEMY_DAMAGE = 5;
     public static final byte BULLET_ENEMY_SPEED = 15;
+    public static final byte NUMBER_BULLETS_ENEMY = 30;
 
     public static final byte BULLET_BOSS_VADERS_DAMAGE = 25;
 
@@ -124,10 +136,13 @@ public final class Constants {
 
     public static final byte BOMB_DAMAGE = 5;
     public static final byte BOMB_SPEED = 20;
+    public static final byte NUMBER_BOMBS = 15;
 
-    public static final byte NUMBER_BULLETS_ENEMY = 50;
-    public static final byte NUMBER_BOMBS = NUMBER_BULLETS_ENEMY + 20;
-    public static final byte NUMBER_BOSS_SHOTS = NUMBER_BOMBS + 30;
+    public static final byte SUNRISE_BOMB_SPEED = 35;
+    public static final byte SUNRISE_BOMB_DAMAGE = 20;
+    public static final float SUNRISE_BOMB_BOOM_TIME_IN_SECS = 2.12f;
+    public static final float SUNRISE_BOMB_RED_TIME_IN_SECS = 0.08f;
+    public static final byte NUMBER_SUNRISE_BOMBS = 3;
 
     // other
     public static final float BUTTON_CLICK_TIME = 0.1f;

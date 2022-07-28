@@ -6,15 +6,9 @@ android {
             keyAlias 'key2'
             keyPassword '1234567mli'
         }
-        release {
-            storeFile file('/home/mihalis/Android/keyStore/key2.jks')
-            storePassword '1234567mli'
-            keyPassword '1234567mli'
-            keyAlias 'key2'
-        }
     }
     buildToolsVersion "31.0.0"
-    compileSdkVersion 33
+    compileSdkVersion 31
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -32,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.warfare.darkannihilation"
         minSdkVersion 27
-        targetSdkVersion 33
+        targetSdkVersion 31
         versionCode 3
         versionName "3.0"
     }

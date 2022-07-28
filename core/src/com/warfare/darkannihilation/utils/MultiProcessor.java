@@ -28,7 +28,7 @@ public class MultiProcessor extends InputAdapter {
 
         for (ClickListener listener : listeners) {
             if (listener.touchDragged(x, y)) {
-                break;
+                return true;
             }
         }
         return true;
@@ -42,7 +42,7 @@ public class MultiProcessor extends InputAdapter {
 
         for (ClickListener listener : listeners) {
             if (listener.touchDown(x, y)) {
-                break;
+                return true;
             }
         }
         return true;
@@ -56,7 +56,7 @@ public class MultiProcessor extends InputAdapter {
 
         for (ClickListener listener : listeners) {
             if (listener.touchUp(x, y)) {
-                break;
+                return true;
             }
         }
         return true;
@@ -66,7 +66,7 @@ public class MultiProcessor extends InputAdapter {
     public boolean keyDown(int keycode) {
         for (ClickListener listener : listeners) {
             if (listener.keyDown(keycode)) {
-                break;
+                return true;
             }
         }
         return true;

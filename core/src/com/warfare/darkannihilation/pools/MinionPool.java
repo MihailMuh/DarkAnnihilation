@@ -4,11 +4,11 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.enemy.Minion;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
-public abstract class MinionPool extends Pool<Opponent> {
+public class MinionPool extends PoolWrap<Opponent> {
     private final Array<Opponent> empire;
 
     public MinionPool(Array<Opponent> empire) {
@@ -20,5 +20,10 @@ public abstract class MinionPool extends Pool<Opponent> {
         Minion minion = (Minion) obtain();
         minion.start(x, y);
         Gdx.app.postRunnable(() -> empire.add(minion));
+    }
+
+    @Override
+    protected Minion newObject() {
+        return new Minion();
     }
 }

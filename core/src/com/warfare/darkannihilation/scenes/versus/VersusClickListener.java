@@ -1,15 +1,14 @@
-package com.warfare.darkannihilation.scenes.gameover;
+package com.warfare.darkannihilation.scenes.versus;
 
 import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
 import com.warfare.darkannihilation.utils.ClickListener;
 
-class GameOverClickListener extends ClickListener {
+class VersusClickListener extends ClickListener {
     private final MainGameManager manager;
     private boolean start = false;
 
-    GameOverClickListener(MainGameManager manager) {
+    VersusClickListener(MainGameManager manager) {
         this.manager = manager;
     }
 
@@ -17,7 +16,7 @@ class GameOverClickListener extends ClickListener {
     public boolean touchDragged(float x, float y) {
         if (Gdx.input.isTouched(1) && !start) {
             start = true;
-            manager.startScene(new FirstLevel(manager), true);
+            manager.finishScene();
         }
         return true;
     }

@@ -47,6 +47,14 @@ public class ScenesStack implements Iterable<Scene> {
         size = 0;
     }
 
+    public void pauseScene() {
+        if (lastScene != null) lastScene.pause();
+    }
+
+    public void resumeScene() {
+        if (lastScene != null) lastScene.resume();
+    }
+
     @Override
     public Iterator<Scene> iterator() {
         return scenes.iterator();

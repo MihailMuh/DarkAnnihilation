@@ -1,14 +1,14 @@
-first_level_screen.jpg
+first_level_screen.png
 	size: 2048, 2048
 	repeat: none
 star_screen
 	index: 15
 	bounds: 0, 1715, 480, 245
 star_screen
-	index: 20
+	index: 3
 	bounds: 0, 1470, 480, 245
 star_screen
-	index: 3
+	index: 20
 	bounds: 480, 1715, 480, 245
 star_screen
 	index: 12
@@ -23,10 +23,10 @@ star_screen
 	index: 17
 	bounds: 0, 980, 480, 245
 star_screen
-	index: 22
+	index: 5
 	bounds: 480, 1225, 480, 245
 star_screen
-	index: 5
+	index: 22
 	bounds: 960, 1470, 480, 245
 star_screen
 	index: 14

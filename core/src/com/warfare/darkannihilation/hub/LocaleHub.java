@@ -17,7 +17,7 @@ public class LocaleHub extends BaseHub {
     public LocaleHub(AssetManagerSuper assetManager) {
         super(assetManager);
 
-        loadNewLocale("en");
+        loadNewLocale("ru");
     }
 
     @Override

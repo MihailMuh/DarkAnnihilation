@@ -95,9 +95,11 @@ public class DifficultyAnalyzer {
     }
 
     private void easy() {
-        if (reduceEffectIfPowerfulEnemy(0.2f)) {
+        if (reduceEffectIfDamagePowerfulEnemy(0.2f)) {
             if (randomBoolean(0.75f)) {
                 enemyController.killTriple();
+            } else {
+                enemyController.runHealthKit();
             }
             enemyController.killVader();
             enemyController.killVader();
@@ -107,7 +109,7 @@ public class DifficultyAnalyzer {
     }
 
     private void notBad() {
-        if (reduceEffectIfPowerfulEnemy(0.35f)) {
+        if (reduceEffectIfDamagePowerfulEnemy(0.35f)) {
             if (PLAYER_SKILL - 10 < 20) {
                 enemyController.killVader();
                 if (randomBoolean() || health < MILLENNIUM_FALCON_HEALTH - 30)
@@ -122,7 +124,7 @@ public class DifficultyAnalyzer {
         if (PLAYER_SKILL > 2) {
             chillSpawn();
             enemyController.newVader(1);
-            enemyController.newTriple();
+            enemyController.newTriple(1);
         } else {
             normalSpawn();
         }
@@ -130,12 +132,12 @@ public class DifficultyAnalyzer {
         print("WOOOOW", PLAYER_SKILL);
     }
 
-    private boolean reduceEffectIfPowerfulEnemy(float chance) {
+    private boolean reduceEffectIfDamagePowerfulEnemy(float chance) {
         return powerfulEnemy.visible && randomBoolean(chance);
     }
 
     private void normalSpawn() {
-        if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 40) enemyController.newTriple();
+        if (randomBoolean() || health > MILLENNIUM_FALCON_HEALTH + 40) enemyController.newTriple(1);
         enemyController.newVader(2);
     }
 

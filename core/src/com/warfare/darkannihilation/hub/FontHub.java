@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 
 public class FontHub extends BaseHub {
+    private static final String RUSSIAN = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+
     public BitmapFont canisMinor, fiendish;
 
     public FontHub(AssetManagerSuper assetManager) {
         super(assetManager);
+        FreeTypeFontGenerator.setMaxTextureSize(2048);
 
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(assetManager.resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(assetManager.resolver));
@@ -31,6 +34,7 @@ public class FontHub extends BaseHub {
         params.fontParameters.borderWidth = 5f;
         params.fontParameters.incremental = true;
         params.fontParameters.genMipMaps = true;
+        params.fontParameters.characters += RUSSIAN;
 
         loadFiendish(new FreeTypeFontLoaderParameter());
 
@@ -38,17 +42,16 @@ public class FontHub extends BaseHub {
     }
 
     private void loadFiendish(FreeTypeFontLoaderParameter params) {
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = params.fontParameters;
-
         params.fontFileName = "fonts/fiendish.ttf";
-        parameter.size = 190;
-        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
-        parameter.magFilter = Texture.TextureFilter.Linear;
-        parameter.hinting = FreeTypeFontGenerator.Hinting.Full;
-        parameter.color = Color.BLACK;
-        parameter.spaceX = 20;
-        parameter.incremental = true;
-        parameter.genMipMaps = true;
+        params.fontParameters.size = 190;
+        params.fontParameters.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        params.fontParameters.magFilter = Texture.TextureFilter.Linear;
+        params.fontParameters.hinting = FreeTypeFontGenerator.Hinting.Full;
+        params.fontParameters.color = Color.BLACK;
+        params.fontParameters.spaceX = 20;
+        params.fontParameters.incremental = true;
+        params.fontParameters.genMipMaps = true;
+        params.fontParameters.characters += RUSSIAN;
 
         assetManager.load("fiendish.ttf", BitmapFont.class, params);
     }
@@ -59,22 +62,24 @@ public class FontHub extends BaseHub {
         fiendish = assetManager.get("fiendish.ttf");
     }
 
-    public synchronized static float resizeFont(BitmapFont font, float maxWidth, String... texts) {
+    public static float resizeFont(BitmapFont font, float maxWidth, String... texts) {
         GlyphLayout glyph = new GlyphLayout();
 
-        if (texts.length != 1) {
+        if (texts.length > 1) {
             float maxTextWidth = -1;
-            String maxStr = "";
+            int indexOfWordWithMaxLen = 0;
 
-            for (String text : texts) {
-                glyph.setText(font, text);
+            for (int i = 0; i < texts.length; i++) {
+                String word = texts[i];
+
+                glyph.setText(font, word);
                 if (glyph.width > maxTextWidth) {
                     maxTextWidth = glyph.width;
-                    maxStr = text;
+                    indexOfWordWithMaxLen = i;
                 }
             }
 
-            glyph.setText(font, maxStr);
+            glyph.setText(font, texts[indexOfWordWithMaxLen]);
         } else {
             glyph.setText(font, texts[0]);
         }

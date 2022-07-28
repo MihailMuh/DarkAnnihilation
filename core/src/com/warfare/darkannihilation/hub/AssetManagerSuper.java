@@ -1,32 +1,36 @@
 package com.warfare.darkannihilation.hub;
 
-import com.badlogic.gdx.Application;
+import static com.badlogic.gdx.Application.ApplicationType.Desktop;
+import static com.warfare.darkannihilation.Settings.SHOW_ASSET_MANAGER_LOGS;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.I18NBundleLoader;
-import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Logger;
+import com.warfare.darkannihilation.Settings;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 import com.warfare.darkannihilation.utils.Image;
 import com.warfare.darkannihilation.utils.ImageAtlas;
 import com.warfare.darkannihilation.utils.audio.MusicWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
-import java.util.Locale;
-
 public class AssetManagerSuper extends AssetManager {
-    private final boolean MUTE = true;
+    private final boolean MUTE = Settings.isMuteMusic();
 
-    public final FileHandleResolver resolver = getFileHandleResolver();
+    public final FileHandleResolver resolver;
 
     public AssetManagerSuper() {
+        super();
+
+        if (SHOW_ASSET_MANAGER_LOGS) getLogger().setLevel(Logger.DEBUG);
+
         Texture.setAssetManager(this);
+        resolver = getFileHandleResolver();
     }
 
     public void loadAtlas(String path) {
@@ -58,7 +62,8 @@ public class AssetManagerSuper extends AssetManager {
     }
 
     public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration, float scale) {
-        Array<Image> images = new Array<>(10);
+        Array<Image> images = new Array<>(true, 10, Image.class);
+
         int i = 0;
         while (true) {
             Image image = atlas.getImage(name, i, scale);
@@ -72,13 +77,15 @@ public class AssetManagerSuper extends AssetManager {
         return new AnimationSuper(images.toArray(Image.class), frameDuration);
     }
 
-    public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration) {
-        return getAnimation(atlas, name, frameDuration, 1);
+    @Override
+    public void finishLoading() {
+        while (!update()) {
+        }
     }
 
     @Override
     public synchronized void unload(String fileName) {
-        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+        if (Gdx.app.getType() == Desktop) {
             Gdx.app.postRunnable(() -> super.unload(fileName));
         } else {
             super.unload(fileName);

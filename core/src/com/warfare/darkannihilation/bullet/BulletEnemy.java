@@ -4,12 +4,11 @@ import static com.warfare.darkannihilation.constants.Constants.BULLET_ENEMY_DAMA
 import static com.warfare.darkannihilation.constants.Constants.BULLET_ENEMY_SPEED;
 import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
-import static java.lang.Math.max;
 
 public class BulletEnemy extends BaseBullet {
     private float angle;
-    private float shrinkWidth, shrinkHeight;
 
     public BulletEnemy() {
         super(getImages().laserImg, BULLET_ENEMY_DAMAGE, BULLET_ENEMY_SPEED);
@@ -20,20 +19,8 @@ public class BulletEnemy extends BaseBullet {
         speedX = BULLET_ENEMY_SPEED * cos;
         speedY = BULLET_ENEMY_SPEED * sin;
         this.angle = angle;
-        shrinkWidth = max(cos * width, width);
-        shrinkHeight = max(sin * height, height);
 
         start(X, Y);
-    }
-
-    @Override
-    public float rightWithBorders() {
-        return x + shrinkWidth;
-    }
-
-    @Override
-    public float topWithBorders() {
-        return y + shrinkHeight;
     }
 
     @Override
@@ -46,7 +33,9 @@ public class BulletEnemy extends BaseBullet {
         x += speedX;
         y += speedY;
 
-        if (x < -width || x > SCREEN_WIDTH || y < -height) visible = false;
+        if (x < -width || x > SCREEN_WIDTH || y < -height || y > SCREEN_HEIGHT) {
+            visible = false;
+        }
     }
 
     @Override

@@ -8,11 +8,13 @@ public class DesktopLauncher {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 //        config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-        config.width = 1920;
-        config.height = 1200;
-//        config.fullscreen = true;
+//        config.width = 300;
+//        config.height = 900;
+        config.fullscreen = true;
         config.useGL30 = true;
         config.audioDeviceSimultaneousSources = 32;
+        config.foregroundFPS = 0;
+        config.backgroundFPS = 0;
 
         new LwjglApplication(new MainGame(), config);
     }

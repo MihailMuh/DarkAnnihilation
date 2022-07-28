@@ -1,17 +1,19 @@
 package com.warfare.darkannihilation.scenes.firstlevel;
 
 import static com.badlogic.gdx.math.MathUtils.randomBoolean;
-import static com.warfare.darkannihilation.constants.Constants.BOSS_PERIOD_IN_SECS;
+import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_PERIOD_IN_SECS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.ATTENTION;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
+import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.DEATH_STAR;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
 import static com.warfare.darkannihilation.constants.Names.HEALTH_KIT;
 import static com.warfare.darkannihilation.constants.Names.MINION;
+import static com.warfare.darkannihilation.constants.Names.SUNRISE_BOMB;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
@@ -21,6 +23,7 @@ import static com.warfare.darkannihilation.systemd.service.Processor.postToLoope
 import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -31,8 +34,9 @@ import com.warfare.darkannihilation.enemy.Attention;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Factory;
 import com.warfare.darkannihilation.enemy.Rocket;
-import com.warfare.darkannihilation.enemy.boss.DeathStar;
+import com.warfare.darkannihilation.enemy.deathstar.DeathStar;
 import com.warfare.darkannihilation.hub.PoolHub;
+import com.warfare.darkannihilation.hub.Resources;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.scenes.countdown.Countdown;
 import com.warfare.darkannihilation.scenes.gameover.GameOver;
@@ -51,7 +55,7 @@ import java.util.Iterator;
 public class FirstLevel extends Scene {
     private final GameTask gameTask = new GameTask(this::systemTask, 250);
     // BOSS_PERIOD_IN_SECS * 100 == (BOSS_PERIOD_IN_SECS / 10) * 1000
-    private final GameTask spawnBossTask = new GameTask(this::spawnBoss, BOSS_PERIOD_IN_SECS * 100);
+    private final GameTask spawnBossTask = new GameTask(this::spawnBoss, DEATH_STAR_PERIOD_IN_SECS * 100);
 
     private final Array<Explosion> explosions = new Array<>(false, NUMBER_EXPLOSION);
     private final Array<Bullet> bullets = new Array<>(false, NUMBER_MILLENNIUM_FALCON_BULLETS);
@@ -59,16 +63,16 @@ public class FirstLevel extends Scene {
     private final Array<Opponent> empire = new Array<>(false, 40);
 
     private final EnemyController enemyController = new EnemyController(empire);
-    private DifficultyAnalyzer difficultyAnalyzer;
     private final PoolHub poolHub = getPools();
 
+    private DifficultyAnalyzer difficultyAnalyzer;
     private Frontend frontend;
     private Player player;
     private Demoman demoman;
     private HealthKit healthKit;
     private Attention attention;
     private Rocket rocket;
-    public Factory factory;
+    private Factory factory;
 
     private boolean firstRun = true;
     private boolean startAnalytics = false;
@@ -86,29 +90,31 @@ public class FirstLevel extends Scene {
     public void create() {
         getImages().getFirstLevelImages();
         getSounds().getGameSounds();
-        poolHub.initPools(explosions, bulletsEnemy, bullets);
+        poolHub.initPools(explosions, bulletsEnemy, bullets, empire);
 
         factory = new Factory();
         difficultyAnalyzer = new DifficultyAnalyzer(enemyController, factory);
         player = new Player(difficultyAnalyzer);
         screen = new MovingScreen(getImages().starScreenGIF);
-        frontend = new Frontend(this, player, screen, explosions, bullets, empire, bulletsEnemy);
+        frontend = new Frontend(this, screen, explosions, bullets, empire, bulletsEnemy);
 
-        poolHub.initWithPlayer(empire, player);
+        Resources.setPlayer(player);
         Processor.postTask(this::initEnemies);
     }
 
     private void initEnemies() {
         enemyController.newVader(NUMBER_VADER);
-        enemyController.newTriple();
+        enemyController.newTriple(1);
 
         demoman = new Demoman();
         healthKit = new HealthKit();
         rocket = new Rocket();
         attention = new Attention(rocket);
-        empire.addAll(demoman, healthKit, attention, rocket, factory);
 
-        clickListener = new GameClickListener(player, mainGameManager);
+        empire.addAll(demoman, healthKit, attention, rocket, factory);
+        enemyController.setHealthKit(healthKit);
+
+        clickListener = new GameClickListener(mainGameManager);
         Processor.multiProcessor.insertProcessor(clickListener);
     }
 
@@ -126,7 +132,7 @@ public class FirstLevel extends Scene {
             }
         } else {
             firstRun = false;
-            mainGameManager.startScene(new Countdown(mainGameManager, screen, player), false);
+            mainGameManager.startScene(new Countdown(mainGameManager, screen), false);
 
             getSounds().firstLevelMusic.play();
         }
@@ -150,18 +156,7 @@ public class FirstLevel extends Scene {
 
         updateEmpire(moveAll, needFindIntersections);
         updateBulletsEnemy(moveAll, needFindIntersections);
-
-        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
-            Bullet bullet = iterator.next();
-            if (bullet.visible) {
-                bullet.x -= moveAll;
-                bullet.update();
-            } else {
-                iterator.remove();
-                postToLooper(() -> poolHub.bulletPool.free(bullet));
-            }
-        }
-
+        updateBullets(moveAll);
         updateExplosions(moveAll);
     }
 
@@ -194,8 +189,7 @@ public class FirstLevel extends Scene {
                             difficultyAnalyzer.isBossTime(numBosses != 0);
 
                             enemyController.newVader((int) (NUMBER_VADER * 1.5));
-                            enemyController.newTriple();
-                            enemyController.newTriple();
+                            enemyController.newTriple(2);
                         });
                 }
             }
@@ -216,12 +210,30 @@ public class FirstLevel extends Scene {
             } else {
                 iterator.remove();
                 postToLooper(() -> {
-                    if (bullet.name == BOMB) {
-                        poolHub.bombPool.free(bullet);
-                    } else {
-                        poolHub.bulletEnemyPool.free(bullet);
+                    switch (bullet.name) {
+                        case BOMB:
+                            poolHub.bombPool.free(bullet);
+                            break;
+                        case BULLET_ENEMY:
+                            poolHub.bulletEnemyPool.free(bullet);
+                            break;
+                        case SUNRISE_BOMB:
+                            poolHub.sunriseBulletPool.free(bullet);
                     }
                 });
+            }
+        }
+    }
+
+    private void updateBullets(float moveAll) {
+        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
+            Bullet bullet = iterator.next();
+            if (bullet.visible) {
+                bullet.x -= moveAll;
+                bullet.update();
+            } else {
+                iterator.remove();
+                postToLooper(() -> poolHub.bulletPool.free(bullet));
             }
         }
     }
@@ -242,7 +254,7 @@ public class FirstLevel extends Scene {
         if (opponent.name == ATTENTION) return;
         if (opponent.name == HEALTH_KIT) {
             if (opponent.intersect(player)) {
-                Processor.postTask(() -> player.heal(15));
+                Processor.postTask(() -> player.heal(20));
                 opponent.kill();
             }
             return;
@@ -269,15 +281,16 @@ public class FirstLevel extends Scene {
 
     private void systemTask() {
         if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
-        if (!healthKit.visible && randomBoolean(0.02f)) healthKit.reset();
+        if (!healthKit.visible && randomBoolean(0.018f)) healthKit.reset();
         if (!attention.visible && score > 50 && randomBoolean(0.06f)) attention.reset();
-        if (!factory.visible && score > 170 && randomBoolean(0.0135f) && numBosses == 0)
+        if (!factory.visible && score > 170 && randomBoolean(0.013f) && numBosses == 0) {
             factory.reset();
+        }
 
         difficultyAnalyzer.checkTime();
 
         if (player.isDead()) {
-            Processor.runForDifferentOS(() -> {
+            Gdx.app.postRunnable(() -> {
                 frontend.setScreen(new GameOverScreen());
                 mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions), false);
             });
@@ -285,14 +298,14 @@ public class FirstLevel extends Scene {
     }
 
     private void spawnBoss() {
-        if (time - lastBoss > BOSS_PERIOD_IN_SECS && numBosses == 0) {
+        if (time - lastBoss > DEATH_STAR_PERIOD_IN_SECS && numBosses == 0) {
             lastBoss = time;
 
-            enemyController.killEmpire();
-
-            DeathStar deathStar = new DeathStar();
+            DeathStar deathStar = new DeathStar(enemyController);
             stopBackground();
             mainGameManager.startScene(new VersusScene(mainGameManager, player.name, deathStar.name), false);
+
+            enemyController.killEmpire();
 
             difficultyAnalyzer.isBossTime(true);
             numBosses++;
@@ -310,6 +323,9 @@ public class FirstLevel extends Scene {
         super.dispose();
         getImages().disposeFirstLevelImages();
         getSounds().disposeGameSounds();
-        poolHub.disposePools();
+        poolHub.dispose();
+
+        gameTask.shutdown();
+        spawnBossTask.shutdown();
     }
 }

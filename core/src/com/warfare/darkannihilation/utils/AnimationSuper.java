@@ -2,7 +2,7 @@ package com.warfare.darkannihilation.utils;
 
 public class AnimationSuper {
     private final Image[] images;
-    private final int lastElem;
+    private final int lastElementIndex;
     private final float frameDuration;
 
     public final int size;
@@ -12,7 +12,7 @@ public class AnimationSuper {
         this.images = images;
         this.frameDuration = frameDuration;
         size = images.length;
-        lastElem = size - 1;
+        lastElementIndex = size - 1;
     }
 
     public Image get(float time) {
@@ -20,10 +20,10 @@ public class AnimationSuper {
         if (index < size) {
             return images[index];
         }
-        return images[lastElem];
+        return images[lastElementIndex];
     }
 
     public boolean isFinished() {
-        return index >= lastElem;
+        return index >= lastElementIndex;
     }
 }

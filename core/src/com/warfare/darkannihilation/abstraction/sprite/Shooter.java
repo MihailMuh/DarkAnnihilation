@@ -8,13 +8,10 @@ import com.warfare.darkannihilation.utils.Image;
 public abstract class Shooter extends Opponent {
     protected float lastShot;
     protected float shootTime;
+    protected boolean shotInThread = true;
 
     public Shooter(Image image, int maxHealth, int damage, int killScore, float shootTime) {
-        this(image, image.width, image.height, maxHealth, damage, killScore, shootTime);
-    }
-
-    public Shooter(Image image, int width, int height, int maxHealth, int damage, int killScore, float shootTime) {
-        super(image, width, height, maxHealth, damage, killScore);
+        super(image, maxHealth, damage, killScore);
 
         this.shootTime = shootTime;
     }
@@ -25,7 +22,11 @@ public abstract class Shooter extends Opponent {
         if (time - lastShot >= shootTime) {
             lastShot = time;
 
-            Processor.postToLooper(this::shot);
+            if (shotInThread) {
+                Processor.postToLooper(this::shot);
+            } else {
+                shot();
+            }
         }
     }
 }

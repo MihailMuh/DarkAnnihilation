@@ -2,10 +2,10 @@ package com.warfare.darkannihilation.pools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
-public abstract class OpponentPool extends Pool<Opponent> {
+public abstract class OpponentPool extends PoolWrap<Opponent> {
     private final Array<Opponent> empire;
 
     public OpponentPool(Array<Opponent> empire, int size) {

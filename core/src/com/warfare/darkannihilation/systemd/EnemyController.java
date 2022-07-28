@@ -5,18 +5,33 @@ import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
+import com.warfare.darkannihilation.support.HealthKit;
+import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.systemd.service.Service;
 
 public class EnemyController {
     private final Array<Opponent> empire;
+    private HealthKit healthKit;
 
     public EnemyController(Array<Opponent> empire) {
         this.empire = empire;
     }
 
-    public void newTriple() {
-        getPools().triplePool.obtain();
+    public void setHealthKit(HealthKit healthKit) {
+        this.healthKit = healthKit;
+    }
+
+    public void runHealthKit() {
+        if (!healthKit.visible) healthKit.reset();
+    }
+
+    public void newTriple(int count) {
+        for (int i = 0; i < count; i++) {
+            getPools().triplePool.obtain();
+        }
     }
 
     public void newVader(int count) {
@@ -41,14 +56,17 @@ public class EnemyController {
     }
 
     public void killEmpire() {
-        Array<Opponent> empire = this.empire;
-
-        for (int i = 0; i < empire.size; i++) {
-            Opponent opponent = empire.get(i);
-            if (opponent.name == VADER || opponent.name == TRIPLE) {
-                opponent.shouldKill = true;
+        Processor.postTask(() -> {
+            for (int j = 0; j < 3; j++) {
+                for (int i = 0; i < empire.size; i++) {
+                    Opponent opponent = empire.get(i);
+                    if (!opponent.shouldKill && (opponent.name == VADER || opponent.name == TRIPLE)) {
+                        opponent.shouldKill = true;
+                    }
+                }
+                Service.sleep(2000);
             }
-        }
+        });
     }
 
     private void kill(int name) {
@@ -71,5 +89,9 @@ public class EnemyController {
             }
         }
         return numVaders;
+    }
+
+    public void addEnemy(Opponent opponent) {
+        Gdx.app.postRunnable(() -> empire.add(opponent));
     }
 }

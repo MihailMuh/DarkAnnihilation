@@ -15,7 +15,6 @@ public class MusicWrap extends Audio {
 
     @Override
     public void play() {
-        music.setPosition(0);
         music.play();
     }
 

@@ -13,7 +13,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class Demoman extends Shooter {
     private boolean goLeft;
@@ -73,12 +72,12 @@ public class Demoman extends Shooter {
 
     @Override
     public void render() {
-        if (visible) {
-            if (goLeft) {
-                super.render();
-            } else {
-                image.draw(x + width, y, -width, height);
-            }
+        if (!visible) return;
+
+        if (goLeft) {
+            super.render();
+        } else {
+            image.draw(x + width, y, -width, height);
         }
     }
 }

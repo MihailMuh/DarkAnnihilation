@@ -4,10 +4,10 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 import com.warfare.darkannihilation.Explosion;
+import com.warfare.darkannihilation.utils.PoolWrap;
 
-public class ExplosionPool extends Pool<Explosion> {
+public class ExplosionPool extends PoolWrap<Explosion> {
     private final Array<Explosion> explosions;
 
     public ExplosionPool(Array<Explosion> explosions) {

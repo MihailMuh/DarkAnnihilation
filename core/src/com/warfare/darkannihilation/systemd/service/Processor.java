@@ -9,10 +9,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class Processor {
-    private static final ExecutorService pool = Executors.newCachedThreadPool();
+    private static final ExecutorService pool = Executors.newWorkStealingPool();
 
     private static final ExecutorService looper = Executors.newSingleThreadExecutor();
-    private static final ExecutorService looperSounds = Executors.newSingleThreadExecutor();
+    private static final ExecutorService looperTouches = Executors.newSingleThreadExecutor();
 
     public static final MultiProcessor multiProcessor = new MultiProcessor();
     public static Thread UIThread;
@@ -25,8 +25,8 @@ public final class Processor {
         looper.execute(runnable);
     }
 
-    public static void postToLooperSounds(Runnable runnable) {
-        looperSounds.execute(runnable);
+    public static void postToLooperTouches(Runnable runnable) {
+        looperTouches.execute(runnable);
     }
 
     public static void runForDifferentOS(Runnable function) {
@@ -44,6 +44,6 @@ public final class Processor {
     public static void dispose() {
         pool.shutdown();
         looper.shutdown();
-        looperSounds.shutdown();
+        looperTouches.shutdown();
     }
 }

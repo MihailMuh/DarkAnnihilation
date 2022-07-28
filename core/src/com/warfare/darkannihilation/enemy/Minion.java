@@ -6,11 +6,9 @@ import static com.warfare.darkannihilation.constants.Constants.MINION_HEALTH;
 import static com.warfare.darkannihilation.constants.Names.MINION;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 
-import com.warfare.darkannihilation.player.Player;
-
 public class Minion extends TripleFighter {
-    public Minion(Player player) {
-        super(player, getImages().minionImg, MINION_HEALTH, MINION_DAMAGE, 2, random(0.8f, 1.5f));
+    public Minion() {
+        super(getImages().minionImg, MINION_HEALTH, MINION_DAMAGE, 2, random(0.8f, 1.5f));
 
         visible = false;
         name = MINION;
@@ -30,5 +28,10 @@ public class Minion extends TripleFighter {
     @Override
     public void reset() {
         visible = false;
+    }
+
+    @Override
+    protected float getMiniAngle() {
+        return 0;
     }
 }

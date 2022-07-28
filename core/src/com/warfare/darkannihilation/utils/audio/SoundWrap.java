@@ -1,5 +1,7 @@
 package com.warfare.darkannihilation.utils.audio;
 
+import static com.warfare.darkannihilation.Settings.SOUNDS_IN_THREAD;
+
 import com.badlogic.gdx.audio.Sound;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
@@ -13,6 +15,10 @@ public class SoundWrap extends Audio {
 
     @Override
     public void play() {
-        Processor.postToLooperSounds(() -> sound.play(volume));
+        if (SOUNDS_IN_THREAD) {
+            Processor.postToLooper(() -> sound.play(volume));
+        } else {
+            sound.play(volume);
+        }
     }
 }

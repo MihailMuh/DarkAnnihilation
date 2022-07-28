@@ -3,6 +3,7 @@ package com.warfare.darkannihilation.bullet;
 import static com.warfare.darkannihilation.constants.Constants.BULLET_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.BULLET_SPEED;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class Bullet extends BaseBullet {
     public Bullet() {
@@ -13,7 +14,7 @@ public class Bullet extends BaseBullet {
     public void update() {
         y += speedY;
 
-        if (y > topY) {
+        if (y > SCREEN_HEIGHT) {
             visible = false;
         }
     }

@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.scenes.gameover;
 
 import static com.badlogic.gdx.math.MathUtils.random;
+import static com.badlogic.gdx.math.MathUtils.randomBoolean;
 import static com.warfare.darkannihilation.constants.Names.HUGE_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Names.MEDIUM_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAULT;
@@ -8,7 +9,7 @@ import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -22,8 +23,8 @@ import com.warfare.darkannihilation.utils.GameTask;
 import java.util.Iterator;
 
 public class GameOver extends Scene {
-    private final GameTask gameTask1 = new GameTask(this::randBoom, 50);
-    private final GameTask gameTask2 = new GameTask(this::randBoom, 100);
+    private final GameTask gameTask1 = new GameTask(this::boomInRandomArea, 50);
+    private final GameTask gameTask2 = new GameTask(this::boomInRandomArea, 100);
     private final GameTask gameTask3 = new GameTask(this::killSprites, 150);
 
     private final ExplosionPool explosionPool = getPools().explosionPool;
@@ -83,24 +84,24 @@ public class GameOver extends Scene {
         }
     }
 
-    private void boom(float x, float y) {
+    private void obtainRandomExplosion(float x, float y) {
         explosionPool.obtain(x, y, (byte) -random(-MEDIUM_EXPLOSION_TRIPLE, -SMALL_EXPLOSION_DEFAULT));
     }
 
-    private void randBoom() {
+    private void boomInRandomArea() {
         for (int i = 0; i < 4; i++) {
-            if (MathUtils.randomBoolean()) {
-                boom(random(SCREEN_WIDTH), random(SCREEN_HEIGHT));
+            if (randomBoolean()) {
+                obtainRandomExplosion(random(SCREEN_WIDTH), random(SCREEN_HEIGHT));
             }
         }
 
-        if (random(1, 35) == 1) {
+        if (randomBoolean(0.02857f)) {
             explosionPool.obtain(random(SCREEN_WIDTH), random(SCREEN_HEIGHT), HUGE_EXPLOSION);
         }
     }
 
     private void killSprites() {
-        randBoom();
+        boomInRandomArea();
 
         killInArray(empire);
         killInArray(bullets);
@@ -108,13 +109,26 @@ public class GameOver extends Scene {
     }
 
     private void killInArray(Array<?> sprites) {
-        if (sprites.isEmpty()) return;
+        if (sprites.isEmpty()) {
+            boomInRandomArea();
+            return;
+        }
 
-        Opponent opponent = (Opponent) sprites.pop();
-        if (opponent.visible) opponent.kill();
+        Gdx.app.postRunnable(() -> {
+            Opponent opponent = (Opponent) sprites.pop();
+            if (opponent.visible) opponent.kill();
+        });
     }
 
     @Override
     public void render() {
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        gameTask1.shutdown();
+        gameTask2.shutdown();
+        gameTask3.shutdown();
     }
 }

@@ -1,11 +1,15 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.warfare.darkannihilation.Settings.APPLY_ACCUMULATOR;
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getLocales;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
-import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
+import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
+import static com.warfare.darkannihilation.systemd.service.Service.print;
+import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.hub.AssetManagerSuper;
@@ -18,17 +22,20 @@ import com.warfare.darkannihilation.scenes.error.ErrorScene;
 import com.warfare.darkannihilation.scenes.loading.Loading;
 import com.warfare.darkannihilation.scenes.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class MainGame extends BaseApp {
-    private final MainGameManager mainGameManager = new MainGameManager(this);
+    private final ScenesStack scenesStack = new ScenesStack();
+    private final MainGameManager mainGameManager = new MainGameManager(this, scenesStack);
     private Frontend frontend;
     private ErrorScene errorScene;
 
-    final ScenesStack scenesStack = new ScenesStack();
+    private static final double FPS_61 = 1 / 61f;
+    private static final double FPS_60 = 1 / 60f;
+    private static final double FPS_59 = 1 / 59f;
+    private double accumulator;
 
     AssetManagerSuper assetManager;
     Loading loading;
@@ -37,32 +44,32 @@ public class MainGame extends BaseApp {
     public void create() {
         super.create();
         assetManager = new AssetManagerSuper();
-        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager), new LocaleHub(assetManager));
+        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager), new LocaleHub(assetManager), assetManager);
 
         Menu menu = new Menu(mainGameManager);
+
         assetManager.finishLoading();
         getImages().boot();
         getFonts().boot();
         getSounds().boot();
         getLocales().boot();
-        menu.create();
 
+        menu.create();
         scenesStack.push(menu);
 
-        frontend = new Frontend(this);
+        getImages().lazyLoading();
+        getSounds().lazyLoading();
+        getFonts().lazyLoading();
+        getLocales().lazyLoading();
 
-        Processor.postTask(() -> {
-            Service.sleep(500);
-            getImages().lazyLoading();
-            getSounds().lazyLoading();
-            getFonts().lazyLoading();
-            getLocales().lazyLoading();
-            loading = new Loading(mainGameManager, scenesStack);
+        frontend = new Frontend(scenesStack);
+        loading = new Loading(mainGameManager, scenesStack);
+        errorScene = new ErrorScene(this, mainGameManager, scenesStack);
 
-            resume();
-
-            errorScene = new ErrorScene(this, mainGameManager, scenesStack);
-            Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> error(throwable));
+        resume();
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            print("Error in thread:", thread);
+            Gdx.app.postRunnable(() -> error(throwable));
         });
     }
 
@@ -71,9 +78,26 @@ public class MainGame extends BaseApp {
         try {
             Watch.update();
 
-            scenesStack.lastScene.update();
+            if (APPLY_ACCUMULATOR) {
+                accumulator += delta;
+                while (accumulator >= FPS_61) {
+                    scenesStack.lastScene.update();
+
+                    accumulator -= FPS_60;
+                    if (accumulator < FPS_59 - FPS_60) accumulator = 0;
+                }
+            } else {
+                scenesStack.lastScene.update();
+            }
 
             frontend.render();
+        } catch (IllegalStateException exception) {
+            try {
+                spriteBatch.end();
+            } catch (Exception e) {
+                exception.printStackTrace();
+                error(exception);
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
             error(exception);
@@ -94,17 +118,12 @@ public class MainGame extends BaseApp {
     @Override
     public void resume() {
         Texture.setAssetManager(assetManager);
-        if (scenesStack.lastScene != null) {
-            scenesStack.lastScene.resume();
-        }
+        scenesStack.resumeScene();
     }
 
     @Override
     public void pause() {
-        if (scenesStack.lastScene != null) {
-            scenesStack.lastScene.pause();
-        }
-        frameCount = 0;
+        scenesStack.pauseScene();
     }
 
     @Override
