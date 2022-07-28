@@ -7,8 +7,8 @@ android {
             keyPassword '1234567mli'
         }
     }
-    buildToolsVersion "31.0.0"
-    compileSdkVersion 31
+    buildToolsVersion '33.0.0'
+    compileSdkVersion 33
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -26,9 +26,9 @@ android {
     defaultConfig {
         applicationId "com.warfare.darkannihilation"
         minSdkVersion 27
-        targetSdkVersion 31
-        versionCode 3
-        versionName "3.0"
+        targetSdkVersion 33
+        versionCode 4
+        versionName "4.0"
     }
     buildTypes {
         release {

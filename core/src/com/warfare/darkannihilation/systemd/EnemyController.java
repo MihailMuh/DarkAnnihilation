@@ -94,4 +94,7 @@ public class EnemyController {
     public void addEnemy(Opponent opponent) {
         Gdx.app.postRunnable(() -> empire.add(opponent));
     }
+    public void removeEnemy(Opponent opponent) {
+        Gdx.app.postRunnable(() -> empire.removeValue(opponent, true));
+    }
 }

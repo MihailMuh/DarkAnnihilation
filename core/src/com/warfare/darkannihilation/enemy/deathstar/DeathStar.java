@@ -226,6 +226,10 @@ public class DeathStar extends Shooter {
             getSounds().disposeDeathStarMusic();
 
             healthBar.hide();
+            if (shield.visible) {
+                enemyController.removeEnemy(shield);
+                shield.kill();
+            }
         });
     }
 

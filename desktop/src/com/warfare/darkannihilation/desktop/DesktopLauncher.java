@@ -7,9 +7,8 @@ import com.warfare.darkannihilation.systemd.MainGame;
 public class DesktopLauncher {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-//        config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-//        config.width = 300;
-//        config.height = 900;
+        config.width = 300;
+        config.height = 900;
         config.fullscreen = true;
         config.useGL30 = true;
         config.audioDeviceSimultaneousSources = 32;

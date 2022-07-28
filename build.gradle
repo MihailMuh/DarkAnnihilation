@@ -15,7 +15,7 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
 
-    version = '3.0'
+    version = '4.0'
     ext {
         appName = "dark-annihilation"
         gdxVersion = '1.10.0'

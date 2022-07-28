@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.hub;
 
 import static com.warfare.darkannihilation.constants.Assets.LOCALES;
+import static com.warfare.darkannihilation.systemd.service.Service.print;
 
 import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -17,7 +18,8 @@ public class LocaleHub extends BaseHub {
     public LocaleHub(AssetManagerSuper assetManager) {
         super(assetManager);
 
-        loadNewLocale("ru");
+        print("System language:", Locale.getDefault().getLanguage());
+        loadNewLocale(Locale.getDefault().getLanguage());
     }
 
     @Override
