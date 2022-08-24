@@ -1,7 +1,7 @@
 package com.warfare.darkannihilation.scenes.firstlevel;
 
 import static com.badlogic.gdx.math.MathUtils.randomBoolean;
-import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_PERIOD_IN_SECS;
+import static com.warfare.darkannihilation.Settings.DEATH_STAR_PERIOD_IN_SECS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_EXPLOSION;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM_FALCON_BULLETS;
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;

@@ -9,24 +9,24 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.screens.Screen;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.Font;
 
 public class GameOverScreen extends Screen {
-    private final FontWrap fontFinger;
+    private final Font fontFinger;
     private final float textFingerX, textFingerY;
 
-    private final FontWrap fontDead;
+    private final Font fontDead;
     private final float textDeadX, textDeadY;
 
     public GameOverScreen() {
         super(getImages().gameOverScreen, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        fontDead = FontWrap.scaledFontWrap(getFonts().fiendish, HALF_SCREEN_WIDTH + 150, getLocales().youDead);
+        fontDead = Font.scaledFontWrap(getFonts().fiendish, HALF_SCREEN_WIDTH + 150, getLocales().youDead);
 
         textDeadX = HALF_SCREEN_WIDTH - fontDead.getHalfTextWidth(getLocales().youDead);
         textDeadY = HALF_SCREEN_HEIGHT + fontDead.getTextHeight(getLocales().youDead) / 1.4f;
 
-        fontFinger = FontWrap.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH + 250, getLocales().tapScreenWith2Fingers);
+        fontFinger = Font.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH + 250, getLocales().tapScreenWith2Fingers);
         textFingerX = HALF_SCREEN_WIDTH - fontFinger.getHalfTextWidth(getLocales().tapScreenWith2Fingers);
         textFingerY = HALF_SCREEN_HEIGHT / 4f + fontFinger.getHalfTextHeight(getLocales().tapScreenWith2Fingers);
     }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.systemd.service.Processor;
 
-public class FontWrap {
+public class Font {
     private final BitmapFont bitmapFont;
     private final BitmapFontData bitmapFontData;
     private final GlyphLayout glyph = new GlyphLayout();
@@ -18,7 +18,7 @@ public class FontWrap {
 
     private Color color = Color.WHITE;
 
-    public FontWrap(BitmapFont font, float scale) {
+    public Font(BitmapFont font, float scale) {
         checkUIThread();
 
         this.scale = scale;
@@ -27,8 +27,8 @@ public class FontWrap {
         baseScale = bitmapFontData.scaleX;
     }
 
-    public static FontWrap scaledFontWrap(BitmapFont font, float limit, String... strings) {
-        return new FontWrap(font, FontHub.resizeFont(font, limit, strings));
+    public static Font scaledFontWrap(BitmapFont font, float limit, String... strings) {
+        return new Font(font, FontHub.resizeFont(font, limit, strings));
     }
 
     private void checkUIThread() {
@@ -70,9 +70,6 @@ public class FontWrap {
     }
 
     public void draw(float x, float y, String text) {
-        final BitmapFont bitmapFont = this.bitmapFont;
-        final BitmapFontData bitmapFontData = this.bitmapFontData;
-
         bitmapFontData.setScale(scale);
         bitmapFont.setColor(color);
 

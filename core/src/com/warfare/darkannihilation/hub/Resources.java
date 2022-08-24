@@ -1,5 +1,6 @@
 package com.warfare.darkannihilation.hub;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.warfare.darkannihilation.player.Player;
 
 public class Resources {
@@ -11,6 +12,7 @@ public class Resources {
     private static LocaleHub localeHub;
     private static Player player;
     private static AssetManagerSuper assetManager;
+    private static Batch batch;
 
     public static void setProviders(ImageHub image, SoundHub sound, FontHub font, LocaleHub locales, AssetManagerSuper assetManagerSuper) {
         imageHub = image;
@@ -22,6 +24,10 @@ public class Resources {
 
     public static void setPlayer(Player player) {
         Resources.player = player;
+    }
+
+    public static void setBatch(Batch batch) {
+        Resources.batch = batch;
     }
 
     public static ImageHub getImages() {
@@ -50,5 +56,9 @@ public class Resources {
 
     public static AssetManagerSuper getAssetManager() {
         return assetManager;
+    }
+
+    public static Batch getBatch() {
+        return batch;
     }
 }

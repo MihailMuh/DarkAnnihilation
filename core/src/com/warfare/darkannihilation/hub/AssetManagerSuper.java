@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.hub;
 
 import static com.badlogic.gdx.Application.ApplicationType.Desktop;
+import static com.warfare.darkannihilation.Settings.MUTE_MUSIC;
 import static com.warfare.darkannihilation.Settings.SHOW_ASSET_MANAGER_LOGS;
 
 import com.badlogic.gdx.Gdx;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
-import com.warfare.darkannihilation.Settings;
 import com.warfare.darkannihilation.utils.AnimationSuper;
 import com.warfare.darkannihilation.utils.Image;
 import com.warfare.darkannihilation.utils.ImageAtlas;
@@ -20,8 +20,6 @@ import com.warfare.darkannihilation.utils.audio.MusicWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
 public class AssetManagerSuper extends AssetManager {
-    private final boolean MUTE = Settings.isMuteMusic();
-
     public final FileHandleResolver resolver;
 
     public AssetManagerSuper() {
@@ -44,7 +42,7 @@ public class AssetManagerSuper extends AssetManager {
     }
 
     public SoundWrap getSound(String path, float volume) {
-        if (MUTE) volume = 0;
+        if (MUTE_MUSIC) volume = 0;
         return new SoundWrap(get(path, Sound.class), volume);
     }
 
@@ -53,7 +51,7 @@ public class AssetManagerSuper extends AssetManager {
     }
 
     public MusicWrap getMusic(String path, float volume) {
-        if (MUTE) volume = 0;
+        if (MUTE_MUSIC) volume = 0;
         return new MusicWrap(get(path, Music.class), volume);
     }
 

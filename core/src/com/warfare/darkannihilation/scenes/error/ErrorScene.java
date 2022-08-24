@@ -15,7 +15,7 @@ import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.systemd.MainGame;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ClickListener;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.Font;
 import com.warfare.darkannihilation.utils.ScenesStack;
 
 public class ErrorScene extends Scene {
@@ -25,8 +25,8 @@ public class ErrorScene extends Scene {
 
     private float unexpectedErrorTextY, pleaseExitTextY;
 
-    private FontWrap errorFont;
-    private FontWrap pleaseExitFont;
+    private Font errorFont;
+    private Font pleaseExitFont;
 
     public boolean running = false;
 
@@ -59,10 +59,10 @@ public class ErrorScene extends Scene {
         }
         report.add("------ End Of Stack Trace ------");
 
-        errorFont = FontWrap.scaledFontWrap(getFonts().canisMinor, SCREEN_WIDTH - 200, report.toArray(String.class));
+        errorFont = Font.scaledFontWrap(getFonts().canisMinor, SCREEN_WIDTH - 200, report.toArray(String.class));
         errorFont.setColor(Color.SCARLET);
 
-        pleaseExitFont = FontWrap.scaledFontWrap(getFonts().fiendish, SCREEN_WIDTH - 200, getLocales().unexpectedError);
+        pleaseExitFont = Font.scaledFontWrap(getFonts().fiendish, SCREEN_WIDTH - 200, getLocales().unexpectedError);
         unexpectedErrorTextY = SCREEN_HEIGHT - 150;
         pleaseExitTextY = unexpectedErrorTextY - 30 - pleaseExitFont.getTextHeight(getLocales().unexpectedError);
     }

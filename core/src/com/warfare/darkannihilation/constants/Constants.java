@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation.constants;
 
-import static com.warfare.darkannihilation.Settings.getBossHealth;
+import static com.warfare.darkannihilation.Settings.DEATH_STAR_HEALTH;
 
 import com.warfare.darkannihilation.Settings;
 
@@ -53,12 +53,10 @@ public final class Constants {
     public static final float DEATH_STAR_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS = 0.8f;
     public static final float DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS = 3.5f;
     public static final float DEATH_STAR_SHOOT_TIME_FOR_SECOND_PHASE_IN_SECS = 0.8f;
-    public static final short DEATH_STAR_HEALTH = getBossHealth();
     public static final int DEATH_STAR_THIRD_PHASE_HEALTH = DEATH_STAR_HEALTH / 3;
     public static final int DEATH_STAR_SECOND_PHASE_HEALTH = DEATH_STAR_THIRD_PHASE_HEALTH * 2;
     public static final byte DEATH_STAR_SPEED_FOR_THIRD_PHASE = 4;
     public static final short DEATH_STAR_HEALTH_BAR_LEN = 260;
-    public static final byte DEATH_STAR_PERIOD_IN_SECS = Settings.getBossPeriodInSecs();
     public static final byte DEATH_STAR_VERSUS_SCREEN_IN_SECS = 4;
 
     public static final short STAR_SHIELD_HEALTH = 800;

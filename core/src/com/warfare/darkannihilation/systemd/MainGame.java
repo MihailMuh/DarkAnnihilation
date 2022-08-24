@@ -42,6 +42,11 @@ public class MainGame extends BaseApp {
 
     @Override
     public void create() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            print("Error in thread:", thread);
+            Gdx.app.postRunnable(() -> error(throwable));
+        });
+
         super.create();
         assetManager = new AssetManagerSuper();
         Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager), new LocaleHub(assetManager), assetManager);
@@ -67,10 +72,6 @@ public class MainGame extends BaseApp {
         errorScene = new ErrorScene(this, mainGameManager, scenesStack);
 
         resume();
-        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            print("Error in thread:", thread);
-            Gdx.app.postRunnable(() -> error(throwable));
-        });
     }
 
     @Override

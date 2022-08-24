@@ -10,7 +10,7 @@ import static com.warfare.darkannihilation.systemd.service.Watch.time;
 import com.badlogic.gdx.graphics.Color;
 import com.warfare.darkannihilation.abstraction.BaseButton;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.Font;
 
 public class Button extends BaseButton {
     private Runnable runnable;
@@ -20,7 +20,7 @@ public class Button extends BaseButton {
     private boolean pressed, swept;
     private float shootTime;
 
-    public static FontWrap buttonFont;
+    public static Font buttonFont;
 
     public Button(String name, float X, float Y, Runnable runnable) {
         super(getImages().buttonNotPress);

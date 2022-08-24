@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.hub;
 
 import static com.warfare.darkannihilation.constants.Assets.COMMON_ATLAS;
+import static com.warfare.darkannihilation.constants.Assets.DEATH_STAR_LASER;
 import static com.warfare.darkannihilation.constants.Assets.EXPLOSIONS_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_SCREEN_ATLAS;
@@ -19,6 +20,7 @@ public class ImageHub extends BaseHub {
 
     public AnimationSuper starScreenGIF, menuScreenGIF;
     public AnimationSuper defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
+    public AnimationSuper deathStarLaser;
 
     public Image[] vadersImages, deathStarImages;
     public Image buttonPress, buttonNotPress;
@@ -137,6 +139,15 @@ public class ImageHub extends BaseHub {
         Texture versusTexture = assetManager.get(MILLENNIUM_VS_STAR, Texture.class);
         versusScreen = new Image(new AtlasRegion(versusTexture, 0, 0, versusTexture.getWidth(), versusTexture.getHeight()));
         versusScreenName = MILLENNIUM_VS_STAR;
+    }
+
+    public void loadDeathStarLaserAnimation() {
+        assetManager.load(DEATH_STAR_LASER, Texture.class);
+    }
+
+    public void getDeathStarLaserAnimation() {
+        deathStarLaser = assetManager.getAnimation(assetManager.getAtlas(DEATH_STAR_LASER), "death_star_laser", 0.01f, 1);
+        assetManager.load(DEATH_STAR_LASER, Texture.class);
     }
 
     public void disposeVersusImage() {

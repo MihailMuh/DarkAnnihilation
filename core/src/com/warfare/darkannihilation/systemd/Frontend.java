@@ -16,14 +16,15 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.hub.Resources;
+import com.warfare.darkannihilation.utils.Font;
 import com.warfare.darkannihilation.utils.ScenesStack;
 import com.warfare.darkannihilation.utils.SpriteBatchSuper;
 
 public class Frontend implements Disposable {
     private final ScenesStack scenesStack;
 
-    private static final FontWrap fpsFont = new FontWrap(getFonts().canisMinor, 0.25f);
+    private static final Font fpsFont = new Font(getFonts().canisMinor, 0.25f);
     private static final int fpsX = SCREEN_WIDTH - 200;
     private static final int fpsY = SCREEN_HEIGHT - 100;
 
@@ -33,6 +34,7 @@ public class Frontend implements Disposable {
 
     Frontend(ScenesStack scenesStack) {
         this.scenesStack = scenesStack;
+        Resources.setBatch(spriteBatch);
     }
 
     void resize(int width, int height) {

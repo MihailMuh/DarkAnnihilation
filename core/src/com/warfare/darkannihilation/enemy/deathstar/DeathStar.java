@@ -7,7 +7,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 import static com.badlogic.gdx.math.MathUtils.randomBoolean;
 import static com.badlogic.gdx.math.MathUtils.sin;
 import static com.badlogic.gdx.math.MathUtils.sinDeg;
-import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_HEALTH;
+import static com.warfare.darkannihilation.Settings.DEATH_STAR_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_HEALTH_BAR_LEN;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SECOND_PHASE_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS;

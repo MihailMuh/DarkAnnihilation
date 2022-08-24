@@ -15,7 +15,7 @@ import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
 import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.Font;
 
 public class Menu extends Scene {
     private final Button[] buttons = new Button[4];
@@ -33,7 +33,7 @@ public class Menu extends Scene {
 
         screen = new Screen(getImages().menuScreenGIF, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        Button.buttonFont = FontWrap.scaledFontWrap(getFonts().canisMinor, getImages().buttonPress.width - 140,
+        Button.buttonFont = Font.scaledFontWrap(getFonts().canisMinor, getImages().buttonPress.width - 140,
                 getLocales().quit, getLocales().start, getLocales().topScore, getLocales().settings);
 
         int step = 50;

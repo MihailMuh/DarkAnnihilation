@@ -12,10 +12,10 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.screens.Screen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.Font;
 
 public class Countdown extends Scene {
-    private final FontWrap countdownFont;
+    private final Font countdownFont;
 
     private String text = "3";
     private float textX, textY, lastSwitch;
@@ -25,7 +25,7 @@ public class Countdown extends Scene {
         super(mainGameManager);
         this.screen = screen;
 
-        countdownFont = FontWrap.scaledFontWrap(getFonts().canisMinor, SCREEN_WIDTH - 400, getLocales().shoot);
+        countdownFont = Font.scaledFontWrap(getFonts().canisMinor, SCREEN_WIDTH - 400, getLocales().shoot);
     }
 
     @Override

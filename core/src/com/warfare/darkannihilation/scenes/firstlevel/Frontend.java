@@ -13,13 +13,13 @@ import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;
-import com.warfare.darkannihilation.utils.FontWrap;
+import com.warfare.darkannihilation.utils.Font;
 
 class Frontend {
     private final FirstLevel firstLevel;
     private final StringBuilder stringBuilder = new StringBuilder(30);
 
-    private final FontWrap font;
+    private final Font font;
     private final String currentScoreString = getLocales().currentScore;
     private final float textX, textY;
 
@@ -39,7 +39,7 @@ class Frontend {
         this.empire = empire;
         this.bulletsEnemy = bulletsEnemy;
 
-        font = FontWrap.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH / 1.75f, currentScoreString + "10");
+        font = Font.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH / 1.75f, currentScoreString + "10");
         textX = HALF_SCREEN_WIDTH - font.getHalfTextWidth(currentScoreString + "10");
         textY = SCREEN_HEIGHT - font.getTextHeight(currentScoreString + "10");
     }

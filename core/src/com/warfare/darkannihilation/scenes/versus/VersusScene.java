@@ -35,6 +35,12 @@ public class VersusScene extends Scene {
     }
 
     @Override
+    public void resume() {
+        super.resume();
+
+    }
+
+    @Override
     public void render() {
         screen.render();
     }
