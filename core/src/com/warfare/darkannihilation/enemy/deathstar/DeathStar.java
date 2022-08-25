@@ -59,7 +59,7 @@ public class DeathStar extends Shooter {
 
         yToStopForSecondPhase = SCREEN_HEIGHT - getHeight() - 100;
         yToShootForFirstPhase = SCREEN_HEIGHT - halfHeight - 50;
-        yToStopForThirdPhase = SCREEN_HEIGHT - getHeight() - 40;
+        yToStopForThirdPhase = SCREEN_HEIGHT - getHeight() - 60;
 
         speedX = random(0.002f, 0.005f);
         speedY = random(1, 3);
@@ -103,7 +103,7 @@ public class DeathStar extends Shooter {
 
             enemyController.addEnemy(shield);
             postTask(() -> {
-                Service.sleep(500);
+                Service.sleep(1000);
                 enemyController.newTriple(10);
             });
         }

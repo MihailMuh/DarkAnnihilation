@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation.utils;
 
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
+import static com.warfare.darkannihilation.hub.Resources.getBatch;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,8 +14,9 @@ public class Font {
     private final BitmapFont bitmapFont;
     private final BitmapFontData bitmapFontData;
     private final GlyphLayout glyph = new GlyphLayout();
-    private final float scale, baseScale;
+    private final float scale, oldScale;
 
+    private final Color oldColor;
     private Color color = Color.WHITE;
 
     public Font(BitmapFont font, float scale) {
@@ -24,14 +25,16 @@ public class Font {
         this.scale = scale;
         bitmapFont = font;
         bitmapFontData = bitmapFont.getData();
-        baseScale = bitmapFontData.scaleX;
+
+        oldScale = bitmapFontData.scaleX;
+        oldColor = new Color(font.getColor());
     }
 
     public static Font scaledFontWrap(BitmapFont font, float limit, String... strings) {
         return new Font(font, FontHub.resizeFont(font, limit, strings));
     }
 
-    private void checkUIThread() {
+    private static void checkUIThread() {
         if (!Processor.isUIThread()) throw new GdxRuntimeException("No OpenGL context found!");
     }
 
@@ -40,7 +43,7 @@ public class Font {
 
         bitmapFontData.setScale(scale);
         glyph.setText(bitmapFont, text);
-        bitmapFontData.setScale(baseScale);
+        bitmapFontData.setScale(oldScale);
     }
 
     public float getTextWidth(String text) {
@@ -66,16 +69,16 @@ public class Font {
     }
 
     public void resetColor() {
-        color = Color.WHITE;
+        color = oldColor;
     }
 
     public void draw(float x, float y, String text) {
         bitmapFontData.setScale(scale);
         bitmapFont.setColor(color);
 
-        bitmapFont.draw(spriteBatch, text, x, y);
+        bitmapFont.draw(getBatch(), text, x, y);
 
         bitmapFont.setColor(Color.WHITE);
-        bitmapFontData.setScale(baseScale);
+        bitmapFontData.setScale(oldScale);
     }
 }

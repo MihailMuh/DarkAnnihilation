@@ -242,6 +242,7 @@ public class FirstLevel extends Scene {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
                 explosion.translateX(moveAll);
+                explosion.update();
             } else {
                 iterator.remove();
                 postToLooper(() -> poolHub.explosionPool.free(explosion));
@@ -301,7 +302,6 @@ public class FirstLevel extends Scene {
             lastBoss = time;
 
             DeathStar deathStar = new DeathStar(enemyController);
-            stopBackground();
             mainGameManager.startScene(new VersusScene(mainGameManager, player.name, deathStar.name), false);
 
             enemyController.killEmpire();

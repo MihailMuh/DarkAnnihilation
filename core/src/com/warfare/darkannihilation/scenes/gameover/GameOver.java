@@ -81,6 +81,8 @@ public class GameOver extends Scene {
             if (!explosion.visible) {
                 iterator.remove();
                 explosionPool.free(explosion);
+            } else {
+                explosion.update();
             }
         }
     }

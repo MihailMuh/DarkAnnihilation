@@ -4,9 +4,9 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.warfare.darkannihilation.screens.Screen;
+import com.warfare.darkannihilation.screens.AnimatedScreen;
 
-class VersusScreen extends Screen {
+class VersusScreen extends AnimatedScreen {
     public VersusScreen(AtlasRegion region) {
         super(region, SCREEN_HEIGHT, SCREEN_HEIGHT);
 

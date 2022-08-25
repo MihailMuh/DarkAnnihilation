@@ -56,7 +56,7 @@ public class Player extends MovingSprite {
         reset();
     }
 
-    private void updateHeartsPositions() {
+    private synchronized void updateHeartsPositions() {
         final Array<Heart> hearts = this.hearts;
         final int len = health / 10;
         int bar;

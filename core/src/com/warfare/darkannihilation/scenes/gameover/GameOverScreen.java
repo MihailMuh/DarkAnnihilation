@@ -8,10 +8,10 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.warfare.darkannihilation.screens.Screen;
+import com.warfare.darkannihilation.screens.AnimatedScreen;
 import com.warfare.darkannihilation.utils.Font;
 
-public class GameOverScreen extends Screen {
+public class GameOverScreen extends AnimatedScreen {
     private final Font fontFinger;
     private final float textFingerX, textFingerY;
 

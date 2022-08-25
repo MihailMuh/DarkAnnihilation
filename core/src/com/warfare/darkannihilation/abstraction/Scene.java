@@ -1,7 +1,7 @@
 package com.warfare.darkannihilation.abstraction;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.warfare.darkannihilation.screens.Screen;
+import com.warfare.darkannihilation.screens.AnimatedScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.ClickListener;
@@ -9,7 +9,7 @@ import com.warfare.darkannihilation.utils.ClickListener;
 public abstract class Scene implements ApplicationListener {
     protected final MainGameManager mainGameManager;
     protected ClickListener clickListener;
-    protected Screen screen;
+    protected AnimatedScreen screen;
 
     public boolean updateOnPause = false;
     public boolean update = true;
@@ -22,7 +22,7 @@ public abstract class Scene implements ApplicationListener {
         this(mainGameManager, clickListener, null);
     }
 
-    public Scene(MainGameManager mainGameManager, ClickListener clickListener, Screen screen) {
+    public Scene(MainGameManager mainGameManager, ClickListener clickListener, AnimatedScreen screen) {
         this.mainGameManager = mainGameManager;
 
         this.clickListener = clickListener;
@@ -46,20 +46,11 @@ public abstract class Scene implements ApplicationListener {
 
     @Override
     public void resume() {
-        resumeBackground();
         update = true;
     }
 
     public void update() {
 
-    }
-
-    public void stopBackground() {
-        if (screen != null) screen.stopAnimation = true;
-    }
-
-    public void resumeBackground() {
-        if (screen != null) screen.stopAnimation = false;
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.Button;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
-import com.warfare.darkannihilation.screens.Screen;
+import com.warfare.darkannihilation.screens.AnimatedScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.Font;
@@ -32,7 +32,7 @@ public class Menu extends Scene {
         getImages().getMenuImages();
         getSounds().getMenuSounds();
 
-        screen = new Screen(getImages().menuScreenGIF, SCREEN_WIDTH, SCREEN_HEIGHT);
+        screen = new AnimatedScreen(getImages().menuScreenGIF, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         Button.buttonFont = Font.scaledFontWrap(getFonts().canisMinor, getImages().buttonPress.originalWidth - 140,
                 getLocales().quit, getLocales().start, getLocales().topScore, getLocales().settings);

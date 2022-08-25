@@ -59,17 +59,12 @@ public class Explosion extends BaseSprite {
     }
 
     @Override
-    public void render() {
+    public void update() {
         setRegion(animation.getKeyFrame(timer));
-        super.render();
 
         timer += delta;
         if (animation.isAnimationFinished(timer)) {
             visible = false;
         }
-    }
-
-    @Override
-    public void update() {
     }
 }

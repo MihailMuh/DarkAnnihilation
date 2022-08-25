@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.hub;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.warfare.darkannihilation.player.Player;
 
 public class Resources {
@@ -12,7 +13,8 @@ public class Resources {
     private static LocaleHub localeHub;
     private static Player player;
     private static AssetManagerSuper assetManager;
-    private static Batch batch;
+    private static SpriteBatch batch;
+    private static Viewport viewport;
 
     public static void setProviders(ImageHub image, SoundHub sound, FontHub font, LocaleHub locales, AssetManagerSuper assetManagerSuper) {
         imageHub = image;
@@ -26,7 +28,7 @@ public class Resources {
         Resources.player = player;
     }
 
-    public static void setBatch(Batch batch) {
+    public static void setBatch(SpriteBatch batch) {
         Resources.batch = batch;
     }
 
@@ -58,7 +60,15 @@ public class Resources {
         return assetManager;
     }
 
-    public static Batch getBatch() {
+    public static SpriteBatch getBatch() {
         return batch;
+    }
+
+    public static void setViewport(Viewport viewport) {
+        Resources.viewport = viewport;
+    }
+
+    public static Viewport getViewport() {
+        return viewport;
     }
 }

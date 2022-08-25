@@ -1,11 +1,11 @@
 package com.warfare.darkannihilation.systemd;
 
 import static com.warfare.darkannihilation.Settings.APPLY_ACCUMULATOR;
+import static com.warfare.darkannihilation.hub.Resources.getBatch;
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getLocales;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
@@ -91,7 +91,7 @@ public class MainGame extends BaseApp {
             frontend.render();
         } catch (IllegalStateException exception) {
             try {
-                spriteBatch.end();
+                getBatch().end();
             } catch (Exception e) {
                 exception.printStackTrace();
                 error(exception);

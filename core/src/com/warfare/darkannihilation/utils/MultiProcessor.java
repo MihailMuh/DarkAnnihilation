@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.warfare.darkannihilation.systemd.Frontend;
+import com.warfare.darkannihilation.hub.Resources;
 
 public class MultiProcessor extends InputAdapter {
     private final Vector3 touchPos = new Vector3();
@@ -17,7 +17,7 @@ public class MultiProcessor extends InputAdapter {
     private void onTouch() {
         touchPos.x = Gdx.input.getX(0);
         touchPos.y = Gdx.input.getY(0);
-        Frontend.unproject(touchPos);
+        Resources.getViewport().getCamera().unproject(touchPos);
     }
 
     @Override
