@@ -34,15 +34,20 @@ public class SunriseBomb extends BaseBullet {
         lastRedColorTimer = 0.7f;
         red = false;
 
+        setRegion(getImages().sunriseBomb);
+
         start(X, Y);
     }
 
     @Override
     public void update() {
         translate(speedX, speedY);
+    }
 
-        speedX /= 1.055;
-        speedY /= 1.055;
+    @Override
+    public void updateInThread() {
+        speedX /= 1.055f;
+        speedY /= 1.055f;
 
         if (time - lastBoom >= SUNRISE_BOMB_BOOM_TIME_IN_SECS) {
             lastBoom = Integer.MAX_VALUE;
@@ -56,11 +61,13 @@ public class SunriseBomb extends BaseBullet {
 
             red = true;
             lastRedColor = time;
+            setRegion(getImages().sunriseBombRed);
         }
 
         if (red) {
             if (time - lastRedColor >= SUNRISE_BOMB_RED_TIME_IN_SECS) {
                 red = false;
+                setRegion(getImages().sunriseBomb);
             }
         }
     }
@@ -77,15 +84,5 @@ public class SunriseBomb extends BaseBullet {
     @Override
     public void kill() {
         explodeHuge();
-    }
-
-    @Override
-    public void render() {
-        if (red) {
-            setRegion(getImages().sunriseBombRed);
-        } else {
-            setRegion(getImages().sunriseBomb);
-        }
-        super.render();
     }
 }

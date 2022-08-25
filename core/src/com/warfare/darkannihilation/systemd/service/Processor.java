@@ -1,8 +1,5 @@
 package com.warfare.darkannihilation.systemd.service;
 
-import static com.badlogic.gdx.Application.ApplicationType.Desktop;
-
-import com.badlogic.gdx.Gdx;
 import com.warfare.darkannihilation.utils.MultiProcessor;
 
 import java.util.concurrent.ExecutorService;
@@ -10,9 +7,7 @@ import java.util.concurrent.Executors;
 
 public final class Processor {
     private static final ExecutorService pool = Executors.newWorkStealingPool();
-
     private static final ExecutorService looper = Executors.newSingleThreadExecutor();
-    private static final ExecutorService looperTouches = Executors.newSingleThreadExecutor();
 
     public static final MultiProcessor multiProcessor = new MultiProcessor();
     public static Thread UIThread;
@@ -25,18 +20,6 @@ public final class Processor {
         looper.execute(runnable);
     }
 
-    public static void postToLooperTouches(Runnable runnable) {
-        looperTouches.execute(runnable);
-    }
-
-    public static void runForDifferentOS(Runnable function) {
-        if (Gdx.app.getType() == Desktop) {
-            Gdx.app.postRunnable(function);
-        } else {
-            function.run();
-        }
-    }
-
     public static boolean isUIThread() {
         return Thread.currentThread() == UIThread;
     }
@@ -44,6 +27,5 @@ public final class Processor {
     public static void dispose() {
         pool.shutdown();
         looper.shutdown();
-        looperTouches.shutdown();
     }
 }

@@ -9,7 +9,6 @@ import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public abstract class MovingSprite extends BaseSprite {
     protected final int maxHealth;
@@ -66,10 +65,7 @@ public abstract class MovingSprite extends BaseSprite {
     }
 
     protected void explosion(byte type) {
-        float X = centerX();
-        float Y = centerY();
-
-        Processor.postToLooper(() -> getPools().explosionPool.obtain(X, Y, type));
+        getPools().explosionPool.obtain(centerX(), centerY(), type);
     }
 
     protected void explodeSmall() {

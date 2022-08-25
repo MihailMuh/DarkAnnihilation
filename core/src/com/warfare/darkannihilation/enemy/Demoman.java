@@ -58,6 +58,10 @@ public class Demoman extends Shooter {
     @Override
     public void update() {
         translateX(speedX);
+    }
+
+    @Override
+    public void updateInThread() {
         shooting();
 
         if (goLeft) {

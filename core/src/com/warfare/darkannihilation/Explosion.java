@@ -60,6 +60,11 @@ public class Explosion extends BaseSprite {
 
     @Override
     public void update() {
+
+    }
+
+    @Override
+    public void updateInThread() {
         setRegion(animation.getKeyFrame(timer));
 
         timer += delta;

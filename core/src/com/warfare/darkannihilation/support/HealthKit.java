@@ -20,13 +20,11 @@ public class HealthKit extends Opponent {
     @Override
     public void update() {
         translateY(speedY);
-
-        if (getY() < -getHeight()) kill();
     }
 
     @Override
-    public void render() {
-        if (visible) super.render();
+    public void updateInThread() {
+        if (getY() < -getHeight()) kill();
     }
 
     @Override

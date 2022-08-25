@@ -82,7 +82,7 @@ public class GameOver extends Scene {
                 iterator.remove();
                 explosionPool.free(explosion);
             } else {
-                explosion.update();
+                explosion.updateInThread();
             }
         }
     }

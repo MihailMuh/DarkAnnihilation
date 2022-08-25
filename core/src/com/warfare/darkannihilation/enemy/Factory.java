@@ -14,7 +14,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
-import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.HealthBar;
 
 public class Factory extends Shooter {
@@ -46,18 +45,8 @@ public class Factory extends Shooter {
     public void update() {
         if (getY() >= yToStop) {
             translateY(FACTORY_SPEED);
-        } else {
-            shooting();
         }
-
         healthBar.setOutlineBarCoords(centerX(), top() - 90);
-    }
-
-    @Override
-    public void damage(int damage) {
-        super.damage(damage);
-
-        Processor.postToLooper(() -> healthBar.updateHealthBar(health));
     }
 
     @Override
@@ -82,5 +71,12 @@ public class Factory extends Shooter {
     public void render() {
         super.render();
         if (visible) healthBar.render();
+    }
+
+    @Override
+    public void updateInThread() {
+        if (getY() < yToStop) shooting();
+
+        healthBar.updateHealthBar(health);
     }
 }

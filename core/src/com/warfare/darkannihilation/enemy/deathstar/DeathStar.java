@@ -30,7 +30,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.EnemyController;
-import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.utils.HealthBar;
 
@@ -73,12 +72,6 @@ public class DeathStar extends Shooter {
     public void damage(int damage) {
         if (phase == 2) damage *= 2;
         super.damage(damage);
-
-        Processor.postToLooper(() -> {
-            healthBar.updateHealthBar(health);
-
-            checkHealthForPhases();
-        });
     }
 
     private void checkHealthForPhases() {
@@ -133,13 +126,6 @@ public class DeathStar extends Shooter {
             translateY(-speedY);
         } else {
             translateX(speedX);
-
-            if (getX() < -getWidth()) {
-                newDirection(SCREEN_WIDTH);
-            } else if (getX() > SCREEN_WIDTH) {
-                newDirection(-getWidth());
-            }
-            shooting();
         }
     }
 
@@ -153,15 +139,6 @@ public class DeathStar extends Shooter {
     }
 
     private void updateFirstPhase() {
-        if (getY() <= yToShootForFirstPhase) {
-            shooting();
-            if (time - lastSecondShot >= DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS) {
-                lastSecondShot = time;
-
-                Processor.postToLooper(this::secondShootOfFirstPhase);
-            }
-        }
-
         if (getY() >= yToStopForSecondPhase) {
             translateY(-speedY);
         }
@@ -179,27 +156,28 @@ public class DeathStar extends Shooter {
     }
 
     private void secondShootOfFirstPhase() {
-        float X = right() - 75;
-        float Y = top() - 135;
-        float deltaY = player.centerY() - Y;
-        float deltaX = player.centerX() - X;
+        float x = right() - 75;
+        float y = top() - 135;
+        float deltaX = player.centerX() - x;
+        float deltaY = player.centerY() - y;
         float rads = atan2(deltaY, deltaX);
         float cos = cos(rads);
         float sin = sin(rads);
         double distance = Math.sqrt(deltaY * deltaY + deltaX * deltaX);
 
         // если игрок далеко - скорость бомбы выше
-        if (distance > HALF_SCREEN_WIDTH) {
+        if (distance > HALF_SCREEN_WIDTH - 200) {
             cos *= 1.5;
             sin *= 1.5;
         }
 
-        getPools().sunriseBulletPool.obtain(X, Y, cos, sin);
+        getPools().sunriseBulletPool.obtain(x, y, cos, sin);
     }
 
     @Override
     public void update() {
         centerX = centerX();
+        scale(0);
 
         switch (phase) {
             case 0:
@@ -212,6 +190,34 @@ public class DeathStar extends Shooter {
                 updateThirdPhase();
         }
         healthBar.setOutlineBarCoords(centerX, top() + 30);
+    }
+
+    @Override
+    public void updateInThread() {
+        switch (phase) {
+            case 0:
+                if (getY() <= yToShootForFirstPhase) {
+                    shooting();
+                    if (time - lastSecondShot >= DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS) {
+                        lastSecondShot = time;
+
+                        secondShootOfFirstPhase();
+                    }
+                }
+                break;
+            case 1:
+                if (getY() < yToStopForSecondPhase) {
+                    if (getX() < -getWidth()) {
+                        newDirection(SCREEN_WIDTH);
+                    } else if (getX() > SCREEN_WIDTH) {
+                        newDirection(-getWidth());
+                    }
+                    shooting();
+                }
+        }
+
+        healthBar.updateHealthBar(health);
+        checkHealthForPhases();
     }
 
     @Override

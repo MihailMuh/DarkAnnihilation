@@ -7,7 +7,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
@@ -17,10 +16,8 @@ import com.warfare.darkannihilation.utils.Font;
 
 class Frontend {
     private final FirstLevel firstLevel;
-    private final StringBuilder stringBuilder = new StringBuilder(30);
 
     private final Font font;
-    private final String currentScoreString = getLocales().currentScore;
     private final float textX, textY;
 
     private BaseSprite screen;
@@ -39,9 +36,9 @@ class Frontend {
         this.empire = empire;
         this.bulletsEnemy = bulletsEnemy;
 
-        font = Font.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH / 1.75f, currentScoreString + "10");
-        textX = HALF_SCREEN_WIDTH - font.getHalfTextWidth(currentScoreString + "10");
-        textY = SCREEN_HEIGHT - font.getTextHeight(currentScoreString + "10");
+        font = Font.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH / 1.75f, getLocales().currentScore + "10");
+        textX = HALF_SCREEN_WIDTH - font.getHalfTextWidth(getLocales().currentScore + "10");
+        textY = SCREEN_HEIGHT - font.getTextHeight(getLocales().currentScore + "10");
     }
 
     void setScreen(BaseSprite screen) {
@@ -67,7 +64,6 @@ class Frontend {
             explosion.render();
         }
 
-        font.draw(textX, textY, stringBuilder.append(currentScoreString).append(firstLevel.score).toString());
-        stringBuilder.length = 0;
+        font.draw(textX, textY, firstLevel.scoreForFrontend);
     }
 }

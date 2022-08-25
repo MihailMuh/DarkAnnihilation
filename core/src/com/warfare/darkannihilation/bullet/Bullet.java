@@ -13,7 +13,10 @@ public class Bullet extends BaseBullet {
     @Override
     public void update() {
         translateY(speedY);
+    }
 
+    @Override
+    public void updateInThread() {
         if (getY() > SCREEN_HEIGHT) {
             visible = false;
         }

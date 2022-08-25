@@ -62,6 +62,11 @@ public class Menu extends Scene {
     }
 
     @Override
+    public void updateInThread() {
+        screen.update();
+    }
+
+    @Override
     public void dispose() {
         super.dispose();
         getImages().disposeMenuImages();

@@ -9,7 +9,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class Vader extends Opponent {
     public Vader() {
@@ -22,16 +21,13 @@ public class Vader extends Opponent {
     @Override
     public void reset() {
         visible = !shouldKill;
+        health = maxHealth;
 
-        Processor.postToLooper(() -> {
-            health = maxHealth;
+        setRegion(getImages().vadersImages[random(0, 2)]);
+        setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
 
-            setRegion(getImages().vadersImages[random(0, 2)]);
-            setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
-
-            speedX = random(-6.5f, 6.5f);
-            speedY = -random(4f, 13f);
-        });
+        speedX = random(-6.5f, 6.5f);
+        speedY = -random(4f, 13f);
     }
 
     @Override
@@ -49,7 +45,10 @@ public class Vader extends Opponent {
     @Override
     public void update() {
         translate(speedX, speedY);
+    }
 
+    @Override
+    public void updateInThread() {
         if (getX() < -getWidth() || getX() > SCREEN_WIDTH || getY() < -getHeight()) reset();
     }
 }

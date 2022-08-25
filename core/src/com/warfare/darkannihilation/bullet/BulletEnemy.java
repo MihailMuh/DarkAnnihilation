@@ -29,7 +29,10 @@ public class BulletEnemy extends BaseBullet {
     @Override
     public void update() {
         translate(speedX, speedY);
+    }
 
+    @Override
+    public void updateInThread() {
         if (getX() < -getWidth() || getX() > SCREEN_WIDTH || getY() < -getHeight() || getY() > SCREEN_HEIGHT) {
             visible = false;
         }

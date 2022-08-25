@@ -1,16 +1,17 @@
 package com.warfare.darkannihilation.systemd;
 
+import static com.badlogic.gdx.graphics.Texture.setAssetManager;
 import static com.warfare.darkannihilation.Settings.APPLY_ACCUMULATOR;
 import static com.warfare.darkannihilation.hub.Resources.getBatch;
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getLocales;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
+import static com.warfare.darkannihilation.systemd.service.Processor.postTask;
 import static com.warfare.darkannihilation.systemd.service.Service.print;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.warfare.darkannihilation.abstraction.BaseApp;
 import com.warfare.darkannihilation.hub.AssetManagerSuper;
 import com.warfare.darkannihilation.hub.FontHub;
@@ -21,6 +22,7 @@ import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.scenes.error.ErrorScene;
 import com.warfare.darkannihilation.scenes.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
+import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
 import com.warfare.darkannihilation.utils.ScenesArray;
@@ -35,6 +37,8 @@ public class MainGame extends BaseApp {
     private static final double FPS_60 = 1 / 60f;
     private static final double FPS_59 = 1 / 59f;
     private double accumulator;
+
+    private boolean onPause = false;
 
     AssetManagerSuper assetManager;
 
@@ -102,6 +106,19 @@ public class MainGame extends BaseApp {
         }
     }
 
+    private void backgroundUpdate() {
+        while (!onPause) {
+            Service.sleep(16);
+
+            try {
+                scenesArray.backgroundUpdate();
+            } catch (Exception exception) {
+                print("Exception in ScenesArray.backgroundUpdate()!");
+                exception.printStackTrace();
+            }
+        }
+    }
+
     private void error(Throwable throwable) {
         if (errorScene.running) return;
 
@@ -115,12 +132,18 @@ public class MainGame extends BaseApp {
 
     @Override
     public void resume() {
-        Texture.setAssetManager(assetManager);
+        onPause = false;
+
+        postTask(this::backgroundUpdate);
+        setAssetManager(assetManager);
+
         scenesArray.resumeLastScene();
     }
 
     @Override
     public void pause() {
+        onPause = true;
+
         scenesArray.pauseLastScene();
     }
 

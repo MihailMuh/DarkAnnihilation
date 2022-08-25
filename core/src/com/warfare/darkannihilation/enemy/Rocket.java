@@ -21,7 +21,10 @@ public class Rocket extends BaseBullet {
     @Override
     public void update() {
         translateY(speedY);
+    }
 
+    @Override
+    public void updateInThread() {
         if (getY() <= -getHeight()) {
             visible = false;
         }

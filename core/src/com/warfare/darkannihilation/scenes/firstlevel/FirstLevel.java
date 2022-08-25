@@ -17,14 +17,15 @@ import static com.warfare.darkannihilation.constants.Names.SUNRISE_BOMB;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+import static com.warfare.darkannihilation.hub.Resources.getLocales;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Processor.postToLooper;
-import static com.warfare.darkannihilation.systemd.service.Watch.frameCount;
 import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
@@ -74,10 +75,13 @@ public class FirstLevel extends Scene {
     private Rocket rocket;
     private Factory factory;
 
-    private boolean startAnalytics = false;
+    private boolean startAnalytics = false, countdownTime = true;
     private float lastBoss;
     private int numBosses;
-    int score;
+    private int score;
+
+    private final StringBuilder stringBuilder = new StringBuilder(30);
+    String scoreForFrontend = "";
 
     public FirstLevel(MainGameManager mainGameManager) {
         super(mainGameManager);
@@ -100,7 +104,10 @@ public class FirstLevel extends Scene {
         Resources.setPlayer(player);
         Processor.postTask(this::initEnemies);
 
-        mainGameManager.startSceneOver(this, new Countdown(mainGameManager, () -> updateOnPause = false));
+        mainGameManager.startSceneOver(this, new Countdown(mainGameManager, () -> {
+            countdownTime = false;
+            updateOnPause = false;
+        }));
         getSounds().firstLevelMusic.play();
     }
 
@@ -141,31 +148,66 @@ public class FirstLevel extends Scene {
     }
 
     @Override
+    public void updateInThread() {
+        for (int i = 0; i < empire.size; i++) {
+            Opponent opponent = empire.get(i);
+
+            if (opponent != null && opponent.visible) {
+                opponent.updateInThread();
+                checkIntersectionsWithAnybody(opponent);
+            }
+        }
+        for (int i = 0; i < bulletsEnemy.size; i++) {
+            BaseBullet bullet = bulletsEnemy.get(i);
+
+            if (bullet != null && bullet.visible) {
+                bullet.updateInThread();
+                bullet.killedByPlayer(player);
+            }
+        }
+        for (int i = 0; i < bullets.size; i++) {
+            Bullet bullet = bullets.get(i);
+
+            if (bullet != null && bullet.visible) {
+                bullet.updateInThread();
+            }
+        }
+        for (int i = 0; i < explosions.size; i++) {
+            Explosion explosion = explosions.get(i);
+
+            if (explosion != null && explosion.visible) {
+                explosion.updateInThread();
+            }
+        }
+
+        screen.update();
+        if (!countdownTime) player.shoot();
+
+        scoreForFrontend = stringBuilder.append(getLocales().currentScore).append(score).toString();
+        stringBuilder.setLength(0);
+    }
+
+    @Override
     public void update() {
         float moveAll = player.speedX / -2.8f;
-        boolean needFindIntersections = frameCount % 2 == 0;
 
         screen.translateX(moveAll);
-
         player.update();
 
-        if (!updateOnPause) {
-            player.shoot();
-
-            updateEmpire(moveAll, needFindIntersections);
-            updateBulletsEnemy(moveAll, needFindIntersections);
+        if (!countdownTime) {
+            updateEmpire(moveAll);
+            updateBulletsEnemy(moveAll);
             updateBullets(moveAll);
             updateExplosions(moveAll);
         }
     }
 
-    private void updateEmpire(float moveAll, boolean needFindIntersections) {
+    private void updateEmpire(float moveAll) {
         for (Iterator<Opponent> iterator = empire.iterator(); iterator.hasNext(); ) {
             Opponent opponent = iterator.next();
             if (opponent.visible) {
                 opponent.translateX(moveAll);
                 opponent.update();
-                if (needFindIntersections) checkIntersectionsWithAnybody(opponent);
             } else {
                 switch (opponent.name) {
                     case VADER:
@@ -195,17 +237,12 @@ public class FirstLevel extends Scene {
         }
     }
 
-    private void updateBulletsEnemy(float moveAll, boolean needFindIntersections) {
-        Player player = this.player;
-
+    private void updateBulletsEnemy(float moveAll) {
         for (Iterator<BaseBullet> iterator = bulletsEnemy.iterator(); iterator.hasNext(); ) {
             BaseBullet bullet = iterator.next();
             if (bullet.visible) {
                 bullet.translateX(moveAll);
                 bullet.update();
-                if (needFindIntersections) {
-                    bullet.killedByPlayer(player);
-                }
             } else {
                 iterator.remove();
                 postToLooper(() -> {
@@ -242,7 +279,6 @@ public class FirstLevel extends Scene {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
                 explosion.translateX(moveAll);
-                explosion.update();
             } else {
                 iterator.remove();
                 postToLooper(() -> poolHub.explosionPool.free(explosion));
@@ -264,15 +300,18 @@ public class FirstLevel extends Scene {
             return;
         }
 
-        for (Bullet bullet : bullets) {
-            if (bullet.visible && opponent.killedBy(bullet)) {
+        for (int i = 0; i < bullets.size; i++) {
+            Bullet bullet = bullets.get(i);
+            if (bullet != null && bullet.visible && opponent.killedBy(bullet)) {
                 score += opponent.killScore;
                 return;
             }
         }
+
         if (opponent.name != DEMOMAN && opponent.name != FACTORY) {
-            for (BaseBullet bullet : bulletsEnemy) {
-                if (bullet.visible && bullet.name == BOMB && opponent.killedBy(bullet)) {
+            for (int i = 0; i < bulletsEnemy.size; i++) {
+                BaseBullet bullet = bulletsEnemy.get(i);
+                if (bullet != null && bullet.visible && bullet.name == BOMB && opponent.killedBy(bullet)) {
                     return;
                 }
             }

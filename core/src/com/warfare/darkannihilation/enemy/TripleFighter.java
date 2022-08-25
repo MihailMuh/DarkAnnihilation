@@ -14,7 +14,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class TripleFighter extends Shooter {
     private final float right, top;
@@ -47,24 +46,17 @@ public class TripleFighter extends Shooter {
     @Override
     public void reset() {
         visible = !shouldKill;
+        health = maxHealth;
 
-        Processor.postToLooper(() -> {
-            health = maxHealth;
+        setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
 
-            setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
-
-            speedX = random(-4f, 4f);
-            speedY = -random(1.3f, 13f);
-        });
+        speedX = random(-4f, 4f);
+        speedY = -random(1.3f, 13f);
     }
 
     @Override
     public void update() {
         translate(speedX, speedY);
-
-        shooting();
-
-        if (getX() < -getWidth() || getX() > SCREEN_WIDTH || getY() < -getHeight()) reset();
     }
 
     @Override
@@ -88,5 +80,12 @@ public class TripleFighter extends Shooter {
         shootTime = random(1f, 2f);
         getSounds().bigLaserSound.play();
         getPools().bulletEnemyPool.obtain(X, Y, cos, sin, rads * MathUtils.radiansToDegrees);
+    }
+
+    @Override
+    public void updateInThread() {
+        shooting();
+
+        if (getX() < -getWidth() || getX() > SCREEN_WIDTH || getY() < -getHeight()) reset();
     }
 }

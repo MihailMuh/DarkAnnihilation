@@ -128,16 +128,14 @@ public class Player extends MovingSprite {
         if (time - lastShot >= MILLENNIUM_FALCON_SHOOT_TIME) {
             lastShot = time;
 
-            Processor.postToLooper(() -> {
-                final float X = centerX();
-                final float Y = top();
+            final float X = centerX();
+            final float Y = top();
 
-                getPools().bulletPool.obtain(X - 7, Y);
-                getPools().bulletPool.obtain(X, Y);
-                getPools().bulletPool.obtain(X + 7, Y);
+            getPools().bulletPool.obtain(X - 7, Y);
+            getPools().bulletPool.obtain(X, Y);
+            getPools().bulletPool.obtain(X + 7, Y);
 
-                getSounds().laserSound.play();
-            });
+            getSounds().laserSound.play();
         }
     }
 

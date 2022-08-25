@@ -22,6 +22,13 @@ public class ScenesArray extends Array<Scene> {
         }
     }
 
+    public void backgroundUpdate() {
+        for (int i = 0; i < size; i++) {
+            Scene scene = get(i);
+            if (scene != null && scene.update) scene.updateInThread();
+        }
+    }
+
     public void removeExceptLastScene() {
         for (int i = 0; i < size - 1; i++) {
             Scene scene = get(i);

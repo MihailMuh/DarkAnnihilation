@@ -53,6 +53,10 @@ public abstract class Scene implements ApplicationListener {
 
     }
 
+    public void updateInThread() {
+
+    }
+
     @Override
     public void dispose() {
         Processor.multiProcessor.removeProcessor(clickListener);

@@ -47,6 +47,10 @@ public abstract class BaseSprite extends Sprite implements Pool.Poolable {
 
     public abstract void update();
 
+    public void updateInThread() {
+
+    }
+
     public void render() {
         draw(getBatch());
     }
