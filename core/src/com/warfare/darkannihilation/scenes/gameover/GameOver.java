@@ -54,6 +54,7 @@ public class GameOver extends Scene {
 
     @Override
     public void pause() {
+        super.pause();
         gameTask1.stop();
         gameTask2.stop();
         gameTask3.stop();

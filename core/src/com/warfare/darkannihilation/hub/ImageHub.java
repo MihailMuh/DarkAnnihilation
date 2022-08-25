@@ -9,17 +9,17 @@ import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.MILLENNIUM_VS_STAR;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class ImageHub extends BaseHub {
     private String versusScreenName;
     private TextureAtlas commonAtlas;
 
-    public AnimationSuper starScreenGIF, menuScreenGIF;
-    public AnimationSuper defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
-    public AnimationSuper deathStarLaser;
+    public Animation<AtlasRegion> starScreenGIF, menuScreenGIF;
+    public Animation<AtlasRegion> defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
+    public Animation<AtlasRegion> deathStarLaser;
 
     public AtlasRegion[] vadersImages, deathStarImages;
     public AtlasRegion buttonPress, buttonNotPress;
@@ -64,6 +64,10 @@ public class ImageHub extends BaseHub {
         defaultExplosionAnim = assetManager.getAnimation(explosionsAtlas, "default_explosion", 0.02f, 1.2f);
         hugeExplosionAnim = assetManager.getAnimation(explosionsAtlas, "skull_explosion", 0.05f, 1.2f);
         tripleExplosionAnim = assetManager.getAnimation(explosionsAtlas, "triple_explosion", 0.03f, 1.2f);
+        defaultExplosionAnim.setPlayMode(Animation.PlayMode.NORMAL);
+        hugeExplosionAnim.setPlayMode(Animation.PlayMode.NORMAL);
+        tripleExplosionAnim.setPlayMode(Animation.PlayMode.NORMAL);
+
         gameOverScreen = commonAtlas.findRegion("gameover");
     }
 

@@ -9,26 +9,19 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.systemd.MainGameManager;
-import com.warfare.darkannihilation.utils.ScenesStack;
+import com.warfare.darkannihilation.utils.ScenesArray;
 
 public class Loading extends Scene {
-    private final ScenesStack scenesStack;
-    private Scene sceneToRun, sceneToUpdate;
+    private final ScenesArray scenesArray;
+    private final Scene sceneToStart;
 
-    private float alpha;
-    private byte status;
+    private float alpha = 0;
+    private byte status = -2;
 
-    public Loading(MainGameManager mainGameManager, ScenesStack scenesStack) {
+    public Loading(MainGameManager mainGameManager, ScenesArray scenesArray, Scene sceneToStart) {
         super(mainGameManager, new LoadingClickListener());
-        this.scenesStack = scenesStack;
-    }
-
-    public void setSceneToRun(Scene sceneToRun, Scene sceneToUpdate) {
-        this.sceneToRun = sceneToRun;
-        this.sceneToUpdate = sceneToUpdate;
-
-        alpha = 0;
-        status = -2;
+        this.scenesArray = scenesArray;
+        this.sceneToStart = sceneToStart;
     }
 
     @Override
@@ -43,23 +36,20 @@ public class Loading extends Scene {
         switch (status) {
             case -2: // потускнение
                 alpha += 0.011;
-                sceneToUpdate.update();
                 getAssetManager().update();
                 getSounds().setVolume(1 - alpha); // в status = -1 не делаем эту строчку, т.к. вылетает ошибка в Native, в soundWrap
 
                 if (alpha > 1) {
-                    mainGameManager.finishAllScenes();
-                    scenesStack.push(this);
+                    scenesArray.removeExceptLastScene();
                     status = -1;
                     alpha = 1;
                 }
                 break;
-            case -1: // загрузка новой сцены
+            case -1: // загрузка ресурсов для новой сцены
                 getAssetManager().finishLoading();
-                mainGameManager.finishScene();
-                mainGameManager.startScene(sceneToRun, false);
-                sceneToUpdate = scenesStack.lastScene;
-                mainGameManager.startScene(this, false);
+
+                scenesArray.insert(scenesArray.indexOf(this, true), sceneToStart); // вставляем сцену под текущую
+                sceneToStart.create();
 
                 status = 0;
                 break;
@@ -69,9 +59,8 @@ public class Loading extends Scene {
 
                 if (alpha < 0) {
                     alpha = 0;
-                    mainGameManager.finishScene();
+                    mainGameManager.finishScene(this);
                 }
-                sceneToUpdate.update();
         }
     }
 }

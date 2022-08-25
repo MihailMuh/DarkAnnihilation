@@ -19,16 +19,15 @@ import com.warfare.darkannihilation.hub.LocaleHub;
 import com.warfare.darkannihilation.hub.Resources;
 import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.scenes.error.ErrorScene;
-import com.warfare.darkannihilation.scenes.loading.Loading;
 import com.warfare.darkannihilation.scenes.menu.Menu;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
-import com.warfare.darkannihilation.utils.ScenesStack;
+import com.warfare.darkannihilation.utils.ScenesArray;
 
 public class MainGame extends BaseApp {
-    private final ScenesStack scenesStack = new ScenesStack();
-    private final MainGameManager mainGameManager = new MainGameManager(this, scenesStack);
+    private final ScenesArray scenesArray = new ScenesArray();
+    private final MainGameManager mainGameManager = new MainGameManager(scenesArray);
     private Frontend frontend;
     private ErrorScene errorScene;
 
@@ -38,7 +37,6 @@ public class MainGame extends BaseApp {
     private double accumulator;
 
     AssetManagerSuper assetManager;
-    Loading loading;
 
     @Override
     public void create() {
@@ -60,16 +58,15 @@ public class MainGame extends BaseApp {
         getLocales().boot();
 
         menu.create();
-        scenesStack.push(menu);
+        scenesArray.add(menu);
 
         getImages().lazyLoading();
         getSounds().lazyLoading();
         getFonts().lazyLoading();
         getLocales().lazyLoading();
 
-        frontend = new Frontend(scenesStack);
-        loading = new Loading(mainGameManager, scenesStack);
-        errorScene = new ErrorScene(this, mainGameManager, scenesStack);
+        frontend = new Frontend(scenesArray);
+        errorScene = new ErrorScene(this, mainGameManager, scenesArray);
 
         resume();
     }
@@ -82,13 +79,13 @@ public class MainGame extends BaseApp {
             if (APPLY_ACCUMULATOR) {
                 accumulator += delta;
                 while (accumulator >= FPS_61) {
-                    scenesStack.lastScene.update();
+                    scenesArray.updateScenes();
 
                     accumulator -= FPS_60;
                     if (accumulator < FPS_59 - FPS_60) accumulator = 0;
                 }
             } else {
-                scenesStack.lastScene.update();
+                scenesArray.updateScenes();
             }
 
             frontend.render();
@@ -119,12 +116,12 @@ public class MainGame extends BaseApp {
     @Override
     public void resume() {
         Texture.setAssetManager(assetManager);
-        scenesStack.resumeScene();
+        scenesArray.resumeLastScene();
     }
 
     @Override
     public void pause() {
-        scenesStack.pauseScene();
+        scenesArray.pauseLastScene();
     }
 
     @Override

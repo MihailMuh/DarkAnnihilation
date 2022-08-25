@@ -8,11 +8,12 @@ import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPL
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class Explosion extends BaseSprite {
-    private AnimationSuper animation;
+    private Animation<AtlasRegion> animation;
 
     private float timer;
 
@@ -42,8 +43,8 @@ public class Explosion extends BaseSprite {
                 animation = getImages().hugeExplosionAnim;
         }
 
-        float width = animation.get(0).originalWidth;
-        float height = animation.get(0).originalHeight;
+        float width = animation.getKeyFrame(0).originalWidth;
+        float height = animation.getKeyFrame(0).originalHeight;
 
         if (small) {
             width /= 2.5f;
@@ -59,11 +60,11 @@ public class Explosion extends BaseSprite {
 
     @Override
     public void render() {
-        setRegion(animation.get(timer));
+        setRegion(animation.getKeyFrame(timer));
         super.render();
 
         timer += delta;
-        if (animation.isFinished()) {
+        if (animation.isAnimationFinished(timer)) {
             visible = false;
         }
     }

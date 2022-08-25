@@ -74,7 +74,6 @@ public class FirstLevel extends Scene {
     private Rocket rocket;
     private Factory factory;
 
-    private boolean firstRun = true;
     private boolean startAnalytics = false;
     private float lastBoss;
     private int numBosses;
@@ -100,6 +99,9 @@ public class FirstLevel extends Scene {
 
         Resources.setPlayer(player);
         Processor.postTask(this::initEnemies);
+
+        mainGameManager.startSceneOver(this, new Countdown(mainGameManager, () -> updateOnPause = false));
+        getSounds().firstLevelMusic.play();
     }
 
     private void initEnemies() {
@@ -121,25 +123,19 @@ public class FirstLevel extends Scene {
     @Override
     public void resume() {
         super.resume();
-        if (!firstRun) {
-            gameTask.start();
-            spawnBossTask.start();
+        gameTask.start();
+        spawnBossTask.start();
 
-            if (!startAnalytics) {
-                startAnalytics = true;
-                difficultyAnalyzer.startCollecting();
-                lastBoss = time;
-            }
-        } else {
-            firstRun = false;
-            mainGameManager.startScene(new Countdown(mainGameManager, screen), false);
-
-            getSounds().firstLevelMusic.play();
+        if (!startAnalytics) {
+            startAnalytics = true;
+            difficultyAnalyzer.startCollecting();
+            lastBoss = time;
         }
     }
 
     @Override
     public void pause() {
+        super.pause();
         gameTask.stop();
         spawnBossTask.stop();
     }
@@ -152,12 +148,15 @@ public class FirstLevel extends Scene {
         screen.translateX(moveAll);
 
         player.update();
-        player.shoot();
 
-        updateEmpire(moveAll, needFindIntersections);
-        updateBulletsEnemy(moveAll, needFindIntersections);
-        updateBullets(moveAll);
-        updateExplosions(moveAll);
+        if (!updateOnPause) {
+            player.shoot();
+
+            updateEmpire(moveAll, needFindIntersections);
+            updateBulletsEnemy(moveAll, needFindIntersections);
+            updateBullets(moveAll);
+            updateExplosions(moveAll);
+        }
     }
 
     private void updateEmpire(float moveAll, boolean needFindIntersections) {

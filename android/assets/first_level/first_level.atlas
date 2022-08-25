@@ -2,64 +2,64 @@ first_level.png
 	size: 2048, 1024
 	repeat: none
 attention
-	bounds: 1870, 143, 70, 63
+	bounds: 1878, 139, 70, 63
 bomb
-	bounds: 477, 26, 30, 70
+	bounds: 483, 26, 30, 70
 bullet
-	bounds: 2025, 838, 7, 32
+	bounds: 2029, 842, 7, 32
 cannon_ball
 	bounds: 0, 0, 15, 15
 death_star
 	index: 1
-	bounds: 670, 160, 400, 400
+	bounds: 672, 164, 400, 400
 death_star
 	index: 0
-	bounds: 1070, 160, 400, 400
+	bounds: 1074, 164, 400, 400
 death_star
 	index: 2
-	bounds: 1470, 160, 400, 400
+	bounds: 1476, 164, 400, 400
 demoman
-	bounds: 0, 15, 287, 165
+	bounds: 0, 17, 287, 165
 factory
-	bounds: 0, 560, 1925, 430
+	bounds: 0, 566, 1925, 430
 full_blue_heart
-	bounds: 1870, 374, 99, 84
+	bounds: 1878, 376, 99, 84
 full_heart
-	bounds: 506, 96, 99, 84
+	bounds: 512, 98, 99, 84
 half_blue_heart
-	bounds: 1925, 602, 99, 84
+	bounds: 1927, 602, 99, 84
 half_heart
-	bounds: 1925, 686, 99, 84
+	bounds: 1927, 688, 99, 84
 health
-	bounds: 605, 125, 55, 55
+	bounds: 613, 127, 55, 55
 laser
-	bounds: 1925, 572, 70, 30
+	bounds: 1927, 570, 70, 30
 minion
-	bounds: 287, 10, 77, 50
+	bounds: 289, 10, 77, 50
 non_heart
-	bounds: 407, 96, 99, 84
+	bounds: 411, 98, 99, 84
 red
-	bounds: 2024, 769, 1, 1
+	bounds: 613, 124, 1, 1
 rocket
-	bounds: 1870, 276, 50, 98
+	bounds: 1878, 276, 50, 98
 ship
-	bounds: 1870, 458, 75, 102
+	bounds: 1878, 462, 75, 102
 star_shield
-	bounds: 0, 180, 670, 380
+	bounds: 0, 184, 670, 380
 sunrise_bomb
-	bounds: 287, 60, 120, 120
+	bounds: 289, 62, 120, 120
 sunrise_bomb_red
-	bounds: 1925, 870, 120, 120
+	bounds: 1927, 876, 120, 120
 triple_fighter
-	bounds: 1925, 770, 100, 100
+	bounds: 1927, 774, 100, 100
 vader
 	index: 1
-	bounds: 1870, 206, 70, 70
+	bounds: 1878, 204, 70, 70
 vader
 	index: 0
-	bounds: 1920, 304, 70, 70
+	bounds: 1930, 304, 70, 70
 vader
 	index: 2
-	bounds: 407, 26, 70, 70
+	bounds: 411, 26, 70, 70
 white
-	bounds: 2045, 989, 1, 1
+	bounds: 1930, 301, 1, 1

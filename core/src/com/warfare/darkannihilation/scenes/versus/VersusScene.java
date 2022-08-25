@@ -13,11 +13,13 @@ public class VersusScene extends Scene {
     private float lastVersus;
 
     public VersusScene(MainGameManager mainGameManager, byte playerName, byte bossName) {
-        super(mainGameManager, new VersusClickListener(mainGameManager));
+        super(mainGameManager);
 
         getImages().loadVersusImage(playerName, bossName);
         getSounds().loadDeathStarMusic();
         getImages().loadInCycle();
+
+        clickListener = new VersusClickListener(() -> mainGameManager.finishScene(this));
     }
 
     @Override
@@ -35,12 +37,6 @@ public class VersusScene extends Scene {
     }
 
     @Override
-    public void resume() {
-        super.resume();
-
-    }
-
-    @Override
     public void render() {
         screen.render();
     }
@@ -49,7 +45,7 @@ public class VersusScene extends Scene {
     public void update() {
         if (timeOnPause - lastVersus > DEATH_STAR_VERSUS_SCREEN_IN_SECS) {
             lastVersus = Integer.MAX_VALUE;
-            mainGameManager.finishScene();
+            mainGameManager.finishScene(this);
         }
     }
 

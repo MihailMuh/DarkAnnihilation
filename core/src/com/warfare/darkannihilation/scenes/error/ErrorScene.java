@@ -16,12 +16,12 @@ import com.warfare.darkannihilation.systemd.MainGame;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ClickListener;
 import com.warfare.darkannihilation.utils.Font;
-import com.warfare.darkannihilation.utils.ScenesStack;
+import com.warfare.darkannihilation.utils.ScenesArray;
 
 public class ErrorScene extends Scene {
     private final Array<String> report = new Array<>(true, 20, String.class);
     private final MainGame mainGame;
-    private final ScenesStack scenesStack;
+    private final ScenesArray scenesArray;
 
     private float unexpectedErrorTextY, pleaseExitTextY;
 
@@ -30,10 +30,10 @@ public class ErrorScene extends Scene {
 
     public boolean running = false;
 
-    public ErrorScene(MainGame mainGame, MainGameManager mainGameManager, ScenesStack scenesStack) {
+    public ErrorScene(MainGame mainGame, MainGameManager mainGameManager, ScenesArray scenesArray) {
         super(mainGameManager, new ClickListener());
         this.mainGame = mainGame;
-        this.scenesStack = scenesStack;
+        this.scenesArray = scenesArray;
     }
 
     public void hardRun() {
@@ -42,8 +42,8 @@ public class ErrorScene extends Scene {
                 mainGame.pause();
             } catch (Exception ignored) {
             }
-            scenesStack.clear();
-            scenesStack.push(this);
+            scenesArray.clear();
+            scenesArray.add(this);
         });
     }
 

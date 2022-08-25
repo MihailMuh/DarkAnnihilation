@@ -28,6 +28,7 @@ public class Menu extends Scene {
 
     @Override
     public void create() {
+        super.create();
         getImages().getMenuImages();
         getSounds().getMenuSounds();
 

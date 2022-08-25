@@ -11,6 +11,9 @@ public abstract class Scene implements ApplicationListener {
     protected ClickListener clickListener;
     protected Screen screen;
 
+    public boolean updateOnPause = false;
+    public boolean update = true;
+
     public Scene(MainGameManager mainGameManager) {
         this(mainGameManager, null, null);
     }
@@ -38,12 +41,13 @@ public abstract class Scene implements ApplicationListener {
 
     @Override
     public void pause() {
-
+        if (!updateOnPause) update = false;
     }
 
     @Override
     public void resume() {
         resumeBackground();
+        update = true;
     }
 
     public void update() {
@@ -51,11 +55,11 @@ public abstract class Scene implements ApplicationListener {
     }
 
     public void stopBackground() {
-        if (screen != null) screen.stop = true;
+        if (screen != null) screen.stopAnimation = true;
     }
 
     public void resumeBackground() {
-        if (screen != null) screen.stop = false;
+        if (screen != null) screen.stopAnimation = false;
     }
 
     @Override

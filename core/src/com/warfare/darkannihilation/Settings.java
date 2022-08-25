@@ -9,7 +9,7 @@ public final class Settings {
     public static final boolean MUTE_MUSIC = false;
     public static final boolean VIBRATE = true;
 
-    public static final boolean SHOW_FPS = true;
+    public static final boolean SHOW_FPS = false;
     public static final boolean GOD_MODE = false;
     public static final boolean SOUNDS_IN_THREAD = true;
 

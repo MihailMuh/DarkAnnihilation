@@ -10,11 +10,11 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
-import com.warfare.darkannihilation.utils.AnimationSuper;
 import com.warfare.darkannihilation.utils.audio.MusicWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
@@ -54,7 +54,7 @@ public class AssetManagerSuper extends AssetManager {
         return new MusicWrap(get(path, Music.class), volume);
     }
 
-    public AnimationSuper getAnimation(TextureAtlas atlas, String name, float frameDuration, float scale) {
+    public Animation<AtlasRegion> getAnimation(TextureAtlas atlas, String name, float frameDuration, float scale) {
         Array<AtlasRegion> regions = new Array<>(true, 10, AtlasRegion.class);
 
         int i = 0;
@@ -68,7 +68,9 @@ public class AssetManagerSuper extends AssetManager {
             regions.add(region);
         }
 
-        return new AnimationSuper(regions.toArray(AtlasRegion.class), frameDuration);
+        Animation<AtlasRegion> animation = new Animation<>(frameDuration, regions.toArray(AtlasRegion.class));
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+        return animation;
     }
 
     @Override
