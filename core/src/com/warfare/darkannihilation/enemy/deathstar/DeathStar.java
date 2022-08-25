@@ -55,18 +55,18 @@ public class DeathStar extends Shooter {
 
         name = DEATH_STAR;
 
-        x = random(SCREEN_WIDTH - width);
-        y = SCREEN_HEIGHT;
-        yToStopForSecondPhase = SCREEN_HEIGHT - height - 100;
+        setPosition(random(SCREEN_WIDTH - getWidth()), SCREEN_HEIGHT);
+
+        yToStopForSecondPhase = SCREEN_HEIGHT - getHeight() - 100;
         yToShootForFirstPhase = SCREEN_HEIGHT - halfHeight - 50;
-        yToStopForThirdPhase = SCREEN_HEIGHT - height - 40;
+        yToStopForThirdPhase = SCREEN_HEIGHT - getHeight() - 40;
 
         speedX = random(0.002f, 0.005f);
         speedY = random(1, 3);
 
         healthBar = new HealthBar(DEATH_STAR_HEALTH_BAR_LEN, maxHealth, 20, 16);
 
-        shrinkBorders(20, 20, 20, 20);
+        shrinkBounds(20, 20, 20, 20);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class DeathStar extends Shooter {
         }
 
         explodeHuge();
-        image = getImages().deathStarImages[++phase];
+        setRegion(getImages().deathStarImages[++phase]);
         newParamsForPhase();
     }
 
@@ -113,31 +113,31 @@ public class DeathStar extends Shooter {
         if (randomBoolean()) {
             speedX = -speedX;
         } else {
-            x = startX;
+            setX(startX);
         }
     }
 
     private void updateThirdPhase() {
-        if (y < yToStopForThirdPhase) {
-            y += speedY;
+        if (getY() < yToStopForThirdPhase) {
+            translateY(speedY);
         } else {
             if (!drawShield) {
-                shield.start(centerX, y - halfHeight);
+                shield.start(centerX, getY() - halfHeight);
                 drawShield = true;
             }
         }
     }
 
     private void updateSecondPhase() {
-        if (y >= yToStopForSecondPhase) {
-            y -= speedY;
+        if (getY() >= yToStopForSecondPhase) {
+            translateY(-speedY);
         } else {
-            x += speedX;
+            translateX(speedX);
 
-            if (x < -width) {
+            if (getX() < -getWidth()) {
                 newDirection(SCREEN_WIDTH);
-            } else if (x > SCREEN_WIDTH) {
-                newDirection(-width);
+            } else if (getX() > SCREEN_WIDTH) {
+                newDirection(-getWidth());
             }
             shooting();
         }
@@ -153,7 +153,7 @@ public class DeathStar extends Shooter {
     }
 
     private void updateFirstPhase() {
-        if (y <= yToShootForFirstPhase) {
+        if (getY() <= yToShootForFirstPhase) {
             shooting();
             if (time - lastSecondShot >= DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS) {
                 lastSecondShot = time;
@@ -162,17 +162,17 @@ public class DeathStar extends Shooter {
             }
         }
 
-        if (y >= yToStopForSecondPhase) {
-            y -= speedY;
+        if (getY() >= yToStopForSecondPhase) {
+            translateY(-speedY);
         }
-        x += speedX * (player.x - centerX); // player.x faster than player.centerX(). Accuracy doesn't live matter
+        translateX(speedX * (player.getX() - centerX)); // player.getX() faster than player.centerX(). Accuracy doesn't live matter
     }
 
     private void shootFirstPhase() {
         float Y = top() - 215;
         float endX = right() - 30;
 
-        for (float X = x + 100; X < endX; X += 30) {
+        for (float X = getX() + 100; X < endX; X += 30) {
             getPools().bulletEnemyPool.obtain(X, Y, 0, -1, 90); // Летят прямо вниз
             Y += 7;
         }
@@ -188,6 +188,7 @@ public class DeathStar extends Shooter {
         float sin = sin(rads);
         double distance = Math.sqrt(deltaY * deltaY + deltaX * deltaX);
 
+        // если игрок далеко - скорость бомбы выше
         if (distance > HALF_SCREEN_WIDTH) {
             cos *= 1.5;
             sin *= 1.5;
@@ -210,7 +211,7 @@ public class DeathStar extends Shooter {
             case 2:
                 updateThirdPhase();
         }
-        healthBar.setOutlineBarCoords(centerX, top());
+        healthBar.setOutlineBarCoords(centerX, top() + 30);
     }
 
     @Override

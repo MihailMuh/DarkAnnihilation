@@ -25,13 +25,12 @@ public class Vader extends Opponent {
 
         Processor.postToLooper(() -> {
             health = maxHealth;
-            image = getImages().vadersImages[random(0, 2)];
 
-            x = random(SCREEN_WIDTH);
-            y = SCREEN_HEIGHT;
+            setRegion(getImages().vadersImages[random(0, 2)]);
+            setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
 
             speedX = random(-6.5f, 6.5f);
-            speedY = random(4f, 13f);
+            speedY = -random(4f, 13f);
         });
     }
 
@@ -49,9 +48,8 @@ public class Vader extends Opponent {
 
     @Override
     public void update() {
-        x += speedX;
-        y -= speedY;
+        translate(speedX, speedY);
 
-        if (x < -width || x > SCREEN_WIDTH || y < -height) reset();
+        if (getX() < -getWidth() || getX() > SCREEN_WIDTH || getY() < -getHeight()) reset();
     }
 }

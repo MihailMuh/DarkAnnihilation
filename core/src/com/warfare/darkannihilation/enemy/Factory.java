@@ -11,7 +11,6 @@ import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
-import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
@@ -20,38 +19,38 @@ import com.warfare.darkannihilation.utils.HealthBar;
 
 public class Factory extends Shooter {
     private final HealthBar healthBar;
-    private final int yToStop;
+    private final float yToStop;
 
     public Factory() {
         super(getImages().factoryImg, FACTORY_HEALTH, ULTIMATE_DAMAGE, 100, FACTORY_SPAWN_TIME);
 
         visible = false;
         name = FACTORY;
-        yToStop = SCREEN_HEIGHT - height - 100;
+        yToStop = SCREEN_HEIGHT - getHeight() - 100;
         healthBar = new HealthBar(FACTORY_HEALTH_BAR_LEN, maxHealth, 22, 18);
 
-        shrinkBorders(20, 80, 20, halfHeight);
+        shrinkBounds(20, 80, 20, halfHeight);
     }
 
     @Override
     public void reset() {
         health = maxHealth;
 
-        y = SCREEN_HEIGHT;
-        x = HALF_SCREEN_WIDTH - halfWidth;
+        setCenterX(HALF_SCREEN_WIDTH);
+        setY(SCREEN_HEIGHT);
 
         visible = true;
     }
 
     @Override
     public void update() {
-        if (y >= yToStop) {
-            y -= FACTORY_SPEED;
+        if (getY() >= yToStop) {
+            translateY(FACTORY_SPEED);
         } else {
             shooting();
         }
 
-        healthBar.setOutlineBarCoords(centerX(), top() - 100);
+        healthBar.setOutlineBarCoords(centerX(), top() - 90);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class Factory extends Shooter {
     @Override
     protected void shot() {
         for (int i = 0; i < random(1, 3); i++) {
-            getPools().minionPool.obtain(random(x, right()), y + 100);
+            getPools().minionPool.obtain(random(getX(), right()), getY() + 100);
         }
     }
 

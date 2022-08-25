@@ -39,10 +39,8 @@ public class SunriseBomb extends BaseBullet {
 
     @Override
     public void update() {
-        x += speedX;
-        y += speedY;
+        translate(speedX, speedY);
 
-//        Processor.postToLooper(() -> {
         speedX /= 1.055;
         speedY /= 1.055;
 
@@ -65,7 +63,6 @@ public class SunriseBomb extends BaseBullet {
                 red = false;
             }
         }
-//        });
     }
 
     private void aLotOfShots() {
@@ -85,9 +82,10 @@ public class SunriseBomb extends BaseBullet {
     @Override
     public void render() {
         if (red) {
-            getImages().sunriseBombRed.draw(x, y);
+            setRegion(getImages().sunriseBombRed);
         } else {
-            super.render();
+            setRegion(getImages().sunriseBomb);
         }
+        super.render();
     }
 }

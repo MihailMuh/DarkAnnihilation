@@ -30,7 +30,7 @@ public class Countdown extends Scene {
 
     @Override
     public void update() {
-        screen.x -= getPlayer().speedX / 2.8f;
+        screen.translateX(getPlayer().speedX / -2.8f);
         getPlayer().update();
 
         if (time - lastSwitch > 1) {

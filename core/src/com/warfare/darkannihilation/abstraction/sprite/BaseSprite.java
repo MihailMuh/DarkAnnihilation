@@ -1,87 +1,87 @@
 package com.warfare.darkannihilation.abstraction.sprite;
 
 import static com.warfare.darkannihilation.constants.Names.NO_NAME;
+import static com.warfare.darkannihilation.hub.Resources.getBatch;
 
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.warfare.darkannihilation.utils.Image;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Pool;
 
-public abstract class BaseSprite implements Poolable {
-    private int indentX, indentY, indentWidth, indentHeight;
+public abstract class BaseSprite extends Sprite implements Pool.Poolable {
+    private float indentX, indentY, indentWidth, indentHeight;
+    private boolean shrunkBorders = false;
 
-    protected Image image;
-
-    public float x, y;
-    public final int width, height, halfWidth, halfHeight;
+    public float halfWidth, halfHeight;
 
     public boolean visible = true;
     public byte name = NO_NAME;
 
-    public BaseSprite(Image image, int width, int height) {
-        this.image = image;
-        this.width = width;
-        this.height = height;
-
-        if (width == image.width) halfWidth = image.halfWidth;
-        else halfWidth = width / 2;
-
-        if (height == image.height) halfHeight = image.halfHeight;
-        else halfHeight = height / 2;
+    public BaseSprite(AtlasRegion region) {
+        this(region, region.originalWidth, region.originalHeight);
     }
 
-    public BaseSprite(Image image) {
-        this(image, image.width, image.height);
+    public BaseSprite(AtlasRegion region, float width, float height) {
+        super(region);
+
+        setSize(width, height);
+        setOriginCenter();
+
+        halfWidth = width / 2f;
+        halfHeight = height / 2f;
+        indentWidth = width;
+        indentHeight = height;
     }
 
-    protected void shrinkBorders(int X, int Y, int indentWidth, int indentHeight) {
-        indentX = X;
-        indentY = Y;
-        this.indentWidth = indentWidth;
-        this.indentHeight = indentHeight;
-    }
+    protected void shrinkBounds(float left, float bottom, float right, float top) {
+        indentX = left;
+        indentY = bottom;
+        indentWidth = getWidth() - right;
+        indentHeight = getHeight() - top;
 
-    public void render() {
-        image.draw(x, y, width, height);
+        shrunkBorders = true;
     }
-
-    public abstract void update();
 
     @Override
     public void reset() {
     }
 
-    public float x() {
-        return x + indentX;
-    }
+    public abstract void update();
 
-    public float y() {
-        return y + indentY;
+    public void render() {
+        draw(getBatch());
     }
 
     public float centerX() {
-        return x + halfWidth;
+        return getX() + halfWidth;
     }
 
     public float centerY() {
-        return y + halfHeight;
+        return getY() + halfHeight;
     }
 
     public float right() {
-        return x + width;
-    }
-
-    public float rightWithBorders() {
-        return right() - indentWidth;
+        return getX() + getWidth();
     }
 
     public float top() {
-        return y + height;
+        return getY() + getHeight();
     }
 
-    public float topWithBorders() {
-        return top() - indentHeight;
-    }
+    public boolean intersect(BaseSprite sprite) {
+        float x = getX();
+        float y = getY();
+        float spriteX = sprite.getX();
+        float spriteY = sprite.getY();
 
-    public boolean intersect(BaseSprite r) {
-        return x() < r.rightWithBorders() && rightWithBorders() > r.x() && y() < r.topWithBorders() && topWithBorders() > r.y();
+        if (shrunkBorders) {
+            return x + indentX < spriteX + sprite.indentWidth &&
+                    x + indentWidth > spriteX + sprite.indentX &&
+                    y + indentY < spriteY + sprite.indentHeight &&
+                    y + indentHeight > spriteY + sprite.indentY;
+        }
+        return x < sprite.right() &&
+                right() > spriteX &&
+                y < sprite.top() &&
+                top() > spriteY;
     }
 }

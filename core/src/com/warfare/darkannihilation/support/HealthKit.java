@@ -19,9 +19,9 @@ public class HealthKit extends Opponent {
 
     @Override
     public void update() {
-        y -= speedY;
+        translateY(speedY);
 
-        if (y < -height) kill();
+        if (getY() < -getHeight()) kill();
     }
 
     @Override
@@ -31,9 +31,9 @@ public class HealthKit extends Opponent {
 
     @Override
     public void reset() {
-        speedY = MathUtils.random(1.7f, 3.4f);
-        y = SCREEN_HEIGHT;
-        x = random(SCREEN_WIDTH);
+        speedY = -MathUtils.random(1.7f, 3.4f);
+
+        setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
 
         visible = true;
     }

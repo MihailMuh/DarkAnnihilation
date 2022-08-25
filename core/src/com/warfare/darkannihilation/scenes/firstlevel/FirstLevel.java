@@ -146,10 +146,10 @@ public class FirstLevel extends Scene {
 
     @Override
     public void update() {
-        float moveAll = player.speedX / 2.8f;
+        float moveAll = player.speedX / -2.8f;
         boolean needFindIntersections = frameCount % 2 == 0;
 
-        screen.x -= moveAll;
+        screen.translateX(moveAll);
 
         player.update();
         player.shoot();
@@ -164,7 +164,7 @@ public class FirstLevel extends Scene {
         for (Iterator<Opponent> iterator = empire.iterator(); iterator.hasNext(); ) {
             Opponent opponent = iterator.next();
             if (opponent.visible) {
-                opponent.x -= moveAll;
+                opponent.translateX(moveAll);
                 opponent.update();
                 if (needFindIntersections) checkIntersectionsWithAnybody(opponent);
             } else {
@@ -202,7 +202,7 @@ public class FirstLevel extends Scene {
         for (Iterator<BaseBullet> iterator = bulletsEnemy.iterator(); iterator.hasNext(); ) {
             BaseBullet bullet = iterator.next();
             if (bullet.visible) {
-                bullet.x -= moveAll;
+                bullet.translateX(moveAll);
                 bullet.update();
                 if (needFindIntersections) {
                     bullet.killedByPlayer(player);
@@ -229,7 +229,7 @@ public class FirstLevel extends Scene {
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet bullet = iterator.next();
             if (bullet.visible) {
-                bullet.x -= moveAll;
+                bullet.translateX(moveAll);
                 bullet.update();
             } else {
                 iterator.remove();
@@ -242,7 +242,7 @@ public class FirstLevel extends Scene {
         for (Iterator<Explosion> iterator = explosions.iterator(); iterator.hasNext(); ) {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
-                explosion.x -= moveAll;
+                explosion.translateX(moveAll);
             } else {
                 iterator.remove();
                 postToLooper(() -> poolHub.explosionPool.free(explosion));

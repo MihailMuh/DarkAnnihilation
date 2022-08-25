@@ -22,22 +22,23 @@ public class Demoman extends Shooter {
 
         visible = false;
         name = DEMOMAN;
-        shrinkBorders(30, 25, 20, 50);
+        shrinkBounds(30, 25, 20, 50);
     }
 
     @Override
     public void reset() {
         health = maxHealth;
-        y = random(HALF_SCREEN_HEIGHT - height, SCREEN_HEIGHT - height);
+        setY(random(HALF_SCREEN_HEIGHT - getHeight(), SCREEN_HEIGHT - getHeight()));
         speedX = random(5, 10);
         goLeft = randomBoolean();
         shootTime = random(0.1f, 0.2f);
 
+        setFlip(!goLeft, false);
         if (goLeft) {
-            x = SCREEN_WIDTH;
+            setX(SCREEN_WIDTH);
             speedX = -speedX;
         } else {
-            x = -width;
+            setX(-getWidth());
         }
 
         visible = true;
@@ -56,28 +57,17 @@ public class Demoman extends Shooter {
 
     @Override
     public void update() {
-        x += speedX;
+        translateX(speedX);
         shooting();
 
         if (goLeft) {
-            if (x < -width) {
+            if (getX() < -getWidth()) {
                 visible = false;
             }
         } else {
-            if (x > SCREEN_WIDTH) {
+            if (getX() > SCREEN_WIDTH) {
                 visible = false;
             }
-        }
-    }
-
-    @Override
-    public void render() {
-        if (!visible) return;
-
-        if (goLeft) {
-            super.render();
-        } else {
-            image.draw(x + width, y, -width, height);
         }
     }
 }

@@ -7,10 +7,9 @@ import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_DEFAU
 import static com.warfare.darkannihilation.constants.Names.SMALL_EXPLOSION_TRIPLE;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
-import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.Image;
 
 public abstract class MovingSprite extends BaseSprite {
     protected final int maxHealth;
@@ -21,12 +20,12 @@ public abstract class MovingSprite extends BaseSprite {
 
     public float speedX, speedY;
 
-    public MovingSprite(Image image, int maxHealth, int damage, int killScore) {
-        this(image, image.width, image.height, maxHealth, damage, killScore);
+    public MovingSprite(AtlasRegion region, int maxHealth, int damage, int killScore) {
+        this(region, region.originalWidth, region.originalHeight, maxHealth, damage, killScore);
     }
 
-    public MovingSprite(Image image, int width, int height, int maxHealth, int damage, int killScore) {
-        super(image, width, height);
+    public MovingSprite(AtlasRegion region, int width, int height, int maxHealth, int damage, int killScore) {
+        super(region, width, height);
 
         this.maxHealth = maxHealth;
         this.damage = damage;

@@ -13,9 +13,9 @@ public class Shield extends Opponent {
         visible = false;
     }
 
-    public void start(float X, float Y) {
-        x = X - halfWidth;
-        y = Y;
+    public void start(float x, float y) {
+        setCenterX(x);
+        setY(y);
 
         health = maxHealth;
         visible = true;

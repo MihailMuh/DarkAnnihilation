@@ -28,24 +28,23 @@ public class Button extends BaseButton {
         setParams(name, X, Y, runnable);
     }
 
-    public void setParams(String name, float X, float Y, Runnable runnable) {
+    public void setParams(String name, float x, float y, Runnable runnable) {
         this.runnable = runnable;
         text = name;
 
-        x = X;
-        y = Y;
+        setPosition(x, y);
 
         textX = centerX() - buttonFont.getHalfTextWidth(text);
         textY = centerY() + buttonFont.getHalfTextHeight(text) + 5;
     }
 
     @Override
-    public void onClick(float X, float Y) {
+    public void onClick(float x, float y) {
         if (time - shootTime >= BUTTON_CLICK_TIME) {
             shootTime = time;
             pressed = false;
 
-            if (checkClick(X, Y)) {
+            if (checkClick(x, y)) {
                 pressed = true;
 
                 getSounds().spaceBarSound.play();
@@ -74,13 +73,14 @@ public class Button extends BaseButton {
     @Override
     public void render() {
         if (pressed) {
-            getImages().buttonPress.draw(x, y);
+            setRegion(getImages().buttonPress);
             buttonFont.setColor(Color.LIGHT_GRAY);
         } else {
-            super.render();
+            setRegion(getImages().buttonNotPress);
             buttonFont.resetColor();
         }
 
+        super.render();
         buttonFont.draw(textX, textY, text);
     }
 }

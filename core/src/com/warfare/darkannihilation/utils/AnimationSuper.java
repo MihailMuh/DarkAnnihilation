@@ -1,26 +1,28 @@
 package com.warfare.darkannihilation.utils;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+
 public class AnimationSuper {
-    private final Image[] images;
+    private final AtlasRegion[] regions;
     private final int lastElementIndex;
     private final float frameDuration;
 
     public final int size;
     public int index;
 
-    public AnimationSuper(Image[] images, float frameDuration) {
-        this.images = images;
+    public AnimationSuper(AtlasRegion[] regions, float frameDuration) {
+        this.regions = regions;
         this.frameDuration = frameDuration;
-        size = images.length;
+        size = regions.length;
         lastElementIndex = size - 1;
     }
 
-    public Image get(float time) {
+    public AtlasRegion get(float time) {
         index = (int) (time / frameDuration);
         if (index < size) {
-            return images[index];
+            return regions[index];
         }
-        return images[lastElementIndex];
+        return regions[lastElementIndex];
     }
 
     public boolean isFinished() {

@@ -11,11 +11,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.warfare.darkannihilation.utils.AnimationSuper;
-import com.warfare.darkannihilation.utils.Image;
-import com.warfare.darkannihilation.utils.ImageAtlas;
 import com.warfare.darkannihilation.utils.audio.MusicWrap;
 import com.warfare.darkannihilation.utils.audio.SoundWrap;
 
@@ -55,24 +54,21 @@ public class AssetManagerSuper extends AssetManager {
         return new MusicWrap(get(path, Music.class), volume);
     }
 
-    public ImageAtlas getAtlas(String name) {
-        return new ImageAtlas(get(name));
-    }
-
-    public AnimationSuper getAnimation(ImageAtlas atlas, String name, float frameDuration, float scale) {
-        Array<Image> images = new Array<>(true, 10, Image.class);
+    public AnimationSuper getAnimation(TextureAtlas atlas, String name, float frameDuration, float scale) {
+        Array<AtlasRegion> regions = new Array<>(true, 10, AtlasRegion.class);
 
         int i = 0;
         while (true) {
-            Image image = atlas.getImage(name, i, scale);
-            if (image == null) {
+            AtlasRegion region = atlas.findRegion(name, i++);
+            if (region == null) {
                 break;
             }
-            images.add(image);
-            i++;
+            region.originalWidth *= scale;
+            region.originalHeight *= scale;
+            regions.add(region);
         }
 
-        return new AnimationSuper(images.toArray(Image.class), frameDuration);
+        return new AnimationSuper(regions.toArray(AtlasRegion.class), frameDuration);
     }
 
     @Override

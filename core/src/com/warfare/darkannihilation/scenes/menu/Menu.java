@@ -33,17 +33,17 @@ public class Menu extends Scene {
 
         screen = new Screen(getImages().menuScreenGIF, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        Button.buttonFont = Font.scaledFontWrap(getFonts().canisMinor, getImages().buttonPress.width - 140,
+        Button.buttonFont = Font.scaledFontWrap(getFonts().canisMinor, getImages().buttonPress.originalWidth - 140,
                 getLocales().quit, getLocales().start, getLocales().topScore, getLocales().settings);
 
         int step = 50;
         buttons[0] = new Button(getLocales().topScore, HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
-        buttons[1] = new Button(getLocales().start, buttons[0].x - buttons[0].width - step, 10,
+        buttons[1] = new Button(getLocales().start, buttons[0].getX() - buttons[0].getWidth() - step, 10,
                 () -> mainGameManager.startScene(new FirstLevel(mainGameManager), true));
         buttons[2] = new Button(getLocales().settings, buttons[0].right() + step, 10, () -> {
         });
-        buttons[3] = new Button(getLocales().quit, buttons[1].x - buttons[0].width - step, 10, () -> Gdx.app.exit());
+        buttons[3] = new Button(getLocales().quit, buttons[1].getX() - buttons[0].getWidth() - step, 10, () -> Gdx.app.exit());
 
         clickListener = new MenuClickListener(buttons);
         Processor.multiProcessor.insertProcessor(clickListener);

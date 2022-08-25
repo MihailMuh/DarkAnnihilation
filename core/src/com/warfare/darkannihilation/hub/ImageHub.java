@@ -9,32 +9,31 @@ import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.MILLENNIUM_VS_STAR;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.utils.AnimationSuper;
-import com.warfare.darkannihilation.utils.Image;
-import com.warfare.darkannihilation.utils.ImageAtlas;
 
 public class ImageHub extends BaseHub {
     private String versusScreenName;
-    private ImageAtlas commonAtlas;
+    private TextureAtlas commonAtlas;
 
     public AnimationSuper starScreenGIF, menuScreenGIF;
     public AnimationSuper defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
     public AnimationSuper deathStarLaser;
 
-    public Image[] vadersImages, deathStarImages;
-    public Image buttonPress, buttonNotPress;
-    public Image fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
-    public Image demomanImg, bombImg, factoryImg, minionImg, tripleFighterImg, attentionImg, rocketImg, laserImg;
-    public Image millenniumFalcon;
-    public Image bulletImg;
-    public Image blackColor, whiteColor, redColor;
-    public Image healthKitImg;
-    public Image sunriseBomb, sunriseBombRed;
-    public Image starShield;
+    public AtlasRegion[] vadersImages, deathStarImages;
+    public AtlasRegion buttonPress, buttonNotPress;
+    public AtlasRegion fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
+    public AtlasRegion demomanImg, bombImg, factoryImg, minionImg, tripleFighterImg, attentionImg, rocketImg, laserImg;
+    public AtlasRegion millenniumFalcon;
+    public AtlasRegion bulletImg;
+    public AtlasRegion blackColor, whiteColor, redColor;
+    public AtlasRegion healthKitImg;
+    public AtlasRegion sunriseBomb, sunriseBombRed;
+    public AtlasRegion starShield;
 
-    public Image gameOverScreen;
-    public Image versusScreen;
+    public AtlasRegion gameOverScreen;
+    public AtlasRegion versusScreen;
 
     public ImageHub(AssetManagerSuper assetManager) {
         super(assetManager);
@@ -44,28 +43,28 @@ public class ImageHub extends BaseHub {
     }
 
     private void getColorsFromCommonAtlas() {
-        whiteColor = commonAtlas.getImage("white");
-        redColor = commonAtlas.getImage("red");
+        whiteColor = commonAtlas.findRegion("white");
+        redColor = commonAtlas.findRegion("red");
     }
 
     @Override
     public void boot() {
-        commonAtlas = assetManager.getAtlas(COMMON_ATLAS);
+        commonAtlas = assetManager.get(COMMON_ATLAS);
 
-        buttonPress = commonAtlas.getImage("button_press");
-        buttonNotPress = commonAtlas.getImage("button_not_press");
+        buttonPress = commonAtlas.findRegion("button_press");
+        buttonNotPress = commonAtlas.findRegion("button_not_press");
     }
 
     @Override
     public void lazyLoading() {
-        blackColor = commonAtlas.getImage("black");
+        blackColor = commonAtlas.findRegion("black");
         getColorsFromCommonAtlas();
 
-        ImageAtlas explosionsAtlas = assetManager.getAtlas(EXPLOSIONS_ATLAS);
+        TextureAtlas explosionsAtlas = assetManager.get(EXPLOSIONS_ATLAS);
         defaultExplosionAnim = assetManager.getAnimation(explosionsAtlas, "default_explosion", 0.02f, 1.2f);
         hugeExplosionAnim = assetManager.getAnimation(explosionsAtlas, "skull_explosion", 0.05f, 1.2f);
         tripleExplosionAnim = assetManager.getAnimation(explosionsAtlas, "triple_explosion", 0.03f, 1.2f);
-        gameOverScreen = commonAtlas.getImage("gameover");
+        gameOverScreen = commonAtlas.findRegion("gameover");
     }
 
     public void loadMenuImages() {
@@ -73,7 +72,7 @@ public class ImageHub extends BaseHub {
     }
 
     public void getMenuImages() {
-        menuScreenGIF = assetManager.getAnimation(assetManager.getAtlas(MENU_ATLAS), "menu_screen", 0.11f, 1.4f);
+        menuScreenGIF = assetManager.getAnimation(assetManager.get(MENU_ATLAS), "menu_screen", 0.11f, 1.4f);
     }
 
     public void disposeMenuImages() {
@@ -86,42 +85,42 @@ public class ImageHub extends BaseHub {
     }
 
     public void getFirstLevelImages() {
-        ImageAtlas firstLevelAtlas = assetManager.getAtlas(FIRST_LEVEL_ATLAS);
+        TextureAtlas firstLevelAtlas = assetManager.get(FIRST_LEVEL_ATLAS);
 
-        vadersImages = new Image[]{firstLevelAtlas.getImage("vader", 0),
-                firstLevelAtlas.getImage("vader", 1), firstLevelAtlas.getImage("vader", 2)};
-        deathStarImages = new Image[]{firstLevelAtlas.getImage("death_star", 0),
-                firstLevelAtlas.getImage("death_star", 1), firstLevelAtlas.getImage("death_star", 2)};
+        vadersImages = new AtlasRegion[]{firstLevelAtlas.findRegion("vader", 0),
+                firstLevelAtlas.findRegion("vader", 1), firstLevelAtlas.findRegion("vader", 2)};
+        deathStarImages = new AtlasRegion[]{firstLevelAtlas.findRegion("death_star", 0),
+                firstLevelAtlas.findRegion("death_star", 1), firstLevelAtlas.findRegion("death_star", 2)};
 
-        whiteColor = firstLevelAtlas.getImage("white");
-        redColor = firstLevelAtlas.getImage("red");
+        whiteColor = firstLevelAtlas.findRegion("white");
+        redColor = firstLevelAtlas.findRegion("red");
 
-        millenniumFalcon = firstLevelAtlas.getImage("ship");
-        bulletImg = firstLevelAtlas.getImage("bullet");
+        millenniumFalcon = firstLevelAtlas.findRegion("ship");
+        bulletImg = firstLevelAtlas.findRegion("bullet");
 
-        demomanImg = firstLevelAtlas.getImage("demoman");
-        bombImg = firstLevelAtlas.getImage("bomb");
-        factoryImg = firstLevelAtlas.getImage("factory");
-        minionImg = firstLevelAtlas.getImage("minion");
-        tripleFighterImg = firstLevelAtlas.getImage("triple_fighter");
-        attentionImg = firstLevelAtlas.getImage("attention");
-        rocketImg = firstLevelAtlas.getImage("rocket");
-        laserImg = firstLevelAtlas.getImage("laser");
+        demomanImg = firstLevelAtlas.findRegion("demoman");
+        bombImg = firstLevelAtlas.findRegion("bomb");
+        factoryImg = firstLevelAtlas.findRegion("factory");
+        minionImg = firstLevelAtlas.findRegion("minion");
+        tripleFighterImg = firstLevelAtlas.findRegion("triple_fighter");
+        attentionImg = firstLevelAtlas.findRegion("attention");
+        rocketImg = firstLevelAtlas.findRegion("rocket");
+        laserImg = firstLevelAtlas.findRegion("laser");
 
-        fullHeartBlue = firstLevelAtlas.getImage("full_blue_heart");
-        halfHeartBlue = firstLevelAtlas.getImage("half_blue_heart");
-        fullHeartRed = firstLevelAtlas.getImage("full_heart");
-        halfHeartRed = firstLevelAtlas.getImage("half_heart");
-        nullHeartRed = firstLevelAtlas.getImage("non_heart");
+        fullHeartBlue = firstLevelAtlas.findRegion("full_blue_heart");
+        halfHeartBlue = firstLevelAtlas.findRegion("half_blue_heart");
+        fullHeartRed = firstLevelAtlas.findRegion("full_heart");
+        halfHeartRed = firstLevelAtlas.findRegion("half_heart");
+        nullHeartRed = firstLevelAtlas.findRegion("non_heart");
 
-        healthKitImg = firstLevelAtlas.getImage("health");
+        healthKitImg = firstLevelAtlas.findRegion("health");
 
-        sunriseBomb = firstLevelAtlas.getImage("sunrise_bomb");
-        sunriseBombRed = firstLevelAtlas.getImage("sunrise_bomb_red");
+        sunriseBomb = firstLevelAtlas.findRegion("sunrise_bomb");
+        sunriseBombRed = firstLevelAtlas.findRegion("sunrise_bomb_red");
 
-        starShield = firstLevelAtlas.getImage("star_shield");
+        starShield = firstLevelAtlas.findRegion("star_shield");
 
-        starScreenGIF = assetManager.getAnimation(assetManager.getAtlas(FIRST_LEVEL_SCREEN_ATLAS), "star_screen", 0.07f, 2);
+        starScreenGIF = assetManager.getAnimation(assetManager.get(FIRST_LEVEL_SCREEN_ATLAS), "star_screen", 0.07f, 2);
     }
 
     public void disposeFirstLevelImages() {
@@ -137,7 +136,7 @@ public class ImageHub extends BaseHub {
 
     public void getVersusImage() {
         Texture versusTexture = assetManager.get(MILLENNIUM_VS_STAR, Texture.class);
-        versusScreen = new Image(new AtlasRegion(versusTexture, 0, 0, versusTexture.getWidth(), versusTexture.getHeight()));
+        versusScreen = new AtlasRegion(versusTexture, 0, 0, versusTexture.getWidth(), versusTexture.getHeight());
         versusScreenName = MILLENNIUM_VS_STAR;
     }
 
@@ -146,7 +145,7 @@ public class ImageHub extends BaseHub {
     }
 
     public void getDeathStarLaserAnimation() {
-        deathStarLaser = assetManager.getAnimation(assetManager.getAtlas(DEATH_STAR_LASER), "death_star_laser", 0.01f, 1);
+        deathStarLaser = assetManager.getAnimation(assetManager.get(DEATH_STAR_LASER), "death_star_laser", 0.01f, 1);
         assetManager.load(DEATH_STAR_LASER, Texture.class);
     }
 

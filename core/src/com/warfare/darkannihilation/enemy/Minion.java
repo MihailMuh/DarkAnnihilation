@@ -15,14 +15,13 @@ public class Minion extends TripleFighter {
     }
 
     public void start(float x, float y) {
-        this.x = x;
-        this.y = y;
+        setPosition(x, y);
         health = maxHealth;
         visible = true;
 
         shootTime = random(0.8f, 1.5f);
         speedX = random(-8, 8);
-        speedY = random(2, 5);
+        speedY = -random(2, 5);
     }
 
     @Override

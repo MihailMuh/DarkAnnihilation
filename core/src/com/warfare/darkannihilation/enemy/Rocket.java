@@ -13,16 +13,16 @@ public class Rocket extends BaseBullet {
     }
 
     @Override
-    public void start(float X, float Y) {
-        super.start(X, Y);
+    public void start(float x, float y) {
+        super.start(x, y);
         health = maxHealth;
     }
 
     @Override
     public void update() {
-        y -= speedY;
+        translateY(speedY);
 
-        if (y <= -height) {
+        if (getY() <= -getHeight()) {
             visible = false;
         }
     }

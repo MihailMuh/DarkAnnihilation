@@ -2,11 +2,10 @@ package com.warfare.darkannihilation.screens;
 
 import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Watch.delta;
-import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 import com.warfare.darkannihilation.utils.AnimationSuper;
-import com.warfare.darkannihilation.utils.Image;
 
 public class Screen extends BaseSprite {
     private final AnimationSuper animation;
@@ -18,13 +17,14 @@ public class Screen extends BaseSprite {
         this.animation = animation;
     }
 
-    public Screen(Image image, int width, int height) {
-        this(new AnimationSuper(new Image[]{image}, 0), width, height);
+    public Screen(AtlasRegion region, int width, int height) {
+        this(new AnimationSuper(new AtlasRegion[]{region}, 0), width, height);
     }
 
     @Override
     public void render() {
-        animation.get(time).draw(x, 0, width, SCREEN_HEIGHT);
+        setRegion(animation.get(time));
+        super.render();
         spriteBatch.endSolidScreen();
 
         if (stop) return;

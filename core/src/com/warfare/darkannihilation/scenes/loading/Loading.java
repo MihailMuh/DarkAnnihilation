@@ -1,9 +1,9 @@
 package com.warfare.darkannihilation.scenes.loading;
 
 import static com.warfare.darkannihilation.hub.Resources.getAssetManager;
+import static com.warfare.darkannihilation.hub.Resources.getBatch;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
@@ -33,9 +33,9 @@ public class Loading extends Scene {
 
     @Override
     public void render() {
-        spriteBatch.setColor(0, 0, 0, alpha);
-        getImages().blackColor.draw(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        spriteBatch.setColor(1, 1, 1, 1);
+        getBatch().setColor(0, 0, 0, alpha);
+        getBatch().draw(getImages().blackColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        getBatch().setColor(1, 1, 1, 1);
     }
 
     @Override

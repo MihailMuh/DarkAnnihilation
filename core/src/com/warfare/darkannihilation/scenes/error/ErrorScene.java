@@ -1,9 +1,9 @@
 package com.warfare.darkannihilation.scenes.error;
 
+import static com.warfare.darkannihilation.hub.Resources.getBatch;
 import static com.warfare.darkannihilation.hub.Resources.getFonts;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getLocales;
-import static com.warfare.darkannihilation.systemd.Frontend.spriteBatch;
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
@@ -69,9 +69,9 @@ public class ErrorScene extends Scene {
 
     @Override
     public void render() {
-        spriteBatch.setColor(1, 1, 1, 0.65f);
-        getImages().whiteColor.draw(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        spriteBatch.setColor(1, 1, 1, 1);
+        getBatch().setColor(1, 1, 1, 0.65f);
+        getBatch().draw(getImages().whiteColor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        getBatch().setColor(1, 1, 1, 1);
 
         pleaseExitFont.draw(HALF_SCREEN_WIDTH - pleaseExitFont.getHalfTextWidth(getLocales().unexpectedError),
                 unexpectedErrorTextY, getLocales().unexpectedError);

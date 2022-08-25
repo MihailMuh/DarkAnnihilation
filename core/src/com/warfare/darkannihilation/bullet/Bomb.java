@@ -14,9 +14,9 @@ public class Bomb extends BaseBullet {
 
     @Override
     public void update() {
-        y -= speedY;
+        translateY(speedY);
 
-        if (y < -height) visible = false;
+        if (getY() < -getHeight()) visible = false;
     }
 
     @Override

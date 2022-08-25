@@ -8,24 +8,21 @@ import static com.warfare.darkannihilation.hub.Resources.getImages;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
 
 public class Heart extends BaseSprite {
-    public Heart(int X, int Y) {
+    public Heart(int x, int y) {
         super(getImages().fullHeartRed, 70, 60);
-        x = X;
-        y = Y;
-
-        image = getImages().fullHeartRed;
+        setPosition(x, y);
     }
 
     public void setType(byte heart) {
         switch (heart) {
             case FULL_HEART:
-                image = getImages().fullHeartRed;
+                setRegion(getImages().fullHeartRed);
                 return;
             case HALF_HEART:
-                image = getImages().halfHeartRed;
+                setRegion(getImages().halfHeartRed);
                 return;
             case NULL_HEART:
-                image = getImages().nullHeartRed;
+                setRegion(getImages().nullHeartRed);
                 return;
         }
         visible = false;

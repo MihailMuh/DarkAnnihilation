@@ -1,24 +1,22 @@
 package com.warfare.darkannihilation.bullet;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
-import com.warfare.darkannihilation.utils.Image;
 
 public abstract class BaseBullet extends Opponent {
-    public BaseBullet(Image image, int damage, float speedY) {
-        this(image, damage, 0, speedY);
+    public BaseBullet(AtlasRegion region, int damage, float speedY) {
+        this(region, damage, 0, speedY);
     }
 
-    public BaseBullet(Image image, int damage, int maxHealth, float speedY) {
-        super(image, maxHealth, damage, 0);
+    public BaseBullet(AtlasRegion region, int damage, int maxHealth, float speedY) {
+        super(region, maxHealth, damage, 0);
 
         visible = false;
         this.speedY = speedY;
     }
 
-    public void start(float X, float Y) {
-        x = X - halfWidth;
-        y = Y - halfHeight;
-
+    public void start(float x, float y) {
+        setCenter(x, y);
         visible = true;
     }
 }

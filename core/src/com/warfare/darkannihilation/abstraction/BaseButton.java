@@ -1,17 +1,17 @@
 package com.warfare.darkannihilation.abstraction;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.abstraction.sprite.BaseSprite;
-import com.warfare.darkannihilation.utils.Image;
 
 public abstract class BaseButton extends BaseSprite {
-    public BaseButton(Image image) {
-        super(image);
+    public BaseButton(AtlasRegion region) {
+        super(region);
     }
 
-    public abstract void onClick(float X, float Y);
+    public abstract void onClick(float x, float y);
 
-    protected boolean checkClick(float X, float Y) {
-        return x <= X && X <= right() && y <= Y && Y <= top();
+    protected boolean checkClick(float x, float y) {
+        return getX() <= x && x <= right() && getY() <= y && y <= top();
     }
 
     @Override

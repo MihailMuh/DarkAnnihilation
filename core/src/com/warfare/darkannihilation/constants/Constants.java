@@ -66,13 +66,13 @@ public final class Constants {
 
     public static final float FACTORY_SPAWN_TIME = 1.65f;
     public static final short FACTORY_HEALTH = 800;
-    public static final byte FACTORY_SPEED = 3;
+    public static final byte FACTORY_SPEED = -3;
     public static final short FACTORY_HEALTH_BAR_LEN = 800;
 
     public static final byte MINION_HEALTH = 2;
     public static final byte MINION_DAMAGE = 5;
 
-    public static final byte ROCKET_SPEED = 45;
+    public static final byte ROCKET_SPEED = -45;
     public static final short ROCKET_DAMAGE = 175;
 
     public static final byte VADER_HEALTH = 2;
@@ -133,7 +133,7 @@ public final class Constants {
     public static final byte BUCKSHOT_SPEED = 8;
 
     public static final byte BOMB_DAMAGE = 5;
-    public static final byte BOMB_SPEED = 20;
+    public static final byte BOMB_SPEED = -20;
     public static final byte NUMBER_BOMBS = 15;
 
     public static final byte SUNRISE_BOMB_SPEED = 35;

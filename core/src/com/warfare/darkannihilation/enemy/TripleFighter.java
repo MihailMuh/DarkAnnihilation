@@ -11,13 +11,13 @@ import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.systemd.service.Processor;
-import com.warfare.darkannihilation.utils.Image;
 
 public class TripleFighter extends Shooter {
-    private final int right, top;
+    private final float right, top;
 
     public TripleFighter() {
         this(getImages().tripleFighterImg, TRIPLE_FIGHTER_HEALTH, TRIPLE_FIGHTER_DAMAGE, 5, random(1f, 2f));
@@ -26,10 +26,10 @@ public class TripleFighter extends Shooter {
         reset();
     }
 
-    public TripleFighter(Image image, byte health, byte damage, int killScore, float shootTime) {
-        super(image, health, damage, killScore, shootTime);
-        right = SCREEN_WIDTH - width;
-        top = SCREEN_HEIGHT - height;
+    public TripleFighter(AtlasRegion region, byte health, byte damage, int killScore, float shootTime) {
+        super(region, health, damage, killScore, shootTime);
+        right = SCREEN_WIDTH - getWidth();
+        top = SCREEN_HEIGHT - getHeight();
     }
 
     @Override
@@ -51,27 +51,25 @@ public class TripleFighter extends Shooter {
         Processor.postToLooper(() -> {
             health = maxHealth;
 
-            x = random(SCREEN_WIDTH);
-            y = SCREEN_HEIGHT;
+            setPosition(random(SCREEN_WIDTH), SCREEN_HEIGHT);
 
             speedX = random(-4f, 4f);
-            speedY = random(1.3f, 13f);
+            speedY = -random(1.3f, 13f);
         });
     }
 
     @Override
     public void update() {
-        x += speedX;
-        y -= speedY;
+        translate(speedX, speedY);
 
         shooting();
 
-        if (x < -width || x > SCREEN_WIDTH || y < -height) reset();
+        if (getX() < -getWidth() || getX() > SCREEN_WIDTH || getY() < -getHeight()) reset();
     }
 
     @Override
     protected void shot() {
-        if (0 < x && x < right && 0 < y && y < top) {
+        if (0 < getX() && getX() < right && 0 < getY() && getY() < top) {
             calculate(centerX(), centerY());
         }
     }
@@ -89,6 +87,6 @@ public class TripleFighter extends Shooter {
 
         shootTime = random(1f, 2f);
         getSounds().bigLaserSound.play();
-        getPools().bulletEnemyPool.obtain(X, Y, cos, sin, rads * MathUtils.radDeg);
+        getPools().bulletEnemyPool.obtain(X, Y, cos, sin, rads * MathUtils.radiansToDegrees);
     }
 }

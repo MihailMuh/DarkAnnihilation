@@ -12,9 +12,9 @@ public class Bullet extends BaseBullet {
 
     @Override
     public void update() {
-        y += speedY;
+        translateY(speedY);
 
-        if (y > SCREEN_HEIGHT) {
+        if (getY() > SCREEN_HEIGHT) {
             visible = false;
         }
     }

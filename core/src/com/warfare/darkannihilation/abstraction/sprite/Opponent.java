@@ -2,14 +2,14 @@ package com.warfare.darkannihilation.abstraction.sprite;
 
 import static com.warfare.darkannihilation.constants.Names.ENEMY;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.warfare.darkannihilation.player.Player;
-import com.warfare.darkannihilation.utils.Image;
 
 public abstract class Opponent extends MovingSprite {
     public boolean shouldKill = false;
 
-    public Opponent(Image image, int maxHealth, int damage, int killScore) {
-        super(image, maxHealth, damage, killScore);
+    public Opponent(AtlasRegion region, int maxHealth, int damage, int killScore) {
+        super(region, maxHealth, damage, killScore);
         name = ENEMY;
     }
 

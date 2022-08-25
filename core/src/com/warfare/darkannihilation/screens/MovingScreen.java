@@ -8,6 +8,6 @@ import com.warfare.darkannihilation.utils.AnimationSuper;
 public class MovingScreen extends Screen {
     public MovingScreen(AnimationSuper textures) {
         super(textures, (int) (SCREEN_WIDTH * 1.35), SCREEN_HEIGHT);
-        x = SCREEN_WIDTH * -0.175f;
+        setX(SCREEN_WIDTH * -0.175f);
     }
 }

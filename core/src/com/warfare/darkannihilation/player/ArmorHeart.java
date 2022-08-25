@@ -12,20 +12,18 @@ class ArmorHeart extends Heart {
     public void start(int X, int Y) {
         visible = true;
 
-        x = X;
-        y = Y;
-
-        image = getImages().fullHeartBlue;
+        setPosition(X, Y);
+        setRegion(getImages().fullHeartBlue);
     }
 
     @Override
     public void setType(byte heart) {
         switch (heart) {
             case FULL_HEART:
-                image = getImages().fullHeartBlue;
+                setRegion(getImages().fullHeartBlue);
                 return;
             case HALF_HEART:
-                image = getImages().halfHeartBlue;
+                setRegion(getImages().halfHeartBlue);
                 return;
         }
         visible = false;

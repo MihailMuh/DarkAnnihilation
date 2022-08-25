@@ -13,7 +13,6 @@ import com.warfare.darkannihilation.utils.AnimationSuper;
 
 public class Explosion extends BaseSprite {
     private AnimationSuper animation;
-    private int explosionWidth, explosionHeight;
 
     private float timer;
 
@@ -21,7 +20,7 @@ public class Explosion extends BaseSprite {
         super(getImages().blackColor);
     }
 
-    public void start(float X, float Y, byte type) {
+    public void start(float x, float y, byte type) {
         boolean small = false;
 
         switch (type) {
@@ -41,18 +40,18 @@ public class Explosion extends BaseSprite {
                 break;
             case HUGE_EXPLOSION:
                 animation = getImages().hugeExplosionAnim;
-                break;
         }
 
-        explosionWidth = animation.get(0).width;
-        explosionHeight = animation.get(0).height;
+        float width = animation.get(0).originalWidth;
+        float height = animation.get(0).originalHeight;
+
         if (small) {
-            explosionWidth /= 2.5;
-            explosionHeight /= 2.5;
+            width /= 2.5f;
+            height /= 2.5f;
         }
 
-        x = X - explosionWidth / 2f;
-        y = Y - explosionHeight / 2f;
+        setSize(width, height);
+        setCenter(x, y);
 
         timer = 0;
         visible = true;
@@ -60,7 +59,8 @@ public class Explosion extends BaseSprite {
 
     @Override
     public void render() {
-        animation.get(timer).draw(x, y, explosionWidth, explosionHeight);
+        setRegion(animation.get(timer));
+        super.render();
 
         timer += delta;
         if (animation.isFinished()) {

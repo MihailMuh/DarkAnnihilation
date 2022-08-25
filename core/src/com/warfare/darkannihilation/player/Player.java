@@ -51,7 +51,7 @@ public class Player extends MovingSprite {
             checkLevel(true);
         }
 
-        shrinkBorders(25, 30, 25, 25);
+        shrinkBounds(25, 30, 25, 25);
 
         reset();
     }
@@ -143,25 +143,23 @@ public class Player extends MovingSprite {
 
     @Override
     public void reset() {
-        x = HALF_SCREEN_WIDTH;
-        y = HALF_SCREEN_HEIGHT;
+        setCenter(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
 
-        endX = (x -= halfWidth);
-        endY = (y -= halfHeight);
+        endX = getX();
+        endY = getY();
     }
 
-    public void setCoordinates(float X, float Y) {
-        endX = X - halfWidth;
-        endY = Y - halfHeight;
+    public void setCoordinates(float x, float y) {
+        endX = x - halfWidth;
+        endY = y - halfHeight;
     }
 
     @Override
     public void update() {
-        x += speedX;
-        y += speedY;
+        translate(speedX, speedY);
 
-        speedX = (endX - x) / 3f;
-        speedY = (endY - y) / 3f;
+        speedX = (endX - getX()) / 3f;
+        speedY = (endY - getY()) / 3f;
     }
 
     public void damage(MovingSprite sprite) {
