@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Pool;
 
 public abstract class BaseSprite extends Sprite implements Pool.Poolable {
     private float indentX, indentY, indentWidth, indentHeight;
-    private boolean shrunkBorders = false;
 
     public float halfWidth, halfHeight;
 
@@ -25,11 +24,14 @@ public abstract class BaseSprite extends Sprite implements Pool.Poolable {
 
         setSize(width, height);
         setOriginCenter();
+        onNewSize();
+    }
 
-        halfWidth = width / 2f;
-        halfHeight = height / 2f;
-        indentWidth = width;
-        indentHeight = height;
+    protected void onNewSize() {
+        halfWidth = getWidth() / 2f;
+        halfHeight = getHeight() / 2f;
+        indentWidth = getWidth();
+        indentHeight = getHeight();
     }
 
     protected void shrinkBounds(float left, float bottom, float right, float top) {
@@ -37,8 +39,6 @@ public abstract class BaseSprite extends Sprite implements Pool.Poolable {
         indentY = bottom;
         indentWidth = getWidth() - right;
         indentHeight = getHeight() - top;
-
-        shrunkBorders = true;
     }
 
     @Override
@@ -71,21 +71,21 @@ public abstract class BaseSprite extends Sprite implements Pool.Poolable {
         return getY() + getHeight();
     }
 
+    @Override
+    public void setSize(float width, float height) {
+        super.setSize(width, height);
+        onNewSize();
+    }
+
     public boolean intersect(BaseSprite sprite) {
         float x = getX();
         float y = getY();
         float spriteX = sprite.getX();
         float spriteY = sprite.getY();
 
-        if (shrunkBorders) {
-            return x + indentX < spriteX + sprite.indentWidth &&
-                    x + indentWidth > spriteX + sprite.indentX &&
-                    y + indentY < spriteY + sprite.indentHeight &&
-                    y + indentHeight > spriteY + sprite.indentY;
-        }
-        return x < sprite.right() &&
-                right() > spriteX &&
-                y < sprite.top() &&
-                top() > spriteY;
+        return x + indentX < spriteX + sprite.indentWidth &&
+                x + indentWidth > spriteX + sprite.indentX &&
+                y + indentY < spriteY + sprite.indentHeight &&
+                y + indentHeight > spriteY + sprite.indentY;
     }
 }

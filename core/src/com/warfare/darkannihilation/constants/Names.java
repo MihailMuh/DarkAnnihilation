@@ -19,12 +19,13 @@ public final class Names {
     public static final byte BOMB = -2;
     public static final byte BULLET_ENEMY = -1;
     public static final byte SUNRISE_BOMB = 0;
+    public static final byte STAR_LASER = 1;
 
-    public static final byte ENEMY = 1;
-    public static final byte VADER = 2;
-    public static final byte TRIPLE = 3;
-    public static final byte DEMOMAN = 4;
-    public static final byte FACTORY = 5;
-    public static final byte MINION = 6;
-    public static final byte DEATH_STAR = 7;
+    public static final byte ENEMY = 10;
+    public static final byte VADER = 11;
+    public static final byte TRIPLE = 12;
+    public static final byte DEMOMAN = 13;
+    public static final byte FACTORY = 14;
+    public static final byte MINION = 15;
+    public static final byte DEATH_STAR = 16;
 }

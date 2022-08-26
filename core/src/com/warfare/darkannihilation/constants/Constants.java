@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.constants;
 
 import static com.warfare.darkannihilation.Settings.DEATH_STAR_HEALTH;
+import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.Settings;
 
@@ -53,6 +54,7 @@ public final class Constants {
     public static final float DEATH_STAR_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS = 0.8f;
     public static final float DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS = 3.5f;
     public static final float DEATH_STAR_SHOOT_TIME_FOR_SECOND_PHASE_IN_SECS = 0.8f;
+    public static final float DEATH_STAR_SHOOT_TIME_FOR_THIRD_PHASE_IN_SECS = 3;
     public static final int DEATH_STAR_THIRD_PHASE_HEALTH = DEATH_STAR_HEALTH / 3;
     public static final int DEATH_STAR_SECOND_PHASE_HEALTH = DEATH_STAR_THIRD_PHASE_HEALTH * 2;
     public static final byte DEATH_STAR_SPEED_FOR_THIRD_PHASE = 4;
@@ -60,6 +62,9 @@ public final class Constants {
     public static final byte DEATH_STAR_VERSUS_SCREEN_IN_SECS = 4;
 
     public static final short STAR_SHIELD_HEALTH = 800;
+
+    public static final float STAR_LASER_SHOOT_TIME = 0.5f;
+    public static final byte STAR_LASER_DAMAGE = 4;
 
     public static final byte DEMOMAN_DAMAGE = 40;
     public static final byte DEMOMAN_HEALTH = 30;
@@ -87,13 +92,7 @@ public final class Constants {
     public static final byte NUMBER_EXPLOSION = 40;
 
     // screens
-    public static final byte LOADING_SCREEN_FRAME_TIME = 45;
-    public static final byte NUMBER_LOADING_SCREEN_IMAGES = 12;
-
-    public static final byte NUMBER_STAR_SCREEN_IMAGES = 34;
-
-    public static final short THUNDER_SCREEN_FRAME_TIME = 135;
-    public static final byte NUMBER_THUNDER_SCREEN_IMAGES = 20;
+    public static final int ANIMATION_SCREEN_WIDTH = (int) (SCREEN_WIDTH * 1.35);
 
     // sprites on levels
     public static final byte PORTAL_FRAME = 70;

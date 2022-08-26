@@ -13,6 +13,7 @@ import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
 import static com.warfare.darkannihilation.constants.Names.HEALTH_KIT;
 import static com.warfare.darkannihilation.constants.Names.MINION;
+import static com.warfare.darkannihilation.constants.Names.STAR_LASER;
 import static com.warfare.darkannihilation.constants.Names.SUNRISE_BOMB;
 import static com.warfare.darkannihilation.constants.Names.TRIPLE;
 import static com.warfare.darkannihilation.constants.Names.VADER;
@@ -102,7 +103,7 @@ public class FirstLevel extends Scene {
         frontend = new Frontend(this, screen, explosions, bullets, empire, bulletsEnemy);
 
         Resources.setPlayer(player);
-        Processor.postTask(this::initEnemies);
+        initEnemies();
 
         mainGameManager.startSceneOver(this, new Countdown(mainGameManager, () -> {
             countdownTime = false;
@@ -249,12 +250,15 @@ public class FirstLevel extends Scene {
                     switch (bullet.name) {
                         case BOMB:
                             poolHub.bombPool.free(bullet);
-                            break;
+                            return;
                         case BULLET_ENEMY:
                             poolHub.bulletEnemyPool.free(bullet);
-                            break;
+                            return;
                         case SUNRISE_BOMB:
                             poolHub.sunriseBulletPool.free(bullet);
+                            return;
+                        case STAR_LASER:
+                            poolHub.starLaserPool.free(bullet);
                     }
                 });
             }
@@ -279,6 +283,7 @@ public class FirstLevel extends Scene {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
                 explosion.translateX(moveAll);
+                explosion.update();
             } else {
                 iterator.remove();
                 postToLooper(() -> poolHub.explosionPool.free(explosion));

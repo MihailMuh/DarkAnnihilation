@@ -38,6 +38,7 @@ public class MainGame extends BaseApp {
     private static final double FPS_59 = 1 / 59f;
     private double accumulator;
 
+    private volatile boolean threadRan = false;
     private boolean onPause = false;
 
     AssetManagerSuper assetManager;
@@ -107,8 +108,11 @@ public class MainGame extends BaseApp {
     }
 
     private void backgroundUpdate() {
+        if (threadRan) return;
+
+        threadRan = true;
         while (!onPause) {
-            Service.sleep(16);
+            Service.sleep((int) (delta * 1000));
 
             try {
                 scenesArray.backgroundUpdate();
@@ -117,6 +121,7 @@ public class MainGame extends BaseApp {
                 exception.printStackTrace();
             }
         }
+        threadRan = false;
     }
 
     private void error(Throwable throwable) {

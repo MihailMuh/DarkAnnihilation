@@ -10,6 +10,7 @@ import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.TripleFighter;
 import com.warfare.darkannihilation.enemy.Vader;
+import com.warfare.darkannihilation.enemy.deathstar.StarLaserPool;
 import com.warfare.darkannihilation.pools.BombPool;
 import com.warfare.darkannihilation.pools.BulletEnemyPool;
 import com.warfare.darkannihilation.pools.BulletPool;
@@ -19,6 +20,8 @@ import com.warfare.darkannihilation.pools.OpponentPool;
 import com.warfare.darkannihilation.pools.SunriseBulletPool;
 
 public class PoolHub implements Disposable {
+    private Array<BaseBullet> bulletsEnemy;
+
     public ExplosionPool explosionPool;
     public BombPool bombPool;
     public BulletEnemyPool bulletEnemyPool;
@@ -26,8 +29,11 @@ public class PoolHub implements Disposable {
     public OpponentPool vaderPool, triplePool;
     public MinionPool minionPool;
     public SunriseBulletPool sunriseBulletPool;
+    public StarLaserPool starLaserPool;
 
     public void initPools(Array<Explosion> explosions, Array<BaseBullet> bulletsEnemy, Array<Bullet> bullets, Array<Opponent> empire) {
+        this.bulletsEnemy = bulletsEnemy;
+
         explosionPool = new ExplosionPool(explosions);
         bombPool = new BombPool(bulletsEnemy);
         bulletEnemyPool = new BulletEnemyPool(bulletsEnemy);
@@ -49,6 +55,10 @@ public class PoolHub implements Disposable {
         };
     }
 
+    public void iniStarLaserPool() {
+        starLaserPool = new StarLaserPool(bulletsEnemy);
+    }
+
     @Override
     public void dispose() {
         explosionPool.clear();
@@ -59,5 +69,7 @@ public class PoolHub implements Disposable {
         triplePool.clear();
         minionPool.clear();
         sunriseBulletPool.clear();
+
+        if (starLaserPool != null) starLaserPool.clear();
     }
 }

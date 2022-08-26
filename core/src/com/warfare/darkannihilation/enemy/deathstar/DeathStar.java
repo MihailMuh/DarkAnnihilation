@@ -13,6 +13,7 @@ import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SECOND
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SECOND_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SHOOT_TIME_FOR_FIRST_PHASE_IN_SECS;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SHOOT_TIME_FOR_SECOND_PHASE_IN_SECS;
+import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SHOOT_TIME_FOR_THIRD_PHASE_IN_SECS;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_SPEED_FOR_THIRD_PHASE;
 import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_THIRD_PHASE_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
@@ -27,6 +28,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.warfare.darkannihilation.abstraction.sprite.Shooter;
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.systemd.EnemyController;
@@ -93,6 +95,7 @@ public class DeathStar extends Shooter {
             shootTime = DEATH_STAR_SHOOT_TIME_FOR_SECOND_PHASE_IN_SECS;
         } else {
             speedY = DEATH_STAR_SPEED_FOR_THIRD_PHASE;
+            shootTime = DEATH_STAR_SHOOT_TIME_FOR_THIRD_PHASE_IN_SECS;
 
             enemyController.addEnemy(shield);
             postTask(() -> {
@@ -174,10 +177,18 @@ public class DeathStar extends Shooter {
         getPools().sunriseBulletPool.obtain(x, y, cos, sin);
     }
 
+    private void shootThirdPhase() {
+        float x = right() - 70;
+        float y = top() - 120;
+        float deltaX = player.centerX() - x;
+        float deltaY = player.centerY() - y;
+
+        getPools().starLaserPool.obtain(x, y, MathUtils.radiansToDegrees * atan2(deltaY, deltaX));
+    }
+
     @Override
     public void update() {
         centerX = centerX();
-        scale(0);
 
         switch (phase) {
             case 0:
@@ -214,6 +225,9 @@ public class DeathStar extends Shooter {
                     }
                     shooting();
                 }
+                break;
+            case 2:
+                if (getY() >= yToStopForThirdPhase) shooting();
         }
 
         healthBar.updateHealthBar(health);
@@ -250,7 +264,7 @@ public class DeathStar extends Shooter {
                 shootSecondPhase();
                 break;
             case 2:
-
+                shootThirdPhase();
         }
         getSounds().bigLaserSound.play();
     }

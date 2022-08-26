@@ -23,7 +23,7 @@ public class SunriseBomb extends BaseBullet {
         name = SUNRISE_BOMB;
     }
 
-    public void start(float X, float Y, float cos, float sin) {
+    public void start(float x, float y, float cos, float sin) {
         speedX = SUNRISE_BOMB_SPEED * cos;
         speedY = SUNRISE_BOMB_SPEED * sin;
 
@@ -36,19 +36,19 @@ public class SunriseBomb extends BaseBullet {
 
         setRegion(getImages().sunriseBomb);
 
-        start(X, Y);
+        start(x, y);
     }
 
     @Override
     public void update() {
         translate(speedX, speedY);
+
+        speedX /= 1.055f;
+        speedY /= 1.055f;
     }
 
     @Override
     public void updateInThread() {
-        speedX /= 1.055f;
-        speedY /= 1.055f;
-
         if (time - lastBoom >= SUNRISE_BOMB_BOOM_TIME_IN_SECS) {
             lastBoom = Integer.MAX_VALUE;
             internalKill();

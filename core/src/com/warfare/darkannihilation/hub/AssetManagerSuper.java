@@ -55,17 +55,11 @@ public class AssetManagerSuper extends AssetManager {
     }
 
     public Animation<AtlasRegion> getAnimation(TextureAtlas atlas, String name, float frameDuration, float scale) {
-        Array<AtlasRegion> regions = new Array<>(true, 10, AtlasRegion.class);
+        Array<AtlasRegion> regions = atlas.findRegions(name);
 
-        int i = 0;
-        while (true) {
-            AtlasRegion region = atlas.findRegion(name, i++);
-            if (region == null) {
-                break;
-            }
+        for (AtlasRegion region : regions) {
             region.originalWidth *= scale;
             region.originalHeight *= scale;
-            regions.add(region);
         }
 
         Animation<AtlasRegion> animation = new Animation<>(frameDuration, regions.toArray(AtlasRegion.class));

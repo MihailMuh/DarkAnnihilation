@@ -7,6 +7,7 @@ import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_SCREEN_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.MILLENNIUM_VS_STAR;
+import static com.warfare.darkannihilation.constants.Constants.ANIMATION_SCREEN_WIDTH;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -145,12 +146,18 @@ public class ImageHub extends BaseHub {
     }
 
     public void loadDeathStarLaserAnimation() {
-        assetManager.load(DEATH_STAR_LASER, Texture.class);
+        assetManager.load(DEATH_STAR_LASER, TextureAtlas.class);
     }
 
     public void getDeathStarLaserAnimation() {
-        deathStarLaser = assetManager.getAnimation(assetManager.get(DEATH_STAR_LASER), "death_star_laser", 0.01f, 1);
-        assetManager.load(DEATH_STAR_LASER, Texture.class);
+        deathStarLaser = assetManager.getAnimation(assetManager.get(DEATH_STAR_LASER), "death_star_laser", 0.02f, 1);
+        deathStarLaser.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        AtlasRegion lastFrame = deathStarLaser.getKeyFrames()[deathStarLaser.getKeyFrames().length - 1];
+        float scale = ANIMATION_SCREEN_WIDTH / (float) lastFrame.originalWidth;
+        lastFrame.originalWidth *= scale;
+        lastFrame.originalHeight *= scale;
+
     }
 
     public void disposeVersusImage() {

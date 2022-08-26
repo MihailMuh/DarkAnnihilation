@@ -18,7 +18,7 @@ public class Explosion extends BaseSprite {
     private float timer;
 
     public Explosion() {
-        super(getImages().blackColor);
+        super(getImages().tripleExplosionAnim.getKeyFrames()[21]);
     }
 
     public void start(float x, float y, byte type) {
@@ -43,15 +43,12 @@ public class Explosion extends BaseSprite {
                 animation = getImages().hugeExplosionAnim;
         }
 
-        float width = animation.getKeyFrame(0).originalWidth;
-        float height = animation.getKeyFrame(0).originalHeight;
+        AtlasRegion firstFrame = animation.getKeyFrame(0);
 
-        if (small) {
-            width /= 2.5f;
-            height /= 2.5f;
-        }
-
-        setSize(width, height);
+        setRegion(firstFrame);
+        setScale(small ? 0.4f : 1);
+        setSize(firstFrame.originalWidth, firstFrame.originalHeight);
+        setOriginCenter();
         setCenter(x, y);
 
         timer = 0;

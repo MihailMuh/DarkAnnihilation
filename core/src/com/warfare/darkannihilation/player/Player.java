@@ -5,7 +5,7 @@ import static com.warfare.darkannihilation.Settings.GOD_MODE;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
 import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
-import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
+import static com.warfare.darkannihilation.constants.Names.ENEMY;
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
 import static com.warfare.darkannihilation.constants.Names.HALF_HEART;
 import static com.warfare.darkannihilation.constants.Names.MILLENNIUM_FALCON;
@@ -22,7 +22,6 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.sprite.MovingSprite;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class Player extends MovingSprite {
     private final Array<Heart> hearts = new Array<>(true, 20, Heart.class);
@@ -160,20 +159,18 @@ public class Player extends MovingSprite {
         speedY = (endY - getY()) / 3f;
     }
 
-    public void damage(MovingSprite sprite) {
-        Processor.postTask(() -> {
-            if (!GOD_MODE) {
-                damage(sprite.damage);
-                updateHeartsPositions();
-            }
+    public synchronized void damage(MovingSprite sprite) {
+        if (!GOD_MODE) {
+            damage(sprite.damage);
+            updateHeartsPositions();
+        }
 
-            if (sprite.name > BULLET_ENEMY) getSounds().metalSound.play();
+        if (sprite.name >= ENEMY) getSounds().metalSound.play();
 
-            if (sprite.damage >= 20) vibrate(120);
-            else vibrate(60);
+        if (sprite.damage >= 20) vibrate(120);
+        else vibrate(60);
 
-            difficultyAnalyzer.addStatistics(health);
-        });
+        difficultyAnalyzer.addStatistics(health);
     }
 
     @Override
