@@ -295,7 +295,7 @@ public class FirstLevel extends Scene {
         if (opponent.name == ATTENTION) return;
         if (opponent.name == HEALTH_KIT) {
             if (opponent.intersect(player)) {
-                Processor.postTask(() -> player.heal(20));
+                player.heal(20);
                 opponent.kill();
             }
             return;

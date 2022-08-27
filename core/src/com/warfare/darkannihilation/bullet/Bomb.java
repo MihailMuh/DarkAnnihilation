@@ -24,6 +24,7 @@ public class Bomb extends BaseBullet {
 
     @Override
     public void kill() {
+        visible = false;
         explodeSmall();
     }
 }

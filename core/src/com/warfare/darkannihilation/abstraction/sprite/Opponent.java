@@ -28,7 +28,7 @@ public abstract class Opponent extends MovingSprite {
     }
 
     public void killFromPlayer() {
-        internalKill();
+        kill();
     }
 
     @Override

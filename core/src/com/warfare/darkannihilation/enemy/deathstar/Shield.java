@@ -10,6 +10,7 @@ import com.warfare.darkannihilation.player.Player;
 public class Shield extends Opponent {
     public Shield() {
         super(getImages().starShield, STAR_SHIELD_HEALTH, ULTIMATE_DAMAGE, 0);
+
         visible = false;
     }
 
@@ -33,6 +34,8 @@ public class Shield extends Opponent {
 
     @Override
     public void kill() {
+        visible = false;
+
         explodeHuge();
     }
 }

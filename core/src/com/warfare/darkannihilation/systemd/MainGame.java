@@ -112,7 +112,7 @@ public class MainGame extends BaseApp {
 
         threadRan = true;
         while (!onPause) {
-            Service.sleep((int) (delta * 1000));
+            Service.sleep(16);
 
             try {
                 scenesArray.backgroundUpdate();

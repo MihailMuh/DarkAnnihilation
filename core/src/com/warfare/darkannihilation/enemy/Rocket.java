@@ -32,6 +32,8 @@ public class Rocket extends BaseBullet {
 
     @Override
     public void kill() {
+        visible = false;
+
         explodeHuge();
     }
 }

@@ -56,6 +56,7 @@ public class Factory extends Shooter {
 
     @Override
     public void kill() {
+        visible = false;
         explodeHuge();
         healthBar.hide();
     }

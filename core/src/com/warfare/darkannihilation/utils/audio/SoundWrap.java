@@ -15,7 +15,11 @@ public class SoundWrap extends Audio {
 
     @Override
     public void play() {
-        if (SOUNDS_IN_THREAD) {
+        play(SOUNDS_IN_THREAD);
+    }
+
+    public void play(boolean soundInThread) {
+        if (soundInThread) {
             Processor.postToLooper(() -> sound.play(volume));
         } else {
             sound.play(volume);

@@ -51,7 +51,7 @@ public class SunriseBomb extends BaseBullet {
     public void updateInThread() {
         if (time - lastBoom >= SUNRISE_BOMB_BOOM_TIME_IN_SECS) {
             lastBoom = Integer.MAX_VALUE;
-            internalKill();
+            kill();
             aLotOfShots();
             return;
         }
@@ -83,6 +83,8 @@ public class SunriseBomb extends BaseBullet {
 
     @Override
     public void kill() {
+        visible = false;
+
         explodeHuge();
     }
 }

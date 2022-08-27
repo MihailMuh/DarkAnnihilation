@@ -100,7 +100,7 @@ public class DeathStar extends Shooter {
             enemyController.addEnemy(shield);
             postTask(() -> {
                 Service.sleep(1000);
-                enemyController.newTriple(10);
+                enemyController.newTriple(5);
             });
         }
     }
@@ -241,7 +241,9 @@ public class DeathStar extends Shooter {
 
     @Override
     public void kill() {
+        visible = false;
         explodeHuge();
+
         postTask(() -> {
             getSounds().firstLevelMusic.play();
             getSounds().disposeDeathStarMusic();

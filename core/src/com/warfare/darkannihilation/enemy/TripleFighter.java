@@ -72,14 +72,14 @@ public class TripleFighter extends Shooter {
         return MathUtils.random(-rads, rads);
     }
 
-    protected void calculate(float X, float Y) {
-        float rads = MathUtils.atan2(getPlayer().centerY() - Y, getPlayer().centerX() - X) + getMiniAngle();
+    protected void calculate(float x, float y) {
+        float rads = MathUtils.atan2(getPlayer().centerY() - y, getPlayer().centerX() - x) + getMiniAngle();
         float cos = MathUtils.cos(rads);
         float sin = MathUtils.sin(rads);
 
         shootTime = random(1f, 2f);
         getSounds().bigLaserSound.play();
-        getPools().bulletEnemyPool.obtain(X, Y, cos, sin, rads * MathUtils.radiansToDegrees);
+        getPools().bulletEnemyPool.obtain(x, y, cos, sin, rads * MathUtils.radiansToDegrees);
     }
 
     @Override

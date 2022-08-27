@@ -175,6 +175,8 @@ public class Player extends MovingSprite {
 
     @Override
     public void kill() {
+        visible = false;
+
         explodeHuge();
         vibrate(200);
     }

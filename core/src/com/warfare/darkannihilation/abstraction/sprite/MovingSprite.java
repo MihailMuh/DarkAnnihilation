@@ -37,7 +37,7 @@ public abstract class MovingSprite extends BaseSprite {
         health -= damage;
 
         if (isDead()) {
-            internalKill();
+            kill();
         }
     }
 
@@ -58,11 +58,6 @@ public abstract class MovingSprite extends BaseSprite {
     }
 
     public abstract void kill();
-
-    protected final void internalKill() {
-        visible = false;
-        kill();
-    }
 
     protected void explosion(byte type) {
         getPools().explosionPool.obtain(centerX(), centerY(), type);

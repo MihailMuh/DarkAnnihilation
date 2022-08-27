@@ -33,7 +33,7 @@ public class HealthBar {
     public void setOutlineBarCoords(float x, float y) {
         outlineColor.setCenter(x, y);
 
-        // чтобы dirty стало true - вершины пересчитываться будут только в barColor.draw
+        // чтобы dirty стало true, тогда вершины пересчитываться будут только в barColor.draw
         barColor.scale(0);
         barColor.setCenterY(y);
         barColor.setX(outlineColor.getX() + halfDeltaHeights);

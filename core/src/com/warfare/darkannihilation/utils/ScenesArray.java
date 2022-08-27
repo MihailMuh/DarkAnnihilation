@@ -2,7 +2,6 @@ package com.warfare.darkannihilation.utils;
 
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.systemd.service.Processor;
 
 public class ScenesArray extends Array<Scene> {
     public ScenesArray() {
@@ -32,8 +31,8 @@ public class ScenesArray extends Array<Scene> {
     public void removeExceptLastScene() {
         for (int i = 0; i < size - 1; i++) {
             Scene scene = get(i);
-            if (scene != null && scene.update) {
-                Processor.postTask(scene::dispose);
+            if (scene != null) {
+                scene.dispose();
                 removeIndex(i--);
             }
         }
