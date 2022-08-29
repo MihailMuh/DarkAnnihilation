@@ -1,4 +1,4 @@
-package com.warfare.darkannihilation;
+package com.warfare.darkannihilation.widgets;
 
 import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
@@ -18,7 +18,7 @@ public class Button extends BaseButton {
     private float textX;
     private float textY;
     private boolean pressed, swept;
-    private float shootTime;
+    private float tapTime;
 
     public static Font buttonFont;
 
@@ -40,8 +40,8 @@ public class Button extends BaseButton {
 
     @Override
     public void onClick(float x, float y) {
-        if (time - shootTime >= BUTTON_CLICK_TIME) {
-            shootTime = time;
+        if (time - tapTime >= BUTTON_CLICK_TIME) {
+            tapTime = time;
             pressed = false;
 
             if (checkClick(x, y)) {

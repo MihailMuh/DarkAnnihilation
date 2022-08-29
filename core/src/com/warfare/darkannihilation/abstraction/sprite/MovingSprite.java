@@ -41,7 +41,7 @@ public abstract class MovingSprite extends BaseSprite {
         }
     }
 
-    public final boolean killedBy(MovingSprite sprite) {
+    public boolean killedBy(MovingSprite sprite) {
         boolean killed = false;
 
         if (intersect(sprite)) {

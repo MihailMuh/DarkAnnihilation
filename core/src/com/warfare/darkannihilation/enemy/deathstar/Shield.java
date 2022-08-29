@@ -5,7 +5,6 @@ import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
-import com.warfare.darkannihilation.player.Player;
 
 public class Shield extends Opponent {
     public Shield() {
@@ -23,7 +22,7 @@ public class Shield extends Opponent {
     }
 
     @Override
-    public boolean killedByPlayer(Player player) {
+    public boolean killedByPlayer() {
         return false;
     }
 

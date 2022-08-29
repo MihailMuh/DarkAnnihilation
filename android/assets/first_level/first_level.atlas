@@ -1,65 +1,95 @@
 first_level.png
-	size: 2048, 1024
+	size: 2048, 2048
 	repeat: none
 attention
-	bounds: 1878, 139, 70, 63
+	bounds: 672, 1224, 70, 63
 bomb
-	bounds: 483, 26, 30, 70
-bullet
-	bounds: 2029, 842, 7, 32
-cannon_ball
+	bounds: 1878, 1533, 30, 70
+buckshot
 	bounds: 0, 0, 15, 15
+bullet
+	bounds: 792, 241, 7, 32
+changer_guns
+	index: 8
+	bounds: 672, 1289, 400, 314
+changer_guns
+	index: 0
+	bounds: 1074, 1289, 400, 314
+changer_guns
+	index: 5
+	bounds: 1476, 1289, 400, 314
+changer_guns
+	index: 2
+	bounds: 402, 907, 400, 314
+changer_guns
+	index: 7
+	bounds: 402, 591, 400, 314
+changer_guns
+	index: 4
+	bounds: 402, 275, 400, 314
+changer_guns
+	index: 1
+	bounds: 804, 973, 400, 314
+changer_guns
+	index: 6
+	bounds: 804, 657, 400, 314
+changer_guns
+	index: 3
+	bounds: 1206, 973, 400, 314
 death_star
 	index: 1
-	bounds: 672, 164, 400, 400
+	bounds: 0, 821, 400, 400
 death_star
 	index: 0
-	bounds: 1074, 164, 400, 400
+	bounds: 0, 419, 400, 400
 death_star
 	index: 2
-	bounds: 1476, 164, 400, 400
+	bounds: 0, 17, 400, 400
 demoman
-	bounds: 0, 17, 287, 165
+	bounds: 402, 108, 287, 165
 factory
-	bounds: 0, 566, 1925, 430
+	bounds: 0, 1605, 1925, 430
 full_blue_heart
-	bounds: 1878, 376, 99, 84
+	bounds: 926, 571, 99, 84
 full_heart
-	bounds: 512, 98, 99, 84
+	bounds: 1927, 1829, 99, 84
+gun_kit
+	index: 0
+	bounds: 1608, 1178, 87, 109
 half_blue_heart
-	bounds: 1927, 602, 99, 84
+	bounds: 804, 449, 99, 84
 half_heart
-	bounds: 1927, 688, 99, 84
+	bounds: 691, 189, 99, 84
 health
-	bounds: 613, 127, 55, 55
+	bounds: 1927, 1772, 55, 55
 laser
-	bounds: 1927, 570, 70, 30
+	bounds: 804, 417, 70, 30
 minion
-	bounds: 289, 10, 77, 50
+	bounds: 691, 137, 77, 50
 non_heart
-	bounds: 411, 98, 99, 84
+	bounds: 402, 22, 99, 84
 red
-	bounds: 613, 124, 1, 1
+	bounds: 2028, 1912, 1, 1
 rocket
-	bounds: 1878, 276, 50, 98
+	bounds: 1308, 873, 50, 98
 ship
-	bounds: 1878, 462, 75, 102
+	bounds: 1206, 767, 75, 102
 star_shield
-	bounds: 0, 184, 670, 380
+	bounds: 0, 1223, 670, 380
 sunrise_bomb
-	bounds: 289, 62, 120, 120
+	bounds: 804, 535, 120, 120
 sunrise_bomb_red
-	bounds: 1927, 876, 120, 120
+	bounds: 1927, 1915, 120, 120
 triple_fighter
-	bounds: 1927, 774, 100, 100
+	bounds: 1206, 871, 100, 100
 vader
 	index: 1
-	bounds: 1878, 204, 70, 70
+	bounds: 1608, 1106, 70, 70
 vader
 	index: 0
-	bounds: 1930, 304, 70, 70
+	bounds: 1697, 1217, 70, 70
 vader
 	index: 2
-	bounds: 411, 26, 70, 70
+	bounds: 503, 36, 70, 70
 white
-	bounds: 1930, 301, 1, 1
+	bounds: 402, 19, 1, 1

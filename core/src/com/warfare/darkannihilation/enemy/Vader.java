@@ -3,11 +3,13 @@ package com.warfare.darkannihilation.enemy;
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Constants.VADER_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.VADER_HEALTH;
+import static com.warfare.darkannihilation.constants.Names.BUCKSHOT;
 import static com.warfare.darkannihilation.constants.Names.VADER;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
+import com.warfare.darkannihilation.abstraction.sprite.MovingSprite;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 
 public class Vader extends Opponent {
@@ -16,6 +18,23 @@ public class Vader extends Opponent {
 
         name = VADER;
         reset();
+    }
+
+    @Override
+    public boolean killedBy(MovingSprite sprite) {
+        boolean killed = false;
+
+        if (intersect(sprite)) {
+            killed = sprite.damage >= health;
+
+            if (sprite.name == BUCKSHOT) {
+                kill();
+            } else {
+                sprite.damage(damage);
+                damage(sprite.damage);
+            }
+        }
+        return killed;
     }
 
     @Override

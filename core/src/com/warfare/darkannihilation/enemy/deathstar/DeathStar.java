@@ -235,7 +235,7 @@ public class DeathStar extends Shooter {
     }
 
     @Override
-    public boolean killedByPlayer(Player player) {
+    public boolean killedByPlayer() {
         return false;
     }
 

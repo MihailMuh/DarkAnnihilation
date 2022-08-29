@@ -3,6 +3,7 @@ package com.warfare.darkannihilation.abstraction.sprite;
 import static com.warfare.darkannihilation.constants.Names.ENEMY;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.warfare.darkannihilation.hub.Resources;
 import com.warfare.darkannihilation.player.Player;
 
 public abstract class Opponent extends MovingSprite {
@@ -18,7 +19,9 @@ public abstract class Opponent extends MovingSprite {
         shouldKill = false;
     }
 
-    public boolean killedByPlayer(Player player) {
+    public boolean killedByPlayer() {
+        Player player = Resources.getPlayer();
+
         if (intersect(player)) {
             player.damage(this);
             killFromPlayer();

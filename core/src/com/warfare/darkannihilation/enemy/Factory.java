@@ -50,7 +50,7 @@ public class Factory extends Shooter {
     }
 
     @Override
-    public boolean killedByPlayer(Player player) {
+    public boolean killedByPlayer() {
         return false;
     }
 

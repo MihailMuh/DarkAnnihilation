@@ -9,7 +9,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
-import com.warfare.darkannihilation.Button;
+import com.warfare.darkannihilation.widgets.Button;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
 import com.warfare.darkannihilation.screens.AnimatedScreen;

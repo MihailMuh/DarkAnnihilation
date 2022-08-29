@@ -4,19 +4,20 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.utils.PoolWrap;
 
-public class BulletPool extends PoolWrap<Bullet> {
-    private final Array<Bullet> bullets;
+public class BulletPool extends PoolWrap<BaseBullet> {
+    private final Array<BaseBullet> bullets;
 
-    public BulletPool(Array<Bullet> bullets) {
+    public BulletPool(Array<BaseBullet> bullets) {
         super(NUMBER_MILLENNIUM_FALCON_BULLETS);
         this.bullets = bullets;
     }
 
     public void obtain(float x, float y) {
-        Bullet bullet = obtain();
+        BaseBullet bullet = obtain();
         bullet.start(x, y);
         Gdx.app.postRunnable(() -> bullets.add(bullet));
     }

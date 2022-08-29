@@ -13,9 +13,11 @@ import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
 import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.utils.Font;
+import com.warfare.darkannihilation.widgets.ChangerGuns;
 
 class Frontend {
     private final FirstLevel firstLevel;
+    private final ChangerGuns changerGuns;
 
     private final Font font;
     private final float textX, textY;
@@ -23,18 +25,19 @@ class Frontend {
     private BaseSprite screen;
 
     private final Array<Explosion> explosions;
-    private final Array<Bullet> bullets;
+    private final Array<BaseBullet> bullets;
     private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
 
-    Frontend(FirstLevel firstLevel, BaseSprite screen, Array<Explosion> explosions,
-             Array<Bullet> bullets, Array<Opponent> empire, Array<BaseBullet> bulletsEnemy) {
+    Frontend(FirstLevel firstLevel, BaseSprite screen, Array<Explosion> explosions, Array<BaseBullet> bullets,
+             Array<Opponent> empire, Array<BaseBullet> bulletsEnemy, ChangerGuns changerGuns) {
         this.firstLevel = firstLevel;
         this.screen = screen;
         this.explosions = explosions;
         this.bullets = bullets;
         this.empire = empire;
         this.bulletsEnemy = bulletsEnemy;
+        this.changerGuns = changerGuns;
 
         font = Font.scaledFontWrap(getFonts().canisMinor, HALF_SCREEN_WIDTH / 1.75f, getLocales().currentScore + "10");
         textX = HALF_SCREEN_WIDTH - font.getHalfTextWidth(getLocales().currentScore + "10");
@@ -55,10 +58,11 @@ class Frontend {
             baseBullet.render();
         }
 
-        for (Bullet bullet : bullets) {
+        for (BaseBullet bullet : bullets) {
             bullet.render();
         }
         getPlayer().render();
+        changerGuns.render();
 
         for (Explosion explosion : explosions) {
             explosion.render();

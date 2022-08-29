@@ -4,6 +4,7 @@ import static com.badlogic.gdx.math.MathUtils.roundPositive;
 import static com.warfare.darkannihilation.Settings.GOD_MODE;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_HEALTH;
 import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOOT_TIME;
+import static com.warfare.darkannihilation.constants.Constants.MILLENNIUM_FALCON_SHOTGUN_TIME;
 import static com.warfare.darkannihilation.constants.Constants.ULTIMATE_DAMAGE;
 import static com.warfare.darkannihilation.constants.Names.ENEMY;
 import static com.warfare.darkannihilation.constants.Names.FULL_HEART;
@@ -28,17 +29,24 @@ public class Player extends MovingSprite {
     private final ArmorPool armorPool = new ArmorPool(hearts);
     private final DifficultyAnalyzer difficultyAnalyzer;
 
-    private float lastShot;
+    private float lastShot, shootTime;
     private float endX, endY;
     private int heartX = 25;
     private int heartY = SCREEN_HEIGHT - 90;
     private final int mxHealthMinus5;
 
+    private boolean activeAlternativeGun = false;
+
+    // поле используется в ImageHub, при загрузке картинок для уровня, когда игрок еще не создан
+    public static byte CHARACTER_NAME;
+
     public Player(DifficultyAnalyzer difficultyAnalyzer) {
         super(getImages().millenniumFalcon, MILLENNIUM_FALCON_HEALTH, ULTIMATE_DAMAGE, 0);
         this.difficultyAnalyzer = difficultyAnalyzer;
 
+        CHARACTER_NAME = MILLENNIUM_FALCON;
         name = MILLENNIUM_FALCON;
+
         mxHealthMinus5 = maxHealth - 5;
         health = maxHealth;
 
@@ -123,18 +131,35 @@ public class Player extends MovingSprite {
         }
     }
 
+    public void activateAlternativeGun(boolean activate) {
+        activeAlternativeGun = activate;
+
+        if (activate) {
+            shootTime = MILLENNIUM_FALCON_SHOTGUN_TIME;
+        } else {
+            shootTime = MILLENNIUM_FALCON_SHOOT_TIME;
+        }
+    }
+
     public void shoot() {
-        if (time - lastShot >= MILLENNIUM_FALCON_SHOOT_TIME) {
+        if (time - lastShot >= shootTime) {
             lastShot = time;
 
-            final float X = centerX();
-            final float Y = top();
+            final float x = centerX();
+            final float y = top();
 
-            getPools().bulletPool.obtain(X - 7, Y);
-            getPools().bulletPool.obtain(X, Y);
-            getPools().bulletPool.obtain(X + 7, Y);
+            if (activeAlternativeGun) {
+                for (int bulletSpeedX = -6; bulletSpeedX <= 6; bulletSpeedX += 2) {
+                    getPools().buckshotPool.obtain(x, y, bulletSpeedX);
+                }
+                getSounds().secondPlayerGunSound.play();
+            } else {
+                getPools().bulletPool.obtain(x - 7, y);
+                getPools().bulletPool.obtain(x, y);
+                getPools().bulletPool.obtain(x + 7, y);
 
-            getSounds().laserSound.play();
+                getSounds().firstPlayerGunSound.play();
+            }
         }
     }
 
@@ -167,8 +192,10 @@ public class Player extends MovingSprite {
 
         if (sprite.name >= ENEMY) getSounds().metalSound.play();
 
-        if (sprite.damage >= 20) vibrate(120);
-        else vibrate(60);
+        if (sprite.damage > 0) {
+            if (sprite.damage >= 20) vibrate(120);
+            else vibrate(60);
+        }
 
         difficultyAnalyzer.addStatistics(health);
     }
@@ -184,6 +211,10 @@ public class Player extends MovingSprite {
     @Override
     public void render() {
         if (visible) super.render();
-        for (Heart heart : hearts) heart.render();
+
+        for (int i = 0; i < hearts.size; i++) {
+            Heart heart = hearts.get(i);
+            if (heart != null) heart.render();
+        }
     }
 }

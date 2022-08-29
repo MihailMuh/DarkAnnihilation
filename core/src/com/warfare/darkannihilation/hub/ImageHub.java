@@ -8,11 +8,14 @@ import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_SCREEN_A
 import static com.warfare.darkannihilation.constants.Assets.MENU_ATLAS;
 import static com.warfare.darkannihilation.constants.Assets.MILLENNIUM_VS_STAR;
 import static com.warfare.darkannihilation.constants.Constants.ANIMATION_SCREEN_WIDTH;
+import static com.warfare.darkannihilation.constants.Names.EMERALD;
+import static com.warfare.darkannihilation.constants.Names.SATURN;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.warfare.darkannihilation.player.Player;
 
 public class ImageHub extends BaseHub {
     private String versusScreenName;
@@ -22,16 +25,17 @@ public class ImageHub extends BaseHub {
     public Animation<AtlasRegion> defaultExplosionAnim, tripleExplosionAnim, hugeExplosionAnim;
     public Animation<AtlasRegion> deathStarLaser;
 
-    public AtlasRegion[] vadersImages, deathStarImages;
+    public AtlasRegion[] vadersImages, deathStarImages, changerGunsImages;
     public AtlasRegion buttonPress, buttonNotPress;
     public AtlasRegion fullHeartBlue, halfHeartBlue, fullHeartRed, halfHeartRed, nullHeartRed;
     public AtlasRegion demomanImg, bombImg, factoryImg, minionImg, tripleFighterImg, attentionImg, rocketImg, laserImg;
     public AtlasRegion millenniumFalcon;
-    public AtlasRegion bulletImg;
+    public AtlasRegion bulletImg, buckshot;
     public AtlasRegion blackColor, whiteColor, redColor;
     public AtlasRegion healthKitImg;
     public AtlasRegion sunriseBomb, sunriseBombRed;
     public AtlasRegion starShield;
+    public AtlasRegion gunKit;
 
     public AtlasRegion gameOverScreen;
     public AtlasRegion versusScreen;
@@ -84,6 +88,21 @@ public class ImageHub extends BaseHub {
         assetManager.unload(MENU_ATLAS);
     }
 
+    private int getIndexForGunKitByCharacterName() {
+        switch (Player.CHARACTER_NAME) {
+            case SATURN:
+                return 1;
+            case EMERALD:
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
+    private int getIndexForChangerGunsByCharacterName() {
+        return getIndexForGunKitByCharacterName() * 3;
+    }
+
     public void loadFirstLevelImages() {
         assetManager.loadAtlas(FIRST_LEVEL_ATLAS);
         assetManager.loadAtlas(FIRST_LEVEL_SCREEN_ATLAS);
@@ -97,11 +116,19 @@ public class ImageHub extends BaseHub {
         deathStarImages = new AtlasRegion[]{firstLevelAtlas.findRegion("death_star", 0),
                 firstLevelAtlas.findRegion("death_star", 1), firstLevelAtlas.findRegion("death_star", 2)};
 
+        int characterIndex = getIndexForChangerGunsByCharacterName();
+        changerGunsImages = new AtlasRegion[]{
+                firstLevelAtlas.findRegion("changer_guns", characterIndex),
+                firstLevelAtlas.findRegion("changer_guns", characterIndex + 1),
+                firstLevelAtlas.findRegion("changer_guns", characterIndex + 2)
+        };
+
         whiteColor = firstLevelAtlas.findRegion("white");
         redColor = firstLevelAtlas.findRegion("red");
 
         millenniumFalcon = firstLevelAtlas.findRegion("ship");
         bulletImg = firstLevelAtlas.findRegion("bullet");
+        buckshot = firstLevelAtlas.findRegion("buckshot");
 
         demomanImg = firstLevelAtlas.findRegion("demoman");
         bombImg = firstLevelAtlas.findRegion("bomb");
@@ -124,6 +151,8 @@ public class ImageHub extends BaseHub {
         sunriseBombRed = firstLevelAtlas.findRegion("sunrise_bomb_red");
 
         starShield = firstLevelAtlas.findRegion("star_shield");
+
+        gunKit = firstLevelAtlas.findRegion("gun_kit", getIndexForGunKitByCharacterName());
 
         starScreenGIF = assetManager.getAnimation(assetManager.get(FIRST_LEVEL_SCREEN_ATLAS), "star_screen", 0.07f, 2);
     }

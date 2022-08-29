@@ -2,6 +2,7 @@ package com.warfare.darkannihilation.hub;
 
 import static com.warfare.darkannihilation.constants.Assets.ATTENTION_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.BOOM_SOUND;
+import static com.warfare.darkannihilation.constants.Assets.BUCKSHOT_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.DEATH_STAR_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.FALLING_BOMB_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.FIRST_LEVEL_MUSIC;
@@ -13,7 +14,8 @@ import static com.warfare.darkannihilation.constants.Assets.MENU_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.METAL_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.READY_SOUND_0;
 import static com.warfare.darkannihilation.constants.Assets.READY_SOUND_1;
-import static com.warfare.darkannihilation.constants.Assets.SHOTGUN_SOUND;
+import static com.warfare.darkannihilation.constants.Assets.RELOAD_SOUND_0;
+import static com.warfare.darkannihilation.constants.Assets.RELOAD_SOUND_1;
 import static com.warfare.darkannihilation.constants.Assets.SPACE_BAR_SOUND;
 
 import com.badlogic.gdx.utils.Array;
@@ -27,13 +29,14 @@ public class SoundHub extends BaseHub {
 
     public SoundWrap metalSound;
     public SoundWrap bigLaserSound;
-    public SoundWrap laserSound;
+    public SoundWrap firstPlayerGunSound, secondPlayerGunSound;
     public SoundWrap attentionSound;
     public SoundWrap boomSound, megaBoomSound;
     public SoundWrap healSound;
     public SoundWrap fallingBombSound;
     public SoundWrap joystickSound, spaceBarSound;
     public SoundWrap readySound0, readySound1;
+    public SoundWrap reloadSound0, reloadSound1;
 
     public MusicWrap menuMusic;
     public MusicWrap firstLevelMusic;
@@ -70,8 +73,8 @@ public class SoundHub extends BaseHub {
         assetManager.loadSounds(ATTENTION_SOUND, FALLING_BOMB_SOUND);
 
         if (!cache) {
-            assetManager.loadSounds(LASER_SOUND, METAL_SOUND, SHOTGUN_SOUND, BOOM_SOUND, MEGA_BOOM_SOUND,
-                    HEAL_SOUND, READY_SOUND_0, READY_SOUND_1);
+            assetManager.loadSounds(LASER_SOUND, METAL_SOUND, BOOM_SOUND, MEGA_BOOM_SOUND,
+                    HEAL_SOUND, READY_SOUND_0, READY_SOUND_1, RELOAD_SOUND_0, RELOAD_SOUND_1, BUCKSHOT_SOUND);
         }
     }
 
@@ -83,7 +86,8 @@ public class SoundHub extends BaseHub {
         allAudio.add(firstLevelMusic, attentionSound, fallingBombSound);
 
         if (!cache) {
-            laserSound = assetManager.getSound(LASER_SOUND, 0.17f);
+            firstPlayerGunSound = assetManager.getSound(LASER_SOUND, 0.17f);
+            secondPlayerGunSound = assetManager.getSound(BUCKSHOT_SOUND, 0.25f);
             metalSound = assetManager.getSound(METAL_SOUND, 0.48f);
             bigLaserSound = assetManager.getSound(LASER_SOUND, 0.6f);
             boomSound = assetManager.getSound(BOOM_SOUND, 0.18f);
@@ -91,10 +95,13 @@ public class SoundHub extends BaseHub {
             healSound = assetManager.getSound(HEAL_SOUND, 0.8f);
             readySound0 = assetManager.getSound(READY_SOUND_0, 1);
             readySound1 = assetManager.getSound(READY_SOUND_1, 1);
+            reloadSound0 = assetManager.getSound(RELOAD_SOUND_0, 1);
+            reloadSound1 = assetManager.getSound(RELOAD_SOUND_1, 1);
 
             cache = true;
 
-            allAudio.addAll(laserSound, metalSound, bigLaserSound, boomSound, megaBoomSound, healSound, readySound0, readySound1);
+            allAudio.addAll(firstPlayerGunSound, metalSound, bigLaserSound, boomSound, megaBoomSound, healSound,
+                    readySound0, readySound1, reloadSound0, reloadSound1, secondPlayerGunSound);
         }
     }
 

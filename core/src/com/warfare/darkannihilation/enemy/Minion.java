@@ -3,8 +3,11 @@ package com.warfare.darkannihilation.enemy;
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.warfare.darkannihilation.constants.Constants.MINION_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.MINION_HEALTH;
+import static com.warfare.darkannihilation.constants.Names.BUCKSHOT;
 import static com.warfare.darkannihilation.constants.Names.MINION;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
+
+import com.warfare.darkannihilation.abstraction.sprite.MovingSprite;
 
 public class Minion extends TripleFighter {
     public Minion() {
@@ -12,6 +15,23 @@ public class Minion extends TripleFighter {
 
         visible = false;
         name = MINION;
+    }
+
+    @Override
+    public boolean killedBy(MovingSprite sprite) {
+        boolean killed = false;
+
+        if (intersect(sprite)) {
+            killed = sprite.damage >= health;
+
+            if (sprite.name == BUCKSHOT) {
+                kill();
+            } else {
+                sprite.damage(damage);
+                damage(sprite.damage);
+            }
+        }
+        return killed;
     }
 
     public void start(float x, float y) {

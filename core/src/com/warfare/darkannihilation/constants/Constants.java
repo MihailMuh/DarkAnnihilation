@@ -9,9 +9,9 @@ public final class Constants {
     // characters
     public static final byte MILLENNIUM_FALCON_HEALTH = 50;
     public static final float MILLENNIUM_FALCON_SHOOT_TIME = 0.065f;
-    public static final short MILLENNIUM_FALCON_SHOTGUN_TIME = 515;
+    public static final float MILLENNIUM_FALCON_SHOTGUN_TIME = 0.55f;
     public static final byte NUMBER_MILLENNIUM_FALCON_BULLETS = 30;
-    public static final short NUMBER_MILLENNIUM_FALCON_BUCKSHOT = NUMBER_MILLENNIUM_FALCON_BULLETS + 30;
+    public static final short NUMBER_MILLENNIUM_FALCON_BUCKSHOT = 30;
 
     public static final short EMERALD_SHOOT_TIME = 1_300;
     public static final short EMERALD_SHOTGUN_TIME = 1_200;
@@ -129,7 +129,7 @@ public final class Constants {
     public static final byte BULLET_SPEED = 34;
 
     public static final byte BUCKSHOT_DAMAGE = 3;
-    public static final byte BUCKSHOT_SPEED = 8;
+    public static final byte BUCKSHOT_SPEED = 20;
 
     public static final byte BOMB_DAMAGE = 5;
     public static final byte BOMB_SPEED = -20;
@@ -144,7 +144,7 @@ public final class Constants {
     // other
     public static final float BUTTON_CLICK_TIME = 0.1f;
 
-    public static final short CHANGER_GUNS_CLICK_TIME = 700;
+    public static final float CHANGER_GUNS_CLICK_TIME = 0.7f;
 
     public static final short ULTIMATE_DAMAGE = 10_000;
 }

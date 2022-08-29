@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation.scenes.menu;
 
-import com.warfare.darkannihilation.Button;
+import com.warfare.darkannihilation.widgets.Button;
 import com.warfare.darkannihilation.utils.ClickListener;
 
 class MenuClickListener extends ClickListener {

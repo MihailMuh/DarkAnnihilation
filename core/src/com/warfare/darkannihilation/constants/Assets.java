@@ -9,9 +9,9 @@ public final class Assets {
     public static final String MILLENNIUM_VS_STAR = "vs_screens/millennium_vs_star.png";
     public static final String DEATH_STAR_LASER = "star_laser/star_laser.atlas";
 
+    public static final String BUCKSHOT_SOUND = "sounds/buckshot.mp3";
     public static final String LASER_SOUND = "sounds/laser.mp3";
     public static final String METAL_SOUND = "sounds/metal.mp3";
-    public static final String SHOTGUN_SOUND = "sounds/shotgun.mp3";
     public static final String ATTENTION_SOUND = "sounds/attention.mp3";
     public static final String BOOM_SOUND = "sounds/boom.mp3";
     public static final String MEGA_BOOM_SOUND = "sounds/mega_boom.mp3";
@@ -21,6 +21,8 @@ public final class Assets {
     public static final String SPACE_BAR_SOUND = "sounds/space_bar.mp3";
     public static final String READY_SOUND_0 = "sounds/ready0.mp3";
     public static final String READY_SOUND_1 = "sounds/ready1.mp3";
+    public static final String RELOAD_SOUND_0 = "sounds/reload0.mp3";
+    public static final String RELOAD_SOUND_1 = "sounds/reload1.mp3";
 
     public static final String MENU_MUSIC = "sounds/menu.mp3";
     public static final String FIRST_LEVEL_MUSIC = "sounds/first_level.mp3";

@@ -10,7 +10,7 @@ public abstract class BaseButton extends BaseSprite {
 
     public abstract void onClick(float x, float y);
 
-    protected boolean checkClick(float x, float y) {
+    public boolean checkClick(float x, float y) {
         return getX() <= x && x <= right() && getY() <= y && y <= top();
     }
 

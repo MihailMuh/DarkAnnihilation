@@ -15,7 +15,6 @@ import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
-import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.pools.ExplosionPool;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.GameTask;
@@ -31,10 +30,10 @@ public class GameOver extends Scene {
 
     private final Array<Opponent> empire;
     private final Array<BaseBullet> bulletsEnemy;
-    private final Array<Bullet> bullets;
+    private final Array<BaseBullet> bullets;
     private final Array<Explosion> explosions;
 
-    public GameOver(MainGameManager mainGameManager, Array<Opponent> empire, Array<Bullet> bullets,
+    public GameOver(MainGameManager mainGameManager, Array<Opponent> empire, Array<BaseBullet> bullets,
                     Array<BaseBullet> bulletsEnemy, Array<Explosion> explosions) {
         super(mainGameManager, new GameOverClickListener(mainGameManager));
 
@@ -72,7 +71,7 @@ public class GameOver extends Scene {
             bullet.update();
         }
 
-        for (Bullet bullet : bullets) {
+        for (BaseBullet bullet : bullets) {
             bullet.update();
         }
 

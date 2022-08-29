@@ -11,6 +11,7 @@ import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.DEATH_STAR;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
 import static com.warfare.darkannihilation.constants.Names.FACTORY;
+import static com.warfare.darkannihilation.constants.Names.GUN_KIT;
 import static com.warfare.darkannihilation.constants.Names.HEALTH_KIT;
 import static com.warfare.darkannihilation.constants.Names.MINION;
 import static com.warfare.darkannihilation.constants.Names.STAR_LASER;
@@ -31,7 +32,6 @@ import com.warfare.darkannihilation.Explosion;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.abstraction.sprite.Opponent;
 import com.warfare.darkannihilation.bullet.BaseBullet;
-import com.warfare.darkannihilation.bullet.Bullet;
 import com.warfare.darkannihilation.enemy.Attention;
 import com.warfare.darkannihilation.enemy.Demoman;
 import com.warfare.darkannihilation.enemy.Factory;
@@ -45,12 +45,14 @@ import com.warfare.darkannihilation.scenes.gameover.GameOver;
 import com.warfare.darkannihilation.scenes.gameover.GameOverScreen;
 import com.warfare.darkannihilation.scenes.versus.VersusScene;
 import com.warfare.darkannihilation.screens.MovingScreen;
+import com.warfare.darkannihilation.support.GunKit;
 import com.warfare.darkannihilation.support.HealthKit;
 import com.warfare.darkannihilation.systemd.DifficultyAnalyzer;
 import com.warfare.darkannihilation.systemd.EnemyController;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
+import com.warfare.darkannihilation.widgets.ChangerGuns;
 
 import java.util.Iterator;
 
@@ -60,7 +62,7 @@ public class FirstLevel extends Scene {
     private final GameTask spawnBossTask = new GameTask(this::spawnBoss, DEATH_STAR_PERIOD_IN_SECS * 100);
 
     private final Array<Explosion> explosions = new Array<>(false, NUMBER_EXPLOSION);
-    private final Array<Bullet> bullets = new Array<>(false, NUMBER_MILLENNIUM_FALCON_BULLETS);
+    private final Array<BaseBullet> bullets = new Array<>(false, NUMBER_MILLENNIUM_FALCON_BULLETS);
     private final Array<BaseBullet> bulletsEnemy = new Array<>(false, 30);
     private final Array<Opponent> empire = new Array<>(false, 40);
 
@@ -68,6 +70,7 @@ public class FirstLevel extends Scene {
     private final PoolHub poolHub = getPools();
 
     private DifficultyAnalyzer difficultyAnalyzer;
+    private ChangerGuns changerGuns;
     private Frontend frontend;
     private Player player;
     private Demoman demoman;
@@ -75,6 +78,7 @@ public class FirstLevel extends Scene {
     private Attention attention;
     private Rocket rocket;
     private Factory factory;
+    private GunKit gunKit;
 
     private boolean startAnalytics = false, countdownTime = true;
     private float lastBoss;
@@ -97,10 +101,11 @@ public class FirstLevel extends Scene {
         poolHub.initPools(explosions, bulletsEnemy, bullets, empire);
 
         factory = new Factory();
+        changerGuns = new ChangerGuns();
         difficultyAnalyzer = new DifficultyAnalyzer(enemyController, factory);
         player = new Player(difficultyAnalyzer);
         screen = new MovingScreen(getImages().starScreenGIF);
-        frontend = new Frontend(this, screen, explosions, bullets, empire, bulletsEnemy);
+        frontend = new Frontend(this, screen, explosions, bullets, empire, bulletsEnemy, changerGuns);
 
         Resources.setPlayer(player);
         initEnemies();
@@ -118,13 +123,14 @@ public class FirstLevel extends Scene {
 
         demoman = new Demoman();
         healthKit = new HealthKit();
+        gunKit = new GunKit();
         rocket = new Rocket();
         attention = new Attention(rocket);
 
-        empire.addAll(demoman, healthKit, attention, rocket, factory);
+        empire.addAll(demoman, healthKit, attention, rocket, factory, gunKit);
         enemyController.setHealthKit(healthKit);
 
-        clickListener = new GameClickListener(mainGameManager);
+        clickListener = new FirstLevelClickListener(mainGameManager, changerGuns);
         Processor.multiProcessor.insertProcessor(clickListener);
     }
 
@@ -137,6 +143,8 @@ public class FirstLevel extends Scene {
         if (!startAnalytics) {
             startAnalytics = true;
             difficultyAnalyzer.startCollecting();
+
+            changerGuns.reset();
             lastBoss = time;
         }
     }
@@ -163,11 +171,11 @@ public class FirstLevel extends Scene {
 
             if (bullet != null && bullet.visible) {
                 bullet.updateInThread();
-                bullet.killedByPlayer(player);
+                bullet.killedByPlayer();
             }
         }
         for (int i = 0; i < bullets.size; i++) {
-            Bullet bullet = bullets.get(i);
+            BaseBullet bullet = bullets.get(i);
 
             if (bullet != null && bullet.visible) {
                 bullet.updateInThread();
@@ -266,8 +274,8 @@ public class FirstLevel extends Scene {
     }
 
     private void updateBullets(float moveAll) {
-        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
-            Bullet bullet = iterator.next();
+        for (Iterator<BaseBullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
+            BaseBullet bullet = iterator.next();
             if (bullet.visible) {
                 bullet.translateX(moveAll);
                 bullet.update();
@@ -300,13 +308,21 @@ public class FirstLevel extends Scene {
             }
             return;
         }
+        if (opponent.name == GUN_KIT) {
+            if (opponent.killedByPlayer()) {
+                GunKit.COLLECTED = true;
+                changerGuns.changeGun();
+                Gdx.app.postRunnable(() -> empire.removeValue(opponent, true));
+            }
+            return;
+        }
 
-        if (opponent.killedByPlayer(player) || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
+        if (opponent.killedByPlayer() || (rocket.visible && opponent != rocket && opponent.killedBy(rocket))) {
             return;
         }
 
         for (int i = 0; i < bullets.size; i++) {
-            Bullet bullet = bullets.get(i);
+            BaseBullet bullet = bullets.get(i);
             if (bullet != null && bullet.visible && opponent.killedBy(bullet)) {
                 score += opponent.killScore;
                 return;
@@ -327,7 +343,8 @@ public class FirstLevel extends Scene {
         if (!demoman.visible && score > 70 && randomBoolean(0.0315f)) demoman.reset();
         if (!healthKit.visible && randomBoolean(0.018f)) healthKit.reset();
         if (!attention.visible && score > 50 && randomBoolean(0.06f)) attention.reset();
-        if (!factory.visible && score > 170 && randomBoolean(0.013f) && numBosses == 0) {
+        if (!gunKit.visible && score >= 50 && randomBoolean(0.07f)) gunKit.reset();
+        if (!factory.visible && score > 170 && randomBoolean(0.012f) && numBosses == 0) {
             factory.reset();
         }
 
