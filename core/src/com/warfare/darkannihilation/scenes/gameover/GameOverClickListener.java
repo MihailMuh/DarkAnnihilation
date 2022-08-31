@@ -17,7 +17,7 @@ class GameOverClickListener extends ClickListener {
     public boolean touchDragged(float x, float y) {
         if (Gdx.input.isTouched(1) && !start) {
             start = true;
-            manager.startScene(new FirstLevel(manager), true);
+            manager.startScene(true, FirstLevel.class, manager);
         }
         return true;
     }

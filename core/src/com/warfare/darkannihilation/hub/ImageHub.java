@@ -36,6 +36,7 @@ public class ImageHub extends BaseHub {
     public AtlasRegion sunriseBomb, sunriseBombRed;
     public AtlasRegion starShield;
     public AtlasRegion gunKit;
+    public AtlasRegion pauseButton;
 
     public AtlasRegion gameOverScreen;
     public AtlasRegion versusScreen;
@@ -58,6 +59,7 @@ public class ImageHub extends BaseHub {
 
         buttonPress = commonAtlas.findRegion("button_press");
         buttonNotPress = commonAtlas.findRegion("button_not_press");
+        pauseButton = commonAtlas.findRegion("pause_button");
     }
 
     @Override

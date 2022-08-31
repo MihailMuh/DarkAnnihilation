@@ -53,6 +53,7 @@ import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
 import com.warfare.darkannihilation.widgets.ChangerGuns;
+import com.warfare.darkannihilation.widgets.PauseButton;
 
 import java.util.Iterator;
 
@@ -71,6 +72,7 @@ public class FirstLevel extends Scene {
 
     private DifficultyAnalyzer difficultyAnalyzer;
     private ChangerGuns changerGuns;
+    private PauseButton pauseButton;
     private Frontend frontend;
     private Player player;
     private Demoman demoman;
@@ -102,10 +104,11 @@ public class FirstLevel extends Scene {
 
         factory = new Factory();
         changerGuns = new ChangerGuns();
+        pauseButton = new PauseButton();
         difficultyAnalyzer = new DifficultyAnalyzer(enemyController, factory);
         player = new Player(difficultyAnalyzer);
         screen = new MovingScreen(getImages().starScreenGIF);
-        frontend = new Frontend(this, screen, explosions, bullets, empire, bulletsEnemy, changerGuns);
+        frontend = new Frontend(this, screen, explosions, bullets, empire, bulletsEnemy, changerGuns, pauseButton);
 
         Resources.setPlayer(player);
         initEnemies();
@@ -130,13 +133,15 @@ public class FirstLevel extends Scene {
         empire.addAll(demoman, healthKit, attention, rocket, factory, gunKit);
         enemyController.setHealthKit(healthKit);
 
-        clickListener = new FirstLevelClickListener(mainGameManager, changerGuns);
+        clickListener = new FirstLevelClickListener(mainGameManager, changerGuns, pauseButton);
         Processor.multiProcessor.insertProcessor(clickListener);
     }
 
     @Override
     public void resume() {
         super.resume();
+        getSounds().firstLevelMusic.play();
+
         gameTask.start();
         spawnBossTask.start();
 
@@ -145,6 +150,7 @@ public class FirstLevel extends Scene {
             difficultyAnalyzer.startCollecting();
 
             changerGuns.reset();
+            pauseButton.reset();
             lastBoss = time;
         }
     }
@@ -152,6 +158,8 @@ public class FirstLevel extends Scene {
     @Override
     public void pause() {
         super.pause();
+        getSounds().firstLevelMusic.pause();
+
         gameTask.stop();
         spawnBossTask.stop();
     }
@@ -353,7 +361,7 @@ public class FirstLevel extends Scene {
         if (player.isDead()) {
             Gdx.app.postRunnable(() -> {
                 frontend.setScreen(new GameOverScreen());
-                mainGameManager.startScene(new GameOver(mainGameManager, empire, bullets, bulletsEnemy, explosions), false);
+                mainGameManager.startScene(GameOver.class, mainGameManager, empire, bullets, bulletsEnemy, explosions);
             });
         }
     }
@@ -363,7 +371,7 @@ public class FirstLevel extends Scene {
             lastBoss = time;
 
             DeathStar deathStar = new DeathStar(enemyController);
-            mainGameManager.startScene(new VersusScene(mainGameManager, player.name, deathStar.name), false);
+            mainGameManager.startScene(VersusScene.class, mainGameManager, player.name, deathStar.name);
 
             enemyController.killEmpire();
 

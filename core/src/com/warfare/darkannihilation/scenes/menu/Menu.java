@@ -9,16 +9,17 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.badlogic.gdx.Gdx;
-import com.warfare.darkannihilation.widgets.Button;
+import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.scenes.firstlevel.FirstLevel;
 import com.warfare.darkannihilation.screens.AnimatedScreen;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.Font;
+import com.warfare.darkannihilation.widgets.Button;
 
 public class Menu extends Scene {
-    private final Button[] buttons = new Button[4];
+    private final Array<Button> buttons = new Array<>(true, 4, Button.class);
 
     public Menu(MainGameManager mainGameManager) {
         super(mainGameManager);
@@ -38,13 +39,18 @@ public class Menu extends Scene {
                 getLocales().quit, getLocales().start, getLocales().topScore, getLocales().settings);
 
         int step = 50;
-        buttons[0] = new Button(getLocales().topScore, HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
+        Button buttonTopScore = new Button(getLocales().topScore, HALF_SCREEN_WIDTH + step / 2f, 10, () -> {
         });
-        buttons[1] = new Button(getLocales().start, buttons[0].getX() - buttons[0].getWidth() - step, 10,
-                () -> mainGameManager.startScene(new FirstLevel(mainGameManager), true));
-        buttons[2] = new Button(getLocales().settings, buttons[0].right() + step, 10, () -> {
-        });
-        buttons[3] = new Button(getLocales().quit, buttons[1].getX() - buttons[0].getWidth() - step, 10, () -> Gdx.app.exit());
+        Button buttonStart = new Button(getLocales().start, buttonTopScore.getX() - buttonTopScore.getWidth() - step, 10,
+                () -> mainGameManager.startScene(true, FirstLevel.class, mainGameManager));
+
+        buttons.addAll(
+                buttonTopScore,
+                buttonStart,
+                new Button(getLocales().settings, buttonTopScore.right() + step, 10, () -> {
+                }),
+                new Button(getLocales().quit, buttonStart.getX() - buttonTopScore.getWidth() - step, 10, () -> Gdx.app.exit())
+        );
 
         clickListener = new MenuClickListener(buttons);
         Processor.multiProcessor.insertProcessor(clickListener);

@@ -32,7 +32,7 @@ public class VersusScene extends Scene {
         super.create();
         getImages().getVersusImage();
         getSounds().getDeathStarMusic();
-        getSounds().firstLevelMusic.stop();
+        getSounds().firstLevelMusic.pause();
         getSounds().deathStarMusic.play();
 
         screen = new VersusScreen(getImages().versusScreen);

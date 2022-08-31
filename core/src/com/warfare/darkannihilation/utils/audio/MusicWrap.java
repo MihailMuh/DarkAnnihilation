@@ -18,6 +18,10 @@ public class MusicWrap extends Audio {
         music.play();
     }
 
+    public void pause() {
+        music.pause();
+    }
+
     public void stop() {
         music.stop();
     }
@@ -26,13 +30,5 @@ public class MusicWrap extends Audio {
     public void setVolume(float newVolume) {
         super.setVolume(newVolume);
         music.setVolume(volume);
-    }
-
-    public void setOnCompletionListener (Music.OnCompletionListener listener) {
-        music.setOnCompletionListener(listener);
-    }
-
-    public void setLooping(boolean loop) {
-        music.setLooping(loop);
     }
 }

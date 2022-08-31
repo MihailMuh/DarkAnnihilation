@@ -26,12 +26,12 @@ import com.warfare.darkannihilation.systemd.service.Service;
 import com.warfare.darkannihilation.systemd.service.Watch;
 import com.warfare.darkannihilation.systemd.service.Windows;
 import com.warfare.darkannihilation.utils.ScenesArray;
+import com.warfare.darkannihilation.utils.ThrowableWrap;
 
 public class MainGame extends BaseApp {
     private final ScenesArray scenesArray = new ScenesArray();
     private final MainGameManager mainGameManager = new MainGameManager(scenesArray);
     private Frontend frontend;
-    private ErrorScene errorScene;
 
     private static final double FPS_61 = 1 / 61f;
     private static final double FPS_60 = 1 / 60f;
@@ -39,7 +39,7 @@ public class MainGame extends BaseApp {
     private double accumulator;
 
     private volatile boolean threadRan = false;
-    private boolean onPause = false;
+    private boolean onPause = false, ERROR = false;
 
     AssetManagerSuper assetManager;
 
@@ -71,7 +71,6 @@ public class MainGame extends BaseApp {
         getLocales().lazyLoading();
 
         frontend = new Frontend(scenesArray);
-        errorScene = new ErrorScene(this, mainGameManager, scenesArray);
 
         resume();
     }
@@ -125,14 +124,11 @@ public class MainGame extends BaseApp {
     }
 
     private void error(Throwable throwable) {
-        if (errorScene.running) return;
+        if (ERROR) return;
+        ERROR = true;
 
-        errorScene.init(throwable);
-        try {
-            mainGameManager.startScene(errorScene, false);
-        } catch (Exception exception2) {
-            errorScene.hardRun();
-        }
+        // используем ThrowableWrap, т.к. рефлексия ломается при использовании Throwable
+        mainGameManager.startScene(ErrorScene.class, mainGameManager, scenesArray, new ThrowableWrap(throwable));
     }
 
     @Override

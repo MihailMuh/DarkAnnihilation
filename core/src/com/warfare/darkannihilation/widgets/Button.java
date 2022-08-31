@@ -28,14 +28,23 @@ public class Button extends BaseButton {
         setParams(name, X, Y, runnable);
     }
 
+    private void updateTexPosition() {
+        textX = centerX() - buttonFont.getHalfTextWidth(text);
+        textY = centerY() + buttonFont.getHalfTextHeight(text) + 5;
+    }
+
+    @Override
+    public void setCenter(float x, float y) {
+        super.setCenter(x, y);
+        updateTexPosition();
+    }
+
     public void setParams(String name, float x, float y, Runnable runnable) {
         this.runnable = runnable;
         text = name;
 
         setPosition(x, y);
-
-        textX = centerX() - buttonFont.getHalfTextWidth(text);
-        textY = centerY() + buttonFont.getHalfTextHeight(text) + 5;
+        updateTexPosition();
     }
 
     @Override
@@ -63,7 +72,6 @@ public class Button extends BaseButton {
         if (pressed) {
             if (!swept) {
                 swept = true;
-                getSounds().joystickSound.play();
             }
         } else {
             swept = false;

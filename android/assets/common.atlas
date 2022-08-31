@@ -1,5 +1,6 @@
 common.png
 	size: 2048, 512
+	filter: Linear, Linear
 	repeat: none
 black
 	bounds: 0, 0, 10, 10
@@ -9,7 +10,9 @@ button_press
 	bounds: 1002, 383, 423, 129
 gameover
 	bounds: 0, 12, 1000, 500
+pause_button
+	bounds: 1427, 332, 180, 180
 red
-	bounds: 1002, 249, 1, 1
+	bounds: 1427, 329, 1, 1
 white
-	bounds: 1427, 511, 1, 1
+	bounds: 1002, 249, 1, 1

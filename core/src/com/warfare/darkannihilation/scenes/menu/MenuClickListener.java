@@ -1,12 +1,13 @@
 package com.warfare.darkannihilation.scenes.menu;
 
+import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.widgets.Button;
 import com.warfare.darkannihilation.utils.ClickListener;
 
 class MenuClickListener extends ClickListener {
-    private final Button[] buttons;
+    private final Array<Button> buttons;
 
-    MenuClickListener(Button[] buttons) {
+    MenuClickListener(Array<Button> buttons) {
         this.buttons = buttons;
     }
 

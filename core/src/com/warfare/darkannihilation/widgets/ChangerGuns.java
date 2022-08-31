@@ -18,6 +18,7 @@ public class ChangerGuns extends BaseButton {
         super(getImages().changerGunsImages[0]);
 
         visible = false;
+        translate(30, 30);
     }
 
     public void changeGun() {

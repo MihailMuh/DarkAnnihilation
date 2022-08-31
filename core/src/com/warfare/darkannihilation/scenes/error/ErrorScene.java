@@ -8,48 +8,34 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_W
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.abstraction.Scene;
-import com.warfare.darkannihilation.systemd.MainGame;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ClickListener;
 import com.warfare.darkannihilation.utils.Font;
 import com.warfare.darkannihilation.utils.ScenesArray;
+import com.warfare.darkannihilation.utils.ThrowableWrap;
 
 public class ErrorScene extends Scene {
     private final Array<String> report = new Array<>(true, 20, String.class);
-    private final MainGame mainGame;
-    private final ScenesArray scenesArray;
 
     private float unexpectedErrorTextY, pleaseExitTextY;
 
     private Font errorFont;
     private Font pleaseExitFont;
 
-    public boolean running = false;
-
-    public ErrorScene(MainGame mainGame, MainGameManager mainGameManager, ScenesArray scenesArray) {
+    public ErrorScene(MainGameManager mainGameManager, ScenesArray scenesArray, ThrowableWrap throwableWrap) {
         super(mainGameManager, new ClickListener());
-        this.mainGame = mainGame;
-        this.scenesArray = scenesArray;
-    }
 
-    public void hardRun() {
-        Gdx.app.postRunnable(() -> {
-            try {
-                mainGame.pause();
-            } catch (Exception ignored) {
-            }
-            scenesArray.clear();
-            scenesArray.add(this);
+        scenesArray.map(scene -> {
+            scene.updateOnPause = false;
+            scene.update = false;
         });
+        createReport(throwableWrap.getThrowable());
     }
 
-    public void init(Throwable throwable) {
-        running = true;
-
+    public void createReport(Throwable throwable) {
         report.add("--------- Stack Trace ---------");
         report.add(throwable.toString());
 

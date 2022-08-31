@@ -7,12 +7,15 @@ import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.ClickListener;
 
 public abstract class Scene implements ApplicationListener {
-    protected final MainGameManager mainGameManager;
     protected ClickListener clickListener;
     protected AnimatedScreen screen;
+    protected MainGameManager mainGameManager;
 
     public boolean updateOnPause = false;
     public boolean update = true;
+
+    public Scene() {
+    }
 
     public Scene(MainGameManager mainGameManager) {
         this(mainGameManager, null, null);

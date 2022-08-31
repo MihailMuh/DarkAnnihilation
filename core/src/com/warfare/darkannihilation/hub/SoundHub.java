@@ -12,6 +12,7 @@ import static com.warfare.darkannihilation.constants.Assets.LASER_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.MEGA_BOOM_SOUND;
 import static com.warfare.darkannihilation.constants.Assets.MENU_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.METAL_SOUND;
+import static com.warfare.darkannihilation.constants.Assets.PAUSE_MUSIC;
 import static com.warfare.darkannihilation.constants.Assets.READY_SOUND_0;
 import static com.warfare.darkannihilation.constants.Assets.READY_SOUND_1;
 import static com.warfare.darkannihilation.constants.Assets.RELOAD_SOUND_0;
@@ -39,6 +40,7 @@ public class SoundHub extends BaseHub {
     public SoundWrap reloadSound0, reloadSound1;
 
     public MusicWrap menuMusic;
+    public MusicWrap pauseMusic;
     public MusicWrap firstLevelMusic;
     public MusicWrap deathStarMusic;
 
@@ -75,6 +77,7 @@ public class SoundHub extends BaseHub {
         if (!cache) {
             assetManager.loadSounds(LASER_SOUND, METAL_SOUND, BOOM_SOUND, MEGA_BOOM_SOUND,
                     HEAL_SOUND, READY_SOUND_0, READY_SOUND_1, RELOAD_SOUND_0, RELOAD_SOUND_1, BUCKSHOT_SOUND);
+            assetManager.loadMusic(PAUSE_MUSIC);
         }
     }
 
@@ -98,10 +101,12 @@ public class SoundHub extends BaseHub {
             reloadSound0 = assetManager.getSound(RELOAD_SOUND_0, 1);
             reloadSound1 = assetManager.getSound(RELOAD_SOUND_1, 1);
 
+            pauseMusic = assetManager.getMusic(PAUSE_MUSIC, 0.75f);
+
             cache = true;
 
             allAudio.addAll(firstPlayerGunSound, metalSound, bigLaserSound, boomSound, megaBoomSound, healSound,
-                    readySound0, readySound1, reloadSound0, reloadSound1, secondPlayerGunSound);
+                    readySound0, readySound1, reloadSound0, reloadSound1, secondPlayerGunSound, pauseMusic);
         }
     }
 

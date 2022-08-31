@@ -9,19 +9,20 @@ import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.systemd.MainGameManager;
+import com.warfare.darkannihilation.utils.Intent;
 import com.warfare.darkannihilation.utils.ScenesArray;
 
 public class Loading extends Scene {
     private final ScenesArray scenesArray;
-    private final Scene sceneToStart;
+    private final Intent intent;
 
     private float alpha = 0;
     private byte status = -2;
 
-    public Loading(MainGameManager mainGameManager, ScenesArray scenesArray, Scene sceneToStart) {
+    public Loading(MainGameManager mainGameManager, ScenesArray scenesArray, Intent intent) {
         super(mainGameManager, new LoadingClickListener());
         this.scenesArray = scenesArray;
-        this.sceneToStart = sceneToStart;
+        this.intent = intent;
     }
 
     @Override
@@ -46,6 +47,9 @@ public class Loading extends Scene {
                 }
                 break;
             case -1: // загрузка ресурсов для новой сцены
+                Scene sceneToStart = intent.getScene();
+                sceneToStart.updateOnPause = true;
+
                 getAssetManager().finishLoading();
 
                 scenesArray.insert(scenesArray.indexOf(this, true), sceneToStart); // вставляем сцену под текущую

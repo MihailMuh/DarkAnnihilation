@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 import java.util.Locale;
 
 public class LocaleHub extends BaseHub {
-    public String quit, start, topScore, settings;
+    public String quit, start, topScore, settings, toMenu, continueStr, restart;
     public String tapScreenWith2Fingers, youDead;
     public String shoot;
     public String currentScore;
@@ -44,6 +44,9 @@ public class LocaleHub extends BaseHub {
         currentScore = locale.get("currentScore");
         unexpectedError = locale.get("unexpectedError");
         pleaseReEnter = locale.get("pleaseReEnter");
+        toMenu = locale.get("toMenu");
+        continueStr = locale.get("continue");
+        restart = locale.get("restart");
 
         assetManager.unload(LOCALES);
     }

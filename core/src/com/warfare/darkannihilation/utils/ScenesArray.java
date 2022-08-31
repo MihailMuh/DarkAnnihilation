@@ -8,6 +8,13 @@ public class ScenesArray extends Array<Scene> {
         super(true, 10, Scene.class);
     }
 
+    public void map(MapAction action) {
+        for (int i = 0; i < size; i++) {
+            Scene scene = get(i);
+            if (scene != null) action.run(scene);
+        }
+    }
+
     public void updateScenes() {
         for (int i = 0; i < size; i++) {
             Scene scene = get(i);
@@ -51,5 +58,9 @@ public class ScenesArray extends Array<Scene> {
 
     public void resumeLastScene() {
         if (size >= 1) peek().resume();
+    }
+
+    public interface MapAction {
+        void run(Scene scene);
     }
 }
