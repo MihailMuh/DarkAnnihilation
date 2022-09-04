@@ -77,7 +77,6 @@ public class SoundHub extends BaseHub {
         if (!cache) {
             assetManager.loadSounds(LASER_SOUND, METAL_SOUND, BOOM_SOUND, MEGA_BOOM_SOUND,
                     HEAL_SOUND, READY_SOUND_0, READY_SOUND_1, RELOAD_SOUND_0, RELOAD_SOUND_1, BUCKSHOT_SOUND);
-            assetManager.loadMusic(PAUSE_MUSIC);
         }
     }
 
@@ -101,12 +100,10 @@ public class SoundHub extends BaseHub {
             reloadSound0 = assetManager.getSound(RELOAD_SOUND_0, 1);
             reloadSound1 = assetManager.getSound(RELOAD_SOUND_1, 1);
 
-            pauseMusic = assetManager.getMusic(PAUSE_MUSIC, 0.75f);
-
             cache = true;
 
             allAudio.addAll(firstPlayerGunSound, metalSound, bigLaserSound, boomSound, megaBoomSound, healSound,
-                    readySound0, readySound1, reloadSound0, reloadSound1, secondPlayerGunSound, pauseMusic);
+                    readySound0, readySound1, reloadSound0, reloadSound1, secondPlayerGunSound);
         }
     }
 
@@ -129,6 +126,19 @@ public class SoundHub extends BaseHub {
     public void disposeDeathStarMusic() {
         assetManager.unload(DEATH_STAR_MUSIC);
         allAudio.removeValue(deathStarMusic, true);
+    }
+
+    public void loadPauseMusic() {
+        assetManager.loadMusic(PAUSE_MUSIC);
+    }
+
+    public void getPauseMusic() {
+        pauseMusic = assetManager.getMusic(PAUSE_MUSIC, 0.75f);
+        allAudio.add(pauseMusic);
+    }
+
+    public void disposePauseMusic() {
+        assetManager.unload(PAUSE_MUSIC);
     }
 
     public void setVolume(float newVolume) {

@@ -1,6 +1,7 @@
 package com.warfare.darkannihilation.hub;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.warfare.darkannihilation.player.Player;
 
@@ -15,6 +16,7 @@ public class Resources {
     private static AssetManagerSuper assetManager;
     private static SpriteBatch batch;
     private static Viewport viewport;
+    private static FrameBuffer blurFrameBuffer;
 
     public static void setProviders(ImageHub image, SoundHub sound, FontHub font, LocaleHub locales, AssetManagerSuper assetManagerSuper) {
         imageHub = image;
@@ -70,5 +72,13 @@ public class Resources {
 
     public static Viewport getViewport() {
         return viewport;
+    }
+
+    public static FrameBuffer getBlurFrameBuffer() {
+        return blurFrameBuffer;
+    }
+
+    public static void setBlurFrameBuffer(FrameBuffer blurFrameBuffer) {
+        Resources.blurFrameBuffer = blurFrameBuffer;
     }
 }
