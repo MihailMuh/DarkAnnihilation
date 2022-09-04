@@ -43,11 +43,15 @@ public class MainGameManager {
         }
     }
 
-    public void startSceneOver(Scene callerScene, Scene sceneToStart) {
+    public void insertScene(Scene callerScene, Scene sceneToStart, boolean over) {
         sceneToStart.create();
 
         callerScene.pause();
-        scenesArray.insert(scenesArray.indexOf(callerScene, true) + 1, sceneToStart);
+
+        int increment = 0;
+        if (over) increment = 1;
+
+        scenesArray.insert(scenesArray.indexOf(callerScene, true) + increment, sceneToStart);
 
         sceneToStart.resume();
     }

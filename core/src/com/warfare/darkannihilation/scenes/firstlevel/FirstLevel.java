@@ -113,10 +113,10 @@ public class FirstLevel extends Scene {
         Resources.setPlayer(player);
         initEnemies();
 
-        mainGameManager.startSceneOver(this, new Countdown(mainGameManager, () -> {
+        mainGameManager.insertScene(this, new Countdown(mainGameManager, () -> {
             countdownTime = false;
             updateOnPause = false;
-        }));
+        }), true);
         getSounds().firstLevelMusic.play();
     }
 

@@ -74,5 +74,6 @@ public class Frontend implements Disposable {
     @Override
     public void dispose() {
         spriteBatch.dispose();
+        blurFrameBuffer.dispose();
     }
 }

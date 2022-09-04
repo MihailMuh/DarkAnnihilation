@@ -12,17 +12,19 @@ public class Resources {
     private static SoundHub soundHub;
     private static FontHub fontHub;
     private static LocaleHub localeHub;
+    private static ShaderHub shaderHub;
     private static Player player;
     private static AssetManagerSuper assetManager;
     private static SpriteBatch batch;
     private static Viewport viewport;
     private static FrameBuffer blurFrameBuffer;
 
-    public static void setProviders(ImageHub image, SoundHub sound, FontHub font, LocaleHub locales, AssetManagerSuper assetManagerSuper) {
+    public static void setProviders(ImageHub image, SoundHub sound, FontHub font, LocaleHub locales, ShaderHub shaders, AssetManagerSuper assetManagerSuper) {
         imageHub = image;
         soundHub = sound;
         fontHub = font;
         localeHub = locales;
+        shaderHub = shaders;
         assetManager = assetManagerSuper;
     }
 
@@ -80,5 +82,9 @@ public class Resources {
 
     public static void setBlurFrameBuffer(FrameBuffer blurFrameBuffer) {
         Resources.blurFrameBuffer = blurFrameBuffer;
+    }
+
+    public static ShaderHub getShaders() {
+        return shaderHub;
     }
 }

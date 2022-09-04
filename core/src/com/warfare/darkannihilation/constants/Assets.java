@@ -30,4 +30,7 @@ public final class Assets {
     public static final String PAUSE_MUSIC = "sounds/pause.mp3";
 
     public static final String LOCALES = "locales/locale";
+
+    public static final String BLUR_SHADER_FRAG = "shaders/blur.frag";
+    public static final String BLUR_SHADER_VERT = "shaders/blur.vert";
 }

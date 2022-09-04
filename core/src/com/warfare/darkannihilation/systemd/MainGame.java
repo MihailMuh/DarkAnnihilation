@@ -18,6 +18,7 @@ import com.warfare.darkannihilation.hub.FontHub;
 import com.warfare.darkannihilation.hub.ImageHub;
 import com.warfare.darkannihilation.hub.LocaleHub;
 import com.warfare.darkannihilation.hub.Resources;
+import com.warfare.darkannihilation.hub.ShaderHub;
 import com.warfare.darkannihilation.hub.SoundHub;
 import com.warfare.darkannihilation.scenes.error.ErrorScene;
 import com.warfare.darkannihilation.scenes.menu.Menu;
@@ -52,7 +53,8 @@ public class MainGame extends BaseApp {
 
         super.create();
         assetManager = new AssetManagerSuper();
-        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager), new LocaleHub(assetManager), assetManager);
+        Resources.setProviders(new ImageHub(assetManager), new SoundHub(assetManager), new FontHub(assetManager),
+                new LocaleHub(assetManager), new ShaderHub(assetManager), assetManager);
 
         Menu menu = new Menu(mainGameManager);
 

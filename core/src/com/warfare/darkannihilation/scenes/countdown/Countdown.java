@@ -35,8 +35,7 @@ public class Countdown extends Scene {
             if (count == -1) {
                 mainGameManager.finishScene(this);
                 onFinish.run();
-            }
-            else {
+            } else {
                 if (count == 0) {
                     text = getLocales().shoot;
                     getSounds().readySound1.play();
