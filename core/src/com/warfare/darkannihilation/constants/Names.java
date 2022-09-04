@@ -25,6 +25,7 @@ public final class Names {
     public static final byte SUNRISE_BOMB = 0;
     public static final byte STAR_LASER = 1;
     public static final byte BUCKSHOT = 2;
+    public static final byte BULLET = 3;
 
     public static final byte ENEMY = 10;
     public static final byte VADER = 11;

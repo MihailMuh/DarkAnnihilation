@@ -1,6 +1,6 @@
 package com.warfare.darkannihilation.widgets;
 
-import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
+import static com.warfare.darkannihilation.constants.Constants.CHANGER_GUNS_CLICK_TIME;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPlayer;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
@@ -38,9 +38,9 @@ public class ChangerGuns extends BaseButton {
 
         if (GunKit.COLLECTED) {
             if (activeAlternativeGun) {
-                setRegion(getImages().changerGunsImages[2]);
-            } else {
                 setRegion(getImages().changerGunsImages[1]);
+            } else {
+                setRegion(getImages().changerGunsImages[2]);
             }
         } else {
             setRegion(getImages().changerGunsImages[0]);
@@ -50,7 +50,7 @@ public class ChangerGuns extends BaseButton {
 
     @Override
     public void onClick(float x, float y) {
-        if (time - tapTime >= BUTTON_CLICK_TIME) {
+        if (time - tapTime >= CHANGER_GUNS_CLICK_TIME) {
             tapTime = time;
 
             if (GunKit.COLLECTED && checkClick(x, y)) {

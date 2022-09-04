@@ -59,7 +59,7 @@ public final class Constants {
     public static final int DEATH_STAR_SECOND_PHASE_HEALTH = DEATH_STAR_THIRD_PHASE_HEALTH * 2;
     public static final byte DEATH_STAR_SPEED_FOR_THIRD_PHASE = 4;
     public static final short DEATH_STAR_HEALTH_BAR_LEN = 260;
-    public static final byte DEATH_STAR_VERSUS_SCREEN_IN_SECS = 4;
+    public static final short DEATH_STAR_VERSUS_SCREEN_IN_MILLIS = 4000;
 
     public static final short STAR_SHIELD_HEALTH = 800;
 
@@ -142,9 +142,11 @@ public final class Constants {
     public static final byte NUMBER_SUNRISE_BOMBS = 3;
 
     // other
-    public static final float BUTTON_CLICK_TIME = 0.1f;
+    public static final byte BUTTON_CLICK_TIME = 100;
 
     public static final float CHANGER_GUNS_CLICK_TIME = 0.7f;
+
+    public static final float PAUSE_BUTTON_CLICK_TIME = 1;
 
     public static final short ULTIMATE_DAMAGE = 10_000;
 }

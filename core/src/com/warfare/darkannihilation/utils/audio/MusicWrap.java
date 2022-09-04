@@ -22,8 +22,8 @@ public class MusicWrap extends Audio {
         music.pause();
     }
 
-    public void stop() {
-        music.stop();
+    public boolean isPlaying() {
+        return music.isPlaying();
     }
 
     @Override

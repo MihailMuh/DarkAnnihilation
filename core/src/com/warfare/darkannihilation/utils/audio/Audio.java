@@ -12,6 +12,10 @@ public abstract class Audio {
 
     public abstract void play();
 
+    public float getVolume() {
+        return volume;
+    }
+
     public void setVolume(float newVolume) {
         volume = START_VOLUME * newVolume;
     }

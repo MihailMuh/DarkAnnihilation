@@ -5,7 +5,6 @@ import static com.warfare.darkannihilation.hub.Resources.getPlayer;
 
 import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.scenes.menu.Menu;
-import com.warfare.darkannihilation.scenes.pause.Pause;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.utils.ClickListener;
 import com.warfare.darkannihilation.widgets.ChangerGuns;
@@ -18,6 +17,7 @@ class FirstLevelClickListener extends ClickListener {
     private final MainGameManager mainGameManager;
 
     private boolean tapInChangerGuns, tapInPauseButton;
+    public boolean allowPlayerMove;
 
     FirstLevelClickListener(MainGameManager mainGameManager, ChangerGuns changerGuns, PauseButton pauseButton) {
         this.mainGameManager = mainGameManager;
@@ -27,7 +27,7 @@ class FirstLevelClickListener extends ClickListener {
 
     @Override
     public boolean touchDragged(float x, float y) {
-        if (!tapInChangerGuns && !tapInPauseButton) player.setCoordinates(x, y);
+        if (allowPlayerMove) player.setCoordinates(x, y);
         return true;
     }
 
@@ -35,6 +35,8 @@ class FirstLevelClickListener extends ClickListener {
     public boolean touchDown(float x, float y) {
         tapInChangerGuns = changerGuns.checkClick(x, y);
         tapInPauseButton = pauseButton.checkClick(x, y);
+
+        allowPlayerMove = !tapInChangerGuns && !tapInPauseButton;
         return true;
     }
 
@@ -42,7 +44,7 @@ class FirstLevelClickListener extends ClickListener {
     public boolean touchUp(float x, float y) {
         if (tapInChangerGuns) changerGuns.onClick(x, y);
         else if (tapInPauseButton) {
-            mainGameManager.startScene(Pause.class, mainGameManager);
+            pauseButton.onClick(x, y);
         }
         return true;
     }

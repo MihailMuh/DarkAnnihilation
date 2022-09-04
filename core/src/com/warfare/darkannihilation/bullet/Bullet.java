@@ -2,12 +2,14 @@ package com.warfare.darkannihilation.bullet;
 
 import static com.warfare.darkannihilation.constants.Constants.BULLET_DAMAGE;
 import static com.warfare.darkannihilation.constants.Constants.BULLET_SPEED;
+import static com.warfare.darkannihilation.constants.Names.BULLET;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_HEIGHT;
 
 public class Bullet extends BaseBullet {
     public Bullet() {
         super(getImages().bulletImg, BULLET_DAMAGE, BULLET_SPEED);
+        name = BULLET;
     }
 
     @Override

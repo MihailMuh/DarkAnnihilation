@@ -1,11 +1,11 @@
 package com.warfare.darkannihilation.widgets;
 
+import static com.badlogic.gdx.utils.TimeUtils.millis;
 import static com.warfare.darkannihilation.constants.Constants.BUTTON_CLICK_TIME;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
 import static com.warfare.darkannihilation.systemd.service.Service.sleep;
 import static com.warfare.darkannihilation.systemd.service.Service.vibrate;
-import static com.warfare.darkannihilation.systemd.service.Watch.time;
 
 import com.badlogic.gdx.graphics.Color;
 import com.warfare.darkannihilation.abstraction.BaseButton;
@@ -18,7 +18,7 @@ public class Button extends BaseButton {
     private float textX;
     private float textY;
     private boolean pressed, swept;
-    private float tapTime;
+    private long tapTime;
 
     public static Font buttonFont;
 
@@ -49,8 +49,8 @@ public class Button extends BaseButton {
 
     @Override
     public void onClick(float x, float y) {
-        if (time - tapTime >= BUTTON_CLICK_TIME) {
-            tapTime = time;
+        if (millis() - tapTime >= BUTTON_CLICK_TIME) {
+            tapTime = millis();
             pressed = false;
 
             if (checkClick(x, y)) {

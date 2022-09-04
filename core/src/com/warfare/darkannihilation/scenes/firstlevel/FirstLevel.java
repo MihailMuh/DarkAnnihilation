@@ -7,6 +7,8 @@ import static com.warfare.darkannihilation.constants.Constants.NUMBER_MILLENNIUM
 import static com.warfare.darkannihilation.constants.Constants.NUMBER_VADER;
 import static com.warfare.darkannihilation.constants.Names.ATTENTION;
 import static com.warfare.darkannihilation.constants.Names.BOMB;
+import static com.warfare.darkannihilation.constants.Names.BUCKSHOT;
+import static com.warfare.darkannihilation.constants.Names.BULLET;
 import static com.warfare.darkannihilation.constants.Names.BULLET_ENEMY;
 import static com.warfare.darkannihilation.constants.Names.DEATH_STAR;
 import static com.warfare.darkannihilation.constants.Names.DEMOMAN;
@@ -43,6 +45,7 @@ import com.warfare.darkannihilation.player.Player;
 import com.warfare.darkannihilation.scenes.countdown.Countdown;
 import com.warfare.darkannihilation.scenes.gameover.GameOver;
 import com.warfare.darkannihilation.scenes.gameover.GameOverScreen;
+import com.warfare.darkannihilation.scenes.pause.Pause;
 import com.warfare.darkannihilation.scenes.versus.VersusScene;
 import com.warfare.darkannihilation.screens.MovingScreen;
 import com.warfare.darkannihilation.support.GunKit;
@@ -52,6 +55,7 @@ import com.warfare.darkannihilation.systemd.EnemyController;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Processor;
 import com.warfare.darkannihilation.utils.GameTask;
+import com.warfare.darkannihilation.utils.MultiProcessor;
 import com.warfare.darkannihilation.widgets.ChangerGuns;
 import com.warfare.darkannihilation.widgets.PauseButton;
 
@@ -59,7 +63,7 @@ import java.util.Iterator;
 
 public class FirstLevel extends Scene {
     private final GameTask gameTask = new GameTask(this::systemTask, 250);
-    // BOSS_PERIOD_IN_SECS * 100 == (BOSS_PERIOD_IN_SECS / 10) * 1000
+    // DEATH_STAR_PERIOD_IN_SECS * 100 == (DEATH_STAR_PERIOD_IN_SECS / 10) * 1000
     private final GameTask spawnBossTask = new GameTask(this::spawnBoss, DEATH_STAR_PERIOD_IN_SECS * 100);
 
     private final Array<Explosion> explosions = new Array<>(false, NUMBER_EXPLOSION);
@@ -69,6 +73,7 @@ public class FirstLevel extends Scene {
 
     private final EnemyController enemyController = new EnemyController(empire);
     private final PoolHub poolHub = getPools();
+    private final MultiProcessor.TouchManager touchManager = new MultiProcessor.TouchManager();
 
     private DifficultyAnalyzer difficultyAnalyzer;
     private ChangerGuns changerGuns;
@@ -104,7 +109,7 @@ public class FirstLevel extends Scene {
 
         factory = new Factory();
         changerGuns = new ChangerGuns();
-        pauseButton = new PauseButton();
+        pauseButton = new PauseButton(() -> mainGameManager.startScene(Pause.class, mainGameManager));
         difficultyAnalyzer = new DifficultyAnalyzer(enemyController, factory);
         player = new Player(difficultyAnalyzer);
         screen = new MovingScreen(getImages().starScreenGIF);
@@ -140,7 +145,6 @@ public class FirstLevel extends Scene {
     @Override
     public void resume() {
         super.resume();
-        getSounds().firstLevelMusic.play();
 
         gameTask.start();
         spawnBossTask.start();
@@ -158,7 +162,6 @@ public class FirstLevel extends Scene {
     @Override
     public void pause() {
         super.pause();
-        getSounds().firstLevelMusic.pause();
 
         gameTask.stop();
         spawnBossTask.stop();
@@ -202,6 +205,8 @@ public class FirstLevel extends Scene {
 
         scoreForFrontend = stringBuilder.append(getLocales().currentScore).append(score).toString();
         stringBuilder.setLength(0);
+
+        checkClickBySecondFinger();
     }
 
     @Override
@@ -289,7 +294,15 @@ public class FirstLevel extends Scene {
                 bullet.update();
             } else {
                 iterator.remove();
-                postToLooper(() -> poolHub.bulletPool.free(bullet));
+                postToLooper(() -> {
+                    switch (bullet.name) {
+                        case BULLET:
+                            poolHub.bulletPool.free(bullet);
+                            return;
+                        case BUCKSHOT:
+                            poolHub.buckshotPool.free(bullet);
+                    }
+                });
             }
         }
     }
@@ -299,7 +312,6 @@ public class FirstLevel extends Scene {
             Explosion explosion = iterator.next();
             if (explosion.visible) {
                 explosion.translateX(moveAll);
-                explosion.update();
             } else {
                 iterator.remove();
                 postToLooper(() -> poolHub.explosionPool.free(explosion));
@@ -358,12 +370,35 @@ public class FirstLevel extends Scene {
 
         difficultyAnalyzer.checkTime();
 
+        changeWidgetsAlpha();
+
         if (player.isDead()) {
+            changerGuns.visible = false;
+            pauseButton.visible = false;
+
             Gdx.app.postRunnable(() -> {
                 frontend.setScreen(new GameOverScreen());
                 mainGameManager.startScene(GameOver.class, mainGameManager, empire, bullets, bulletsEnemy, explosions);
             });
         }
+    }
+
+    private void changeWidgetsAlpha() {
+        if (!((FirstLevelClickListener) clickListener).allowPlayerMove) return;
+
+        touchManager.updateTouchPos(0);
+
+        changerGuns.setAlpha(changerGuns.checkClick(touchManager.x, touchManager.y) ? 0.4f : 1);
+        pauseButton.setAlpha(pauseButton.checkClick(touchManager.x, touchManager.y) ? 0.4f : 1);
+    }
+
+    private void checkClickBySecondFinger() {
+        if (!Gdx.input.isTouched(1)) return;
+
+        touchManager.updateTouchPos(1);
+
+        changerGuns.onClick(touchManager.x, touchManager.y);
+        pauseButton.onClick(touchManager.x, touchManager.y);
     }
 
     private void spawnBoss() {

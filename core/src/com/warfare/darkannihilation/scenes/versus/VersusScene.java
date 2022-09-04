@@ -1,21 +1,21 @@
 package com.warfare.darkannihilation.scenes.versus;
 
-import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_VERSUS_SCREEN_IN_SECS;
+import static com.badlogic.gdx.utils.TimeUtils.millis;
+import static com.warfare.darkannihilation.constants.Constants.DEATH_STAR_VERSUS_SCREEN_IN_MILLIS;
 import static com.warfare.darkannihilation.hub.Resources.getAssetManager;
 import static com.warfare.darkannihilation.hub.Resources.getImages;
 import static com.warfare.darkannihilation.hub.Resources.getPools;
 import static com.warfare.darkannihilation.hub.Resources.getSounds;
-import static com.warfare.darkannihilation.systemd.service.Watch.timeOnPause;
 
 import com.warfare.darkannihilation.abstraction.Scene;
 import com.warfare.darkannihilation.systemd.MainGameManager;
 import com.warfare.darkannihilation.systemd.service.Watch;
 
 public class VersusScene extends Scene {
-    private float lastVersus;
+    private long lastVersus;
     private boolean resourcesLoaded = false;
 
-    public VersusScene(MainGameManager mainGameManager, byte playerName, byte bossName) {
+    public VersusScene(MainGameManager mainGameManager, Byte playerName, Byte bossName) {
         super(mainGameManager);
 
         getImages().loadVersusImage(playerName, bossName);
@@ -37,7 +37,7 @@ public class VersusScene extends Scene {
 
         screen = new VersusScreen(getImages().versusScreen);
 
-        lastVersus = timeOnPause;
+        lastVersus = millis();
         Watch.stopTime();
     }
 
@@ -56,7 +56,7 @@ public class VersusScene extends Scene {
 
             resourcesLoaded = true;
         }
-        if (timeOnPause - lastVersus > DEATH_STAR_VERSUS_SCREEN_IN_SECS) {
+        if (millis() - lastVersus > DEATH_STAR_VERSUS_SCREEN_IN_MILLIS) {
             lastVersus = Integer.MAX_VALUE;
             mainGameManager.finishScene(this);
         }

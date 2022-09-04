@@ -7,24 +7,18 @@ import com.badlogic.gdx.utils.Array;
 import com.warfare.darkannihilation.hub.Resources;
 
 public class MultiProcessor extends InputAdapter {
-    private final Vector3 touchPos = new Vector3();
-    public final Array<ClickListener> listeners = new Array<>(5);
+    private final TouchManager touchManager = new TouchManager();
+    public final Array<ClickListener> listeners = new Array<>(true, 5, ClickListener.class);
 
     public MultiProcessor() {
         Gdx.input.setInputProcessor(this);
     }
 
-    private void onTouch() {
-        touchPos.x = Gdx.input.getX(0);
-        touchPos.y = Gdx.input.getY(0);
-        Resources.getViewport().getCamera().unproject(touchPos);
-    }
-
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        onTouch();
-        float x = touchPos.x;
-        float y = touchPos.y;
+        touchManager.updateTouchPos(0);
+        float x = touchManager.x;
+        float y = touchManager.y;
 
         for (ClickListener listener : listeners) {
             if (listener.touchDragged(x, y)) {
@@ -36,9 +30,9 @@ public class MultiProcessor extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        onTouch();
-        float x = touchPos.x;
-        float y = touchPos.y;
+        touchManager.updateTouchPos(0);
+        float x = touchManager.x;
+        float y = touchManager.y;
 
         for (ClickListener listener : listeners) {
             if (listener.touchDown(x, y)) {
@@ -50,9 +44,9 @@ public class MultiProcessor extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        onTouch();
-        float x = touchPos.x;
-        float y = touchPos.y;
+        touchManager.updateTouchPos(0);
+        float x = touchManager.x;
+        float y = touchManager.y;
 
         for (ClickListener listener : listeners) {
             if (listener.touchUp(x, y)) {
@@ -81,6 +75,21 @@ public class MultiProcessor extends InputAdapter {
     public synchronized void removeProcessor(ClickListener clickListener) {
         if (clickListener != null) {
             listeners.removeValue(clickListener, true);
+        }
+    }
+
+    public static class TouchManager {
+        private final Vector3 touchPos = new Vector3();
+        public float x, y;
+
+        public void updateTouchPos(int pointer) {
+            touchPos.x = Gdx.input.getX(pointer);
+            touchPos.y = Gdx.input.getY(pointer);
+
+            Resources.getViewport().getCamera().unproject(touchPos);
+
+            x = touchPos.x;
+            y = touchPos.y;
         }
     }
 }

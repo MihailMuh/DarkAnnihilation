@@ -10,6 +10,7 @@ import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_H
 import static com.warfare.darkannihilation.systemd.service.Windows.HALF_SCREEN_WIDTH;
 import static com.warfare.darkannihilation.systemd.service.Windows.SCREEN_WIDTH;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.warfare.darkannihilation.abstraction.Scene;
@@ -34,7 +35,9 @@ class Countdown extends Scene {
     private long lastBlur;
     private final long blurTime = 17;
 
-    Countdown(MainGameManager mainGameManager, float initialRadiusForBlurScreen) {
+    private float firstLevelMusicLoud = 0;
+
+    Countdown(MainGameManager mainGameManager, float initialRadiusForBlurScreen, float firstLevelMusicLoudOld) {
         super(mainGameManager, new ClickListener());
         final float step = initialRadiusForBlurScreen / (countdownTime * 2f / blurTime); // почти методом подбора
 
@@ -47,7 +50,11 @@ class Countdown extends Scene {
                     lastBlur = millis();
                     currentBlur -= step;
 
+                    firstLevelMusicLoud += step / MAX_BLUR_RADIUS;
+                    firstLevelMusicLoud = min(firstLevelMusicLoud, firstLevelMusicLoudOld);
+
                     getShaders().blurShader.setUniformf("radius", max(0, currentBlur));
+                    getSounds().firstLevelMusic.setVolume(firstLevelMusicLoud);
                 }
             }
         };
@@ -56,14 +63,9 @@ class Countdown extends Scene {
     }
 
     @Override
-    public void pause() {
-        super.pause();
-        getSounds().firstLevelMusic.pause();
-    }
+    public void create() {
+        super.create();
 
-    @Override
-    public void resume() {
-        super.resume();
         getSounds().firstLevelMusic.play();
     }
 
