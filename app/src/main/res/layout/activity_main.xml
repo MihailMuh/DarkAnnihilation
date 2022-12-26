@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".systemd.MainActivity">
+
+    <ru.warfare.darkannihilation.systemd.Game
+        android:id="@+id/gameView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/pauseAdMob"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/2247696110"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seekArcEffects"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="30dp"
+        android:visibility="gone"
+        app:arcColor="@color/white"
+        app:arcWidth="7dp"
+        app:clockwise="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintWidth_percent="0.35"
+        app:progressColor="#6A5ACD"
+        app:rotation="180"
+        app:roundEdges="true"
+        app:startAngle="30"
+        app:sweepAngle="300"
+        app:touchInside="true" />
+
+    <TextView
+        android:id="@+id/angleEffects"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/seekArcEffects"
+        app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
+        app:layout_constraintTop_toTopOf="@+id/seekArcEffects"
+        app:layout_constraintWidth_percent="0.2" />
+
+    <TextView
+        android:id="@+id/textViewEffects"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/change_loud_of_sound_effects"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/seekArcEffects"
+        app:layout_constraintEnd_toEndOf="@+id/seekArcEffects"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintStart_toStartOf="@+id/seekArcEffects"
+        app:layout_constraintWidth_percent="0.35" />
+
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seekArcMusic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="30dp"
+        android:visibility="gone"
+        app:arcColor="@color/white"
+        app:arcWidth="7dp"
+        app:clockwise="false"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintWidth_percent="0.35"
+        app:progressColor="#6A5ACD"
+        app:rotation="180"
+        app:roundEdges="true"
+        app:startAngle="30"
+        app:sweepAngle="300"
+        app:touchInside="true" />
+
+    <TextView
+        android:id="@+id/textViewMusic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/change_loud_of_sound_music"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/seekArcMusic"
+        app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
+        app:layout_constraintWidth_percent="0.35" />
+
+    <TextView
+        android:id="@+id/angleMusic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/seekArcMusic"
+        app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
+        app:layout_constraintTop_toTopOf="@+id/seekArcMusic"
+        app:layout_constraintWidth_percent="0.2" />
+
+    <TextView
+        android:id="@+id/textVibration"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/vibration"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/stickySwitch"
+        app:layout_constraintEnd_toEndOf="@+id/stickySwitch"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/stickySwitch"
+        app:layout_constraintWidth_percent="0.1" />
+
+    <io.ghyeok.stickyswitch.widget.StickySwitch
+        android:id="@+id/stickySwitch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekArcMusic"
+        app:layout_constraintHeight_percent="0.19"
+        app:layout_constraintStart_toStartOf="@+id/seekArcMusic"
+        app:layout_constraintTop_toBottomOf="@+id/seekArcMusic"
+        app:layout_constraintWidth_percent="0.17"
+        app:ss_animationDuration="450"
+        app:ss_animationType="curved"
+        app:ss_iconPadding="14dp"
+        app:ss_iconSize="30dp"
+        app:ss_leftText="Disable"
+        app:ss_rightText="Enable"
+        app:ss_selectedTextSize="15sp"
+        app:ss_sliderBackgroundColor="#87CEFA"
+        app:ss_switchColor="#6A5ACD"
+        app:ss_textSize="12sp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.skydoves.powerspinner.PowerSpinnerView
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="#6A5ACD"
+        android:gravity="center"
+        android:padding="0dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="17sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/seekArcEffects"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toEndOf="@+id/seekArcMusic"
+        app:layout_constraintTop_toBottomOf="@+id/textSpinner"
+        app:layout_constraintWidth_percent="0.21"
+        app:spinner_popup_animation="fade"
+        app:spinner_popup_background="#87CEFA"
+        app:spinner_popup_elevation="14dp" />
+
+    <TextView
+        android:id="@+id/textSpinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/choose_your_language"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/spinner"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/spinner"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintWidth_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="30dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="30dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

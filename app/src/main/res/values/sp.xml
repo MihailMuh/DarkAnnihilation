@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sp">
+        <item>Puntuación actual:</item>
+        <item>Mejor resultado:</item>
+        <item>Top jugadores</item>
+        <item>Empezar</item>
+        <item>Salirse</item>
+        <item>Configuración</item>
+        <item>Atrás</item>
+        <item>Reanudar</item>
+        <item>Reiniciar</item>
+        <item>Al menú</item>
+        <item>Elige tu personaje</item>
+        <item>Gracias por jugar!</item>
+        <item>Toque la pantalla con cuatro o más dedos para acceder al menú principal</item>
+        <item>Toque la pantalla con cuatro o más dedos para reiniciar el juego</item>
+        <item>DISPARA!</item>
+
+        <item>Volumen:</item>
+        <item>Cambiar el volumen de los efectos de sonido</item>
+        <item>Cambiar el volumen de la música de fondo</item>
+        <item>Vibraciones</item>
+        <item>Incluir</item>
+        <item>Apagar</item>
+        <item>Elige tu idioma</item>
+        <item>Suavizar texto</item>
+
+        <item>No hay conexión a internet</item>
+        <item>El servidor no está disponible temporalmente</item>
+
+    </string-array>
+</resources>

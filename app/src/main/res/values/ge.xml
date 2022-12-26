@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ge">
+        <item>Aktuelle Punktzahl:</item>
+        <item>Beste Punktzahl:</item>
+        <item>Top-Spieler</item>
+        <item>Start</item>
+        <item>Beenden</item>
+        <item>Einstellung</item>
+        <item>Zurück</item>
+        <item>Fortfahren</item>
+        <item>Neustart</item>
+        <item>Zum Menü</item>
+        <item>Wähle deinen Charakter</item>
+        <item>Vielen Dank für das Spiel!</item>
+        <item>Tippen Sie mit vier oder mehr Fingern auf den Bildschirm, um das Hauptmenü zu öffnen</item>
+        <item>Tippen Sie mit vier oder mehr Fingern auf diesen Bildschirm, um neu zu starten</item>
+        <item>SCHIEßEN!</item>
+
+        <item>Lautstärke:</item>
+        <item>Lautstärke der Soundeffekte ändern</item>
+        <item>Ändern Sie die Lautstärke der Hintergrundmusik</item>
+        <item>Vibration</item>
+        <item>Ein</item>
+        <item>Aus</item>
+        <item>Wählen Sie Ihre Sprache</item>
+        <item>Text glätten</item>
+
+        <item>Keine Internetverbindung</item>
+        <item>Der server ist vorübergehend nicht verfügbar</item>
+
+    </string-array>
+</resources>
